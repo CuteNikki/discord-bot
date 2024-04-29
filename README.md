@@ -1,4 +1,30 @@
-# discord-bot
+# Discord Bot written in TypeScript using custom classes
+
+###### Made with 💖 by [Nikki](https://github.com/CuteNikki/)
+
+<br><br />
+
+## Setup your own Discord Bot:
+
+This project was created using [Bun](https://bun.sh) v1.1.6. (a fast all-in-one JavaScript runtime).
+
+How to install Bun on Windows:
+
+```bash
+powershell -c "irm bun.sh/install.ps1 | iex"
+```
+
+How to install Bun on Linux/MacOS:
+
+```bash
+curl -fsSL https://bun.sh/install | bash
+```
+
+Clone the repository:
+
+```bash
+git clone https://github.com/CuteNikki/discord-bot.git
+```
 
 To install dependencies:
 
@@ -11,5 +37,3 @@ To run:
 ```bash
 bun run index.ts
 ```
-
-This project was created using `bun init` in bun v1.1.6. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.

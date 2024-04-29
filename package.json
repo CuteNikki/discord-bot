@@ -9,6 +9,8 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "discord.js": "^14.14.1"
+    "discord.js": "^14.14.1",
+    "pino": "^9.0.0",
+    "pino-pretty": "^11.0.0"
   }
 }

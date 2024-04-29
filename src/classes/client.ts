@@ -16,5 +16,7 @@ export class DiscordClient extends Client {
         // GatewayIntentBits.MessageContent // Not needed as we are not reading messages and only replying to interactions
       ],
     });
+
+    this.login(process.env.DISCORD_BOT_TOKEN);
   }
 }

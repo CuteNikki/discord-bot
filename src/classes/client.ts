@@ -4,7 +4,8 @@ import type { Command } from 'classes/command';
 import { loadCommands, registerCommands } from 'loaders/commands';
 
 export class DiscordClient extends Client {
-  commands = new Collection<string, Command>();
+  commands = new Collection<string, Command>(); // Collection<commandName, commandData>
+  cooldowns = new Collection<string, Collection<string, number>>(); // Collection<commandName, Collection<userId, timestamp>>
 
   constructor() {
     super({
@@ -20,7 +21,9 @@ export class DiscordClient extends Client {
       ],
     });
 
+    // Load commands and register commands
     this.load();
+    // Login with token
     this.login(process.env.DISCORD_BOT_TOKEN);
   }
 

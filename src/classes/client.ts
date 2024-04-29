@@ -2,6 +2,7 @@ import { Client, Collection, GatewayIntentBits } from 'discord.js';
 
 import type { Command } from 'classes/command';
 import { loadCommands, registerCommands } from 'loaders/commands';
+import { loadEvents } from 'loaders/events';
 
 export class DiscordClient extends Client {
   commands = new Collection<string, Command>(); // Collection<commandName, commandData>
@@ -21,13 +22,14 @@ export class DiscordClient extends Client {
       ],
     });
 
-    // Load commands and register commands
+    // Load commands, events and register commands
     this.load();
     // Login with token
     this.login(process.env.DISCORD_BOT_TOKEN);
   }
 
   async load() {
+    await loadEvents(this);
     await loadCommands(this);
     await registerCommands(this);
   }

@@ -1,9 +1,22 @@
 import { Shard, ShardingManager } from 'discord.js';
+import mongoose from 'mongoose';
 
+import { keys } from 'utils/keys';
 import { logger } from 'utils/logger';
 
-const manager = new ShardingManager('./src/bot.ts', { token: process.env.DISCORD_BOT_TOKEN });
+// Check if config variables are set
+if (Object.values(keys).includes('value_not_found')) throw new Error('Not all config variables are defined!');
 
+// Connect to database
+await mongoose
+  .connect(keys.DATABASE_URI)
+  .then(() => logger.info('Connected to database'))
+  .catch((err) => logger.error('Could not connect to database', err));
+
+// Create a discord sharding manager
+const manager = new ShardingManager('./src/bot.ts', { token: keys.DISCORD_BOT_TOKEN });
+
+// Setup shard events
 manager.on('shardCreate', (shard: Shard) => {
   shard.on('ready', () => logger.info(`[${shard.id}] SHARD READY`));
   shard.on('death', (_process) => logger.fatal(`[${shard.id}] SHARD DEATH`));

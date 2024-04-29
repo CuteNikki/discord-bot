@@ -1,0 +1,13 @@
+{
+  "DISCORD_BOT": {
+    "TOKEN": "abc123",
+    "ID": "123"
+  },
+  "DEVELOPER": {
+    "USER_IDS": ["123"],
+    "GUILD_IDS": ["123"]
+  },
+  "DATABASE": {
+    "URI": "abc123"
+  }
+}

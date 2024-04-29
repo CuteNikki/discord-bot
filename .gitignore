@@ -108,6 +108,10 @@ web_modules/
 .env.production.local
 .env.local
 
+# configation variable files
+
+config.json
+
 # parcel-bundler cache (https://parceljs.org/)
 
 .parcel-cache

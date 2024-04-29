@@ -3,6 +3,8 @@ import fs from 'fs';
 import path from 'path';
 
 import type { DiscordClient } from 'classes/client';
+
+import { keys } from 'utils/keys';
 import { logger } from 'utils/logger';
 
 export async function loadCommands(client: DiscordClient) {
@@ -30,13 +32,27 @@ export async function loadCommands(client: DiscordClient) {
 }
 
 export async function registerCommands(client: DiscordClient) {
-  const rest = new REST().setToken(process.env.DISCORD_BOT_TOKEN!);
-  const commands = client.commands.filter((cmd) => !cmd.options.developerOnly).map((cmd) => cmd.options.data);
+  const { DISCORD_BOT_ID, DISCORD_BOT_TOKEN } = keys;
+  const rest = new REST().setToken(DISCORD_BOT_TOKEN);
 
+  const commands = client.commands.filter((cmd) => !cmd.options.developerOnly).map((cmd) => cmd.options.data);
+  const devCommands = client.commands.filter((cmd) => cmd.options.developerOnly).map((cmd) => cmd.options.data);
+
+  // Register global commands
   try {
-    await rest.put(Routes.applicationCommands(process.env.DISCORD_BOT_ID!), { body: commands });
+    await rest.put(Routes.applicationCommands(DISCORD_BOT_ID), { body: commands });
     logger.info('Successfully registered application commands');
   } catch (err) {
     logger.error('Failed to register application commands', err);
+  }
+
+  // Register developer commands
+  for (const guildId of keys.DEVELOPER_GUILD_IDS) {
+    try {
+      await rest.put(Routes.applicationGuildCommands(DISCORD_BOT_ID, guildId), { body: devCommands });
+      logger.info(`Successfully registered application guild commands for ${guildId}`);
+    } catch (err) {
+      logger.error(`Failed to register application guild commands for ${guildId}`, err);
+    }
   }
 }

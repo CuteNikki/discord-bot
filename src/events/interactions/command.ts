@@ -1,6 +1,8 @@
 import { Collection, Events } from 'discord.js';
 
 import { Event } from 'classes/event';
+
+import { keys } from 'utils/keys';
 import { logger } from 'utils/logger';
 
 export default new Event({
@@ -14,7 +16,8 @@ export default new Event({
     if (!command) return interaction.reply({ content: 'Could not find that command!', ephemeral: true });
 
     // Check if command is developer only and return if the user's id doesn't match the developer's id
-    if (command.options.developerOnly && interaction.user.id !== process.env.DISCORD_USER_ID)
+    const developerIds = keys.DEVELOPER_USER_IDS;
+    if (command.options.developerOnly && !developerIds.includes(interaction.user.id))
       return interaction.reply({ content: 'This command cannot be used by you!', ephemeral: true });
 
     // Check if cooldowns has the current command and add the command if it doesn't have the command

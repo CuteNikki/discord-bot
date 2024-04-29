@@ -1,8 +1,7 @@
-# Discord Bot written in TypeScript using custom classes
+# Discord Bot written in TypeScript
+This Bot uses custom classes and has advanced functions!
 
 ###### Made with 💖 by [Nikki](https://github.com/CuteNikki/)
-
-<br><br />
 
 ## Setup your own Discord Bot:
 

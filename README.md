@@ -1,7 +1,6 @@
 # Discord Bot written in TypeScript
-This Bot uses custom classes and has advanced functions!
 
-###### Made with 💖 by [Nikki](https://github.com/CuteNikki/)
+This Bot uses custom classes and has advanced functions!
 
 ## Setup your own Discord Bot:
 
@@ -36,3 +35,7 @@ To run:
 ```bash
 bun run index.ts
 ```
+
+<br><br />
+
+###### Made with 💖 by [Nikki](https://github.com/CuteNikki/)

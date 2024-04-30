@@ -14,6 +14,6 @@ export default new Command({
   execute({ interaction, client }) {
     const lng = client.getLanguage(interaction.user.id);
 
-    interaction.reply({ content: i18next.t('commands.ping', { lng }) });
+    interaction.reply({ content: i18next.t('ping', { lng }) });
   },
 });

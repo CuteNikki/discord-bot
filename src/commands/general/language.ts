@@ -36,21 +36,21 @@ export default new Command({
     const language = options.getString('language', false);
 
     if (!language) {
-      return interaction.editReply({ content: i18next.t('commands.language.current', { lng }) });
+      return interaction.editReply({ content: i18next.t('language.current', { lng }) });
     } else if (language) {
       if (!client.supportedLanguages.includes(language))
         return interaction.editReply({
           content: [
-            i18next.t('commands.language.invalid', { lng, language }),
-            i18next.t('commands.language.supported', { lng, languages: client.supportedLanguages.map((value) => `\`${value}\``).join(', ') }),
+            i18next.t('language.invalid', { lng, language }),
+            i18next.t('language.supported', { lng, languages: client.supportedLanguages.map((value) => `\`${value}\``).join(', ') }),
           ].join('\n'),
         });
       try {
         await userModel.findOneAndUpdate({ userId: user.id }, { $set: { language } }, { new: true, upsert: true }).lean().exec();
         client.languages.set(user.id, language);
-        return interaction.editReply({ content: i18next.t('commands.language.success', { lng, language }) });
+        return interaction.editReply({ content: i18next.t('language.success', { lng, language }) });
       } catch (err) {
-        return interaction.editReply({ content: i18next.t('commands.language.error', { lng }) });
+        return interaction.editReply({ content: i18next.t('language.error', { lng }) });
       }
     }
   },

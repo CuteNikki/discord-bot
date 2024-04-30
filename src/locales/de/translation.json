@@ -1,12 +1,76 @@
 {
-  "commands": {
-    "ping": "Pong!",
-    "language": {
-      "current": "Momentane Sprache ist `{{lng}}`",
-      "invalid": "`{{language}}` ist keine unterstützte Sprache!",
-      "supported": "Liste unterstützter Sprachen: {{languages}}",
-      "error": "Sprache konnte nicht geändert werden!",
-      "success": "Sprache wurde zu `{{language}}` geändert"
+  "ping": "Pong!",
+  "language": {
+    "current": "Momentane Sprache ist `{{lng}}`",
+    "invalid": "`{{language}}` ist keine unterstützte Sprache!",
+    "supported": "Liste unterstützter Sprachen: {{languages}}",
+    "error": "Sprache konnte nicht geändert werden!",
+    "success": "Sprache wurde zu `{{language}}` geändert"
+  },
+  "weather": {
+    "none": "Es konnten keine Wetterdaten gefunden werden!",
+    "location": {
+      "title": "Standort",
+      "name": "Name: {{name}}",
+      "region": "Region: {{region}}",
+      "country": "Land: {{country}}",
+      "coordinates": "Koordinaten: {{latitude}}, {{longitude}}",
+      "localtime": "Datum & Uhrzeit: {{localtime}}",
+      "timezone": "Zeitzone: {{timezone}}"
+    },
+    "current": {
+      "embed_title": "Aktuelles Wetter",
+      "title": "Wetter",
+      "condition": "Zustand: {{condition}}",
+      "humidity": "Luftfeuchtigkeit: {{humidity}}%",
+      "cloud": "Wolkenbedeckung: {{coverage}}%",
+      "temperature": "Temperatur: {{temp_c}}°C ({{temp_f}}°F)",
+      "feels_like": "Gefühlte Temperatur: {{temp_c}}°C ({{temp_f}}°F)",
+      "uv_index": "UV-Index: {{uv}}",
+      "wind_direction": "Windrichtung: {{direction}} ({{degree}}°)",
+      "wind_speed": "Windgeschwindigkeit: {{speed_kph}} Kilometer/h ({{speed_mph}} Meilen/h)",
+      "wind_gust": "Windböen: {{gust_kph}} Kilometer/h ({{gust_mph}} Meilen/h)",
+      "pressure": "Luftdruck: {{pressure_mb}} Millibar ({{pressure_in}} Zoll)",
+      "precipitation": "Niederschlag: {{precipitation_mm}} Millimeter ({{precipitation_in}} Zoll)",
+      "visibility": "Sichtbarkeit: {{vis_km}} Kilometer ({{vis_miles}} Meilen)",
+      "last_updated": "Zuletzt aktualisiert: {{updated}}"
+    },
+    "quality": {
+      "title": "Luftqualität",
+      "co": "Kohlenmonoxid: {{co}} μg/m3",
+      "o3": "Ozon: {{o3}} μg/m3",
+      "no2": "Stickstoffdioxid: {{no2}} μg/m3",
+      "so2": "Schwefeldioxid: {{so2}} μg/m3",
+      "pm2_5": "PM2.5: {{pm2_5}} μg/m3",
+      "pm10": "PM10: {{pm10}} μg/m3",
+      "epa_index": "US-EPA-Index: {{epa_index}}",
+      "defra_index": "UK-Defra-Index: {{defra_index}}"
+    },
+    "astro": {
+      "title": "Astrologie",
+      "sunrise": "Sonnenaufgang: {{sunrise}}",
+      "sunset": "Sonnenuntergang: {{sunset}}",
+      "moonset": "Monduntergang: {{moonset}}",
+      "moon_phase": "Mondphase: {{phase}}",
+      "moon_illumination": "Mondbeleuchtung: {{illumination}}%"
+    },
+    "forecast": {
+      "title": "Wettervorhersage ({{date}})",
+      "condition": "Zustand: {{condition}}",
+      "avg_humidity": "Durchschn. Luftfeuchtigkeit: {{humidity}}%",
+      "rain_chance": "Regenwahrscheinlichkeit: {{chance}}%",
+      "snow_chance": "Schneewahrscheinlichkeit: {{chance}}%",
+      "max_temp": "Max. Temperatur: {{temp_c}}°C ({{temp_f}}°F)",
+      "min_temp": "Min. Temperatur: {{temp_c}}°C ({{temp_f}}°F)",
+      "avg_temp": "Durchschn. Temperatur: {{temp_c}}°C ({{temp_f}}°F)",
+      "uv_index": "UV-Index: {{uv}}",
+      "max_wind_speed": "Max. Windgeschwindigkeit: {{speed_kph}} Kilometer/h ({{speed_mph}} Meilen/h)",
+      "total_precipitation": "Gesamtniederschlag: {{precipitation_mm}} Millimeter ({{precipitation_in}} Zoll)",
+      "total_snowfall": "Gesamtschneefall: {{snowfall}} Centimeter",
+      "avg_visibility": "Durchschn. Sichtbarkeit: {{vis_km}} Kilometer ({{vis_miles}} Meilen)"
+    },
+    "history": {
+      "date": "Das angegebene Datum ist ungültig!"
     }
   }
 }

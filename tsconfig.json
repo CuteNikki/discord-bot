@@ -24,11 +24,16 @@
     "noUnusedParameters": false,
     "noPropertyAccessFromIndexSignature": false,
 
+    // DayJS requirements
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+
     // Custom paths
     "paths": {
       "classes/*": ["./src/classes/*"],
       "loaders/*": ["./src/loaders/*"],
       "utils/*": ["./src/utilities/*"],
+      "utilities/*": ["./src/utilities/*"],
       "models/*": ["./src/models/*"]
     }
   }

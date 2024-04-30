@@ -1,13 +1,24 @@
 {
   "DISCORD_BOT": {
+    "comment_1": "Get your bot's token from https://discord.com/developers/applications",
     "TOKEN": "abc123",
+
+    "comment_2": "Your bot's user id",
     "ID": "123"
   },
   "DEVELOPER": {
+    "comment_1": "This is an array of discord user ids that can use developer only commands",
     "USER_IDS": ["123"],
+
+    "comment_2": "This is an array of discord server ids that the developer only commands get registered to",
     "GUILD_IDS": ["123"]
   },
   "DATABASE": {
+    "comment": "Get your URI from https://www.mongodb.com/",
     "URI": "abc123"
+  },
+  "API_KEYS": {
+    "comment": "Get your API key from https://www.weatherapi.com/",
+    "WEATHER": "abc123"
   }
 }

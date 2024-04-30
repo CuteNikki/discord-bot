@@ -1,12 +1,90 @@
 {
-  "commands": {
-    "ping": "pong!",
-    "language": {
-      "current": "Current language is `{{lng}}`",
-      "invalid": "`{{language}}` is not a supported language!",
-      "supported": "List of supported languages: {{languages}}",
-      "error": "Language could not be changed!",
-      "success": "Language has been changed to `{{language}}`"
+  "ping": "pong!",
+  "language": {
+    "current": "Current language is `{{lng}}`",
+    "invalid": "`{{language}}` is not a supported language!",
+    "supported": "List of supported languages: {{languages}}",
+    "error": "Language could not be changed!",
+    "success": "Language has been changed to `{{language}}`"
+  },
+  "weather": {
+    "none": "No weather data could be found!",
+    "location": {
+      "title": "Location",
+      "name": "Name: {{name}}",
+      "region": "Region: {{region}}",
+      "country": "Country: {{country}}",
+      "coordinates": "Coordinates: {{latitude}}, {{longitude}}",
+      "localtime": "Date & Time: {{localtime}}",
+      "timezone": "Timezone: {{timezone}}"
+    },
+    "current": {
+      "embed_title": "Current Weather",
+      "title": "Weather",
+      "condition": "Condition: {{condition}}",
+      "humidity": "Humidity: {{humidity}}%",
+      "cloud": "Cloud Coverage: {{coverage}}%",
+      "temperature": "Temperature: {{temp_c}}°C ({{temp_f}}°F)",
+      "feels_like": "Feels Like: {{temp_c}}°C ({{temp_f}}°F)",
+      "uv_index": "UV Index: {{uv}}",
+      "wind_direction": "Wind Direction: {{direction}} ({{degree}}°)",
+      "wind_speed": "Wind Speed: {{speed_kph}} kilometer/h ({{speed_mph}} miles/h)",
+      "wind_gust": "Wind Gusts: {{gust_kph}} kilometer/h ({{gust_mph}} miles/h)",
+      "pressure": "Air Pressure: {{pressure_mb}} mBAR ({{pressure_in}} inches)",
+      "precipitation": "Precipitation: {{precipitation_mm}} mm ({{precipitation_in}} inches)",
+      "visibility": "Visibility: {{vis_km}} kilometer ({{vis_miles}} miles)",
+      "last_updated": "Last Updated: {{updated}}"
+    },
+    "quality": {
+      "title": "Air Quality",
+      "co": "Carbon Monoxide: {{co}} μg/m3",
+      "o3": "Ozone: {{o3}} μg/m3",
+      "no2": "Nitrogen Dioxide: {{no2}} μg/m3",
+      "so2": "Sulphur Dioxide: {{so2}} μg/m3",
+      "pm2_5": "PM2.5: {{pm2_5}} μg/m3",
+      "pm10": "PM10: {{pm10}} μg/m3",
+      "epa_index": "US EPA Index: {{index}}",
+      "defra_index": "UK Defra Index: {{index}}"
+    },
+    "astro": {
+      "title": "Astrology",
+      "sunrise": "Sunrise: {{sunrise}}",
+      "sunset": "Sunset: {{sunset}}",
+      "moonset": "Moonset: {{moonset}}",
+      "moon_phase": "Moon Phase: {{phase}}",
+      "moon_illumination": "Moon Illumination: {{illumination}}%"
+    },
+    "forecast": {
+      "title": "Weather Forecast ({{date}})",
+      "condition": "Condition: {{condition}}",
+      "avg_humidity": "Humidity: {{humidity}}%",
+      "rain_chance": "Chance of Rain: {{chance}}%",
+      "snow_chance": "Chance of Snow: {{chance}}%",
+      "max_temp": "Max. Temperature: {{temp_c}}°C ({{temp_f}}°F)",
+      "min_temp": "Min. Temperature: {{temp_c}}°C ({{temp_f}}°F)",
+      "avg_temp": "Avg. Temperature: {{temp_c}}°C ({{temp_f}}°F)",
+      "uv_index": "UV Index: {{uv}}",
+      "max_wind_speed": "Max Wind Speed: {{speed_kph}} kilometer/h ({{speed_mph}} miles/h)",
+      "total_precipitation": "Total Precipitation: {{precipitation_mm}} mm ({{precipitation_in}} inches)",
+      "total_snowfall": "Total Snowfall: {{snowfall}} centimeter",
+      "avg_visibility": "Avg Visibility: {{vis_km}} kilometer ({{vis_miles}} miles)"
+    },
+    "history": {
+      "date": "The date provided is invalid! Please use one of the following formats: {{formats}}",
+      "embed_title": "Historic Weather ({{date}})",
+      "title": "Weather",
+      "condition": "Condition: {{condition}}",
+      "avg_humidity": "Humidity: {{humidity}}%",
+      "rain_chance": "Chance of Rain: {{chance}}%",
+      "snow_chance": "Chance of Snow: {{chance}}%",
+      "max_temp": "Max. Temperature: {{temp_c}}°C ({{temp_f}}°F)",
+      "min_temp": "Min. Temperature: {{temp_c}}°C ({{temp_f}}°F)",
+      "avg_temp": "Avg. Temperature: {{temp_c}}°C ({{temp_f}}°F)",
+      "uv_index": "UV Index: {{uv}}",
+      "max_wind_speed": "Max Wind Speed: {{speed_kph}} kilometer/h ({{speed_mph}} miles/h)",
+      "total_precipitation": "Total Precipitation: {{precipitation_mm}} mm ({{precipitation_in}} inches)",
+      "total_snowfall": "Total Snowfall: {{snowfall}} centimeter",
+      "avg_visibility": "Avg Visibility: {{vis_km}} kilometer ({{vis_miles}} miles)"
     }
   }
 }

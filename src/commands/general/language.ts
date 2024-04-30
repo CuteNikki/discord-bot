@@ -1,7 +1,7 @@
-import { ApplicationCommandOptionType } from 'discord.js';
+import { ApplicationCommandOptionType, ApplicationCommandType } from 'discord.js';
 import i18next from 'i18next';
 
-import { Command } from 'classes/command';
+import { Command, Context, IntegrationTypes } from 'classes/command';
 
 import { userModel } from 'models/user';
 
@@ -9,9 +9,26 @@ export default new Command({
   data: {
     name: 'language',
     description: 'Manage the bot language',
-    options: [{ name: 'language', description: 'The new language to set', type: ApplicationCommandOptionType.String }],
+    type: ApplicationCommandType.ChatInput,
+    contexts: [Context.GUILD, Context.BOT_DM, Context.PRIVATE_CHANNEL],
+    integration_types: [IntegrationTypes.GUILD_INSTALL, IntegrationTypes.USER_INSTALL],
+    options: [
+      {
+        name: 'language',
+        description: 'The new language to set',
+        type: ApplicationCommandOptionType.String,
+        autocomplete: true,
+      },
+    ],
+  },
+  async autocomplete({ interaction, client }) {
+    const focused = interaction.options.getFocused();
+    const choices = client.supportedLanguages;
+    const filtered = choices.filter((choice) => choice.toLowerCase().includes(focused.toLowerCase()));
+    await interaction.respond(filtered.map((choice) => ({ name: choice, value: choice })));
   },
   async execute({ interaction, client }) {
+    if (!interaction.isChatInputCommand()) return;
     await interaction.deferReply({ ephemeral: true });
     const { user, options } = interaction;
 

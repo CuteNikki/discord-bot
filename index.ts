@@ -22,3 +22,9 @@ manager.on('shardCreate', (shard: Shard) => {
 });
 
 manager.spawn();
+
+/**
+ * IGNORE (SAVED FOR WHEN NEEDED)
+ * https://www.i18next.com/translation-function/plurals#singular-plural
+ * https://www.i18next.com/translation-function/plurals#languages-with-multiple-plurals
+ */

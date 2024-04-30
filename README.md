@@ -21,6 +21,9 @@ cd discord-bot
 # Install dependencies:
 bun install
 
+# Now rename example.config.json to config.json
+# Fill in the config with your own data
+
 # Run the bot:
 bun run index.ts
 # Or without sharding:

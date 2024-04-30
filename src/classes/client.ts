@@ -53,8 +53,8 @@ export class DiscordClient extends Client {
       },
     });
 
-    // Add user language preference to collection
-    this.loadLanguages();
+    // Add user data to collections
+    this.syncUsers();
     // Load all modules
     this.loadModules();
     // Login with token
@@ -67,14 +67,14 @@ export class DiscordClient extends Client {
     loadCommands(this).then(() => registerCommands(this));
   }
 
-  async loadLanguages() {
+  async syncUsers() {
     // Get all user documents
     const users = await userModel.find().lean().exec();
-
-    // Loop through users and set their language preference
+    // Loop through users and fill collections
     for (const user of users) {
       this.languages.set(user.userId, user.language);
     }
+    logger.info(`Synced ${users.length} users`);
   }
 
   // Get a users language preference

@@ -6,6 +6,13 @@
     "update": "Update",
     "pinging": "Pinging..."
   },
+  "avatar": {
+    "user": "Could not fetch that user!",
+    "failed": "Something went wrong while fetching user!",
+    "user_avatar": "User Avatar",
+    "user_banner": "User Banner",
+    "member_avatar": "Member Avatar"
+  },
   "language": {
     "current": "Current language is `{{lng}}`",
     "invalid": "`{{language}}` is not a supported language!",

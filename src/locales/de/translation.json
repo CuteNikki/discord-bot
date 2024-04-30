@@ -6,6 +6,13 @@
     "update": "Update",
     "pinging": "Pinging..."
   },
+  "avatar": {
+    "user": "Der Benutzer konnte nicht abgerufen werden!",
+    "failed": "Beim Abrufen des Benutzers ist ein Fehler aufgetreten!",
+    "user_avatar": "Benutzer Avatar",
+    "user_banner": "Benutzer Banner",
+    "member_avatar": "Mitglied Avatar"
+  },
   "language": {
     "current": "Momentane Sprache ist `{{lng}}`",
     "invalid": "`{{language}}` ist keine unterstützte Sprache!",

@@ -2,39 +2,42 @@
 
 This Bot uses custom classes and has advanced functions!
 
-## Setup your own Discord Bot:
+## Setup Process:
 
-This project was created using [Bun](https://bun.sh) v1.1.6. (a fast all-in-one JavaScript runtime).
-
-To install Bun on Windows:
+This project was created using [Bun](https://bun.sh) v1.1.6. (a faster all-in-one JavaScript runtime).
 
 ```bash
+# Install Bun on Windows:
 powershell -c "irm bun.sh/install.ps1 | iex"
-```
-
-To install Bun on Linux/MacOS:
-
-```bash
+# Or install Bun on Linux/MacOS:
 curl -fsSL https://bun.sh/install | bash
-```
 
-To clone the repository:
-
-```bash
+# Clone repository
 git clone https://github.com/CuteNikki/discord-bot.git
-```
 
-To install dependencies:
+# Navigate into folder:
+cd discord-bot
 
-```bash
+# Install dependencies:
 bun install
-```
 
-To run:
-
-```bash
+# Run the bot:
 bun run index.ts
+# Or without sharding:
+bun run ./src/bot.ts
 ```
+
+## TO-DO:
+
+- Moderation
+- Logging
+- Welcomer
+- Utility
+- Music
+- Custom VC
+- Levelling
+- Economy
+- Fun (Games, etc.)
 
 <br><br />
 

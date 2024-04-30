@@ -1,5 +1,11 @@
 {
-  "ping": "Pong!",
+  "ping": {
+    "title": "Pong!",
+    "websocket": "Websocket-Herzschlag",
+    "roundtrip": "Rundtrip-Latenz",
+    "update": "Update",
+    "pinging": "Pinging..."
+  },
   "language": {
     "current": "Momentane Sprache ist `{{lng}}`",
     "invalid": "`{{language}}` ist keine unterstützte Sprache!",

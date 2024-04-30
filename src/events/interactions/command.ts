@@ -53,7 +53,7 @@ export default new Event({
       const message = `Could not run command \`${command.options.data.name}\``;
 
       if (interaction.deferred) interaction.editReply({ content: message });
-      else interaction.reply({ content: message });
+      else interaction.reply({ content: message, ephemeral: true });
 
       logger.error(`Could not run command ${command.options.data.name}`, err);
     }

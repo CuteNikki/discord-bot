@@ -1,11 +1,13 @@
-import { Client, Collection } from 'discord.js';
+import { Client, Collection, GatewayIntentBits } from 'discord.js';
 import mongoose from 'mongoose';
 
 import i18next from 'i18next';
 import i18nextFsBackend from 'i18next-fs-backend';
 
+import type { Button } from 'classes/button';
 import type { Command } from 'classes/command';
 
+import { loadButtons } from 'loaders/buttons';
 import { loadCommands, registerCommands } from 'loaders/commands';
 import { loadEvents } from 'loaders/events';
 
@@ -16,6 +18,7 @@ import { userModel } from 'models/user';
 
 export class DiscordClient extends Client {
   commands = new Collection<string, Command>(); // Collection<commandName, commandData>
+  buttons = new Collection<string, Button>(); // Collection<buttonName, buttonData>
   cooldowns = new Collection<string, Collection<string, number>>(); // Collection<commandName, Collection<userId, timestamp>>
   languages = new Collection<string, string>(); // Collection<userId, language>
   supportedLanguages = ['en', 'de'];
@@ -23,7 +26,7 @@ export class DiscordClient extends Client {
   constructor() {
     super({
       intents: [
-        // GatewayIntentBits.Guilds, // !! Needed for guilds, channels and roles !!
+        GatewayIntentBits.Guilds, // !! Needed for guilds, channels and roles !!
         // GatewayIntentBits.GuildModeration, // !! Needed to keep track of bans !!
         // (If a user gets banned and then unbanned they will still show up as banned in the cache without this intent)
         // privileged intents:
@@ -64,6 +67,7 @@ export class DiscordClient extends Client {
 
   async loadModules() {
     loadEvents(this);
+    loadButtons(this);
     // Make sure to load commands before trying to register them
     loadCommands(this).then(() => registerCommands(this));
   }

@@ -92,12 +92,12 @@ export default new Command({
   async execute({ interaction, client }) {
     if (!interaction.isChatInputCommand()) return;
     const { options, user } = interaction;
-    const ephemeral = options.getBoolean('ephemeral', false) || true;
+    const ephemeral = options.getBoolean('ephemeral', false) ?? true;
     await interaction.deferReply({ ephemeral });
     const lng = client.getLanguage(user.id);
 
     const userLocation = options.getString('location', true);
-    const days = options.getString('days', false) || undefined;
+    const days = options.getString('days', false) ?? '1';
 
     switch (options.getSubcommand()) {
       case 'current':

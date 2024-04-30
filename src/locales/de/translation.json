@@ -1,0 +1,12 @@
+{
+  "commands": {
+    "ping": "Pong!",
+    "language": {
+      "current": "Momentane Sprache ist `{{lng}}`",
+      "invalid": "`{{language}}` ist keine unterstützte Sprache!",
+      "supported": "Liste unterstützter Sprachen: {{languages}}",
+      "error": "Sprache konnte nicht geändert werden!",
+      "success": "Sprache wurde zu `{{language}}` geändert"
+    }
+  }
+}

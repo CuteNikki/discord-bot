@@ -28,7 +28,8 @@
     "paths": {
       "classes/*": ["./src/classes/*"],
       "loaders/*": ["./src/loaders/*"],
-      "utils/*": ["./src/utilities/*"]
+      "utils/*": ["./src/utilities/*"],
+      "models/*": ["./src/models/*"]
     }
   }
 }

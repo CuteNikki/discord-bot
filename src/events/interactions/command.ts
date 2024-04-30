@@ -9,7 +9,7 @@ export default new Event({
   name: Events.InteractionCreate,
   execute(client, interaction) {
     // Since we only want the command interactions we return early if the interaction is not a command
-    if (!interaction.isCommand()) return;
+    if (!interaction.isChatInputCommand()) return;
 
     // Get the command with the interactions command name and return if it wasn't found
     const command = client.commands.get(interaction.commandName);

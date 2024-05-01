@@ -10,6 +10,33 @@
     "title": "Bot Betriebszeit",
     "description": "Gestartet {{uptime}}"
   },
+  "botinfo": {
+    "title": "Bot Informationen",
+    "general": {
+      "title": "Generelle Informationen",
+      "name": "Name: {{name}} ({{id}})",
+      "owner": "Besitzer: {{owner}} ({{id}})",
+      "created": "Erstellt: {{created}}",
+      "uptime": "Betriebszeit: {{uptime}}",
+      "ping": "Ping: {{ping}}ms"
+    },
+    "vps": {
+      "title": "Virtueller privater Server",
+      "os": "Betriebssystem: {{os}}",
+      "cpu_model": "CPU-Model: {{cpuModel}}",
+      "cpu_usage": "CPU-Nutzung: {{cpuUsage}}%",
+      "ram_usage": "RAM-Nutzung: {{usedMemGb}}Gb/{{totalMemGb}}Gb ({{usedMemPercentage}}%)"
+    },
+    "stats": {
+      "title": "Verschiedenes & Statistiken",
+      "db_name": "Database: {{name}}",
+      "db_state": "DB Verbindung: {{state}}",
+      "guilds": "Server: {{guildCount}}",
+      "users": "User: {{userCount}}",
+      "channels": "Kanäle: {{channelCount}}",
+      "emojis": "Emojis: {{emojiCount}}"
+    }
+  },
   "serverinfo": {
     "title": "Server Informationen",
     "features": "Server Features",

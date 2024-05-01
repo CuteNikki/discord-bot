@@ -16,15 +16,22 @@ export default new Command({
         description: 'User to get the avatar from',
         type: ApplicationCommandOptionType.User,
       },
+      {
+        name: 'ephemeral',
+        description: 'When set to false will show the message to everyone',
+        type: ApplicationCommandOptionType.Boolean,
+      },
     ],
   },
   async execute({ interaction, client }) {
     if (!interaction.isChatInputCommand()) return;
+    const ephemeral = interaction.options.getBoolean('ephemeral', false) ?? true;
+    await interaction.deferReply({ ephemeral });
     const lng = client.getLanguage(interaction.user.id);
 
     try {
       const user = await client.users.fetch(interaction.options.getUser('user', false) ?? interaction.user, { force: true });
-      if (!user) return interaction.reply({ content: i18next.t('avatar.user', { lng }) });
+      if (!user) return interaction.editReply({ content: i18next.t('avatar.user', { lng }) });
 
       const member = await interaction.guild?.members.fetch(user.id);
 
@@ -49,9 +56,9 @@ export default new Command({
             .setImage(member.displayAvatarURL({ size: 4096 }))
         );
 
-      interaction.reply({ embeds });
+      interaction.editReply({ embeds });
     } catch (err) {
-      interaction.reply({ content: i18next.t('avatar.failed', { lng }) });
+      interaction.editReply({ content: i18next.t('avatar.failed', { lng }) });
     }
   },
 });

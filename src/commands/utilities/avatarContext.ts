@@ -5,7 +5,7 @@ import { Command, Context, IntegrationTypes } from 'classes/command';
 
 export default new Command({
   data: {
-    name: 'Avatar/Banner',
+    name: 'Avatar & Banner',
     type: ApplicationCommandType.User,
     contexts: [Context.GUILD, Context.BOT_DM, Context.PRIVATE_CHANNEL],
     integration_types: [IntegrationTypes.GUILD_INSTALL, IntegrationTypes.USER_INSTALL],
@@ -13,10 +13,11 @@ export default new Command({
   async execute({ interaction, client }) {
     if (!interaction.isUserContextMenuCommand()) return;
     const lng = client.getLanguage(interaction.user.id);
+    await interaction.deferReply({ ephemeral: true });
 
     try {
       const user = await client.users.fetch(interaction.targetId, { force: true });
-      if (!user) return interaction.reply({ content: i18next.t('avatar.user', { lng }) });
+      if (!user) return interaction.editReply({ content: i18next.t('avatar.user', { lng }) });
 
       const member = await interaction.guild?.members.fetch(user.id);
 
@@ -41,9 +42,9 @@ export default new Command({
             .setImage(member.displayAvatarURL({ size: 4096 }))
         );
 
-      interaction.reply({ embeds });
+      interaction.editReply({ embeds });
     } catch (err) {
-      interaction.reply({ content: i18next.t('avatar.failed', { lng }) });
+      interaction.editReply({ content: i18next.t('avatar.failed', { lng }) });
     }
   },
 });

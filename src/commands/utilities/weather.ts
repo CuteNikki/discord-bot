@@ -26,7 +26,7 @@ export default new Command({
           },
           {
             name: 'ephemeral',
-            description: 'When set to true it will only shows the message to you',
+            description: 'When set to false will show the message to everyone',
             type: ApplicationCommandOptionType.Boolean,
             required: false,
           },

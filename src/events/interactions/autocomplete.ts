@@ -15,7 +15,7 @@ export default new Event({
     try {
       await command.options.autocomplete({ interaction, client });
     } catch (err) {
-      logger.error(`Could not autocomplete ${command.options.data.name}`, err);
+      logger.error(err, `Could not autocomplete ${command.options.data.name}`);
     }
   },
 });

@@ -20,7 +20,7 @@ export async function loadCommands(client: DiscordClient) {
       const command = await import(filePath);
 
       if (!command.default) {
-        logger.error('Failed to load command', filePath);
+        logger.error(filePath, `Failed to load command`);
         continue;
       }
 
@@ -43,7 +43,7 @@ export async function registerCommands(client: DiscordClient) {
     await rest.put(Routes.applicationCommands(DISCORD_BOT_ID), { body: commands });
     logger.info('Successfully registered application commands');
   } catch (err) {
-    logger.error('Failed to register application commands', err);
+    logger.error(err, `Failed to register application commands`);
   }
 
   // Register developer commands
@@ -52,7 +52,7 @@ export async function registerCommands(client: DiscordClient) {
       await rest.put(Routes.applicationGuildCommands(DISCORD_BOT_ID, guildId), { body: devCommands });
       logger.info(`Successfully registered application guild commands for ${guildId}`);
     } catch (err) {
-      logger.error(`Failed to register application guild commands for ${guildId}`, err);
+      logger.error(err, `Failed to register application guild commands for ${guildId}`);
     }
   }
 }

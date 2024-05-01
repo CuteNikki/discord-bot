@@ -40,7 +40,7 @@ export class DiscordClient extends Client {
     mongoose
       .connect(keys.DATABASE_URI)
       .then(() => logger.info('Connected to database'))
-      .catch((err) => logger.error('Could not connect to database', err));
+      .catch((err) => logger.error(err, `Could not connect to database`));
 
     // Initialize i18next
     i18next.use(i18nextFsBackend).init({

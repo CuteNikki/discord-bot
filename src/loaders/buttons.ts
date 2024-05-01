@@ -18,7 +18,7 @@ export async function loadButtons(client: DiscordClient) {
       const button = await import(filePath);
 
       if (!button.default) {
-        logger.error('Failed to load button', filePath);
+        logger.error(filePath, `Failed to load button`);
         continue;
       }
 

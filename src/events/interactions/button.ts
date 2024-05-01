@@ -83,7 +83,7 @@ export default new Event({
       if (interaction.deferred) interaction.editReply({ content: message });
       else interaction.reply({ content: message, ephemeral: true });
 
-      logger.error(`Could not run command ${button.options.customId}`, err);
+      logger.error(err, `Could not run command ${button.options.customId}`);
     }
   },
 });

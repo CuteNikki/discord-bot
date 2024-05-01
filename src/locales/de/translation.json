@@ -6,11 +6,26 @@
     "update": "Update",
     "pinging": "Pinging..."
   },
+  "userinfo": {
+    "user": "Der Benutzer konnte nicht gefunden werden!",
+    "failed": "Beim Abrufen des Users ist ein Fehler aufgetreten!",
+    "user_embed_title": "User Information",
+    "user_title": "User",
+    "created_at": "Erstellt",
+    "badges": "Abzeichen",
+    "banner": "Banner",
+    "member_embed_title": "Mitglied Information",
+    "joined_at": "Beigetreten",
+    "activities": "Aktivitäten",
+    "devices": "Geräte",
+    "boosting": "Booster seit",
+    "roles": "Rollen ({{showing}}/{{total}})"
+  },
   "avatar": {
-    "user": "Der Benutzer konnte nicht abgerufen werden!",
-    "failed": "Beim Abrufen des Benutzers ist ein Fehler aufgetreten!",
-    "user_avatar": "Benutzer Avatar",
-    "user_banner": "Benutzer Banner",
+    "user": "Der User konnte nicht abgerufen werden!",
+    "failed": "Beim Abrufen des Users ist ein Fehler aufgetreten!",
+    "user_avatar": "User Avatar",
+    "user_banner": "User Banner",
     "member_avatar": "Mitglied Avatar"
   },
   "language": {

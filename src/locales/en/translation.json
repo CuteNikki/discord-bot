@@ -6,9 +6,73 @@
     "update": "Update",
     "pinging": "Pinging..."
   },
+  "serverinfo": {
+    "title": "Server Information",
+    "features": "Server Features",
+    "user_roles": "Roles ({{showing}}/{{total}})",
+    "managed_roles": "Managed Roles ({{showing}}/{{total}})",
+    "banner": "Banner",
+    "server": {
+      "title": "General Information",
+      "name": "Name: {{name}}",
+      "id": "Id: {{id}}",
+      "vanity": "Vanity: {{vanity}}",
+      "owner": "Owner: {{owner}}"
+    },
+    "security": {
+      "title": "Server Security",
+      "explicit_filter": "Explicit Filter: {{filter}}",
+      "nsfw_level": "NSFW Level: {{level}}",
+      "verification_level": "Verification Level: {{level}}"
+    },
+    "boost": {
+      "title": "Server Boosts",
+      "tier": "Tier: {{tier}}",
+      "count": "Boosts: {{boosts}}",
+      "users": "Boosters: {{boosters}}"
+    },
+    "members": {
+      "title": "Server Members",
+      "total": "Total: {{total}}",
+      "humans": "Humans: {{humans}}",
+      "bots": "Bots: {{bots}}",
+      "online": "Online: {{online}}"
+    },
+    "channels": {
+      "title": "Server Channels",
+      "total": "Total: {{total}}",
+      "categories": "Categories: {{categories}}",
+      "text": "Text: {{text}}",
+      "voice": "Voice: {{voice}}",
+      "threads": "Threads: {{threads}}",
+      "other": "Other: {{other}}"
+    },
+    "emojis": {
+      "title": "Server Emojis & Stickers",
+      "total": "Total Emojis: {{total}}",
+      "animated": "Animated Emojis: {{animated}}",
+      "static": "Static Emojis: {{static}}",
+      "stickers": "Total Stickers: {{total}}"
+    }
+  },
+  "userinfo": {
+    "user": "Could not find that user!",
+    "failed": "Something went wrong while getting user!",
+    "user_embed_title": "User Information",
+    "user_title": "User",
+    "created_at": "Created at",
+    "badges": "Badges",
+    "banner": "Banner",
+    "member_embed_title": "Member Information",
+    "joined_at": "Created at",
+    "activities": "Activities",
+    "devices": "Devices",
+    "boosting": "Booster since",
+    "roles": "Roles ({{showing}}/{{total}})"
+  },
   "avatar": {
-    "user": "Could not fetch that user!",
-    "failed": "Something went wrong while fetching user!",
+    "user": "Could not find that user!",
+    "failed": "Something went wrong while getting user!",
     "user_avatar": "User Avatar",
     "user_banner": "User Banner",
     "member_avatar": "Member Avatar"

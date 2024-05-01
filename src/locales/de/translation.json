@@ -6,6 +6,55 @@
     "update": "Update",
     "pinging": "Pinging..."
   },
+  "serverinfo": {
+    "title": "Server Informationen",
+    "features": "Server Features",
+    "user_roles": "Rollen ({{showing}}/{{total}})",
+    "managed_roles": "Verwaltete Rollen ({{showing}}/{{total}})",
+    "banner": "Banner",
+    "server": {
+      "title": "Generelle Informationen",
+      "name": "Name: {{name}}",
+      "id": "Id: {{id}}",
+      "vanity": "Vanity: {{vanity}}",
+      "owner": "Besitzer: {{owner}}"
+    },
+    "security": {
+      "title": "Server Sicherheit",
+      "explicit_filter": "Expliziter Filter: {{filter}}",
+      "nsfw_level": "NSFW-Level: {{level}}",
+      "verification_level": "Verifizierungs-Level: {{level}}"
+    },
+    "boost": {
+      "title": "Server Boosts",
+      "tier": "Stufe: {{tier}}",
+      "count": "Boosts: {{boosts}}",
+      "users": "Boosters: {{boosters}}"
+    },
+    "members": {
+      "title": "Server Mitglieder",
+      "total": "Insgesamt: {{total}}",
+      "humans": "Menschen: {{humans}}",
+      "bots": "Bots: {{bots}}",
+      "online": "Online: {{online}}"
+    },
+    "channels": {
+      "title": "Server Kanäle",
+      "total": "Insgesamt: {{total}}",
+      "categories": "Kategorien: {{categories}}",
+      "text": "Text: {{text}}",
+      "voice": "Sprache: {{voice}}",
+      "threads": "Threads: {{threads}}",
+      "other": "Andere: {{other}}"
+    },
+    "emojis": {
+      "title": "Server Emojis & Sticker",
+      "total": "Gesamte Emojis: {{total}}",
+      "animated": "Animierte Emojis: {{animated}}",
+      "static": "Statische Emojis: {{static}}",
+      "stickers": "Gesamte Sticker: {{total}}"
+    }
+  },
   "userinfo": {
     "user": "Der Benutzer konnte nicht gefunden werden!",
     "failed": "Beim Abrufen des Users ist ein Fehler aufgetreten!",

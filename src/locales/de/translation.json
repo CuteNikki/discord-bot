@@ -6,6 +6,10 @@
     "update": "Update",
     "pinging": "Pinging..."
   },
+  "uptime": {
+    "title": "Bot Betriebszeit",
+    "description": "Gestartet {{uptime}}"
+  },
   "serverinfo": {
     "title": "Server Informationen",
     "features": "Server Features",

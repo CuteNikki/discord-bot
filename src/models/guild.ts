@@ -1,7 +1,8 @@
 import mongoose from 'mongoose';
 
-const guildSchema = new mongoose.Schema({
-  guildId: { type: String, required: true },
-});
-
-export const guildModel = mongoose.model('guild', guildSchema);
+export const guildModel = mongoose.model(
+  'guild',
+  new mongoose.Schema({
+    guildId: { type: String, required: true },
+  })
+);

@@ -21,7 +21,8 @@ export default new Button({
           .setTitle(i18next.t('ping.title', { lng }))
           .addFields(
             { name: i18next.t('ping.websocket', { lng }), value: `${client.ws.ping}ms` },
-            { name: i18next.t('ping.roundtrip', { lng }), value: `${sent.editedTimestamp! - interaction.createdTimestamp}ms` }
+            { name: i18next.t('ping.roundtrip', { lng }), value: `${sent.editedTimestamp! - interaction.createdTimestamp}ms` },
+            { name: i18next.t('ping.last_updated', { lng }), value: `<t:${Math.floor(Date.now() / 1000)}:R>` }
           ),
       ],
       components: [

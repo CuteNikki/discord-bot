@@ -4,7 +4,8 @@
     "websocket": "Websocket Heartbeat",
     "roundtrip": "Roundtrip Latency",
     "update": "Update",
-    "pinging": "Pinging..."
+    "pinging": "Pinging...",
+    "last_updated": "Last Updated"
   },
   "uptime": {
     "title": "Bot Uptime",

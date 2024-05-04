@@ -1,4 +1,4 @@
-import { ApplicationCommandType, CommandInteraction, type ApplicationCommandData, type AutocompleteInteraction } from 'discord.js';
+import { ApplicationCommandType, CommandInteraction, type ApplicationCommandDataResolvable, type AutocompleteInteraction } from 'discord.js';
 import type { DiscordClient } from './client';
 
 export enum Context {
@@ -17,7 +17,7 @@ export class Command {
     public options: {
       developerOnly?: boolean; // If command is for developer only, it cannot be used by anyone else
       cooldown?: number; // Cooldown between command executes per user (in milliseconds)
-      data: ApplicationCommandData & {
+      data: ApplicationCommandDataResolvable & {
         type: ApplicationCommandType;
         contexts?: Context[];
         integration_types?: IntegrationTypes[];

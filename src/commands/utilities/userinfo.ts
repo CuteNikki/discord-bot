@@ -1,14 +1,14 @@
 import { ActivityType, ApplicationCommandOptionType, ApplicationCommandType, Colors, EmbedBuilder, Role } from 'discord.js';
 import i18next from 'i18next';
 
-import { Command, Context, IntegrationTypes } from 'classes/command';
+import { Command, Contexts, IntegrationTypes } from 'classes/command';
 
 export default new Command({
   data: {
     name: 'userinfo',
     description: 'Get information about a user',
     type: ApplicationCommandType.ChatInput,
-    contexts: [Context.GUILD, Context.BOT_DM, Context.PRIVATE_CHANNEL],
+    contexts: [Contexts.GUILD, Contexts.BOT_DM, Contexts.PRIVATE_CHANNEL],
     integration_types: [IntegrationTypes.GUILD_INSTALL, IntegrationTypes.USER_INSTALL],
     options: [
       {
@@ -24,7 +24,6 @@ export default new Command({
     ],
   },
   async execute({ interaction, client }) {
-    if (!interaction.isChatInputCommand()) return;
     const lng = client.getLanguage(interaction.user.id);
     const ephemeral = interaction.options.getBoolean('ephemeral', false) ?? true;
     await interaction.deferReply({ ephemeral });

@@ -1,7 +1,7 @@
 import { ApplicationCommandOptionType, ApplicationCommandType } from 'discord.js';
 import i18next from 'i18next';
 
-import { Command, Context, IntegrationTypes } from 'classes/command';
+import { Command, Contexts, IntegrationTypes } from 'classes/command';
 
 import { userModel } from 'models/user';
 
@@ -10,7 +10,7 @@ export default new Command({
     name: 'language',
     description: 'Manage the bot language',
     type: ApplicationCommandType.ChatInput,
-    contexts: [Context.GUILD, Context.BOT_DM, Context.PRIVATE_CHANNEL],
+    contexts: [Contexts.GUILD, Contexts.BOT_DM, Contexts.PRIVATE_CHANNEL],
     integration_types: [IntegrationTypes.GUILD_INSTALL, IntegrationTypes.USER_INSTALL],
     options: [
       {
@@ -28,7 +28,6 @@ export default new Command({
     await interaction.respond(filtered.map((choice) => ({ name: choice, value: choice })));
   },
   async execute({ interaction, client }) {
-    if (!interaction.isChatInputCommand()) return;
     await interaction.deferReply({ ephemeral: true });
     const { user, options } = interaction;
 

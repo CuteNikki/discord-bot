@@ -1,7 +1,7 @@
 import { ActionRowBuilder, ApplicationCommandOptionType, ApplicationCommandType, ButtonBuilder, ButtonStyle, PermissionFlagsBits } from 'discord.js';
 import i18next from 'i18next';
 
-import { Command, Context, IntegrationTypes } from 'classes/command';
+import { Command, Contexts, IntegrationTypes } from 'classes/command';
 
 import { InfractionType, infractionModel } from 'models/infraction';
 
@@ -10,7 +10,7 @@ export default new Command({
     name: 'ban',
     description: 'Bans a user',
     type: ApplicationCommandType.ChatInput,
-    contexts: [Context.GUILD],
+    contexts: [Contexts.GUILD],
     integration_types: [IntegrationTypes.GUILD_INSTALL],
     default_member_permissions: `${PermissionFlagsBits.BanMembers}`,
     options: [

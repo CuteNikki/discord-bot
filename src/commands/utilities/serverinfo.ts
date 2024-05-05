@@ -11,7 +11,7 @@ import {
   Role,
 } from 'discord.js';
 
-import { Command, Context, IntegrationTypes } from 'classes/command';
+import { Command, Contexts, IntegrationTypes } from 'classes/command';
 import i18next from 'i18next';
 
 export default new Command({
@@ -19,7 +19,7 @@ export default new Command({
     name: 'serverinfo',
     description: 'Get information about the server',
     type: ApplicationCommandType.ChatInput,
-    contexts: [Context.GUILD],
+    contexts: [Contexts.GUILD],
     integration_types: [IntegrationTypes.GUILD_INSTALL],
     options: [
       {

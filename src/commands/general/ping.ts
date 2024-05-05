@@ -1,14 +1,14 @@
 import { ActionRowBuilder, ApplicationCommandType, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder } from 'discord.js';
 import i18next from 'i18next';
 
-import { Command, Context, IntegrationTypes } from 'classes/command';
+import { Command, Contexts, IntegrationTypes } from 'classes/command';
 
 export default new Command({
   data: {
     name: 'ping',
     description: 'Replies with Pong!',
     type: ApplicationCommandType.ChatInput,
-    contexts: [Context.GUILD, Context.BOT_DM, Context.PRIVATE_CHANNEL],
+    contexts: [Contexts.GUILD, Contexts.BOT_DM, Contexts.PRIVATE_CHANNEL],
     integration_types: [IntegrationTypes.GUILD_INSTALL, IntegrationTypes.USER_INSTALL],
   },
   async execute({ interaction, client }) {

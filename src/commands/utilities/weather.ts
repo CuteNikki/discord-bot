@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import { ApplicationCommandOptionType, ApplicationCommandType, Colors, EmbedBuilder } from 'discord.js';
 import i18next from 'i18next';
 
-import { Command, Context, IntegrationTypes } from 'classes/command';
+import { Command, Contexts, IntegrationTypes } from 'classes/command';
 import { compass, defraIndex, epaIndex, getCurrentWeather, getHistoricWeather, getWeatherForecast, uvIndex } from 'utils/weather';
 
 export default new Command({
@@ -10,7 +10,7 @@ export default new Command({
     name: 'weather',
     description: 'Get weather information',
     type: ApplicationCommandType.ChatInput,
-    contexts: [Context.GUILD, Context.BOT_DM, Context.PRIVATE_CHANNEL],
+    contexts: [Contexts.GUILD, Contexts.BOT_DM, Contexts.PRIVATE_CHANNEL],
     integration_types: [IntegrationTypes.GUILD_INSTALL, IntegrationTypes.USER_INSTALL],
     options: [
       {
@@ -90,7 +90,6 @@ export default new Command({
     ],
   },
   async execute({ interaction, client }) {
-    if (!interaction.isChatInputCommand()) return;
     const { options, user } = interaction;
     const ephemeral = options.getBoolean('ephemeral', false) ?? true;
     await interaction.deferReply({ ephemeral });

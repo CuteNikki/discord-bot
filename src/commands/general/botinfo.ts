@@ -4,14 +4,14 @@ import mongoose from 'mongoose';
 import nou from 'node-os-utils';
 import os from 'os';
 
-import { Command, Context, IntegrationTypes } from 'classes/command';
+import { Command, Contexts, IntegrationTypes } from 'classes/command';
 
 export default new Command({
   data: {
     name: 'botinfo',
     description: 'Shows information about the bot',
     type: ApplicationCommandType.ChatInput,
-    contexts: [Context.GUILD, Context.BOT_DM, Context.PRIVATE_CHANNEL],
+    contexts: [Contexts.GUILD, Contexts.BOT_DM, Contexts.PRIVATE_CHANNEL],
     integration_types: [IntegrationTypes.GUILD_INSTALL, IntegrationTypes.USER_INSTALL],
     options: [
       {
@@ -22,7 +22,6 @@ export default new Command({
     ],
   },
   async execute({ interaction, client }) {
-    if (!interaction.isChatInputCommand()) return;
     const lng = client.getLanguage(interaction.user.id);
     const ephemeral = interaction.options.getBoolean('ephemeral', false) ?? true;
     await interaction.deferReply({ ephemeral });

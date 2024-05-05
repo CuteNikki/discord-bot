@@ -78,12 +78,12 @@ export default new Event({
     try {
       button.options.execute({ client, interaction });
     } catch (err) {
-      const message = `Could not run command \`${button.options.customId}\``;
+      const message = `Could not run button \`${button.options.customId}\``;
 
       if (interaction.deferred) interaction.editReply({ content: message });
       else interaction.reply({ content: message, ephemeral: true });
 
-      logger.error(err, `Could not run command ${button.options.customId}`);
+      logger.error(err, `Could not run button ${button.options.customId}`);
     }
   },
 });

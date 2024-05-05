@@ -1,4 +1,12 @@
-import { ActionRowBuilder, ApplicationCommandOptionType, ApplicationCommandType, ButtonBuilder, ButtonStyle, PermissionFlagsBits } from 'discord.js';
+import {
+  ActionRowBuilder,
+  ApplicationCommandOptionType,
+  ApplicationCommandType,
+  ButtonBuilder,
+  ButtonStyle,
+  ComponentType,
+  PermissionFlagsBits,
+} from 'discord.js';
 import i18next from 'i18next';
 
 import { Command, Contexts, IntegrationTypes } from 'classes/command';
@@ -99,11 +107,11 @@ export default new Command({
       ],
     });
 
-    const collector = await msg.awaitMessageComponent({ filter: (i) => i.user.id === interaction.user.id, time: 30000 });
+    const collector = await msg.awaitMessageComponent({ filter: (i) => i.user.id === interaction.user.id, componentType: ComponentType.Button, time: 30_000 });
 
     if (collector.customId === CustomIds.CANCEL) {
-      await collector.update(i18next.t('ban.cancelled', { lng }));
-    } else if (collector.id === CustomIds.CONFIRM) {
+      await collector.update({ content: i18next.t('ban.cancelled', { lng }), components: [] });
+    } else if (collector.customId === CustomIds.CONFIRM) {
       const banned = await guild.bans.create(target.id, { reason, deleteMessageSeconds: history }).catch(() => {});
       if (!banned) return collector.update(i18next.t('ban.failed', { lng }));
 
@@ -112,13 +120,14 @@ export default new Command({
           content: i18next.t('ban.target_dm', { lng: targetLng, guild: `\`${guild.name}\``, reason: `\`${reason}\`` }),
         })
         .catch(() => {});
-      await collector.update(
-        [
-          i18next.t('ban.confirmed', { lng, user: target.toString, reason: `\`${reason}\`` }),
+      await collector.update({
+        content: [
+          i18next.t('ban.confirmed', { lng, user: target.toString(), reason: `\`${reason}\`` }),
           receivedDM ? i18next.t('ban.dm_received', { lng }) : i18next.t('ban.dm_not_received', { lng }),
           i18next.t('ban.deleted_history', { lng, deleted: historyOptions[history as keyof typeof historyOptions] }),
-        ].join('\n')
-      );
+        ].join('\n'),
+        components: [],
+      });
 
       await infractionModel.create({
         guildId: guild.id,

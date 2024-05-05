@@ -1,10 +1,10 @@
 import { ApplicationCommandOptionType, ApplicationCommandType, Colors, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
+import i18next from 'i18next';
 
 import { Command, Contexts, IntegrationTypes } from 'classes/command';
 
 import { infractionModel } from 'models/infraction';
 
-import i18next from 'i18next';
 import { chunk, pagination } from 'utils/pagination';
 
 export default new Command({

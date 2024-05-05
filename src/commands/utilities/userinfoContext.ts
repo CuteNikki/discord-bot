@@ -5,7 +5,7 @@ import { Command, Contexts, IntegrationTypes } from 'classes/command';
 
 export default new Command({
   data: {
-    name: 'Userinfo',
+    name: 'View Userinfo',
     type: ApplicationCommandType.User,
     contexts: [Contexts.GUILD, Contexts.BOT_DM, Contexts.PRIVATE_CHANNEL],
     integration_types: [IntegrationTypes.GUILD_INSTALL, IntegrationTypes.USER_INSTALL],

@@ -23,7 +23,7 @@ export default new Command({
           .setColor(Colors.Blurple)
           .setTitle(i18next.t('ping.title', { lng }))
           .addFields(
-            { name: i18next.t('ping.websocket', { lng }), value: `${client.ws.ping}` },
+            { name: i18next.t('ping.websocket', { lng }), value: `${client.ws.ping}ms` },
             { name: i18next.t('ping.roundtrip', { lng }), value: `${sent.createdTimestamp - interaction.createdTimestamp}ms` }
           ),
       ],

@@ -6,18 +6,18 @@ export function chunk<T>(arr: T[], size: number): T[][] {
 
 export async function pagination({
   interaction,
-  embeds,
-  ephemeral = false,
-  time = 180_000,
+  embeds, // The array of embeds (the pages)
+  time = 180_000, // The time a user has to use the buttons before disabling them
+  ephemeral = true, // If true, the pagination will only be visible to the user
+  footer = true, // If true, will replace the current embeds footer to tell that the buttons have been disabled because the time is over
 }: {
   interaction: CommandInteraction;
   embeds: EmbedBuilder[];
   time?: number;
   ephemeral?: boolean;
+  footer?: boolean;
 }) {
   if (!interaction.deferred) await interaction.deferReply({ ephemeral });
-
-  if (embeds.length === 1) await interaction.editReply({ embeds });
 
   enum CustomIds {
     FIRST = 'PAGINATION_FIRST',
@@ -83,6 +83,9 @@ export async function pagination({
     buttonNext.setDisabled(true);
     buttonLast.setDisabled(true);
 
-    interaction.editReply({ embeds: [embeds[index]], components: [components] });
+    const embed = embeds[index];
+    if (footer) embed.setFooter({ text: 'The time to use buttons has run out' });
+
+    interaction.editReply({ embeds: [embed], components: [components] }).catch(() => {});
   });
 }

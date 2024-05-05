@@ -4,7 +4,7 @@ import {
   ChatInputCommandInteraction,
   MessageContextMenuCommandInteraction,
   UserContextMenuCommandInteraction,
-  type ApplicationCommandDataResolvable,
+  type RESTPostAPIApplicationCommandsJSONBody,
 } from 'discord.js';
 import { DiscordClient } from './client';
 
@@ -27,10 +27,12 @@ type InteractionType<T extends ApplicationCommandType> = T extends ApplicationCo
   ? UserContextMenuCommandInteraction
   : never;
 
-export class Command<T extends ApplicationCommandType> {
+export class Command<T extends ApplicationCommandType = ApplicationCommandType.ChatInput> {
   constructor(
     public options: {
-      data: ApplicationCommandDataResolvable & {
+      developerOnly?: boolean; // If command is for developer only, it cannot be used by anyone else
+      cooldown?: number; // Cooldown between command executes per user (in milliseconds)
+      data: RESTPostAPIApplicationCommandsJSONBody & {
         type: T;
         contexts?: Contexts[];
         integration_types?: IntegrationTypes[];

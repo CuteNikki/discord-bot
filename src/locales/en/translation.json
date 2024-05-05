@@ -7,6 +7,33 @@
     "pinging": "Pinging...",
     "last_updated": "Last Updated"
   },
+  "ban": {
+    "confirm": "Are you sure you want to ban {{user}}?",
+    "cancelled": "Cancelled! User will not be banned.",
+    "failed": "Failed... Could not ban user!",
+    "target_dm": "You have been banned from {{guild}} for {{reason}}!",
+    "confirmed": "Successfully banned {{user}} for {{reason}}.",
+    "dm_received": "User received a DM.",
+    "dm_not_received": "User did not receive a DM.",
+    "deleted_history": "Deleted history of: {{deleted}}",
+    "history": {
+      "none": "none",
+      "minutes_30": "previous 30 minutes",
+      "minutes_60": "previous 60 minutes",
+      "hours_3": "previous 3 hours",
+      "hours_6": "previous 6 hours",
+      "hours_12": "previous 12 hours",
+      "hours_24": "previous 24 hours",
+      "days_3": "previous 3 days",
+      "days_7": "previous 7 days"
+    },
+    "target": {
+      "pos_staff": "The user has a higher or equivalent role than you!",
+      "pos_bot": "The user has a higher or equivalent role than the bot!",
+      "bannable": "The user is not bannable for the bot!",
+      "banned": "The user is already banned!"
+    }
+  },
   "uptime": {
     "title": "Bot Uptime",
     "description": "Started running {{uptime}}"

@@ -7,6 +7,33 @@
     "pinging": "Pinging...",
     "last_updated": "Zuletzt aktualisiert"
   },
+  "ban": {
+    "confirm": "Bist du sicher, dass du {{user}} bannen möchtest?",
+    "cancelled": "Abgebrochen! Der User wird nicht gebannt.",
+    "failed": "Fehlgeschlagen... Der User konnte nicht gebannt werden!",
+    "target_dm": "Du wurdest von {{guild}} für {{reason}} gebannt!",
+    "confirmed": "{{user}} wurde erfolgreich für {{reason}} gebannt.",
+    "dm_received": "Der User User hat eine Privatnachricht erhalten.",
+    "dm_not_received": "Der User hat keine Privatnachricht erhalten.",
+    "deleted_history": "Gelöschter Verlauf: {{deleted}}",
+    "history": {
+      "none": "nichts",
+      "minutes_30": "vorherige 30 Minuten",
+      "minutes_60": "vorherige 60 Minuten",
+      "hours_3": "vorherige 3 Stunden",
+      "hours_6": "vorherige 6 Stunden",
+      "hours_12": "vorherige 12 Stunden",
+      "hours_24": "vorherige 24 Stunden",
+      "days_3": "vorherige 3 Tage",
+      "days_7": "vorherige 7 Tage"
+    },
+    "target": {
+      "pos_staff": "The user has a higher or equivalent role than you!",
+      "pos_bot": "The user has a higher or equivalent role than the bot!",
+      "bannable": "The user is not bannable for the bot!",
+      "banned": "The user is already banned!"
+    }
+  },
   "uptime": {
     "title": "Bot Betriebszeit",
     "description": "Gestartet {{uptime}}"

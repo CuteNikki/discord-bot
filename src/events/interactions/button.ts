@@ -25,7 +25,7 @@ export default new Event({
         }
       }
     }
-    if (!button) return interaction.reply({ content: 'Could not find that button!', ephemeral: true });
+    if (!button) return;
 
     // Check author only
     if (button.options.authorOnly) {

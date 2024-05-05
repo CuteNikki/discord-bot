@@ -1,5 +1,4 @@
 import { Client, Collection, GatewayIntentBits } from 'discord.js';
-import mongoose from 'mongoose';
 
 import i18next from 'i18next';
 import i18nextFsBackend from 'i18next-fs-backend';
@@ -11,16 +10,14 @@ import { loadButtons } from 'loaders/buttons';
 import { loadCommands, registerCommands } from 'loaders/commands';
 import { loadEvents } from 'loaders/events';
 
+import { connectDatabase } from 'utils/database';
 import { keys } from 'utils/keys';
-import { logger } from 'utils/logger';
-
-import { userModel } from 'models/user';
 
 export class DiscordClient extends Client {
   commands = new Collection<string, Command>(); // Collection<commandName, commandData>
   buttons = new Collection<string, Button>(); // Collection<buttonName, buttonData>
   cooldowns = new Collection<string, Collection<string, number>>(); // Collection<commandName, Collection<userId, timestamp>>
-  languages = new Collection<string, string>(); // Collection<userId, language>
+  userLanguages = new Collection<string, string>(); // Collection<userId, language>
   supportedLanguages = ['en', 'de'];
 
   constructor() {
@@ -37,12 +34,27 @@ export class DiscordClient extends Client {
     });
 
     // Connect to database
-    mongoose
-      .connect(keys.DATABASE_URI)
-      .then(() => logger.info('Connected to database'))
-      .catch((err) => logger.error(err, `Could not connect to database`));
+    connectDatabase(this);
 
     // Initialize i18next
+    this.initTranslation();
+
+    // Load all modules
+    this.loadModules();
+
+    // Login with token
+    this.login(keys.DISCORD_BOT_TOKEN);
+  }
+
+  async loadModules() {
+    await loadEvents(this);
+    await loadButtons(this);
+    // Make sure to load commands before trying to register them
+    await loadCommands(this);
+    await registerCommands(this);
+  }
+
+  initTranslation() {
     i18next.use(i18nextFsBackend).init({
       // debug: true,
       preload: this.supportedLanguages,
@@ -54,36 +66,10 @@ export class DiscordClient extends Client {
         loadPath: 'src/locales/{{lng}}/{{ns}}.json',
       },
     });
-
-    // Add user data to collections
-    this.syncUsers();
-
-    // Load all modules
-    this.loadModules();
-
-    // Login with token
-    this.login(keys.DISCORD_BOT_TOKEN);
   }
 
-  async loadModules() {
-    loadEvents(this);
-    loadButtons(this);
-    // Make sure to load commands before trying to register them
-    loadCommands(this).then(() => registerCommands(this));
-  }
-
-  async syncUsers() {
-    // Get all user documents
-    const users = await userModel.find().lean().exec();
-    // Loop through users and fill collections
-    for (const user of users) {
-      this.languages.set(user.userId, user.language);
-    }
-    logger.info(`Synced ${users.length} users`);
-  }
-
-  // Get a users language preference
-  getLanguage(userId: string | null) {
-    return this.languages.get(userId || '') || 'en';
+  getLanguage(userId: string | null | undefined) {
+    // Get a users language preference or return en if not set
+    return this.userLanguages.get(userId ?? '') ?? 'en';
   }
 }

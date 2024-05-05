@@ -15,7 +15,8 @@
       "type": "Typ: {{type}}",
       "moderator": "Moderator: {{moderator}}",
       "reason": "Grund: {{reason}}",
-      "date": "Datum: {{date}}"
+      "date": "Datum: {{date}}",
+      "ends_at": "Ende: {{date}}"
     },
     "delete": {
       "invalid": "Es wurde kein Verstoß gefunden!",
@@ -30,7 +31,7 @@
     "confirmed": "{{user}} wurde erfolgreich für {{reason}} gebannt.",
     "dm_received": "Der User User hat eine Privatnachricht erhalten.",
     "dm_not_received": "Der User hat keine Privatnachricht erhalten.",
-    "deleted_history": "Gelöschter Verlauf: {{deleted}}",
+    "deleted_history": "Gelöschter Nachrichtenverlauf: {{deleted}}",
     "history": {
       "none": "nichts",
       "minutes_30": "vorherige 30 Minuten",

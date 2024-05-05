@@ -8,6 +8,7 @@ import {
   PermissionFlagsBits,
 } from 'discord.js';
 import i18next from 'i18next';
+import ms from 'ms';
 
 import { Command, Contexts, IntegrationTypes } from 'classes/command';
 
@@ -31,6 +32,12 @@ export default new Command({
       {
         name: 'reason',
         description: 'The reason for the ban',
+        type: ApplicationCommandOptionType.String,
+        required: false,
+      },
+      {
+        name: 'duration',
+        description: 'The duration of the ban',
         type: ApplicationCommandOptionType.String,
         required: false,
       },
@@ -70,6 +77,10 @@ export default new Command({
 
     const lng = client.getLanguage(interaction.user.id);
     const targetLng = client.getLanguage(target.id);
+
+    const userDuration = options.getString('duration', false);
+    const duration = ms(userDuration ?? '0');
+    const durationText = ms(duration, { long: true });
 
     const reason = options.getString('reason', false) ?? undefined;
     const history = options.getInteger('history', false) ?? 604800;
@@ -117,14 +128,20 @@ export default new Command({
 
       const receivedDM = await client.users
         .send(target.id, {
-          content: i18next.t('ban.target_dm', { lng: targetLng, guild: `\`${guild.name}\``, reason: `\`${reason}\`` }),
+          content: i18next.t('ban.target_dm', {
+            lng: targetLng,
+            guild: `\`${guild.name}\``,
+            reason: `\`${reason ?? '/'}\``,
+            duration: duration ? durationText : 'forever',
+          }),
         })
         .catch(() => {});
       await collector.update({
         content: [
-          i18next.t('ban.confirmed', { lng, user: target.toString(), reason: `\`${reason}\`` }),
-          receivedDM ? i18next.t('ban.dm_received', { lng }) : i18next.t('ban.dm_not_received', { lng }),
+          i18next.t('ban.confirmed', { lng, user: target.toString(), reason: `\`${reason ?? '/'}\`` }),
           i18next.t('ban.deleted_history', { lng, deleted: historyOptions[history as keyof typeof historyOptions] }),
+          receivedDM ? i18next.t('ban.dm_received', { lng }) : i18next.t('ban.dm_not_received', { lng }),
+          duration ? i18next.t('ban.duration', { lng, duration: durationText }) : i18next.t('ban.permanent', { lng }),
         ].join('\n'),
         components: [],
       });
@@ -133,7 +150,9 @@ export default new Command({
         guildId: guild.id,
         userId: target.id,
         moderatorId: interaction.user.id,
-        action: InfractionType.BAN,
+        action: duration ? InfractionType.TEMPBAN : InfractionType.BAN,
+        ended: duration ? false : true,
+        endsAt: duration ? Date.now() + duration : undefined,
         createdAt: Date.now(),
         reason,
       });

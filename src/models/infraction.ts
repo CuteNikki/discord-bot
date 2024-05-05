@@ -18,5 +18,7 @@ export const infractionModel = mongoose.model(
     action: { type: String, enum: Object.values(InfractionType), required: true },
     createdAt: { type: Number, default: Date.now() },
     reason: { type: String, required: false },
+    endsAt: { type: Number, required: false },
+    ended: { type: Boolean, default: true },
   })
 );

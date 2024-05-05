@@ -15,7 +15,8 @@
       "type": "Type: {{type}}",
       "moderator": "Moderator: {{moderator}}",
       "reason": "Reason: {{reason}}",
-      "date": "Date: {{date}}"
+      "date": "Date: {{date}}",
+      "ends_at": "Ending Date: {{date}}"
     },
     "delete": {
       "invalid": "Could not find that infraction!",
@@ -26,11 +27,13 @@
     "confirm": "Are you sure you want to ban {{user}}?",
     "cancelled": "Cancelled! User will not be banned.",
     "failed": "Failed... Could not ban user!",
-    "target_dm": "You have been banned from {{guild}} for {{reason}}!",
-    "confirmed": "Successfully banned {{user}} for {{reason}}.",
+    "target_dm": "You have been banned from {{guild}} because {{reason}} for {{duration}}!",
+    "confirmed": "Successfully banned {{user}} because {{reason}}.",
+    "duration": "Duration of ban is {{duration}}.",
+    "permanent": "The ban is permanent.",
     "dm_received": "User received a DM.",
     "dm_not_received": "User did not receive a DM.",
-    "deleted_history": "Deleted history of: {{deleted}}",
+    "deleted_history": "Deleted message history: {{deleted}}",
     "history": {
       "none": "none",
       "minutes_30": "previous 30 minutes",

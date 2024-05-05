@@ -76,7 +76,8 @@ export default new Command({
                       i18next.t('infractions.history.type', { lng, type: infraction.action }),
                       i18next.t('infractions.history.moderator', { lng, moderator: `<@${infraction.moderatorId}>` }),
                       i18next.t('infractions.history.reason', { lng, reason: infraction.reason ?? '/' }),
-                      i18next.t('infractions.history.date', { lng, date: `<t:${Math.floor(infraction.createdAt / 1000)}:D>` }),
+                      i18next.t('infractions.history.date', { lng, date: `<t:${Math.floor(infraction.createdAt / 1000)}:f>` }),
+                      infraction.endsAt ? i18next.t('infractions.history.ends_at', { lng, date: `<t:${Math.floor(infraction.endsAt / 1000)}:f>` }) : '',
                     ].join('\n')
                   )
                   .join('\n\n')

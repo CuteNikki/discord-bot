@@ -14,7 +14,7 @@ export const infractionModel = mongoose.model(
   new mongoose.Schema({
     userId: { type: String, required: true },
     guildId: { type: String, required: true },
-    staffId: { type: String, required: true },
+    moderatorId: { type: String, required: true },
     action: { type: String, enum: Object.values(InfractionType), required: true },
     createdAt: { type: Number, default: Date.now() },
     reason: { type: String, required: false },

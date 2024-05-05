@@ -132,7 +132,7 @@ export default new Command({
       await infractionModel.create({
         guildId: guild.id,
         userId: target.id,
-        staffId: interaction.user.id,
+        moderatorId: interaction.user.id,
         action: InfractionType.BAN,
         createdAt: Date.now(),
         reason,

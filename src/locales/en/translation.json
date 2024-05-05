@@ -7,6 +7,21 @@
     "pinging": "Pinging...",
     "last_updated": "Last Updated"
   },
+  "infractions": {
+    "history": {
+      "none": "That user does not have any infractions!",
+      "title": "Infractions (Page {{page}}/{{pages}})",
+      "id": "Id: {{id}}",
+      "type": "Type: {{type}}",
+      "moderator": "Moderator: {{moderator}}",
+      "reason": "Reason: {{reason}}",
+      "date": "Date: {{date}}"
+    },
+    "delete": {
+      "invalid": "Could not find that infraction!",
+      "success": "Infraction has been deleted."
+    }
+  },
   "ban": {
     "confirm": "Are you sure you want to ban {{user}}?",
     "cancelled": "Cancelled! User will not be banned.",

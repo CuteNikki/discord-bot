@@ -7,6 +7,21 @@
     "pinging": "Pinging...",
     "last_updated": "Zuletzt aktualisiert"
   },
+  "infractions": {
+    "history": {
+      "none": "Der User hat keine Verstöße!",
+      "title": "Verstöße (Page {{page}}/{{pages}})",
+      "id": "Id: {{id}}",
+      "type": "Typ: {{type}}",
+      "moderator": "Moderator: {{moderator}}",
+      "reason": "Grund: {{reason}}",
+      "date": "Datum: {{date}}"
+    },
+    "delete": {
+      "invalid": "Es wurde kein Verstoß gefunden!",
+      "success": "Der Verstoß wurde gelöscht."
+    }
+  },
   "ban": {
     "confirm": "Bist du sicher, dass du {{user}} bannen möchtest?",
     "cancelled": "Abgebrochen! Der User wird nicht gebannt.",

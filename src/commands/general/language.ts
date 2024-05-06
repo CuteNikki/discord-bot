@@ -45,8 +45,8 @@ export default new Command({
           ].join('\n'),
         });
       try {
+        client.userLanguages.set(user.id, language);
         await userModel.findOneAndUpdate({ userId: user.id }, { $set: { language } }, { new: true, upsert: true }).lean().exec();
-        client.languages.set(user.id, language);
         return interaction.editReply({ content: i18next.t('language.success', { lng, language }) });
       } catch (err) {
         return interaction.editReply({ content: i18next.t('language.error', { lng }) });

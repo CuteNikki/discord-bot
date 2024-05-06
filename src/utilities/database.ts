@@ -58,6 +58,9 @@ export async function resolveInfractions(client: DiscordClient) {
       const guild = await client.guilds.fetch(infraction.guildId).catch(() => {});
       await infractionModel.findByIdAndUpdate(infraction._id, { $set: { ended: true } });
       if (guild) await guild.bans.remove(infraction.userId, 'Temporary ban has expired').catch(() => {});
+    } else if (infraction.action === InfractionType.TIMEOUT) {
+      // Discord takes care of removing mutes for us so we only need to set ended to true
+      await infractionModel.findByIdAndUpdate(infraction._id, { $set: { ended: true } });
     }
   }
 

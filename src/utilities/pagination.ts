@@ -1,4 +1,8 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType, type CommandInteraction, type EmbedBuilder } from 'discord.js';
+import i18next from 'i18next';
+import ms from 'ms';
+
+import type { DiscordClient } from 'classes/client';
 
 export function chunk<T>(arr: T[], size: number): T[][] {
   return Array.from({ length: Math.ceil(arr.length / size) }, (_: T, i: number) => arr.slice(i * size, i * size + size));
@@ -7,7 +11,7 @@ export function chunk<T>(arr: T[], size: number): T[][] {
 export async function pagination({
   interaction,
   embeds, // The array of embeds (the pages)
-  time = 180_000, // The time a user has to use the buttons before disabling them
+  time = 60_000, // The time a user has to use the buttons before disabling them
   ephemeral = true, // If true, the pagination will only be visible to the user
   footer = true, // If true, will replace the current embeds footer to tell that the buttons have been disabled because the time is over
 }: {
@@ -18,6 +22,7 @@ export async function pagination({
   footer?: boolean;
 }) {
   if (!interaction.deferred) await interaction.deferReply({ ephemeral });
+  const { client, user } = interaction;
 
   enum CustomIds {
     FIRST = 'PAGINATION_FIRST',
@@ -44,7 +49,7 @@ export async function pagination({
 
   const msg = await interaction.editReply({ embeds: [embeds[index]], components: [components] });
 
-  const collector = msg.createMessageComponentCollector({ filter: (i) => i.user.id === interaction.user.id, idle: time, componentType: ComponentType.Button });
+  const collector = msg.createMessageComponentCollector({ filter: (i) => i.user.id === user.id, idle: time, componentType: ComponentType.Button });
 
   collector.on('collect', async (int) => {
     await int.deferUpdate();
@@ -84,7 +89,7 @@ export async function pagination({
     buttonLast.setDisabled(true);
 
     const embed = embeds[index];
-    if (footer) embed.setFooter({ text: 'The time to use buttons has run out' });
+    if (footer) embed.setFooter({ text: i18next.t('pagination', { lng: (client as DiscordClient).getLanguage(user.id), time: ms(time, { long: true }) }) });
 
     interaction.editReply({ embeds: [embed], components: [components] }).catch(() => {});
   });

@@ -22,6 +22,9 @@ export function connectDatabase(client: DiscordClient) {
 }
 
 export async function resolve(client: DiscordClient) {
+  // Sync users language preference
+  syncLanguages(client);
+
   // Runs every minute to take care of anything that expires
   CronJob.from({
     cronTime: '*/1 * * * *',
@@ -30,8 +33,6 @@ export async function resolve(client: DiscordClient) {
     },
     start: true,
   });
-  // Sync users language preference
-  syncLanguages(client);
 }
 
 export async function syncLanguages(client: DiscordClient) {

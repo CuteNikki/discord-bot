@@ -60,6 +60,14 @@ export class DiscordClient extends Client {
     await registerCommands(this);
   }
 
+  async reload() {
+    await loadButtons(this);
+    await loadButtons(this);
+    await loadModals(this);
+    await loadCommands(this);
+    await registerCommands(this);
+  }
+
   initTranslation() {
     i18next.use(i18nextFsBackend).init({
       // debug: true,

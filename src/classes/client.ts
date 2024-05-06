@@ -16,12 +16,13 @@ import { connectDatabase } from 'utils/database';
 import { keys } from 'utils/keys';
 
 export class DiscordClient extends Client {
-  commands = new Collection<string, Command>(); // Collection<commandName, commandData>
-  buttons = new Collection<string, Button>(); // Collection<customId, buttonOptions>
-  modals = new Collection<string, Modal>(); // Collection<customId, modalOptions>
-  cooldowns = new Collection<string, Collection<string, number>>(); // Collection<commandName, Collection<userId, timestamp>>
-  userLanguages = new Collection<string, string>(); // Collection<userId, language>
-  supportedLanguages = ['en', 'de'];
+  public events = new Collection<string, (...args: any[]) => any>();
+  public commands = new Collection<string, Command>(); // Collection<commandName, commandData>
+  public buttons = new Collection<string, Button>(); // Collection<customId, buttonOptions>
+  public modals = new Collection<string, Modal>(); // Collection<customId, modalOptions>
+  public cooldowns = new Collection<string, Collection<string, number>>(); // Collection<commandName, Collection<userId, timestamp>>
+  public userLanguages = new Collection<string, string>(); // Collection<userId, language>
+  public readonly supportedLanguages = ['en', 'de'];
 
   constructor() {
     super({
@@ -51,24 +52,39 @@ export class DiscordClient extends Client {
     this.login(keys.DISCORD_BOT_TOKEN);
   }
 
-  async loadModules() {
+  private async loadModules() {
     await loadEvents(this);
     await loadButtons(this);
     await loadModals(this);
     // Make sure to load commands before trying to register them
     await loadCommands(this);
+    // We don't want to register commands on every start
     await registerCommands(this);
   }
 
-  async reload() {
-    await loadButtons(this);
+  public async reload() {
+    // Removing all listeners
+    // IT IS NOT RECOMMENDED TO USE:
+    // client.removeAllListeners();
+    // My workaround is saving each of our own listeners and removing them one by one
+    for (const [indexWithName, listener] of this.events) {
+      const eventName = indexWithName.split('_')[1];
+      this.removeListener(eventName, listener);
+    }
+
+    this.events = new Collection();
+    this.commands = new Collection();
+    this.modals = new Collection();
+    this.buttons = new Collection();
+
+    await loadEvents(this);
     await loadButtons(this);
     await loadModals(this);
     await loadCommands(this);
     await registerCommands(this);
   }
 
-  initTranslation() {
+  private initTranslation() {
     i18next.use(i18nextFsBackend).init({
       // debug: true,
       preload: this.supportedLanguages,
@@ -82,7 +98,7 @@ export class DiscordClient extends Client {
     });
   }
 
-  getLanguage(userId: string | null | undefined) {
+  public getLanguage(userId: string | null | undefined) {
     // Get a users language preference or return en if not set
     return this.userLanguages.get(userId ?? '') ?? 'en';
   }

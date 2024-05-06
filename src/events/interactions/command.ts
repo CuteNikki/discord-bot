@@ -55,7 +55,7 @@ export default new Event({
       if (interaction.deferred) interaction.editReply({ content: message });
       else interaction.reply({ content: message, ephemeral: true });
 
-      logger.error(err, `Could not run command ${command.options.data.name}`);
+      logger.error(err, message);
     }
   },
 });

@@ -4,7 +4,7 @@ import i18next from 'i18next';
 import { Button } from 'classes/button';
 
 export default new Button({
-  customId: 'update_ping',
+  customId: 'button_ping_update',
   authorOnly: false,
   includesCustomId: false,
   permissions: [],

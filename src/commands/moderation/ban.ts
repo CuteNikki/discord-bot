@@ -33,6 +33,7 @@ export default new Command({
         name: 'reason',
         description: 'The reason for the ban',
         type: ApplicationCommandOptionType.String,
+        max_length: 180,
         required: false,
       },
       {
@@ -61,16 +62,15 @@ export default new Command({
     ],
   },
   async execute({ interaction, client }) {
-    if (!interaction.inCachedGuild() || !interaction.isChatInputCommand()) return;
+    if (!interaction.inCachedGuild()) return;
     await interaction.deferReply({ ephemeral: true });
 
     enum CustomIds {
       CONFIRM = 'BAN_CONFIRM',
       CANCEL = 'BAN_CANCEL',
-      DM = 'BAN_DM',
     }
 
-    const { options, guild, member } = interaction;
+    const { options, guild, member, user } = interaction;
 
     const target = options.getUser('user', true);
     const targetMember = await guild.members.fetch(target.id).catch(() => {});
@@ -146,10 +146,11 @@ export default new Command({
         components: [],
       });
 
+      if (target.bot) return;
       await infractionModel.create({
         guildId: guild.id,
         userId: target.id,
-        moderatorId: interaction.user.id,
+        moderatorId: user.id,
         action: duration ? InfractionType.TEMPBAN : InfractionType.BAN,
         ended: duration ? false : true,
         endsAt: duration ? Date.now() + duration : undefined,

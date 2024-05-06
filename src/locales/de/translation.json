@@ -10,7 +10,7 @@
   "infractions": {
     "history": {
       "none": "Der User hat keine Verstöße!",
-      "title": "Verstöße (Page {{page}}/{{pages}})",
+      "title": "Verstöße (Seite {{page}}/{{pages}})",
       "id": "Id: {{id}}",
       "type": "Typ: {{type}}",
       "moderator": "Moderator: {{moderator}}",
@@ -23,13 +23,46 @@
       "success": "Der Verstoß wurde gelöscht."
     }
   },
+  "warn": {
+    "confirm": "Bist du sicher, dass du {{user}} verwarnen möchtest?",
+    "cancelled": "Abgebrochen! Der User wird nicht verwarnt.",
+    "target_dm": "Du wurdest auf {{guild}} für {{reason}} verwarnt!",
+    "confirmed": "{{user}} wurde erfolgreich für {{reason}} verwarnt.",
+    "dm_received": "Der User hat eine Privatnachricht erhalten.",
+    "dm_not_received": "Der User hat keine Privatnachricht erhalten."
+  },
+  "kick": {
+    "confirm": "Bist du sicher, dass du {{user}} kicken möchtest?",
+    "cancelled": "Abgebrochen! Der User wird nicht gekickt.",
+    "failed": "Fehlgeschlagen... Der User konnte nicht gekickt werden!",
+    "target_dm": "Du wurdest von {{guild}} für {{reason}} gekickt!",
+    "confirmed": "{{user}} wurde erfolgreich für {{reason}} gekickt.",
+    "dm_received": "Der User hat eine Privatnachricht erhalten.",
+    "dm_not_received": "Der User hat keine Privatnachricht erhalten.",
+    "target": {
+      "invalid": "Der User wurde nicht gefunden!",
+      "pos_staff": "Der User hat eine höhere oder gleichwertige Rolle als du!",
+      "pos_bot": "Der User hat eine höhere oder gleichwertige Rolle als der Bot!",
+      "kickable": "Der User ist für den Bot nicht kickbar!"
+    }
+  },
+  "unban": {
+    "confirm": "Bist du sicher, dass du {{user}} entbannen möchtest?",
+    "cancelled": "Abgebrochen! Der User wird nicht entbannt.",
+    "failed": "Fehlgeschlagen... Der User konnte nicht entbannt werden!",
+    "target_dm": "Du wurdest von {{guild}} für {{reason}} entbannt!",
+    "confirmed": "{{user}} wurde erfolgreich für {{reason}} entbannt.",
+    "dm_received": "Der User hat eine Privatnachricht erhalten.",
+    "dm_not_received": "Der User hat keine Privatnachricht erhalten.",
+    "target_not_banned": "Der User ist nicht gebannt!"
+  },
   "ban": {
     "confirm": "Bist du sicher, dass du {{user}} bannen möchtest?",
     "cancelled": "Abgebrochen! Der User wird nicht gebannt.",
     "failed": "Fehlgeschlagen... Der User konnte nicht gebannt werden!",
     "target_dm": "Du wurdest von {{guild}} für {{reason}} gebannt!",
     "confirmed": "{{user}} wurde erfolgreich für {{reason}} gebannt.",
-    "dm_received": "Der User User hat eine Privatnachricht erhalten.",
+    "dm_received": "Der User hat eine Privatnachricht erhalten.",
     "dm_not_received": "Der User hat keine Privatnachricht erhalten.",
     "deleted_history": "Gelöschter Nachrichtenverlauf: {{deleted}}",
     "history": {
@@ -44,10 +77,10 @@
       "days_7": "vorherige 7 Tage"
     },
     "target": {
-      "pos_staff": "The user has a higher or equivalent role than you!",
-      "pos_bot": "The user has a higher or equivalent role than the bot!",
-      "bannable": "The user is not bannable for the bot!",
-      "banned": "The user is already banned!"
+      "pos_staff": "Der User hat eine höhere oder gleichwertige Rolle als du!",
+      "pos_bot": "Der User hat eine höhere oder gleichwertige Rolle als der Bot!",
+      "kickable": "Der User ist für den Bot nicht bannbar!",
+      "banned": "Der User ist bereits gebannt!"
     }
   },
   "uptime": {
@@ -224,5 +257,6 @@
     "history": {
       "date": "Das angegebene Datum ist ungültig!"
     }
-  }
+  },
+  "pagination": "Knöpfe wurden für {{time}} nicht benutzt und deaktiviert!"
 }

@@ -23,6 +23,57 @@
       "success": "Infraction has been deleted."
     }
   },
+  "warn": {
+    "confirm": "Are you sure you want to warn {{user}}?",
+    "cancelled": "Cancelled! User will not be warned.",
+    "target_dm": "You have been warned on {{guild}} because {{reason}}!",
+    "confirmed": "Successfully warned {{user}} because {{reason}}.",
+    "dm_received": "User received a DM.",
+    "dm_not_received": "User did not receive a DM."
+  },
+  "kick": {
+    "confirm": "Are you sure you want to kick {{user}}?",
+    "cancelled": "Cancelled! User will not be kicked.",
+    "failed": "Failed... Could not kick user!",
+    "target_dm": "You have been kicked from {{guild}} because {{reason}}!",
+    "confirmed": "Successfully kicked {{user}} because {{reason}}.",
+    "dm_received": "User received a DM.",
+    "dm_not_received": "User did not receive a DM.",
+    "target": {
+      "invalid": "The user was not found!",
+      "pos_staff": "The user has a higher or equivalent role than you!",
+      "pos_bot": "The user has a higher or equivalent role than the bot!",
+      "kickable": "The user is not kickable for the bot!"
+    }
+  },
+  "timeout": {
+    "confirm": "Are you sure you want to timeout {{user}}?",
+    "cancelled": "Cancelled! User will not be timed out.",
+    "failed": "Failed... Could not timeout user!",
+    "target_dm": "You have been timed out on {{guild}} because {{reason}}!",
+    "confirmed": "Successfully timed out {{user}} because {{reason}}.",
+    "duration": "Duration of timeout is {{duration}}.",
+    "dm_received": "User received a DM.",
+    "dm_not_received": "User did not receive a DM.",
+    "invalid_duration": "An invalid duration was provided!",
+    "target": {
+      "timed_out": "The user is already timed out (until {{date}})!",
+      "invalid": "The user was not found!",
+      "pos_staff": "The user has a higher or equivalent role than you!",
+      "pos_bot": "The user has a higher or equivalent role than the bot!",
+      "moderatable": "The user is not moderatable for the bot!"
+    }
+  },
+  "unban": {
+    "confirm": "Are you sure you want to unban {{user}}?",
+    "cancelled": "Cancelled! User will not be unbanned.",
+    "failed": "Failed... Could not unban user!",
+    "target_dm": "You have been unbanned from {{guild}} because {{reason}}!",
+    "confirmed": "Successfully unbanned {{user}} because {{reason}}.",
+    "dm_received": "User received a DM.",
+    "dm_not_received": "User did not receive a DM.",
+    "target_not_banned": "The user is not banned!"
+  },
   "ban": {
     "confirm": "Are you sure you want to ban {{user}}?",
     "cancelled": "Cancelled! User will not be banned.",
@@ -240,5 +291,6 @@
       "total_snowfall": "Total Snowfall: {{snowfall}} centimeter",
       "avg_visibility": "Avg Visibility: {{vis_km}} kilometer ({{vis_miles}} miles)"
     }
-  }
+  },
+  "pagination": "Buttons were not used for {{time}} and have been disabled!"
 }

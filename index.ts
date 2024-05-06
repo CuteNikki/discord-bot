@@ -7,18 +7,18 @@ import { logger } from 'utils/logger';
 if (Object.values(keys).includes('value_not_found')) throw new Error('Not all config variables are defined!');
 
 // Create a discord sharding manager
-const manager = new ShardingManager('./src/bot.ts', { token: keys.DISCORD_BOT_TOKEN, mode: 'process', respawn: false, totalShards: 2 });
+const manager = new ShardingManager('./src/bot.ts', { token: keys.DISCORD_BOT_TOKEN, mode: 'process', respawn: false, totalShards: 'auto' });
 
 // Setup shard events
 manager.on('shardCreate', (shard: Shard) => {
-  shard.on('ready', () => logger.info(`[${shard.id}] SHARD READY`));
-  shard.on('death', (process) => logger.fatal(process, `[${shard.id}] SHARD DEATH`));
-  shard.on('disconnect', () => logger.fatal(`[${shard.id}] SHARD DISCONNECT`));
-  shard.on('error', (error) => logger.error(error, `[${shard.id}] SHARD ERROR`));
-  shard.on('message', (message) => logger.info(message, `[${shard.id}] SHARD MESSAGE`));
-  shard.on('reconnecting', () => logger.info(`[${shard.id}] SHARD RECONNECTING`));
-  shard.on('resume', () => logger.info(`[${shard.id}] SHARD RESUME`));
-  shard.on('spawn', () => logger.info(`[${shard.id}] SHARD SPAWN`));
+  shard.on('ready', () => logger.info(`[ShardId:${shard.id}] SHARD READY`));
+  shard.on('death', (process) => logger.fatal(process, `[ShardId:${shard.id}] SHARD DEATH`));
+  shard.on('disconnect', () => logger.fatal(`[ShardId:${shard.id}] SHARD DISCONNECT`));
+  shard.on('error', (error) => logger.error(error, `[ShardId:${shard.id}] SHARD ERROR`));
+  shard.on('message', (message) => logger.info(message, `[ShardId:${shard.id}] SHARD MESSAGE`));
+  shard.on('reconnecting', () => logger.info(`[ShardId:${shard.id}] SHARD RECONNECTING`));
+  shard.on('resume', () => logger.info(`[ShardId:${shard.id}] SHARD RESUME`));
+  shard.on('spawn', () => logger.info(`[ShardId:${shard.id}] SHARD SPAWN`));
 });
 
 manager.spawn();

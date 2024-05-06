@@ -27,7 +27,7 @@ type InteractionType<T extends ApplicationCommandType> = T extends ApplicationCo
   ? UserContextMenuCommandInteraction
   : never;
 
-export class Command<T extends ApplicationCommandType = ApplicationCommandType.ChatInput> {
+export class Command<T extends ApplicationCommandType = any> {
   constructor(
     public options: {
       developerOnly?: boolean; // If command is for developer only, it cannot be used by anyone else

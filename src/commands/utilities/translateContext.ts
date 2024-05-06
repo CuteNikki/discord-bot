@@ -14,7 +14,7 @@ export default new Command({
     const { user, targetMessage } = interaction;
     await interaction.deferReply({ ephemeral: true });
 
-    const lng = client.getLanguage(user.id);
+    const lng = await client.getLanguage(user.id);
 
     const translator = new GoogleTranslator({
       headers: {

@@ -22,28 +22,29 @@ export function connectDatabase(client: DiscordClient) {
 }
 
 export async function resolve(client: DiscordClient) {
-  // Sync users language preference
-  syncLanguages(client);
+  client.once('ready', () => {
+    // Sync users language preference
+    syncLanguages(client);
 
-  // Runs every minute to take care of anything that expires
-  CronJob.from({
-    cronTime: '*/1 * * * *',
-    onTick: async () => {
-      await resolveInfractions(client);
-    },
-    start: true,
+    // Interval to take care of anything that expires
+    CronJob.from({
+      cronTime: '*/1 * * * *',
+      onTick: async () => {
+        await resolveInfractions(client);
+      },
+      start: true,
+    });
   });
 }
 
 export async function syncLanguages(client: DiscordClient) {
-  // Get all user documents
-  const users = await userModel.find().lean().exec();
-  // Loop through users and fill collections
-  for (const user of users) {
-    client.userLanguages.set(user.userId, user.language);
+  // Loop through users set their preferred language
+  for (const user of client.users.cache.values()) {
+    const userData = await userModel.findOne({ userId: user.id }, {}, { upsert: false }).lean().exec();
+    if (userData && userData.language) client.userLanguages.set(user.id, userData.language);
   }
 
-  logger.info(`Synced ${users.length} user language preferences`);
+  logger.info(`Synced ${client.userLanguages.size} user language preferences`);
 }
 
 export async function resolveInfractions(client: DiscordClient) {

@@ -7,7 +7,7 @@ import { logger } from 'utils/logger';
 if (Object.values(keys).includes('value_not_found')) throw new Error('Not all config variables are defined!');
 
 // Create a discord sharding manager
-const manager = new ShardingManager('./src/bot.ts', { token: keys.DISCORD_BOT_TOKEN });
+const manager = new ShardingManager('./src/bot.ts', { token: keys.DISCORD_BOT_TOKEN, mode: 'process', respawn: false, totalShards: 2 });
 
 // Setup shard events
 manager.on('shardCreate', (shard: Shard) => {

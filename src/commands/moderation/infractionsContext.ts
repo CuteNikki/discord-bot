@@ -18,7 +18,7 @@ export default new Command({
     if (!interaction.inCachedGuild()) return;
     const { options, user, guildId } = interaction;
 
-    const lng = client.getLanguage(user.id);
+    const lng = await client.getLanguage(user.id);
 
     await interaction.deferReply({ ephemeral: true });
     const target = options.getUser('user', true);

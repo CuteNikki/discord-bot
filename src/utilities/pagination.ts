@@ -82,14 +82,15 @@ export async function pagination({
     await int.editReply({ embeds: [embeds[index]], components: [components] });
   });
 
-  collector.on('end', () => {
+  collector.on('end', async () => {
     buttonFirst.setDisabled(true);
     buttonPrev.setDisabled(true);
     buttonNext.setDisabled(true);
     buttonLast.setDisabled(true);
 
     const embed = embeds[index];
-    if (footer) embed.setFooter({ text: i18next.t('pagination', { lng: (client as DiscordClient).getLanguage(user.id), time: ms(time, { long: true }) }) });
+    if (footer)
+      embed.setFooter({ text: i18next.t('pagination', { lng: await (client as DiscordClient).getLanguage(user.id), time: ms(time, { long: true }) }) });
 
     interaction.editReply({ embeds: [embed], components: [components] }).catch(() => {});
   });

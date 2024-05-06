@@ -9,7 +9,7 @@ export default new Button({
   includesCustomId: false,
   permissions: [],
   async execute({ interaction, client }) {
-    const lng = client.getLanguage(interaction.user.id);
+    const lng = await client.getLanguage(interaction.user.id);
 
     const sent = await interaction.update({ content: i18next.t('ping.pinging', { lng }), fetchReply: true });
 

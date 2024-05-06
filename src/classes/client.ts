@@ -3,6 +3,8 @@ import { Client, Collection, GatewayIntentBits } from 'discord.js';
 import i18next from 'i18next';
 import i18nextFsBackend from 'i18next-fs-backend';
 
+import { userModel } from 'models/user';
+
 import type { Button } from 'classes/button';
 import type { Command } from 'classes/command';
 import type { Modal } from 'classes/modal';
@@ -98,8 +100,14 @@ export class DiscordClient extends Client {
     });
   }
 
-  public getLanguage(userId: string | null | undefined) {
-    // Get a users language preference or return en if not set
-    return this.userLanguages.get(userId ?? '') ?? 'en';
+  public async getLanguage(userId: string | null | undefined): Promise<string> {
+    if (!userId) return this.supportedLanguages[0];
+    if (this.userLanguages.get(userId)) return this.userLanguages.get(userId) ?? this.supportedLanguages[0];
+    const user = await userModel.findOne({ userId }, {}, { upsert: false });
+    if (user && user.language) {
+      this.userLanguages.set(userId, user.language);
+      return user.language;
+    }
+    return this.supportedLanguages[0];
   }
 }

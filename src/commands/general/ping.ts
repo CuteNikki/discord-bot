@@ -12,7 +12,7 @@ export default new Command({
     integration_types: [IntegrationTypes.GUILD_INSTALL, IntegrationTypes.USER_INSTALL],
   },
   async execute({ interaction, client }) {
-    const lng = client.getLanguage(interaction.user.id);
+    const lng = await client.getLanguage(interaction.user.id);
 
     const sent = await interaction.reply({ content: i18next.t('ping.pinging', { lng }), fetchReply: true });
 

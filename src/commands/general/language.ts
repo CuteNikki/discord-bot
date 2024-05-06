@@ -31,7 +31,7 @@ export default new Command({
     await interaction.deferReply({ ephemeral: true });
     const { user, options } = interaction;
 
-    const lng = client.getLanguage(user.id);
+    const lng = await client.getLanguage(user.id);
     const language = options.getString('language', false);
 
     if (!language) {

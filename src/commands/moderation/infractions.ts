@@ -48,7 +48,7 @@ export default new Command({
     if (!interaction.inCachedGuild()) return;
     const { options, user, guildId } = interaction;
 
-    const lng = client.getLanguage(user.id);
+    const lng = await client.getLanguage(user.id);
 
     switch (options.getSubcommand()) {
       case 'history':

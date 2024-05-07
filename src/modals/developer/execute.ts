@@ -1,7 +1,6 @@
-import { inspect } from 'bun';
 import { exec } from 'child_process';
 import { Colors, EmbedBuilder, codeBlock } from 'discord.js';
-import { promisify } from 'util';
+import { inspect, promisify } from 'util';
 
 import { Modal } from 'classes/modal';
 

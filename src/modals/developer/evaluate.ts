@@ -1,5 +1,5 @@
-import { inspect } from 'bun';
 import { Colors, EmbedBuilder, codeBlock } from 'discord.js';
+import { inspect } from 'util';
 
 import { Modal } from 'classes/modal';
 

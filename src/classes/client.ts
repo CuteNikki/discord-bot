@@ -11,7 +11,7 @@ import type { Command } from 'classes/command';
 import type { Modal } from 'classes/modal';
 
 import { loadButtons } from 'loaders/buttons';
-import { loadCommands } from 'loaders/commands';
+import { loadCommands, registerCommands } from 'loaders/commands';
 import { loadEvents } from 'loaders/events';
 import { loadModals } from 'loaders/modals';
 
@@ -63,6 +63,7 @@ export class DiscordClient extends Client {
     await loadButtons(this);
     await loadModals(this);
     await loadCommands(this);
+    // await registerCommands(this);
   }
 
   private initTranslation() {

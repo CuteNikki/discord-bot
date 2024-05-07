@@ -31,14 +31,7 @@ This discord bot was built with custom classes, [i18next](https://www.i18next.co
 
 ## Setup Process:
 
-This project was created using [Bun](https://bun.sh) v1.1.6. (a faster all-in-one JavaScript runtime).
-
 ```bash
-# Install Bun on Windows:
-powershell -c "irm bun.sh/install.ps1 | iex"
-# Or install Bun on Linux/MacOS:
-curl -fsSL https://bun.sh/install | bash
-
 # Clone repository
 git clone https://github.com/CuteNikki/discord-bot.git
 
@@ -46,15 +39,15 @@ git clone https://github.com/CuteNikki/discord-bot.git
 cd discord-bot
 
 # Install dependencies:
-bun install
+npm install
 
 # Now rename example.config.json to config.json
 # Fill in the config with your own data
 
 # Run the bot:
-bun run index.ts
-# Or without sharding:
-bun run ./src/bot.ts
+npm run start
+
+# Register commands by using registerCommands() function and then use /register command instead
 ```
 
 ## TO-DO:

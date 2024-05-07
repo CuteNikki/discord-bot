@@ -20,7 +20,7 @@
       "status": "Status: {{status}}",
       "ping": "Ping: {{ping}}ms",
       "guilds": "Server: {{guilds}}",
-      "members": "Mitglieder: {{status}}"
+      "members": "Mitglieder: {{members}}"
     }
   },
   "infractions": {

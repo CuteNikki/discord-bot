@@ -28,7 +28,7 @@ export async function loadCommands(client: DiscordClient) {
     }
   }
 
-  logger.info('Successfully loaded application commands');
+  logger.info(`[${client.cluster.id}] Successfully loaded application commands`);
 }
 
 export async function registerCommands(client: DiscordClient) {
@@ -41,7 +41,7 @@ export async function registerCommands(client: DiscordClient) {
   // Register global commands
   try {
     await rest.put(Routes.applicationCommands(DISCORD_BOT_ID), { body: commands });
-    logger.info('Successfully registered application commands');
+    logger.info(`Successfully registered application commands`);
   } catch (err) {
     logger.error(err, `Failed to register application commands`);
   }

@@ -26,5 +26,5 @@ export async function loadButtons(client: DiscordClient) {
     }
   }
 
-  logger.info('Successfully loaded buttons');
+  logger.info(`[${client.cluster.id}] Successfully loaded buttons`);
 }

@@ -13,58 +13,65 @@ export function connectDatabase(client: DiscordClient) {
   mongoose
     .connect(keys.DATABASE_URI)
     .then(() => {
-      logger.info('Connected to database');
+      logger.info(`[${client.cluster.id}] Connected to database`);
 
       // Takes care of anything DB related
-      resolve(client);
+      manage(client);
     })
-    .catch((err) => logger.error(err, `Could not connect to database`));
+    .catch((err) => logger.error(err, `[${client.cluster.id}] Could not connect to database`));
 }
 
-export async function resolve(client: DiscordClient) {
+export async function manage(client: DiscordClient) {
   client.once('ready', () => {
-    // Sync users language preference
-    syncLanguages(client);
+    // Cache user language preferences
+    cacheLanguages(client);
 
     // Interval to take care of anything that expires
     CronJob.from({
       cronTime: '*/1 * * * *',
       onTick: async () => {
-        await resolveInfractions(client);
+        await manageInfractions(client);
       },
       start: true,
     });
   });
 }
 
-export async function syncLanguages(client: DiscordClient) {
+export async function cacheLanguages(client: DiscordClient) {
   // Loop through users set their preferred language
   for (const user of client.users.cache.values()) {
     const userData = await userModel.findOne({ userId: user.id }, {}, { upsert: false }).lean().exec();
     if (userData && userData.language) client.userLanguages.set(user.id, userData.language);
   }
 
-  logger.info(`Synced ${client.userLanguages.size} user language preferences`);
+  logger.info(`[${client.cluster.id}] ${client.userLanguages.size} user language preferences cached`);
 }
 
-export async function resolveInfractions(client: DiscordClient) {
+export async function manageInfractions(client: DiscordClient) {
   // Grab infractions where ended is false and the endsAt is less than or equal to the current time
   const infractions = await infractionModel
     .find({ ended: false, endsAt: { $lte: Date.now() } })
     .lean()
     .exec();
 
+  const cleanedInfractions: any[] = [];
   for (const infraction of infractions) {
     // Unban users from guilds if their temporary ban expired
     if (infraction.action === InfractionType.TEMPBAN) {
-      const guild = await client.guilds.fetch(infraction.guildId).catch(() => {});
-      await infractionModel.findByIdAndUpdate(infraction._id, { $set: { ended: true } });
-      if (guild) await guild.bans.remove(infraction.userId, 'Temporary ban has expired').catch(() => {});
+      const guild = client.guilds.cache.get(infraction.guildId);
+      if (guild) {
+        const removed = await guild.bans.remove(infraction.userId, 'Temporary ban has expired').catch(() => {});
+        if (removed) {
+          await infractionModel.findByIdAndUpdate(infraction._id, { $set: { ended: true } });
+          cleanedInfractions.push(infraction);
+        }
+      }
     } else if (infraction.action === InfractionType.TIMEOUT) {
-      // Discord takes care of removing mutes for us so we only need to set ended to true
+      // Discord takes care of removing timeouts for us so we only need to set ended to true
       await infractionModel.findByIdAndUpdate(infraction._id, { $set: { ended: true } });
+      cleanedInfractions.push(infraction);
     }
   }
 
-  logger.info(`Cleaned up ${infractions.length} infractions`);
+  if (cleanedInfractions.length > 0) logger.info(`[${client.cluster.id}] Cleaned up ${cleanedInfractions.length}/${infractions.length} infractions`);
 }

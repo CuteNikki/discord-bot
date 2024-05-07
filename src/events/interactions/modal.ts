@@ -1,7 +1,7 @@
 import { Collection, Events, PermissionsBitField } from 'discord.js';
 
-import type { Modal } from 'classes/modal';
 import { Event } from 'classes/event';
+import type { Modal } from 'classes/modal';
 
 import { keys } from 'utils/keys';
 import { logger } from 'utils/logger';
@@ -10,7 +10,7 @@ export default new Event({
   name: Events.InteractionCreate,
   async execute(client, interaction) {
     // Since we only want the button interactions we return early if the interaction is not a button
-    if (!interaction.isModalSubmit()) return;
+    if (!interaction.isModalSubmit() || !client.usable) return;
 
     // Get the button with the interactions custom id and return if it wasn't found
     let modal: Modal | undefined;

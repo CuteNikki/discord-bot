@@ -26,5 +26,5 @@ export async function loadModals(client: DiscordClient) {
     }
   }
 
-  logger.info('Successfully loaded modals');
+  logger.info(`[${client.cluster.id}] Successfully loaded modals`);
 }

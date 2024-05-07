@@ -27,5 +27,5 @@ export async function loadEvents(client: DiscordClient) {
     }
   }
 
-  logger.info('Successfully loaded events');
+  logger.info(`[${client.cluster.id}] Successfully loaded events`);
 }

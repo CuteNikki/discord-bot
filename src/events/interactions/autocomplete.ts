@@ -7,7 +7,7 @@ export default new Event({
   name: Events.InteractionCreate,
   once: false,
   async execute(client, interaction) {
-    if (!interaction.isAutocomplete()) return;
+    if (!interaction.isAutocomplete() || !client.usable) return;
 
     const command = client.commands.get(interaction.commandName);
     if (!command || !command.options.autocomplete) return;

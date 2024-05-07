@@ -10,7 +10,7 @@ export default new Event({
   name: Events.InteractionCreate,
   async execute(client, interaction) {
     // Since we only want the button interactions we return early if the interaction is not a button
-    if (!interaction.isButton()) return;
+    if (!interaction.isButton() || !client.usable) return;
 
     // Get the button with the interactions custom id and return if it wasn't found
     let button: Button | undefined;

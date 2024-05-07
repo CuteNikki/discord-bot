@@ -11,7 +11,7 @@ import type { Command } from 'classes/command';
 import type { Modal } from 'classes/modal';
 
 import { loadButtons } from 'loaders/buttons';
-import { loadCommands, registerCommands } from 'loaders/commands';
+import { loadCommands } from 'loaders/commands';
 import { loadEvents } from 'loaders/events';
 import { loadModals } from 'loaders/modals';
 
@@ -19,6 +19,7 @@ import { connectDatabase } from 'utils/database';
 import { keys } from 'utils/keys';
 
 export class DiscordClient extends Client {
+  public usable = false;
   public cluster = new ClusterClient(this);
   public events = new Collection<string, (...args: any[]) => any>();
   public commands = new Collection<string, Command>(); // Collection<commandName, commandData>
@@ -61,32 +62,7 @@ export class DiscordClient extends Client {
     await loadEvents(this);
     await loadButtons(this);
     await loadModals(this);
-    // Make sure to load commands before trying to register them
     await loadCommands(this);
-    // We don't want to register commands on every start
-    await registerCommands(this);
-  }
-
-  public async reload() {
-    // Removing all listeners
-    // IT IS NOT RECOMMENDED TO USE:
-    // client.removeAllListeners();
-    // My workaround is saving each of our own listeners and removing them one by one
-    for (const [indexWithName, listener] of this.events) {
-      const eventName = indexWithName.split('_')[1];
-      this.removeListener(eventName, listener);
-    }
-
-    this.events = new Collection();
-    this.commands = new Collection();
-    this.modals = new Collection();
-    this.buttons = new Collection();
-
-    await loadEvents(this);
-    await loadButtons(this);
-    await loadModals(this);
-    await loadCommands(this);
-    await registerCommands(this);
   }
 
   private initTranslation() {

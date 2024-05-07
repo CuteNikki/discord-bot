@@ -27,7 +27,7 @@ export default new Button({
       ],
       components: [
         new ActionRowBuilder<ButtonBuilder>().setComponents(
-          new ButtonBuilder().setCustomId('update_ping').setLabel(i18next.t('ping.update', { lng })).setStyle(ButtonStyle.Primary)
+          new ButtonBuilder().setCustomId('button_ping_update').setLabel(i18next.t('ping.update', { lng })).setStyle(ButtonStyle.Primary)
         ),
       ],
     });

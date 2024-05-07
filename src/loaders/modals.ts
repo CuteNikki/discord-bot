@@ -15,7 +15,7 @@ export async function loadModals(client: DiscordClient) {
 
     for (const file of files) {
       const filePath = path.join(modalsPath, file);
-      const modal = await import(filePath);
+      const modal = await import('file://' + filePath);
 
       if (!modal.default) {
         logger.error(filePath, `Failed to load modal`);

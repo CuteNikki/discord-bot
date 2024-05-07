@@ -17,7 +17,7 @@ export async function loadCommands(client: DiscordClient) {
 
     for (const file of files) {
       const filePath = path.join(commandsPath, file);
-      const command = await import(filePath);
+      const command = await import('file://' + filePath);
 
       if (!command.default) {
         logger.error(filePath, `Failed to load command`);

@@ -14,7 +14,7 @@ export async function loadEvents(client: DiscordClient) {
 
     for (const file of files) {
       const filePath = path.join(eventsPath, file);
-      const event = await import(filePath);
+      const event = await import('file://' + filePath);
 
       const listener = (...args: any[]) => event.default.options.execute(client, ...args);
       client.events.set(`${client.events.size + 1}_${event.default.options.name}`, listener);

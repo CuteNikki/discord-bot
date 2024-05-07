@@ -1,4 +1,4 @@
-import { Shard, ShardingManager } from 'discord.js';
+import { ClusterManager, HeartbeatManager } from 'discord-hybrid-sharding';
 
 import { keys } from 'utils/keys';
 import { logger } from 'utils/logger';
@@ -6,22 +6,26 @@ import { logger } from 'utils/logger';
 // Check if config variables are set
 if (Object.values(keys).includes('value_not_found')) throw new Error('Not all config variables are defined!');
 
-// Create a discord sharding manager
-const manager = new ShardingManager('./src/bot.ts', { token: keys.DISCORD_BOT_TOKEN, mode: 'process', respawn: false, totalShards: 'auto' });
-
-// Setup shard events
-manager.on('shardCreate', (shard: Shard) => {
-  shard.on('ready', () => logger.info(`[ShardId:${shard.id}] SHARD READY`));
-  shard.on('death', (process) => logger.fatal(process, `[ShardId:${shard.id}] SHARD DEATH`));
-  shard.on('disconnect', () => logger.fatal(`[ShardId:${shard.id}] SHARD DISCONNECT`));
-  shard.on('error', (error) => logger.error(error, `[ShardId:${shard.id}] SHARD ERROR`));
-  shard.on('message', (message) => logger.info(message, `[ShardId:${shard.id}] SHARD MESSAGE`));
-  shard.on('reconnecting', () => logger.info(`[ShardId:${shard.id}] SHARD RECONNECTING`));
-  shard.on('resume', () => logger.info(`[ShardId:${shard.id}] SHARD RESUME`));
-  shard.on('spawn', () => logger.info(`[ShardId:${shard.id}] SHARD SPAWN`));
+// Create a cluster manager
+const manager = new ClusterManager(`${process.cwd()}/src/bot.ts`, {
+  token: keys.DISCORD_BOT_TOKEN,
+  mode: 'process',
+  shardsPerClusters: 8,
+  totalShards: 'auto',
+  execArgv: [...process.execArgv],
 });
 
-manager.spawn();
+manager.extend(new HeartbeatManager({ maxMissedHeartbeats: 5, interval: 5000 }));
+
+// Setup cluster events
+manager.on('clusterCreate', (cluster) => {
+  cluster.on('spawn', (_thread) => logger.info(`[${cluster.id}] CLUSTER SPAWN`));
+  cluster.on('death', (cluster, _thread) => logger.fatal(`[${cluster.id}] CLUSTER DEATH`));
+  cluster.on('error', (error) => logger.error(error, `[${cluster.id}] CLUSTER ERROR`));
+  cluster.on('message', (message) => logger.info(message, `[${cluster.id}] CLUSTER MESSAGE`));
+});
+
+manager.spawn({ timeout: -1 });
 
 /**
  * IGNORE (SAVED FOR WHEN NEEDED)

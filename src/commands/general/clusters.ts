@@ -100,6 +100,6 @@ export default new Command({
       );
     }
 
-    await pagination({ embeds, interaction, footer: true });
+    await pagination({ embeds, interaction });
   },
 });

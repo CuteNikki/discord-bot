@@ -2,6 +2,9 @@
   "name": "discord-bot",
   "module": "index.ts",
   "type": "module",
+  "scripts": {
+    "start": "npx tsx ."
+  },
   "devDependencies": {
     "@types/bun": "latest",
     "@types/node-os-utils": "^1.3.4"

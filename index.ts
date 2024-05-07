@@ -10,7 +10,7 @@ if (Object.values(keys).includes('value_not_found')) throw new Error('Not all co
 const manager = new ClusterManager(`${process.cwd()}/src/bot.ts`, {
   token: keys.DISCORD_BOT_TOKEN,
   mode: 'process',
-  shardsPerClusters: 8,
+  shardsPerClusters: 10,
   totalShards: 'auto',
   execArgv: [...process.execArgv],
 });
@@ -25,7 +25,7 @@ manager.on('clusterCreate', (cluster) => {
   cluster.on('message', (message) => logger.info(message, `[${cluster.id}] CLUSTER MESSAGE`));
 });
 
-manager.spawn({ timeout: -1 });
+manager.spawn({ timeout: Infinity });
 
 /**
  * IGNORE (SAVED FOR WHEN NEEDED)

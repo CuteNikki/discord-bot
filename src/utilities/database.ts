@@ -5,6 +5,7 @@ import type { DiscordClient } from 'classes/client';
 
 import { InfractionType, infractionModel } from 'models/infraction';
 import { userModel } from 'models/user';
+import { weeklyLevelModel } from 'models/weeklyLevels';
 
 import { keys } from 'utils/keys';
 import { logger } from 'utils/logger';
@@ -34,6 +35,15 @@ export async function manage(client: DiscordClient) {
       },
       start: true,
     });
+
+    // Clear weekly levels on every Sunday at 00:00
+    CronJob.from({
+      cronTime: '0 0 * * 0',
+      onTick: async () => {
+        await clearWeeklyLevels(client);
+      },
+      start: true,
+    });
   });
 }
 
@@ -45,6 +55,12 @@ export async function cacheLanguages(client: DiscordClient) {
   }
 
   logger.info(`[${client.cluster.id}] ${client.userLanguages.size} user language preferences cached`);
+}
+
+export async function clearWeeklyLevels(client: DiscordClient) {
+  const levels = await weeklyLevelModel.deleteMany({});
+  client.levelsWeekly.clear();
+  logger.info(`[${client.cluster.id}] CLEARED ${levels.deletedCount} WEEKLY LEVELS`);
 }
 
 export async function manageInfractions(client: DiscordClient) {

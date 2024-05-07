@@ -11,22 +11,24 @@ import type { Command } from 'classes/command';
 import type { Modal } from 'classes/modal';
 
 import { loadButtons } from 'loaders/buttons';
-import { loadCommands, registerCommands } from 'loaders/commands';
+import { loadCommands } from 'loaders/commands';
 import { loadEvents } from 'loaders/events';
 import { loadModals } from 'loaders/modals';
 
 import { connectDatabase } from 'utils/database';
 import { keys } from 'utils/keys';
+import type { Level, LevelIdentifier } from 'utils/levels';
 
 export class DiscordClient extends Client {
   public usable = false;
   public cluster = new ClusterClient(this);
-  public events = new Collection<string, (...args: any[]) => any>();
   public commands = new Collection<string, Command>(); // Collection<commandName, commandData>
   public buttons = new Collection<string, Button>(); // Collection<customId, buttonOptions>
   public modals = new Collection<string, Modal>(); // Collection<customId, modalOptions>
   public cooldowns = new Collection<string, Collection<string, number>>(); // Collection<commandName, Collection<userId, timestamp>>
   public userLanguages = new Collection<string, string>(); // Collection<userId, language>
+  public levels = new Collection<LevelIdentifier, Level>();
+  public levelsWeekly = new Collection<LevelIdentifier, Level>();
   public readonly supportedLanguages = ['en', 'de'];
   constructor() {
     super({
@@ -40,6 +42,7 @@ export class DiscordClient extends Client {
         // privileged intents:
         // GatewayIntentBits.GuildMembers, // !! Needed for welcome messages !!
         GatewayIntentBits.GuildPresences, // !! Needed for userinfo !!
+        GatewayIntentBits.GuildMessages, // !! Needed for levels !!
         // GatewayIntentBits.MessageContent // Not needed as we are not reading messages and only replying to interactions
         // (MessageContextMenuCommands will still have readable message.content without this intent)
       ],

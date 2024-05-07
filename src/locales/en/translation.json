@@ -124,10 +124,13 @@
       "cpu_usage": "CPU Usage: {{cpuUsage}}%",
       "ram_usage": "RAM Usage: {{usedMemGb}}Gb/{{totalMemGb}}Gb ({{usedMemPercentage}}%)"
     },
+    "database": {
+      "title": "Database",
+      "name": "Name: {{name}}",
+      "state": "Connection: {{state}}"
+    },
     "stats": {
-      "title": "Miscellaneous & Statistics",
-      "db_name": "Database: {{name}}",
-      "db_state": "DB Connection: {{state}}",
+      "title": "Statistics",
       "guilds": "Guilds: {{guildCount}}",
       "users": "Users: {{userCount}}",
       "channels": "Channels: {{channelCount}}",

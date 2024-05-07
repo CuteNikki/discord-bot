@@ -104,10 +104,13 @@
       "cpu_usage": "CPU-Nutzung: {{cpuUsage}}%",
       "ram_usage": "RAM-Nutzung: {{usedMemGb}}Gb/{{totalMemGb}}Gb ({{usedMemPercentage}}%)"
     },
+    "database": {
+      "title": "Datenbank",
+      "name": "Name: {{name}}",
+      "state": "Verbindung: {{state}}"
+    },
     "stats": {
-      "title": "Verschiedenes & Statistiken",
-      "db_name": "Database: {{name}}",
-      "db_state": "DB Verbindung: {{state}}",
+      "title": "Statistiken",
       "guilds": "Server: {{guildCount}}",
       "users": "User: {{userCount}}",
       "channels": "Kanäle: {{channelCount}}",

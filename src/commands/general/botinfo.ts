@@ -45,16 +45,10 @@ export default new Command({
       const usedMemGb = Math.floor(memInfo.usedMemMb / 1000);
       const usedMemPercentage = Math.floor(memInfo.usedMemPercentage);
 
-      let guildCount = client.guilds.cache.size;
-      let userCount = client.users.cache.size;
-      let channelCount = client.channels.cache.size;
-      let emojiCount = client.emojis.cache.size;
-      if (client.shard) {
-        guildCount = ((await client.shard.fetchClientValues('guilds.cache.size')) as number[]).reduce((acc, count) => acc + count, 0);
-        userCount = ((await client.shard.fetchClientValues('users.cache.size')) as number[]).reduce((acc, count) => acc + count, 0);
-        channelCount = ((await client.shard.fetchClientValues('channels.cache.size')) as number[]).reduce((acc, count) => acc + count, 0);
-        emojiCount = ((await client.shard.fetchClientValues('emojis.cache.size')) as number[]).reduce((acc, count) => acc + count, 0);
-      }
+      const guildCount = ((await client.shard?.fetchClientValues('guilds.cache.size')) as number[]).reduce((acc, count) => acc + count, 0);
+      const userCount = ((await client.shard?.fetchClientValues('users.cache.size')) as number[]).reduce((acc, count) => acc + count, 0);
+      const channelCount = ((await client.shard?.fetchClientValues('channels.cache.size')) as number[]).reduce((acc, count) => acc + count, 0);
+      const emojiCount = ((await client.shard?.fetchClientValues('emojis.cache.size')) as number[]).reduce((acc, count) => acc + count, 0);
 
       await interaction.editReply({
         embeds: [
@@ -85,12 +79,17 @@ export default new Command({
               {
                 name: i18next.t('botinfo.stats.title', { lng }),
                 value: [
-                  i18next.t('botinfo.stats.db_name', { lng, name: 'MongoDB' }),
-                  i18next.t('botinfo.stats.db_state', { lng, state: dbStates[mongoose.connection.readyState] }),
                   i18next.t('botinfo.stats.guilds', { lng, guildCount }),
                   i18next.t('botinfo.stats.users', { lng, userCount }),
                   i18next.t('botinfo.stats.channels', { lng, channelCount }),
                   i18next.t('botinfo.stats.emojis', { lng, emojiCount }),
+                ].join('\n'),
+              },
+              {
+                name: i18next.t('botinfo.database.title', { lng }),
+                value: [
+                  i18next.t('botinfo.database.name', { lng, name: 'MongoDB' }),
+                  i18next.t('botinfo.database.state', { lng, state: dbStates[mongoose.connection.readyState] }),
                 ].join('\n'),
               }
             ),

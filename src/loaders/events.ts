@@ -16,13 +16,10 @@ export async function loadEvents(client: DiscordClient) {
       const filePath = path.join(eventsPath, file);
       const event = await import('file://' + filePath);
 
-      const listener = (...args: any[]) => event.default.options.execute(client, ...args);
-      client.events.set(`${client.events.size + 1}_${event.default.options.name}`, listener);
-
       if (event.default.options.once) {
-        client.prependOnceListener(event.default.options.name, listener);
+        client.once(event.default.options.name, (...args: any[]) => event.default.options.execute(client, ...args));
       } else {
-        client.addListener(event.default.options.name, listener);
+        client.on(event.default.options.name, (...args: any[]) => event.default.options.execute(client, ...args));
       }
     }
   }

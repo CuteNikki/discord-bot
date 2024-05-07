@@ -1,8 +1,6 @@
 import { ApplicationCommandOptionType, ApplicationCommandType, Colors, EmbedBuilder } from 'discord.js';
 import i18next from 'i18next';
 import mongoose from 'mongoose';
-import nou from 'node-os-utils';
-import os from 'os';
 
 import { Command, Contexts, IntegrationTypes } from 'classes/command';
 
@@ -37,18 +35,11 @@ export default new Command({
         99: 'Uninitialized',
       };
 
-      const operatingSystem = os.type();
-      const cpuModel = nou.cpu.model();
-      const cpuUsage = await nou.cpu.usage();
-      const memInfo = await nou.mem.info();
-      const totalMemGb = Math.floor(memInfo.totalMemMb / 1000);
-      const usedMemGb = Math.floor(memInfo.usedMemMb / 1000);
-      const usedMemPercentage = Math.floor(memInfo.usedMemPercentage);
-
-      const guildCount = ((await client.shard?.fetchClientValues('guilds.cache.size')) as number[]).reduce((acc, count) => acc + count, 0);
-      const userCount = ((await client.shard?.fetchClientValues('users.cache.size')) as number[]).reduce((acc, count) => acc + count, 0);
-      const channelCount = ((await client.shard?.fetchClientValues('channels.cache.size')) as number[]).reduce((acc, count) => acc + count, 0);
-      const emojiCount = ((await client.shard?.fetchClientValues('emojis.cache.size')) as number[]).reduce((acc, count) => acc + count, 0);
+      const guildCount = ((await client.cluster.fetchClientValues('guilds.cache.size')) as number[]).reduce((acc, count) => acc + count, 0);
+      const memberCount = ((await client.cluster.broadcastEval((c) => c.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0))) as number[]).reduce(
+        (acc, count) => acc + count,
+        0
+      );
 
       await interaction.editReply({
         embeds: [
@@ -63,27 +54,11 @@ export default new Command({
                   i18next.t('botinfo.general.name', { lng, name: application.name, id: application.id }),
                   i18next.t('botinfo.general.owner', { lng, owner: `<@${application.owner?.id}>`, id: application.owner?.id }),
                   i18next.t('botinfo.general.created', { lng, created: `<t:${Math.floor(application.createdTimestamp / 1000)}:D>` }),
-                  i18next.t('botinfo.general.uptime', { lng, uptime: `<t:${Math.floor(interaction.client.readyTimestamp / 1000)}:R>` }),
-                  i18next.t('botinfo.general.ping', { lng, ping: client.ws.ping }),
-                ].join('\n'),
-              },
-              {
-                name: i18next.t('botinfo.vps.title', { lng }),
-                value: [
-                  i18next.t('botinfo.vps.os', { lng, os: operatingSystem }),
-                  i18next.t('botinfo.vps.cpu_model', { lng, cpuModel }),
-                  i18next.t('botinfo.vps.cpu_usage', { lng, cpuUsage }),
-                  i18next.t('botinfo.vps.ram_usage', { lng, usedMemGb, totalMemGb, usedMemPercentage }),
                 ].join('\n'),
               },
               {
                 name: i18next.t('botinfo.stats.title', { lng }),
-                value: [
-                  i18next.t('botinfo.stats.guilds', { lng, guildCount }),
-                  i18next.t('botinfo.stats.users', { lng, userCount }),
-                  i18next.t('botinfo.stats.channels', { lng, channelCount }),
-                  i18next.t('botinfo.stats.emojis', { lng, emojiCount }),
-                ].join('\n'),
+                value: [i18next.t('botinfo.stats.guilds', { lng, guildCount }), i18next.t('botinfo.stats.members', { lng, memberCount })].join('\n'),
               },
               {
                 name: i18next.t('botinfo.database.title', { lng }),

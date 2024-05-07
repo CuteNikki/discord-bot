@@ -7,6 +7,22 @@
     "pinging": "Pinging...",
     "last_updated": "Last Updated"
   },
+  "clusters": {
+    "title": "Cluster {{id}}",
+    "uptime": "Uptime: {{uptime}}",
+    "ping": "Average Ping: {{ping}}ms",
+    "memory": "Memory Usage: {{memory}}Mb",
+    "guilds": "Guilds: {{guilds}}",
+    "members": "Members: {{members}}",
+    "pin": "If you spot a red pin it means that you are currently on that shard",
+    "shards": {
+      "title": "Shard {{id}}",
+      "status": "Status: {{status}}",
+      "ping": "Ping: {{ping}}ms",
+      "guilds": "Guilds: {{guilds}}",
+      "members": "Members: {{status}}"
+    }
+  },
   "infractions": {
     "history": {
       "none": "That user does not have any infractions!",
@@ -113,28 +129,17 @@
       "title": "General Information",
       "name": "Name: {{name}} ({{id}})",
       "owner": "Owner: {{owner}} ({{id}})",
-      "created": "Created at: {{created}}",
-      "uptime": "Uptime: {{uptime}}",
-      "ping": "Ping: {{ping}}ms"
-    },
-    "vps": {
-      "title": "Virtual Private Server",
-      "os": "Operating System: {{os}}",
-      "cpu_model": "CPU Model: {{cpuModel}}",
-      "cpu_usage": "CPU Usage: {{cpuUsage}}%",
-      "ram_usage": "RAM Usage: {{usedMemGb}}Gb/{{totalMemGb}}Gb ({{usedMemPercentage}}%)"
+      "created": "Created at: {{created}}"
     },
     "database": {
       "title": "Database",
       "name": "Name: {{name}}",
-      "state": "Connection: {{state}}"
+      "state": "State: {{state}}"
     },
     "stats": {
       "title": "Statistics",
-      "guilds": "Guilds: {{guildCount}}",
-      "users": "Users: {{userCount}}",
-      "channels": "Channels: {{channelCount}}",
-      "emojis": "Emojis: {{emojiCount}}"
+      "guilds": "All Guilds: {{guildCount}}",
+      "members": "All Members: {{memberCount}}"
     }
   },
   "serverinfo": {

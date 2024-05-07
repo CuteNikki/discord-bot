@@ -7,6 +7,22 @@
     "pinging": "Pinging...",
     "last_updated": "Zuletzt aktualisiert"
   },
+  "clusters": {
+    "title": "Cluster {{id}}",
+    "uptime": "Betriebszeit: {{uptime}}",
+    "ping": "Durchschn. Ping: {{ping}}ms",
+    "memory": "Speichernutzung: {{memory}}Mb",
+    "guilds": "Server: {{guilds}}",
+    "members": "Mitglieder: {{members}}",
+    "pin": "Wenn du eine rote Stecknadel siehst, bedeutet das, dass du dich auf diesem Shard befindest.",
+    "shards": {
+      "title": "Shard {{id}}",
+      "status": "Status: {{status}}",
+      "ping": "Ping: {{ping}}ms",
+      "guilds": "Server: {{guilds}}",
+      "members": "Mitglieder: {{status}}"
+    }
+  },
   "infractions": {
     "history": {
       "none": "Der User hat keine Verstöße!",
@@ -93,28 +109,17 @@
       "title": "Generelle Informationen",
       "name": "Name: {{name}} ({{id}})",
       "owner": "Besitzer: {{owner}} ({{id}})",
-      "created": "Erstellt: {{created}}",
-      "uptime": "Betriebszeit: {{uptime}}",
-      "ping": "Ping: {{ping}}ms"
-    },
-    "vps": {
-      "title": "Virtueller privater Server",
-      "os": "Betriebssystem: {{os}}",
-      "cpu_model": "CPU-Model: {{cpuModel}}",
-      "cpu_usage": "CPU-Nutzung: {{cpuUsage}}%",
-      "ram_usage": "RAM-Nutzung: {{usedMemGb}}Gb/{{totalMemGb}}Gb ({{usedMemPercentage}}%)"
+      "created": "Erstellt: {{created}}"
     },
     "database": {
       "title": "Datenbank",
       "name": "Name: {{name}}",
-      "state": "Verbindung: {{state}}"
+      "state": "Status: {{state}}"
     },
     "stats": {
       "title": "Statistiken",
-      "guilds": "Server: {{guildCount}}",
-      "users": "User: {{userCount}}",
-      "channels": "Kanäle: {{channelCount}}",
-      "emojis": "Emojis: {{emojiCount}}"
+      "guilds": "Alle Server: {{guildCount}}",
+      "members": "Alle Mitglieder: {{userCount}}"
     }
   },
   "serverinfo": {

@@ -12,6 +12,7 @@ export default new Button({
     const lng = await client.getLanguage(interaction.user.id);
 
     const sent = await interaction.update({ content: i18next.t('ping.pinging', { lng }), fetchReply: true });
+    const websocketHeartbeat = interaction.guild?.shard.ping ?? client.ws.ping;
 
     await interaction.editReply({
       content: '',
@@ -20,7 +21,7 @@ export default new Button({
           .setColor(Colors.Blurple)
           .setTitle(i18next.t('ping.title', { lng }))
           .addFields(
-            { name: i18next.t('ping.websocket', { lng }), value: `${client.ws.ping}ms` },
+            { name: i18next.t('ping.websocket', { lng }), value: `${websocketHeartbeat}ms` },
             { name: i18next.t('ping.roundtrip', { lng }), value: `${sent.editedTimestamp! - interaction.createdTimestamp}ms` },
             { name: i18next.t('ping.last_updated', { lng }), value: `<t:${Math.floor(Date.now() / 1000)}:R>` }
           ),

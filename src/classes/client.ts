@@ -1,3 +1,4 @@
+// import { ClusterClient, getInfo } from 'discord-hybrid-sharding';
 import { Client, Collection, GatewayIntentBits } from 'discord.js';
 
 import i18next from 'i18next';
@@ -18,6 +19,7 @@ import { connectDatabase } from 'utils/database';
 import { keys } from 'utils/keys';
 
 export class DiscordClient extends Client {
+  // public cluster = new ClusterClient(this);
   public events = new Collection<string, (...args: any[]) => any>();
   public commands = new Collection<string, Command>(); // Collection<commandName, commandData>
   public buttons = new Collection<string, Button>(); // Collection<customId, buttonOptions>
@@ -25,9 +27,10 @@ export class DiscordClient extends Client {
   public cooldowns = new Collection<string, Collection<string, number>>(); // Collection<commandName, Collection<userId, timestamp>>
   public userLanguages = new Collection<string, string>(); // Collection<userId, language>
   public readonly supportedLanguages = ['en', 'de'];
-
   constructor() {
     super({
+      // shards: getInfo().SHARD_LIST,
+      // shardCount: getInfo().TOTAL_SHARDS,
       intents: [
         GatewayIntentBits.Guilds, // !! Needed for guilds, channels and roles !!
         GatewayIntentBits.GuildModeration, // !! Needed to keep track of bans !!

@@ -2,7 +2,7 @@ import { ChannelType, Colors, EmbedBuilder, Events, type MessageCreateOptions } 
 
 import { Event } from 'classes/event';
 
-import { guildModel } from 'models/guild';
+import { AnnouncementType, guildModel } from 'models/guild';
 import { appendXP, getDataOrCreate, getLevelReward, randomXP } from 'utils/levels';
 
 const cooldowns = new Set();
@@ -48,7 +48,7 @@ export default new Event({
       if (rewards?.length) {
         const added = await member.roles.add(rewards.map((r) => r.roleId)).catch(() => {});
         if (added) levelUpEmbed.addFields({ name: 'New Role(s)', value: `${rewards.map((r) => `<@&${r.roleId}>`).join(' ')}` });
-        else levelUpEmbed.addFields({ name: 'Could not add new Role(s)', value: `${rewards.map((r) => `<@&${r.roleId}>`).join(' ')}` });
+        else levelUpEmbed.addFields({ name: 'Could not add new Role(s)', value: `${rewards.map((r) => `<@&${r.roleId}>`).join('\n')}` });
       }
 
       const levelUpMessage: MessageCreateOptions = {
@@ -56,15 +56,29 @@ export default new Event({
         embeds: [levelUpEmbed],
       };
 
-      if (guildSettings.levels.channelId) {
-        const channel = guild.channels.cache.get(guildSettings.levels.channelId);
-        if (!channel || channel.type !== ChannelType.GuildText) return;
-        channel.send(levelUpMessage);
-      } else {
-        const msg = await channel.send(levelUpMessage).catch(() => {});
-        setTimeout(() => {
-          if (msg) msg.delete().catch(() => {});
-        }, 5000);
+      switch (guildSettings.levels.announcement) {
+        case AnnouncementType.USER_CHANNEL:
+          {
+            const msg = await channel.send(levelUpMessage).catch(() => {});
+            setTimeout(() => {
+              if (msg) msg.delete().catch(() => {});
+            }, 5000);
+          }
+          break;
+        case AnnouncementType.OTHER_CHANNEL:
+          {
+            if (!guildSettings.levels.channelId) return;
+            const channel = guild.channels.cache.get(guildSettings.levels.channelId);
+            if (!channel || channel.type !== ChannelType.GuildText) return;
+            channel.send(levelUpMessage).catch(() => {});
+          }
+          break;
+        case AnnouncementType.PRIVATE_MESSAGE:
+          {
+            levelUpMessage.content = `Message from ${guild.name}:`;
+            client.users.send(author.id, levelUpMessage).catch(() => {});
+          }
+          break;
       }
     }
   },

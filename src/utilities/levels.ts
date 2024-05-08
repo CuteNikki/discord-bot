@@ -81,28 +81,36 @@ export async function appendXP(identifier: LevelIdentifier, client: DiscordClien
 }
 
 export async function setXP(identifier: LevelIdentifier, client: DiscordClient, xp: number): Promise<Level> {
+  if (xp > 200000) xp = 200000;
+  if (xp < 0) xp = 0;
   const level = xpToLevel(xp);
   const newLevel = await levelModel.findOneAndUpdate(identifier, { $set: { level, xp } }, { upsert: true, new: true }).lean().exec();
   client.levels.set(identifier, newLevel);
   return newLevel;
 }
 
-export async function addXP(identifier: LevelIdentifier, client: DiscordClient, xp: number): Promise<Level> {
-  const level = xpToLevel(xp);
+export async function addXP(identifier: LevelIdentifier, client: DiscordClient, xp: number, current: Level): Promise<Level> {
+  if (current.xp + xp > 200000) xp = 200000;
+  if (current.xp + xp < 0) xp = 0;
+  const level = xpToLevel(current.xp + xp);
   const newLevel = await levelModel.findOneAndUpdate(identifier, { $inc: { xp }, $set: { level } }, { upsert: true, new: true }).lean().exec();
   client.levels.set(identifier, newLevel);
   return newLevel;
 }
 
 export async function setLevel(identifier: LevelIdentifier, client: DiscordClient, level: number): Promise<Level> {
+  if (level > 1000) level = 1000;
+  if (level < 0) level = 0;
   const xp = levelToXP(level);
   const newLevel = await levelModel.findOneAndUpdate(identifier, { $set: { level, xp } }, { upsert: true, new: true }).lean().exec();
   client.levels.set(identifier, newLevel);
   return newLevel;
 }
 
-export async function addLevel(identifier: LevelIdentifier, client: DiscordClient, level: number): Promise<Level> {
-  const xp = levelToXP(level);
+export async function addLevel(identifier: LevelIdentifier, client: DiscordClient, level: number, current: Level): Promise<Level> {
+  if (current.level + level > 1000) level = 1000;
+  if (current.level + level < 0) level = 0;
+  const xp = levelToXP(current.level + level);
   const newLevel = await levelModel.findOneAndUpdate(identifier, { $set: { level, xp } }, { upsert: true, new: true }).lean().exec();
   client.levels.set(identifier, newLevel);
   return newLevel;

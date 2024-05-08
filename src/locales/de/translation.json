@@ -7,6 +7,71 @@
     "pinging": "Pinging...",
     "last_updated": "Zuletzt aktualisiert"
   },
+  "levels": {
+    "title": "Levels Modul",
+    "state": {
+      "title": "Status",
+      "enabled": "aktiviert",
+      "disabled": "deaktiviert"
+    },
+    "announcement": {
+      "title": "Ankündigung",
+      "already_channel": "Die Ankündigung ist bereits auf den Kanal gesetzt!",
+      "other": "Level ups werden ab jetzt in dem Kanal angekündigt.",
+      "already_user": "Die Ankündigung ist bereits auf User-Kanal gesetzt!",
+      "user": "Level ups werden jetzt dort angekündigt, wo der User ein Level aufsteigt.",
+      "already_private": "Die Ankündigung ist bereits auf Privatnachricht gesetzt!",
+      "private": "Level ups werden jetzt in den Direktnachrichten der User angekündigt."
+    },
+    "ignored_roles": {
+      "title": "Ignorierte Rollen",
+      "already": "Die Rolle wird bereits ignoriert!",
+      "limit": "Du kannst nicht mehr als 25 ignorierte Rollen haben!",
+      "added": "User mit der Rolle {{role}} erhalten keine XP mehr.",
+      "invalid": "Die Rolle wird nicht ignoriert!",
+      "removed": "Die Rolle wird nun nicht mehr ignoriert."
+    },
+    "ignored_channels": {
+      "title": "Ignorierte Kanäle",
+      "already": "Der Kanal wird bereits ignoriert!",
+      "limit": "Du kannst nicht mehr als 25 ignorierte Kanäle haben!",
+      "added": "User erhalten nun keine XP mehr in {{channel}}.",
+      "invalid": "Der Kanal wird nicht ignoriert!",
+      "removed": "Der Kanal wird nun nicht mehr ignoriert."
+    },
+    "enabled_channels": {
+      "title": "Aktivierte Kanäle",
+      "already": "Das Level Modul ist in dem Kanal bereits aktiviert!",
+      "limit": "Du kannst nicht mehr als 25 aktivierte Kanäle haben!",
+      "added": "Das Level Modul wurde in {{channel}} aktiviert.",
+      "invalid": "Das Level Modul ist für diesen Kanal nicht aktiviert!",
+      "removed": "Das Level Modul wurde für diesen Kanal ausgeschaltet."
+    },
+    "rewards": {
+      "title": "Levelup-Belohnungen",
+      "limit": "Du kannst nicht mehr als 25 Belohnungen haben!",
+      "already": "Diese Rolle ist bereits eine Belohnung!",
+      "added": "User erhalten nun {{role}}, wenn sie die Stufe {{level}} erreichen.",
+      "invalid": "Diese Rolle ist keine Belohnung!",
+      "removed": "User erhalten diese Rolle nicht mehr."
+    },
+    "toggle": {
+      "already_on": "Das Level Modul ist bereits aktiviert!",
+      "already_off": "Das Level Modul ist bereits deaktiviert!",
+      "on": "Das Level Modul wurde aktiviert.",
+      "off": "Das Level Modul wurde deaktiviert."
+    },
+    "xp": {
+      "added": "{{xp}}XP zu {{user}} hinzugefügt. Er ist jetzt auf Level {{new_level}} und hat {{new_xp}}XP.",
+      "removed": "{{xp}}XP von {{user}} entfernt. Er ist jetzt auf Level {{new_level}} und hat {{new_xp}}XP.",
+      "set": "XP von {{user}} auf {{xp}}XP gesetzt. Er ist jetzt auf Level {{new_level}} und hat {{new_xp}}XP."
+    },
+    "level": {
+      "added": "{{levels}} Level zu {{user}} hinzugefügt. Er ist jetzt auf Level {{new_level}} und hat {{new_xp}}XP.",
+      "removed": "{{levels}} Level von {{user}} entfernt. Er ist jetzt auf Level {{new_level}} und hat {{new_xp}}XP.",
+      "set": "{{user}} ist jetzt auf Level {{new_level}} und hat {{new_xp}}XP."
+    }
+  },
   "clusters": {
     "title": "Cluster {{id}}",
     "uptime": "Betriebszeit: {{uptime}}",

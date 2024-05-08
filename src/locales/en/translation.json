@@ -7,6 +7,71 @@
     "pinging": "Pinging...",
     "last_updated": "Last Updated"
   },
+  "levels": {
+    "title": "Levels Module",
+    "state": {
+      "title": "State",
+      "enabled": "enabled",
+      "disabled": "disabled"
+    },
+    "announcement": {
+      "title": "Announcement",
+      "already_channel": "The announcement is already set to that channel!",
+      "other": "Level ups will now be announced in that channel.",
+      "already_user": "The announcement is already set to user's channel!",
+      "user": "Level ups will now be announced where the user levels up.",
+      "already_private": "The announcement is already set to private message!",
+      "private": "Level ups will now be announced in user's direct messages."
+    },
+    "ignored_roles": {
+      "title": "Ignored Roles",
+      "already": "That role is already ignored!",
+      "limit": "You cannot have more than 25 ignored roles!",
+      "added": "Users with the role {{role}} will no longer gain XP.",
+      "invalid": "That role is not ignored!",
+      "removed": "That role will no longer be ignored."
+    },
+    "ignored_channels": {
+      "title": "Ignored Channels",
+      "already": "That channel is already ignored!",
+      "limit": "You cannot have more than 25 ignored channels!",
+      "added": "Users will no longer gain XP in {{channel}}.",
+      "invalid": "That channel is not ignored!",
+      "removed": "That channel will no longer be ignored."
+    },
+    "enabled_channels": {
+      "title": "Enabled Channels",
+      "already": "The levels module is already enabled in that channel!",
+      "limit": "You cannot have more than 25 enabled channels!",
+      "added": "The levels module is now enabled in {{channel}}.",
+      "invalid": "The levels module is not enabled in that channel!",
+      "removed": "The levels module is no longer enabled in that channel."
+    },
+    "rewards": {
+      "title": "Levelup Rewards",
+      "limit": "You cannot have more than 25 rewards!",
+      "already": "That role is already a reward!",
+      "added": "Users will now obtain {{role}} when they reach level {{level}}.",
+      "invalid": "That role is not a reward!",
+      "removed": "Users will no longer obtain that role."
+    },
+    "toggle": {
+      "already_on": "Level module is already enabled!",
+      "already_off": "Level module is already disabled!",
+      "on": "Level module has been enabled.",
+      "off": "Level module has been disabled."
+    },
+    "xp": {
+      "added": "Added {{xp}}XP to {{user}}. They are now level {{new_level}} and have {{new_xp}}XP.",
+      "removed": "Removed {{xp}}XP from {{user}}. They are now level {{new_level}} and have {{new_xp}}XP.",
+      "set": "Set XP of {{user}} to {{xp}}XP. They are now level {{new_level}} and have {{new_xp}}XP."
+    },
+    "level": {
+      "added": "Added {{levels}} levels to {{user}}. They are now level {{new_level}} and have {{new_xp}}XP.",
+      "removed": "Removed {{levels}} levels from {{user}}. They are now level {{new_level}} and have {{new_xp}}XP.",
+      "set": "{{user}} is now level {{new_level}} and has {{new_xp}}XP."
+    }
+  },
   "clusters": {
     "title": "Cluster {{id}}",
     "uptime": "Uptime: {{uptime}}",

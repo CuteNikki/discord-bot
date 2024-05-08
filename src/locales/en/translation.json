@@ -7,6 +7,12 @@
     "pinging": "Pinging...",
     "last_updated": "Last Updated"
   },
+  "math": {
+    "title": "Math",
+    "title_error": "Error",
+    "input": "Input",
+    "output": "Output"
+  },
   "levels": {
     "title": "Levels Module",
     "state": {

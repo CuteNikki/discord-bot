@@ -95,6 +95,7 @@ npm run start
   - [x] Userinfo command
   - [x] Serverinfo command
   - [x] Weather command
+  - [x] Math command
 - [ ] Log Module
   - [ ] Config command
 - [ ] Welcomer Module

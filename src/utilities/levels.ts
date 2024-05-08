@@ -66,16 +66,25 @@ export function getWeeklyData(identifier: LevelIdentifier, client: DiscordClient
 export async function getWeeklyDataOrCreate(identifier: LevelIdentifier, client: DiscordClient): Promise<Level> {
   const data = client.levelsWeekly.get(identifier);
   if (data) return data;
-  const newData = await weeklyLevelModel.create(identifier);
+  const newData = await weeklyLevelModel.findOneAndUpdate(identifier, {}, { new: true, upsert: true }).lean().exec();
   client.levelsWeekly.set(identifier, newData);
   return newData;
 }
 
-export async function appendXP(identifier: LevelIdentifier, client: DiscordClient, xp: number, current: Level): Promise<Level> {
+export async function appendXP(identifier: LevelIdentifier, client: DiscordClient, xp: number, current?: Level): Promise<Level> {
+  if (!current) current = await getDataOrCreate(identifier, client);
   const level = xpToLevel(current.xp + xp);
-  const newWeeklyLevel = await weeklyLevelModel.findOneAndUpdate(identifier, { $inc: { xp }, $set: { level } }, { upsert: true, new: true }).lean().exec();
+  const currentWeekly = await getWeeklyDataOrCreate(identifier, client);
+  const weeklyLevel = xpToLevel(currentWeekly.xp + xp);
+  const newWeeklyLevel = await weeklyLevelModel
+    .findOneAndUpdate(identifier, { $inc: { xp }, $set: { level: weeklyLevel } }, { upsert: true, new: true })
+    .lean()
+    .exec();
   client.levelsWeekly.set(identifier, newWeeklyLevel);
-  const newLevel = await levelModel.findOneAndUpdate(identifier, { $inc: { xp }, $set: { level } }, { upsert: true, new: true }).lean().exec();
+  const newLevel = await levelModel
+    .findOneAndUpdate(identifier, { $inc: { xp }, $set: { level: level } }, { upsert: true, new: true })
+    .lean()
+    .exec();
   client.levels.set(identifier, newLevel);
   return newLevel;
 }
@@ -89,7 +98,8 @@ export async function setXP(identifier: LevelIdentifier, client: DiscordClient, 
   return newLevel;
 }
 
-export async function addXP(identifier: LevelIdentifier, client: DiscordClient, xp: number, current: Level): Promise<Level> {
+export async function addXP(identifier: LevelIdentifier, client: DiscordClient, xp: number): Promise<Level> {
+  const current = await getDataOrCreate(identifier, client);
   if (current.xp + xp > 200000) xp = 200000;
   if (current.xp + xp < 0) xp = 0;
   const level = xpToLevel(current.xp + xp);
@@ -107,7 +117,8 @@ export async function setLevel(identifier: LevelIdentifier, client: DiscordClien
   return newLevel;
 }
 
-export async function addLevel(identifier: LevelIdentifier, client: DiscordClient, level: number, current: Level): Promise<Level> {
+export async function addLevel(identifier: LevelIdentifier, client: DiscordClient, level: number): Promise<Level> {
+  const current = await getDataOrCreate(identifier, client);
   if (current.level + level > 1000) level = 1000;
   if (current.level + level < 0) level = 0;
   const xp = levelToXP(current.level + level);

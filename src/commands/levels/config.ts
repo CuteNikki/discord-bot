@@ -5,7 +5,7 @@ import { Command, Contexts, IntegrationTypes } from 'classes/command';
 
 import { AnnouncementType, guildModel } from 'models/guild';
 
-import { addLevel, addXP, getDataOrCreate, setLevel, setXP } from 'utils/levels';
+import { addLevel, addXP, setLevel, setXP } from 'utils/levels';
 
 export default new Command({
   data: {
@@ -729,18 +729,16 @@ export default new Command({
             case 'add':
               {
                 const user = options.getUser('user', true);
-                const current = await getDataOrCreate({ userId: user.id, guildId }, client);
                 const xp = options.getInteger('xp', true);
-                const userLevel = await addXP({ userId: user.id, guildId }, client, xp, current);
+                const userLevel = await addXP({ userId: user.id, guildId }, client, xp);
                 interaction.editReply(i18next.t('levels.xp.added', { lng, user: user.toString(), xp, new_xp: userLevel.xp, new_level: userLevel.level }));
               }
               break;
             case 'remove':
               {
                 const user = options.getUser('user', true);
-                const current = await getDataOrCreate({ userId: user.id, guildId }, client);
                 const xp = options.getInteger('xp', true);
-                const userLevel = await addXP({ userId: user.id, guildId }, client, -xp, current);
+                const userLevel = await addXP({ userId: user.id, guildId }, client, -xp);
                 interaction.editReply(i18next.t('levels.xp.removed', { lng, user: user.toString(), xp, new_xp: userLevel.xp, new_level: userLevel.level }));
               }
               break;
@@ -761,9 +759,8 @@ export default new Command({
             case 'add':
               {
                 const user = options.getUser('user', true);
-                const current = await getDataOrCreate({ userId: user.id, guildId }, client);
                 const levels = options.getInteger('levels', true);
-                const userLevel = await addLevel({ userId: user.id, guildId }, client, levels, current);
+                const userLevel = await addLevel({ userId: user.id, guildId }, client, levels);
                 interaction.editReply(
                   i18next.t('levels.level.added', { lng, user: user.toString(), levels, new_xp: userLevel.xp, new_level: userLevel.level })
                 );
@@ -772,9 +769,8 @@ export default new Command({
             case 'remove':
               {
                 const user = options.getUser('user', true);
-                const current = await getDataOrCreate({ userId: user.id, guildId }, client);
                 const levels = options.getInteger('levels', true);
-                const userLevel = await addLevel({ userId: user.id, guildId }, client, -levels, current);
+                const userLevel = await addLevel({ userId: user.id, guildId }, client, -levels);
                 interaction.editReply(
                   i18next.t('levels.level.removed', { lng, user: user.toString(), levels, new_xp: userLevel.xp, new_level: userLevel.level })
                 );

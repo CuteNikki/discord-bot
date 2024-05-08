@@ -64,7 +64,7 @@ npm run start
 
 <h3>TO-DO</h3>
 
-- [ ] Level Module
+- [X] Level Module
   - [x] Weekly levels
   - [x] Rank command (with weekly option)
   - [x] Leaderboard command (with weekly option)

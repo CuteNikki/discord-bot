@@ -1,7 +1,18 @@
 {
   "name": "discord-bot",
+  "description": "DiscordJS Bot written in TypeScript",
   "module": "index.ts",
   "type": "module",
+  "author": "https://github.com/CuteNikki",
+  "license": "MIT",
+  "homepage": "https://github.com/CuteNikki/discord-bot",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CuteNikki/discord-bot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/CuteNikki/discord-bot/issues"
+  },
   "scripts": {
     "start": "npx tsx ."
   },

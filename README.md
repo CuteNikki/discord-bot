@@ -1,7 +1,7 @@
-<center>
+<div align="center">
   <h6 > - A WORK IN PROGRESS - </h6>
 
-  <h3>DiscordJS Bot written in TypeScript</h3>
+  <h1>DiscordJS Bot written in TypeScript</h3>
 
   <p>This discord bot was built with custom classes, <a href="https://www.i18next.com/">i18next</a> for translations, <a href="https://getpino.io/">Pino</a> as logger and <a href="https://www.mongodb.com/">MongoDB</a> as database.</p>
 
@@ -33,7 +33,7 @@
   <h6>
     Made with 💖 by <a href="https://github.com/CuteNikki/">Nikki</a>
   </h6>
-</center>
+</div>
 
 <hr>
 

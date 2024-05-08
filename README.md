@@ -49,13 +49,15 @@ cd discord-bot
 # Install dependencies:
 npm install
 
-# Now rename example.config.json to config.json
+# Rename example.config.json to config.json
 # Fill in the config with your own data
 
 # Run the bot:
 npm run start
 
-# Register commands by using registerCommands() function and then use /register command instead if needed
+# Register commands by using registerCommands() function in client class 
+# and then use /register slash command in the future. This is necessary! 
+# We don't want to register our slash commands on each startup.
 ```
 
 <hr>

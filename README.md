@@ -111,7 +111,7 @@ Feel free to check <a href="https://github.com/CuteNikki/discord-bot/issues">iss
 
 <h3>Show your support</h3>
 
-Please ⭐️ this project if this project helped you!
+Please ⭐️ this repository if this project helped you!
 
 <hr>
 

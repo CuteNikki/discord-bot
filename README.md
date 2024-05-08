@@ -39,25 +39,27 @@
 
 <h3>How to Install and Run the Project</h3>
 
+All it takes is just 7 simple steps.
+
 ```bash
-# Clone repository
+# 1. Clone repository
 git clone https://github.com/CuteNikki/discord-bot.git
 
-# Navigate into folder:
+# 2. Navigate into folder:
 cd discord-bot
 
-# Install dependencies:
+# 3. Install dependencies:
 npm install
 
-# Rename example.config.json to config.json
-# Fill in the config with your own data
+# 4. Rename example.config.json to config.json
+# 5. Fill in the config with your own data.
 
-# Run the bot:
+# 6. Register commands by using registerCommands() function in client class 
+#    and then use /register slash command in the future. This is necessary! 
+#    We don't want to register our slash commands on each startup.
+
+# 7. Run the bot:
 npm run start
-
-# Register commands by using registerCommands() function in client class 
-# and then use /register slash command in the future. This is necessary! 
-# We don't want to register our slash commands on each startup.
 ```
 
 <hr>

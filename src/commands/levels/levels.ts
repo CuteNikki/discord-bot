@@ -52,8 +52,8 @@ export default new Command({
           .setColor(Colors.Blurple)
           .setTitle(
             weekly
-              ? i18next.t('levels.leaderboard.weekly', { lng, page: index, pages: chunkedLeaderboard.length })
-              : i18next.t('levels.leaderboard.title', { lng, page: index, pages: chunkedLeaderboard.length })
+              ? i18next.t('levels.leaderboard.weekly', { lng, page: index + 1, pages: chunkedLeaderboard.length })
+              : i18next.t('levels.leaderboard.title', { lng, page: index + 1, pages: chunkedLeaderboard.length })
           )
           .setDescription(
             levels.map(({ position, username, xp, level }) => i18next.t('levels.leaderboard.position', { lng, position, username, xp, level })).join('\n')

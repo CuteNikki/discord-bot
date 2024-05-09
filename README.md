@@ -104,6 +104,7 @@ npm run start
 - [ ] Custom VC Module
 - [ ] Economy Module
 - [ ] Fun Module
+- [ ] Ticket Module
 
 <hr>
 

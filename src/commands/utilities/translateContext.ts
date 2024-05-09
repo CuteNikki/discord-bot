@@ -1,7 +1,8 @@
 import { GoogleTranslator } from '@translate-tools/core/translators/GoogleTranslator';
-import { ApplicationCommandType } from 'discord.js';
+import { ApplicationCommandType, Colors, EmbedBuilder, codeBlock } from 'discord.js';
 
 import { Command, Contexts, IntegrationTypes } from 'classes/command';
+import i18next from 'i18next';
 
 export default new Command({
   data: {
@@ -22,8 +23,20 @@ export default new Command({
       },
     });
 
+    if (!targetMessage.content) return interaction.editReply(i18next.t('translate.none', { lng }));
     const translated = await translator.translate(targetMessage.content, 'auto', lng);
+    if (!translated) return interaction.editReply(i18next.t('translate.none', { lng }));
 
-    interaction.editReply(translated);
+    interaction.editReply({
+      embeds: [
+        new EmbedBuilder()
+          .setColor(Colors.Aqua)
+          .setTitle(i18next.t('translate.title', { lng }))
+          .addFields(
+            { name: i18next.t('translate.input', { lng }), value: codeBlock(targetMessage.content.substring(0, 4000)) },
+            { name: i18next.t('translate.output', { lng }), value: codeBlock(translated.substring(0, 4000)) }
+          ),
+      ],
+    });
   },
 });

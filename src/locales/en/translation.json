@@ -13,12 +13,31 @@
     "input": "Input",
     "output": "Output"
   },
+  "translate": {
+    "none": "There was no content or content could not be translated!",
+    "title": "Translation",
+    "input": "Input",
+    "output": "Output"
+  },
   "levels": {
     "title": "Levels Module",
+    "bot": "Bots cannot have XP/Level!",
+    "dm": {
+      "message": "Message from {{guild}}:",
+      "title": "Congratulations",
+      "description": "You are now level **level**!",
+      "title_roles_one": "New role",
+      "title_roles_other": "New roles"
+    },
     "state": {
       "title": "State",
       "enabled": "enabled",
       "disabled": "disabled"
+    },
+    "leaderboard": {
+      "title": "Leaderboard (Page {{page}}/{{pages}})",
+      "weekly": "Weekly Leaderboard (Page {{page}}/{{pages}})",
+      "position": "{{position}}. {{username}} ({{xp}}XP/LVL{{level}})"
     },
     "announcement": {
       "title": "Announcement",
@@ -86,6 +105,7 @@
     "guilds": "Guilds: {{guilds}}",
     "members": "Members: {{members}}",
     "pin": "If you spot a red pin it means that you are currently on that shard",
+    "page": "Page {{page}}/{{pages}}",
     "shards": {
       "title": "Shard {{id}}",
       "status": "Status: {{status}}",
@@ -104,6 +124,14 @@
       "reason": "Reason: {{reason}}",
       "date": "Date: {{date}}",
       "ends_at": "Ending Date: {{date}}"
+    },
+    "types": {
+      "ban": "ban",
+      "unban": "unban",
+      "tempban": "tempban",
+      "kick": "kick",
+      "timeout": "timeout",
+      "warn": "warning"
     },
     "delete": {
       "invalid": "Could not find that infraction!",
@@ -205,7 +233,12 @@
     "database": {
       "title": "Database",
       "name": "Name: {{name}}",
-      "state": "State: {{state}}"
+      "state": "State: {{state}}",
+      "disconnected": "disconnected",
+      "connected": "connected",
+      "connecting": "connecting",
+      "disconnecting": "disconnecting",
+      "uninitialized": "uninitialized"
     },
     "stats": {
       "title": "Statistics",
@@ -275,7 +308,15 @@
     "activities": "Activities",
     "devices": "Devices",
     "boosting": "Booster since",
-    "roles": "Roles ({{showing}}/{{total}})"
+    "roles": "Roles ({{showing}}/{{total}})",
+    "activity": {
+      "playing": "playing",
+      "streaming": "streaming",
+      "listening": "listening to",
+      "watching": "watching",
+      "custom": "custom",
+      "competing": "competing in"
+    }
   },
   "avatar": {
     "user": "Could not find that user!",
@@ -370,6 +411,14 @@
       "total_snowfall": "Total Snowfall: {{snowfall}} centimeter",
       "avg_visibility": "Avg Visibility: {{vis_km}} kilometer ({{vis_miles}} miles)"
     }
+  },
+  "interactions": {
+    "author_only": "This is not for you!",
+    "guild_only": "This can only be done in a guild!",
+    "permissions": "You are missing permissions!",
+    "developer_only": "This can only be done by developers!",
+    "cooldown": "Please wait, you are on cooldown for {{action}}. You can use it again {{timestamp}}.",
+    "error": "Something went wrong! Error: {{error}}"
   },
   "pagination": "Buttons were not used for {{time}} and have been disabled!"
 }

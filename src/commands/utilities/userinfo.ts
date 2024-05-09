@@ -56,7 +56,14 @@ export default new Command({
       const member = await interaction.guild?.members.fetch(user.id);
 
       if (member) {
-        const activities = ['playing', 'streaming', 'listening to', 'watching', 'custom', 'competing in'];
+        const activities = [
+          i18next.t('userinfo.activity.playing', { lng }),
+          i18next.t('userinfo.activity.streaming', { lng }),
+          i18next.t('userinfo.activity.listening', { lng }),
+          i18next.t('userinfo.activity.watching', { lng }),
+          i18next.t('userinfo.activity.custom', { lng }),
+          i18next.t('userinfo.activity.competing', { lng }),
+        ];
         const devices = Object.entries(member.presence?.clientStatus ?? {}).map(([key]) => `${key}`);
 
         const statusImage = {

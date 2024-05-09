@@ -1,4 +1,5 @@
 import { Collection, Events, PermissionsBitField } from 'discord.js';
+import i18next from 'i18next';
 
 import { type Button } from 'classes/button';
 import { Event } from 'classes/event';
@@ -11,6 +12,8 @@ export default new Event({
   async execute(client, interaction) {
     // Since we only want the button interactions we return early if the interaction is not a button
     if (!interaction.isButton() || !client.usable) return;
+
+    const lng = await client.getLanguage(interaction.user.id);
 
     // Get the button with the interactions custom id and return if it wasn't found
     let button: Button | undefined;
@@ -29,7 +32,7 @@ export default new Event({
 
     // Check author only
     if (button.options.authorOnly) {
-      const content = 'You cannot do that!';
+      const content = i18next.t('interactions.author_only', { lng });
       if (interaction.message.interaction && interaction.user.id !== interaction.message.interaction.user.id)
         return interaction.reply({ content, ephemeral: true });
       if (interaction.message.reference && interaction.user.id !== (await interaction.message.fetchReference()).author.id)
@@ -38,15 +41,15 @@ export default new Event({
 
     // Permissions check
     if (button.options.permissions?.length) {
-      if (!interaction.member) return interaction.reply({ content: 'This can only be done in a guild!', ephemeral: true });
+      if (!interaction.member) return interaction.reply({ content: i18next.t('interactions.guild_only', { lng }), ephemeral: true });
       const permissions = interaction.member.permissions as PermissionsBitField;
-      if (!permissions.has(button.options.permissions)) return interaction.reply({ content: 'You are missing permissions!', ephemeral: true });
+      if (!permissions.has(button.options.permissions)) return interaction.reply({ content: i18next.t('interactions.permissions', { lng }), ephemeral: true });
     }
 
     // Check if button is developer only and return if the user's id doesn't match the developer's id
     const developerIds = keys.DEVELOPER_USER_IDS;
     if (button.options.developerOnly && !developerIds.includes(interaction.user.id))
-      return interaction.reply({ content: 'This button cannot be used by you!', ephemeral: true });
+      return interaction.reply({ content: i18next.t('interactions.developer_only', { lng }), ephemeral: true });
 
     // Check if cooldowns has the current button and add the button if it doesn't have the button
     const cooldowns = client.cooldowns;
@@ -64,7 +67,7 @@ export default new Event({
       if (now < expirationTime) {
         const expiredTimestamp = Math.round(expirationTime / 1_000);
         return interaction.reply({
-          content: `Please wait, you are on a cooldown for \`${button.options.customId}\`. You can use it again <t:${expiredTimestamp}:R>.`,
+          content: i18next.t('interactions.cooldown', { lng, action: `\`${button.options.customId}\``, timestamp: `<t:${expiredTimestamp}:R>` }),
           ephemeral: true,
         });
       }
@@ -77,8 +80,8 @@ export default new Event({
     // Try to run the button and send an error message if it couldn't run
     try {
       button.options.execute({ client, interaction });
-    } catch (err) {
-      const message = `Could not run button \`${button.options.customId}\``;
+    } catch (err: any) {
+      const message = i18next.t('interactions.error', { lng, error: `\`${err.message}\`` });
 
       if (interaction.deferred) interaction.editReply({ content: message });
       else interaction.reply({ content: message, ephemeral: true });

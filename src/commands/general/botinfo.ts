@@ -28,11 +28,11 @@ export default new Command({
       const application = await interaction.client.application.fetch();
 
       const dbStates = {
-        0: 'Disconnected',
-        1: 'Connected',
-        2: 'Connecting',
-        3: 'Disconnecting',
-        99: 'Uninitialized',
+        0: i18next.t('botinfo.database.disconnected', { lng }),
+        1: i18next.t('botinfo.database.connected', { lng }),
+        2: i18next.t('botinfo.database.connecting', { lng }),
+        3: i18next.t('botinfo.database.disconnecting', { lng }),
+        99: i18next.t('botinfo.database.uninitialized', { lng }),
       };
 
       const guildCount = ((await client.cluster.fetchClientValues('guilds.cache.size')) as number[]).reduce((acc, count) => acc + count, 0);

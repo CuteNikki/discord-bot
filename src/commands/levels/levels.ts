@@ -1,4 +1,5 @@
 import { ApplicationCommandOptionType, ApplicationCommandType, Colors, EmbedBuilder } from 'discord.js';
+import i18next from 'i18next';
 
 import { Command, Contexts, IntegrationTypes } from 'classes/command';
 
@@ -30,6 +31,7 @@ export default new Command({
   async execute({ interaction, client }) {
     if (!interaction.inCachedGuild()) return;
     const { options, guildId } = interaction;
+    const lng = await client.getLanguage(interaction.user.id);
 
     const ephemeral = options.getBoolean('ephemeral', false) ?? true;
     await interaction.deferReply({ ephemeral });
@@ -45,11 +47,17 @@ export default new Command({
 
     await pagination({
       interaction,
-      embeds: chunkedLeaderboard.map((levels) =>
+      embeds: chunkedLeaderboard.map((levels, index) =>
         new EmbedBuilder()
           .setColor(Colors.Blurple)
-          .setTitle(weekly ? 'Weekly Leaderboard' : 'Leaderboard')
-          .setDescription(levels.map((level) => `${level.position}. ${level.username} (${level.xp}XP/LVL${level.level})`).join('\n'))
+          .setTitle(
+            weekly
+              ? i18next.t('levels.leaderboard.weekly', { lng, page: index, pages: chunkedLeaderboard.length })
+              : i18next.t('levels.leaderboard.title', { lng, page: index, pages: chunkedLeaderboard.length })
+          )
+          .setDescription(
+            levels.map(({ position, username, xp, level }) => i18next.t('levels.leaderboard.position', { lng, position, username, xp, level })).join('\n')
+          )
       ),
     });
   },

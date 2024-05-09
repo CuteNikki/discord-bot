@@ -1,4 +1,5 @@
 import { ChannelType, Colors, EmbedBuilder, Events, type MessageCreateOptions } from 'discord.js';
+import i18next from 'i18next';
 
 import { Event } from 'classes/event';
 
@@ -47,8 +48,8 @@ export default new Event({
 
       if (rewards?.length) {
         const added = await member.roles.add(rewards.map((r) => r.roleId)).catch(() => {});
-        if (added) levelUpEmbed.addFields({ name: 'New Role(s)', value: `${rewards.map((r) => `<@&${r.roleId}>`).join(' ')}` });
-        else levelUpEmbed.addFields({ name: 'Could not add new Role(s)', value: `${rewards.map((r) => `<@&${r.roleId}>`).join('\n')}` });
+        if (added) levelUpEmbed.addFields({ name: 'New Role(s)', value: rewards.map((r) => `<@&${r.roleId}>`).join(' ') });
+        else levelUpEmbed.addFields({ name: 'Could not add new Role(s)', value: rewards.map((r) => `<@&${r.roleId}>`).join('\n') });
       }
 
       const levelUpMessage: MessageCreateOptions = {
@@ -75,7 +76,12 @@ export default new Event({
           break;
         case AnnouncementType.PRIVATE_MESSAGE:
           {
-            levelUpMessage.content = `Message from ${guild.name}:`;
+            const lng = await client.getLanguage(author.id);
+
+            levelUpMessage.content = i18next.t('levels.dm.message', { lng, guild: guild.name });
+            levelUpEmbed.setFields({ name: i18next.t('levels.dm.title', { lng }), value: i18next.t('levels.dm.description', { lng }) });
+            if (rewards?.length)
+              levelUpEmbed.addFields({ name: i18next.t('levels.dm.title_roles', { lng, count: rewards.length }), value: rewards.map((r) => `<@&${r.roleId}>`).join(' ') });
             client.users.send(author.id, levelUpMessage).catch(() => {});
           }
           break;

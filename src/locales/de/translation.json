@@ -13,12 +13,30 @@
     "input": "Eingabe",
     "output": "Ausgabe"
   },
+  "translate": {
+    "title": "Übersetzung",
+    "input": "Eingabe",
+    "output": "Ausgabe"
+  },
   "levels": {
     "title": "Levels Modul",
+    "bot": "Bots können keine XP/Level haben!",
+    "dm": {
+      "message": "Nachricht von {{guild}}:",
+      "title": "Glückwunsch",
+      "description": "Du bist jetzt Level **level**!",
+      "title_roles_one": "Neue Rolle",
+      "title_roles_other": "Neue Rollen"
+    },
     "state": {
       "title": "Status",
       "enabled": "aktiviert",
       "disabled": "deaktiviert"
+    },
+    "leaderboard": {
+      "title": "Bestenliste (Seite {{page}}/{{pages}})",
+      "weekly": "Wöchentliche Bestenliste (Seite {{page}}/{{pages}})",
+      "position": "{{position}}. {{username}} ({{xp}}XP/LVL{{level}})"
     },
     "announcement": {
       "title": "Ankündigung",
@@ -86,6 +104,7 @@
     "guilds": "Server: {{guilds}}",
     "members": "Mitglieder: {{members}}",
     "pin": "Wenn du eine rote Stecknadel siehst, bedeutet das, dass du dich auf diesem Shard befindest.",
+    "page": "Seite {{page}}/{{pages}}",
     "shards": {
       "title": "Shard {{id}}",
       "status": "Status: {{status}}",
@@ -104,6 +123,14 @@
       "reason": "Grund: {{reason}}",
       "date": "Datum: {{date}}",
       "ends_at": "Ende: {{date}}"
+    },
+    "types": {
+      "ban": "Ban",
+      "unban": "Entbannung",
+      "tempban": "Temporärer Ban",
+      "kick": "Kick",
+      "timeout": "Auszeit",
+      "warn": "Verwarnung"
     },
     "delete": {
       "invalid": "Es wurde kein Verstoß gefunden!",
@@ -131,6 +158,24 @@
       "pos_staff": "Der User hat eine höhere oder gleichwertige Rolle als du!",
       "pos_bot": "Der User hat eine höhere oder gleichwertige Rolle als der Bot!",
       "kickable": "Der User ist für den Bot nicht kickbar!"
+    }
+  },
+  "timeout": {
+    "confirm": "Bist du sicher, dass du {{user}} eine Auszeit geben möchtest?",
+    "cancelled": "Abgebrochen! Der User wird nicht gestummt.",
+    "failed": "Fehlgeschlagen... Der User konnte nicht gestummt werden!",
+    "target_dm": "Du wurdest auf {{guild}} für {{reason}} gestummt!",
+    "confirmed": "{{user}} wurde erfolgreich für {{reason}} gestummt.",
+    "duration": "Die Dauer der Auszeit ist {{duration}}.",
+    "dm_received": "Der User hat eine Privatnachricht erhalten.",
+    "dm_not_received": "Der User hat keine Privatnachricht erhalten.",
+    "invalid_duration": "Eine ungültige Dauer wurde angegeben",
+    "target": {
+      "timed_out": "Der User ist bereits gestummt (bis {{date}})!",
+      "invalid": "Der User wurde nicht gefunden!",
+      "pos_staff": "Der User hat eine höhere oder gleichwertige Rolle als du!",
+      "pos_bot": "Der User hat eine höhere oder gleichwertige Rolle als der Bot!",
+      "moderatable": "Der User kann vom Bot nicht moderiert werden!"
     }
   },
   "unban": {
@@ -185,7 +230,12 @@
     "database": {
       "title": "Datenbank",
       "name": "Name: {{name}}",
-      "state": "Status: {{state}}"
+      "state": "Status: {{state}}",
+      "disconnected": "getrennt",
+      "connected": "verbunden",
+      "connecting": "wird verbunden",
+      "disconnecting": "wird getrennt",
+      "uninitialized": "nicht initialisiert"
     },
     "stats": {
       "title": "Statistiken",
@@ -255,7 +305,15 @@
     "activities": "Aktivitäten",
     "devices": "Geräte",
     "boosting": "Booster seit",
-    "roles": "Rollen ({{showing}}/{{total}})"
+    "roles": "Rollen ({{showing}}/{{total}})",
+    "activity": {
+      "playing": "Spielt",
+      "streaming": "Streamt",
+      "listening": "Hört",
+      "watching": "Schaut",
+      "custom": "Custom",
+      "competing": "Tritt an in"
+    }
   },
   "avatar": {
     "user": "Der User konnte nicht abgerufen werden!",
@@ -336,6 +394,14 @@
     "history": {
       "date": "Das angegebene Datum ist ungültig!"
     }
+  },
+  "interactions": {
+    "author_only": "Das ist nicht für dich!",
+    "guild_only": "Das kann nur auf einem Server gemacht werden!",
+    "permissions": "Dir fehlen dafür Rechte!",
+    "developer_only": "Das können nur die Entwickler!",
+    "cooldown": "Bitte warte, bis du {{action}} erneut benutzen kannst. Du kannst es erneut versuchen {{timestamp}}.",
+    "error": "Etwas ist schief gelaufen! Fehler: {{error}}"
   },
   "pagination": "Knöpfe wurden für {{time}} nicht benutzt und deaktiviert!"
 }

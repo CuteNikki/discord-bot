@@ -729,6 +729,7 @@ export default new Command({
             case 'add':
               {
                 const user = options.getUser('user', true);
+                if (user.bot) return interaction.editReply(i18next.t('levels.bot', { lng }));
                 const xp = options.getInteger('xp', true);
                 const userLevel = await addXP({ userId: user.id, guildId }, client, xp);
                 interaction.editReply(i18next.t('levels.xp.added', { lng, user: user.toString(), xp, new_xp: userLevel.xp, new_level: userLevel.level }));
@@ -737,6 +738,7 @@ export default new Command({
             case 'remove':
               {
                 const user = options.getUser('user', true);
+                if (user.bot) return interaction.editReply(i18next.t('levels.bot', { lng }));
                 const xp = options.getInteger('xp', true);
                 const userLevel = await addXP({ userId: user.id, guildId }, client, -xp);
                 interaction.editReply(i18next.t('levels.xp.removed', { lng, user: user.toString(), xp, new_xp: userLevel.xp, new_level: userLevel.level }));
@@ -745,6 +747,7 @@ export default new Command({
             case 'set':
               {
                 const user = options.getUser('user', true);
+                if (user.bot) return interaction.editReply(i18next.t('levels.bot', { lng }));
                 const xp = options.getInteger('xp', true);
                 const userLevel = await setXP({ userId: user.id, guildId }, client, xp);
                 interaction.editReply(i18next.t('levels.xp.set', { lng, user: user.toString(), xp, new_xp: userLevel.xp, new_level: userLevel.level }));
@@ -759,6 +762,7 @@ export default new Command({
             case 'add':
               {
                 const user = options.getUser('user', true);
+                if (user.bot) return interaction.editReply(i18next.t('levels.bot', { lng }));
                 const levels = options.getInteger('levels', true);
                 const userLevel = await addLevel({ userId: user.id, guildId }, client, levels);
                 interaction.editReply(
@@ -769,6 +773,7 @@ export default new Command({
             case 'remove':
               {
                 const user = options.getUser('user', true);
+                if (user.bot) return interaction.editReply(i18next.t('levels.bot', { lng }));
                 const levels = options.getInteger('levels', true);
                 const userLevel = await addLevel({ userId: user.id, guildId }, client, -levels);
                 interaction.editReply(
@@ -779,6 +784,7 @@ export default new Command({
             case 'set':
               {
                 const user = options.getUser('user', true);
+                if (user.bot) return interaction.editReply(i18next.t('levels.bot', { lng }));
                 const level = options.getInteger('level', true);
                 const userLevel = await setLevel({ userId: user.id, guildId }, client, level);
                 interaction.editReply(i18next.t('levels.level.set', { lng, user: user.toString(), new_xp: userLevel.xp, new_level: userLevel.level }));

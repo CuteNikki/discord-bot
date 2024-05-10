@@ -80,15 +80,14 @@ npm run start
           (Messages in channel will not give any XP)
     - [x] Enabled channels
           (When set will only enable level module in those channels)
-- [ ] Moderation Module
+- [X] Moderation Module
   - [x] Ban/Tempban command
   - [x] Unban command
   - [x] Kick command
   - [x] Timeout command
   - [x] Warn command
   - [x] Infractions command
-  - [ ] Config command
-    - [ ] Modrole
+  - [X] Config command
 - [ ] Utility Module
       Planning on adding more
   - [x] Avatar/Banner command
@@ -96,15 +95,21 @@ npm run start
   - [x] Serverinfo command
   - [x] Weather command
   - [x] Math command
+  - [ ] Config command
 - [ ] Log Module
   - [ ] Config command
 - [ ] Welcomer Module
   - [ ] Config command
 - [ ] Music Module
+  - [ ] Config command
 - [ ] Custom VC Module
+  - [ ] Config command
 - [ ] Economy Module
+  - [ ] Config command
 - [ ] Fun Module
+  - [ ] Config command
 - [ ] Ticket Module
+  - [ ] Config command
 
 <hr>
 

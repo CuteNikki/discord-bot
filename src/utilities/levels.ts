@@ -130,7 +130,7 @@ export async function addLevel(identifier: LevelIdentifier, client: DiscordClien
 export async function getLevelReward(level: Level | PositionLevel): Promise<LevelReward[] | null> {
   const guildData = await guildModel.findOne({ guildId: level.guildId }).lean().exec();
   if (!guildData) return null;
-  const rewards = guildData.levels.rewards.filter((rw) => rw.level === level.level);
+  const rewards = guildData.levels.rewards.filter((rw) => rw.level <= level.level);
   return rewards;
 }
 

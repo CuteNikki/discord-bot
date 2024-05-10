@@ -45,6 +45,7 @@ export default new Command({
     const computedLeaderboard = await computeLeaderboard(leaderboard, client);
 
     const chunkedLeaderboard = chunk(computedLeaderboard, 10);
+    if (!chunkedLeaderboard.length) return interaction.editReply(i18next.t('levels.none'));
 
     await pagination({
       interaction,

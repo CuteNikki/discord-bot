@@ -36,6 +36,7 @@
   "levels": {
     "title": "Levels Modul",
     "bot": "Bots können keine XP/Level haben!",
+    "none": "Konnte keine Level Daten finden!",
     "dm": {
       "message": "Nachricht von {{guild}}:",
       "title": "Glückwunsch",

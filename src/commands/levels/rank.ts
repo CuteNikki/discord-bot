@@ -52,7 +52,7 @@ export default new Command({
     if (!weekly) rank = await getDataWithRank({ userId: target.id, guildId }, client);
     else rank = await getWeeklyDataWithRank({ userId: target.id, guildId }, client);
 
-    if (!rank) return interaction.editReply(i18next.t('rank.none', { lng }));
+    if (!rank) return interaction.editReply(i18next.t('levels.none', { lng }));
 
     Font.loadDefault();
 

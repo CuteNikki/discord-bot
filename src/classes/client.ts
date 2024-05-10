@@ -4,6 +4,7 @@ import { Client, Collection, GatewayIntentBits } from 'discord.js';
 import i18next from 'i18next';
 import i18nextFsBackend from 'i18next-fs-backend';
 
+import { guildModel, type Guild } from 'models/guild';
 import { userModel } from 'models/user';
 
 import type { Button } from 'classes/button';
@@ -27,6 +28,7 @@ export class DiscordClient extends Client {
   public modals = new Collection<string, Modal>(); // Collection<customId, modalOptions>
   public cooldowns = new Collection<string, Collection<string, number>>(); // Collection<commandName, Collection<userId, timestamp>>
   public userLanguages = new Collection<string, string>(); // Collection<userId, language>
+  public guildSettings = new Collection<string, Guild>(); // Collection<guildId, settings>
   public levels = new Collection<LevelIdentifier, Level>();
   public levelsWeekly = new Collection<LevelIdentifier, Level>();
   public readonly supportedLanguages = ['en', 'de'];
@@ -92,5 +94,13 @@ export class DiscordClient extends Client {
       return user.language;
     }
     return this.supportedLanguages[0];
+  }
+
+  public async getGuildSettings(guildId: string): Promise<Guild> {
+    const cachedSettings = this.guildSettings.get(guildId);
+    if (cachedSettings) return cachedSettings;
+    const settings = await guildModel.findOneAndUpdate({ guildId }, {}, { upsert: true, new: true }).lean().exec();
+    this.guildSettings.set(guildId, settings);
+    return settings;
   }
 }

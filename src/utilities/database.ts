@@ -3,6 +3,8 @@ import mongoose from 'mongoose';
 
 import type { DiscordClient } from 'classes/client';
 
+import { clientModel } from 'models/client';
+import { guildModel } from 'models/guild';
 import { InfractionType, infractionModel } from 'models/infraction';
 import { userModel } from 'models/user';
 import { weeklyLevelModel } from 'models/weeklyLevels';
@@ -24,27 +26,43 @@ export function connectDatabase(client: DiscordClient) {
 
 export async function manage(client: DiscordClient) {
   client.once('ready', () => {
-    // Cache user language preferences
+    // Cache commonly used stuff
     cacheLanguages(client);
+    cacheGuildSettings(client);
 
     // Interval to take care of anything that expires
     CronJob.from({
-      cronTime: '*/1 * * * *',
+      cronTime: '* * * * *',
       onTick: async () => {
         await manageInfractions(client);
-      },
-      start: true,
-    });
-
-    // Clear weekly levels on every Sunday at 00:00
-    CronJob.from({
-      cronTime: '0 0 * * 0',
-      onTick: async () => {
         await clearWeeklyLevels(client);
       },
       start: true,
     });
   });
+}
+
+async function clearWeeklyLevels(client: DiscordClient) {
+  const ONE_WEEK = 604800000;
+  const NOW = Date.now();
+
+  async function wipe() {
+    await clientModel
+      .findOneAndUpdate({ clientId: keys.DISCORD_BOT_ID }, { $set: { lastWeeklyLevelsClear: NOW } }, { upsert: true, new: true })
+      .lean()
+      .exec();
+    const levels = await weeklyLevelModel.deleteMany({});
+    client.levelsWeekly.clear();
+    return logger.info(`[${client.cluster.id}] Cleared ${levels.deletedCount} weekly levels`);
+  }
+
+  const clientSettings = await clientModel.findOneAndUpdate({ clientId: keys.DISCORD_BOT_ID }, {}, { upsert: true, new: true }).lean().exec();
+  if (!clientSettings.lastWeeklyLevelsClear) {
+    return await wipe();
+  }
+  if (NOW > clientSettings.lastWeeklyLevelsClear + ONE_WEEK) {
+    return await wipe();
+  }
 }
 
 export async function cacheLanguages(client: DiscordClient) {
@@ -57,10 +75,12 @@ export async function cacheLanguages(client: DiscordClient) {
   logger.info(`[${client.cluster.id}] ${client.userLanguages.size} user language preferences cached`);
 }
 
-export async function clearWeeklyLevels(client: DiscordClient) {
-  const levels = await weeklyLevelModel.deleteMany({});
-  client.levelsWeekly.clear();
-  logger.info(`[${client.cluster.id}] CLEARED ${levels.deletedCount} WEEKLY LEVELS`);
+export async function cacheGuildSettings(client: DiscordClient) {
+  for (const guild of client.guilds.cache.values()) {
+    const guildData = await guildModel.findOne({ guildId: guild.id }, {}, { upsert: false }).lean().exec();
+    if (guildData) client.guildSettings.set(guild.id, guildData);
+  }
+  logger.info(`[${client.cluster.id}] ${client.guildSettings.size} guild settings cached`);
 }
 
 export async function manageInfractions(client: DiscordClient) {

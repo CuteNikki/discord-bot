@@ -1,13 +1,14 @@
 import { ApplicationCommandOptionType, ApplicationCommandType, Colors, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
 import i18next from 'i18next';
 
-import { Command, Contexts, IntegrationTypes } from 'classes/command';
+import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
 
 import { infractionModel } from 'models/infraction';
 
 import { chunk, pagination } from 'utils/pagination';
 
 export default new Command({
+  module: Modules.MODERATION,
   data: {
     name: 'infractions',
     description: 'Manage infractions of a user',

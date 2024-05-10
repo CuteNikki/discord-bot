@@ -1,10 +1,11 @@
 import { GoogleTranslator } from '@translate-tools/core/translators/GoogleTranslator';
 import { ApplicationCommandType, Colors, EmbedBuilder, codeBlock } from 'discord.js';
 
-import { Command, Contexts, IntegrationTypes } from 'classes/command';
+import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
 import i18next from 'i18next';
 
 export default new Command({
+  module: Modules.UTILITIES,
   data: {
     name: 'Translate',
     type: ApplicationCommandType.Message,

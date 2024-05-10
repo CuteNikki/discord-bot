@@ -10,11 +10,12 @@ import {
 import i18next from 'i18next';
 import ms from 'ms';
 
-import { Command, Contexts, IntegrationTypes } from 'classes/command';
+import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
 
 import { InfractionType, infractionModel } from 'models/infraction';
 
 export default new Command({
+  module: Modules.MODERATION,
   data: {
     name: 'timeout',
     description: 'Times out a user',

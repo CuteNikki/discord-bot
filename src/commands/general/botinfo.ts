@@ -2,9 +2,10 @@ import { ApplicationCommandOptionType, ApplicationCommandType, Colors, EmbedBuil
 import i18next from 'i18next';
 import mongoose from 'mongoose';
 
-import { Command, Contexts, IntegrationTypes } from 'classes/command';
+import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
 
 export default new Command({
+  module: Modules.GENERAL,
   data: {
     name: 'botinfo',
     description: 'Shows information about the bot',

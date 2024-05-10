@@ -9,11 +9,12 @@ import {
 } from 'discord.js';
 import i18next from 'i18next';
 
-import { Command, Contexts, IntegrationTypes } from 'classes/command';
+import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
 
 import { InfractionType, infractionModel } from 'models/infraction';
 
 export default new Command({
+  module: Modules.MODERATION,
   data: {
     name: 'kick',
     description: 'Kicks a user',

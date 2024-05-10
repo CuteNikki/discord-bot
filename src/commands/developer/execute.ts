@@ -1,8 +1,9 @@
 import { ActionRowBuilder, ApplicationCommandType, ModalBuilder, PermissionFlagsBits, TextInputBuilder, TextInputStyle } from 'discord.js';
 
-import { Command, Contexts, IntegrationTypes } from 'classes/command';
+import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
 
 export default new Command({
+  module: Modules.DEVELOPER,
   developerOnly: true,
   cooldown: 0,
   data: {

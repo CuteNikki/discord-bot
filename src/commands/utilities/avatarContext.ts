@@ -1,9 +1,10 @@
 import { ApplicationCommandType, Colors, EmbedBuilder } from 'discord.js';
 import i18next from 'i18next';
 
-import { Command, Contexts, IntegrationTypes } from 'classes/command';
+import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
 
 export default new Command({
+  module: Modules.UTILITIES,
   data: {
     name: 'Avatar & Banner',
     type: ApplicationCommandType.User,

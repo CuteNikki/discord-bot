@@ -1,12 +1,13 @@
 import { ApplicationCommandOptionType, ApplicationCommandType, Colors, EmbedBuilder } from 'discord.js';
 import i18next from 'i18next';
 
-import { Command, Contexts, IntegrationTypes } from 'classes/command';
+import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
 
 import { computeLeaderboard, getLeaderboard, getWeeklyLeaderboard } from 'utils/levels';
 import { chunk, pagination } from 'utils/pagination';
 
 export default new Command({
+  module: Modules.LEVELS,
   data: {
     name: 'levels',
     description: 'Shows the level leaderboard',

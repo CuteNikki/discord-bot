@@ -19,6 +19,15 @@ export enum IntegrationTypes {
   USER_INSTALL = 1,
 }
 
+export enum Modules {
+  DEVELOPER = 'DEVELOPER',
+  MODERATION = 'MODERATION',
+  LEVELS = 'LEVELS',
+  GENERAL = 'GENERAL',
+  UTILITIES = 'UTILITIES',
+  CONFIG = 'CONFIG',
+}
+
 type InteractionType<T extends ApplicationCommandType> = T extends ApplicationCommandType.ChatInput
   ? ChatInputCommandInteraction
   : T extends ApplicationCommandType.Message
@@ -30,6 +39,7 @@ type InteractionType<T extends ApplicationCommandType> = T extends ApplicationCo
 export class Command<T extends ApplicationCommandType = any> {
   constructor(
     public options: {
+      module?: Modules;
       developerOnly?: boolean; // If command is for developer only, it cannot be used by anyone else
       cooldown?: number; // Cooldown between command executes per user (in milliseconds)
       data: RESTPostAPIApplicationCommandsJSONBody & {

@@ -1,9 +1,10 @@
 import { ActivityType, ApplicationCommandType, Colors, EmbedBuilder, Role } from 'discord.js';
 import i18next from 'i18next';
 
-import { Command, Contexts, IntegrationTypes } from 'classes/command';
+import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
 
 export default new Command({
+  module: Modules.UTILITIES,
   data: {
     name: 'View Userinfo',
     type: ApplicationCommandType.User,

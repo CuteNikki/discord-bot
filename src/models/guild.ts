@@ -6,10 +6,34 @@ export enum AnnouncementType {
   PRIVATE_MESSAGE = 'PRIVATE_MESSAGE',
 }
 
+export interface Guild {
+  guildId: string;
+  moderation: {
+    enabled: boolean;
+  };
+  levels: {
+    enabled: boolean;
+    channelId?: string;
+    announcement: AnnouncementType;
+    ignoredRoles: string[];
+    ignoredChannels: string[];
+    enabledChannels: string[];
+    rewards: { roleId: string; level: number; _id: mongoose.Types.ObjectId }[];
+  };
+}
+
 export const guildModel = mongoose.model(
   'guild',
-  new mongoose.Schema({
+  new mongoose.Schema<Guild>({
     guildId: { type: String, required: true },
+    moderation: {
+      type: {
+        enabled: { type: Boolean, default: true },
+      },
+      default: {
+        enabled: true,
+      },
+    },
     levels: {
       type: {
         enabled: { type: Boolean, default: false },

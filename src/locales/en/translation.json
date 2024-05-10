@@ -19,6 +19,20 @@
     "input": "Input",
     "output": "Output"
   },
+  "moderation": {
+    "title": "Moderation Module",
+    "state": {
+      "title": "State",
+      "enabled": "enabled",
+      "disabled": "disabled"
+    },
+    "toggle": {
+      "already_off": "Moderation module is already disabled!",
+      "already_on": "Moderation module is already enabled!",
+      "off": "Moderation module has been disabled.",
+      "on": "Moderation module has been enabled."
+    }
+  },
   "levels": {
     "title": "Levels Module",
     "bot": "Bots cannot have XP/Level!",
@@ -81,10 +95,10 @@
       "removed": "Users will no longer obtain that role."
     },
     "toggle": {
-      "already_on": "Level module is already enabled!",
-      "already_off": "Level module is already disabled!",
-      "on": "Level module has been enabled.",
-      "off": "Level module has been disabled."
+      "already_on": "Levels module is already enabled!",
+      "already_off": "Levels module is already disabled!",
+      "on": "Levels module has been enabled.",
+      "off": "Levels module has been disabled."
     },
     "xp": {
       "added": "Added {{xp}}XP to {{user}}. They are now level {{new_level}} and have {{new_xp}}XP.",
@@ -418,7 +432,8 @@
     "permissions": "You are missing permissions!",
     "developer_only": "This can only be done by developers!",
     "cooldown": "Please wait, you are on cooldown for {{action}}. You can use it again {{timestamp}}.",
-    "error": "Something went wrong! Error: {{error}}"
+    "error": "Something went wrong! Error: {{error}}",
+    "module": "You can only use this command if the {{module}} module is enabled!"
   },
   "pagination": "Buttons were not used for {{time}} and have been disabled!"
 }

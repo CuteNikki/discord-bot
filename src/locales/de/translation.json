@@ -14,9 +14,24 @@
     "output": "Ausgabe"
   },
   "translate": {
+    "none": "Es gab keinen Inhalt oder der Inhalt konnte nicht übersetzt werden!",
     "title": "Übersetzung",
     "input": "Eingabe",
     "output": "Ausgabe"
+  },
+  "moderation": {
+    "title": "Moderation Modul",
+    "state": {
+      "title": "Status",
+      "enabled": "aktiviert",
+      "disabled": "deaktiviert"
+    },
+    "toggle": {
+      "already_off": "Moderation Modul ist bereits deaktiviert!",
+      "already_on": "Moderation Modul ist bereits aktiviert!",
+      "off": "Moderation Modul wurde deaktiviert.",
+      "on": "Moderation Modul wurde aktiviert."
+    }
   },
   "levels": {
     "title": "Levels Modul",
@@ -194,6 +209,8 @@
     "failed": "Fehlgeschlagen... Der User konnte nicht gebannt werden!",
     "target_dm": "Du wurdest von {{guild}} für {{reason}} gebannt!",
     "confirmed": "{{user}} wurde erfolgreich für {{reason}} gebannt.",
+    "duration": "Die Dauer des Bans ist {{duration}}.",
+    "permanent": "Der Ban ist permanent.",
     "dm_received": "Der User hat eine Privatnachricht erhalten.",
     "dm_not_received": "Der User hat keine Privatnachricht erhalten.",
     "deleted_history": "Gelöschter Nachrichtenverlauf: {{deleted}}",
@@ -392,7 +409,21 @@
       "avg_visibility": "Durchschn. Sichtbarkeit: {{vis_km}} Kilometer ({{vis_miles}} Meilen)"
     },
     "history": {
-      "date": "Das angegebene Datum ist ungültig!"
+      "date": "Das angegebene Datum ist ungültig!",
+      "embed_title": "Historisches Wetter ({{date}})",
+      "title": "Weather",
+      "condition": "Zustand: {{condition}}",
+      "avg_humidity": "Durchschn. Luftfeuchtigkeit: {{humidity}}%",
+      "rain_chance": "Regenwahrscheinlichkeit: {{chance}}%",
+      "snow_chance": "Schneewahrscheinlichkeit: {{chance}}%",
+      "max_temp": "Max. Temperatur: {{temp_c}}°C ({{temp_f}}°F)",
+      "min_temp": "Min. Temperatur: {{temp_c}}°C ({{temp_f}}°F)",
+      "avg_temp": "Durchschn. Temperatur: {{temp_c}}°C ({{temp_f}}°F)",
+      "uv_index": "UV-Index: {{uv}}",
+      "max_wind_speed": "Max. Windgeschwindigkeit: {{speed_kph}} Kilometer/h ({{speed_mph}} Meilen/h)",
+      "total_precipitation": "Gesamtniederschlag: {{precipitation_mm}} Millimeter ({{precipitation_in}} Zoll)",
+      "total_snowfall": "Gesamtschneefall: {{snowfall}} Centimeter",
+      "avg_visibility": "Durchschn. Sichtbarkeit: {{vis_km}} Kilometer ({{vis_miles}} Meilen)"
     }
   },
   "interactions": {
@@ -401,7 +432,8 @@
     "permissions": "Dir fehlen dafür Rechte!",
     "developer_only": "Das können nur die Entwickler!",
     "cooldown": "Bitte warte, bis du {{action}} erneut benutzen kannst. Du kannst es erneut versuchen {{timestamp}}.",
-    "error": "Etwas ist schief gelaufen! Fehler: {{error}}"
+    "error": "Etwas ist schief gelaufen! Fehler: {{error}}",
+    "module": "Du kannst diesen Befehl nur verwenden wenn das {{module}} Modul aktiviert ist!"
   },
   "pagination": "Knöpfe wurden für {{time}} nicht benutzt und deaktiviert!"
 }

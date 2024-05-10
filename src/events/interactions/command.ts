@@ -1,7 +1,8 @@
-import { Collection, Events } from 'discord.js';
+import { Collection, Events, type InteractionReplyOptions } from 'discord.js';
 import i18next from 'i18next';
 
 import { Event } from 'classes/event';
+import { Modules } from 'classes/command';
 
 import { keys } from 'utils/keys';
 import { logger } from 'utils/logger';
@@ -17,6 +18,20 @@ export default new Event({
     // Get the command with the interactions command name and return if it wasn't found
     const command = client.commands.get(interaction.commandName);
     if (!command) return;
+
+    // Only allowing commands if their module is enabled
+    if (interaction.guild) {
+      const guildSettings = await client.getGuildSettings(interaction.guild.id);
+      const message: InteractionReplyOptions = { content: i18next.t('interactions.module', { lng, module: command.options.module }), ephemeral: true };
+      switch (command.options.module) {
+        case Modules.MODERATION:
+          if (!guildSettings.moderation.enabled) return interaction.reply(message);
+          break;
+        case Modules.LEVELS:
+          if (!guildSettings.levels.enabled) return interaction.reply(message);
+          break;
+      }
+    }
 
     // Check if command is developer only and return if the user's id doesn't match the developer's id
     const developerIds = keys.DEVELOPER_USER_IDS;

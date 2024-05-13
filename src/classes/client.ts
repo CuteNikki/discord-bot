@@ -88,7 +88,6 @@ export class DiscordClient extends Client {
     await loadButtons(this);
     await loadModals(this);
     await loadCommands(this);
-    // await registerCommands(this);
   }
 
   private initTranslation() {

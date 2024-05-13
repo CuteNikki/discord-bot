@@ -47,7 +47,8 @@ export async function pagination({
   const firstPageIndex = 0;
   const lastPageIndex = embeds.length - 1;
 
-  const msg = await interaction.editReply({ embeds: [embeds[index]], components: [components] });
+  const msg = await interaction.editReply({ embeds: [embeds[index]], components: [components] }).catch(() => {});
+  if (!msg) return;
 
   const collector = msg.createMessageComponentCollector({ filter: (i) => i.user.id === user.id, idle: time, componentType: ComponentType.Button });
 

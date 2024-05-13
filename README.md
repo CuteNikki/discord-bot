@@ -100,7 +100,7 @@ npm run start
   - [x] Infractions command
   - [x] Config command
 - [ ] Utility Module
-      Planning on adding more
+      (Planning on adding more)
   - [x] Avatar/Banner command
   - [x] Userinfo command
   - [x] Serverinfo command

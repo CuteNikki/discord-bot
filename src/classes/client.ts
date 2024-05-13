@@ -1,4 +1,5 @@
 import { ClusterClient, getInfo } from 'discord-hybrid-sharding';
+import { Player } from 'discord-player';
 import { Client, Collection, GatewayIntentBits } from 'discord.js';
 
 import i18next from 'i18next';
@@ -19,24 +20,40 @@ import { loadModals } from 'loaders/modals';
 import { connectDatabase } from 'utils/database';
 import { keys } from 'utils/keys';
 import type { Level, LevelIdentifier } from 'utils/levels';
+import { managePlayer } from 'utils/player';
 
 export class DiscordClient extends Client {
-  public usable = false;
   public cluster = new ClusterClient(this);
+  public player = new Player(this, {
+    skipFFmpeg: false,
+    useLegacyFFmpeg: false,
+    ytdlOptions: {
+      quality: 'highestaudio',
+      highWaterMark: 1 << 25,
+    },
+  });
+
+  public usable = false;
+
   public commands = new Collection<string, Command>(); // Collection<commandName, commandData>
   public buttons = new Collection<string, Button>(); // Collection<customId, buttonOptions>
   public modals = new Collection<string, Modal>(); // Collection<customId, modalOptions>
+
   public cooldowns = new Collection<string, Collection<string, number>>(); // Collection<commandName, Collection<userId, timestamp>>
+
   public userLanguages = new Collection<string, string>(); // Collection<userId, language>
   public guildSettings = new Collection<string, Guild>(); // Collection<guildId, settings>
   public levels = new Collection<LevelIdentifier, Level>();
   public levelsWeekly = new Collection<LevelIdentifier, Level>();
+
   public readonly supportedLanguages = ['en', 'de'];
+
   constructor() {
     super({
       shards: getInfo().SHARD_LIST,
       shardCount: getInfo().TOTAL_SHARDS,
       intents: [
+        GatewayIntentBits.GuildVoiceStates, // !! Needed for music module !!
         GatewayIntentBits.Guilds, // !! Needed for guilds, channels and roles !!
         GatewayIntentBits.GuildModeration, // !! Needed to keep track of bans !!
         // (If a user gets banned and then unbanned they will still show up as banned in the cache without this intent)
@@ -52,6 +69,9 @@ export class DiscordClient extends Client {
 
     // Connect to database
     connectDatabase(this);
+
+    // Setting up the music player
+    managePlayer(this);
 
     // Initialize i18next
     this.initTranslation();

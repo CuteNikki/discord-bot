@@ -19,6 +19,108 @@
     "input": "Input",
     "output": "Output"
   },
+  "music": {
+    "error": {
+      "voice": "You are not in a voice channel!",
+      "none": "There is nothing playing!",
+      "equalizer": "Could not change the equalizer!"
+    },
+    "play": {
+      "error": "Could not play that!",
+      "none": "Could not find any tracks!",
+      "title_track": "Track Queued",
+      "title_playlist": "Playlist Queued",
+      "author": "Author",
+      "title": "Title",
+      "duration": "Duration",
+      "tracks": "Tracks",
+      "queued_by": "Queued by {{user}}"
+    },
+    "remove": {
+      "invalid": "Given position is not valid!",
+      "failed": "Could not remove!",
+      "title_removed": "Track Removed",
+      "author": "Author",
+      "title": "Title",
+      "duration": "Duration",
+      "queued_by": "Queued By",
+      "range_success": "Successfully removed {{tracks}} tracks.",
+      "user_success": "Successfully removed {{tracks}} tracks by {{user}}.",
+      "duplicate_success": "Removed {{tracks}} duplicate tracks."
+    },
+    "stop": {
+      "success": "Queue has been deleted and the music stopped."
+    },
+    "skip": {
+      "success": "Skipping the current track."
+    },
+    "back": {
+      "success": "Going back to play the previous track."
+    },
+    "resume": {
+      "already": "The music is already playing!",
+      "success": "Continuing to play music."
+    },
+    "pause": {
+      "already": "The music is already paused!",
+      "success": "Pausing the music."
+    },
+    "volume": {
+      "current": "The current volume is at {{volume}}%",
+      "changed": "Changing volume to {{volume}}%"
+    },
+    "nowplaying": {
+      "title_now": "Now Playing",
+      "author": "Author",
+      "title": "Title",
+      "duration": "Duration",
+      "progress": "Progress ({{progress}}%)",
+      "requested_by": "Requested by {{user}}"
+    },
+    "seek": {
+      "invalid": "An invalid timestamp was provided!",
+      "success": "Seeking to {{timestamp}}."
+    },
+    "queue": {
+      "none": "Could not find any tracks in the queue.",
+      "title": "Queue (Page {{page}}/{{pages}})"
+    },
+    "history": {
+      "none": "Could not find any tracks in the history.",
+      "title": "History (Page {{page}}/{{pages}})"
+    },
+    "shuffle": {
+      "success": "Shuffling the queue."
+    },
+    "loop": {
+      "set": "Setting loop to {{mode}}.",
+      "current": "The loop mode is currently {{mode}}."
+    },
+    "leave": {
+      "queue": "There is nothing to leave!",
+      "success": "Leaving the voice channel."
+    },
+    "bassboost": {
+      "enabled": "Setting equalizer to boost bass.",
+      "disabled": "Disabling the equalizer."
+    },
+    "8d": {
+      "enabled": "Enabling the 8D filter.",
+      "disabled": "Disabling the 8D filter."
+    },
+    "vocalboost": {
+      "enabled": "Setting equalizer to boost vocals.",
+      "disabled": "Disabling the equalizer."
+    },
+    "empty_queue": {
+      "title": "Queue Empty",
+      "description": "Channel will be left if no music is queued within 60 seconds."
+    },
+    "empty_voice_channel": {
+      "title": "Voice Channel Empty",
+      "description": "Current track has been paused but the channel will be left if nobody joins within 60 seconds."
+    }
+  },
   "moderation": {
     "title": "Moderation Module",
     "state": {

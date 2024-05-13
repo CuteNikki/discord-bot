@@ -26,6 +26,7 @@ export enum Modules {
   GENERAL = 'GENERAL',
   UTILITIES = 'UTILITIES',
   CONFIG = 'CONFIG',
+  MUSIC = 'MUSIC'
 }
 
 type InteractionType<T extends ApplicationCommandType> = T extends ApplicationCommandType.ChatInput

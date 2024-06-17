@@ -13,7 +13,7 @@ export default new Modal({
     await interaction.deferReply();
     const { fields } = interaction;
 
-    const code = fields.getTextInputValue('code').replaceAll('token', 'no').replaceAll('TOKEN', 'no');
+    const code = fields.getTextInputValue('code');
     const userDepth = fields.getTextInputValue('depth');
     const depth = parseInt(userDepth);
 

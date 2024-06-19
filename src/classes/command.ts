@@ -22,7 +22,7 @@ export enum IntegrationTypes {
 export enum Modules {
   DEVELOPER = 'DEVELOPER',
   MODERATION = 'MODERATION',
-  LEVELS = 'LEVELS',
+  LEVEL = 'LEVEL',
   GENERAL = 'GENERAL',
   UTILITIES = 'UTILITIES',
   CONFIG = 'CONFIG',

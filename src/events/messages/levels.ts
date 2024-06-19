@@ -4,7 +4,7 @@ import i18next from 'i18next';
 import { Event } from 'classes/event';
 
 import { AnnouncementType, guildModel } from 'models/guild';
-import { appendXP, getDataOrCreate, getLevelReward, randomXP } from 'utils/levels';
+import { appendXP, getDataOrCreate, getLevelReward, randomXP } from 'utils/level';
 
 const cooldowns = new Set();
 
@@ -24,9 +24,9 @@ export default new Event({
       !guild ||
       !guildId ||
       !guildSettings ||
-      !guildSettings.levels.enabled ||
-      guildSettings.levels.ignoredChannels.includes(channelId) ||
-      (guildSettings.levels.enabledChannels.length && !guildSettings.levels.enabledChannels.includes(channelId))
+      !guildSettings.level.enabled ||
+      guildSettings.level.ignoredChannels.includes(channelId) ||
+      (guildSettings.level.enabledChannels.length && !guildSettings.level.enabledChannels.includes(channelId))
     )
       return;
 
@@ -57,7 +57,7 @@ export default new Event({
         embeds: [levelUpEmbed],
       };
 
-      switch (guildSettings.levels.announcement) {
+      switch (guildSettings.level.announcement) {
         case AnnouncementType.USER_CHANNEL:
           {
             const msg = await channel.send(levelUpMessage).catch(() => {});
@@ -68,8 +68,8 @@ export default new Event({
           break;
         case AnnouncementType.OTHER_CHANNEL:
           {
-            if (!guildSettings.levels.channelId) return;
-            const channel = guild.channels.cache.get(guildSettings.levels.channelId);
+            if (!guildSettings.level.channelId) return;
+            const channel = guild.channels.cache.get(guildSettings.level.channelId);
             if (!channel || channel.type !== ChannelType.GuildText) return;
             channel.send(levelUpMessage).catch(() => {});
           }
@@ -78,10 +78,13 @@ export default new Event({
           {
             const lng = await client.getLanguage(author.id);
 
-            levelUpMessage.content = i18next.t('levels.dm.message', { lng, guild: guild.name });
-            levelUpEmbed.setFields({ name: i18next.t('levels.dm.title', { lng }), value: i18next.t('levels.dm.description', { lng }) });
+            levelUpMessage.content = i18next.t('level.dm.message', { lng, guild: guild.name });
+            levelUpEmbed.setFields({ name: i18next.t('level.dm.title', { lng }), value: i18next.t('level.dm.description', { lng }) });
             if (rewards?.length)
-              levelUpEmbed.addFields({ name: i18next.t('levels.dm.title_roles', { lng, count: rewards.length }), value: rewards.map((r) => `<@&${r.roleId}>`).join(' ') });
+              levelUpEmbed.addFields({
+                name: i18next.t('level.dm.title_roles', { lng, count: rewards.length }),
+                value: rewards.map((r) => `<@&${r.roleId}>`).join(' '),
+              });
             client.users.send(author.id, levelUpMessage).catch(() => {});
           }
           break;

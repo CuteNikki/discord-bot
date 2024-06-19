@@ -19,7 +19,7 @@ import { loadModals } from 'loaders/modals';
 
 import { connectDatabase } from 'utils/database';
 import { keys } from 'utils/keys';
-import type { Level, LevelIdentifier } from 'utils/levels';
+import type { Level, LevelIdentifier } from 'utils/level';
 import { managePlayer } from 'utils/player';
 
 export class DiscordClient extends Client {
@@ -43,8 +43,8 @@ export class DiscordClient extends Client {
 
   public userLanguages = new Collection<string, string>(); // Collection<userId, language>
   public guildSettings = new Collection<string, Guild>(); // Collection<guildId, settings>
-  public levels = new Collection<LevelIdentifier, Level>();
-  public levelsWeekly = new Collection<LevelIdentifier, Level>();
+  public level = new Collection<LevelIdentifier, Level>();
+  public levelWeekly = new Collection<LevelIdentifier, Level>();
 
   public readonly supportedLanguages = ['en', 'de'];
 
@@ -61,7 +61,7 @@ export class DiscordClient extends Client {
         // privileged intents:
         // GatewayIntentBits.GuildMembers, // !! Needed for welcome messages !!
         GatewayIntentBits.GuildPresences, // !! Needed for userinfo !!
-        GatewayIntentBits.GuildMessages, // !! Needed for levels !!
+        GatewayIntentBits.GuildMessages, // !! Needed for level !!
         // GatewayIntentBits.MessageContent // Not needed as we are not reading messages and only replying to interactions
         // (MessageContextMenuCommands will still have readable message.content without this intent)
       ],

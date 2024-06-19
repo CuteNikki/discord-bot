@@ -11,7 +11,7 @@ export interface Guild {
   moderation: {
     enabled: boolean;
   };
-  levels: {
+  level: {
     enabled: boolean;
     channelId?: string;
     announcement: AnnouncementType;
@@ -34,7 +34,7 @@ export const guildModel = mongoose.model(
         enabled: true,
       },
     },
-    levels: {
+    level: {
       type: {
         enabled: { type: Boolean, default: false },
         channelId: { type: String, required: false },

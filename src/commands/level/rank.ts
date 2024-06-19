@@ -3,10 +3,10 @@ import { ApplicationCommandOptionType, ApplicationCommandType, AttachmentBuilder
 import i18next from 'i18next';
 
 import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
-import { getDataWithRank, getWeeklyDataWithRank, levelToXP, type PositionLevel } from 'utils/levels';
+import { getDataWithRank, getWeeklyDataWithRank, levelToXP, type PositionLevel } from 'utils/level';
 
 export default new Command({
-  module: Modules.LEVELS,
+  module: Modules.LEVEL,
   data: {
     name: 'rank',
     description: 'Shows the rank of a user',
@@ -52,7 +52,7 @@ export default new Command({
     if (!weekly) rank = await getDataWithRank({ userId: target.id, guildId }, client);
     else rank = await getWeeklyDataWithRank({ userId: target.id, guildId }, client);
 
-    if (!rank) return interaction.editReply(i18next.t('levels.none', { lng }));
+    if (!rank) return interaction.editReply(i18next.t('level.none', { lng }));
 
     Font.loadDefault();
 

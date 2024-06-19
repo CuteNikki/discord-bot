@@ -3,7 +3,7 @@ import { ApplicationCommandType, AttachmentBuilder } from 'discord.js';
 import i18next from 'i18next';
 
 import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
-import { getDataWithRank, levelToXP } from 'utils/levels';
+import { getDataWithRank, levelToXP } from 'utils/level';
 
 export default new Command({
   module: Modules.MODERATION,
@@ -25,7 +25,7 @@ export default new Command({
     const member = guild.members.cache.get(target.id);
 
     const rank = await getDataWithRank({ userId: target.id, guildId }, client);
-    if (!rank) return interaction.editReply(i18next.t('levels.none', { lng }));
+    if (!rank) return interaction.editReply(i18next.t('level.none', { lng }));
 
     Font.loadDefault();
     const card = new RankCardBuilder()

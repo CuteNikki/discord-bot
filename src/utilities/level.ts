@@ -2,7 +2,7 @@ import type { Types } from 'mongoose';
 
 import type { DiscordClient } from 'classes/client';
 
-import { levelModel } from 'models/levels';
+import { levelModel } from 'models/level';
 import { weeklyLevelModel } from 'models/weeklyLevels';
 import { guildModel } from '../models/guild';
 
@@ -46,28 +46,28 @@ export function randomXP(): number {
 }
 
 export function getData(identifier: LevelIdentifier, client: DiscordClient) {
-  const data = client.levels.get(identifier);
+  const data = client.level.get(identifier);
   if (data) return data;
 }
 
 export async function getDataOrCreate(identifier: LevelIdentifier, client: DiscordClient): Promise<Level> {
-  const data = client.levels.get(identifier);
+  const data = client.level.get(identifier);
   if (data) return data;
   const newData = await levelModel.findOneAndUpdate(identifier, {}, { new: true, upsert: true }).lean().exec();
-  client.levels.set(identifier, newData);
+  client.level.set(identifier, newData);
   return newData;
 }
 
 export function getWeeklyData(identifier: LevelIdentifier, client: DiscordClient) {
-  const data = client.levelsWeekly.get(identifier);
+  const data = client.levelWeekly.get(identifier);
   if (data) return data;
 }
 
 export async function getWeeklyDataOrCreate(identifier: LevelIdentifier, client: DiscordClient): Promise<Level> {
-  const data = client.levelsWeekly.get(identifier);
+  const data = client.levelWeekly.get(identifier);
   if (data) return data;
   const newData = await weeklyLevelModel.findOneAndUpdate(identifier, {}, { new: true, upsert: true }).lean().exec();
-  client.levelsWeekly.set(identifier, newData);
+  client.levelWeekly.set(identifier, newData);
   return newData;
 }
 
@@ -80,12 +80,12 @@ export async function appendXP(identifier: LevelIdentifier, client: DiscordClien
     .findOneAndUpdate(identifier, { $inc: { xp }, $set: { level: weeklyLevel } }, { upsert: true, new: true })
     .lean()
     .exec();
-  client.levelsWeekly.set(identifier, newWeeklyLevel);
+  client.levelWeekly.set(identifier, newWeeklyLevel);
   const newLevel = await levelModel
     .findOneAndUpdate(identifier, { $inc: { xp }, $set: { level: level } }, { upsert: true, new: true })
     .lean()
     .exec();
-  client.levels.set(identifier, newLevel);
+  client.level.set(identifier, newLevel);
   return newLevel;
 }
 
@@ -94,7 +94,7 @@ export async function setXP(identifier: LevelIdentifier, client: DiscordClient, 
   if (xp < 0) xp = 0;
   const level = xpToLevel(xp);
   const newLevel = await levelModel.findOneAndUpdate(identifier, { $set: { level, xp } }, { upsert: true, new: true }).lean().exec();
-  client.levels.set(identifier, newLevel);
+  client.level.set(identifier, newLevel);
   return newLevel;
 }
 
@@ -104,7 +104,7 @@ export async function addXP(identifier: LevelIdentifier, client: DiscordClient, 
   if (current.xp + xp < 0) xp = 0;
   const level = xpToLevel(current.xp + xp);
   const newLevel = await levelModel.findOneAndUpdate(identifier, { $inc: { xp }, $set: { level } }, { upsert: true, new: true }).lean().exec();
-  client.levels.set(identifier, newLevel);
+  client.level.set(identifier, newLevel);
   return newLevel;
 }
 
@@ -113,7 +113,7 @@ export async function setLevel(identifier: LevelIdentifier, client: DiscordClien
   if (level < 0) level = 0;
   const xp = levelToXP(level);
   const newLevel = await levelModel.findOneAndUpdate(identifier, { $set: { level, xp } }, { upsert: true, new: true }).lean().exec();
-  client.levels.set(identifier, newLevel);
+  client.level.set(identifier, newLevel);
   return newLevel;
 }
 
@@ -123,14 +123,14 @@ export async function addLevel(identifier: LevelIdentifier, client: DiscordClien
   if (current.level + level < 0) level = 0;
   const xp = levelToXP(current.level + level);
   const newLevel = await levelModel.findOneAndUpdate(identifier, { $set: { level, xp } }, { upsert: true, new: true }).lean().exec();
-  client.levels.set(identifier, newLevel);
+  client.level.set(identifier, newLevel);
   return newLevel;
 }
 
 export async function getLevelReward(level: Level | PositionLevel): Promise<LevelReward[] | null> {
   const guildData = await guildModel.findOne({ guildId: level.guildId }).lean().exec();
   if (!guildData) return null;
-  const rewards = guildData.levels.rewards.filter((rw) => rw.level <= level.level);
+  const rewards = guildData.level.rewards.filter((rw) => rw.level <= level.level);
   return rewards;
 }
 

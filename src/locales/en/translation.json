@@ -135,7 +135,7 @@
       "on": "Moderation module has been enabled."
     }
   },
-  "levels": {
+  "level": {
     "title": "Levels Module",
     "bot": "Bots cannot have XP/Level!",
     "none": "Could not find any level data!",
@@ -183,11 +183,11 @@
     },
     "enabled_channels": {
       "title": "Enabled Channels",
-      "already": "The levels module is already enabled in that channel!",
+      "already": "The level module is already enabled in that channel!",
       "limit": "You cannot have more than 25 enabled channels!",
-      "added": "The levels module is now enabled in {{channel}}.",
-      "invalid": "The levels module is not enabled in that channel!",
-      "removed": "The levels module is no longer enabled in that channel."
+      "added": "The level module is now enabled in {{channel}}.",
+      "invalid": "The level module is not enabled in that channel!",
+      "removed": "The level module is no longer enabled in that channel."
     },
     "rewards": {
       "title": "Levelup Rewards",
@@ -209,8 +209,8 @@
       "set": "Set XP of {{user}} to {{xp}}XP. They are now level {{new_level}} and have {{new_xp}}XP."
     },
     "level": {
-      "added": "Added {{levels}} levels to {{user}}. They are now level {{new_level}} and have {{new_xp}}XP.",
-      "removed": "Removed {{levels}} levels from {{user}}. They are now level {{new_level}} and have {{new_xp}}XP.",
+      "added": "Added {{level}} level to {{user}}. They are now level {{new_level}} and have {{new_xp}}XP.",
+      "removed": "Removed {{level}} level from {{user}}. They are now level {{new_level}} and have {{new_xp}}XP.",
       "set": "{{user}} is now level {{new_level}} and has {{new_xp}}XP."
     }
   },

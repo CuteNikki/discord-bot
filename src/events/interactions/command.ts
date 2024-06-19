@@ -1,8 +1,8 @@
 import { Collection, Events, type InteractionReplyOptions } from 'discord.js';
 import i18next from 'i18next';
 
-import { Event } from 'classes/event';
 import { Modules } from 'classes/command';
+import { Event } from 'classes/event';
 
 import { keys } from 'utils/keys';
 import { logger } from 'utils/logger';
@@ -27,8 +27,8 @@ export default new Event({
         case Modules.MODERATION:
           if (!guildSettings.moderation.enabled) return interaction.reply(message);
           break;
-        case Modules.LEVELS:
-          if (!guildSettings.levels.enabled) return interaction.reply(message);
+        case Modules.LEVEL:
+          if (!guildSettings.level.enabled) return interaction.reply(message);
           break;
       }
     }

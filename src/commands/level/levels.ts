@@ -3,13 +3,13 @@ import i18next from 'i18next';
 
 import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
 
-import { computeLeaderboard, getLeaderboard, getWeeklyLeaderboard } from 'utils/levels';
+import { computeLeaderboard, getLeaderboard, getWeeklyLeaderboard } from 'utils/level';
 import { chunk, pagination } from 'utils/pagination';
 
 export default new Command({
-  module: Modules.LEVELS,
+  module: Modules.LEVEL,
   data: {
-    name: 'levels',
+    name: 'level',
     description: 'Shows the level leaderboard',
     type: ApplicationCommandType.ChatInput,
     contexts: [Contexts.GUILD],
@@ -45,23 +45,23 @@ export default new Command({
     const computedLeaderboard = await computeLeaderboard(leaderboard, client);
 
     const chunkedLeaderboard = chunk(computedLeaderboard, 10);
-    if (!chunkedLeaderboard.length) return interaction.editReply(i18next.t('levels.none'));
+    if (!chunkedLeaderboard.length) return interaction.editReply(i18next.t('level.none'));
 
     await pagination({
       interaction,
-      embeds: chunkedLeaderboard.map((levels, index) =>
+      embeds: chunkedLeaderboard.map((level, index) =>
         new EmbedBuilder()
           .setColor(Colors.Blurple)
           .setTitle(
             weekly
-              ? i18next.t('levels.leaderboard.weekly', { lng, page: index + 1, pages: chunkedLeaderboard.length })
-              : i18next.t('levels.leaderboard.title', { lng, page: index + 1, pages: chunkedLeaderboard.length })
+              ? i18next.t('level.leaderboard.weekly', { lng, page: index + 1, pages: chunkedLeaderboard.length })
+              : i18next.t('level.leaderboard.title', { lng, page: index + 1, pages: chunkedLeaderboard.length })
           )
           .setDescription(
-            levels
+            level
               .map(
                 ({ position, username, xp, level }) =>
-                  i18next.t('levels.leaderboard.position', { lng, position, username, xp, level }) +
+                  i18next.t('level.leaderboard.position', { lng, position, username, xp, level }) +
                   `${position === 1 ? ' 🥇' : position === 2 ? ' 🥈' : position === 3 ? ' 🥉' : ''}`
               )
               .join('\n')

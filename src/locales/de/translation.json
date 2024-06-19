@@ -123,7 +123,7 @@
       "on": "Moderation Modul wurde aktiviert."
     }
   },
-  "levels": {
+  "level": {
     "title": "Levels Modul",
     "bot": "Bots können keine XP/Level haben!",
     "none": "Konnte keine Level Daten finden!",
@@ -197,8 +197,8 @@
       "set": "XP von {{user}} auf {{xp}}XP gesetzt. Er ist jetzt auf Level {{new_level}} und hat {{new_xp}}XP."
     },
     "level": {
-      "added": "{{levels}} Level zu {{user}} hinzugefügt. Er ist jetzt auf Level {{new_level}} und hat {{new_xp}}XP.",
-      "removed": "{{levels}} Level von {{user}} entfernt. Er ist jetzt auf Level {{new_level}} und hat {{new_xp}}XP.",
+      "added": "{{level}} Level zu {{user}} hinzugefügt. Er ist jetzt auf Level {{new_level}} und hat {{new_xp}}XP.",
+      "removed": "{{level}} Level von {{user}} entfernt. Er ist jetzt auf Level {{new_level}} und hat {{new_xp}}XP.",
       "set": "{{user}} ist jetzt auf Level {{new_level}} und hat {{new_xp}}XP."
     }
   },

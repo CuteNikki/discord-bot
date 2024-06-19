@@ -1,4 +1,4 @@
-import { ApplicationCommandType, Colors, EmbedBuilder } from 'discord.js';
+import { ApplicationCommandType, Colors, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
 import i18next from 'i18next';
 
 import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
@@ -17,11 +17,14 @@ export default new Command({
   },
   async execute({ interaction, client }) {
     if (!interaction.inCachedGuild()) return;
-    const { options, user, guildId } = interaction;
+    await interaction.deferReply({ ephemeral: true });
+
+    const { options, user, guildId, member } = interaction;
 
     const lng = await client.getLanguage(user.id);
 
-    await interaction.deferReply({ ephemeral: true });
+    if (member.permissions.has(PermissionFlagsBits.ModerateMembers)) return interaction.editReply(i18next.t('interactions.permissions'));
+
     const target = options.getUser('user', true);
 
     const targetInfractions = await infractionModel.find({ guildId, userId: target.id }).lean().exec();

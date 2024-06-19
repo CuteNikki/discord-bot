@@ -78,7 +78,7 @@ npm run start
 <h3>TO-DO</h3>
 
 - [x] Level Module
-  - [x] Weekly levels
+  - [x] Weekly level
   - [x] Rank command (with weekly option)
   - [x] Leaderboard command (with weekly option)
   - [x] Config command
@@ -108,7 +108,6 @@ npm run start
   - [x] Math command
   - [ ] Config command
 - [x] Music Module
-  - [ ] Config command
 - [ ] Log Module
   - [ ] Config command
 - [ ] Welcomer Module
@@ -120,6 +119,8 @@ npm run start
 - [ ] Fun Module
   - [ ] Config command
 - [ ] Ticket Module
+  - [ ] Config command
+- [ ] Suggestions Module
   - [ ] Config command
 
 <hr>

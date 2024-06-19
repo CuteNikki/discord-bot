@@ -58,7 +58,13 @@ export default new Command({
               : i18next.t('levels.leaderboard.title', { lng, page: index + 1, pages: chunkedLeaderboard.length })
           )
           .setDescription(
-            levels.map(({ position, username, xp, level }) => i18next.t('levels.leaderboard.position', { lng, position, username, xp, level })).join('\n')
+            levels
+              .map(
+                ({ position, username, xp, level }) =>
+                  i18next.t('levels.leaderboard.position', { lng, position, username, xp, level }) +
+                  `${position === 1 ? ' 🥇' : position === 2 ? ' 🥈' : position === 3 ? ' 🥉' : ''}`
+              )
+              .join('\n')
           )
       ),
     });

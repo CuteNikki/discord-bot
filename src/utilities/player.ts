@@ -8,7 +8,7 @@ export async function managePlayer(client: DiscordClient) {
   const player = client.player;
 
   // await player.extractors.loadDefault((extractor) => extractor === 'SoundCloudExtractor');
-  await player.extractors.loadDefault();
+  await player.extractors.loadDefault((extractor) => extractor !== 'YouTubeExtractor'); // YouTube currently doesn't seem to work
 
   player.events.on('playerError', (_queue, error: any, track) => {
     logger.error({ error, track }, 'DiscordPlayer Error');

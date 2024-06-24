@@ -106,15 +106,7 @@ npm run start
           (Messages in channel will not give any XP)
     - [x] Enabled channels
           (When set will only enable level module in those channels)
-- [ ] Utility module
-      (Planning on adding more)
-  - [x] Avatar/Banner command
-  - [x] Userinfo command
-  - [x] Serverinfo command
-  - [x] Weather command
-  - [x] Math command
-  - [ ] Config command
-- [ ] Music module
+- [x] Music module
   - [x] Play command
     - [x] Autocompletion
   - [x] Stop command
@@ -143,6 +135,14 @@ npm run start
     - [x] Range
     - [x] User
     - [x] ID
+  - [x] Config command
+- [ ] Utility module
+      (Planning on adding more)
+  - [x] Avatar/Banner command
+  - [x] Userinfo command
+  - [x] Serverinfo command
+  - [x] Weather command
+  - [x] Math command
   - [ ] Config command
 - [ ] Developer Module
   - [x] Evaluate command

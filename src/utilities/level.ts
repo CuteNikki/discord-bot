@@ -127,9 +127,9 @@ export async function addLevel(identifier: LevelIdentifier, client: DiscordClien
   return newLevel;
 }
 
-export async function getLevelReward(level: Level | PositionLevel): Promise<LevelReward[] | null> {
+export async function getLevelRewards(level: Level | PositionLevel): Promise<LevelReward[]> {
   const guildData = await guildModel.findOne({ guildId: level.guildId }).lean().exec();
-  if (!guildData) return null;
+  if (!guildData) return [];
   const rewards = guildData.level.rewards.filter((rw) => rw.level <= level.level);
   return rewards;
 }

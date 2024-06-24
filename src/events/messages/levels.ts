@@ -4,7 +4,7 @@ import i18next from 'i18next';
 import { Event } from 'classes/event';
 
 import { AnnouncementType, guildModel } from 'models/guild';
-import { appendXP, getDataOrCreate, getLevelReward, randomXP } from 'utils/level';
+import { appendXP, getDataOrCreate, getLevelRewards, randomXP } from 'utils/level';
 
 const cooldowns = new Set();
 
@@ -39,7 +39,7 @@ export default new Event({
     setTimeout(() => cooldowns.delete(author.id), 60000);
 
     if (currentData.level < newData.level) {
-      const rewards = await getLevelReward(newData);
+      const rewards = await getLevelRewards(newData);
 
       const levelUpEmbed = new EmbedBuilder()
         .setColor(Colors.Blurple)

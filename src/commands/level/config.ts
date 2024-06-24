@@ -5,7 +5,7 @@ import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
 
 import { AnnouncementType, guildModel } from 'models/guild';
 
-import { addLevel, addXP, setLevel, setXP } from 'utils/level';
+import { addLevel, addXP, getDataOrCreate, getLevelRewards, setLevel, setXP } from 'utils/level';
 
 export default new Command({
   module: Modules.CONFIG,
@@ -486,7 +486,7 @@ export default new Command({
               break;
             case 'rewards':
               {
-                if (!config.level.rewards.length) return interaction.editReply(i18next.t('level.rewards.none', { lng }));
+                if (!config.level.rewards.length) return interaction.editReply(i18next.t('level.none', { lng }));
                 interaction.editReply({
                   embeds: [
                     new EmbedBuilder().addFields({
@@ -504,7 +504,7 @@ export default new Command({
               break;
             case 'ignored-roles':
               {
-                if (!config.level.ignoredRoles.length) return interaction.editReply(i18next.t('level.ignored_roles.none', { lng }));
+                if (!config.level.ignoredRoles.length) return interaction.editReply(i18next.t('level.none', { lng }));
                 interaction.editReply({
                   embeds: [
                     new EmbedBuilder().addFields({
@@ -522,7 +522,7 @@ export default new Command({
               break;
             case 'ignored-channels':
               {
-                if (!config.level.ignoredChannels.length) return interaction.editReply(i18next.t('level.ignored_channels.none', { lng }));
+                if (!config.level.ignoredChannels.length) return interaction.editReply(i18next.t('level.none', { lng }));
                 interaction.editReply({
                   embeds: [
                     new EmbedBuilder().addFields({
@@ -540,7 +540,7 @@ export default new Command({
               break;
             case 'enabled-channels':
               {
-                if (!config.level.enabledChannels.length) return interaction.editReply(i18next.t('level.enabledChannels.none', { lng }));
+                if (!config.level.enabledChannels.length) return interaction.editReply(i18next.t('level.none', { lng }));
                 interaction.editReply({
                   embeds: [
                     new EmbedBuilder().addFields({
@@ -775,27 +775,61 @@ export default new Command({
             case 'add':
               {
                 const user = options.getUser('user', true);
+                const member = guild.members.cache.get(user.id);
+
                 if (user.bot) return interaction.editReply(i18next.t('level.bot', { lng }));
+
                 const xp = options.getInteger('xp', true);
                 const userLevel = await addXP({ userId: user.id, guildId }, client, xp);
+                const rewards = await getLevelRewards(userLevel);
+
+                if (member && rewards.length) {
+                  await member.roles.add(rewards.map((reward) => reward.roleId)).catch(() => {});
+                }
+
                 interaction.editReply(i18next.t('level.xp.added', { lng, user: user.toString(), xp, new_xp: userLevel.xp, new_level: userLevel.level }));
               }
               break;
             case 'remove':
               {
                 const user = options.getUser('user', true);
+                const member = guild.members.cache.get(user.id);
+
                 if (user.bot) return interaction.editReply(i18next.t('level.bot', { lng }));
+
                 const xp = options.getInteger('xp', true);
+                const currentLevel = await getDataOrCreate({ userId: user.id, guildId }, client);
                 const userLevel = await addXP({ userId: user.id, guildId }, client, -xp);
+                const oldRewards = await getLevelRewards(currentLevel);
+                const newRewards = await getLevelRewards(userLevel);
+
+                if (member && (oldRewards.length || newRewards.length)) {
+                  await member.roles
+                    .set([
+                      ...member.roles.cache.map((role) => role.id).filter((id) => !oldRewards.map((reward) => reward.roleId).includes(id)),
+                      ...newRewards.map((reward) => reward.roleId),
+                    ])
+                    .catch(() => {});
+                }
+
                 interaction.editReply(i18next.t('level.xp.removed', { lng, user: user.toString(), xp, new_xp: userLevel.xp, new_level: userLevel.level }));
               }
               break;
             case 'set':
               {
                 const user = options.getUser('user', true);
+                const member = guild.members.cache.get(user.id);
+
                 if (user.bot) return interaction.editReply(i18next.t('level.bot', { lng }));
+
                 const xp = options.getInteger('xp', true);
                 const userLevel = await setXP({ userId: user.id, guildId }, client, xp);
+                const rewards = await getLevelRewards(userLevel);
+
+                if (member && rewards.length) {
+                  await member.roles.add(rewards.map((reward) => reward.roleId)).catch(() => {});
+                }
+
                 interaction.editReply(i18next.t('level.xp.set', { lng, user: user.toString(), xp, new_xp: userLevel.xp, new_level: userLevel.level }));
               }
               break;
@@ -808,18 +842,43 @@ export default new Command({
             case 'add':
               {
                 const user = options.getUser('user', true);
+                const member = guild.members.cache.get(user.id);
+
                 if (user.bot) return interaction.editReply(i18next.t('level.bot', { lng }));
+
                 const level = options.getInteger('level', true);
                 const userLevel = await addLevel({ userId: user.id, guildId }, client, level);
+                const rewards = await getLevelRewards(userLevel);
+
+                if (member && rewards.length) {
+                  await member.roles.add(rewards.map((reward) => reward.roleId)).catch(() => {});
+                }
+
                 interaction.editReply(i18next.t('level.level.added', { lng, user: user.toString(), level, new_xp: userLevel.xp, new_level: userLevel.level }));
               }
               break;
             case 'remove':
               {
                 const user = options.getUser('user', true);
+                const member = guild.members.cache.get(user.id);
+
                 if (user.bot) return interaction.editReply(i18next.t('level.bot', { lng }));
+
                 const level = options.getInteger('level', true);
+                const currentLevel = await getDataOrCreate({ userId: user.id, guildId }, client);
                 const userLevel = await addLevel({ userId: user.id, guildId }, client, -level);
+                const oldRewards = await getLevelRewards(currentLevel);
+                const newRewards = await getLevelRewards(userLevel);
+
+                if (member && (oldRewards.length || newRewards.length)) {
+                  await member.roles
+                    .set([
+                      ...member.roles.cache.map((role) => role.id).filter((id) => !oldRewards.map((reward) => reward.roleId).includes(id)),
+                      ...newRewards.map((reward) => reward.roleId),
+                    ])
+                    .catch(() => {});
+                }
+
                 interaction.editReply(
                   i18next.t('level.level.removed', { lng, user: user.toString(), level, new_xp: userLevel.xp, new_level: userLevel.level })
                 );
@@ -828,9 +887,18 @@ export default new Command({
             case 'set':
               {
                 const user = options.getUser('user', true);
+                const member = guild.members.cache.get(user.id);
+
                 if (user.bot) return interaction.editReply(i18next.t('level.bot', { lng }));
+
                 const level = options.getInteger('level', true);
                 const userLevel = await setLevel({ userId: user.id, guildId }, client, level);
+                const rewards = await getLevelRewards(userLevel);
+
+                if (member && rewards.length) {
+                  await member.roles.add(rewards.map((reward) => reward.roleId)).catch(() => {});
+                }
+
                 interaction.editReply(i18next.t('level.level.set', { lng, user: user.toString(), new_xp: userLevel.xp, new_level: userLevel.level }));
               }
               break;

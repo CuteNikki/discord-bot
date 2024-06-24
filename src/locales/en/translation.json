@@ -19,6 +19,32 @@
     "input": "Input",
     "output": "Output"
   },
+  "games": {
+    "invitation": {
+      "accept": "Accept",
+      "reject": "Reject",
+      "title": "Game Invitation",
+      "description": "{{user}} invited you to play a game!",
+      "rejected": "{{opponent}} rejected your invitation!",
+      "timeout": "{{opponent}} did not answer your invitation in time!",
+      "bot": "You cannot invite bots to play!"
+    },
+    "rpc": {
+      "choices": {
+        "rock": "Rock",
+        "paper": "Paper",
+        "scissors": "Scissors"
+      },
+      "title": "Rock Paper Scissors",
+      "description": "Make your choices below!",
+      "picked": "You picked {{pick}}. Good luck!",
+      "already": "You already picked!",
+      "timeout": "The time to pick ran out!",
+      "tied": "The game tied which means nobody won!",
+      "winner": "And the winner is... {{winner}}!",
+      "bot": "The bot is making a choice..."
+    }
+  },
   "music": {
     "config": {
       "title": "Music Module",

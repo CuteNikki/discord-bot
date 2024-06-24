@@ -165,6 +165,16 @@ npm run start
       - [ ] Manage user's subscriptions
   - [ ] Banned users
     - [ ] Config command
+- [ ] Game command
+  - [x] Rock-Paper-Scissors
+  - [ ] Tic-Tac-Toe
+  - [ ] Connect-4
+  - [ ] Trivia
+  - [ ] Hangman
+  - [ ] Memory
+  - [ ] Snake
+  - [ ] Fast-Type
+  - [ ] Remember-Emoji
 - [ ] Log module
   - [ ] Config command
 - [ ] Welcomer module

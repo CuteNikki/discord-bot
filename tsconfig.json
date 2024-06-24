@@ -34,7 +34,8 @@
       "loaders/*": ["./src/loaders/*"],
       "utils/*": ["./src/utilities/*"],
       "utilities/*": ["./src/utilities/*"],
-      "models/*": ["./src/models/*"]
+      "models/*": ["./src/models/*"],
+      "games/*": ["./src/games/*"]
     }
   }
 }

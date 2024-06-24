@@ -19,6 +19,32 @@
     "input": "Eingabe",
     "output": "Ausgabe"
   },
+  "games": {
+    "invitation": {
+      "accept": "Akzeptieren",
+      "reject": "Ablehnen",
+      "title": "Spiel-Einladung",
+      "description": "{{user}} hat dich eingeladen ein Spiel zu spielen!",
+      "rejected": "{{opponent}} hat deine Einladung abgelehnt!",
+      "timeout": "{{opponent}} hat deine Einladung nicht rechtzeitig beantwortet!",
+      "bot": "Du kannst Bots nicht zum spielen einladen!"
+    },
+    "rpc": {
+      "choices": {
+        "rock": "Stein",
+        "paper": "Papier",
+        "scissors": "Schere"
+      },
+      "title": "Stein Schere Papier",
+      "description": "Wähle zwischen den drei Optionen!",
+      "picked": "Du hast {{pick}} ausgewählt. Viel Glück!",
+      "already": "Du hast bereits ausgewählt!",
+      "timeout": "Die Zeit zum auswählen ist ausgelaufen!",
+      "tied": "Das Spiel ist unentschieden, das heißt niemand hat gewonnen!",
+      "winner": "Und gewonnen hat... {{winner}}!",
+      "bot": "Der Bot trifft eine Wahl..."
+    }
+  },
   "music": {
     "config": {
       "title": "Musik Modul",

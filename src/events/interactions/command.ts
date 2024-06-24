@@ -30,6 +30,8 @@ export default new Event({
         case Modules.LEVEL:
           if (!guildSettings.level.enabled) return interaction.reply(message);
           break;
+        case Modules.MUSIC:
+          if (!guildSettings.music.enabled) return interaction.reply(message);
       }
     }
 

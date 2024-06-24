@@ -11,6 +11,9 @@ export interface Guild {
   moderation: {
     enabled: boolean;
   };
+  music: {
+    enabled: boolean;
+  };
   level: {
     enabled: boolean;
     channelId?: string;
@@ -26,9 +29,17 @@ export const guildModel = mongoose.model(
   'guild',
   new mongoose.Schema<Guild>({
     guildId: { type: String, required: true },
+    music: {
+      type: {
+        enabled: { type: Boolean },
+      },
+      default: {
+        enabled: false,
+      },
+    },
     moderation: {
       type: {
-        enabled: { type: Boolean, default: true },
+        enabled: { type: Boolean },
       },
       default: {
         enabled: true,
@@ -36,9 +47,9 @@ export const guildModel = mongoose.model(
     },
     level: {
       type: {
-        enabled: { type: Boolean, default: false },
-        channelId: { type: String, required: false },
-        announcement: { type: String, default: AnnouncementType.USER_CHANNEL, enum: Object.values(AnnouncementType) },
+        enabled: { type: Boolean },
+        channelId: { type: String },
+        announcement: { type: String, enum: Object.values(AnnouncementType) },
         ignoredRoles: [{ type: String }],
         ignoredChannels: [{ type: String }],
         enabledChannels: [{ type: String }],

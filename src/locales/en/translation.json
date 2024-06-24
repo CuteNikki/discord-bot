@@ -20,6 +20,20 @@
     "output": "Output"
   },
   "music": {
+    "config": {
+      "title": "Music Module",
+      "state": {
+        "title": "State",
+        "enabled": "enabled",
+        "disabled": "disabled"
+      },
+      "toggle": {
+        "already_off": "Music module is already disabled!",
+        "already_on": "Music module is already enabled!",
+        "off": "Music module has been disabled.",
+        "on": "Music module has been enabled."
+      }
+    },
     "error": {
       "voice": "You are not in a voice channel!",
       "none": "There is nothing playing!",

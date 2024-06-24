@@ -20,6 +20,20 @@
     "output": "Ausgabe"
   },
   "music": {
+    "config": {
+      "title": "Musik Modul",
+      "state": {
+        "title": "Status",
+        "enabled": "aktiviert",
+        "disabled": "deaktiviert"
+      },
+      "toggle": {
+        "already_off": "Musik Modul ist bereits deaktiviert!",
+        "already_on": "Musik Modul ist bereits aktiviert!",
+        "off": "Musik Modul wurde deaktiviert.",
+        "on": "Musik Modul wurde aktiviert."
+      }
+    },
     "error": {
       "voice": "Du bist nicht in einem Sprachkanal!",
       "none": "Momentan wird nichts gespielt!",

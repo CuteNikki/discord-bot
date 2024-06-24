@@ -57,15 +57,15 @@ export default new Command({
     Font.loadDefault();
 
     const card = new RankCardBuilder()
-      .setStatus(member?.presence?.status ?? 'none')
-      .setAvatar(target.displayAvatarURL({ size: 1024, forceStatic: true }))
-      .setUsername(target.username)
       .setDisplayName(target.displayName)
-      .setRank(rank.position)
-      .setLevel(rank.level)
+      .setUsername(target.username)
+      .setAvatar(target.displayAvatarURL({ size: 1024, forceStatic: true, extension: 'png' }))
       .setCurrentXP(rank.xp)
-      .setRequiredXP(levelToXP(rank.level + 1));
-    const image = await card.build();
-    return interaction.editReply({ files: [new AttachmentBuilder(image, { name: 'rank.png' })] });
+      .setRequiredXP(levelToXP(rank.level + 1))
+      .setLevel(rank.level)
+      .setRank(rank.position)
+      .setStatus(member?.presence?.status ?? 'none');
+    const image = await card.build({ format: 'png' }).catch(() => {});
+    if (image) return interaction.editReply({ files: [new AttachmentBuilder(image, { name: 'rank.png' })] });
   },
 });

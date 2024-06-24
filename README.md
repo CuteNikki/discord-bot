@@ -77,7 +77,22 @@ npm run start
 
 <h3>TO-DO</h3>
 
-- [x] Level Module
+- [x] General module
+  - [x] Language command
+  - [x] Bot information
+    - [x] Botinfo command
+    - [x] Clusters command
+    - [x] Ping command
+    - [x] Uptime command
+- [x] Moderation module
+  - [x] Ban/Tempban command
+  - [x] Unban command
+  - [x] Kick command
+  - [x] Timeout command
+  - [x] Warn command
+  - [x] Infractions command
+  - [x] Config command
+- [x] Level module
   - [x] Weekly level
   - [x] Rank command (with weekly option)
   - [x] Leaderboard command (with weekly option)
@@ -91,15 +106,7 @@ npm run start
           (Messages in channel will not give any XP)
     - [x] Enabled channels
           (When set will only enable level module in those channels)
-- [x] Moderation Module
-  - [x] Ban/Tempban command
-  - [x] Unban command
-  - [x] Kick command
-  - [x] Timeout command
-  - [x] Warn command
-  - [x] Infractions command
-  - [x] Config command
-- [ ] Utility Module
+- [ ] Utility module
       (Planning on adding more)
   - [x] Avatar/Banner command
   - [x] Userinfo command
@@ -107,20 +114,74 @@ npm run start
   - [x] Weather command
   - [x] Math command
   - [ ] Config command
-- [x] Music Module
-- [ ] Log Module
+- [ ] Music module
+  - [x] Play command
+    - [x] Autocompletion
+  - [x] Stop command
+  - [x] Leave command
+  - [x] Skip command
+  - [x] Back command
+  - [x] Pause/Resume command
+  - [x] Now playing command
+  - [x] Queue command
+  - [x] History command
+  - [x] Shuffle command
+  - [x] Seek command
+  - [x] Volume command
+  - [x] Lyrics command
+    - [x] Autocompletion
+  - [x] Loop command
+    - [x] Autoplay
+    - [x] Track
+    - [x] Queue
+  - [x] Filter commands
+    - [x] Bassboost
+    - [x] 8D
+    - [x] Vocalboost
+  - [x] Remove track commands
+    - [x] Duplicates
+    - [x] Range
+    - [x] User
+    - [x] ID
   - [ ] Config command
-- [ ] Welcomer Module
+- [ ] Developer Module
+  - [x] Evaluate command
+  - [x] Execute command
+  - [x] Register command
+  - [ ] Custom badges
+    - [x] List of badges:
+      - Developer
+      - Moderator
+      - Translator
+      - Supporter
+      - Premium
+      - Expert Bughunter
+      - Bughunter
+    - [ ] Config command
+  - [ ] Premium
+    - [ ] Config command
+      - [ ] Generate codes
+      - [ ] Redeem codes
+      - [ ] Manage user's subscriptions
+  - [ ] Banned users
+    - [ ] Config command
+- [ ] Log module
   - [ ] Config command
-- [ ] Custom VC Module
+- [ ] Welcomer module
   - [ ] Config command
-- [ ] Economy Module
+- [ ] Custom VC module
   - [ ] Config command
-- [ ] Fun Module
+- [ ] Economy module
   - [ ] Config command
-- [ ] Ticket Module
+- [ ] Fun module
   - [ ] Config command
-- [ ] Suggestions Module
+- [ ] Ticket module
+  - [ ] Config command
+- [ ] Giveaway module
+  - [ ] Config command
+- [ ] Suggestions module
+  - [ ] Config command
+- [ ] Confession module
   - [ ] Config command
 
 <hr>

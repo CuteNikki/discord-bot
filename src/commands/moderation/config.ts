@@ -29,11 +29,6 @@ export default new Command({
             description: 'Shows the moderation module state',
             type: ApplicationCommandOptionType.Subcommand,
           },
-          {
-            name: 'modrole',
-            description: 'Shows the moderator role',
-            type: ApplicationCommandOptionType.Subcommand,
-          },
         ],
       },
       {
@@ -57,7 +52,7 @@ export default new Command({
   },
   async execute({ client, interaction }) {
     if (!interaction.inCachedGuild()) return;
-    const { options, guildId, guild } = interaction;
+    const { options, guildId } = interaction;
     await interaction.deferReply({ ephemeral: true });
     const lng = await client.getLanguage(interaction.user.id);
 

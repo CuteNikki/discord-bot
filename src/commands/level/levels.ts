@@ -9,7 +9,7 @@ import { chunk, pagination } from 'utils/pagination';
 export default new Command({
   module: Modules.LEVEL,
   data: {
-    name: 'level',
+    name: 'levels',
     description: 'Shows the level leaderboard',
     type: ApplicationCommandType.ChatInput,
     contexts: [Contexts.GUILD],

@@ -2,6 +2,7 @@ import { ApplicationCommandOptionType, ApplicationCommandType } from 'discord.js
 
 import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
 
+import { Connect4 } from 'games/connect4';
 import { RockPaperScissors } from 'games/rock-paper-scissors';
 import { TicTacToe } from 'games/tic-tac-toe';
 
@@ -40,6 +41,43 @@ export default new Command({
           },
         ],
       },
+      {
+        name: 'connect4',
+        description: 'Play a game of Connect4!',
+        type: ApplicationCommandOptionType.Subcommand,
+        options: [
+          {
+            name: 'opponent',
+            description: 'The user to play against',
+            type: ApplicationCommandOptionType.User,
+            required: true,
+          },
+          {
+            name: 'scale',
+            description: 'The scale of connect4',
+            type: ApplicationCommandOptionType.String,
+            required: false,
+            choices: [
+              {
+                name: 'Original (7x6)',
+                value: 'original',
+              },
+              {
+                name: 'Small (6x5)',
+                value: 'small',
+              },
+              {
+                name: 'Medium (8x7)',
+                value: 'medium',
+              },
+              {
+                name: 'Big (10x9)',
+                value: 'big',
+              },
+            ],
+          },
+        ],
+      },
     ],
   },
   async execute({ interaction, client }) {
@@ -68,6 +106,62 @@ export default new Command({
             interaction,
             opponent,
             client,
+          });
+          game.start();
+        }
+        break;
+      case 'connect4':
+        {
+          const opponent = options.getUser('opponent', true);
+
+          let scale;
+
+          // Original Connect4 is 7x6
+          // Highest supported is 10x9
+          // Max supported amount of buttons per row is 5
+          switch (options.getString('scale', false)) {
+            case 'big':
+              scale = {
+                width: 10,
+                height: 9,
+                max_buttons: 5,
+              };
+              break;
+            case 'medium':
+              scale = {
+                width: 8,
+                height: 7,
+                max_buttons: 4,
+              };
+              break;
+            case 'small':
+              scale = {
+                width: 6,
+                height: 5,
+                max_buttons: 3,
+              };
+              break;
+            case 'original':
+              scale = {
+                width: 7,
+                height: 6,
+                max_buttons: 4,
+              };
+              break;
+            default:
+              scale = {
+                width: 7,
+                height: 6,
+                max_buttons: 4,
+              };
+              break;
+          }
+
+          const game = new Connect4({
+            interaction,
+            opponent,
+            client,
+            scale,
           });
           game.start();
         }

@@ -52,6 +52,15 @@
       "timeout": "Die Zeit ist abgelaufen, niemand hat gewonnen!",
       "tied": "Das Spiel ist unentschieden, niemand hat gewonnen!",
       "winner": "Und gewonnen hat... {{winner}}!"
+    },
+    "connect": {
+      "title": "4 Gewinnt",
+      "start": "{{player}} startet!",
+      "wait": "Warte auf {{player}}...",
+      "turn": "Du bist nicht dran!",
+      "timeout": "Die Zeit ist abgelaufen, niemand hat gewonnen!",
+      "tied": "Das Spiel ist unentschieden, niemand hat gewonnen!",
+      "winner": "Und gewonnen hat... {{winner}}!"
     }
   },
   "music": {

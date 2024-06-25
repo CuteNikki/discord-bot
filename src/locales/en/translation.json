@@ -52,6 +52,15 @@
       "timeout": "The time ran out, nobody won!",
       "tied": "The game tied, nobody won!",
       "winner": "And the winner is... {{winner}}!"
+    },
+    "connect": {
+      "title": "Connect4",
+      "start": "{{player}} is starting!",
+      "wait": "Waiting for {{player}}...",
+      "turn": "It's not your turn!",
+      "timeout": "The time ran out, nobody won!",
+      "tied": "The game tied, nobody won!",
+      "winner": "And the winner is... {{winner}}!"
     }
   },
   "music": {

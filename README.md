@@ -167,7 +167,7 @@ npm run start
     - [ ] Config command
 - [ ] Game command
   - [x] Rock-Paper-Scissors
-  - [ ] Tic-Tac-Toe
+  - [x] Tic-Tac-Toe
   - [ ] Connect-4
   - [ ] Trivia
   - [ ] Hangman

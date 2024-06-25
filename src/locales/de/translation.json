@@ -39,10 +39,19 @@
       "description": "Wähle zwischen den drei Optionen!",
       "picked": "Du hast {{pick}} ausgewählt. Viel Glück!",
       "already": "Du hast bereits ausgewählt!",
-      "timeout": "Die Zeit zum auswählen ist ausgelaufen!",
-      "tied": "Das Spiel ist unentschieden, das heißt niemand hat gewonnen!",
+      "timeout": "Die Zeit ist abgelaufen, niemand hat gewonnen!",
+      "tied": "Das Spiel ist unentschieden, niemand hat gewonnen!",
       "winner": "Und gewonnen hat... {{winner}}!",
       "bot": "Der Bot trifft eine Wahl..."
+    },
+    "ttt": {
+      "title": "Tic Tac Toe",
+      "start": "{{player}} startet!",
+      "wait": "Warte auf {{player}}...",
+      "turn": "Du bist nicht dran!",
+      "timeout": "Die Zeit ist abgelaufen, niemand hat gewonnen!",
+      "tied": "Das Spiel ist unentschieden, niemand hat gewonnen!",
+      "winner": "Und gewonnen hat... {{winner}}!"
     }
   },
   "music": {

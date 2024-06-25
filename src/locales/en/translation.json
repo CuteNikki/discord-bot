@@ -39,10 +39,19 @@
       "description": "Make your choices below!",
       "picked": "You picked {{pick}}. Good luck!",
       "already": "You already picked!",
-      "timeout": "The time to pick ran out!",
-      "tied": "The game tied which means nobody won!",
+      "timeout": "The time ran out, nobody won!",
+      "tied": "The game tied, nobody won!",
       "winner": "And the winner is... {{winner}}!",
       "bot": "The bot is making a choice..."
+    },
+    "ttt": {
+      "title": "Tic Tac Toe",
+      "start": "{{player}} is starting!",
+      "wait": "Waiting for {{player}}...",
+      "turn": "It's not your turn!",
+      "timeout": "The time ran out, nobody won!",
+      "tied": "The game tied, nobody won!",
+      "winner": "And the winner is... {{winner}}!"
     }
   },
   "music": {

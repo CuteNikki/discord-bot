@@ -411,7 +411,8 @@
       "connected": "verbunden",
       "connecting": "wird verbunden",
       "disconnecting": "wird getrennt",
-      "uninitialized": "nicht initialisiert"
+      "uninitialized": "nicht initialisiert",
+      "weekly": "Letzte wöchentliche Level Löschung: {{date}}"
     },
     "stats": {
       "title": "Statistiken",

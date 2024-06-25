@@ -423,7 +423,8 @@
       "connected": "connected",
       "connecting": "connecting",
       "disconnecting": "disconnecting",
-      "uninitialized": "uninitialized"
+      "uninitialized": "uninitialized",
+      "weekly": "Last weekly level clear: {{date}}"
     },
     "stats": {
       "title": "Statistics",

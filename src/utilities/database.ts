@@ -48,7 +48,7 @@ async function clearWeeklyLevels(client: DiscordClient) {
 
   async function wipe() {
     await clientModel
-      .findOneAndUpdate({ clientId: keys.DISCORD_BOT_ID }, { $set: { lastWeeklyLevelsClear: NOW } }, { upsert: true, new: true })
+      .findOneAndUpdate({ clientId: keys.DISCORD_BOT_ID }, { $set: { lastWeeklyLevelClear: NOW } }, { upsert: true, new: true })
       .lean()
       .exec();
     const level = await weeklyLevelModel.deleteMany({});
@@ -57,10 +57,10 @@ async function clearWeeklyLevels(client: DiscordClient) {
   }
 
   const clientSettings = await clientModel.findOneAndUpdate({ clientId: keys.DISCORD_BOT_ID }, {}, { upsert: true, new: true }).lean().exec();
-  if (!clientSettings.lastWeeklyLevelsClear) {
+  if (!clientSettings.lastWeeklyLevelClear) {
     return await wipe();
   }
-  if (NOW > clientSettings.lastWeeklyLevelsClear + ONE_WEEK) {
+  if (NOW > clientSettings.lastWeeklyLevelClear + ONE_WEEK) {
     return await wipe();
   }
 }

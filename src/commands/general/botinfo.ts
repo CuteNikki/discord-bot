@@ -4,6 +4,8 @@ import mongoose from 'mongoose';
 
 import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
 
+import { clientModel } from 'models/client';
+
 export default new Command({
   module: Modules.GENERAL,
   data: {
@@ -27,6 +29,8 @@ export default new Command({
 
     try {
       const application = await interaction.client.application.fetch();
+
+      const clientDatabaseSettings = await clientModel.findOneAndUpdate({ clientId: application.id }, {}, { upsert: true, new: true }).lean().exec();
 
       const dbStates = {
         0: i18next.t('botinfo.database.disconnected', { lng }),
@@ -66,6 +70,10 @@ export default new Command({
                 value: [
                   i18next.t('botinfo.database.name', { lng, name: 'MongoDB' }),
                   i18next.t('botinfo.database.state', { lng, state: dbStates[mongoose.connection.readyState] }),
+                  i18next.t('botinfo.database.weekly', {
+                    lng,
+                    date: clientDatabaseSettings.lastWeeklyLevelClear ? `<t:${Math.floor(clientDatabaseSettings.lastWeeklyLevelClear / 1000)}:D>` : '/',
+                  }),
                 ].join('\n'),
               }
             ),

@@ -129,7 +129,7 @@ export class RockPaperScissors extends Opponent {
   }
 
   async getResult(message: Message, lng: string) {
-    const { user } = this.options.interaction;
+    const user = this.options.interaction.user;
     const opponent = this.options.opponent;
 
     let result: 'TIMEOUT' | 'TIE' | 'PLAYER' | 'OPPONENT' | null = null;
@@ -151,7 +151,7 @@ export class RockPaperScissors extends Opponent {
     if (result === 'TIMEOUT') embed.setDescription(i18next.t('games.rpc.timeout', { lng }));
     else if (result === 'TIE') embed.setDescription(i18next.t('games.rpc.tie', { lng }));
     else if (result === 'PLAYER') embed.setDescription(i18next.t('games.rpc.winner', { lng, winner: user.toString() }));
-    else embed.setDescription(i18next.t('games.rpc.winner', { lng, winner: opponent?.toString ?? message.client.user.toString() }));
+    else embed.setDescription(i18next.t('games.rpc.winner', { lng, winner: opponent?.toString() ?? message.client.user.toString() }));
 
     return message
       .edit({

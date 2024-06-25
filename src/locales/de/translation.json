@@ -61,6 +61,16 @@
       "timeout": "Die Zeit ist abgelaufen, niemand hat gewonnen!",
       "tied": "Das Spiel ist unentschieden, niemand hat gewonnen!",
       "winner": "Und gewonnen hat... {{winner}}!"
+    },
+    "hangman": {
+      "title": "Galgenmännchen",
+      "theme": "Thema",
+      "word": "Wort ({{length}})",
+      "guesses": "Geratene Buchstaben",
+      "timeout": "Deine Zeit ist abgelaufen. Das Wort war **{{word}}**!",
+      "lost": "Du hast falsch geraten. Das Wort war **{{word}}**!",
+      "won": "Du hast richtig geraten!",
+      "stop": "Du hast aufgegeben. Das Wort war **{{word}}**!"
     }
   },
   "music": {

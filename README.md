@@ -168,9 +168,9 @@ npm run start
 - [ ] Game command
   - [x] Rock-Paper-Scissors
   - [x] Tic-Tac-Toe
-  - [ ] Connect-4
+  - [x] Connect-4
   - [ ] Trivia
-  - [ ] Hangman
+  - [x] Hangman
   - [ ] Memory
   - [ ] Snake
   - [ ] Fast-Type

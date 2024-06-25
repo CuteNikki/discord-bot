@@ -61,6 +61,16 @@
       "timeout": "The time ran out, nobody won!",
       "tied": "The game tied, nobody won!",
       "winner": "And the winner is... {{winner}}!"
+    },
+    "hangman": {
+      "title": "Hangman",
+      "theme": "Theme",
+      "word": "Word ({{length}})",
+      "guesses": "Guessed Letters",
+      "timeout": "Your time ran out. The word was **{{word}}**!",
+      "lost": "You guessed incorrectly. The word was **{{word}}**!",
+      "won": "You guessed correct!",
+      "stop": "You surrendered. The word was **{{word}}**!"
     }
   },
   "music": {

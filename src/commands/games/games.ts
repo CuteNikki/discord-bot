@@ -3,8 +3,11 @@ import { ApplicationCommandOptionType, ApplicationCommandType } from 'discord.js
 import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
 
 import { Connect4 } from 'games/connect4';
+import { Hangman } from 'games/hangman';
 import { RockPaperScissors } from 'games/rock-paper-scissors';
 import { TicTacToe } from 'games/tic-tac-toe';
+
+import { words } from 'utils/words';
 
 export default new Command({
   module: Modules.GAMES,
@@ -78,6 +81,30 @@ export default new Command({
           },
         ],
       },
+      {
+        name: 'hangman',
+        description: 'Play a game of hangman!',
+        type: ApplicationCommandOptionType.Subcommand,
+        options: [
+          {
+            name: 'theme',
+            description: 'The theme you want your word to be from',
+            type: ApplicationCommandOptionType.String,
+            choices: [
+              { name: 'Random', value: 'random' },
+              { name: 'Discord', value: 'discord' },
+              { name: 'Fruit', value: 'fruit' },
+              { name: 'Color', value: 'color' },
+              { name: 'Sport', value: 'sport' },
+              { name: 'Nature', value: 'nature' },
+              { name: 'Camping', value: 'camping' },
+              { name: 'Winter', value: 'winter' },
+              { name: 'Pokemon', value: 'pokemon' },
+              { name: 'Wordle', value: 'wordle' },
+            ],
+          },
+        ],
+      },
     ],
   },
   async execute({ interaction, client }) {
@@ -107,6 +134,16 @@ export default new Command({
             opponent,
             client,
           });
+          game.start();
+        }
+        break;
+      case 'hangman':
+        {
+          let theme = options.getString('theme', false);
+          const themes = Object.keys(words);
+          if (!theme || theme === 'random') theme = themes[Math.floor(Math.random() * themes.length)];
+
+          const game = new Hangman({ interaction, client, theme: theme as keyof typeof words });
           game.start();
         }
         break;

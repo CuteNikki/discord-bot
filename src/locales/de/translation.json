@@ -97,6 +97,11 @@
       "similarity": "Ähnlichkeit",
       "wpm": "Wörter pro Minute",
       "time": "Gebrauchte Zeit"
+    },
+    "memory": {
+      "title": "Erinnerung",
+      "description": "Klick auf die Knöpfe, um Spielsteine umzudrehen. Du musst ein Emoji seinem Paar zuordnen!",
+      "finished": "Du hast insgesamt {{tiles}} Spielsteine umgedreht!"
     }
   },
   "music": {

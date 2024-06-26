@@ -97,6 +97,11 @@
       "similarity": "Similarity",
       "wpm": "Words per minute",
       "time": "Time taken"
+    },
+    "memory": {
+      "title": "Memory",
+      "description": "Click on the buttons to turn a tile. You need to match an emoji with their pair!",
+      "finished": "You turned a total of {{tiles}} tiles!"
     }
   },
   "music": {

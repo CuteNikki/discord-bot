@@ -171,9 +171,9 @@ npm run start
   - [x] Connect-4
   - [x] Trivia
   - [x] Hangman
-  - [ ] Memory
+  - [x] Memory
   - [x] Snake
-  - [ ] Fast-Type
+  - [x] Fast-Type
   - [ ] Remember-Emoji
 - [ ] Log module
   - [ ] Config command

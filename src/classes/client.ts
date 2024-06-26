@@ -62,7 +62,7 @@ export class DiscordClient extends Client {
         // GatewayIntentBits.GuildMembers, // !! Needed for welcome messages !!
         GatewayIntentBits.GuildPresences, // !! Needed for userinfo !!
         GatewayIntentBits.GuildMessages, // !! Needed for level !!
-        // GatewayIntentBits.MessageContent // Not needed as we are not reading messages and only replying to interactions
+        GatewayIntentBits.MessageContent, // !! Needed for fast-type game !!
         // (MessageContextMenuCommands will still have readable message.content without this intent)
       ],
     });

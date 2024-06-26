@@ -87,6 +87,16 @@
       "title": "Schlange",
       "score": "Punktezahl",
       "over": "Du bist gestorben! Das Spiel ist vorbei."
+    },
+    "typing": {
+      "title": "Schnell-Schreiben",
+      "info": "Informationen",
+      "timer": "Du hast 60 Sekunden um den Satz zu schreiben.",
+      "sentence": "Satz",
+      "input": "Deine Eingabe",
+      "similarity": "Ähnlichkeit",
+      "wpm": "Wörter pro Minute",
+      "time": "Gebrauchte Zeit"
     }
   },
   "music": {

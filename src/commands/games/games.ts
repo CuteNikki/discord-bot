@@ -3,6 +3,7 @@ import { ApplicationCommandOptionType, ApplicationCommandType } from 'discord.js
 import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
 
 import { Connect4 } from 'games/connect4';
+import { FastType } from 'games/fast-type';
 import { Hangman } from 'games/hangman';
 import { RockPaperScissors } from 'games/rock-paper-scissors';
 import { Snake } from 'games/snake';
@@ -218,6 +219,11 @@ export default new Command({
           },
         ],
       },
+      {
+        name: 'fast-type',
+        description: 'Play a game of fast-type',
+        type: ApplicationCommandOptionType.Subcommand,
+      },
     ],
   },
   async execute({ interaction, client }) {
@@ -355,6 +361,11 @@ export default new Command({
           }
 
           new Snake({ interaction, client, size });
+        }
+        break;
+      case 'fast-type':
+        {
+          new FastType({ interaction, client });
         }
         break;
     }

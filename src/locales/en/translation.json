@@ -87,6 +87,16 @@
       "title": "Snake",
       "score": "Score",
       "over": "You died! The game is over."
+    },
+    "typing": {
+      "title": "Fast-Type",
+      "info": "Information",
+      "timer": "You have 60 seconds to type the sentence below.",
+      "sentence": "Sentence",
+      "input": "Your input",
+      "similarity": "Similarity",
+      "wpm": "Words per minute",
+      "time": "Time taken"
     }
   },
   "music": {

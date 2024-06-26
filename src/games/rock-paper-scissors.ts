@@ -166,7 +166,7 @@ export class RockPaperScissors extends Opponent {
       );
 
     if (result === 'TIMEOUT') embed.setDescription(i18next.t('games.rpc.timeout', { lng }));
-    else if (result === 'TIE') embed.setDescription(i18next.t('games.rpc.tie', { lng }));
+    else if (result === 'TIE') embed.setDescription(i18next.t('games.rpc.tied', { lng }));
     else if (result === 'PLAYER') embed.setDescription(i18next.t('games.rpc.winner', { lng, winner: user.toString() }));
     else embed.setDescription(i18next.t('games.rpc.winner', { lng, winner: opponent?.toString() ?? client.user.toString() }));
 

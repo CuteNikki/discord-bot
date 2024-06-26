@@ -230,24 +230,22 @@ export default new Command({
         {
           const opponent = options.getUser('opponent', false);
 
-          const game = new RockPaperScissors({
+          new RockPaperScissors({
             interaction,
             opponent,
             client,
           });
-          game.start();
         }
         break;
       case 'tic-tac-toe':
         {
           const opponent = options.getUser('opponent', true);
 
-          const game = new TicTacToe({
+          new TicTacToe({
             interaction,
             opponent,
             client,
           });
-          game.start();
         }
         break;
       case 'hangman':
@@ -256,8 +254,7 @@ export default new Command({
           const themes = Object.keys(words);
           if (!theme || theme === 'random') theme = themes[Math.floor(Math.random() * themes.length)];
 
-          const game = new Hangman({ interaction, client, theme: theme as keyof typeof words });
-          game.start();
+          new Hangman({ interaction, client, theme: theme as keyof typeof words });
         }
         break;
       case 'connect4':
@@ -307,13 +304,12 @@ export default new Command({
               break;
           }
 
-          const game = new Connect4({
+          new Connect4({
             interaction,
             opponent,
             client,
             scale,
           });
-          game.start();
         }
         break;
       case 'trivia':
@@ -322,14 +318,13 @@ export default new Command({
           const difficulty = options.getString('difficulty', true);
           const category = options.getInteger('category', false) ?? 0;
 
-          const game = new Trivia({
+          new Trivia({
             interaction,
             client,
             category,
             difficulty: difficulty as TriviaDifficulty,
             mode: mode as TriviaMode,
           });
-          game.start();
         }
         break;
       case 'snake':
@@ -359,8 +354,7 @@ export default new Command({
               break;
           }
 
-          const game = new Snake({ interaction, client, size });
-          game.start();
+          new Snake({ interaction, client, size });
         }
         break;
     }

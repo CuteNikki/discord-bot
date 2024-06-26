@@ -20,14 +20,16 @@ export class Opponent {
   public async isApprovedByOpponent(): Promise<Message | false> {
     const user = this.options.interaction.user;
     const opponent = this.options.opponent;
+    const interaction = this.options.interaction;
+    const client = this.options.client;
 
     if (!opponent) return false;
 
-    const lng = await this.options.client.getLanguage(user.id);
-    const opponentLng = await this.options.client.getLanguage(opponent.id);
+    const lng = await client.getLanguage(user.id);
+    const opponentLng = await client.getLanguage(opponent.id);
 
     if (opponent.bot) {
-      await this.options.interaction.editReply(i18next.t('games.invitation.bot')).catch(() => {});
+      await interaction.editReply(i18next.t('games.invitation.bot')).catch(() => {});
       return false;
     }
 
@@ -42,7 +44,7 @@ export class Opponent {
         .setStyle(ButtonStyle.Danger);
       const row = new ActionRowBuilder<ButtonBuilder>().setComponents(acceptButton, rejectButton);
 
-      const message = await this.options.interaction
+      const message = await interaction
         .editReply({
           content: opponent.toString(),
           embeds: [
@@ -59,14 +61,16 @@ export class Opponent {
       const collector = message.createMessageComponentCollector({ time: 30 * 1000 });
 
       collector.on('collect', async (buttonInteraction) => {
-        if (buttonInteraction.user.id !== opponent.id) {
-          return buttonInteraction.reply({
-            content: i18next.t('interactions.author_only', { lng: await this.options.client.getLanguage(buttonInteraction.user.id) }),
-            ephemeral: true,
-          });
-        }
-
         await buttonInteraction.deferUpdate().catch(() => {});
+
+        if (buttonInteraction.user.id !== opponent.id) {
+          return buttonInteraction
+            .followUp({
+              content: i18next.t('interactions.author_only', { lng: await client.getLanguage(buttonInteraction.user.id) }),
+              ephemeral: true,
+            })
+            .catch(() => {});
+        }
 
         if (buttonInteraction.customId === CustomIds.ACCEPT) return collector.stop('accept');
         if (buttonInteraction.customId === CustomIds.REJECT) return collector.stop('reject');
@@ -80,7 +84,7 @@ export class Opponent {
         if (reason === 'reject') embed.setDescription(i18next.t('games.invitation.rejected', { lng, opponent: opponent.toString() }));
         if (reason === 'time') embed.setDescription(i18next.t('games.invitation.timeout', { lng, opponent: opponent.toString() }));
 
-        message.edit({ content: user.toString(), embeds: [embed], components: [] }).catch(() => {});
+        interaction.editReply({ content: user.toString(), embeds: [embed], components: [] }).catch(() => {});
         return resolve(false);
       });
     });

@@ -1,40 +1,39 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, Message, type ChatInputCommandInteraction } from 'discord.js';
-import i18next from 'i18next';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, type ChatInputCommandInteraction } from 'discord.js';
+import i18next, { t } from 'i18next';
 
 import type { DiscordClient } from 'classes/client';
 
 import { words } from 'utils/words';
 
-const emojiLetters = {
-  A: '🇦',
-  B: '🇧',
-  C: '🇨',
-  D: '🇩',
-  E: '🇪',
-  F: '🇫',
-  G: '🇬',
-  H: '🇭',
-  I: '🇮',
-  J: '🇯',
-  K: '🇰',
-  L: '🇱',
-  M: '🇲',
-  N: '🇳',
-  O: '🇴',
-  P: '🇵',
-  Q: '🇶',
-  R: '🇷',
-  S: '🇸',
-  T: '🇹',
-  U: '🇺',
-  V: '🇻',
-  W: '🇼',
-  X: '🇽',
-  Y: '🇾',
-  Z: '🇿',
-};
-
 export class Hangman {
+  emojiLetters = {
+    A: '🇦',
+    B: '🇧',
+    C: '🇨',
+    D: '🇩',
+    E: '🇪',
+    F: '🇫',
+    G: '🇬',
+    H: '🇭',
+    I: '🇮',
+    J: '🇯',
+    K: '🇰',
+    L: '🇱',
+    M: '🇲',
+    N: '🇳',
+    O: '🇴',
+    P: '🇵',
+    Q: '🇶',
+    R: '🇷',
+    S: '🇸',
+    T: '🇹',
+    U: '🇺',
+    V: '🇻',
+    W: '🇼',
+    X: '🇽',
+    Y: '🇾',
+    Z: '🇿',
+  };
   damage: number = 0;
   word: string;
   guesses: string[] = [];
@@ -48,6 +47,8 @@ export class Hangman {
   ) {
     const wordsFromTheme = words[this.options.theme];
     this.word = wordsFromTheme[Math.floor(Math.random() * wordsFromTheme.length)];
+    
+    this.start();
   }
 
   private getBoardContent() {
@@ -64,11 +65,13 @@ export class Hangman {
     ].join('\n');
   }
 
-  async start() {
-    const user = this.options.interaction.user;
-    const lng = await this.options.client.getLanguage(user.id);
+  private async start() {
+    const interaction = this.options.interaction;
+    const user = interaction.user;
+    const client = this.options.client;
+    const lng = await client.getLanguage(user.id);
 
-    const message = await this.options.interaction
+    const message = await interaction
       .editReply({
         content: null,
         embeds: [
@@ -90,24 +93,25 @@ export class Hangman {
     const collector = message.createMessageComponentCollector({ idle: 60 * 1000 });
 
     collector.on('collect', async (buttonInteraction) => {
-      if (buttonInteraction.user.id !== user.id)
-        return buttonInteraction.reply({
-          content: i18next.t('interactions.author_only', { lng: await this.options.client.getLanguage(buttonInteraction.user.id) }),
-        });
-
       await buttonInteraction.deferUpdate().catch(() => {});
+
+      if (buttonInteraction.user.id !== user.id)
+        return buttonInteraction.followUp({
+          content: i18next.t('interactions.author_only', { lng: await client.getLanguage(buttonInteraction.user.id) }),
+          ephemeral: true,
+        });
       const guess = buttonInteraction.customId.split('_')[1];
 
       if (guess === 'stop') return collector.stop();
       if (parseInt(guess) === 0 || parseInt(guess) === 1) {
-        return message.edit({ components: this.getComponents(parseInt(guess)) }).catch(() => {});
+        return interaction.editReply({ components: this.getComponents(parseInt(guess)) }).catch(() => {});
       }
       if (!this.guesses.includes(guess)) {
         this.guesses.push(guess);
         if (!this.word.includes(guess.toLowerCase())) this.damage += 1;
 
-        message
-          .edit({
+        await buttonInteraction
+          .editReply({
             embeds: [
               new EmbedBuilder()
                 .setColor(Colors.Yellow)
@@ -129,7 +133,7 @@ export class Hangman {
     });
 
     collector.on('end', async (_, reason) => {
-      this.getResult(message, lng, reason);
+      return await this.getResult(lng, reason);
     });
   }
 
@@ -149,8 +153,9 @@ export class Hangman {
       .join(' ');
   }
 
-  private async getResult(message: Message, lng: string, reason: string) {
-    const user = this.options.interaction.user;
+  private async getResult(lng: string, reason: string) {
+    const interaction = this.options.interaction;
+    const user = interaction.user;
 
     let result: 'TIMEOUT' | 'WIN' | 'LOSE' | 'STOP' | null = null;
 
@@ -174,7 +179,7 @@ export class Hangman {
     else if (result === 'STOP') embed.setDescription([i18next.t('games.hangman.stop', { lng, word: this.word }), this.getBoardContent()].join('\n\n'));
     else embed.setDescription([i18next.t('games.hangman.won', { lng }), this.getBoardContent()].join('\n\n'));
 
-    return message.edit({ content: null, embeds: [embed], components: [] }).catch(() => {});
+    return await interaction.editReply({ content: null, embeds: [embed], components: [] }).catch(() => {});
   }
 
   private getComponents(page = 0) {
@@ -218,12 +223,12 @@ export class Hangman {
   }
 
   private getLettersForPage(page: number) {
-    if (page == 0) return Object.keys(emojiLetters).slice(0, 12);
-    else return Object.keys(emojiLetters).slice(12, 24);
+    if (page == 0) return Object.keys(this.emojiLetters).slice(0, 12);
+    else return Object.keys(this.emojiLetters).slice(12, 24);
   }
 
   private letterToEmoji(letter: string) {
-    if (!Object.keys(emojiLetters).includes(letter)) return '?';
-    return emojiLetters[letter as keyof typeof emojiLetters];
+    if (!Object.keys(this.emojiLetters).includes(letter)) return '?';
+    return this.emojiLetters[letter as keyof typeof this.emojiLetters];
   }
 }

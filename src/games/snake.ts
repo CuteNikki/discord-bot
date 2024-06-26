@@ -1,23 +1,24 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, Message, type ChatInputCommandInteraction } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, type ChatInputCommandInteraction } from 'discord.js';
 
 import type { DiscordClient } from 'classes/client';
 import i18next from 'i18next';
 
-interface Coordinates {
+type Coordinates = {
   x: number;
   y: number;
-}
-
-const SNAKE_HEAD = '🔵';
-const SNAKE_BODY = '🟦';
-const SNAKE_TAIL = '🔷';
-const SNAKE_DEAD = '💀';
-
-const BOARD_TILE = '⬛';
-const BOARD_FOOD = '🍎';
-// const FOODS = ['🍎', '🍇', '🍊', '🫐', '🥕', '🥝', '🌽'];
+};
 
 export class Snake {
+  snakeEmojis = {
+    dead: '💀',
+    head: '🔵',
+    body: '🟦',
+    tail: '🔷',
+  };
+  boardEmojis = {
+    tile: '⬛',
+    food: '🍎',
+  };
   height: number;
   width: number;
   board: string[] = [];
@@ -39,9 +40,11 @@ export class Snake {
 
     for (let y = 0; y < this.height; y++) {
       for (let x = 0; x < this.width; x++) {
-        this.board[y * this.width + x] = BOARD_TILE;
+        this.board[y * this.width + x] = this.boardEmojis.tile;
       }
     }
+
+    this.start();
   }
 
   private getBoardContent(isDead?: boolean) {
@@ -50,7 +53,7 @@ export class Snake {
     for (let y = 0; y < this.height; y++) {
       for (let x = 0; x < this.width; x++) {
         if (x === this.food.x && y === this.food.y) {
-          board += BOARD_FOOD;
+          board += this.boardEmojis.food;
           continue;
         }
 
@@ -60,11 +63,11 @@ export class Snake {
           const snakePart = this.snake.indexOf(snake);
           if (snakePart === 0) {
             const isHead = !isDead || this.snakeLength >= this.height * this.width;
-            board += isHead ? SNAKE_HEAD : SNAKE_DEAD;
+            board += isHead ? this.snakeEmojis.head : this.snakeEmojis.dead;
           } else if (snakePart === this.snake.length - 1) {
-            board += SNAKE_TAIL;
+            board += this.snakeEmojis.tail;
           } else {
-            board += SNAKE_BODY;
+            board += this.snakeEmojis.body;
           }
         }
         if (!snake) board += this.board[y * this.width + x];
@@ -76,13 +79,15 @@ export class Snake {
     return board;
   }
 
-  public async start() {
-    const user = this.options.interaction.user;
-    const lng = await this.options.client.getLanguage(user.id);
+  private async start() {
+    const interaction = this.options.interaction;
+    const user = interaction.user;
+    const client = this.options.client;
+    const lng = await client.getLanguage(user.id);
 
     this.generateNewFood();
 
-    const message = await this.options.interaction
+    const message = await interaction
       .editReply({
         content: null,
         embeds: [
@@ -101,12 +106,15 @@ export class Snake {
     const collector = message.createMessageComponentCollector({ idle: 60 * 1000 });
 
     collector.on('collect', async (buttonInteraction) => {
-      if (buttonInteraction.user.id !== user.id)
-        return buttonInteraction.reply({
-          content: i18next.t('interactions.author_only', { lng: await this.options.client.getLanguage(buttonInteraction.user.id) }),
-        });
-
       await buttonInteraction.deferUpdate().catch(() => {});
+
+      if (buttonInteraction.user.id !== user.id)
+        return buttonInteraction
+          .followUp({
+            content: i18next.t('interactions.author_only', { lng: await client.getLanguage(buttonInteraction.user.id) }),
+            ephemeral: true,
+          })
+          .catch(() => {});
 
       const snakeHead = this.snake[0];
       const nextCoordinates = { x: snakeHead.x, y: snakeHead.y };
@@ -138,8 +146,8 @@ export class Snake {
         this.generateNewFood();
       }
 
-      return message
-        .edit({
+      return await buttonInteraction
+        .editReply({
           content: null,
           embeds: [
             new EmbedBuilder()
@@ -153,18 +161,17 @@ export class Snake {
         .catch(() => {});
     });
 
-    collector.on('end', async (_, reason) => {
-      if (reason === 'idle' || reason === 'user') {
-        await this.getResult(message, lng, reason);
-      }
+    collector.on('end', async () => {
+      return await this.getResult(lng);
     });
   }
 
-  private async getResult(message: Message, lng: string, reason: string) {
-    const user = this.options.interaction.user;
+  private async getResult(lng: string) {
+    const interaction = this.options.interaction;
+    const user = interaction.user;
 
-    return message
-      .edit({
+    return await interaction
+      .editReply({
         content: null,
         embeds: [
           new EmbedBuilder()

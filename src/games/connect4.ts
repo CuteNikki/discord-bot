@@ -4,7 +4,6 @@ import {
   ButtonStyle,
   Colors,
   EmbedBuilder,
-  Message,
   type APIButtonComponent,
   type ChatInputCommandInteraction,
   type JSONEncodable,
@@ -16,15 +15,8 @@ import { Opponent } from 'utils/opponent';
 
 import type { DiscordClient } from 'classes/client';
 
-const EMOJIS = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟'];
-
-type Scale = {
-  width: number;
-  height: number;
-  max_buttons: number;
-};
-
 export class Connect4 extends Opponent {
+  numberEmojis: string[] = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟'];
   board: string[] = [];
   playerTurn: boolean;
   width: number;
@@ -35,7 +27,11 @@ export class Connect4 extends Opponent {
       interaction: ChatInputCommandInteraction;
       opponent: User;
       client: DiscordClient;
-      scale: Scale;
+      scale: {
+        width: number;
+        height: number;
+        max_buttons: number;
+      };
     }
   ) {
     super(options);
@@ -56,6 +52,8 @@ export class Connect4 extends Opponent {
 
     if (isPlayerStarting) this.playerTurn = true;
     else this.playerTurn = false;
+
+    this.start();
   }
 
   private getBoardContent() {
@@ -66,22 +64,24 @@ export class Connect4 extends Opponent {
       }
       board += '\n';
     }
-    board += EMOJIS.join('').slice(0, this.width * 3);
+    board += this.numberEmojis.join('').slice(0, this.width * 3);
     return board;
   }
 
-  async start() {
-    const user = this.options.interaction.user;
+  private async start() {
+    const interaction = this.options.interaction;
+    const user = interaction.user;
     const opponent = this.options.opponent;
+    const client = this.options.client;
 
-    const lng = await this.options.client.getLanguage(user.id);
-    const opponentLng = await this.options.client.getLanguage(opponent.id);
+    const lng = await client.getLanguage(user.id);
+    const opponentLng = await client.getLanguage(opponent.id);
 
     const message = await this.isApprovedByOpponent();
     if (!message) return;
 
-    message
-      .edit({
+    await interaction
+      .editReply({
         content: i18next.t('games.connect.start', this.playerTurn ? { lng, player: user.toString() } : { lng: opponentLng, player: opponent.toString() }),
         embeds: [
           new EmbedBuilder()
@@ -101,16 +101,21 @@ export class Connect4 extends Opponent {
     const collector = message.createMessageComponentCollector({ idle: 60 * 1000 });
 
     collector.on('collect', async (buttonInteraction) => {
-      if (buttonInteraction.user.id !== user.id && buttonInteraction.user.id !== opponent.id)
-        return buttonInteraction.reply({
-          content: i18next.t('interactions.author_only', { lng: await this.options.client.getLanguage(buttonInteraction.user.id) }),
-        });
-      if (this.playerTurn && buttonInteraction.user.id !== user.id)
-        return buttonInteraction.reply({ content: i18next.t('games.connect.turn', { lng: opponentLng }), ephemeral: true });
-      if (!this.playerTurn && buttonInteraction.user.id !== opponent.id)
-        return buttonInteraction.reply({ content: i18next.t('games.connect.turn', { lng }), ephemeral: true });
+      await buttonInteraction.deferUpdate().catch(() => {});
 
-      await buttonInteraction.deferUpdate();
+      if (buttonInteraction.user.id !== user.id && buttonInteraction.user.id !== opponent.id)
+        return buttonInteraction
+          .followUp({
+            content: i18next.t('interactions.author_only', { lng: await client.getLanguage(buttonInteraction.user.id) }),
+            ephemeral: true,
+          })
+          .catch(() => {});
+
+      if (this.playerTurn && buttonInteraction.user.id !== user.id)
+        return buttonInteraction.followUp({ content: i18next.t('games.connect.turn', { lng: opponentLng }), ephemeral: true }).catch(() => {});
+
+      if (!this.playerTurn && buttonInteraction.user.id !== opponent.id)
+        return buttonInteraction.followUp({ content: i18next.t('games.connect.turn', { lng }), ephemeral: true }).catch(() => {});
 
       const column = parseInt(buttonInteraction.customId.split('_')[1]) - 1;
       const coords = { x: -1, y: -1 };
@@ -136,8 +141,8 @@ export class Connect4 extends Opponent {
 
       this.playerTurn = !this.playerTurn;
 
-      await message
-        .edit({
+      return await buttonInteraction
+        .editReply({
           content: i18next.t('games.connect.wait', this.playerTurn ? { lng, player: user.toString() } : { lng: opponentLng, player: opponent.toString() }),
           embeds: [
             new EmbedBuilder()
@@ -155,10 +160,11 @@ export class Connect4 extends Opponent {
         .catch(() => {});
     });
 
-    collector.on('end', (_, reason) => {
-      return this.getResult(message, lng, reason);
+    collector.on('end', async (_, reason) => {
+      return await this.getResult(lng, reason);
     });
   }
+
   private isBoardFull(): boolean {
     for (let y = 0; y < this.height; y++) {
       for (let x = 0; x < this.width; x++) {
@@ -167,6 +173,7 @@ export class Connect4 extends Opponent {
     }
     return true;
   }
+
   private isWinningMove(coords: { x: number; y: number }): boolean {
     const player = this.playerTurn ? '🔵' : '🔴';
     const board = this.board;
@@ -225,8 +232,9 @@ export class Connect4 extends Opponent {
     return false;
   }
 
-  private async getResult(message: Message, lng: string, reason: string) {
-    const user = this.options.interaction.user;
+  private async getResult(lng: string, reason: string) {
+    const interaction = this.options.interaction;
+    const user = interaction.user;
     const opponent = this.options.opponent;
 
     let result: 'TIMEOUT' | 'TIE' | 'PLAYER' | 'OPPONENT' | null = null;
@@ -250,7 +258,7 @@ export class Connect4 extends Opponent {
       embed.setDescription([i18next.t('games.connect.winner', { lng, winner: user.toString() }), this.getBoardContent()].join('\n\n'));
     else embed.setDescription([i18next.t('games.connect.winner', { lng, winner: opponent.toString() }), this.getBoardContent()].join('\n\n'));
 
-    return message.edit({ content: null, embeds: [embed], components: this.disableButtons(this.getComponents()) }).catch(() => {});
+    return await interaction.editReply({ content: null, embeds: [embed], components: this.disableButtons(this.getComponents()) }).catch(() => {});
   }
 
   private getComponents() {
@@ -264,7 +272,7 @@ export class Connect4 extends Opponent {
         // Prevent adding more buttons than this.width
         if (index >= this.width) break;
         const button = new ButtonBuilder()
-          .setEmoji(EMOJIS[index])
+          .setEmoji(this.numberEmojis[index])
           .setStyle(ButtonStyle.Primary)
           .setCustomId(`CONNECT_${index + 1}`);
         row.addComponents(button);

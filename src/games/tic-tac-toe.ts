@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, Message, type ChatInputCommandInteraction, type User } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, type ChatInputCommandInteraction, type User } from 'discord.js';
 import i18next from 'i18next';
 
 import { Opponent } from 'utils/opponent';
@@ -22,20 +22,24 @@ export class TicTacToe extends Opponent {
 
     if (isPlayerStarting) this.playerTurn = true;
     else this.playerTurn = false;
+
+    this.start();
   }
 
-  async start() {
-    const user = this.options.interaction.user;
+  private async start() {
+    const interaction = this.options.interaction;
+    const user = interaction.user;
     const opponent = this.options.opponent;
+    const client = this.options.client;
 
-    const lng = await this.options.client.getLanguage(user.id);
-    const opponentLng = await this.options.client.getLanguage(opponent.id);
+    const lng = await client.getLanguage(user.id);
+    const opponentLng = await client.getLanguage(opponent.id);
 
     const message = await this.isApprovedByOpponent();
     if (!message) return;
 
-    message
-      .edit({
+    interaction
+      .editReply({
         content: i18next.t('games.ttt.start', this.playerTurn ? { lng, player: user.toString() } : { lng: opponentLng, player: opponent.toString() }),
         embeds: [
           new EmbedBuilder()
@@ -54,16 +58,21 @@ export class TicTacToe extends Opponent {
     const collector = message.createMessageComponentCollector({ idle: 60 * 1000 });
 
     collector.on('collect', async (buttonInteraction) => {
-      if (buttonInteraction.user.id !== user.id && buttonInteraction.user.id !== opponent.id)
-        return buttonInteraction.reply({
-          content: i18next.t('interactions.author_only', { lng: await this.options.client.getLanguage(buttonInteraction.user.id) }),
-        });
-      if (this.playerTurn && buttonInteraction.user.id !== user.id)
-        return buttonInteraction.reply({ content: i18next.t('games.ttt.turn', { lng: opponentLng }), ephemeral: true });
-      if (!this.playerTurn && buttonInteraction.user.id !== opponent.id)
-        return buttonInteraction.reply({ content: i18next.t('games.ttt.turn', { lng }), ephemeral: true });
+      await buttonInteraction.deferUpdate().catch(() => {});
 
-      await buttonInteraction.deferUpdate();
+      if (buttonInteraction.user.id !== user.id && buttonInteraction.user.id !== opponent.id)
+        return buttonInteraction
+          .followUp({
+            content: i18next.t('interactions.author_only', { lng: await client.getLanguage(buttonInteraction.user.id) }),
+            ephemeral: true,
+          })
+          .catch(() => {});
+
+      if (this.playerTurn && buttonInteraction.user.id !== user.id)
+        return buttonInteraction.followUp({ content: i18next.t('games.ttt.turn', { lng: opponentLng }), ephemeral: true }).catch(() => {});
+
+      if (!this.playerTurn && buttonInteraction.user.id !== opponent.id)
+        return buttonInteraction.followUp({ content: i18next.t('games.ttt.turn', { lng }), ephemeral: true }).catch(() => {});
 
       this.board[parseInt(buttonInteraction.customId.split('_')[1])] = this.playerTurn ? 1 : 2;
 
@@ -73,8 +82,8 @@ export class TicTacToe extends Opponent {
 
       this.playerTurn = !this.playerTurn;
 
-      await message
-        .edit({
+      return await buttonInteraction
+        .editReply({
           content: i18next.t('games.ttt.wait', this.playerTurn ? { lng, player: user.toString() } : { lng: opponentLng, player: opponent.toString() }),
           embeds: [
             new EmbedBuilder()
@@ -91,12 +100,13 @@ export class TicTacToe extends Opponent {
         .catch(() => {});
     });
 
-    collector.on('end', () => {
-      return this.getResult(message, lng);
+    collector.on('end', async () => {
+      return await this.getResult(lng);
     });
   }
-  private async getResult(message: Message, lng: string) {
-    const user = this.options.interaction.user;
+  private async getResult(lng: string) {
+    const interaction = this.options.interaction;
+    const user = interaction.user;
     const opponent = this.options.opponent;
 
     let result: 'TIMEOUT' | 'TIE' | 'PLAYER' | 'OPPONENT' | null = null;
@@ -120,7 +130,7 @@ export class TicTacToe extends Opponent {
     else if (result === 'PLAYER') embed.setDescription(i18next.t('games.ttt.winner', { lng, winner: user.toString() }));
     else embed.setDescription(i18next.t('games.ttt.winner', { lng, winner: opponent.toString() }));
 
-    return message.edit({ content: null, embeds: [embed], components: this.disableButtons(this.getComponents()) }).catch(() => {});
+    return await interaction.editReply({ content: null, embeds: [embed], components: this.disableButtons(this.getComponents()) }).catch(() => {});
   }
 
   private isWinner(player: number) {

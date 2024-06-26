@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, Message, type ChatInputCommandInteraction } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, type ChatInputCommandInteraction } from 'discord.js';
 
 import type { DiscordClient } from 'classes/client';
 import i18next from 'i18next';
@@ -14,14 +14,14 @@ export enum TriviaDifficulty {
   HARD = 'hard',
 }
 
-export interface TriviaQuestion {
+export type TriviaQuestion = {
   type: TriviaMode;
   difficulty: TriviaDifficulty;
   category: string;
   question: string;
   correct_answer: string;
   incorrect_answers: string[];
-}
+};
 
 export class Trivia {
   trivia: TriviaQuestion;
@@ -37,16 +37,20 @@ export class Trivia {
     }
   ) {
     this.trivia = {} as TriviaQuestion;
+
+    this.start();
   }
 
-  async start() {
-    const user = this.options.interaction.user;
-    const lng = await this.options.client.getLanguage(user.id);
+  private async start() {
+    const interaction = this.options.interaction;
+    const user = interaction.user;
+    const client = this.options.client;
+    const lng = await client.getLanguage(user.id);
 
     const trivia = await this.getTrivia();
-    if (!trivia) return this.options.interaction.editReply({ content: i18next.t('games.trivia.error', { lng }), embeds: [], components: [] });
+    if (!trivia) return interaction.editReply({ content: i18next.t('games.trivia.error', { lng }), embeds: [], components: [] }).catch(() => {});
 
-    const message = await this.options.interaction
+    const message = await interaction
       .editReply({
         content: null,
         embeds: [
@@ -68,43 +72,50 @@ export class Trivia {
     const collector = message.createMessageComponentCollector({ idle: 60 * 1000 });
 
     collector.on('collect', async (buttonInteraction) => {
-      if (buttonInteraction.user.id !== user.id)
-        return buttonInteraction.reply({
-          content: i18next.t('interactions.author_only', { lng: await this.options.client.getLanguage(buttonInteraction.user.id) }),
-        });
-
       await buttonInteraction.deferUpdate().catch(() => {});
+
+      if (buttonInteraction.user.id !== user.id)
+        return buttonInteraction
+          .followUp({
+            content: i18next.t('interactions.author_only', { lng: await client.getLanguage(buttonInteraction.user.id) }),
+            ephemeral: true,
+          })
+          .catch(() => {});
+
       collector.stop();
       this.selected = buttonInteraction.customId.split('_')[1];
 
-      return this.getResult(message, lng, this.selected === this.trivia.correct_answer);
+      return this.getResult(lng, this.selected === this.trivia.correct_answer);
     });
 
     collector.on('end', (_, reason) => {
-      if (reason === 'idle') return this.getResult(message, lng, false);
+      if (reason === 'idle') return this.getResult(lng, false);
     });
   }
 
-  private async getResult(message: Message, lng: string, result: boolean) {
-    const user = this.options.interaction.user;
+  private async getResult(lng: string, result: boolean) {
+    const interaction = this.options.interaction;
+    const user = interaction.user;
 
-    return message.edit({
-      content: null,
-      embeds: [
-        new EmbedBuilder()
-          .setColor(result ? Colors.Green : Colors.Red)
-          .setAuthor({ name: user.displayName, iconURL: user.displayAvatarURL() })
-          .setTitle(i18next.t('games.trivia.title', { lng }))
-          .setDescription(result ? i18next.t('games.trivia.correct', { lng }) : i18next.t('games.trivia.incorrect', { lng }))
-          .addFields(
-            { name: i18next.t('games.trivia.category', { lng }), value: this.trivia.category },
-            { name: i18next.t('games.trivia.difficulty', { lng }), value: this.trivia.difficulty },
-            { name: i18next.t('games.trivia.question', { lng }), value: this.trivia.question },
-            { name: i18next.t('games.trivia.answer', { lng }), value: this.trivia.correct_answer }
-          ),
-      ],
-      components: this.disableButtons(this.getComponents()),
-    });
+    return interaction
+      .editReply({
+        content: null,
+        embeds: [
+          new EmbedBuilder()
+            .setColor(result ? Colors.Green : Colors.Red)
+            .setAuthor({ name: user.displayName, iconURL: user.displayAvatarURL() })
+            .setTitle(i18next.t('games.trivia.title', { lng }))
+            .setDescription(result ? i18next.t('games.trivia.correct', { lng }) : i18next.t('games.trivia.incorrect', { lng }))
+            .addFields(
+              { name: i18next.t('games.trivia.category', { lng }), value: this.trivia.category },
+              { name: i18next.t('games.trivia.difficulty', { lng }), value: this.trivia.difficulty },
+              { name: i18next.t('games.trivia.question', { lng }), value: this.trivia.question },
+              { name: i18next.t('games.trivia.answer', { lng }), value: this.trivia.correct_answer }
+            ),
+        ],
+        components: this.disableButtons(this.getComponents()),
+      })
+      .catch(() => {});
   }
 
   private getComponents() {

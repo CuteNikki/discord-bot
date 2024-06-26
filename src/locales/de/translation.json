@@ -71,6 +71,16 @@
       "lost": "Du hast falsch geraten. Das Wort war **{{word}}**!",
       "won": "Du hast richtig geraten!",
       "stop": "Du hast aufgegeben. Das Wort war **{{word}}**!"
+    },
+    "trivia": {
+      "error": "Es konnte keine Frage gefunden werden! Bitte versuche es später erneut.",
+      "title": "Quiz: Trivia",
+      "category": "Kategorie",
+      "difficulty": "Schwierigkeit",
+      "question": "Frage",
+      "answer": "Antwort",
+      "correct": "Das ist die richtige Antwort!",
+      "incorrect": "Das ist leider die falsche Antwort!"
     }
   },
   "music": {

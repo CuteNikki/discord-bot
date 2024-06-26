@@ -169,7 +169,7 @@ npm run start
   - [x] Rock-Paper-Scissors
   - [x] Tic-Tac-Toe
   - [x] Connect-4
-  - [ ] Trivia
+  - [x] Trivia
   - [x] Hangman
   - [ ] Memory
   - [ ] Snake

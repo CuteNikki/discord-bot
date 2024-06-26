@@ -71,6 +71,16 @@
       "lost": "You guessed incorrectly. The word was **{{word}}**!",
       "won": "You guessed correct!",
       "stop": "You surrendered. The word was **{{word}}**!"
+    },
+    "trivia": {
+      "error": "No question could be found! Please try again later.",
+      "title": "Trivia Quiz",
+      "category": "Category",
+      "difficulty": "Difficulty",
+      "question": "Question",
+      "answer": "Answer",
+      "correct": "That is the correct answer!",
+      "incorrect": "Unfortunately, that is the wrong answer!"
     }
   },
   "music": {

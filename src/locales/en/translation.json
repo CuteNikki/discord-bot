@@ -81,6 +81,11 @@
       "answer": "Answer",
       "correct": "That is the correct answer!",
       "incorrect": "Unfortunately, that is the wrong answer!"
+    },
+    "snake": {
+      "title": "Snake",
+      "score": "Score",
+      "over": "You died! The game is over."
     }
   },
   "music": {

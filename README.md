@@ -172,7 +172,7 @@ npm run start
   - [x] Trivia
   - [x] Hangman
   - [ ] Memory
-  - [ ] Snake
+  - [x] Snake
   - [ ] Fast-Type
   - [ ] Remember-Emoji
 - [ ] Log module

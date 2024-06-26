@@ -81,6 +81,11 @@
       "answer": "Antwort",
       "correct": "Das ist die richtige Antwort!",
       "incorrect": "Das ist leider die falsche Antwort!"
+    },
+    "snake": {
+      "title": "Schlange",
+      "score": "Punktezahl",
+      "over": "Du bist gestorben! Das Spiel ist vorbei."
     }
   },
   "music": {

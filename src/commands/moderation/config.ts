@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType, ApplicationCommandType, Colors, EmbedBuilder } from 'discord.js';
+import { ApplicationCommandOptionType, ApplicationCommandType, Colors, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
 import i18next from 'i18next';
 
 import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
@@ -10,6 +10,7 @@ export default new Command({
   data: {
     name: 'config-moderation',
     description: 'Configure the moderation module',
+    default_member_permissions: `${PermissionFlagsBits.ManageGuild}`,
     type: ApplicationCommandType.ChatInput,
     contexts: [Contexts.GUILD],
     integration_types: [IntegrationTypes.GUILD_INSTALL],

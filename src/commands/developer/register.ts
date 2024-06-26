@@ -11,10 +11,10 @@ export default new Command({
   data: {
     name: 'register',
     description: 'Registers commands',
+    default_member_permissions: `${PermissionFlagsBits.Administrator}`,
     type: ApplicationCommandType.ChatInput,
     contexts: [Contexts.GUILD],
     integration_types: [IntegrationTypes.GUILD_INSTALL],
-    default_member_permissions: `${PermissionFlagsBits.Administrator}`,
   },
   async execute({ interaction, client }) {
     await interaction.deferReply();

@@ -14,16 +14,15 @@ export default new Command({
     type: ApplicationCommandType.User,
     contexts: [Contexts.GUILD],
     integration_types: [IntegrationTypes.GUILD_INSTALL],
+    default_member_permissions: `${PermissionFlagsBits.ModerateMembers}`,
   },
   async execute({ interaction, client }) {
     if (!interaction.inCachedGuild()) return;
     await interaction.deferReply({ ephemeral: true });
 
-    const { options, user, guildId, member } = interaction;
+    const { options, user, guildId } = interaction;
 
     const lng = await client.getLanguage(user.id);
-
-    if (member.permissions.has(PermissionFlagsBits.ModerateMembers)) return interaction.editReply(i18next.t('interactions.permissions'));
 
     const target = options.getUser('user', true);
 

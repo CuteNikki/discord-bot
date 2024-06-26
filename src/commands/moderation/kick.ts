@@ -18,10 +18,10 @@ export default new Command({
   data: {
     name: 'kick',
     description: 'Kicks a user',
+    default_member_permissions: `${PermissionFlagsBits.KickMembers}`,
     type: ApplicationCommandType.ChatInput,
     contexts: [Contexts.GUILD],
     integration_types: [IntegrationTypes.GUILD_INSTALL],
-    default_member_permissions: `${PermissionFlagsBits.KickMembers}`,
     options: [
       {
         name: 'user',

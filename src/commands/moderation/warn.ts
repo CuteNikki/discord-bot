@@ -18,10 +18,10 @@ export default new Command({
   data: {
     name: 'warn',
     description: 'Warn a user',
+    default_member_permissions: `${PermissionFlagsBits.ModerateMembers}`,
     type: ApplicationCommandType.ChatInput,
     contexts: [Contexts.GUILD],
     integration_types: [IntegrationTypes.GUILD_INSTALL],
-    default_member_permissions: `${PermissionFlagsBits.ModerateMembers}`,
     options: [
       {
         name: 'user',

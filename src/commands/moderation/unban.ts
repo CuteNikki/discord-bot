@@ -18,10 +18,10 @@ export default new Command({
   data: {
     name: 'unban',
     description: 'Unban a user',
+    default_member_permissions: `${PermissionFlagsBits.BanMembers}`,
     type: ApplicationCommandType.ChatInput,
     contexts: [Contexts.GUILD],
     integration_types: [IntegrationTypes.GUILD_INSTALL],
-    default_member_permissions: `${PermissionFlagsBits.BanMembers}`,
     options: [
       {
         name: 'user',

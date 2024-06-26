@@ -9,10 +9,10 @@ export default new Command({
   data: {
     name: 'eval',
     description: 'Evaluates code',
+    default_member_permissions: `${PermissionFlagsBits.Administrator}`,
     type: ApplicationCommandType.ChatInput,
     contexts: [Contexts.GUILD],
     integration_types: [IntegrationTypes.GUILD_INSTALL],
-    default_member_permissions: `${PermissionFlagsBits.Administrator}`,
   },
   async execute({ interaction }) {
     await interaction.showModal(

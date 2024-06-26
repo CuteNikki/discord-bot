@@ -28,8 +28,13 @@ export class Opponent {
     const lng = await client.getLanguage(user.id);
     const opponentLng = await client.getLanguage(opponent.id);
 
+    if (opponent.id === user.id) {
+      await interaction.editReply(i18next.t('games.invitation.yourself', { lng })).catch(() => {});
+      return false;
+    }
+
     if (opponent.bot) {
-      await interaction.editReply(i18next.t('games.invitation.bot')).catch(() => {});
+      await interaction.editReply(i18next.t('games.invitation.bot', { lng })).catch(() => {});
       return false;
     }
 

@@ -1,7 +1,7 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, type ChatInputCommandInteraction, type User } from 'discord.js';
 import i18next from 'i18next';
 
-import { Opponent } from 'utils/opponent';
+import { Opponent } from 'games/opponent';
 
 import type { DiscordClient } from 'classes/client';
 

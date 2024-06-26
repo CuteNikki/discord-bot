@@ -27,7 +27,8 @@
       "description": "{{user}} invited you to play a game!",
       "rejected": "{{opponent}} rejected your invitation!",
       "timeout": "{{opponent}} did not answer your invitation in time!",
-      "bot": "You cannot invite bots to play!"
+      "bot": "You cannot invite bots to play!",
+      "yourself": "You cannot invite yourself!"
     },
     "rpc": {
       "choices": {

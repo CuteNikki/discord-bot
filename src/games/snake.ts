@@ -1,7 +1,7 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, type ChatInputCommandInteraction } from 'discord.js';
+import i18next from 'i18next';
 
 import type { DiscordClient } from 'classes/client';
-import i18next from 'i18next';
 
 type Coordinates = {
   x: number;

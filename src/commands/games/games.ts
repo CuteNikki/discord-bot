@@ -5,6 +5,7 @@ import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
 import { Connect4 } from 'games/connect4';
 import { Hangman } from 'games/hangman';
 import { RockPaperScissors } from 'games/rock-paper-scissors';
+import { Snake } from 'games/snake';
 import { TicTacToe } from 'games/tic-tac-toe';
 import { Trivia, TriviaDifficulty, TriviaMode } from 'games/trivia';
 
@@ -57,8 +58,8 @@ export default new Command({
             required: true,
           },
           {
-            name: 'scale',
-            description: 'The scale of connect4',
+            name: 'size',
+            description: 'The size of connect4',
             type: ApplicationCommandOptionType.String,
             required: false,
             choices: [
@@ -179,6 +180,44 @@ export default new Command({
           },
         ],
       },
+      {
+        name: 'snake',
+        description: 'Play a game of Snake!',
+        type: ApplicationCommandOptionType.Subcommand,
+        options: [
+          {
+            name: 'size',
+            description: 'The size of the board',
+            type: ApplicationCommandOptionType.String,
+            choices: [
+              {
+                name: 'Very small (5x5)',
+                value: 'very_small',
+              },
+              {
+                name: 'Small (6x6)',
+                value: 'small',
+              },
+              {
+                name: 'Medium (7x7)',
+                value: 'medium',
+              },
+              {
+                name: 'Big (8x8)',
+                value: 'big',
+              },
+              {
+                name: 'Very Big (9x9)',
+                value: 'very_big',
+              },
+              {
+                name: 'Huge (10x10)',
+                value: 'huge',
+              },
+            ],
+          },
+        ],
+      },
     ],
   },
   async execute({ interaction, client }) {
@@ -230,7 +269,7 @@ export default new Command({
           // Original Connect4 is 7x6
           // Highest supported is 10x9
           // Max supported amount of buttons per row is 5
-          switch (options.getString('scale', false)) {
+          switch (options.getString('size', false)) {
             case 'big':
               scale = {
                 width: 10,
@@ -290,6 +329,37 @@ export default new Command({
             difficulty: difficulty as TriviaDifficulty,
             mode: mode as TriviaMode,
           });
+          game.start();
+        }
+        break;
+      case 'snake':
+        {
+          let size;
+          switch (options.getString('size', false)) {
+            case 'very_small':
+              size = { width: 5, height: 5 };
+              break;
+            case 'small':
+              size = { width: 6, height: 6 };
+              break;
+            case 'medium':
+              size = { width: 7, height: 7 };
+              break;
+            case 'big':
+              size = { width: 8, height: 8 };
+              break;
+            case 'very_big':
+              size = { width: 9, height: 9 };
+              break;
+            case 'huge':
+              size = { width: 10, height: 10 };
+              break;
+            default:
+              size = { width: 10, height: 10 };
+              break;
+          }
+
+          const game = new Snake({ interaction, client, size });
           game.start();
         }
         break;

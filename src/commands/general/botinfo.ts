@@ -37,8 +37,8 @@ export default new Command({
       const cpuUsage = Math.round(await osu.cpu.usage());
       const memoryInfo = await osu.mem.info();
       const memoryUsage = Math.round(memoryInfo.usedMemPercentage);
-      const memoryUsed = Math.round(memoryInfo.usedMemMb / 1000);
-      const memoryTotal = Math.round(memoryInfo.totalMemMb / 1000);
+      const memoryUsed = (memoryInfo.usedMemMb / 1024).toFixed(2);
+      const memoryTotal = Math.round(memoryInfo.totalMemMb / 1024);
 
       const clientDatabaseSettings = await clientModel
         .findOneAndUpdate({ clientId: interaction.client.user.id }, {}, { upsert: true, new: true })

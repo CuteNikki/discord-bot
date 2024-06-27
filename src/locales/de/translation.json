@@ -451,6 +451,7 @@
   },
   "botinfo": {
     "title": "Bot Informationen",
+    "failed": "Beim Abrufen der Bot Informationen ist ein Fehler aufgetreten!",
     "general": {
       "title": "Generelle Informationen",
       "owner": "Besitzer: {{owner}} ({{id}})",

@@ -453,9 +453,10 @@
     "title": "Bot Information",
     "general": {
       "title": "General Information",
-      "name": "Name: {{name}} ({{id}})",
       "owner": "Owner: {{owner}} ({{id}})",
-      "created": "Created at: {{created}}"
+      "created": "Created at: {{created}}",
+      "ping": "API Latency: {{ping}}ms",
+      "uptime": "Uptime: {{uptime}}"
     },
     "database": {
       "title": "Database",
@@ -468,10 +469,18 @@
       "uninitialized": "uninitialized",
       "weekly": "Last weekly level clear: {{date}}"
     },
+    "system": {
+      "title": "System",
+      "os": "Operating System: {{operatingSystem}}",
+      "cpu_model": "CPU Model: {{cpuModel}}",
+      "cpu_usage": "CPU Usage: {{cpuUsage}}%",
+      "mem_usage": "RAM Usage: {{memoryUsed}}GB/{{memoryTotal}}GB ({{memoryUsage}}%)"
+    },
     "stats": {
       "title": "Statistics",
-      "guilds": "All Guilds: {{guildCount}}",
-      "members": "All Members: {{memberCount}}"
+      "guilds": "Total Guilds: {{guildCount}}",
+      "members": "Total Users: {{memberCount}}",
+      "commands": "Total Commands: {{commandCount}}"
     }
   },
   "serverinfo": {

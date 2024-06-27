@@ -1,6 +1,7 @@
 import { ApplicationCommandOptionType, ApplicationCommandType, Colors, EmbedBuilder } from 'discord.js';
 import i18next from 'i18next';
 import mongoose from 'mongoose';
+import osu from 'node-os-utils';
 
 import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
 
@@ -29,8 +30,20 @@ export default new Command({
 
     try {
       const application = await interaction.client.application.fetch();
+      const commands = await interaction.client.application.commands.fetch();
 
-      const clientDatabaseSettings = await clientModel.findOneAndUpdate({ clientId: application.id }, {}, { upsert: true, new: true }).lean().exec();
+      const operatingSystem = osu.os.type().replace('Windows_NT', 'Windows').replace('Darwin', 'MacOS');
+      const cpuModel = osu.cpu.model();
+      const cpuUsage = Math.floor(await osu.cpu.usage());
+      const memoryInfo = await osu.mem.info();
+      const memoryUsage = Math.floor(memoryInfo.usedMemPercentage);
+      const memoryUsed = Math.floor(memoryInfo.usedMemMb / 1000);
+      const memoryTotal = Math.floor(memoryInfo.totalMemMb / 1000);
+
+      const clientDatabaseSettings = await clientModel
+        .findOneAndUpdate({ clientId: interaction.client.user.id }, {}, { upsert: true, new: true })
+        .lean()
+        .exec();
 
       const dbStates = {
         0: i18next.t('botinfo.database.disconnected', { lng }),
@@ -56,14 +69,28 @@ export default new Command({
               {
                 name: i18next.t('botinfo.general.title', { lng }),
                 value: [
-                  i18next.t('botinfo.general.name', { lng, name: application.name, id: application.id }),
                   i18next.t('botinfo.general.owner', { lng, owner: `<@${application.owner?.id}>`, id: application.owner?.id }),
                   i18next.t('botinfo.general.created', { lng, created: `<t:${Math.floor(application.createdTimestamp / 1000)}:D>` }),
+                  i18next.t('botinfo.general.ping', { lng, ping: client.ws.ping }),
+                  i18next.t('botinfo.general.uptime', { lng, uptime: `<t:${Math.floor(interaction.client.readyTimestamp / 1000)}:R>` }),
                 ].join('\n'),
               },
               {
                 name: i18next.t('botinfo.stats.title', { lng }),
-                value: [i18next.t('botinfo.stats.guilds', { lng, guildCount }), i18next.t('botinfo.stats.members', { lng, memberCount })].join('\n'),
+                value: [
+                  i18next.t('botinfo.stats.guilds', { lng, guildCount }),
+                  i18next.t('botinfo.stats.members', { lng, memberCount }),
+                  i18next.t('botinfo.stats.commands', { lng, commandCount: commands.size }),
+                ].join('\n'),
+              },
+              {
+                name: i18next.t('botinfo.system.title', { lng }),
+                value: [
+                  i18next.t('botinfo.system.os', { lng, operatingSystem }),
+                  i18next.t('botinfo.system.cpu_model', { lng, cpuModel }),
+                  i18next.t('botinfo.system.cpu_usage', { lng, cpuUsage }),
+                  i18next.t('botinfo.system.mem_usage', { lng, memoryUsage, memoryUsed, memoryTotal }),
+                ].join('\n'),
               },
               {
                 name: i18next.t('botinfo.database.title', { lng }),
@@ -72,7 +99,7 @@ export default new Command({
                   i18next.t('botinfo.database.state', { lng, state: dbStates[mongoose.connection.readyState] }),
                   i18next.t('botinfo.database.weekly', {
                     lng,
-                    date: clientDatabaseSettings.lastWeeklyLevelClear ? `<t:${Math.floor(clientDatabaseSettings.lastWeeklyLevelClear / 1000)}:D>` : '/',
+                    date: clientDatabaseSettings.lastWeeklyLevelClear ? `<t:${Math.floor(clientDatabaseSettings.lastWeeklyLevelClear / 1000)}:F>` : '/',
                   }),
                 ].join('\n'),
               }

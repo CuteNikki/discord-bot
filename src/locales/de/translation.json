@@ -441,9 +441,10 @@
     "title": "Bot Informationen",
     "general": {
       "title": "Generelle Informationen",
-      "name": "Name: {{name}} ({{id}})",
       "owner": "Besitzer: {{owner}} ({{id}})",
-      "created": "Erstellt: {{created}}"
+      "created": "Erstellt: {{created}}",
+      "ping": "API Latenz: {{ping}}ms",
+      "uptime": "Betriebszeit: {{uptime}}"
     },
     "database": {
       "title": "Datenbank",
@@ -456,10 +457,18 @@
       "uninitialized": "nicht initialisiert",
       "weekly": "Letzte wöchentliche Level Löschung: {{date}}"
     },
+    "system": {
+      "title": "System",
+      "os": "Betriebssystem: {{operatingSystem}}",
+      "cpu_model": "CPU Model: {{cpuModel}}",
+      "cpu_usage": "CPU Benutzung: {{cpuUsage}}%",
+      "mem_usage": "RAM Benutzung: {{memoryUsed}}GB/{{memoryTotal}}GB ({{memoryUsage}}%)"
+    },
     "stats": {
       "title": "Statistiken",
-      "guilds": "Alle Server: {{guildCount}}",
-      "members": "Alle Mitglieder: {{userCount}}"
+      "guilds": "Server Insgesamt: {{guildCount}}",
+      "members": "Benutzer Insgesamt: {{memberCount}}",
+      "commands": "Befehle Insgesamt: {{commandCount}}"
     }
   },
   "serverinfo": {

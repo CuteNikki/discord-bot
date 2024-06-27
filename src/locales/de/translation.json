@@ -79,7 +79,8 @@
       "category": "Kategorie",
       "difficulty": "Schwierigkeit",
       "question": "Frage",
-      "answer": "Antwort",
+      "answer": "Richtige Antwort",
+      "input": "Deine Eingabe",
       "correct": "Das ist die richtige Antwort!",
       "incorrect": "Das ist leider die falsche Antwort!"
     },
@@ -102,6 +103,16 @@
       "title": "Erinnerung",
       "description": "Klick auf die Knöpfe, um Spielsteine umzudrehen. Du musst ein Emoji seinem Paar zuordnen!",
       "finished": "Du hast insgesamt {{tiles}} Spielsteine umgedreht!"
+    },
+    "remember": {
+      "title": "Erinnerung: Emoji",
+      "starting": "Das Spiel beginnt in 5 Sekunden. Merke dir wo die Emojis sind.",
+      "started": "Konntest du dir alle merken? Finde den {{emoji}} Emoji!",
+      "correct": "Das ist der richtige Emoji!",
+      "incorrect": "Leider ist das das falsche Emoji!",
+      "timeout": "Du hast nicht rechtzeitig geantwortet!",
+      "answer": "Richtige Antwort",
+      "input": "Deine Eingabe"
     }
   },
   "music": {

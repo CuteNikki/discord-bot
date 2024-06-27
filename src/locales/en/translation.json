@@ -79,7 +79,8 @@
       "category": "Category",
       "difficulty": "Difficulty",
       "question": "Question",
-      "answer": "Answer",
+      "answer": "Correct answer",
+      "input": "Your input",
       "correct": "That is the correct answer!",
       "incorrect": "Unfortunately, that is the wrong answer!"
     },
@@ -102,6 +103,16 @@
       "title": "Memory",
       "description": "Click on the buttons to turn a tile. You need to match an emoji with their pair!",
       "finished": "You turned a total of {{tiles}} tiles!"
+    },
+    "remember": {
+      "title": "Remember Emoji",
+      "starting": "The game starts in 5 seconds. Remember where the emojis below are.",
+      "started": "Did you remember all of them? Find the {{emoji}} emoji!",
+      "correct": "That is the correct emoji!",
+      "incorrect": "Unfortunately, that is the wrong emoji!",
+      "timeout": "You did not answer in time!",
+      "answer": "Correct answer",
+      "input": "Your input"
     }
   },
   "music": {

@@ -110,7 +110,8 @@ export class Trivia {
               { name: i18next.t('games.trivia.category', { lng }), value: this.trivia.category },
               { name: i18next.t('games.trivia.difficulty', { lng }), value: this.trivia.difficulty },
               { name: i18next.t('games.trivia.question', { lng }), value: this.trivia.question },
-              { name: i18next.t('games.trivia.answer', { lng }), value: this.trivia.correct_answer }
+              { name: i18next.t('games.trivia.answer', { lng }), value: this.trivia.correct_answer },
+              { name: i18next.t('games.trivia.input', { lng }), value: this.selected || '/' }
             ),
         ],
         components: this.disableButtons(this.getComponents()),

@@ -6,6 +6,7 @@ import { Connect4 } from 'games/connect4';
 import { FastType } from 'games/fast-type';
 import { Hangman } from 'games/hangman';
 import { Memory } from 'games/memory';
+import { RememberEmoji } from 'games/remember-emoji';
 import { RockPaperScissors } from 'games/rock-paper-scissors';
 import { Snake } from 'games/snake';
 import { TicTacToe } from 'games/tic-tac-toe';
@@ -222,12 +223,17 @@ export default new Command({
       },
       {
         name: 'fast-type',
-        description: 'Play a game of fast-type!',
+        description: 'Play a game of Fast-Type!',
         type: ApplicationCommandOptionType.Subcommand,
       },
       {
         name: 'memory',
-        description: 'Play a game of memory!',
+        description: 'Play a game of Memory!',
+        type: ApplicationCommandOptionType.Subcommand,
+      },
+      {
+        name: 'remember-emoji',
+        description: 'Play a game of remember emoji!',
         type: ApplicationCommandOptionType.Subcommand,
       },
     ],
@@ -377,6 +383,11 @@ export default new Command({
       case 'memory':
         {
           new Memory({ interaction, client });
+        }
+        break;
+      case 'remember-emoji':
+        {
+          new RememberEmoji({ interaction, client });
         }
         break;
     }

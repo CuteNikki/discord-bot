@@ -34,11 +34,11 @@ export default new Command({
 
       const operatingSystem = osu.os.type().replace('Windows_NT', 'Windows').replace('Darwin', 'MacOS');
       const cpuModel = osu.cpu.model();
-      const cpuUsage = Math.floor(await osu.cpu.usage());
+      const cpuUsage = Math.round(await osu.cpu.usage());
       const memoryInfo = await osu.mem.info();
-      const memoryUsage = Math.floor(memoryInfo.usedMemPercentage);
-      const memoryUsed = Math.floor(memoryInfo.usedMemMb / 1000);
-      const memoryTotal = Math.floor(memoryInfo.totalMemMb / 1000);
+      const memoryUsage = Math.round(memoryInfo.usedMemPercentage);
+      const memoryUsed = Math.round(memoryInfo.usedMemMb / 1000);
+      const memoryTotal = Math.round(memoryInfo.totalMemMb / 1000);
 
       const clientDatabaseSettings = await clientModel
         .findOneAndUpdate({ clientId: interaction.client.user.id }, {}, { upsert: true, new: true })

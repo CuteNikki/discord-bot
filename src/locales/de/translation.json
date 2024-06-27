@@ -146,6 +146,18 @@
       "tracks": "Songs",
       "queued_by": "Angefragt von {{user}}"
     },
+    "remove": {
+      "invalid": "Die angegebene Position ist ungültig!",
+      "failed": "Konnte nichts entfernen!",
+      "title_removed": "Song entfernt",
+      "author": "Author",
+      "title": "Titel",
+      "duration": "Dauer",
+      "queued_by": "Angefragt von {{user}}",
+      "range_success": "Erfolgreich {{tracks}} Songs entfernt.",
+      "user_success": "Erfolgreich {{tracks}} Songs von {{user}} entfernt.",
+      "duplicate_success": "Erfolgreich {{tracks}} duplizierte Songs entfernt."
+    },
     "stop": {
       "success": "Die Warteschlange wurde gelöscht und die Musik gestoppt."
     },

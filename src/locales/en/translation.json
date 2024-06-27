@@ -148,7 +148,7 @@
     },
     "remove": {
       "invalid": "Given position is not valid!",
-      "failed": "Could not remove!",
+      "failed": "Could not remove anything!",
       "title_removed": "Track Removed",
       "author": "Author",
       "title": "Title",
@@ -156,7 +156,7 @@
       "queued_by": "Queued By",
       "range_success": "Successfully removed {{tracks}} tracks.",
       "user_success": "Successfully removed {{tracks}} tracks by {{user}}.",
-      "duplicate_success": "Removed {{tracks}} duplicate tracks."
+      "duplicate_success": "Successfully removed {{tracks}} duplicate tracks."
     },
     "stop": {
       "success": "Queue has been deleted and the music stopped."

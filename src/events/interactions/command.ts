@@ -32,6 +32,7 @@ export default new Event({
           break;
         case Modules.MUSIC:
           if (!guildSettings.music.enabled) return interaction.reply(message);
+          break;
       }
     }
 

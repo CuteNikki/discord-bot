@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType, ApplicationCommandType, Colors, EmbedBuilder } from 'discord.js';
+import { ApplicationCommandOptionType, ApplicationCommandType, Colors, EmbedBuilder, version } from 'discord.js';
 import i18next from 'i18next';
 import mongoose from 'mongoose';
 import osu from 'node-os-utils';
@@ -90,6 +90,8 @@ export default new Command({
                   i18next.t('botinfo.system.cpu_model', { lng, cpuModel }),
                   i18next.t('botinfo.system.cpu_usage', { lng, cpuUsage }),
                   i18next.t('botinfo.system.mem_usage', { lng, memoryUsage, memoryUsed, memoryTotal }),
+                  i18next.t('botinfo.system.node', { lng, version: process.version }),
+                  i18next.t('botinfo.system.discord', { lng, version }),
                 ].join('\n'),
               },
               {

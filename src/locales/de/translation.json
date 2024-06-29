@@ -475,7 +475,9 @@
       "os": "Betriebssystem: {{operatingSystem}}",
       "cpu_model": "CPU Model: {{cpuModel}}",
       "cpu_usage": "CPU Benutzung: {{cpuUsage}}%",
-      "mem_usage": "RAM Benutzung: {{memoryUsed}}GB/{{memoryTotal}}GB ({{memoryUsage}}%)"
+      "mem_usage": "RAM Benutzung: {{memoryUsed}}GB/{{memoryTotal}}GB ({{memoryUsage}}%)",
+      "node": "Node: {{version}}",
+      "discord": "DiscordJS: {{version}}"
     },
     "stats": {
       "title": "Statistiken",

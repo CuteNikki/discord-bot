@@ -5,14 +5,14 @@
     "TOKEN": "abc123",
 
     "comment_2": "Your bot's application/user id",
-    "ID": "123"
+    "ID": "abc123"
   },
   "DEVELOPER": {
     "comment_3": "This is the array of discord user ids that can use developer only commands",
-    "USER_IDS": ["123"],
+    "USER_IDS": ["abc123"],
 
     "comment_4": "This is the array of discord server ids that the developer only commands get registered to",
-    "GUILD_IDS": ["123"]
+    "GUILD_IDS": ["abc123"]
   },
   "DATABASE": {
     "comment_5": "Get your URI from https://www.mongodb.com/",

@@ -4,7 +4,7 @@ import { keys } from 'utils/keys';
 import { logger } from 'utils/logger';
 
 // Check if config variables are set
-if (Object.values(keys).includes('value_not_found')) throw new Error('Not all config variables are defined!');
+if (Object.values(keys).includes('abc123')) throw new Error('Not all config variables are defined!');
 
 // Create a cluster manager
 const manager = new ClusterManager(`${process.cwd()}/src/bot.ts`, {

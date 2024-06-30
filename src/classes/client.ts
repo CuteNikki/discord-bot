@@ -59,7 +59,7 @@ export class DiscordClient extends Client {
         // (If a user gets banned and then unbanned they will still show up as banned in the cache without this intent)
 
         // privileged intents:
-        // GatewayIntentBits.GuildMembers, // !! Needed for welcome messages !!
+        // GatewayIntentBits.GuildMembers, // !! Needed for welcome messages and log events !!
         GatewayIntentBits.GuildPresences, // !! Needed for userinfo !!
         GatewayIntentBits.GuildMessages, // !! Needed for level !!
         GatewayIntentBits.MessageContent, // !! Needed for fast-type game !!

@@ -176,7 +176,8 @@ npm run start
   - [x] Fast-Type
   - [x] Remember-Emoji
 - [ ] Log module
-  - [ ] Config command
+  - [x] Config command
+  - [ ] Events
 - [ ] Welcomer module
   - [ ] Config command
 - [ ] Custom VC module

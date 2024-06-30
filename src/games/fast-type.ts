@@ -43,7 +43,7 @@ export class FastType {
                 value: this.sentence
                   .split(' ')
                   .map((word) => `\`${word}\``)
-                  .join('\u200b'),
+                  .join('⠀'), // <- invisible character to stop people from copying the sentence and pasting it
               }
             ),
         ],

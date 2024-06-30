@@ -26,7 +26,7 @@ export default new Command({
     const focused = interaction.options.getFocused();
     const choices = client.supportedLanguages;
     const filtered = choices.filter((choice) => choice.toLowerCase().includes(focused.toLowerCase()));
-    await interaction.respond(filtered.map((choice) => ({ name: choice, value: choice })));
+    await interaction.respond(filtered.map((choice) => ({ name: choice, value: choice })).slice(0, 25 ));
   },
   async execute({ interaction, client }) {
     await interaction.deferReply({ ephemeral: true });

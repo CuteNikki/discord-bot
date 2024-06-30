@@ -248,7 +248,7 @@ export default new Command({
 
             const results = data.tracks
               .filter((track) => track.url.length < 100)
-              .slice(0, 10)
+              .slice(0, 25)
               .map((track) => ({ name: `${track.author} - ${track.title}`.slice(0, 100), value: track.url }));
             interaction.respond(results).catch(() => {});
           } catch (error) {
@@ -267,7 +267,7 @@ export default new Command({
             const data = await lyricsFinder.search(query).catch(() => {});
             if (!data) return interaction.respond([]);
 
-            interaction.respond([{ name: `${data.artist.name} - ${data.title}`.slice(0, 100), value: data.title.slice(0, 100) }]).catch(() => {});
+            interaction.respond([{ name: `${data.artist.name} - ${data.title}`.slice(0, 100), value: data.title.slice(0, 100) }].slice(0, 25)).catch(() => {});
           } catch (error) {
             interaction.respond([]).catch(() => {});
           }

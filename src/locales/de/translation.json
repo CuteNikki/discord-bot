@@ -231,6 +231,22 @@
       "description": "Der aktuelle Titel wurde pausiert, aber der Kanal wird verlassen, wenn innerhalb von 60 Sekunden niemand beitritt."
     }
   },
+  "log": {
+    "title": "Log Konfiguration",
+    "channel": {
+      "title": "Kanal",
+      "set": "Der Kanal wurde gesetzt!",
+      "removed": "Der Kanal wurde entfernt!",
+      "none": "Es gibt keinen Kanal zum entfernen!"
+    },
+    "events": {
+      "enabled": "Erfolgreich aktiviert!",
+      "already_enabled": "Das Event ist bereits aktiviert!",
+      "already_disabled": "Das Event ist bereits deaktiviert!",
+      "invalid": "Das ist kein gültiges Event!",
+      "disabled": "Erfolgreich deaktiviert!"
+    }
+  },
   "moderation": {
     "title": "Moderation Modul",
     "state": {

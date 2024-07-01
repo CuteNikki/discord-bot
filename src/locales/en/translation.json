@@ -231,6 +231,22 @@
       "description": "Current track has been paused but the channel will be left if nobody joins within 60 seconds."
     }
   },
+  "log": {
+    "title": "Log Configuration",
+    "channel": {
+      "title": "Channel",
+      "set": "The channel has been set!",
+      "removed": "The channel has been removed!",
+      "none": "There is no channel to remove!"
+    },
+    "events": {
+      "enabled": "Successfully enabled!",
+      "already_enabled": "That event is already enabled!",
+      "already_disabled": "That event is already disabled!",
+      "invalid": "That is not a valid event!",
+      "disabled": "Successfully disabled!"
+    }
+  },
   "moderation": {
     "title": "Moderation Module",
     "state": {

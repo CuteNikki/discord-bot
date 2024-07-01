@@ -384,7 +384,7 @@ export default new Command({
                     .exec();
                   client.guildSettings.set(guildId, newSettings);
 
-                  return interaction.editReply(i18next.t('log.events.enabled', { lng }));
+                  return interaction.editReply(i18next.t('log.events.disabled', { lng }));
                 }
                 if (eventName.toLowerCase() === 'all') {
                   const newSettings = await guildModel

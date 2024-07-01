@@ -37,9 +37,7 @@ export class RememberEmoji {
         embeds: [embed],
         components: this.getComponents(true),
       })
-      .catch((e) => {
-        console.log(e);
-      });
+      .catch(() => {});
     if (!message) return;
 
     setTimeout(async () => {

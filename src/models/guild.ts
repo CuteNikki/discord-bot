@@ -15,11 +15,9 @@ export const availableEvents = [
   'channelCreate',
   'channelDelete',
   'channelUpdate',
-  'channelPinsUpdate',
   'emojiCreate',
   'emojiDelete',
   'emojiUpdate',
-  'guildAuditLogEntryCreate',
   'guildBanAdd',
   'guildBanRemove',
   'guildMemberAdd',
@@ -46,9 +44,7 @@ export const availableEvents = [
   'threadCreate',
   'threadDelete',
   'threadUpdate',
-  'threadMembersUpdate',
   'voiceStateUpdate',
-  'webhooksUpdate',
 ];
 
 export interface Guild {
@@ -67,11 +63,9 @@ export interface Guild {
       channelCreate: boolean;
       channelDelete: boolean;
       channelUpdate: boolean;
-      channelPinsUpdate: boolean;
       emojiCreate: boolean;
       emojiDelete: boolean;
       emojiUpdate: boolean;
-      guildAuditLogEntryCreate: boolean;
       guildBanAdd: boolean;
       guildBanRemove: boolean;
       guildMemberAdd: boolean;
@@ -98,9 +92,7 @@ export interface Guild {
       threadCreate: boolean;
       threadDelete: boolean;
       threadUpdate: boolean;
-      threadMembersUpdate: boolean;
       voiceStateUpdate: boolean;
-      webhooksUpdate: boolean;
     };
   };
   music: {
@@ -149,11 +141,9 @@ export const guildModel = mongoose.model(
           channelCreate: { type: Boolean },
           channelDelete: { type: Boolean },
           channelUpdate: { type: Boolean },
-          channelPinsUpdate: { type: Boolean },
           emojiCreate: { type: Boolean },
           emojiDelete: { type: Boolean },
           emojiUpdate: { type: Boolean },
-          guildAuditLogEntryCreate: { type: Boolean },
           guildBanAdd: { type: Boolean },
           guildBanRemove: { type: Boolean },
           guildMemberAdd: { type: Boolean },
@@ -180,9 +170,7 @@ export const guildModel = mongoose.model(
           threadCreate: { type: Boolean },
           threadDelete: { type: Boolean },
           threadUpdate: { type: Boolean },
-          threadMembersUpdate: { type: Boolean },
           voiceStateUpdate: { type: Boolean },
-          webhooksUpdate: { type: Boolean },
         },
       },
       default: {
@@ -196,11 +184,9 @@ export const guildModel = mongoose.model(
           channelCreate: false,
           channelDelete: false,
           channelUpdate: false,
-          channelPinsUpdate: false,
           emojiCreate: false,
           emojiDelete: false,
           emojiUpdate: false,
-          guildAuditLogEntryCreate: false,
           guildBanAdd: false,
           guildBanRemove: false,
           guildMemberAdd: false,
@@ -227,9 +213,7 @@ export const guildModel = mongoose.model(
           threadCreate: false,
           threadDelete: false,
           threadUpdate: false,
-          threadMembersUpdate: false,
           voiceStateUpdate: false,
-          webhooksUpdate: false,
         },
       },
     },

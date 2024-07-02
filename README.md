@@ -84,13 +84,14 @@ npm run start
     - [x] Clusters command
     - [x] Ping command
     - [x] Uptime command
-- [x] Moderation module
+- [ ] Moderation module
   - [x] Ban/Tempban command
   - [x] Unban command
   - [x] Kick command
   - [x] Timeout command
   - [x] Warn command
   - [x] Infractions command
+  - [ ] Purge command
   - [x] Config command
 - [x] Level module
   - [x] Weekly level
@@ -175,9 +176,47 @@ npm run start
   - [x] Snake
   - [x] Fast-Type
   - [x] Remember-Emoji
-- [ ] Log module
+- [x] Log module
   - [x] Config command
-  - [ ] Events
+  - [x] Events
+    - [x] applicationCommandPermissionUpdate
+    - [x] autoModerationActionExecution
+    - [x] autoModerationRuleCreate
+    - [x] autoModerationRuleDelete
+    - [x] autoModerationRuleUpdate
+    - [x] channelCreate
+    - [x] channelDelete
+    - [x] channelUpdate
+    - [x] emojiCreate
+    - [x] emojiDelete
+    - [x] emojiUpdate
+    - [x] guildBanAdd
+    - [x] guildBanRemove
+    - [x] guildMemberAdd
+    - [x] guildMemberRemove
+    - [x] guildMemberUpdate
+    - [x] guildScheduledEventCreate
+    - [x] guildScheduledEventDelete
+    - [x] guildScheduledEventUpdate
+    - [x] guildScheduledEventUserAdd
+    - [x] guildScheduledEventUserRemove
+    - [x] guildUpdate
+    - [x] inviteCreate
+    - [x] inviteDelete
+    - [x] messageUpdate
+    - [x] messageDelete
+    - [x] messageBulkDelete
+    - [x] messageReactionRemoveAll
+    - [x] roleCreate
+    - [x] roleDelete
+    - [x] roleUpdate
+    - [x] stickerCreate
+    - [x] stickerDelete
+    - [x] stickerUpdate
+    - [x] threadCreate
+    - [x] threadDelete
+    - [x] threadUpdate
+    - [x] voiceStateUpdate
 - [ ] Welcomer module
   - [ ] Config command
 - [ ] Custom VC module

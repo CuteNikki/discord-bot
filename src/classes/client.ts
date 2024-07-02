@@ -1,6 +1,6 @@
 import { ClusterClient, getInfo } from 'discord-hybrid-sharding';
 import { Player } from 'discord-player';
-import { Client, Collection, GatewayIntentBits } from 'discord.js';
+import { Client, Collection, GatewayIntentBits, Partials } from 'discord.js';
 
 import i18next from 'i18next';
 import i18nextFsBackend from 'i18next-fs-backend';
@@ -52,18 +52,38 @@ export class DiscordClient extends Client {
     super({
       shards: getInfo().SHARD_LIST,
       shardCount: getInfo().TOTAL_SHARDS,
+      partials: [
+        Partials.Reaction,
+        Partials.Message,
+        Partials.Channel,
+        Partials.GuildScheduledEvent,
+        Partials.GuildMember,
+        Partials.ThreadMember,
+        Partials.User,
+      ],
       intents: [
-        GatewayIntentBits.GuildVoiceStates, // !! Needed for music module !!
-        GatewayIntentBits.Guilds, // !! Needed for guilds, channels and roles !!
-        GatewayIntentBits.GuildModeration, // !! Needed to keep track of bans !!
-        // (If a user gets banned and then unbanned they will still show up as banned in the cache without this intent)
+        // !! Needed for guilds, channels, roles and messages !!
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+
+        // !! Needed for guild log !!
+        GatewayIntentBits.GuildVoiceStates, // !! also needed for music module !!
+        GatewayIntentBits.AutoModerationExecution,
+        GatewayIntentBits.AutoModerationConfiguration,
+        GatewayIntentBits.GuildEmojisAndStickers,
+        GatewayIntentBits.GuildInvites,
+        GatewayIntentBits.GuildMessageReactions,
+        GatewayIntentBits.GuildScheduledEvents,
+
+        // !! Needed to keep track of bans !!
+        GatewayIntentBits.GuildModeration,
+        // Without this intent users will show up as banned after being unbanned
 
         // privileged intents:
-        // GatewayIntentBits.GuildMembers, // !! Needed for welcome messages and log events !!
+        GatewayIntentBits.GuildMembers, // !! Needed for welcome messages and guild log !!
         GatewayIntentBits.GuildPresences, // !! Needed for userinfo !!
-        GatewayIntentBits.GuildMessages, // !! Needed for level !!
         GatewayIntentBits.MessageContent, // !! Needed for fast-type game !!
-        // (MessageContextMenuCommands will still have readable message.content without this intent)
+        // Without this intent MessageContextMenuCommands will still have message.content
       ],
     });
 

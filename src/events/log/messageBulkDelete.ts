@@ -20,7 +20,12 @@ export default new Event({
     if (!logChannel || logChannel.type !== ChannelType.GuildText) return;
 
     await logChannel.send({
-      embeds: [new EmbedBuilder().setColor(Colors.Red).setTitle('Message Bulk Delete').setDescription(`${messages.size} deleted messages`)],
+      embeds: [
+        new EmbedBuilder()
+          .setColor(Colors.Red)
+          .setTitle('Message Bulk Delete')
+          .setDescription(`${messages.size} deleted messages in ${messages.first()?.channel.toString()}`),
+      ],
       files: [
         new AttachmentBuilder(
           Buffer.from(

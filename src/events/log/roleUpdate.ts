@@ -27,12 +27,6 @@ export default new Event({
       embed.addFields({ name: 'Old Name', value: oldRole.name, inline: true }, { name: 'New Name', value: newRole.name, inline: true }, emptyField);
     if (newRole.hexColor !== oldRole.hexColor)
       embed.addFields({ name: 'Old Color', value: oldRole.hexColor, inline: true }, { name: 'New Color', value: newRole.hexColor, inline: true }, emptyField);
-    if (newRole.position !== oldRole.position)
-      embed.addFields(
-        { name: 'Old Position', value: `${oldRole.position}`, inline: true },
-        { name: 'New Position', value: `${newRole.position}`, inline: true },
-        emptyField
-      );
     if (newRole.hoist !== oldRole.hoist)
       embed.addFields(
         { name: 'Old Displayed Separately', value: `${oldRole.hoist}`, inline: true },
@@ -74,6 +68,9 @@ export default new Event({
         emptyField
       );
     }
+
+    const embedData = embed.toJSON();
+    if (!embedData.fields?.length || embedData.fields.length > 25 || embedData.fields.length <= 1) return;
 
     await logChannel.send({ embeds: [embed] });
   },

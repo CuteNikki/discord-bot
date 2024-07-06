@@ -182,7 +182,7 @@ export default new Event({
     }
 
     const embedData = embed.toJSON();
-    if (!embedData.fields?.length || embedData.fields.length > 25) return;
+    if (!embedData.fields?.length || embedData.fields.length > 25 || embedData.fields.length <= 1) return;
 
     await logChannel.send({
       embeds: [embed],

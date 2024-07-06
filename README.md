@@ -199,23 +199,16 @@ npm run start
   - [x] Evaluate command
   - [x] Execute command
   - [x] Register command
-  - [ ] Custom badges
-    - [x] List of badges:
-      - Developer
-      - Moderator
-      - Translator
-      - Supporter
-      - Premium
-      - Expert Bughunter
-      - Bughunter
-    - [ ] Config command
-  - [ ] Premium
-    - [ ] Config command
-      - [ ] Generate codes
-      - [ ] Redeem codes
-      - [ ] Manage user's subscriptions
-  - [ ] Banned users
-    - [ ] Config command
+  - [ ] Config command
+    - [x] Banned users
+    - [ ] Custom badges
+      - [x] List of badges:
+        - Developer
+        - Moderator
+        - Translator
+        - Supporter
+        - Expert Bughunter
+        - Bughunter
 - [ ] Welcomer module
   - [ ] Config command
 - [ ] Custom VC module

@@ -30,6 +30,9 @@ export default new Event({
     }
     if (!modal) return;
 
+    const user = await client.getUserSettings(interaction.user.id);
+    if (user.banned) return;
+
     // Permissions check
     if (modal.options.permissions?.length) {
       if (!interaction.member) return interaction.reply({ content: i18next.t('interactions.guild_only', { lng }), ephemeral: true });

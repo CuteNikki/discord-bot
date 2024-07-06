@@ -12,6 +12,9 @@ export default new Event({
     const command = client.commands.get(interaction.commandName);
     if (!command || !command.options.autocomplete) return;
 
+    const user = await client.getUserSettings(interaction.user.id);
+    if (user.banned) return;
+
     try {
       await command.options.autocomplete({ interaction, client });
     } catch (err) {

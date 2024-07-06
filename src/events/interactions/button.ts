@@ -30,6 +30,9 @@ export default new Event({
     }
     if (!button) return;
 
+    const user = await client.getUserSettings(interaction.user.id);
+    if (user.banned) return;
+
     // Check author only
     if (button.options.authorOnly) {
       const content = i18next.t('interactions.author_only', { lng });

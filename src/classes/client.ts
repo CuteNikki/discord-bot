@@ -6,7 +6,7 @@ import i18next from 'i18next';
 import i18nextFsBackend from 'i18next-fs-backend';
 
 import { guildModel, type Guild } from 'models/guild';
-import { userModel } from 'models/user';
+import { userModel, type User } from 'models/user';
 
 import type { Button } from 'classes/button';
 import type { Command } from 'classes/command';
@@ -43,6 +43,7 @@ export class DiscordClient extends Client {
 
   public userLanguages = new Collection<string, string>(); // Collection<userId, language>
   public guildSettings = new Collection<string, Guild>(); // Collection<guildId, settings>
+  public userSettings = new Collection<string, User>(); // Collection<userId, settings>
   public level = new Collection<LevelIdentifier, Level>();
   public levelWeekly = new Collection<LevelIdentifier, Level>();
 
@@ -140,6 +141,14 @@ export class DiscordClient extends Client {
     if (cachedSettings) return cachedSettings;
     const settings = await guildModel.findOneAndUpdate({ guildId }, {}, { upsert: true, new: true }).lean().exec();
     this.guildSettings.set(guildId, settings);
+    return settings;
+  }
+
+  public async getUserSettings(userId: string): Promise<User> {
+    const cachedSettings = this.userSettings.get(userId);
+    if (cachedSettings) return cachedSettings;
+    const settings = await userModel.findOneAndUpdate({ userId }, {}, { upsert: true, new: true });
+    this.userSettings.set(userId, settings);
     return settings;
   }
 }

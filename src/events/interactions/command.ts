@@ -19,6 +19,9 @@ export default new Event({
     const command = client.commands.get(interaction.commandName);
     if (!command) return;
 
+    const user = await client.getUserSettings(interaction.user.id);
+    if (user.banned) return;
+
     // Only allowing commands if their module is enabled
     if (interaction.guild) {
       const guildSettings = await client.getGuildSettings(interaction.guild.id);

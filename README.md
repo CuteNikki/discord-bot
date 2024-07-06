@@ -84,14 +84,14 @@ npm run start
     - [x] Clusters command
     - [x] Ping command
     - [x] Uptime command
-- [ ] Moderation module
+- [x] Moderation module
   - [x] Ban/Tempban command
   - [x] Unban command
   - [x] Kick command
   - [x] Timeout command
   - [x] Warn command
   - [x] Infractions command
-  - [ ] Purge command
+  - [x] Purge command
   - [x] Config command
 - [x] Level module
   - [x] Weekly level
@@ -136,37 +136,7 @@ npm run start
     - [x] Range
     - [x] User
     - [x] ID
-  - [x] Config command
-- [ ] Utility module
-      (Planning on adding more)
-  - [x] Avatar/Banner command
-  - [x] Userinfo command
-  - [x] Serverinfo command
-  - [x] Weather command
-  - [x] Math command
-  - [ ] Config command
-- [ ] Developer Module
-  - [x] Evaluate command
-  - [x] Execute command
-  - [x] Register command
-  - [ ] Custom badges
-    - [x] List of badges:
-      - Developer
-      - Moderator
-      - Translator
-      - Supporter
-      - Premium
-      - Expert Bughunter
-      - Bughunter
-    - [ ] Config command
-  - [ ] Premium
-    - [ ] Config command
-      - [ ] Generate codes
-      - [ ] Redeem codes
-      - [ ] Manage user's subscriptions
-  - [ ] Banned users
-    - [ ] Config command
-- [x] Game command
+  - [x] Config command- [x] Game command
   - [x] Rock-Paper-Scissors
   - [x] Tic-Tac-Toe
   - [x] Connect-4
@@ -217,6 +187,35 @@ npm run start
     - [x] threadDelete
     - [x] threadUpdate
     - [x] voiceStateUpdate
+- [ ] Utility module
+      (Planning on adding more)
+  - [x] Avatar/Banner command
+  - [x] Userinfo command
+  - [x] Serverinfo command
+  - [x] Weather command
+  - [x] Math command
+  - [ ] Config command
+- [ ] Developer Module
+  - [x] Evaluate command
+  - [x] Execute command
+  - [x] Register command
+  - [ ] Custom badges
+    - [x] List of badges:
+      - Developer
+      - Moderator
+      - Translator
+      - Supporter
+      - Premium
+      - Expert Bughunter
+      - Bughunter
+    - [ ] Config command
+  - [ ] Premium
+    - [ ] Config command
+      - [ ] Generate codes
+      - [ ] Redeem codes
+      - [ ] Manage user's subscriptions
+  - [ ] Banned users
+    - [ ] Config command
 - [ ] Welcomer module
   - [ ] Config command
 - [ ] Custom VC module

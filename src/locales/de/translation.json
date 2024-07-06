@@ -1,4 +1,9 @@
 {
+  "purge": {
+    "no_messages": "Konnte keine Nachrichten finden!",
+    "none_deleted": "Konnte keine Nachrichten löschen!",
+    "success": "Erfolgreich {{deleted}} von {{amount}} Nachrichten in {{channel}} gelöscht."
+  },
   "ping": {
     "title": "Pong!",
     "websocket": "Websocket-Herzschlag",

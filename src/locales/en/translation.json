@@ -1,4 +1,9 @@
 {
+  "purge": {
+    "no_messages": "Could not fetch any messages!",
+    "none_deleted": "Could not delete any messages!",
+    "success": "Successfully deleted {{deleted}} of {{amount}} messages in {{channel}}."
+  },
   "ping": {
     "title": "Pong!",
     "websocket": "Websocket Heartbeat",

@@ -4,17 +4,27 @@ import ms from 'ms';
 
 import type { DiscordClient } from 'classes/client';
 
-export function chunk<T>(arr: T[], size: number): T[][] {
-  return Array.from({ length: Math.ceil(arr.length / size) }, (_: T, i: number) => arr.slice(i * size, i * size + size));
+// Slices an array into chunks of a given size and returns chunks
+export function chunk<type>(arr: type[], size: number): type[][] {
+  return Array.from({ length: Math.ceil(arr.length / size) }, (_: type, i: number) => arr.slice(i * size, i * size + size));
+}
+
+enum CustomIds {
+  FIRST = 'PAGINATION_FIRST',
+  PREV = 'PAGINATION_PREV',
+  NEXT = 'PAGINATION_NEXT',
+  LAST = 'PAGINATION_LAST',
 }
 
 export async function pagination({
+  client,
   interaction,
-  embeds, // The array of embeds (the pages)
+  embeds,
   time = 60_000, // The time a user has to use the buttons before disabling them
   ephemeral = true, // If true, the pagination will only be visible to the user
   footer = true, // If true, will replace the current embeds footer to tell that the buttons have been disabled because the time is over
 }: {
+  client: DiscordClient;
   interaction: CommandInteraction;
   embeds: EmbedBuilder[];
   time?: number;
@@ -22,24 +32,21 @@ export async function pagination({
   footer?: boolean;
 }) {
   if (!interaction.deferred) await interaction.deferReply({ ephemeral });
-  const { client, user } = interaction;
-
-  enum CustomIds {
-    FIRST = 'PAGINATION_FIRST',
-    PREV = 'PAGINATION_PREV',
-    NEXT = 'PAGINATION_NEXT',
-    LAST = 'PAGINATION_LAST',
-  }
+  const { user } = interaction;
+  const lng = await client.getUserLanguage(user.id);
 
   const buttonFirst = new ButtonBuilder().setCustomId(CustomIds.FIRST).setStyle(ButtonStyle.Secondary).setEmoji('⏪').setDisabled(true);
   const buttonPrev = new ButtonBuilder().setCustomId(CustomIds.PREV).setStyle(ButtonStyle.Secondary).setEmoji('⬅️').setDisabled(true);
-  const buttonNext = new ButtonBuilder().setCustomId(CustomIds.NEXT).setStyle(ButtonStyle.Secondary).setEmoji('➡️');
-  const buttonLast = new ButtonBuilder().setCustomId(CustomIds.LAST).setStyle(ButtonStyle.Secondary).setEmoji('⏩');
-
-  if (embeds.length === 1) {
-    buttonNext.setDisabled(true);
-    buttonLast.setDisabled(true);
-  }
+  const buttonNext = new ButtonBuilder()
+    .setCustomId(CustomIds.NEXT)
+    .setStyle(ButtonStyle.Secondary)
+    .setEmoji('➡️')
+    .setDisabled(embeds.length === 1 ? true : false);
+  const buttonLast = new ButtonBuilder()
+    .setCustomId(CustomIds.LAST)
+    .setStyle(ButtonStyle.Secondary)
+    .setEmoji('⏩')
+    .setDisabled(embeds.length === 1 ? true : false);
 
   const components = new ActionRowBuilder<ButtonBuilder>().setComponents(buttonFirst, buttonPrev, buttonNext, buttonLast);
 
@@ -90,8 +97,7 @@ export async function pagination({
     buttonLast.setDisabled(true);
 
     const embed = embeds[index];
-    if (footer)
-      embed.setFooter({ text: i18next.t('pagination', { lng: await (client as DiscordClient).getLanguage(user.id), time: ms(time, { long: true }) }) });
+    if (footer) embed.setFooter({ text: i18next.t('pagination', { lng, time: ms(time, { long: true }) }) });
 
     interaction.editReply({ embeds: [embed], components: [components] }).catch(() => {});
   });

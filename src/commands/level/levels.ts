@@ -48,6 +48,7 @@ export default new Command({
     if (!chunkedLeaderboard.length) return interaction.editReply(i18next.t('level.none'));
 
     await pagination({
+      client,
       interaction,
       embeds: chunkedLeaderboard.map((level, index) =>
         new EmbedBuilder()

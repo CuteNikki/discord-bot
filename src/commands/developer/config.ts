@@ -400,6 +400,7 @@ export default new Command({
 
                 const chunkedUsers = chunk(bannedUsers, 10);
                 await pagination({
+                  client,
                   interaction,
                   embeds: chunkedUsers.map((chunk, index) =>
                     new EmbedBuilder()

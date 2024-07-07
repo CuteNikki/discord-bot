@@ -1,9 +1,9 @@
 import { ApplicationCommandOptionType, ApplicationCommandType, Colors, EmbedBuilder, Status } from 'discord.js';
 import ms from 'ms';
+import i18next from 'i18next';
 
 import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
 
-import i18next from 'i18next';
 import { pagination } from 'utils/pagination';
 
 export default new Command({
@@ -102,6 +102,6 @@ export default new Command({
       );
     }
 
-    await pagination({ embeds, interaction });
+    await pagination({ client, interaction, embeds });
   },
 });

@@ -73,6 +73,7 @@ export default new Command({
         };
 
         await pagination({
+          client,
           interaction,
           embeds: chunkedInfractions.map((chunk, index) =>
             new EmbedBuilder()

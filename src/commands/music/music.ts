@@ -556,6 +556,7 @@ export default new Command({
           const tracks = queue.tracks.toArray();
           const chunkedTracks = chunk(tracks, 10);
           await pagination({
+            client,
             interaction,
             embeds: chunkedTracks.map((tracks, pageIndex) =>
               new EmbedBuilder()
@@ -580,6 +581,7 @@ export default new Command({
           const tracks = history.tracks.toArray();
           const chunkedTracks = chunk(tracks, 10);
           await pagination({
+            client,
             interaction,
             embeds: chunkedTracks.map((tracks, pageIndex) =>
               new EmbedBuilder()

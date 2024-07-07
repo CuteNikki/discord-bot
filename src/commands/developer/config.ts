@@ -235,21 +235,21 @@ export default new Command({
             if (!badges.includes(BadgeType.DEVELOPER)) return interaction.editReply('You are not a developer of this bot!');
           }
 
-          const settings = await client.getClientSettings(interaction.client.application.id);
+          const settings = await client.getClientSettings(keys.DISCORD_BOT_ID);
 
           switch (options.getSubcommand()) {
             case 'set':
               {
                 const guildId = options.getString('guild-id', true);
                 if (settings.support.guildId === guildId) return interaction.editReply('That is already the guild id');
-                await client.updateClientSettings(interaction.client.application.id, { $set: { ['support.guildId']: guildId } });
+                await client.updateClientSettings(keys.DISCORD_BOT_ID, { $set: { ['support.guildId']: guildId } });
                 interaction.editReply('Guild id has been set');
               }
               break;
             case 'remove':
               {
                 if (settings.support.guildId === 'unavailable') return interaction.editReply('There is no guild id to remove');
-                await client.updateClientSettings(interaction.client.application.id, { $set: { ['support.guildId']: 'unavailable' } });
+                await client.updateClientSettings(keys.DISCORD_BOT_ID, { $set: { ['support.guildId']: 'unavailable' } });
                 interaction.editReply('Guild id has been removed');
               }
               break;
@@ -267,21 +267,21 @@ export default new Command({
             if (!badges.includes(BadgeType.DEVELOPER)) return interaction.editReply('You are not a developer of this bot!');
           }
 
-          const settings = await client.getClientSettings(interaction.client.application.id);
+          const settings = await client.getClientSettings(keys.DISCORD_BOT_ID);
 
           switch (options.getSubcommand()) {
             case 'set':
               {
                 const inviteUrl = options.getString('invite-url', true);
                 if (settings.support.inviteUrl === inviteUrl) return interaction.editReply('That is already the invite url');
-                await client.updateClientSettings(interaction.client.application.id, { $set: { ['support.inviteUrl']: inviteUrl } });
+                await client.updateClientSettings(keys.DISCORD_BOT_ID, { $set: { ['support.inviteUrl']: inviteUrl } });
                 interaction.editReply('Invite url has been set');
               }
               break;
             case 'remove':
               {
                 if (settings.support.inviteUrl === 'unavailable') return interaction.editReply('There is no invite url to remove');
-                await client.updateClientSettings(interaction.client.application.id, { $set: { ['support.inviteUrl']: 'unavailable' } });
+                await client.updateClientSettings(keys.DISCORD_BOT_ID, { $set: { ['support.inviteUrl']: 'unavailable' } });
                 interaction.editReply('Invite url has been removed');
               }
               break;
@@ -299,21 +299,21 @@ export default new Command({
             if (!badges.includes(BadgeType.DEVELOPER)) return interaction.editReply('You are not a developer of this bot!');
           }
 
-          const settings = await client.getClientSettings(interaction.client.application.id);
+          const settings = await client.getClientSettings(keys.DISCORD_BOT_ID);
 
           switch (options.getSubcommand()) {
             case 'set':
               {
                 const inviteUrl = options.getString('invite-url', true);
                 if (settings.inviteUrl === inviteUrl) return interaction.editReply('That is already the invite url');
-                await client.updateClientSettings(interaction.client.application.id, { $set: { inviteUrl: inviteUrl } });
+                await client.updateClientSettings(keys.DISCORD_BOT_ID, { $set: { inviteUrl: inviteUrl } });
                 interaction.editReply('Invite url has been set');
               }
               break;
             case 'remove':
               {
                 if (settings.inviteUrl === 'unavailable') return interaction.editReply('There is no invite url to remove');
-                await client.updateClientSettings(interaction.client.application.id, { $set: { inviteUrl: 'unavailable' } });
+                await client.updateClientSettings(keys.DISCORD_BOT_ID, { $set: { inviteUrl: 'unavailable' } });
                 interaction.editReply('Invite url has been removed');
               }
               break;

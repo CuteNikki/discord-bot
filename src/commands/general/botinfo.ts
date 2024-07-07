@@ -5,6 +5,8 @@ import osu from 'node-os-utils';
 
 import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
 
+import { keys } from 'utils/keys';
+
 export default new Command({
   module: Modules.GENERAL,
   data: {
@@ -38,7 +40,7 @@ export default new Command({
       const memoryUsed = (memoryInfo.usedMemMb / 1024).toFixed(2);
       const memoryTotal = Math.round(memoryInfo.totalMemMb / 1024);
 
-      const { database } = await client.getClientSettings(interaction.client.application.id);
+      const { database } = await client.getClientSettings(keys.DISCORD_BOT_ID);
 
       const dbStates = {
         0: i18next.t('botinfo.database.disconnected', { lng }),

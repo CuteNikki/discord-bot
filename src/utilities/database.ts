@@ -1,5 +1,4 @@
 import { CronJob } from 'cron';
-import type { Client } from 'discord.js';
 import mongoose from 'mongoose';
 
 import { DiscordClient } from 'classes/client';
@@ -18,7 +17,7 @@ export function initDatabase(client: DiscordClient) {
     .then(() => {
       logger.info(`[${client.cluster.id}] Successfully connected to database`);
 
-      client.once('ready', (readyClient) => {
+      client.once('ready', () => {
         collectUserLanguages(client); // Set clients user language collection
         collectGuildSettings(client); // Set clients guild settings collection
 
@@ -26,7 +25,7 @@ export function initDatabase(client: DiscordClient) {
           cronTime: '* * * * *',
           onTick: () => {
             clearExpiredInfractions(client); // Handle expired infractions
-            clearWeekly(client, readyClient); // Handle weekly clear
+            clearWeekly(client); // Handle weekly clear
           },
           start: true,
         });
@@ -54,17 +53,16 @@ async function collectGuildSettings(client: DiscordClient) {
   logger.info(`[${client.cluster.id}] Collected ${client.guildSettings.size} guild settings`);
 }
 
-async function clearWeekly(client: DiscordClient, readyClient: Client<true>) {
+async function clearWeekly(client: DiscordClient) {
   const WEEK = 604800000;
   const NOW = Date.now();
 
-  const applicationId = readyClient.application.id;
-  const { database } = await client.getClientSettings(applicationId);
+  const { database } = await client.getClientSettings(keys.DISCORD_BOT_ID);
 
   // If now is bigger than last weekly clear plus a week
   if (NOW > database.lastWeeklyClear + WEEK) {
     // Clear weekly level
-    clearWeeklyLevel(client, applicationId);
+    clearWeeklyLevel(client, keys.DISCORD_BOT_ID);
   }
 }
 

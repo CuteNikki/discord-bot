@@ -1,7 +1,10 @@
 import { Events } from 'discord.js';
 
 import { Event } from 'classes/event';
+
 import { BadgeType } from 'models/user';
+
+import { keys } from 'utils/keys';
 
 export default new Event({
   name: Events.GuildMemberUpdate,
@@ -10,7 +13,7 @@ export default new Event({
     if (!client.isReady()) return;
     if ((newMember.premiumSinceTimestamp ?? false) === (oldMember.premiumSinceTimestamp ?? false)) return;
 
-    const settings = await client.getClientSettings(client.application.id);
+    const settings = await client.getClientSettings(keys.DISCORD_BOT_ID);
     if (settings.support.guildId !== newMember.guild.id) return;
 
     const userData = await client.getUserData(newMember.user.id);

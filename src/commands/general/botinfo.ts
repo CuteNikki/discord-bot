@@ -5,8 +5,6 @@ import osu from 'node-os-utils';
 
 import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
 
-import { clientModel } from 'models/client';
-
 export default new Command({
   module: Modules.GENERAL,
   data: {
@@ -24,7 +22,7 @@ export default new Command({
     ],
   },
   async execute({ interaction, client }) {
-    const lng = await client.getLanguage(interaction.user.id);
+    const lng = await client.getUserLanguage(interaction.user.id);
     const ephemeral = interaction.options.getBoolean('ephemeral', false) ?? true;
     await interaction.deferReply({ ephemeral });
 
@@ -40,10 +38,7 @@ export default new Command({
       const memoryUsed = (memoryInfo.usedMemMb / 1024).toFixed(2);
       const memoryTotal = Math.round(memoryInfo.totalMemMb / 1024);
 
-      const clientDatabaseSettings = await clientModel
-        .findOneAndUpdate({ clientId: interaction.client.user.id }, {}, { upsert: true, new: true })
-        .lean()
-        .exec();
+      const { database } = await client.getClientSettings(interaction.client.application.id);
 
       const dbStates = {
         0: i18next.t('botinfo.database.disconnected', { lng }),
@@ -101,7 +96,7 @@ export default new Command({
                   i18next.t('botinfo.database.state', { lng, state: dbStates[mongoose.connection.readyState] }),
                   i18next.t('botinfo.database.weekly', {
                     lng,
-                    date: clientDatabaseSettings.lastWeeklyLevelClear ? `<t:${Math.floor(clientDatabaseSettings.lastWeeklyLevelClear / 1000)}:F>` : '/',
+                    date: database.lastWeeklyClear ? `<t:${Math.floor(database.lastWeeklyClear / 1000)}:F>` : '/',
                   }),
                 ].join('\n'),
               }

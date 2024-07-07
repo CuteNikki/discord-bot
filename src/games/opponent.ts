@@ -25,8 +25,8 @@ export class Opponent {
 
     if (!opponent) return false;
 
-    const lng = await client.getLanguage(user.id);
-    const opponentLng = await client.getLanguage(opponent.id);
+    const lng = await client.getUserLanguage(user.id);
+    const opponentLng = await client.getUserLanguage(opponent.id);
 
     if (opponent.id === user.id) {
       await interaction.editReply(i18next.t('games.invitation.yourself', { lng })).catch(() => {});
@@ -71,7 +71,7 @@ export class Opponent {
         if (buttonInteraction.user.id !== opponent.id) {
           return buttonInteraction
             .followUp({
-              content: i18next.t('interactions.author_only', { lng: await client.getLanguage(buttonInteraction.user.id) }),
+              content: i18next.t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
               ephemeral: true,
             })
             .catch(() => {});

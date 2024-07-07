@@ -58,8 +58,8 @@ export default new Command({
 
     const target = options.getUser('user', true);
 
-    const lng = await client.getLanguage(interaction.user.id);
-    const targetLng = await client.getLanguage(target.id);
+    const lng = await client.getUserLanguage(interaction.user.id);
+    const targetLng = await client.getUserLanguage(target.id);
 
     const targetMember = await guild.members.fetch(target.id).catch(() => {});
     if (!targetMember) return interaction.editReply(i18next.t('timeout.target.invalid', { lng }));
@@ -129,7 +129,7 @@ export default new Command({
         userId: target.id,
         moderatorId: user.id,
         action: InfractionType.TIMEOUT,
-        ended: false,
+        closed: false,
         endsAt: Date.now() + duration,
         createdAt: Date.now(),
         reason,

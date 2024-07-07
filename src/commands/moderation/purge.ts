@@ -61,7 +61,7 @@ export default new Command({
   async execute({ interaction, client }) {
     if (!interaction.inCachedGuild() || !interaction.channel) return;
     await interaction.deferReply({ ephemeral: true });
-    const lng = await client.getLanguage(interaction.user.id);
+    const lng = await client.getUserLanguage(interaction.user.id);
 
     const { options } = interaction;
 

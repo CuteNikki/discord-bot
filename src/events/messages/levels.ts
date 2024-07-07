@@ -3,7 +3,7 @@ import i18next from 'i18next';
 
 import { Event } from 'classes/event';
 
-import { AnnouncementType, guildModel } from 'models/guild';
+import { AnnouncementType } from 'models/guild';
 import { appendXP, getDataOrCreate, getLevelRewards, randomXP } from 'utils/level';
 
 const cooldowns = new Set();
@@ -12,17 +12,12 @@ export default new Event({
   name: Events.MessageCreate,
   once: false,
   async execute(client, message) {
-    if (!client.usable) return;
-
     const { guildId, channelId, author, guild, member, channel } = message;
-    const guildSettings = await guildModel.findOne({ guildId }).lean().exec();
+    if (author.bot || cooldowns.has(author.id) || !member || !guild || !guildId) return;
+
+    const guildSettings = await client.getGuildSettings(guildId);
 
     if (
-      author.bot ||
-      cooldowns.has(author.id) ||
-      !member ||
-      !guild ||
-      !guildId ||
       !guildSettings ||
       !guildSettings.level.enabled ||
       guildSettings.level.ignoredChannels.includes(channelId) ||
@@ -39,7 +34,7 @@ export default new Event({
     setTimeout(() => cooldowns.delete(author.id), 60000);
 
     if (currentData.level < newData.level) {
-      const rewards = await getLevelRewards(newData);
+      const rewards = await getLevelRewards(client, newData);
 
       const levelUpEmbed = new EmbedBuilder()
         .setColor(Colors.Blurple)
@@ -76,7 +71,7 @@ export default new Event({
           break;
         case AnnouncementType.PRIVATE_MESSAGE:
           {
-            const lng = await client.getLanguage(author.id);
+            const lng = await client.getUserLanguage(author.id);
 
             levelUpMessage.content = i18next.t('level.dm.message', { lng, guild: guild.name });
             levelUpEmbed.setFields({ name: i18next.t('level.dm.title', { lng }), value: i18next.t('level.dm.description', { lng }) });

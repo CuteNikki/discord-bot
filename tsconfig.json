@@ -30,6 +30,8 @@
 
     // Custom paths
     "paths": {
+      "root/*": ["./*"],
+      "src/*": ["./src/*"],
       "classes/*": ["./src/classes/*"],
       "loaders/*": ["./src/loaders/*"],
       "utils/*": ["./src/utilities/*"],

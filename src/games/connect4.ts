@@ -74,8 +74,8 @@ export class Connect4 extends Opponent {
     const opponent = this.options.opponent;
     const client = this.options.client;
 
-    const lng = await client.getLanguage(user.id);
-    const opponentLng = await client.getLanguage(opponent.id);
+    const lng = await client.getUserLanguage(user.id);
+    const opponentLng = await client.getUserLanguage(opponent.id);
 
     const message = await this.isApprovedByOpponent();
     if (!message) return;
@@ -106,7 +106,7 @@ export class Connect4 extends Opponent {
       if (buttonInteraction.user.id !== user.id && buttonInteraction.user.id !== opponent.id)
         return buttonInteraction
           .followUp({
-            content: i18next.t('interactions.author_only', { lng: await client.getLanguage(buttonInteraction.user.id) }),
+            content: i18next.t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
             ephemeral: true,
           })
           .catch(() => {});

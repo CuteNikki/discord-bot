@@ -76,8 +76,8 @@ export default new Command({
     const target = options.getUser('user', true);
     const targetMember = await guild.members.fetch(target.id).catch(() => {});
 
-    const lng = await client.getLanguage(interaction.user.id);
-    const targetLng = await client.getLanguage(target.id);
+    const lng = await client.getUserLanguage(interaction.user.id);
+    const targetLng = await client.getUserLanguage(target.id);
 
     const userDuration = options.getString('duration', false);
     const duration = ms(userDuration ?? '0');
@@ -153,7 +153,7 @@ export default new Command({
         userId: target.id,
         moderatorId: user.id,
         action: duration ? InfractionType.TEMPBAN : InfractionType.BAN,
-        ended: duration ? false : true,
+        closed: duration ? false : true,
         endsAt: duration ? Date.now() + duration : undefined,
         createdAt: Date.now(),
         reason,

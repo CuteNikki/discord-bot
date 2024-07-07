@@ -20,7 +20,7 @@ export default new Command({
     ],
   },
   async execute({ interaction, client }) {
-    const lng = await client.getLanguage(interaction.user.id);
+    const lng = await client.getUserLanguage(interaction.user.id);
     const ephemeral = interaction.options.getBoolean('ephemeral', false) ?? true;
     await interaction.deferReply({ ephemeral });
 

@@ -3,8 +3,6 @@ import i18next from 'i18next';
 
 import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
 
-import { userModel } from 'models/user';
-
 export default new Command({
   module: Modules.GENERAL,
   data: {
@@ -23,16 +21,17 @@ export default new Command({
     ],
   },
   async autocomplete({ interaction, client }) {
-    const focused = interaction.options.getFocused();
     const choices = client.supportedLanguages;
+    const focused = interaction.options.getFocused();
+    if (!focused.length) return interaction.respond(choices.map((choice) => ({ name: choice, value: choice })).slice(0, 25));
     const filtered = choices.filter((choice) => choice.toLowerCase().includes(focused.toLowerCase()));
-    await interaction.respond(filtered.map((choice) => ({ name: choice, value: choice })).slice(0, 25 ));
+    await interaction.respond(filtered.map((choice) => ({ name: choice, value: choice })).slice(0, 25));
   },
   async execute({ interaction, client }) {
     await interaction.deferReply({ ephemeral: true });
     const { user, options } = interaction;
 
-    const lng = await client.getLanguage(user.id);
+    const lng = await client.getUserLanguage(user.id);
     const language = options.getString('language', false);
 
     if (!language) {
@@ -46,8 +45,7 @@ export default new Command({
           ].join('\n'),
         });
       try {
-        client.userLanguages.set(user.id, language);
-        await userModel.findOneAndUpdate({ userId: user.id }, { $set: { language } }, { new: true, upsert: true }).lean().exec();
+        await client.updateUserLanguage(user.id, language);
         return interaction.editReply({ content: i18next.t('language.success', { lng, language }) });
       } catch (err) {
         return interaction.editReply({ content: i18next.t('language.error', { lng }) });

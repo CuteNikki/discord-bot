@@ -19,7 +19,7 @@ export default new Command({
 
     const { options, user, guild, guildId } = interaction;
 
-    const lng = await client.getLanguage(user.id);
+    const lng = await client.getUserLanguage(user.id);
 
     const target = options.getUser('user', true);
     const member = guild.members.cache.get(target.id);

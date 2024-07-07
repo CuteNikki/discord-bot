@@ -14,18 +14,18 @@ export interface Badge {
   receivedAt: number;
 }
 
-export interface User {
+export interface UserData {
   userId: string;
-  language: string;
+  language?: string;
   banned: boolean;
   badges: Badge[];
 }
 
 export const userModel = mongoose.model(
   'user',
-  new mongoose.Schema<User>({
+  new mongoose.Schema<UserData>({
     userId: { type: String, required: true },
-    language: { type: String, default: 'en' },
+    language: { type: String, requiredPaths: false },
     banned: { type: Boolean, default: false },
     badges: [
       {

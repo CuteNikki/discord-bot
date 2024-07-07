@@ -41,7 +41,7 @@ export default new Command({
     const ephemeral = options.getBoolean('ephemeral', false) ?? true;
     await interaction.deferReply({ ephemeral });
 
-    const lng = await client.getLanguage(user.id);
+    const lng = await client.getUserLanguage(user.id);
 
     const target = options.getUser('user', false) ?? user;
     const member = guild.members.cache.get(target.id);

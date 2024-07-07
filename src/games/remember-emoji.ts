@@ -23,7 +23,7 @@ export class RememberEmoji {
     const interaction = this.options.interaction;
     const user = interaction.user;
     const client = this.options.client;
-    const lng = await client.getLanguage(user.id);
+    const lng = await client.getUserLanguage(user.id);
 
     const embed = new EmbedBuilder()
       .setColor(Colors.Yellow)
@@ -52,7 +52,7 @@ export class RememberEmoji {
         if (buttonInteraction.user.id !== user.id)
           return buttonInteraction
             .followUp({
-              content: i18next.t('interactions.author_only', { lng: await client.getLanguage(buttonInteraction.user.id) }),
+              content: i18next.t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
               ephemeral: true,
             })
             .catch(() => {});

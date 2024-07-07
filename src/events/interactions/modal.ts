@@ -11,9 +11,9 @@ export default new Event({
   name: Events.InteractionCreate,
   async execute(client, interaction) {
     // Since we only want the button interactions we return early if the interaction is not a button
-    if (!interaction.isModalSubmit() || !client.usable) return;
+    if (!interaction.isModalSubmit()) return;
 
-    const lng = await client.getLanguage(interaction.user.id);
+    const lng = await client.getUserLanguage(interaction.user.id);
 
     // Get the button with the interactions custom id and return if it wasn't found
     let modal: Modal | undefined;
@@ -30,7 +30,7 @@ export default new Event({
     }
     if (!modal) return;
 
-    const user = await client.getUserSettings(interaction.user.id);
+    const user = await client.getUserData(interaction.user.id);
     if (user.banned) return;
 
     // Permissions check

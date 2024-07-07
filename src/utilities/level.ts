@@ -4,7 +4,6 @@ import type { DiscordClient } from 'classes/client';
 
 import { levelModel } from 'models/level';
 import { weeklyLevelModel } from 'models/weeklyLevels';
-import { guildModel } from '../models/guild';
 
 export interface LevelIdentifier {
   userId: string;
@@ -127,10 +126,10 @@ export async function addLevel(identifier: LevelIdentifier, client: DiscordClien
   return newLevel;
 }
 
-export async function getLevelRewards(level: Level | PositionLevel): Promise<LevelReward[]> {
-  const guildData = await guildModel.findOne({ guildId: level.guildId }).lean().exec();
-  if (!guildData) return [];
-  const rewards = guildData.level.rewards.filter((rw) => rw.level <= level.level);
+export async function getLevelRewards(client: DiscordClient, level: Level | PositionLevel): Promise<LevelReward[]> {
+  const guildSettings = await client.getGuildSettings(level.guildId);
+  if (!guildSettings) return [];
+  const rewards = guildSettings.level.rewards.filter((rw) => rw.level <= level.level);
   return rewards;
 }
 

@@ -23,7 +23,7 @@ export class FastType {
     const user = interaction.user;
     const client = this.options.client;
 
-    const lng = await client.getLanguage(user.id);
+    const lng = await client.getUserLanguage(user.id);
 
     const message = await interaction
       .editReply({

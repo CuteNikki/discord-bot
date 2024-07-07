@@ -3,7 +3,7 @@ import i18next from 'i18next';
 
 import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
 
-import { AnnouncementType, guildModel } from 'models/guild';
+import { AnnouncementType } from 'models/guild';
 
 import { addLevel, addXP, getDataOrCreate, getLevelRewards, setLevel, setXP } from 'utils/level';
 
@@ -387,7 +387,7 @@ export default new Command({
     if (!interaction.inCachedGuild()) return;
     const { options, guildId, guild } = interaction;
     await interaction.deferReply({ ephemeral: true });
-    const lng = await client.getLanguage(interaction.user.id);
+    const lng = await client.getUserLanguage(interaction.user.id);
 
     const config = await client.getGuildSettings(guildId);
 
@@ -566,22 +566,14 @@ export default new Command({
             case 'on':
               {
                 if (config.level.enabled) return interaction.editReply(i18next.t('level.toggle.already_on', { lng }));
-                const newSettings = await guildModel
-                  .findOneAndUpdate({ guildId }, { $set: { ['level.enabled']: true } }, { new: true, upsert: true })
-                  .lean()
-                  .exec();
-                client.guildSettings.set(guildId, newSettings);
+                await client.updateGuildSettings(guildId, { $set: { ['level.enabled']: true } });
                 interaction.editReply(i18next.t('level.toggle.on', { lng }));
               }
               break;
             case 'off':
               {
                 if (!config.level.enabled) return interaction.editReply(i18next.t('level.toggle.already_off', { lng }));
-                const newSettings = await guildModel
-                  .findOneAndUpdate({ guildId }, { $set: { ['level.enabled']: false } }, { new: true, upsert: true })
-                  .lean()
-                  .exec();
-                client.guildSettings.set(guildId, newSettings);
+                await client.updateGuildSettings(guildId, { $set: { ['level.enabled']: false } });
                 interaction.editReply(i18next.t('level.toggle.off', { lng }));
               }
               break;
@@ -596,15 +588,9 @@ export default new Command({
                 const channel = options.getChannel('channel', true, [ChannelType.GuildText]);
                 if (config.level.channelId === channel.id && config.level.announcement !== AnnouncementType.OTHER_CHANNEL)
                   return interaction.editReply(i18next.t('level.announcement.already_channel', { lng }));
-                const newSettings = await guildModel
-                  .findOneAndUpdate(
-                    { guildId },
-                    { $set: { ['level.channelId']: channel.id, ['level.announcement']: AnnouncementType.OTHER_CHANNEL } },
-                    { new: true, upsert: true }
-                  )
-                  .lean()
-                  .exec();
-                client.guildSettings.set(guildId, newSettings);
+                await client.updateGuildSettings(guildId, {
+                  $set: { ['level.channelId']: channel.id, ['level.announcement']: AnnouncementType.OTHER_CHANNEL },
+                });
                 interaction.editReply(i18next.t('level.announcement.other', { lng }));
               }
               break;
@@ -612,15 +598,7 @@ export default new Command({
               {
                 if (config.level.announcement === AnnouncementType.USER_CHANNEL)
                   return interaction.editReply(i18next.t('level.announcement.already_user', { lng }));
-                const newSettings = await guildModel
-                  .findOneAndUpdate(
-                    { guildId },
-                    { $set: { ['level.channelId']: undefined, ['level.announcement']: AnnouncementType.USER_CHANNEL } },
-                    { new: true, upsert: true }
-                  )
-                  .lean()
-                  .exec();
-                client.guildSettings.set(guildId, newSettings);
+                await client.updateGuildSettings(guildId, { $set: { ['level.channelId']: undefined, ['level.announcement']: AnnouncementType.USER_CHANNEL } });
                 interaction.editReply(i18next.t('level.announcement.user', { lng }));
               }
               break;
@@ -628,15 +606,9 @@ export default new Command({
               {
                 if (config.level.announcement === AnnouncementType.PRIVATE_MESSAGE)
                   return interaction.editReply(i18next.t('level.announcement.already_private', { lng }));
-                const newSettings = await guildModel
-                  .findOneAndUpdate(
-                    { guildId },
-                    { $set: { ['level.channelId']: undefined, ['level.announcement']: AnnouncementType.PRIVATE_MESSAGE } },
-                    { new: true, upsert: true }
-                  )
-                  .lean()
-                  .exec();
-                client.guildSettings.set(guildId, newSettings);
+                await client.updateGuildSettings(guildId, {
+                  $set: { ['level.channelId']: undefined, ['level.announcement']: AnnouncementType.PRIVATE_MESSAGE },
+                });
                 interaction.editReply(i18next.t('level.announcement.private', { lng }));
               }
               break;
@@ -653,11 +625,7 @@ export default new Command({
                 if (config.level.rewards.length >= 25) return interaction.editReply(i18next.t('level.rewards.limit', { lng }));
                 const currentRoles = config.level.rewards.map((reward) => reward.roleId);
                 if (currentRoles.includes(role.id)) return interaction.editReply(i18next.t('level.rewards.already', { lng }));
-                const newSettings = await guildModel
-                  .findOneAndUpdate({ guildId }, { $push: { ['level.rewards']: { level, roleId: role.id } } }, { new: true, upsert: true })
-                  .lean()
-                  .exec();
-                client.guildSettings.set(guildId, newSettings);
+                await client.updateGuildSettings(guildId, { $push: { ['level.rewards']: { level, roleId: role.id } } });
                 interaction.editReply(i18next.t('level.rewards.added', { lng, level, role: role.toString() }));
               }
               break;
@@ -666,11 +634,7 @@ export default new Command({
                 const roleId = options.getString('role-id', true);
                 const reward = config.level.rewards.find((rw) => rw.roleId === roleId);
                 if (!reward) return interaction.editReply(i18next.t('level.rewards.invalid', { lng }));
-                const newSettings = await guildModel
-                  .findOneAndUpdate({ guildId }, { $pull: { ['level.rewards']: { _id: reward._id } } }, { new: true, upsert: true })
-                  .lean()
-                  .exec();
-                client.guildSettings.set(guildId, newSettings);
+                await client.updateGuildSettings(guildId, { $pull: { ['level.rewards']: { _id: reward._id } } });
                 interaction.editReply(i18next.t('level.rewards.removed', { lng }));
               }
               break;
@@ -685,11 +649,7 @@ export default new Command({
                 const role = options.getRole('role', true);
                 if (config.level.ignoredRoles.includes(role.id)) return interaction.editReply(i18next.t('level.ignored_roles.already', { lng }));
                 if (config.level.ignoredRoles.length >= 25) return interaction.editReply(i18next.t('level.ignored_roles.limit', { lng }));
-                const newSettings = await guildModel
-                  .findOneAndUpdate({ guildId }, { $push: { ['level.ignoredRoles']: role.id } }, { new: true, upsert: true })
-                  .lean()
-                  .exec();
-                client.guildSettings.set(guildId, newSettings);
+                await client.updateGuildSettings(guildId, { $push: { ['level.ignoredRoles']: role.id } });
                 interaction.editReply(i18next.t('level.ignored_roles.added', { lng, role: role.toString() }));
               }
               break;
@@ -697,11 +657,7 @@ export default new Command({
               {
                 const roleId = options.getString('role-id', true);
                 if (!config.level.ignoredRoles.includes(roleId)) return interaction.editReply(i18next.t('level.ignored_roles.invalid', { lng }));
-                const newSettings = await guildModel
-                  .findOneAndUpdate({ guildId }, { $pull: { ['level.ignoredRoles']: roleId } }, { new: true, upsert: true })
-                  .lean()
-                  .exec();
-                client.guildSettings.set(guildId, newSettings);
+                await client.updateGuildSettings(guildId, { $pull: { ['level.ignoredRoles']: roleId } });
                 interaction.editReply(i18next.t('level.ignored_roles.removed', { lng }));
               }
               break;
@@ -716,11 +672,7 @@ export default new Command({
                 const channel = options.getChannel('channel', true, [ChannelType.GuildText]);
                 if (config.level.ignoredChannels.includes(channel.id)) return interaction.editReply(i18next.t('level.ignored_channels.already', { lng }));
                 if (config.level.ignoredChannels.length >= 25) return interaction.editReply(i18next.t('level.ignored_channels.limit', { lng }));
-                const newSettings = await guildModel
-                  .findOneAndUpdate({ guildId }, { $push: { ['level.ignoredChannels']: channel.id } }, { new: true, upsert: true })
-                  .lean()
-                  .exec();
-                client.guildSettings.set(guildId, newSettings);
+                await client.updateGuildSettings(guildId, { $push: { ['level.ignoredChannels']: channel.id } });
                 interaction.editReply(i18next.t('level.ignored_channels.added', { lng, channel: channel.toString() }));
               }
               break;
@@ -728,11 +680,7 @@ export default new Command({
               {
                 const channelId = options.getString('channel-id', true);
                 if (!config.level.ignoredChannels.includes(channelId)) return interaction.editReply(i18next.t('level.ignored_channels.invalid', { lng }));
-                const newSettings = await guildModel
-                  .findOneAndUpdate({ guildId }, { $pull: { ['level.ignoredChannels']: channelId } }, { new: true, upsert: true })
-                  .lean()
-                  .exec();
-                client.guildSettings.set(guildId, newSettings);
+                await client.updateGuildSettings(guildId, { $pull: { ['level.ignoredChannels']: channelId } });
                 interaction.editReply(i18next.t('level.ignored_channels.removed', { lng }));
               }
               break;
@@ -747,11 +695,7 @@ export default new Command({
                 const channel = options.getChannel('channel', true, [ChannelType.GuildText]);
                 if (config.level.enabledChannels.includes(channel.id)) return interaction.editReply(i18next.t('level.enabled_channels.already', { lng }));
                 if (config.level.enabledChannels.length >= 25) return interaction.editReply(i18next.t('level.enabled_channels.limit', { lng }));
-                const newSettings = await guildModel
-                  .findOneAndUpdate({ guildId }, { $push: { ['level.enabledChannels']: channel.id } }, { new: true, upsert: true })
-                  .lean()
-                  .exec();
-                client.guildSettings.set(guildId, newSettings);
+                await client.updateGuildSettings(guildId, { $push: { ['level.enabledChannels']: channel.id } });
                 interaction.editReply(i18next.t('level.enabled_channels.added', { lng, channel: channel.toString() }));
               }
               break;
@@ -759,11 +703,7 @@ export default new Command({
               {
                 const channelId = options.getString('channel-id', true);
                 if (!config.level.enabledChannels.includes(channelId)) return interaction.editReply(i18next.t('level.enabled_channels.invalid', { lng }));
-                const newSettings = await guildModel
-                  .findOneAndUpdate({ guildId }, { $pull: { ['level.enabledChannels']: channelId } }, { new: true, upsert: true })
-                  .lean()
-                  .exec();
-                client.guildSettings.set(guildId, newSettings);
+                await client.updateGuildSettings(guildId, { $pull: { ['level.enabledChannels']: channelId } });
                 interaction.editReply(i18next.t('level.enabled_channels.removed', { lng }));
               }
               break;
@@ -782,7 +722,7 @@ export default new Command({
 
                 const xp = options.getInteger('xp', true);
                 const userLevel = await addXP({ userId: user.id, guildId }, client, xp);
-                const rewards = await getLevelRewards(userLevel);
+                const rewards = await getLevelRewards(client, userLevel);
 
                 if (member && rewards.length) {
                   await member.roles.add(rewards.map((reward) => reward.roleId)).catch(() => {});
@@ -801,8 +741,8 @@ export default new Command({
                 const xp = options.getInteger('xp', true);
                 const currentLevel = await getDataOrCreate({ userId: user.id, guildId }, client);
                 const userLevel = await addXP({ userId: user.id, guildId }, client, -xp);
-                const oldRewards = await getLevelRewards(currentLevel);
-                const newRewards = await getLevelRewards(userLevel);
+                const oldRewards = await getLevelRewards(client, currentLevel);
+                const newRewards = await getLevelRewards(client, userLevel);
 
                 if (member && (oldRewards.length || newRewards.length)) {
                   await member.roles
@@ -825,7 +765,7 @@ export default new Command({
 
                 const xp = options.getInteger('xp', true);
                 const userLevel = await setXP({ userId: user.id, guildId }, client, xp);
-                const rewards = await getLevelRewards(userLevel);
+                const rewards = await getLevelRewards(client, userLevel);
 
                 if (member && rewards.length) {
                   await member.roles.add(rewards.map((reward) => reward.roleId)).catch(() => {});
@@ -849,7 +789,7 @@ export default new Command({
 
                 const level = options.getInteger('level', true);
                 const userLevel = await addLevel({ userId: user.id, guildId }, client, level);
-                const rewards = await getLevelRewards(userLevel);
+                const rewards = await getLevelRewards(client, userLevel);
 
                 if (member && rewards.length) {
                   await member.roles.add(rewards.map((reward) => reward.roleId)).catch(() => {});
@@ -868,8 +808,8 @@ export default new Command({
                 const level = options.getInteger('level', true);
                 const currentLevel = await getDataOrCreate({ userId: user.id, guildId }, client);
                 const userLevel = await addLevel({ userId: user.id, guildId }, client, -level);
-                const oldRewards = await getLevelRewards(currentLevel);
-                const newRewards = await getLevelRewards(userLevel);
+                const oldRewards = await getLevelRewards(client, currentLevel);
+                const newRewards = await getLevelRewards(client, userLevel);
 
                 if (member && (oldRewards.length || newRewards.length)) {
                   await member.roles
@@ -894,7 +834,7 @@ export default new Command({
 
                 const level = options.getInteger('level', true);
                 const userLevel = await setLevel({ userId: user.id, guildId }, client, level);
-                const rewards = await getLevelRewards(userLevel);
+                const rewards = await getLevelRewards(client, userLevel);
 
                 if (member && rewards.length) {
                   await member.roles.add(rewards.map((reward) => reward.roleId)).catch(() => {});

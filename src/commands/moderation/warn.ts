@@ -51,8 +51,8 @@ export default new Command({
 
     const target = options.getUser('user', true);
 
-    const lng = await client.getLanguage(interaction.user.id);
-    const targetLng = await client.getLanguage(target.id);
+    const lng = await client.getUserLanguage(interaction.user.id);
+    const targetLng = await client.getUserLanguage(target.id);
 
     const reason = options.getString('reason', false) ?? undefined;
 

@@ -8,7 +8,7 @@ export default new Modal({
   customId: 'modal_math',
   async execute({ interaction, client }) {
     await interaction.deferReply();
-    const lng = await client.getLanguage(interaction.user.id);
+    const lng = await client.getUserLanguage(interaction.user.id);
 
     const input = interaction.fields.getTextInputValue('expression');
 

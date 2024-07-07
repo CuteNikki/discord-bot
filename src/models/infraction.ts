@@ -19,6 +19,6 @@ export const infractionModel = mongoose.model(
     createdAt: { type: Number, default: Date.now() },
     reason: { type: String, required: false },
     endsAt: { type: Number, required: false },
-    ended: { type: Boolean, default: true },
+    closed: { type: Boolean, default: true },
   })
 );

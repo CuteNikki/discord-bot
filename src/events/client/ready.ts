@@ -7,7 +7,6 @@ export default new Event({
   once: true,
   execute(client) {
     setTimeout(() => {
-      client.usable = true;
       logger.info(`[${client.cluster.id}] Client is ready`);
     }, 5000);
   },

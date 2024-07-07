@@ -7,12 +7,12 @@ export default new Event({
   name: Events.InteractionCreate,
   once: false,
   async execute(client, interaction) {
-    if (!interaction.isAutocomplete() || !client.usable) return;
+    if (!interaction.isAutocomplete()) return;
 
     const command = client.commands.get(interaction.commandName);
     if (!command || !command.options.autocomplete) return;
 
-    const user = await client.getUserSettings(interaction.user.id);
+    const user = await client.getUserData(interaction.user.id);
     if (user.banned) return;
 
     try {

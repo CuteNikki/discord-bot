@@ -1,113 +1,114 @@
 import { CronJob } from 'cron';
+import type { Client } from 'discord.js';
 import mongoose from 'mongoose';
 
-import type { DiscordClient } from 'classes/client';
+import { DiscordClient } from 'classes/client';
 
-import { clientModel } from 'models/client';
 import { guildModel } from 'models/guild';
-import { InfractionType, infractionModel } from 'models/infraction';
+import { infractionModel, InfractionType } from 'models/infraction';
 import { userModel } from 'models/user';
 import { weeklyLevelModel } from 'models/weeklyLevels';
 
 import { keys } from 'utils/keys';
 import { logger } from 'utils/logger';
 
-export function connectDatabase(client: DiscordClient) {
+export function initDatabase(client: DiscordClient) {
   mongoose
     .connect(keys.DATABASE_URI)
     .then(() => {
-      logger.info(`[${client.cluster.id}] Connected to database`);
+      logger.info(`[${client.cluster.id}] Successfully connected to database`);
 
-      // Takes care of anything DB related
-      manage(client);
+      client.once('ready', (readyClient) => {
+        collectUserLanguages(client); // Set clients user language collection
+        collectGuildSettings(client); // Set clients guild settings collection
+
+        CronJob.from({
+          cronTime: '* * * * *',
+          onTick: () => {
+            clearExpiredInfractions(client); // Handle expired infractions
+            clearWeekly(client, readyClient); // Handle weekly clear
+          },
+          start: true,
+        });
+      });
     })
-    .catch((err) => logger.error(err, `[${client.cluster.id}] Could not connect to database`));
+    .catch((err) => logger.error(err, `[${client.cluster.id}] Failed connection to database`));
 }
 
-export async function manage(client: DiscordClient) {
-  client.once('ready', () => {
-    // Cache commonly used stuff
-    cacheLanguages(client);
-    cacheGuildSettings(client);
-
-    // Interval to take care of anything that expires
-    CronJob.from({
-      cronTime: '* * * * *',
-      onTick: async () => {
-        await manageInfractions(client);
-        await clearWeeklyLevels(client);
-      },
-      start: true,
-    });
-  });
+async function collectUserLanguages(client: DiscordClient) {
+  // Loop through each cached user and set language
+  for (const user of client.users.cache.values()) {
+    const userData = await userModel.findOne({ userId: user.id, banned: false }, {}, { upsert: false }).lean().exec();
+    if (userData && userData.language && !user.bot) client.userLanguages.set(user.id, userData.language ?? client.supportedLanguages[0]);
+  }
+  // Notify about collected languages
+  logger.info(`[${client.cluster.id}] Collected ${client.userLanguages.size} user languages`);
+}
+async function collectGuildSettings(client: DiscordClient) {
+  // Loop through each cached guild and set settings if found
+  for (const guild of client.guilds.cache.values()) {
+    const guildSettings = await guildModel.findOne({ guildId: guild.id, banned: false }, {}, { upsert: false }).lean().exec();
+    if (guildSettings) client.guildSettings.set(guild.id, guildSettings);
+  }
+  // Notify about collected guild settings
+  logger.info(`[${client.cluster.id}] Collected ${client.guildSettings.size} guild settings`);
 }
 
-async function clearWeeklyLevels(client: DiscordClient) {
-  const ONE_WEEK = 604800000;
+async function clearWeekly(client: DiscordClient, readyClient: Client<true>) {
+  const WEEK = 604800000;
   const NOW = Date.now();
 
-  async function wipe() {
-    await clientModel
-      .findOneAndUpdate({ clientId: keys.DISCORD_BOT_ID }, { $set: { lastWeeklyLevelClear: NOW } }, { upsert: true, new: true })
-      .lean()
-      .exec();
-    const level = await weeklyLevelModel.deleteMany({});
-    client.levelWeekly.clear();
-    return logger.info(`[${client.cluster.id}] Cleared ${level.deletedCount} weekly level`);
-  }
+  const applicationId = readyClient.application.id;
+  const { database } = await client.getClientSettings(applicationId);
 
-  const clientSettings = await clientModel.findOneAndUpdate({ clientId: keys.DISCORD_BOT_ID }, {}, { upsert: true, new: true }).lean().exec();
-  if (!clientSettings.lastWeeklyLevelClear) {
-    return await wipe();
-  }
-  if (NOW > clientSettings.lastWeeklyLevelClear + ONE_WEEK) {
-    return await wipe();
+  // If now is bigger than last weekly clear plus a week
+  if (NOW > database.lastWeeklyClear + WEEK) {
+    // Clear weekly level
+    clearWeeklyLevel(client, applicationId);
   }
 }
 
-export async function cacheLanguages(client: DiscordClient) {
-  // Loop through users set their preferred language
-  for (const user of client.users.cache.values()) {
-    const userData = await userModel.findOne({ userId: user.id }, {}, { upsert: false }).lean().exec();
-    if (userData && userData.language) client.userLanguages.set(user.id, userData.language);
-  }
+async function clearWeeklyLevel(client: DiscordClient, applicationId: string) {
+  // Clear weekly level model and cache
+  const clearedLevel = await weeklyLevelModel.deleteMany({});
+  client.levelWeekly.clear();
 
-  logger.info(`[${client.cluster.id}] ${client.userLanguages.size} user language preferences cached`);
+  // Notify that weekly level have been cleared
+  logger.info(`[${client.cluster.id}] Cleared ${clearedLevel.deletedCount} weekly level`);
+
+  // Update last weekly level clear with current date
+  await client.updateClientSettings(applicationId, { $set: { ['database.lastWeeklyClear']: Date.now() } });
 }
 
-export async function cacheGuildSettings(client: DiscordClient) {
-  for (const guild of client.guilds.cache.values()) {
-    const guildData = await guildModel.findOne({ guildId: guild.id }, {}, { upsert: false }).lean().exec();
-    if (guildData) client.guildSettings.set(guild.id, guildData);
-  }
-  logger.info(`[${client.cluster.id}] ${client.guildSettings.size} guild settings cached`);
-}
-
-export async function manageInfractions(client: DiscordClient) {
-  // Grab infractions where ended is false and the endsAt is less than or equal to the current time
-  const infractions = await infractionModel
-    .find({ ended: false, endsAt: { $lte: Date.now() } })
+async function clearExpiredInfractions(client: DiscordClient) {
+  // Fetch all expired infractions that have not been closed yet
+  const expiredInfractions = await infractionModel
+    .find({ closed: false, endsAt: { $lte: Date.now() } })
     .lean()
     .exec();
 
-  const cleanedInfractions: any[] = [];
-  for (const infraction of infractions) {
-    // Unban users from guilds if their temporary ban expired
+  const closedInfractions = [];
+
+  for (const infraction of expiredInfractions) {
     if (infraction.action === InfractionType.TEMPBAN) {
-      const guild = client.guilds.cache.get(infraction.guildId);
-      if (guild) {
-        const removed = await guild.bans.remove(infraction.userId, 'Temporary ban has expired').catch(() => {});
-        if (removed) {
-          await infractionModel.findByIdAndUpdate(infraction._id, { $set: { ended: true } });
-          cleanedInfractions.push(infraction);
-        }
-      }
+      // Fetch the infraction's guild to unban the user
+      const guild = await client.guilds.fetch(infraction.guildId).catch(() => {});
+      // If we can't find the guild, we can't unban so we close the infraction
+      if (!guild) return closeInfraction();
+      // If we have a guild, we try to unban the user and close the infraction
+      await guild.bans.remove(infraction.userId, 'Temporary Ban has expired').catch(() => {});
+      closeInfraction();
     } else if (infraction.action === InfractionType.TIMEOUT) {
-      // Discord takes care of removing timeouts for us so we only need to set ended to true
-      await infractionModel.findByIdAndUpdate(infraction._id, { $set: { ended: true } });
-      cleanedInfractions.push(infraction);
+      // Discord handles timeouts for us so we don't need to fetch the guild and remove the timeout
+      closeInfraction();
+    }
+
+    async function closeInfraction() {
+      await infractionModel.findByIdAndUpdate(infraction._id, { $set: { closed: true } });
+      closedInfractions.push();
     }
   }
 
-  if (cleanedInfractions.length > 0) logger.info(`[${client.cluster.id}] Cleaned up ${cleanedInfractions.length}/${infractions.length} infractions`);
+  // Notify about closed infractions
+  if (closedInfractions.length > 0) logger.info(`[${client.cluster.id}] Closed ${closedInfractions.length} infractions`);
 }

@@ -4,7 +4,7 @@ import i18next from 'i18next';
 
 import { logger } from 'utils/logger';
 
-export async function managePlayer(client: DiscordClient) {
+export async function initMusicPlayer(client: DiscordClient) {
   const player = client.player;
 
   // await player.extractors.loadDefault((extractor) => extractor === 'SoundCloudExtractor');
@@ -15,7 +15,7 @@ export async function managePlayer(client: DiscordClient) {
   });
 
   player.events.on('playerStart', async (queue, track) => {
-    const lng = await client.getLanguage(track.requestedBy?.id);
+    const lng = await client.getUserLanguage(track.requestedBy?.id);
 
     queue.metadata.channel
       .send({
@@ -39,7 +39,7 @@ export async function managePlayer(client: DiscordClient) {
       .catch(() => {});
   });
   player.events.on('emptyQueue', async (queue) => {
-    const lng = await client.getLanguage(queue.history.tracks.toArray()[queue.history.tracks.toArray().length - 1].requestedBy?.id);
+    const lng = await client.getUserLanguage(queue.history.tracks.toArray()[queue.history.tracks.toArray().length - 1].requestedBy?.id);
 
     queue.metadata.channel
       .send({
@@ -53,7 +53,7 @@ export async function managePlayer(client: DiscordClient) {
       .catch(() => {});
   });
   player.events.on('emptyChannel', async (queue) => {
-    const lng = await client.getLanguage(queue.history.tracks.toArray()[queue.history.tracks.toArray().length - 1].requestedBy?.id);
+    const lng = await client.getUserLanguage(queue.history.tracks.toArray()[queue.history.tracks.toArray().length - 1].requestedBy?.id);
 
     queue.metadata.channel
       .send({

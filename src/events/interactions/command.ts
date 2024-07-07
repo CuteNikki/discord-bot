@@ -11,15 +11,15 @@ export default new Event({
   name: Events.InteractionCreate,
   async execute(client, interaction) {
     // Since we only want the command interactions we return early if the interaction is not a command
-    if (!interaction.isCommand() || !client.usable) return;
+    if (!interaction.isCommand()) return;
 
-    const lng = await client.getLanguage(interaction.user.id);
+    const lng = await client.getUserLanguage(interaction.user.id);
 
     // Get the command with the interactions command name and return if it wasn't found
     const command = client.commands.get(interaction.commandName);
     if (!command) return;
 
-    const user = await client.getUserSettings(interaction.user.id);
+    const user = await client.getUserData(interaction.user.id);
     if (user.banned) return;
 
     // Only allowing commands if their module is enabled

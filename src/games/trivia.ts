@@ -45,7 +45,7 @@ export class Trivia {
     const interaction = this.options.interaction;
     const user = interaction.user;
     const client = this.options.client;
-    const lng = await client.getLanguage(user.id);
+    const lng = await client.getUserLanguage(user.id);
 
     const trivia = await this.getTrivia();
     if (!trivia) return interaction.editReply({ content: i18next.t('games.trivia.error', { lng }), embeds: [], components: [] }).catch(() => {});
@@ -77,7 +77,7 @@ export class Trivia {
       if (buttonInteraction.user.id !== user.id)
         return buttonInteraction
           .followUp({
-            content: i18next.t('interactions.author_only', { lng: await client.getLanguage(buttonInteraction.user.id) }),
+            content: i18next.t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
             ephemeral: true,
           })
           .catch(() => {});

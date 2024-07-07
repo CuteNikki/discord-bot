@@ -94,7 +94,7 @@ export default new Command({
     const { options, user } = interaction;
     const ephemeral = options.getBoolean('ephemeral', false) ?? true;
     await interaction.deferReply({ ephemeral });
-    const lng = await client.getLanguage(user.id);
+    const lng = await client.getUserLanguage(user.id);
 
     const userLocation = options.getString('location', true);
     const days = options.getString('days', false) ?? '1';

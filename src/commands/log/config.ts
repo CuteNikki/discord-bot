@@ -3,7 +3,7 @@ import i18next from 'i18next';
 
 import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
 
-import { availableEvents, guildModel } from 'models/guild';
+import { availableEvents } from 'models/guild';
 
 export default new Command({
   module: Modules.CONFIG,
@@ -124,7 +124,7 @@ export default new Command({
     if (!interaction.inCachedGuild()) return;
     const { options, guildId } = interaction;
     await interaction.deferReply({ ephemeral: true });
-    const lng = await client.getLanguage(interaction.user.id);
+    const lng = await client.getUserLanguage(interaction.user.id);
 
     const config = await client.getGuildSettings(guildId);
     const events = availableEvents
@@ -190,126 +190,104 @@ export default new Command({
                 const event = events.find((e) => e.name.toLowerCase() === eventName.toLowerCase());
 
                 if (eventName.toLowerCase() === 'recommended') {
-                  const newSettings = await guildModel
-                    .findOneAndUpdate(
-                      { guildId },
-                      {
-                        $set: {
-                          ['log.events']: {
-                            applicationCommandPermissionsUpdate: config.log.events.applicationCommandPermissionsUpdate,
-                            autoModerationActionExecution: config.log.events.autoModerationActionExecution,
-                            autoModerationRuleCreate: config.log.events.autoModerationRuleCreate,
-                            autoModerationRuleDelete: config.log.events.autoModerationRuleDelete,
-                            autoModerationRuleUpdate: config.log.events.autoModerationRuleUpdate,
-                            channelCreate: true,
-                            channelDelete: true,
-                            channelUpdate: true,
-                            emojiCreate: true,
-                            emojiDelete: true,
-                            emojiUpdate: true,
-                            guildBanAdd: true,
-                            guildBanRemove: true,
-                            guildMemberAdd: true,
-                            guildMemberRemove: true,
-                            guildMemberUpdate: true,
-                            guildScheduledEventCreate: config.log.events.guildScheduledEventCreate,
-                            guildScheduledEventDelete: config.log.events.guildScheduledEventDelete,
-                            guildScheduledEventUpdate: config.log.events.guildScheduledEventUpdate,
-                            guildScheduledEventUserAdd: config.log.events.guildScheduledEventUserAdd,
-                            guildScheduledEventUserRemove: config.log.events.guildScheduledEventUserRemove,
-                            guildUpdate: true,
-                            inviteCreate: config.log.events.inviteCreate,
-                            inviteDelete: config.log.events.inviteDelete,
-                            messageUpdate: true,
-                            messageDelete: true,
-                            messageBulkDelete: true,
-                            messageReactionRemoveAll: true,
-                            roleCreate: true,
-                            roleDelete: true,
-                            roleUpdate: true,
-                            stickerCreate: true,
-                            stickerDelete: true,
-                            stickerUpdate: true,
-                            threadCreate: config.log.events.threadCreate,
-                            threadDelete: config.log.events.threadDelete,
-                            threadUpdate: config.log.events.threadUpdate,
-                            voiceStateUpdate: config.log.events.voiceStateUpdate,
-                          },
-                        },
+                  await client.updateGuildSettings(guildId, {
+                    $set: {
+                      ['log.events']: {
+                        applicationCommandPermissionsUpdate: config.log.events.applicationCommandPermissionsUpdate,
+                        autoModerationActionExecution: config.log.events.autoModerationActionExecution,
+                        autoModerationRuleCreate: config.log.events.autoModerationRuleCreate,
+                        autoModerationRuleDelete: config.log.events.autoModerationRuleDelete,
+                        autoModerationRuleUpdate: config.log.events.autoModerationRuleUpdate,
+                        channelCreate: true,
+                        channelDelete: true,
+                        channelUpdate: true,
+                        emojiCreate: true,
+                        emojiDelete: true,
+                        emojiUpdate: true,
+                        guildBanAdd: true,
+                        guildBanRemove: true,
+                        guildMemberAdd: true,
+                        guildMemberRemove: true,
+                        guildMemberUpdate: true,
+                        guildScheduledEventCreate: config.log.events.guildScheduledEventCreate,
+                        guildScheduledEventDelete: config.log.events.guildScheduledEventDelete,
+                        guildScheduledEventUpdate: config.log.events.guildScheduledEventUpdate,
+                        guildScheduledEventUserAdd: config.log.events.guildScheduledEventUserAdd,
+                        guildScheduledEventUserRemove: config.log.events.guildScheduledEventUserRemove,
+                        guildUpdate: true,
+                        inviteCreate: config.log.events.inviteCreate,
+                        inviteDelete: config.log.events.inviteDelete,
+                        messageUpdate: true,
+                        messageDelete: true,
+                        messageBulkDelete: true,
+                        messageReactionRemoveAll: true,
+                        roleCreate: true,
+                        roleDelete: true,
+                        roleUpdate: true,
+                        stickerCreate: true,
+                        stickerDelete: true,
+                        stickerUpdate: true,
+                        threadCreate: config.log.events.threadCreate,
+                        threadDelete: config.log.events.threadDelete,
+                        threadUpdate: config.log.events.threadUpdate,
+                        voiceStateUpdate: config.log.events.voiceStateUpdate,
                       },
-                      { new: true, upsert: true }
-                    )
-                    .lean()
-                    .exec();
-                  client.guildSettings.set(guildId, newSettings);
-
+                    },
+                  });
                   return interaction.editReply(i18next.t('log.events.enabled', { lng }));
                 }
                 if (eventName.toLowerCase() === 'all') {
-                  const newSettings = await guildModel
-                    .findOneAndUpdate(
-                      { guildId },
-                      {
-                        $set: {
-                          ['log.events']: {
-                            applicationCommandPermissionsUpdate: true,
-                            autoModerationActionExecution: true,
-                            autoModerationRuleCreate: true,
-                            autoModerationRuleDelete: true,
-                            autoModerationRuleUpdate: true,
-                            channelCreate: true,
-                            channelDelete: true,
-                            channelUpdate: true,
-                            emojiCreate: true,
-                            emojiDelete: true,
-                            emojiUpdate: true,
-                            guildBanAdd: true,
-                            guildBanRemove: true,
-                            guildMemberAdd: true,
-                            guildMemberRemove: true,
-                            guildMemberUpdate: true,
-                            guildScheduledEventCreate: true,
-                            guildScheduledEventDelete: true,
-                            guildScheduledEventUpdate: true,
-                            guildScheduledEventUserAdd: true,
-                            guildScheduledEventUserRemove: true,
-                            guildUpdate: true,
-                            inviteCreate: true,
-                            inviteDelete: true,
-                            messageUpdate: true,
-                            messageDelete: true,
-                            messageBulkDelete: true,
-                            messageReactionRemoveAll: true,
-                            roleCreate: true,
-                            roleDelete: true,
-                            roleUpdate: true,
-                            stickerCreate: true,
-                            stickerDelete: true,
-                            stickerUpdate: true,
-                            threadCreate: true,
-                            threadDelete: true,
-                            threadUpdate: true,
-                            voiceStateUpdate: true,
-                          },
-                        },
+                  await client.updateGuildSettings(guildId, {
+                    $set: {
+                      ['log.events']: {
+                        applicationCommandPermissionsUpdate: true,
+                        autoModerationActionExecution: true,
+                        autoModerationRuleCreate: true,
+                        autoModerationRuleDelete: true,
+                        autoModerationRuleUpdate: true,
+                        channelCreate: true,
+                        channelDelete: true,
+                        channelUpdate: true,
+                        emojiCreate: true,
+                        emojiDelete: true,
+                        emojiUpdate: true,
+                        guildBanAdd: true,
+                        guildBanRemove: true,
+                        guildMemberAdd: true,
+                        guildMemberRemove: true,
+                        guildMemberUpdate: true,
+                        guildScheduledEventCreate: true,
+                        guildScheduledEventDelete: true,
+                        guildScheduledEventUpdate: true,
+                        guildScheduledEventUserAdd: true,
+                        guildScheduledEventUserRemove: true,
+                        guildUpdate: true,
+                        inviteCreate: true,
+                        inviteDelete: true,
+                        messageUpdate: true,
+                        messageDelete: true,
+                        messageBulkDelete: true,
+                        messageReactionRemoveAll: true,
+                        roleCreate: true,
+                        roleDelete: true,
+                        roleUpdate: true,
+                        stickerCreate: true,
+                        stickerDelete: true,
+                        stickerUpdate: true,
+                        threadCreate: true,
+                        threadDelete: true,
+                        threadUpdate: true,
+                        voiceStateUpdate: true,
                       },
-                      { new: true, upsert: true }
-                    )
-                    .lean()
-                    .exec();
-                  client.guildSettings.set(guildId, newSettings);
-
+                    },
+                  });
                   return interaction.editReply(i18next.t('log.events.enabled', { lng }));
                 }
 
                 if (!event) return interaction.editReply(i18next.t('log.events.invalid', { lng }));
                 if (event.enabled) return interaction.editReply(i18next.t('log.events.already_enabled', { lng }));
 
-                const newSettings = await guildModel
-                  .findOneAndUpdate({ guildId }, { $set: { [`log.events.${event.name}`]: true } }, { new: true, upsert: true })
-                  .lean()
-                  .exec();
-                client.guildSettings.set(guildId, newSettings);
+                await client.updateGuildSettings(guildId, { $set: { [`log.events.${event.name}`]: true } });
                 interaction.editReply(i18next.t('log.events.enabled', { lng }));
               }
               break;
@@ -319,126 +297,104 @@ export default new Command({
                 const event = events.find((e) => e.name.toLowerCase() === eventName.toLowerCase());
 
                 if (eventName.toLowerCase() === 'recommended') {
-                  const newSettings = await guildModel
-                    .findOneAndUpdate(
-                      { guildId },
-                      {
-                        $set: {
-                          ['log.events']: {
-                            applicationCommandPermissionsUpdate: false,
-                            autoModerationActionExecution: false,
-                            autoModerationRuleCreate: false,
-                            autoModerationRuleDelete: false,
-                            autoModerationRuleUpdate: false,
-                            channelCreate: config.log.events.channelCreate,
-                            channelDelete: config.log.events.channelDelete,
-                            channelUpdate: config.log.events.channelUpdate,
-                            emojiCreate: config.log.events.emojiCreate,
-                            emojiDelete: config.log.events.emojiDelete,
-                            emojiUpdate: config.log.events.emojiUpdate,
-                            guildBanAdd: config.log.events.guildBanAdd,
-                            guildBanRemove: config.log.events.guildBanRemove,
-                            guildMemberAdd: config.log.events.guildMemberAdd,
-                            guildMemberRemove: config.log.events.guildMemberRemove,
-                            guildMemberUpdate: config.log.events.guildMemberUpdate,
-                            guildScheduledEventCreate: false,
-                            guildScheduledEventDelete: false,
-                            guildScheduledEventUpdate: false,
-                            guildScheduledEventUserAdd: false,
-                            guildScheduledEventUserRemove: false,
-                            guildUpdate: config.log.events.guildUpdate,
-                            inviteCreate: false,
-                            inviteDelete: false,
-                            messageUpdate: config.log.events.messageUpdate,
-                            messageDelete: config.log.events.messageDelete,
-                            messageBulkDelete: config.log.events.messageBulkDelete,
-                            messageReactionRemoveAll: config.log.events.messageReactionRemoveAll,
-                            roleCreate: config.log.events.roleCreate,
-                            roleDelete: config.log.events.roleDelete,
-                            roleUpdate: config.log.events.roleUpdate,
-                            stickerCreate: config.log.events.stickerCreate,
-                            stickerDelete: config.log.events.stickerDelete,
-                            stickerUpdate: config.log.events.stickerUpdate,
-                            threadCreate: false,
-                            threadDelete: false,
-                            threadUpdate: false,
-                            voiceStateUpdate: false,
-                          },
-                        },
+                  await client.updateGuildSettings(guildId, {
+                    $set: {
+                      ['log.events']: {
+                        applicationCommandPermissionsUpdate: false,
+                        autoModerationActionExecution: false,
+                        autoModerationRuleCreate: false,
+                        autoModerationRuleDelete: false,
+                        autoModerationRuleUpdate: false,
+                        channelCreate: config.log.events.channelCreate,
+                        channelDelete: config.log.events.channelDelete,
+                        channelUpdate: config.log.events.channelUpdate,
+                        emojiCreate: config.log.events.emojiCreate,
+                        emojiDelete: config.log.events.emojiDelete,
+                        emojiUpdate: config.log.events.emojiUpdate,
+                        guildBanAdd: config.log.events.guildBanAdd,
+                        guildBanRemove: config.log.events.guildBanRemove,
+                        guildMemberAdd: config.log.events.guildMemberAdd,
+                        guildMemberRemove: config.log.events.guildMemberRemove,
+                        guildMemberUpdate: config.log.events.guildMemberUpdate,
+                        guildScheduledEventCreate: false,
+                        guildScheduledEventDelete: false,
+                        guildScheduledEventUpdate: false,
+                        guildScheduledEventUserAdd: false,
+                        guildScheduledEventUserRemove: false,
+                        guildUpdate: config.log.events.guildUpdate,
+                        inviteCreate: false,
+                        inviteDelete: false,
+                        messageUpdate: config.log.events.messageUpdate,
+                        messageDelete: config.log.events.messageDelete,
+                        messageBulkDelete: config.log.events.messageBulkDelete,
+                        messageReactionRemoveAll: config.log.events.messageReactionRemoveAll,
+                        roleCreate: config.log.events.roleCreate,
+                        roleDelete: config.log.events.roleDelete,
+                        roleUpdate: config.log.events.roleUpdate,
+                        stickerCreate: config.log.events.stickerCreate,
+                        stickerDelete: config.log.events.stickerDelete,
+                        stickerUpdate: config.log.events.stickerUpdate,
+                        threadCreate: false,
+                        threadDelete: false,
+                        threadUpdate: false,
+                        voiceStateUpdate: false,
                       },
-                      { new: true, upsert: true }
-                    )
-                    .lean()
-                    .exec();
-                  client.guildSettings.set(guildId, newSettings);
-
+                    },
+                  });
                   return interaction.editReply(i18next.t('log.events.disabled', { lng }));
                 }
                 if (eventName.toLowerCase() === 'all') {
-                  const newSettings = await guildModel
-                    .findOneAndUpdate(
-                      { guildId },
-                      {
-                        $set: {
-                          ['log.events']: {
-                            applicationCommandPermissionsUpdate: false,
-                            autoModerationActionExecution: false,
-                            autoModerationRuleCreate: false,
-                            autoModerationRuleDelete: false,
-                            autoModerationRuleUpdate: false,
-                            channelCreate: false,
-                            channelDelete: false,
-                            channelUpdate: false,
-                            emojiCreate: false,
-                            emojiDelete: false,
-                            emojiUpdate: false,
-                            guildBanAdd: false,
-                            guildBanRemove: false,
-                            guildMemberAdd: false,
-                            guildMemberRemove: false,
-                            guildMemberUpdate: false,
-                            guildScheduledEventCreate: false,
-                            guildScheduledEventDelete: false,
-                            guildScheduledEventUpdate: false,
-                            guildScheduledEventUserAdd: false,
-                            guildScheduledEventUserRemove: false,
-                            guildUpdate: false,
-                            inviteCreate: false,
-                            inviteDelete: false,
-                            messageUpdate: false,
-                            messageDelete: false,
-                            messageBulkDelete: false,
-                            messageReactionRemoveAll: false,
-                            roleCreate: false,
-                            roleDelete: false,
-                            roleUpdate: false,
-                            stickerCreate: false,
-                            stickerDelete: false,
-                            stickerUpdate: false,
-                            threadCreate: false,
-                            threadDelete: false,
-                            threadUpdate: false,
-                            voiceStateUpdate: false,
-                          },
-                        },
+                  await client.updateGuildSettings(guildId, {
+                    $set: {
+                      ['log.events']: {
+                        applicationCommandPermissionsUpdate: false,
+                        autoModerationActionExecution: false,
+                        autoModerationRuleCreate: false,
+                        autoModerationRuleDelete: false,
+                        autoModerationRuleUpdate: false,
+                        channelCreate: false,
+                        channelDelete: false,
+                        channelUpdate: false,
+                        emojiCreate: false,
+                        emojiDelete: false,
+                        emojiUpdate: false,
+                        guildBanAdd: false,
+                        guildBanRemove: false,
+                        guildMemberAdd: false,
+                        guildMemberRemove: false,
+                        guildMemberUpdate: false,
+                        guildScheduledEventCreate: false,
+                        guildScheduledEventDelete: false,
+                        guildScheduledEventUpdate: false,
+                        guildScheduledEventUserAdd: false,
+                        guildScheduledEventUserRemove: false,
+                        guildUpdate: false,
+                        inviteCreate: false,
+                        inviteDelete: false,
+                        messageUpdate: false,
+                        messageDelete: false,
+                        messageBulkDelete: false,
+                        messageReactionRemoveAll: false,
+                        roleCreate: false,
+                        roleDelete: false,
+                        roleUpdate: false,
+                        stickerCreate: false,
+                        stickerDelete: false,
+                        stickerUpdate: false,
+                        threadCreate: false,
+                        threadDelete: false,
+                        threadUpdate: false,
+                        voiceStateUpdate: false,
                       },
-                      { new: true, upsert: true }
-                    )
-                    .lean()
-                    .exec();
-                  client.guildSettings.set(guildId, newSettings);
-
+                    },
+                  });
                   return interaction.editReply(i18next.t('log.events.disabled', { lng }));
                 }
 
                 if (!event) return interaction.editReply(i18next.t('log.events.invalid', { lng }));
                 if (!event.enabled) return interaction.editReply(i18next.t('log.events.already_disabled', { lng }));
 
-                const newSettings = await guildModel
-                  .findOneAndUpdate({ guildId }, { $set: { [`log.events.${event.name}`]: false } }, { new: true, upsert: true })
-                  .lean()
-                  .exec();
-                client.guildSettings.set(guildId, newSettings);
+                await client.updateGuildSettings(guildId, { $set: { [`log.events.${event.name}`]: false } });
                 interaction.editReply(i18next.t('log.events.disabled', { lng }));
               }
               break;
@@ -451,22 +407,14 @@ export default new Command({
             case 'set':
               {
                 const channel = options.getChannel('channel', true, [ChannelType.GuildText]);
-                const newSettings = await guildModel
-                  .findOneAndUpdate({ guildId }, { $set: { ['log.channelId']: channel.id } }, { new: true, upsert: true })
-                  .lean()
-                  .exec();
-                client.guildSettings.set(guildId, newSettings);
+                await client.updateGuildSettings(guildId, { $set: { ['log.channelId']: channel.id } });
                 interaction.editReply(i18next.t('log.channel.set', { lng }));
               }
               break;
             case 'remove':
               {
                 if (!config.log.channelId) return interaction.editReply(i18next.t('log.channel.none', { lng }));
-                const newSettings = await guildModel
-                  .findOneAndUpdate({ guildId }, { $set: { ['log.channelId']: undefined } }, { new: true, upsert: true })
-                  .lean()
-                  .exec();
-                client.guildSettings.set(guildId, newSettings);
+                await client.updateGuildSettings(guildId, { $set: { ['log.channelId']: undefined } });
                 interaction.editReply(i18next.t('log.channel.removed', { lng }));
               }
               break;

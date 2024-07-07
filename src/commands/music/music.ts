@@ -280,7 +280,7 @@ export default new Command({
     const { options, member, user, guildId } = interaction;
     await interaction.deferReply();
 
-    const lng = await client.getLanguage(user.id);
+    const lng = await client.getUserLanguage(user.id);
 
     const player = useMainPlayer();
 

@@ -1,4 +1,4 @@
-import config from '../../config.json';
+import config from 'root/config.json';
 
 const keys = {
   DISCORD_BOT_TOKEN: config.DISCORD_BOT.TOKEN ?? 'abc123',

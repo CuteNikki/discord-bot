@@ -47,7 +47,7 @@ export const availableEvents = [
   'voiceStateUpdate',
 ];
 
-export interface Guild {
+export interface GuildSettings {
   guildId: string;
   moderation: {
     enabled: boolean;
@@ -111,7 +111,7 @@ export interface Guild {
 
 export const guildModel = mongoose.model(
   'guild',
-  new mongoose.Schema<Guild>({
+  new mongoose.Schema<GuildSettings>({
     guildId: { type: String, required: true },
     music: {
       type: {

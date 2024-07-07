@@ -3,8 +3,6 @@ import i18next from 'i18next';
 
 import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
 
-import { guildModel } from 'models/guild';
-
 export default new Command({
   module: Modules.CONFIG,
   data: {
@@ -55,7 +53,7 @@ export default new Command({
     if (!interaction.inCachedGuild()) return;
     const { options, guildId } = interaction;
     await interaction.deferReply({ ephemeral: true });
-    const lng = await client.getLanguage(interaction.user.id);
+    const lng = await client.getUserLanguage(interaction.user.id);
 
     const config = await client.getGuildSettings(guildId);
 
@@ -99,22 +97,14 @@ export default new Command({
             case 'on':
               {
                 if (config.music.enabled) return interaction.editReply(i18next.t('music.config.toggle.already_on', { lng }));
-                const newSettings = await guildModel
-                  .findOneAndUpdate({ guildId }, { $set: { ['music.enabled']: true } }, { new: true, upsert: true })
-                  .lean()
-                  .exec();
-                client.guildSettings.set(guildId, newSettings);
+                await client.updateGuildSettings(guildId, { $set: { ['music.enabled']: true } });
                 interaction.editReply(i18next.t('music.config.toggle.on', { lng }));
               }
               break;
             case 'off':
               {
                 if (!config.music.enabled) return interaction.editReply(i18next.t('music.config.toggle.already_off', { lng }));
-                const newSettings = await guildModel
-                  .findOneAndUpdate({ guildId }, { $set: { ['music.config.enabled']: false } }, { new: true, upsert: true })
-                  .lean()
-                  .exec();
-                client.guildSettings.set(guildId, newSettings);
+                await client.updateGuildSettings(guildId, { $set: { ['music.enabled']: false } });
                 interaction.editReply(i18next.t('music.config.toggle.off', { lng }));
               }
               break;

@@ -18,6 +18,96 @@ export default new Command({
     integration_types: [IntegrationTypes.GUILD_INSTALL, IntegrationTypes.USER_INSTALL],
     options: [
       {
+        name: 'support-guild-id',
+        description: 'Configure the support guild id',
+        type: ApplicationCommandOptionType.SubcommandGroup,
+        options: [
+          {
+            name: 'set',
+            description: 'Sets the support guild id',
+            type: ApplicationCommandOptionType.Subcommand,
+            options: [
+              {
+                name: 'guild-id',
+                description: 'The guild id',
+                type: ApplicationCommandOptionType.String,
+                required: true,
+              },
+            ],
+          },
+          {
+            name: 'remove',
+            description: 'Removes the support guild id',
+            type: ApplicationCommandOptionType.Subcommand,
+          },
+          {
+            name: 'show',
+            description: 'Shows the support guild id',
+            type: ApplicationCommandOptionType.Subcommand,
+          },
+        ],
+      },
+      {
+        name: 'support-invite-url',
+        description: 'Configure the support invite url',
+        type: ApplicationCommandOptionType.SubcommandGroup,
+        options: [
+          {
+            name: 'set',
+            description: 'Sets the support invite url',
+            type: ApplicationCommandOptionType.Subcommand,
+            options: [
+              {
+                name: 'invite-url',
+                description: 'The invite url',
+                type: ApplicationCommandOptionType.String,
+                required: true,
+              },
+            ],
+          },
+          {
+            name: 'remove',
+            description: 'Removes the support invite url',
+            type: ApplicationCommandOptionType.Subcommand,
+          },
+          {
+            name: 'show',
+            description: 'Shows the support invite url',
+            type: ApplicationCommandOptionType.Subcommand,
+          },
+        ],
+      },
+      {
+        name: 'bot-invite-url',
+        description: 'Configure the bot invite url',
+        type: ApplicationCommandOptionType.SubcommandGroup,
+        options: [
+          {
+            name: 'set',
+            description: 'Sets the bot invite url',
+            type: ApplicationCommandOptionType.Subcommand,
+            options: [
+              {
+                name: 'invite-url',
+                description: 'The invite url',
+                type: ApplicationCommandOptionType.String,
+                required: true,
+              },
+            ],
+          },
+          {
+            name: 'remove',
+            description: 'Removes the bot invite url',
+            type: ApplicationCommandOptionType.Subcommand,
+          },
+          {
+            name: 'show',
+            description: 'Shows the bot invite url',
+            type: ApplicationCommandOptionType.Subcommand,
+          },
+        ],
+      },
+      {
         name: 'badges',
         description: 'Configure the badges of a user',
         type: ApplicationCommandOptionType.SubcommandGroup,
@@ -139,6 +229,102 @@ export default new Command({
     const badges = userData.badges.map((badge) => badge.id);
 
     switch (options.getSubcommandGroup()) {
+      case 'support-guild-id':
+        {
+          if (!keys.DEVELOPER_USER_IDS.includes(user.id)) {
+            if (!badges.includes(BadgeType.DEVELOPER)) return interaction.editReply('You are not a developer of this bot!');
+          }
+
+          const settings = await client.getClientSettings(interaction.client.application.id);
+
+          switch (options.getSubcommand()) {
+            case 'set':
+              {
+                const guildId = options.getString('guild-id', true);
+                if (settings.support.guildId === guildId) return interaction.editReply('That is already the guild id');
+                await client.updateClientSettings(interaction.client.application.id, { $set: { ['support.guildId']: guildId } });
+                interaction.editReply('Guild id has been set');
+              }
+              break;
+            case 'remove':
+              {
+                if (settings.support.guildId === 'unavailable') return interaction.editReply('There is no guild id to remove');
+                await client.updateClientSettings(interaction.client.application.id, { $set: { ['support.guildId']: 'unavailable' } });
+                interaction.editReply('Guild id has been removed');
+              }
+              break;
+            case 'show':
+              {
+                interaction.editReply(`Current guild id: ${settings.support.guildId}`);
+              }
+              break;
+          }
+        }
+        break;
+      case 'support-invite-url':
+        {
+          if (!keys.DEVELOPER_USER_IDS.includes(user.id)) {
+            if (!badges.includes(BadgeType.DEVELOPER)) return interaction.editReply('You are not a developer of this bot!');
+          }
+
+          const settings = await client.getClientSettings(interaction.client.application.id);
+
+          switch (options.getSubcommand()) {
+            case 'set':
+              {
+                const inviteUrl = options.getString('invite-url', true);
+                if (settings.support.inviteUrl === inviteUrl) return interaction.editReply('That is already the invite url');
+                await client.updateClientSettings(interaction.client.application.id, { $set: { ['support.inviteUrl']: inviteUrl } });
+                interaction.editReply('Invite url has been set');
+              }
+              break;
+            case 'remove':
+              {
+                if (settings.support.inviteUrl === 'unavailable') return interaction.editReply('There is no invite url to remove');
+                await client.updateClientSettings(interaction.client.application.id, { $set: { ['support.inviteUrl']: 'unavailable' } });
+                interaction.editReply('Invite url has been removed');
+              }
+              break;
+            case 'show':
+              {
+                interaction.editReply(`Current invite url: ${settings.support.inviteUrl}`);
+              }
+              break;
+          }
+        }
+        break;
+      case 'bot-invite-url':
+        {
+          if (!keys.DEVELOPER_USER_IDS.includes(user.id)) {
+            if (!badges.includes(BadgeType.DEVELOPER)) return interaction.editReply('You are not a developer of this bot!');
+          }
+
+          const settings = await client.getClientSettings(interaction.client.application.id);
+
+          switch (options.getSubcommand()) {
+            case 'set':
+              {
+                const inviteUrl = options.getString('invite-url', true);
+                if (settings.inviteUrl === inviteUrl) return interaction.editReply('That is already the invite url');
+                await client.updateClientSettings(interaction.client.application.id, { $set: { inviteUrl: inviteUrl } });
+                interaction.editReply('Invite url has been set');
+              }
+              break;
+            case 'remove':
+              {
+                if (settings.inviteUrl === 'unavailable') return interaction.editReply('There is no invite url to remove');
+                await client.updateClientSettings(interaction.client.application.id, { $set: { inviteUrl: 'unavailable' } });
+                interaction.editReply('Invite url has been removed');
+              }
+              break;
+            case 'show':
+              {
+                interaction.editReply(`Current invite url: ${settings.inviteUrl}`);
+              }
+              break;
+          }
+        }
+        break;
       case 'badges':
         {
           if (!keys.DEVELOPER_USER_IDS.includes(user.id)) {

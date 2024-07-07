@@ -136,7 +136,8 @@ npm run start
     - [x] Range
     - [x] User
     - [x] ID
-  - [x] Config command- [x] Game command
+  - [x] Config command
+- [x] Game command
   - [x] Rock-Paper-Scissors
   - [x] Tic-Tac-Toe
   - [x] Connect-4
@@ -199,9 +200,11 @@ npm run start
   - [x] Evaluate command
   - [x] Execute command
   - [x] Register command
-  - [ ] Config command
+  - [x] Config command
+    - [x] Update invite url and support settings
     - [x] Banned users
-    - [ ] Custom badges
+    - [x] Custom badges
+      - [x] Add supporter badge on server boost
       - [x] List of badges:
         - Developer
         - Moderator

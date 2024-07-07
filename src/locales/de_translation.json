@@ -118,6 +118,12 @@
       "timeout": "Du hast nicht rechtzeitig geantwortet!",
       "answer": "Richtige Antwort",
       "input": "Deine Eingabe"
+    },
+    "tetris": {
+      "title": "Tetris",
+      "over": "Das Spiel ist vorbei!",
+      "score": "Punktezahl",
+      "pieces": "Nächste Teile"
     }
   },
   "music": {

@@ -118,6 +118,12 @@
       "timeout": "You did not answer in time!",
       "answer": "Correct answer",
       "input": "Your input"
+    },
+    "tetris": {
+      "title": "Tetris",
+      "over": "The game is over!",
+      "score": "Score",
+      "pieces": "Next Pieces"
     }
   },
   "music": {

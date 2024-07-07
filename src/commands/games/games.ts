@@ -11,6 +11,7 @@ import { RockPaperScissors } from 'games/rock-paper-scissors';
 import { Snake } from 'games/snake';
 import { TicTacToe } from 'games/tic-tac-toe';
 import { Trivia, TriviaDifficulty, TriviaMode } from 'games/trivia';
+import { Tetris } from 'games/tetris';
 
 import { words } from 'utils/words';
 
@@ -236,6 +237,11 @@ export default new Command({
         description: 'Play a game of remember emoji!',
         type: ApplicationCommandOptionType.Subcommand,
       },
+      {
+        name: 'tetris',
+        description: 'Play a game of Tetris!',
+        type: ApplicationCommandOptionType.Subcommand,
+      },
     ],
   },
   async execute({ interaction, client }) {
@@ -388,6 +394,11 @@ export default new Command({
       case 'remember-emoji':
         {
           new RememberEmoji({ interaction, client });
+        }
+        break;
+      case 'tetris':
+        {
+          new Tetris({ interaction, client });
         }
         break;
     }

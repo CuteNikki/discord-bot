@@ -63,13 +63,13 @@ export default new Command({
           3
         );
 
-        const types = {
-          BAN: i18next.t('infractions.types.ban', { lng }),
-          UNBAN: i18next.t('infractions.types.unban', { lng }),
-          TEMPBAN: i18next.t('infractions.types.tempban', { lng }),
-          KICK: i18next.t('infractions.types.kick', { lng }),
-          TIMEOUT: i18next.t('infractions.types.timeout', { lng }),
-          WARN: i18next.t('infractions.types.warn', { lng }),
+        const infractionTypes = {
+          0: i18next.t('infractions.types.ban', { lng }),
+          1: i18next.t('infractions.types.unban', { lng }),
+          2: i18next.t('infractions.types.tempban', { lng }),
+          3: i18next.t('infractions.types.kick', { lng }),
+          4: i18next.t('infractions.types.timeout', { lng }),
+          5: i18next.t('infractions.types.warn', { lng }),
         };
 
         await pagination({
@@ -84,7 +84,7 @@ export default new Command({
                   .map((infraction) =>
                     [
                       i18next.t('infractions.history.id', { lng, id: infraction._id }),
-                      i18next.t('infractions.history.type', { lng, type: types[infraction.action] }),
+                      i18next.t('infractions.history.type', { lng, type: infractionTypes[infraction.action as keyof typeof infractionTypes] }),
                       i18next.t('infractions.history.moderator', { lng, moderator: `<@${infraction.moderatorId}>` }),
                       i18next.t('infractions.history.reason', { lng, reason: infraction.reason ?? '/' }),
                       i18next.t('infractions.history.date', { lng, date: `<t:${Math.floor(infraction.createdAt / 1000)}:f>` }),

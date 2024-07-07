@@ -3,12 +3,12 @@ import i18next from 'i18next';
 import mongoose from 'mongoose';
 import osu from 'node-os-utils';
 
-import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
+import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
 
 import { keys } from 'utils/keys';
 
 export default new Command({
-  module: Modules.GENERAL,
+  module: ModuleType.GENERAL,
   data: {
     name: 'botinfo',
     description: 'Shows information about the bot',

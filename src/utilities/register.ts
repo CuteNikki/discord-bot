@@ -32,8 +32,8 @@ logger.info(`Loaded ${commands.size} commands`);
 const { DISCORD_BOT_ID, DISCORD_BOT_TOKEN } = keys;
 const rest = new REST().setToken(DISCORD_BOT_TOKEN);
 
-const commandsArray = commands.filter((cmd) => !cmd.options.developerOnly).map((cmd) => cmd.options.data);
-const devCommandsArray = commands.filter((cmd) => cmd.options.developerOnly).map((cmd) => cmd.options.data);
+const commandsArray = commands.filter((cmd) => !cmd.options.isDeveloperOnly).map((cmd) => cmd.options.data);
+const devCommandsArray = commands.filter((cmd) => cmd.options.isDeveloperOnly).map((cmd) => cmd.options.data);
 
 try {
   await rest.put(Routes.applicationCommands(DISCORD_BOT_ID), { body: commandsArray });

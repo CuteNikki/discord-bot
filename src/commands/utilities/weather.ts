@@ -2,11 +2,11 @@ import dayjs from 'dayjs';
 import { ApplicationCommandOptionType, ApplicationCommandType, Colors, EmbedBuilder } from 'discord.js';
 import i18next from 'i18next';
 
-import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
+import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
 import { compass, defraIndex, epaIndex, getCurrentWeather, getHistoricWeather, getWeatherForecast, uvIndex } from 'utils/weather';
 
 export default new Command({
-  module: Modules.UTILITIES,
+  module: ModuleType.UTILITIES,
   data: {
     name: 'weather',
     description: 'Get weather information',

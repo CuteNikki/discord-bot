@@ -1,10 +1,10 @@
 import { ApplicationCommandOptionType, ApplicationCommandType, Colors, EmbedBuilder } from 'discord.js';
 import i18next from 'i18next';
 
-import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
+import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
 
 export default new Command({
-  module: Modules.GENERAL,
+  module: ModuleType.GENERAL,
   data: {
     name: 'uptime',
     description: 'Shows how long the bot has been running for',

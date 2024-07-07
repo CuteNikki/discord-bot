@@ -1,14 +1,14 @@
 import { ApplicationCommandOptionType, ApplicationCommandType, ChannelType, Colors, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
 import i18next from 'i18next';
 
-import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
+import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
 
 import { AnnouncementType } from 'models/guild';
 
 import { addLevel, addXP, getDataOrCreate, getLevelRewards, setLevel, setXP } from 'utils/level';
 
 export default new Command({
-  module: Modules.CONFIG,
+  module: ModuleType.CONFIG,
   data: {
     name: 'config-level',
     description: 'Configure the level module',

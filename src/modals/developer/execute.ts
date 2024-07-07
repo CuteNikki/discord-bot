@@ -6,8 +6,8 @@ import { Modal } from 'classes/modal';
 
 export default new Modal({
   customId: 'modal_execute',
-  includesCustomId: false,
-  developerOnly: true,
+  isCustomIdIncluded: false,
+  isDeveloperOnly: true,
   permissions: ['Administrator'],
   cooldown: 0,
   async execute({ interaction }) {

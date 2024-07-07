@@ -3,11 +3,11 @@ import { QueueRepeatMode, Track, useHistory, useMainPlayer, usePlayer, useQueue,
 import { ApplicationCommandOptionType, ApplicationCommandType, Colors, EmbedBuilder } from 'discord.js';
 import i18next from 'i18next';
 
-import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
+import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
 import { chunk, pagination } from 'utils/pagination';
 
 export default new Command({
-  module: Modules.MUSIC,
+  module: ModuleType.MUSIC,
   data: {
     name: 'music',
     description: 'Start of all music commands',

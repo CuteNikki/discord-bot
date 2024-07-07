@@ -11,11 +11,11 @@ import {
   Role,
 } from 'discord.js';
 
-import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
+import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
 import i18next from 'i18next';
 
 export default new Command({
-  module: Modules.UTILITIES,
+  module: ModuleType.UTILITIES,
   data: {
     name: 'serverinfo',
     description: 'Get information about the server',

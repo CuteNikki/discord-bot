@@ -1,10 +1,10 @@
 import { ApplicationCommandOptionType, ApplicationCommandType, Colors, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
 import i18next from 'i18next';
 
-import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
+import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
 
 export default new Command({
-  module: Modules.CONFIG,
+  module: ModuleType.CONFIG,
   data: {
     name: 'config-music',
     description: 'Configure the music module',

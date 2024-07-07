@@ -1,12 +1,12 @@
 import { ApplicationCommandOptionType, ApplicationCommandType, ChannelType, Colors, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
 import i18next from 'i18next';
 
-import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
+import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
 
 import { availableEvents } from 'models/guild';
 
 export default new Command({
-  module: Modules.CONFIG,
+  module: ModuleType.CONFIG,
   data: {
     name: 'config-log',
     description: 'Configure the log module',

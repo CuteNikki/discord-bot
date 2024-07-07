@@ -4,13 +4,13 @@ import type { DiscordClient } from './client';
 export class Button {
   constructor(
     public options: {
-      developerOnly?: boolean; // If command is for developer only, it cannot be used by anyone else
-      authorOnly?: boolean;
-      cooldown?: number; // Cooldown between command executes per user (in milliseconds)
-      includesCustomId?: boolean;
-      permissions?: PermissionsString[];
       customId: string;
-      execute: (options: { client: DiscordClient; interaction: ButtonInteraction }) => any;
+      cooldown?: number; // Cooldown between button executes per user (in milliseconds)
+      isDeveloperOnly?: boolean; // If true, can only be used by developers
+      isAuthorOnly?: boolean; // If true, can only be used by the original command executor
+      isCustomIdIncluded?: boolean; // If true, customId does not need to be an exact match
+      permissions?: PermissionsString[]; // Array of permissions required to use the button
+      execute({ client, interaction }: { client: DiscordClient; interaction: ButtonInteraction }): any;
     }
   ) {}
 }

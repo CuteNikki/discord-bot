@@ -19,7 +19,7 @@ export enum IntegrationTypes {
   USER_INSTALL = 1,
 }
 
-export enum Modules {
+export enum ModuleType {
   DEVELOPER = 'DEVELOPER',
   MODERATION = 'MODERATION',
   LEVEL = 'LEVEL',
@@ -41,16 +41,16 @@ type InteractionType<T extends ApplicationCommandType> = T extends ApplicationCo
 export class Command<T extends ApplicationCommandType = any> {
   constructor(
     public options: {
-      module?: Modules;
-      developerOnly?: boolean; // If command is for developer only, it cannot be used by anyone else
-      cooldown?: number; // Cooldown between command executes per user (in milliseconds)
       data: RESTPostAPIApplicationCommandsJSONBody & {
         type: T;
         contexts?: Contexts[];
         integration_types?: IntegrationTypes[];
       };
-      autocomplete?: (options: { client: DiscordClient; interaction: AutocompleteInteraction }) => any;
-      execute: (options: { client: DiscordClient; interaction: InteractionType<T> }) => any;
+      module?: ModuleType;
+      cooldown?: number; // Cooldown between command executes per user (in milliseconds)
+      isDeveloperOnly?: boolean; // If true, can only be used by developers
+      autocomplete?({ client, interaction }: { client: DiscordClient; interaction: AutocompleteInteraction }): any;
+      execute({ client, interaction }: { client: DiscordClient; interaction: InteractionType<T> }): any;
     }
   ) {}
 }

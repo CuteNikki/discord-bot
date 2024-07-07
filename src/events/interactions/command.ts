@@ -1,7 +1,7 @@
 import { Collection, Events, type InteractionReplyOptions } from 'discord.js';
 import i18next from 'i18next';
 
-import { Modules } from 'classes/command';
+import { ModuleType } from 'classes/command';
 import { Event } from 'classes/event';
 
 import { keys } from 'utils/keys';
@@ -27,13 +27,13 @@ export default new Event({
       const guildSettings = await client.getGuildSettings(interaction.guild.id);
       const message: InteractionReplyOptions = { content: i18next.t('interactions.module', { lng, module: command.options.module }), ephemeral: true };
       switch (command.options.module) {
-        case Modules.MODERATION:
+        case ModuleType.MODERATION:
           if (!guildSettings.moderation.enabled) return interaction.reply(message);
           break;
-        case Modules.LEVEL:
+        case ModuleType.LEVEL:
           if (!guildSettings.level.enabled) return interaction.reply(message);
           break;
-        case Modules.MUSIC:
+        case ModuleType.MUSIC:
           if (!guildSettings.music.enabled) return interaction.reply(message);
           break;
       }
@@ -41,7 +41,7 @@ export default new Event({
 
     // Check if command is developer only and return if the user's id doesn't match the developer's id
     const developerIds = keys.DEVELOPER_USER_IDS;
-    if (command.options.developerOnly && !developerIds.includes(interaction.user.id))
+    if (command.options.isDeveloperOnly && !developerIds.includes(interaction.user.id))
       return interaction.reply({ content: i18next.t('interactions.developer_only', { lng }), ephemeral: true });
 
     // Check if cooldowns has the current command and add the command if it doesn't have the command

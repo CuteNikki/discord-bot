@@ -20,7 +20,7 @@ export default new Event({
     for (const key of client.modals.keys()) {
       if (interaction.customId.includes(key)) {
         const tempModal = client.modals.get(key)!;
-        if (!tempModal.options.includesCustomId && key !== interaction.customId) {
+        if (!tempModal.options.isCustomIdIncluded && key !== interaction.customId) {
           continue;
         } else {
           modal = tempModal;
@@ -42,7 +42,7 @@ export default new Event({
 
     // Check if button is developer only and return if the user's id doesn't match the developer's id
     const developerIds = keys.DEVELOPER_USER_IDS;
-    if (modal.options.developerOnly && !developerIds.includes(interaction.user.id))
+    if (modal.options.isDeveloperOnly && !developerIds.includes(interaction.user.id))
       return interaction.reply({ content: i18next.t('interactions.developer_only', { lng }), ephemeral: true });
 
     // Check if cooldowns has the current button and add the button if it doesn't have the button

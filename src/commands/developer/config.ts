@@ -1,6 +1,6 @@
 import { ApplicationCommandOptionType, ApplicationCommandType, Colors, EmbedBuilder } from 'discord.js';
 
-import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
+import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
 
 import { BadgeType, userModel } from 'models/user';
 
@@ -8,7 +8,7 @@ import { keys } from 'utils/keys';
 import { chunk, pagination } from 'utils/pagination';
 
 export default new Command({
-  module: Modules.DEVELOPER,
+  module: ModuleType.DEVELOPER,
   cooldown: 0,
   data: {
     name: 'config-bot',

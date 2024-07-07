@@ -1,12 +1,12 @@
 import { ApplicationCommandType, PermissionFlagsBits } from 'discord.js';
 
-import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
+import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
 
 import { registerCommands } from 'loaders/commands';
 
 export default new Command({
-  module: Modules.DEVELOPER,
-  developerOnly: true,
+  module: ModuleType.DEVELOPER,
+  isDeveloperOnly: true,
   cooldown: 0,
   data: {
     name: 'register',

@@ -1,6 +1,6 @@
 import { ApplicationCommandOptionType, ApplicationCommandType } from 'discord.js';
 
-import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
+import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
 
 import { Connect4 } from 'games/connect4';
 import { FastType } from 'games/fast-type';
@@ -15,7 +15,7 @@ import { Trivia, TriviaDifficulty, TriviaMode } from 'games/trivia';
 import { words } from 'utils/words';
 
 export default new Command({
-  module: Modules.GAMES,
+  module: ModuleType.GAMES,
   data: {
     name: 'games',
     description: 'Choose one of the fun games to play',

@@ -6,11 +6,11 @@ export class Modal {
   constructor(
     public options: {
       customId: string;
-      developerOnly?: boolean;
-      includesCustomId?: boolean;
       cooldown?: number;
-      permissions?: PermissionsString[];
-      execute: (options: { interaction: ModalSubmitInteraction; client: DiscordClient }) => any;
+      isDeveloperOnly?: boolean; // If true, can only be used by developers
+      isCustomIdIncluded?: boolean; // If true, customId does not need to be an exact match
+      permissions?: PermissionsString[]; // Array of permissions required to use the modal
+      execute({ interaction, client }: { client: DiscordClient; interaction: ModalSubmitInteraction }): any;
     }
   ) {}
 }

@@ -5,8 +5,8 @@ import { Button } from 'classes/button';
 
 export default new Button({
   customId: 'button_ping_update',
-  authorOnly: false,
-  includesCustomId: false,
+  isAuthorOnly: false,
+  isCustomIdIncluded: false,
   permissions: [],
   async execute({ interaction, client }) {
     const lng = await client.getUserLanguage(interaction.user.id);

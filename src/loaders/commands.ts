@@ -35,8 +35,8 @@ export async function registerCommands(client: DiscordClient) {
   const { DISCORD_BOT_ID, DISCORD_BOT_TOKEN } = keys;
   const rest = new REST().setToken(DISCORD_BOT_TOKEN);
 
-  const commands = client.commands.filter((cmd) => !cmd.options.developerOnly).map((cmd) => cmd.options.data);
-  const devCommands = client.commands.filter((cmd) => cmd.options.developerOnly).map((cmd) => cmd.options.data);
+  const commands = client.commands.filter((cmd) => !cmd.options.isDeveloperOnly).map((cmd) => cmd.options.data);
+  const devCommands = client.commands.filter((cmd) => cmd.options.isDeveloperOnly).map((cmd) => cmd.options.data);
 
   // Register global commands
   try {

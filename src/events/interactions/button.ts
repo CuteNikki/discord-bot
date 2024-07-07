@@ -20,7 +20,7 @@ export default new Event({
     for (const key of client.buttons.keys()) {
       if (interaction.customId.includes(key)) {
         const tempButton = client.buttons.get(key)!;
-        if (!tempButton.options.includesCustomId && key !== interaction.customId) {
+        if (!tempButton.options.isCustomIdIncluded && key !== interaction.customId) {
           continue;
         } else {
           button = tempButton;
@@ -34,7 +34,7 @@ export default new Event({
     if (user.banned) return;
 
     // Check author only
-    if (button.options.authorOnly) {
+    if (button.options.isAuthorOnly) {
       const content = i18next.t('interactions.author_only', { lng });
       if (interaction.message.interaction && interaction.user.id !== interaction.message.interaction.user.id)
         return interaction.reply({ content, ephemeral: true });
@@ -51,7 +51,7 @@ export default new Event({
 
     // Check if button is developer only and return if the user's id doesn't match the developer's id
     const developerIds = keys.DEVELOPER_USER_IDS;
-    if (button.options.developerOnly && !developerIds.includes(interaction.user.id))
+    if (button.options.isDeveloperOnly && !developerIds.includes(interaction.user.id))
       return interaction.reply({ content: i18next.t('interactions.developer_only', { lng }), ephemeral: true });
 
     // Check if cooldowns has the current button and add the button if it doesn't have the button

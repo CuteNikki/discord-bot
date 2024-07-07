@@ -1,13 +1,13 @@
 import { ApplicationCommandOptionType, ApplicationCommandType, Colors, EmbedBuilder, Status } from 'discord.js';
-import ms from 'ms';
 import i18next from 'i18next';
+import ms from 'ms';
 
-import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
+import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
 
 import { pagination } from 'utils/pagination';
 
 export default new Command({
-  module: Modules.GENERAL,
+  module: ModuleType.GENERAL,
   data: {
     name: 'clusters',
     description: 'Shows info about all clusters and shards',

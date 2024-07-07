@@ -2,11 +2,11 @@ import { Font, RankCardBuilder } from 'canvacord';
 import { ApplicationCommandType, AttachmentBuilder } from 'discord.js';
 import i18next from 'i18next';
 
-import { Command, Contexts, IntegrationTypes, Modules } from 'classes/command';
+import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
 import { getDataWithRank, levelToXP } from 'utils/level';
 
 export default new Command({
-  module: Modules.MODERATION,
+  module: ModuleType.MODERATION,
   data: {
     name: 'View Rank',
     type: ApplicationCommandType.User,

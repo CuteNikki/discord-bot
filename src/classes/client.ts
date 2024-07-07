@@ -1,10 +1,11 @@
 import { ClusterClient, getInfo } from 'discord-hybrid-sharding';
 import { Player } from 'discord-player';
 import { Client, Collection, GatewayIntentBits, Partials } from 'discord.js';
-import { type UpdateQuery } from 'mongoose';
 
 import i18next from 'i18next';
 import i18nextFsBackend from 'i18next-fs-backend';
+
+import { type UpdateQuery } from 'mongoose';
 
 import { clientModel, type ClientSettings } from 'models/client';
 import { guildModel, type GuildSettings } from 'models/guild';
@@ -21,36 +22,32 @@ import { loadModals } from 'loaders/modals';
 
 import { initDatabase } from 'utils/database';
 import { keys } from 'utils/keys';
-import { type Level, type LevelIdentifier } from 'utils/level';
+import type { Level, LevelIdentifier } from 'utils/level';
 import { initMusicPlayer } from 'utils/player';
 
 export class DiscordClient extends Client {
+  // Cluster for sharding
   public cluster = new ClusterClient(this);
-  public player = new Player(this, {
-    skipFFmpeg: false,
-    useLegacyFFmpeg: false,
-    ytdlOptions: {
-      quality: 'highestaudio',
-      highWaterMark: 1 << 25,
-    },
-  });
+  // Player for music
+  public player = new Player(this);
 
+  // Collections for loading and running commands, buttons and modals
   public commands = new Collection<string, Command>(); // Collection<commandName, commandData>
   public buttons = new Collection<string, Button>(); // Collection<customId, buttonOptions>
   public modals = new Collection<string, Modal>(); // Collection<customId, modalOptions>
 
+  // Collection of cooldowns so commands cannot be spammed
   public cooldowns = new Collection<string, Collection<string, number>>(); // Collection<commandName, Collection<userId, timestamp>>
 
+  // Collections for database (used as "cache")
   public settings = new Collection<string, ClientSettings>(); // Collection<applicationId, settings>
-
   public guildSettings = new Collection<string, GuildSettings>(); // Collection<guildId, settings>
-
   public userData = new Collection<string, UserData>(); // Collection<userId, data>
   public userLanguages = new Collection<string, string>(); // Collection<userId, language>
+  public level = new Collection<LevelIdentifier, Level>(); // Collection<{guildId, userId}, {level, xp}>
+  public levelWeekly = new Collection<LevelIdentifier, Level>(); // Collection<{guildId, userId}, {level, xp}>
 
-  public level = new Collection<LevelIdentifier, Level>();
-  public levelWeekly = new Collection<LevelIdentifier, Level>();
-
+  // List of all currently available languages
   public readonly supportedLanguages = ['en', 'de'];
 
   constructor() {
@@ -81,27 +78,28 @@ export class DiscordClient extends Client {
         GatewayIntentBits.GuildScheduledEvents,
 
         // !! Needed to keep track of bans !!
+        // Without GatewayIntentBits.GuildModeration users will show up as banned after being unbanned
         GatewayIntentBits.GuildModeration,
-        // Without this intent users will show up as banned after being unbanned
 
-        // privileged intents:
+        // !! Privileged intents !!
         GatewayIntentBits.GuildMembers, // !! Needed for welcome messages and guild log !!
         GatewayIntentBits.GuildPresences, // !! Needed for userinfo !!
         GatewayIntentBits.MessageContent, // !! Needed for fast-type game !!
-        // Without this intent MessageContextMenuCommands will still have message.content
       ],
     });
 
-    Promise.allSettled([initDatabase(this), initMusicPlayer(this), this.initTranslation(), this.loadModules()]).then(() => {
+    // Loading everything
+    Promise.allSettled([this.loadModules(), this.initTranslation(), initDatabase(this), initMusicPlayer(this)]).then(() => {
+      // Logging in once everything is loaded
       this.login(keys.DISCORD_BOT_TOKEN);
     });
   }
 
   private async loadModules() {
     await loadEvents(this);
+    await loadCommands(this);
     await loadButtons(this);
     await loadModals(this);
-    await loadCommands(this);
   }
 
   private initTranslation() {
@@ -113,79 +111,115 @@ export class DiscordClient extends Client {
         escapeValue: false,
       },
       backend: {
-        loadPath: 'src/locales/{{lng}}/{{ns}}.json',
+        loadPath: 'src/locales/{{lng}}_{{ns}}.json',
       },
     });
   }
 
   public async getGuildSettings(guildId: string): Promise<GuildSettings> {
-    const cachedSettings = this.guildSettings.get(guildId);
-    if (cachedSettings) return cachedSettings;
+    // Return guild settings from collection if found
+    const settingsInCollection = this.guildSettings.get(guildId);
+    if (settingsInCollection) return settingsInCollection;
+
+    // Getting guild settings from model and setting collection
     const settings = await guildModel.findOneAndUpdate({ guildId }, {}, { upsert: true, new: true }).lean().exec();
     this.guildSettings.set(guildId, settings);
+
+    // Return settings
     return settings;
   }
-  public async updateGuildSettings(guildId: string, settings: UpdateQuery<GuildSettings>): Promise<GuildSettings> {
-    const newSettings = await guildModel.findOneAndUpdate({ guildId }, settings, { upsert: true, new: true }).lean().exec();
-    this.guildSettings.set(guildId, newSettings);
-    return newSettings;
+
+  public async updateGuildSettings(guildId: string, query: UpdateQuery<GuildSettings>): Promise<GuildSettings> {
+    // Update settings in model and setting collection
+    const updatedSettings = await guildModel.findOneAndUpdate({ guildId }, query, { upsert: true, new: true }).lean().exec();
+    this.guildSettings.set(guildId, updatedSettings);
+
+    // Return updated settings
+    return updatedSettings;
   }
 
   public async getUserLanguage(userId: string | null | undefined): Promise<string> {
     // Return default language if no valid userId is provided
     if (!userId) return this.supportedLanguages[0];
 
-    // Return cached language if found
-    const cachedLanguage = this.userLanguages.get(userId);
-    if (cachedLanguage) return cachedLanguage;
+    // Return language from language collection if found
+    const languageInCollection = this.userLanguages.get(userId);
+    if (languageInCollection) return languageInCollection;
 
-    // Return language from cached user if found
-    const cachedUserData = this.userData.get(userId);
-    if (cachedUserData && cachedUserData.language) {
-      this.userLanguages.set(userId, cachedUserData.language);
-      return cachedUserData.language;
+    // Return language from user collection if found
+    const userDataInCollection = this.userData.get(userId);
+    if (userDataInCollection && userDataInCollection.language) {
+      // Setting language collection and returning language
+      this.userLanguages.set(userId, userDataInCollection.language);
+      return userDataInCollection.language;
     }
 
     // Return language from user model if found
     const userData = await userModel.findOne({ userId }, {}, { upsert: false });
     if (userData && userData.language) {
+      // Setting language collection and returning language
       this.userLanguages.set(userId, userData.language);
       return userData.language;
     }
 
-    // Return default language and set cached language
+    // Set language collection and return default language
     this.userLanguages.set(userId, this.supportedLanguages[0]);
     return this.supportedLanguages[0];
   }
+
   public async updateUserLanguage(userId: string, language: string): Promise<string> {
-    const newData = await this.updateUserData(userId, { $set: { language } });
-    this.userLanguages.set(userId, newData.language!);
-    return newData.language!;
+    // If language is not supported, use the default language
+    if (!this.supportedLanguages.includes(language)) language = this.supportedLanguages[0];
+
+    // Update the user data model and language collection
+    await this.updateUserData(userId, { $set: { language } });
+    this.userLanguages.set(userId, language);
+
+    // Return language
+    return language;
   }
 
   public async getUserData(userId: string): Promise<UserData> {
-    const cachedData = this.userData.get(userId);
-    if (cachedData) return cachedData;
+    // Return user data from collection if found
+    const userDataInCollection = this.userData.get(userId);
+    if (userDataInCollection) return userDataInCollection;
+
+    // Getting user data from model and setting collection
     const userData = await userModel.findOneAndUpdate({ userId }, {}, { upsert: true, new: true });
     this.userData.set(userId, userData);
+
+    // Return user data
     return userData;
   }
-  public async updateUserData(userId: string, userData: UpdateQuery<UserData>): Promise<UserData> {
-    const newData = await userModel.findOneAndUpdate({ userId }, userData, { upsert: true, new: true });
-    this.userData.set(userId, newData);
-    return newData;
+
+  public async updateUserData(userId: string, query: UpdateQuery<UserData>): Promise<UserData> {
+    // Updating user data in model setting collection
+    const updatedUserData = await userModel.findOneAndUpdate({ userId }, query, { upsert: true, new: true });
+    this.userData.set(userId, updatedUserData);
+
+    // Return updated user data
+    return updatedUserData;
   }
 
   public async getClientSettings(applicationId: string): Promise<ClientSettings> {
-    const cachedSettings = this.settings.get(applicationId);
-    if (cachedSettings) return cachedSettings;
+    // Return client settings from collection if found
+    const settingsInCollection = this.settings.get(applicationId);
+    if (settingsInCollection) return settingsInCollection;
+
+    // Get client settings from model and setting collection
     const settings = await clientModel.findOneAndUpdate({ applicationId }, {}, { upsert: true, new: true }).lean().exec();
     this.settings.set(applicationId, settings);
+
+    // Return settings
     return settings;
   }
-  public async updateClientSettings(applicationId: string, settings: UpdateQuery<ClientSettings>): Promise<ClientSettings> {
-    const newSettings = await clientModel.findOneAndUpdate({ applicationId }, settings, { upsert: true, new: true }).lean().exec();
-    this.settings.set(applicationId, newSettings);
-    return newSettings;
+
+  public async updateClientSettings(applicationId: string, query: UpdateQuery<ClientSettings>): Promise<ClientSettings> {
+    // Updating client settings in model and setting collection
+    const updatedSettings = await clientModel.findOneAndUpdate({ applicationId }, query, { upsert: true, new: true }).lean().exec();
+    this.settings.set(applicationId, updatedSettings);
+
+    // Return updated settings
+    return updatedSettings;
   }
 }

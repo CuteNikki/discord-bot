@@ -15,13 +15,13 @@ import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command
 import i18next from 'i18next';
 
 export default new Command({
-  module: ModuleType.UTILITIES,
+  module: ModuleType.Utilities,
   data: {
     name: 'serverinfo',
     description: 'Get information about the server',
     type: ApplicationCommandType.ChatInput,
-    contexts: [Contexts.GUILD],
-    integration_types: [IntegrationTypes.GUILD_INSTALL],
+    contexts: [Contexts.Guild],
+    integration_types: [IntegrationTypes.GuildInstall],
     options: [
       {
         name: 'ephemeral',

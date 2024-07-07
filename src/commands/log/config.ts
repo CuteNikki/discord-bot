@@ -6,14 +6,14 @@ import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command
 import { availableEvents } from 'models/guild';
 
 export default new Command({
-  module: ModuleType.CONFIG,
+  module: ModuleType.Config,
   data: {
     name: 'config-log',
     description: 'Configure the log module',
     default_member_permissions: `${PermissionFlagsBits.ManageGuild}`,
     type: ApplicationCommandType.ChatInput,
-    contexts: [Contexts.GUILD],
-    integration_types: [IntegrationTypes.GUILD_INSTALL],
+    contexts: [Contexts.Guild],
+    integration_types: [IntegrationTypes.GuildInstall],
     options: [
       {
         name: 'show',

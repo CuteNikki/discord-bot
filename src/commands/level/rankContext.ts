@@ -6,12 +6,12 @@ import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command
 import { getDataWithRank, levelToXP } from 'utils/level';
 
 export default new Command({
-  module: ModuleType.MODERATION,
+  module: ModuleType.Moderation,
   data: {
     name: 'View Rank',
     type: ApplicationCommandType.User,
-    contexts: [Contexts.GUILD],
-    integration_types: [IntegrationTypes.GUILD_INSTALL],
+    contexts: [Contexts.Guild],
+    integration_types: [IntegrationTypes.GuildInstall],
   },
   async execute({ interaction, client }) {
     if (!interaction.inCachedGuild()) return;

@@ -8,14 +8,14 @@ import { infractionModel } from 'models/infraction';
 import { chunk, pagination } from 'utils/pagination';
 
 export default new Command({
-  module: ModuleType.MODERATION,
+  module: ModuleType.Moderation,
   data: {
     name: 'infractions',
     description: 'Manage infractions of a user',
     default_member_permissions: `${PermissionFlagsBits.ModerateMembers}`,
     type: ApplicationCommandType.ChatInput,
-    contexts: [Contexts.GUILD],
-    integration_types: [IntegrationTypes.GUILD_INSTALL],
+    contexts: [Contexts.Guild],
+    integration_types: [IntegrationTypes.GuildInstall],
     options: [
       {
         name: 'history',

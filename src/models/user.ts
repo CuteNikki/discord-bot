@@ -1,12 +1,12 @@
 import mongoose from 'mongoose';
 
 export enum BadgeType {
-  DEVELOPER,
-  MODERATOR,
-  TRANSLATOR,
-  SUPPORTER,
-  EXPERT_BUGHUNTER,
-  BUGHUNTER,
+  Developer,
+  Moderator,
+  Translator,
+  Supporter,
+  ExpertBughunter,
+  Bughunter,
 }
 
 export interface Badge {

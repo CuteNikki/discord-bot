@@ -4,13 +4,13 @@ import i18next from 'i18next';
 import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
 
 export default new Command({
-  module: ModuleType.GENERAL,
+  module: ModuleType.General,
   data: {
     name: 'ping',
     description: 'Replies with Pong!',
     type: ApplicationCommandType.ChatInput,
-    contexts: [Contexts.GUILD, Contexts.BOT_DM, Contexts.PRIVATE_CHANNEL],
-    integration_types: [IntegrationTypes.GUILD_INSTALL, IntegrationTypes.USER_INSTALL],
+    contexts: [Contexts.Guild, Contexts.BotDM, Contexts.PrivateChannel],
+    integration_types: [IntegrationTypes.GuildInstall, IntegrationTypes.UserInstall],
     options: [
       {
         name: 'ephemeral',

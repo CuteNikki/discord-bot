@@ -8,13 +8,13 @@ import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command
 import { keys } from 'utils/keys';
 
 export default new Command({
-  module: ModuleType.GENERAL,
+  module: ModuleType.General,
   data: {
     name: 'botinfo',
     description: 'Shows information about the bot',
     type: ApplicationCommandType.ChatInput,
-    contexts: [Contexts.GUILD, Contexts.BOT_DM, Contexts.PRIVATE_CHANNEL],
-    integration_types: [IntegrationTypes.GUILD_INSTALL, IntegrationTypes.USER_INSTALL],
+    contexts: [Contexts.Guild, Contexts.BotDM, Contexts.PrivateChannel],
+    integration_types: [IntegrationTypes.GuildInstall, IntegrationTypes.UserInstall],
     options: [
       {
         name: 'ephemeral',

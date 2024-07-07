@@ -88,7 +88,7 @@ async function clearExpiredInfractions(client: DiscordClient) {
   const closedInfractions = [];
 
   for (const infraction of expiredInfractions) {
-    if (infraction.action === InfractionType.TEMPBAN) {
+    if (infraction.action === InfractionType.TempBan) {
       // Fetch the infraction's guild to unban the user
       const guild = await client.guilds.fetch(infraction.guildId).catch(() => {});
       // If we can't find the guild, we can't unban so we close the infraction
@@ -96,7 +96,7 @@ async function clearExpiredInfractions(client: DiscordClient) {
       // If we have a guild, we try to unban the user and close the infraction
       await guild.bans.remove(infraction.userId, 'Temporary Ban has expired').catch(() => {});
       closeInfraction();
-    } else if (infraction.action === InfractionType.TIMEOUT) {
+    } else if (infraction.action === InfractionType.Timeout) {
       // Discord handles timeouts for us so we don't need to fetch the guild and remove the timeout
       closeInfraction();
     }

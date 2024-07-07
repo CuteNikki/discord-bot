@@ -4,8 +4,8 @@ import type { DiscordClient } from 'classes/client';
 import i18next from 'i18next';
 
 enum CustomIds {
-  ACCEPT = 'OPPONENT_ACCEPT',
-  REJECT = 'OPPONENT_REJECT',
+  Accept = 'OPPONENT_ACCEPT',
+  Reject = 'OPPONENT_REJECT',
 }
 
 export class Opponent {
@@ -41,11 +41,11 @@ export class Opponent {
     return new Promise(async (resolve) => {
       const acceptButton = new ButtonBuilder()
         .setLabel(i18next.t('games.invitation.accept', { lng: opponentLng }))
-        .setCustomId(CustomIds.ACCEPT)
+        .setCustomId(CustomIds.Accept)
         .setStyle(ButtonStyle.Success);
       const rejectButton = new ButtonBuilder()
         .setLabel(i18next.t('games.invitation.reject', { lng: opponentLng }))
-        .setCustomId(CustomIds.REJECT)
+        .setCustomId(CustomIds.Reject)
         .setStyle(ButtonStyle.Danger);
       const row = new ActionRowBuilder<ButtonBuilder>().setComponents(acceptButton, rejectButton);
 
@@ -77,8 +77,8 @@ export class Opponent {
             .catch(() => {});
         }
 
-        if (buttonInteraction.customId === CustomIds.ACCEPT) return collector.stop('accept');
-        if (buttonInteraction.customId === CustomIds.REJECT) return collector.stop('reject');
+        if (buttonInteraction.customId === CustomIds.Accept) return collector.stop('accept');
+        if (buttonInteraction.customId === CustomIds.Reject) return collector.stop('reject');
       });
 
       collector.on('end', async (_, reason) => {

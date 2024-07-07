@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
 
 export enum AnnouncementType {
-  USER_CHANNEL = 'USER_CHANNEL',
-  OTHER_CHANNEL = 'OTHER_CHANNEL',
-  PRIVATE_MESSAGE = 'PRIVATE_MESSAGE',
+  UserChannel,
+  OtherChannel,
+  PrivateMessage,
 }
 
 export const availableEvents = [
@@ -221,7 +221,7 @@ export const guildModel = mongoose.model(
       type: {
         enabled: { type: Boolean },
         channelId: { type: String },
-        announcement: { type: String, enum: Object.values(AnnouncementType) },
+        announcement: { type: Number, enum: Object.values(AnnouncementType) },
         ignoredRoles: [{ type: String }],
         ignoredChannels: [{ type: String }],
         enabledChannels: [{ type: String }],
@@ -235,7 +235,7 @@ export const guildModel = mongoose.model(
       default: {
         enabled: false,
         channelId: undefined,
-        announcement: AnnouncementType.USER_CHANNEL,
+        announcement: AnnouncementType.UserChannel,
         ignoredRoles: [],
         ignoredChannels: [],
         enabledChannels: [],

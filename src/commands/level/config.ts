@@ -8,14 +8,14 @@ import { AnnouncementType } from 'models/guild';
 import { addLevel, addXP, getDataOrCreate, getLevelRewards, setLevel, setXP } from 'utils/level';
 
 export default new Command({
-  module: ModuleType.CONFIG,
+  module: ModuleType.Config,
   data: {
     name: 'config-level',
     description: 'Configure the level module',
     default_member_permissions: `${PermissionFlagsBits.ManageGuild}`,
     type: ApplicationCommandType.ChatInput,
-    contexts: [Contexts.GUILD],
-    integration_types: [IntegrationTypes.GUILD_INSTALL],
+    contexts: [Contexts.Guild],
+    integration_types: [IntegrationTypes.GuildInstall],
     options: [
       {
         name: 'show',
@@ -408,7 +408,7 @@ export default new Command({
                     {
                       name: i18next.t('level.announcement.title', { lng }),
                       value:
-                        config.level.announcement === AnnouncementType.OTHER_CHANNEL
+                        config.level.announcement === AnnouncementType.OtherChannel
                           ? `${config.level.announcement}: <#${config.level.channelId}>`
                           : config.level.announcement.toString(),
                     }
@@ -586,28 +586,28 @@ export default new Command({
             case 'other-channel':
               {
                 const channel = options.getChannel('channel', true, [ChannelType.GuildText]);
-                if (config.level.channelId === channel.id && config.level.announcement !== AnnouncementType.OTHER_CHANNEL)
+                if (config.level.channelId === channel.id && config.level.announcement !== AnnouncementType.OtherChannel)
                   return interaction.editReply(i18next.t('level.announcement.already_channel', { lng }));
                 await client.updateGuildSettings(guildId, {
-                  $set: { ['level.channelId']: channel.id, ['level.announcement']: AnnouncementType.OTHER_CHANNEL },
+                  $set: { ['level.channelId']: channel.id, ['level.announcement']: AnnouncementType.OtherChannel },
                 });
                 interaction.editReply(i18next.t('level.announcement.other', { lng }));
               }
               break;
             case 'user-channel':
               {
-                if (config.level.announcement === AnnouncementType.USER_CHANNEL)
+                if (config.level.announcement === AnnouncementType.UserChannel)
                   return interaction.editReply(i18next.t('level.announcement.already_user', { lng }));
-                await client.updateGuildSettings(guildId, { $set: { ['level.channelId']: undefined, ['level.announcement']: AnnouncementType.USER_CHANNEL } });
+                await client.updateGuildSettings(guildId, { $set: { ['level.channelId']: undefined, ['level.announcement']: AnnouncementType.UserChannel } });
                 interaction.editReply(i18next.t('level.announcement.user', { lng }));
               }
               break;
             case 'private-message':
               {
-                if (config.level.announcement === AnnouncementType.PRIVATE_MESSAGE)
+                if (config.level.announcement === AnnouncementType.PrivateMessage)
                   return interaction.editReply(i18next.t('level.announcement.already_private', { lng }));
                 await client.updateGuildSettings(guildId, {
-                  $set: { ['level.channelId']: undefined, ['level.announcement']: AnnouncementType.PRIVATE_MESSAGE },
+                  $set: { ['level.channelId']: undefined, ['level.announcement']: AnnouncementType.PrivateMessage },
                 });
                 interaction.editReply(i18next.t('level.announcement.private', { lng }));
               }

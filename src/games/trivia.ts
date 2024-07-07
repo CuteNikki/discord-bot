@@ -4,14 +4,14 @@ import i18next from 'i18next';
 import type { DiscordClient } from 'classes/client';
 
 export enum TriviaMode {
-  SINGLE = 'boolean',
-  MULTIPLE = 'multiple',
+  Single = 'boolean',
+  Multiple = 'multiple',
 }
 
 export enum TriviaDifficulty {
-  EASY = 'easy',
-  MEDIUM = 'medium',
-  HARD = 'hard',
+  Easy = 'easy',
+  Medium = 'medium',
+  Hard = 'hard',
 }
 
 export type TriviaQuestion = {
@@ -122,7 +122,7 @@ export class Trivia {
   private getComponents() {
     const row = new ActionRowBuilder<ButtonBuilder>();
 
-    if (this.options.mode === TriviaMode.SINGLE) {
+    if (this.options.mode === TriviaMode.Single) {
       const trueButton = new ButtonBuilder().setStyle(ButtonStyle.Secondary).setCustomId('TRIVIA_True').setLabel('✔️');
       const falseButton = new ButtonBuilder().setStyle(ButtonStyle.Secondary).setCustomId('TRIVIA_False').setLabel('✖️');
 
@@ -136,7 +136,7 @@ export class Trivia {
       row.addComponents(trueButton, falseButton);
     }
 
-    if (this.options.mode === TriviaMode.MULTIPLE) {
+    if (this.options.mode === TriviaMode.Multiple) {
       for (let i = 0; i < this.answers.length; i++) {
         const button = new ButtonBuilder().setStyle(ButtonStyle.Primary).setCustomId(`TRIVIA_${this.answers[i]}`).setLabel(this.answers[i]);
 

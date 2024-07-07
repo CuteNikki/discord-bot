@@ -6,13 +6,13 @@ import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command
 import { getDataWithRank, getWeeklyDataWithRank, levelToXP, type PositionLevel } from 'utils/level';
 
 export default new Command({
-  module: ModuleType.LEVEL,
+  module: ModuleType.Level,
   data: {
     name: 'rank',
     description: 'Shows the rank of a user',
     type: ApplicationCommandType.ChatInput,
-    contexts: [Contexts.GUILD],
-    integration_types: [IntegrationTypes.GUILD_INSTALL],
+    contexts: [Contexts.Guild],
+    integration_types: [IntegrationTypes.GuildInstall],
     options: [
       {
         name: 'user',

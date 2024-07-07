@@ -13,15 +13,15 @@ import i18next from 'i18next';
 import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
 
 export default new Command({
-  module: ModuleType.MODERATION,
+  module: ModuleType.Moderation,
   data: {
     name: 'purge',
     description: 'Delete x amount of messages, by anyone, anywhere',
     dm_permission: false,
     default_member_permissions: `${PermissionFlagsBits.ManageMessages}`,
     type: ApplicationCommandType.ChatInput,
-    contexts: [Contexts.GUILD],
-    integration_types: [IntegrationTypes.GUILD_INSTALL],
+    contexts: [Contexts.Guild],
+    integration_types: [IntegrationTypes.GuildInstall],
     options: [
       {
         name: 'amount',

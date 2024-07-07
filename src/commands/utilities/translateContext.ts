@@ -5,12 +5,12 @@ import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command
 import i18next from 'i18next';
 
 export default new Command({
-  module: ModuleType.UTILITIES,
+  module: ModuleType.Utilities,
   data: {
     name: 'Translate',
     type: ApplicationCommandType.Message,
-    contexts: [Contexts.GUILD, Contexts.BOT_DM, Contexts.PRIVATE_CHANNEL],
-    integration_types: [IntegrationTypes.GUILD_INSTALL, IntegrationTypes.USER_INSTALL],
+    contexts: [Contexts.Guild, Contexts.BotDM, Contexts.PrivateChannel],
+    integration_types: [IntegrationTypes.GuildInstall, IntegrationTypes.UserInstall],
   },
   async execute({ interaction, client }) {
     const { user, targetMessage } = interaction;

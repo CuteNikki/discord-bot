@@ -6,14 +6,14 @@ import { Opponent } from 'games/opponent';
 import type { DiscordClient } from 'classes/client';
 
 enum CustomIds {
-  ROCK = 'RPS_ROCK',
-  PAPER = 'RPS_PAPER',
-  SCISSORS = 'RPS_SCISSORS',
+  Rock = 'RPS_ROCK',
+  Paper = 'RPS_PAPER',
+  Scissors = 'RPS_SCISSORS',
 }
 enum Picks {
-  ROCK = '🪨',
-  PAPER = '🧻',
-  SCISSORS = '✂️',
+  Rock = '🪨',
+  Paper = '🧻',
+  Scissors = '✂️',
 }
 
 export class RockPaperScissors extends Opponent {
@@ -43,17 +43,17 @@ export class RockPaperScissors extends Opponent {
     const rockButton = new ButtonBuilder()
       .setLabel(i18next.t('games.rpc.choices.rock', { lng }))
       .setEmoji('🪨')
-      .setCustomId(CustomIds.ROCK)
+      .setCustomId(CustomIds.Rock)
       .setStyle(ButtonStyle.Primary);
     const paperButton = new ButtonBuilder()
       .setLabel(i18next.t('games.rpc.choices.paper', { lng }))
       .setEmoji('🧻')
-      .setCustomId(CustomIds.PAPER)
+      .setCustomId(CustomIds.Paper)
       .setStyle(ButtonStyle.Primary);
     const scissorsButton = new ButtonBuilder()
       .setLabel(i18next.t('games.rpc.choices.scissors', { lng }))
       .setEmoji('✂️')
-      .setCustomId(CustomIds.SCISSORS)
+      .setCustomId(CustomIds.Scissors)
       .setStyle(ButtonStyle.Primary);
     const row = new ActionRowBuilder<ButtonBuilder>().setComponents(rockButton, paperButton, scissorsButton);
 
@@ -137,9 +137,9 @@ export class RockPaperScissors extends Opponent {
 
   private isPlayerWinner() {
     return (
-      (this.playerPick === Picks.ROCK && this.opponentPick === Picks.SCISSORS) ||
-      (this.playerPick === Picks.PAPER && this.opponentPick === Picks.ROCK) ||
-      (this.playerPick === Picks.SCISSORS && this.opponentPick === Picks.PAPER)
+      (this.playerPick === Picks.Rock && this.opponentPick === Picks.Scissors) ||
+      (this.playerPick === Picks.Paper && this.opponentPick === Picks.Rock) ||
+      (this.playerPick === Picks.Scissors && this.opponentPick === Picks.Paper)
     );
   }
 

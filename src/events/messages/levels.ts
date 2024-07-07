@@ -53,7 +53,7 @@ export default new Event({
       };
 
       switch (guildSettings.level.announcement) {
-        case AnnouncementType.USER_CHANNEL:
+        case AnnouncementType.UserChannel:
           {
             const msg = await channel.send(levelUpMessage).catch(() => {});
             setTimeout(() => {
@@ -61,7 +61,7 @@ export default new Event({
             }, 5000);
           }
           break;
-        case AnnouncementType.OTHER_CHANNEL:
+        case AnnouncementType.OtherChannel:
           {
             if (!guildSettings.level.channelId) return;
             const channel = guild.channels.cache.get(guildSettings.level.channelId);
@@ -69,7 +69,7 @@ export default new Event({
             channel.send(levelUpMessage).catch(() => {});
           }
           break;
-        case AnnouncementType.PRIVATE_MESSAGE:
+        case AnnouncementType.PrivateMessage:
           {
             const lng = await client.getUserLanguage(author.id);
 

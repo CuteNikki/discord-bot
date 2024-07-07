@@ -3,7 +3,7 @@ import { ActionRowBuilder, ApplicationCommandType, ModalBuilder, PermissionFlags
 import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
 
 export default new Command({
-  module: ModuleType.DEVELOPER,
+  module: ModuleType.Developer,
   isDeveloperOnly: true,
   cooldown: 0,
   data: {
@@ -11,8 +11,8 @@ export default new Command({
     description: 'Executes a console command',
     default_member_permissions: `${PermissionFlagsBits.Administrator}`,
     type: ApplicationCommandType.ChatInput,
-    contexts: [Contexts.GUILD],
-    integration_types: [IntegrationTypes.GUILD_INSTALL],
+    contexts: [Contexts.Guild],
+    integration_types: [IntegrationTypes.GuildInstall],
   },
   async execute({ interaction }) {
     await interaction.showModal(

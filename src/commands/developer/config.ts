@@ -8,14 +8,14 @@ import { keys } from 'utils/keys';
 import { chunk, pagination } from 'utils/pagination';
 
 export default new Command({
-  module: ModuleType.DEVELOPER,
+  module: ModuleType.Developer,
   cooldown: 0,
   data: {
     name: 'config-bot',
     description: 'Only for bot moderators/developers',
     type: ApplicationCommandType.ChatInput,
-    contexts: [Contexts.GUILD, Contexts.BOT_DM, Contexts.PRIVATE_CHANNEL],
-    integration_types: [IntegrationTypes.GUILD_INSTALL, IntegrationTypes.USER_INSTALL],
+    contexts: [Contexts.Guild, Contexts.BotDM, Contexts.PrivateChannel],
+    integration_types: [IntegrationTypes.GuildInstall, IntegrationTypes.UserInstall],
     options: [
       {
         name: 'support-guild-id',
@@ -128,12 +128,12 @@ export default new Command({
                 description: 'The badge to add',
                 type: ApplicationCommandOptionType.Integer,
                 choices: [
-                  { name: 'translator', value: BadgeType.TRANSLATOR },
-                  { name: 'bughunter', value: BadgeType.BUGHUNTER },
-                  { name: 'expert bughunter', value: BadgeType.EXPERT_BUGHUNTER },
-                  { name: 'supporter', value: BadgeType.SUPPORTER },
-                  { name: 'moderator', value: BadgeType.MODERATOR },
-                  { name: 'developer', value: BadgeType.DEVELOPER },
+                  { name: 'translator', value: BadgeType.Translator },
+                  { name: 'bughunter', value: BadgeType.Bughunter },
+                  { name: 'expert bughunter', value: BadgeType.ExpertBughunter },
+                  { name: 'supporter', value: BadgeType.Supporter },
+                  { name: 'moderator', value: BadgeType.Moderator },
+                  { name: 'developer', value: BadgeType.Developer },
                 ],
                 required: true,
               },
@@ -155,12 +155,12 @@ export default new Command({
                 description: 'The badge to remove',
                 type: ApplicationCommandOptionType.Integer,
                 choices: [
-                  { name: 'translator', value: BadgeType.TRANSLATOR },
-                  { name: 'bughunter', value: BadgeType.BUGHUNTER },
-                  { name: 'expert bughunter', value: BadgeType.EXPERT_BUGHUNTER },
-                  { name: 'supporter', value: BadgeType.SUPPORTER },
-                  { name: 'moderator', value: BadgeType.MODERATOR },
-                  { name: 'developer', value: BadgeType.DEVELOPER },
+                  { name: 'translator', value: BadgeType.Translator },
+                  { name: 'bughunter', value: BadgeType.Bughunter },
+                  { name: 'expert bughunter', value: BadgeType.ExpertBughunter },
+                  { name: 'supporter', value: BadgeType.Supporter },
+                  { name: 'moderator', value: BadgeType.Moderator },
+                  { name: 'developer', value: BadgeType.Developer },
                 ],
                 required: true,
               },
@@ -232,7 +232,7 @@ export default new Command({
       case 'support-guild-id':
         {
           if (!keys.DEVELOPER_USER_IDS.includes(user.id)) {
-            if (!badges.includes(BadgeType.DEVELOPER)) return interaction.editReply('You are not a developer of this bot!');
+            if (!badges.includes(BadgeType.Developer)) return interaction.editReply('You are not a developer of this bot!');
           }
 
           const settings = await client.getClientSettings(keys.DISCORD_BOT_ID);
@@ -264,7 +264,7 @@ export default new Command({
       case 'support-invite-url':
         {
           if (!keys.DEVELOPER_USER_IDS.includes(user.id)) {
-            if (!badges.includes(BadgeType.DEVELOPER)) return interaction.editReply('You are not a developer of this bot!');
+            if (!badges.includes(BadgeType.Developer)) return interaction.editReply('You are not a developer of this bot!');
           }
 
           const settings = await client.getClientSettings(keys.DISCORD_BOT_ID);
@@ -296,7 +296,7 @@ export default new Command({
       case 'bot-invite-url':
         {
           if (!keys.DEVELOPER_USER_IDS.includes(user.id)) {
-            if (!badges.includes(BadgeType.DEVELOPER)) return interaction.editReply('You are not a developer of this bot!');
+            if (!badges.includes(BadgeType.Developer)) return interaction.editReply('You are not a developer of this bot!');
           }
 
           const settings = await client.getClientSettings(keys.DISCORD_BOT_ID);
@@ -328,7 +328,7 @@ export default new Command({
       case 'badges':
         {
           if (!keys.DEVELOPER_USER_IDS.includes(user.id)) {
-            if (!badges.includes(BadgeType.DEVELOPER)) return interaction.editReply('You are not a developer of this bot!');
+            if (!badges.includes(BadgeType.Developer)) return interaction.editReply('You are not a developer of this bot!');
           }
 
           switch (options.getSubcommand()) {
@@ -369,7 +369,7 @@ export default new Command({
       case 'bans':
         {
           if (!keys.DEVELOPER_USER_IDS.includes(user.id)) {
-            if (!badges.includes(BadgeType.MODERATOR) || !badges.includes(BadgeType.DEVELOPER))
+            if (!badges.includes(BadgeType.Moderator) || !badges.includes(BadgeType.Developer))
               return interaction.editReply('You are not a moderator or developer of this bot!');
           }
 

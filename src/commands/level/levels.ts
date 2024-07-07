@@ -7,13 +7,13 @@ import { computeLeaderboard, getLeaderboard, getWeeklyLeaderboard } from 'utils/
 import { chunk, pagination } from 'utils/pagination';
 
 export default new Command({
-  module: ModuleType.LEVEL,
+  module: ModuleType.Level,
   data: {
     name: 'levels',
     description: 'Shows the level leaderboard',
     type: ApplicationCommandType.ChatInput,
-    contexts: [Contexts.GUILD],
-    integration_types: [IntegrationTypes.GUILD_INSTALL],
+    contexts: [Contexts.Guild],
+    integration_types: [IntegrationTypes.GuildInstall],
     options: [
       {
         name: 'weekly',

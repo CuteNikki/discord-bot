@@ -4,12 +4,12 @@ import i18next from 'i18next';
 import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
 
 export default new Command({
-  module: ModuleType.UTILITIES,
+  module: ModuleType.Utilities,
   data: {
     name: 'Avatar & Banner',
     type: ApplicationCommandType.User,
-    contexts: [Contexts.GUILD, Contexts.BOT_DM, Contexts.PRIVATE_CHANNEL],
-    integration_types: [IntegrationTypes.GUILD_INSTALL, IntegrationTypes.USER_INSTALL],
+    contexts: [Contexts.Guild, Contexts.BotDM, Contexts.PrivateChannel],
+    integration_types: [IntegrationTypes.GuildInstall, IntegrationTypes.UserInstall],
   },
   async execute({ interaction, client }) {
     const lng = await client.getUserLanguage(interaction.user.id);

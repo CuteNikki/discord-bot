@@ -15,13 +15,13 @@ import { Trivia, TriviaDifficulty, TriviaMode } from 'games/trivia';
 import { words } from 'utils/words';
 
 export default new Command({
-  module: ModuleType.GAMES,
+  module: ModuleType.Games,
   data: {
     name: 'games',
     description: 'Choose one of the fun games to play',
     type: ApplicationCommandType.ChatInput,
-    contexts: [Contexts.GUILD, Contexts.BOT_DM, Contexts.PRIVATE_CHANNEL],
-    integration_types: [IntegrationTypes.GUILD_INSTALL, IntegrationTypes.USER_INSTALL],
+    contexts: [Contexts.Guild, Contexts.BotDM, Contexts.PrivateChannel],
+    integration_types: [IntegrationTypes.GuildInstall, IntegrationTypes.UserInstall],
     options: [
       {
         name: 'rock-paper-scissors',
@@ -123,11 +123,11 @@ export default new Command({
             choices: [
               {
                 name: 'single choice',
-                value: TriviaMode.SINGLE,
+                value: TriviaMode.Single,
               },
               {
                 name: 'multiple choice',
-                value: TriviaMode.MULTIPLE,
+                value: TriviaMode.Multiple,
               },
             ],
           },
@@ -139,15 +139,15 @@ export default new Command({
             choices: [
               {
                 name: 'easy',
-                value: TriviaDifficulty.EASY,
+                value: TriviaDifficulty.Easy,
               },
               {
                 name: 'medium',
-                value: TriviaDifficulty.MEDIUM,
+                value: TriviaDifficulty.Medium,
               },
               {
                 name: 'hard',
-                value: TriviaDifficulty.HARD,
+                value: TriviaDifficulty.Hard,
               },
             ],
           },

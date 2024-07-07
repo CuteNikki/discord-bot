@@ -17,9 +17,9 @@ export default new Event({
     if (settings.support.guildId !== newMember.guild.id) return;
 
     const userData = await client.getUserData(newMember.user.id);
-    if (userData.badges.map((badge) => badge.id).includes(BadgeType.SUPPORTER)) return;
+    if (userData.badges.map((badge) => badge.id).includes(BadgeType.Supporter)) return;
 
     await newMember.send('Thank you for boosting the support server. You received the Supporter badge!').catch(() => {});
-    await client.updateUserData(newMember.user.id, { $push: { badges: { id: BadgeType.SUPPORTER, receivedAt: Date.now() } } });
+    await client.updateUserData(newMember.user.id, { $push: { badges: { id: BadgeType.Supporter, receivedAt: Date.now() } } });
   },
 });

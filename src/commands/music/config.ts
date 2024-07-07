@@ -4,14 +4,14 @@ import i18next from 'i18next';
 import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
 
 export default new Command({
-  module: ModuleType.CONFIG,
+  module: ModuleType.Config,
   data: {
     name: 'config-music',
     description: 'Configure the music module',
     default_member_permissions: `${PermissionFlagsBits.ManageGuild}`,
     type: ApplicationCommandType.ChatInput,
-    contexts: [Contexts.GUILD],
-    integration_types: [IntegrationTypes.GUILD_INSTALL],
+    contexts: [Contexts.Guild],
+    integration_types: [IntegrationTypes.GuildInstall],
     options: [
       {
         name: 'show',

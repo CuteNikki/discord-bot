@@ -27,13 +27,13 @@ export default new Event({
       const guildSettings = await client.getGuildSettings(interaction.guild.id);
       const message: InteractionReplyOptions = { content: i18next.t('interactions.module', { lng, module: command.options.module }), ephemeral: true };
       switch (command.options.module) {
-        case ModuleType.MODERATION:
+        case ModuleType.Moderation:
           if (!guildSettings.moderation.enabled) return interaction.reply(message);
           break;
-        case ModuleType.LEVEL:
+        case ModuleType.Level:
           if (!guildSettings.level.enabled) return interaction.reply(message);
           break;
-        case ModuleType.MUSIC:
+        case ModuleType.Music:
           if (!guildSettings.music.enabled) return interaction.reply(message);
           break;
       }

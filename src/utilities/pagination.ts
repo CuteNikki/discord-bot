@@ -10,10 +10,10 @@ export function chunk<type>(arr: type[], size: number): type[][] {
 }
 
 enum CustomIds {
-  FIRST = 'PAGINATION_FIRST',
-  PREV = 'PAGINATION_PREV',
-  NEXT = 'PAGINATION_NEXT',
-  LAST = 'PAGINATION_LAST',
+  First = 'PAGINATION_FIRST',
+  Previous = 'PAGINATION_PREV',
+  Nest = 'PAGINATION_NEXT',
+  Last = 'PAGINATION_LAST',
 }
 
 export async function pagination({
@@ -35,15 +35,15 @@ export async function pagination({
   const { user } = interaction;
   const lng = await client.getUserLanguage(user.id);
 
-  const buttonFirst = new ButtonBuilder().setCustomId(CustomIds.FIRST).setStyle(ButtonStyle.Secondary).setEmoji('⏪').setDisabled(true);
-  const buttonPrev = new ButtonBuilder().setCustomId(CustomIds.PREV).setStyle(ButtonStyle.Secondary).setEmoji('⬅️').setDisabled(true);
+  const buttonFirst = new ButtonBuilder().setCustomId(CustomIds.First).setStyle(ButtonStyle.Secondary).setEmoji('⏪').setDisabled(true);
+  const buttonPrev = new ButtonBuilder().setCustomId(CustomIds.Previous).setStyle(ButtonStyle.Secondary).setEmoji('⬅️').setDisabled(true);
   const buttonNext = new ButtonBuilder()
-    .setCustomId(CustomIds.NEXT)
+    .setCustomId(CustomIds.Nest)
     .setStyle(ButtonStyle.Secondary)
     .setEmoji('➡️')
     .setDisabled(embeds.length === 1 ? true : false);
   const buttonLast = new ButtonBuilder()
-    .setCustomId(CustomIds.LAST)
+    .setCustomId(CustomIds.Last)
     .setStyle(ButtonStyle.Secondary)
     .setEmoji('⏩')
     .setDisabled(embeds.length === 1 ? true : false);
@@ -62,13 +62,13 @@ export async function pagination({
   collector.on('collect', async (int) => {
     await int.deferUpdate();
 
-    if (int.customId === CustomIds.FIRST) {
+    if (int.customId === CustomIds.First) {
       if (index > firstPageIndex) index = firstPageIndex;
-    } else if (int.customId === CustomIds.PREV) {
+    } else if (int.customId === CustomIds.Previous) {
       if (index > firstPageIndex) index--;
-    } else if (int.customId === CustomIds.NEXT) {
+    } else if (int.customId === CustomIds.Nest) {
       if (index < lastPageIndex) index++;
-    } else if (int.customId === CustomIds.LAST) {
+    } else if (int.customId === CustomIds.Last) {
       if (index < lastPageIndex) index = lastPageIndex;
     }
 

@@ -7,13 +7,13 @@ import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command
 import { chunk, pagination } from 'utils/pagination';
 
 export default new Command({
-  module: ModuleType.MUSIC,
+  module: ModuleType.Music,
   data: {
     name: 'music',
     description: 'Start of all music commands',
     type: ApplicationCommandType.ChatInput,
-    contexts: [Contexts.GUILD],
-    integration_types: [IntegrationTypes.GUILD_INSTALL],
+    contexts: [Contexts.Guild],
+    integration_types: [IntegrationTypes.GuildInstall],
     options: [
       {
         name: 'play',

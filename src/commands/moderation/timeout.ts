@@ -15,14 +15,14 @@ import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command
 import { InfractionType, infractionModel } from 'models/infraction';
 
 export default new Command({
-  module: ModuleType.MODERATION,
+  module: ModuleType.Moderation,
   data: {
     name: 'timeout',
     description: 'Times out a user',
     default_member_permissions: `${PermissionFlagsBits.ModerateMembers}`,
     type: ApplicationCommandType.ChatInput,
-    contexts: [Contexts.GUILD],
-    integration_types: [IntegrationTypes.GUILD_INSTALL],
+    contexts: [Contexts.Guild],
+    integration_types: [IntegrationTypes.GuildInstall],
     options: [
       {
         name: 'user',
@@ -50,8 +50,8 @@ export default new Command({
     await interaction.deferReply({ ephemeral: true });
 
     enum CustomIds {
-      CONFIRM = 'TIMEOUT_CONFIRM',
-      CANCEL = 'TIMEOUT_CANCEL',
+      Confirm = 'TIMEOUT_CONFIRM',
+      Cancel = 'TIMEOUT_CANCEL',
     }
 
     const { options, guild, member, user } = interaction;
@@ -90,17 +90,17 @@ export default new Command({
       content: i18next.t('timeout.confirm', { lng, user: target.toString() }),
       components: [
         new ActionRowBuilder<ButtonBuilder>().setComponents(
-          new ButtonBuilder().setCustomId(CustomIds.CONFIRM).setEmoji('✔').setStyle(ButtonStyle.Success),
-          new ButtonBuilder().setCustomId(CustomIds.CANCEL).setEmoji('✖').setStyle(ButtonStyle.Danger)
+          new ButtonBuilder().setCustomId(CustomIds.Confirm).setEmoji('✔').setStyle(ButtonStyle.Success),
+          new ButtonBuilder().setCustomId(CustomIds.Cancel).setEmoji('✖').setStyle(ButtonStyle.Danger)
         ),
       ],
     });
 
     const collector = await msg.awaitMessageComponent({ filter: (i) => i.user.id === interaction.user.id, componentType: ComponentType.Button, time: 30_000 });
 
-    if (collector.customId === CustomIds.CANCEL) {
+    if (collector.customId === CustomIds.Cancel) {
       await collector.update({ content: i18next.t('timeout.cancelled', { lng }), components: [] });
-    } else if (collector.customId === CustomIds.CONFIRM) {
+    } else if (collector.customId === CustomIds.Confirm) {
       const timeout = await targetMember.disableCommunicationUntil(Date.now() + duration, reason).catch(() => {});
       if (!timeout) return collector.update(i18next.t('timeout.failed', { lng }));
 
@@ -128,7 +128,7 @@ export default new Command({
         guildId: guild.id,
         userId: target.id,
         moderatorId: user.id,
-        action: InfractionType.TIMEOUT,
+        action: InfractionType.Timeout,
         closed: false,
         endsAt: Date.now() + duration,
         createdAt: Date.now(),

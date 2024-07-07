@@ -8,12 +8,12 @@ import { infractionModel } from 'models/infraction';
 import { chunk, pagination } from 'utils/pagination';
 
 export default new Command({
-  module: ModuleType.MODERATION,
+  module: ModuleType.Moderation,
   data: {
     name: 'View Infractions',
     type: ApplicationCommandType.User,
-    contexts: [Contexts.GUILD],
-    integration_types: [IntegrationTypes.GUILD_INSTALL],
+    contexts: [Contexts.Guild],
+    integration_types: [IntegrationTypes.GuildInstall],
     default_member_permissions: `${PermissionFlagsBits.ModerateMembers}`,
   },
   async execute({ interaction, client }) {

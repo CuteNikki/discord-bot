@@ -7,7 +7,7 @@ export default new Event({
   once: false,
   async execute(client, oldMember, newMember) {
     const guild = newMember.guild;
-    if (newMember.partial) await newMember.fetch().catch(() => {});
+    if (oldMember.partial) await oldMember.fetch().catch(() => {});
 
     const config = await client.getGuildSettings(guild.id);
 
@@ -107,6 +107,9 @@ export default new Event({
         emptyField
       );
     }
+
+    const embedData = embed.toJSON();
+    if (!embedData.fields?.length || embedData.fields.length > 25 || embedData.fields.length <= 1) return;
 
     await logChannel.send({
       embeds: [embed],

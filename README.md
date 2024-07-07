@@ -70,6 +70,10 @@ npm run deploy
 #    after the commands have been registered once.
 
 # 8. Run the bot:
+# You can run the typescript version
+npm run dev
+# Or compile it into js and run
+npm run build
 npm run start
 ```
 

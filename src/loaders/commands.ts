@@ -13,7 +13,7 @@ export async function loadCommands(client: DiscordClient) {
 
   for (const folder of folders) {
     const commandsPath = path.join(foldersPath, folder);
-    const files = fs.readdirSync(commandsPath).filter((value) => value.endsWith('.ts'));
+    const files = fs.readdirSync(commandsPath).filter((value) => value.endsWith('.ts') || value.endsWith('.js'));
 
     for (const file of files) {
       const filePath = path.join(commandsPath, file);

@@ -11,7 +11,7 @@ export async function loadModals(client: DiscordClient) {
 
   for (const folder of folders) {
     const modalsPath = path.join(foldersPath, folder);
-    const files = fs.readdirSync(modalsPath).filter((value) => value.endsWith('.ts'));
+    const files = fs.readdirSync(modalsPath).filter((value) => value.endsWith('.ts') || value.endsWith('.js'));
 
     for (const file of files) {
       const filePath = path.join(modalsPath, file);

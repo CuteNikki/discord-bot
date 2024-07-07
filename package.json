@@ -14,8 +14,10 @@
     "url": "https://github.com/CuteNikki/discord-bot/issues"
   },
   "scripts": {
-    "start": "npx tsx .",
-    "deploy": "npx tsx src/utilities/register.ts"
+    "dev": "npx tsx .",
+    "deploy": "npx tsx src/utilities/register.ts",
+    "start": "npx tsx dist/index.js",
+    "build": "rm -rf dist && npx tsc --build ./"
   },
   "devDependencies": {
     "@types/bun": "latest",

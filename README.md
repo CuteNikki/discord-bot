@@ -151,6 +151,7 @@ npm run start
   - [x] Snake
   - [x] Fast-Type
   - [x] Remember-Emoji
+  - [x] Tetris
 - [x] Log module
   - [x] Config command
   - [x] Events

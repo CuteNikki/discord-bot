@@ -201,6 +201,7 @@ npm run start
   - [x] Serverinfo command
   - [x] Weather command
   - [x] Math command
+  - [x] Reminder command
   - [ ] Config command
 - [ ] Developer Module
   - [x] Evaluate command

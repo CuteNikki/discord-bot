@@ -1,4 +1,15 @@
 {
+  "reminder": {
+    "amount": "Du kannst nicht noch mehr aktive Erinnerungen haben!",
+    "invalid_time": "Das ist keine gültige Zeit!",
+    "invalid_id": "Das ist keine gültige Erinnerungs-id!",
+    "none": "Konnte keine aktiven Erinnerungen finden!",
+    "created": "Erinnerung mit id `{{id}}` erstellt.\nIch werde dich in {{time}} erinnern!",
+    "delete": "Erinnerung erfolgreich gelöscht!",
+    "list": "Liste deiner aktiven Erinnerungen:",
+    "reminding": "Ich bin hier um dich an etwas zu erinnern!\n{{message}}",
+    "title": "Erinnerung"
+  },
   "purge": {
     "no_messages": "Konnte keine Nachrichten finden!",
     "none_deleted": "Konnte keine Nachrichten löschen!",

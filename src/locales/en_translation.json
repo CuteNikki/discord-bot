@@ -1,4 +1,15 @@
 {
+  "reminder": {
+    "amount": "You cannot have more active reminders!",
+    "invalid_time": "Invalid time provided!",
+    "invalid_id": "Invalid reminder id provided!",
+    "none": "Could not find any active reminders!",
+    "created": "Created reminder with id `{{id}}`.\nI will remind you in {{time}}!",
+    "deleted": "Successfully deleted the reminder!",
+    "list": "List of your active reminders:",
+    "reminding": "I'm here to remind you about something!\n{{message}}",
+    "title": "Reminder"
+  },
   "purge": {
     "no_messages": "Could not fetch any messages!",
     "none_deleted": "Could not delete any messages!",

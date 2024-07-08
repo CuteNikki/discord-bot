@@ -1,10 +1,13 @@
 import { CronJob } from 'cron';
+import { Colors, EmbedBuilder } from 'discord.js';
 import mongoose from 'mongoose';
+import i18next from 'i18next';
 
 import { DiscordClient } from 'classes/client';
 
 import { guildModel } from 'models/guild';
 import { infractionModel, InfractionType } from 'models/infraction';
+import { reminderModel } from 'models/reminder';
 import { userModel } from 'models/user';
 import { weeklyLevelModel } from 'models/weeklyLevels';
 
@@ -22,10 +25,11 @@ export function initDatabase(client: DiscordClient) {
         collectGuildSettings(client); // Set clients guild settings collection
 
         CronJob.from({
-          cronTime: '* * * * *',
+          cronTime: '*/10 * * * * *', // every 10 seconds
           onTick: () => {
             clearExpiredInfractions(client); // Handle expired infractions
             clearWeekly(client); // Handle weekly clear
+            clearReminders(client); // Handle reminders
           },
           start: true,
         });
@@ -35,7 +39,7 @@ export function initDatabase(client: DiscordClient) {
 }
 
 async function collectUserLanguages(client: DiscordClient) {
-  // Loop through each cached user and set language
+  // Loop through each collected user and set language
   for (const user of client.users.cache.values()) {
     const userData = await userModel.findOne({ userId: user.id, banned: false }, {}, { upsert: false }).lean().exec();
     if (userData && userData.language && !user.bot) client.userLanguages.set(user.id, userData.language ?? client.supportedLanguages[0]);
@@ -44,9 +48,9 @@ async function collectUserLanguages(client: DiscordClient) {
   logger.info(`[${client.cluster.id}] Collected ${client.userLanguages.size} user languages`);
 }
 async function collectGuildSettings(client: DiscordClient) {
-  // Loop through each cached guild and set settings if found
+  // Loop through each collected guild and set settings if found
   for (const guild of client.guilds.cache.values()) {
-    const guildSettings = await guildModel.findOne({ guildId: guild.id, banned: false }, {}, { upsert: false }).lean().exec();
+    const guildSettings = await guildModel.findOne({ guildId: guild.id }, {}, { upsert: false }).lean().exec();
     if (guildSettings) client.guildSettings.set(guild.id, guildSettings);
   }
   // Notify about collected guild settings
@@ -67,7 +71,7 @@ async function clearWeekly(client: DiscordClient) {
 }
 
 async function clearWeeklyLevel(client: DiscordClient, applicationId: string) {
-  // Clear weekly level model and cache
+  // Clear weekly level model and collection
   const clearedLevel = await weeklyLevelModel.deleteMany({});
   client.levelWeekly.clear();
 
@@ -76,6 +80,36 @@ async function clearWeeklyLevel(client: DiscordClient, applicationId: string) {
 
   // Update last weekly level clear with current date
   await client.updateClientSettings(applicationId, { $set: { ['database.lastWeeklyClear']: Date.now() } });
+}
+
+async function clearReminders(client: DiscordClient) {
+  // Store current time to avoid deleting newly expired reminders later
+  const NOW = Date.now();
+  // Fetch all due reminders
+  const dueReminders = await reminderModel.find({ remindAt: { $lte: NOW } });
+
+  for (const reminder of dueReminders) {
+    const lng = await client.getUserLanguage(reminder.userId);
+    const embed = new EmbedBuilder()
+      .setColor(Colors.Aqua)
+      .setTitle(i18next.t('reminder.title', { lng }))
+      .setDescription(i18next.t('reminder.reminding', { lng, message: reminder.message }));
+
+    // Notify user in DM if possible
+    const user = await client.users.fetch(reminder.userId).catch(() => {});
+    if (user) {
+      user.send({ embeds: [embed] }).catch(() => {});
+      continue;
+    }
+    // Notify in reminder channel if DM fails
+    const channel = await client.channels.fetch(reminder.channelId).catch(() => {});
+    if (channel && channel.isTextBased()) {
+      channel.send({ embeds: [embed], content: `<@${reminder.userId}>` }).catch(() => {});
+      continue;
+    }
+  }
+  // Deleting due reminders
+  await reminderModel.deleteMany({ remindAt: { $lte: NOW } });
 }
 
 async function clearExpiredInfractions(client: DiscordClient) {

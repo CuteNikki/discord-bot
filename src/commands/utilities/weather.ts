@@ -199,31 +199,16 @@ export default new Command({
                 i18next.t('weather.forecast.avg_visibility', { lng, vis_km: day.avgvis_km, vis_miles: day.avgvis_miles }),
               ].join('\n')
             )
-            .addFields(
-              {
-                name: i18next.t('weather.astro.title', { lng }),
-                value: [
-                  i18next.t('weather.astro.sunrise', { lng, sunrise: astro.sunrise }),
-                  i18next.t('weather.astro.sunset', { lng, sunset: astro.sunset }),
-                  i18next.t('weather.astro.moonset', { lng, moonset: astro.moonset }),
-                  i18next.t('weather.astro.moon_phase', { lng, phase: astro.moon_phase }),
-                  i18next.t('weather.astro.moon_illumination', { lng, illumination: astro.moon_illumination }),
-                ].join('\n'),
-              },
-              {
-                name: i18next.t('weather.quality.title', { lng }),
-                value: [
-                  i18next.t('weather.quality.co', { lng, co: (Math.round(day.air_quality.co + Number.EPSILON) * 100) / 100 }),
-                  i18next.t('weather.quality.o3', { lng, o3: (Math.round(day.air_quality.o3 + Number.EPSILON) * 100) / 100 }),
-                  i18next.t('weather.quality.no2', { lng, no2: (Math.round(day.air_quality.no2 + Number.EPSILON) * 100) / 100 }),
-                  i18next.t('weather.quality.so2', { lng, so2: (Math.round(day.air_quality.so2 + Number.EPSILON) * 100) / 100 }),
-                  i18next.t('weather.quality.pm2_5', { lng, pm2_5: (Math.round(day.air_quality.pm2_5 + Number.EPSILON) * 100) / 100 }),
-                  i18next.t('weather.quality.pm10', { lng, pm10: (Math.round(day.air_quality.pm10 + Number.EPSILON) * 100) / 100 }),
-                  i18next.t('weather.quality.epa_index', { lng, index: epaIndex[day.air_quality['us-epa-index']] }),
-                  i18next.t('weather.quality.defra_index', { lng, index: defraIndex[day.air_quality['gb-defra-index']] }),
-                ].join('\n'),
-              }
-            );
+            .addFields({
+              name: i18next.t('weather.astro.title', { lng }),
+              value: [
+                i18next.t('weather.astro.sunrise', { lng, sunrise: astro.sunrise }),
+                i18next.t('weather.astro.sunset', { lng, sunset: astro.sunset }),
+                i18next.t('weather.astro.moonset', { lng, moonset: astro.moonset }),
+                i18next.t('weather.astro.moon_phase', { lng, phase: astro.moon_phase }),
+                i18next.t('weather.astro.moon_illumination', { lng, illumination: astro.moon_illumination }),
+              ].join('\n'),
+            });
           if (day.condition.icon) forecastEmbed.setThumbnail(`https:${day.condition.icon}`);
           forecastEmbeds.push(forecastEmbed);
         }

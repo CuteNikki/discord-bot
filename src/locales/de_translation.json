@@ -355,7 +355,7 @@
     "title": "Cluster {{id}}",
     "uptime": "Betriebszeit: {{uptime}}",
     "ping": "Durchschn. Ping: {{ping}}ms",
-    "memory": "Speichernutzung: {{memory}}Mb",
+    "memory": "Speichernutzung: {{memory}}MB",
     "guilds": "Server: {{guilds}}",
     "members": "Mitglieder: {{members}}",
     "pin": "Wenn du eine rote Stecknadel siehst, bedeutet das, dass du dich auf diesem Shard befindest.",

@@ -360,7 +360,7 @@
     "title": "Cluster {{id}}",
     "uptime": "Uptime: {{uptime}}",
     "ping": "Average Ping: {{ping}}ms",
-    "memory": "Memory Usage: {{memory}}Mb",
+    "memory": "Memory Usage: {{memory}}MB",
     "guilds": "Guilds: {{guilds}}",
     "members": "Members: {{members}}",
     "pin": "If you spot a red pin it means that you are currently on that shard",

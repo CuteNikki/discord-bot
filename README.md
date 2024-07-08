@@ -75,6 +75,8 @@ npm run dev
 # Or compile it into js and run
 npm run build
 npm run start
+
+# 9. (optional) Use the config-bot command to configure support and bot links
 ```
 
 <hr>
@@ -83,6 +85,8 @@ npm run start
 
 - [x] General module
   - [x] Language command
+  - [x] Support command
+  - [x] Invite command
   - [x] Bot information
     - [x] Botinfo command
     - [x] Clusters command

@@ -1,4 +1,10 @@
 {
+  "invite": {
+    "title": "Bot-Einladung"
+  },
+  "support": {
+    "title": "Support-Server"
+  },
   "reminder": {
     "amount": "Du kannst nicht noch mehr aktive Erinnerungen haben!",
     "invalid_time": "Das ist keine gültige Zeit!",

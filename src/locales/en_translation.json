@@ -1,4 +1,10 @@
 {
+  "invite": {
+    "title": "Bot Invite"
+  },
+  "support": {
+    "title": "Support Server"
+  },
   "reminder": {
     "amount": "You cannot have more active reminders!",
     "invalid_time": "Invalid time provided!",

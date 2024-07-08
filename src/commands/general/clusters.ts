@@ -76,7 +76,6 @@ export default new Command({
           .setTitle(i18next.t('clusters.title', { lng, id: cluster.clusterId }))
           .setDescription(
             [
-              i18next.t('clusters.pin', { lng }) + '\n',
               i18next.t('clusters.uptime', { lng, uptime: ms(cluster.uptime ?? 0, { long: true }) }),
               i18next.t('clusters.ping', { lng, ping: cluster.ping }),
               i18next.t('clusters.memory', { lng, memory: cluster.memoryUsage.rss }),
@@ -102,6 +101,6 @@ export default new Command({
       );
     }
 
-    await pagination({ client, interaction, embeds });
+    await pagination({ client, interaction, embeds, content: i18next.t('clusters.pin', { lng }) });
   },
 });

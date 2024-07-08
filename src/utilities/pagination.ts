@@ -20,6 +20,7 @@ export async function pagination({
   client,
   interaction,
   embeds,
+  content,
   time = 60_000, // The time a user has to use the buttons before disabling them
   ephemeral = true, // If true, the pagination will only be visible to the user
   footer = true, // If true, will replace the current embeds footer to tell that the buttons have been disabled because the time is over
@@ -27,6 +28,7 @@ export async function pagination({
   client: DiscordClient;
   interaction: CommandInteraction;
   embeds: EmbedBuilder[];
+  content?: string;
   time?: number;
   ephemeral?: boolean;
   footer?: boolean;
@@ -54,7 +56,7 @@ export async function pagination({
   const firstPageIndex = 0;
   const lastPageIndex = embeds.length - 1;
 
-  const msg = await interaction.editReply({ embeds: [embeds[index]], components: [components] }).catch(() => {});
+  const msg = await interaction.editReply({ content, embeds: [embeds[index]], components: [components] }).catch(() => {});
   if (!msg) return;
 
   const collector = msg.createMessageComponentCollector({ filter: (i) => i.user.id === user.id, idle: time, componentType: ComponentType.Button });

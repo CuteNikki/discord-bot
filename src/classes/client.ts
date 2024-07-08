@@ -193,7 +193,7 @@ export class DiscordClient extends Client {
   }
 
   public async updateUserData(userId: string, query: UpdateQuery<UserData>): Promise<UserData> {
-    // Updating user data in model setting collection
+    // Updating user data in model and setting collection
     const updatedUserData = await userModel.findOneAndUpdate({ userId }, query, { upsert: true, new: true });
     this.userData.set(userId, updatedUserData);
 

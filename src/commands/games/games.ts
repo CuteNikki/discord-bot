@@ -12,6 +12,7 @@ import { Snake } from 'games/snake';
 import { TicTacToe } from 'games/tic-tac-toe';
 import { Trivia, TriviaDifficulty, TriviaMode } from 'games/trivia';
 import { Tetris } from 'games/tetris';
+import { Sokoban } from 'games/sokoban';
 
 import { words } from 'utils/words';
 
@@ -242,6 +243,11 @@ export default new Command({
         description: 'Play a game of Tetris!',
         type: ApplicationCommandOptionType.Subcommand,
       },
+      {
+        name: 'sokoban',
+        description: 'Play a game of Sokoban!',
+        type: ApplicationCommandOptionType.Subcommand,
+      },
     ],
   },
   async execute({ interaction, client }) {
@@ -399,6 +405,11 @@ export default new Command({
       case 'tetris':
         {
           new Tetris({ interaction, client });
+        }
+        break;
+      case 'sokoban':
+        {
+          new Sokoban({ interaction, client });
         }
         break;
     }

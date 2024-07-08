@@ -124,6 +124,11 @@
       "over": "The game is over!",
       "score": "Score",
       "pieces": "Next Pieces"
+    },
+    "sokoban": {
+      "title": "Sokoban",
+      "win": "You solved the puzzle!",
+      "lose": "You lost!"
     }
   },
   "music": {

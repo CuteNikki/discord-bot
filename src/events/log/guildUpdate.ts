@@ -18,7 +18,7 @@ export default new Event({
   async execute(client, oldGuild, newGuild) {
     const config = await client.getGuildSettings(newGuild.id);
 
-    if (!config.log.events.guildUpdate || !config.log.channelId) return;
+    if (!config.log.enabled || !config.log.events.guildUpdate || !config.log.channelId) return;
 
     const logChannel = await newGuild.channels.fetch(config.log.channelId);
     if (!logChannel || logChannel.type !== ChannelType.GuildText) return;

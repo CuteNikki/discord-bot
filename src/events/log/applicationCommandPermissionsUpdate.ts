@@ -10,7 +10,7 @@ export default new Event({
 
     const config = await client.getGuildSettings(guildId);
 
-    if (!config.log.events.applicationCommandPermissionsUpdate || !config.log.channelId) return;
+    if (!config.log.enabled || !config.log.events.applicationCommandPermissionsUpdate || !config.log.channelId) return;
 
     const guild = await client.guilds.fetch(guildId).catch(() => {});
     if (!guild) return;

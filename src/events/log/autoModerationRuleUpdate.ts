@@ -10,7 +10,7 @@ export default new Event({
 
     const config = await client.getGuildSettings(guild.id);
 
-    if (!config.log.events.autoModerationRuleUpdate || !config.log.channelId || !oldAutoModerationRule || !newAutoModerationRule) return;
+    if (!config.log.enabled || !config.log.events.autoModerationRuleUpdate || !config.log.channelId || !oldAutoModerationRule || !newAutoModerationRule) return;
 
     const logChannel = await guild.channels.fetch(config.log.channelId);
     if (!logChannel || logChannel.type !== ChannelType.GuildText) return;

@@ -13,7 +13,7 @@ export default new Event({
     if (!config.log.events.roleDelete || !config.log.channelId) return;
 
     const logChannel = await guild.channels.fetch(config.log.channelId);
-    if (!logChannel || logChannel.type !== ChannelType.GuildText) return;
+    if (!config.log.enabled || !logChannel || logChannel.type !== ChannelType.GuildText) return;
 
     await logChannel.send({
       embeds: [

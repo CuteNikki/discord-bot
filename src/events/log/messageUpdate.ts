@@ -15,7 +15,7 @@ export default new Event({
     if (!config.log.events.messageUpdate || !config.log.channelId) return;
 
     const logChannel = await guild.channels.fetch(config.log.channelId);
-    if (!logChannel || logChannel.type !== ChannelType.GuildText) return;
+    if (!config.log.enabled || !logChannel || logChannel.type !== ChannelType.GuildText) return;
 
     const embed = new EmbedBuilder()
       .setColor(Colors.Yellow)

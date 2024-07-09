@@ -1,4 +1,79 @@
 {
+  "custom_embed": {
+    "editing_embed": "Einbettung bearbeiten",
+    "empty": "Sie können keine leeren Einbettungen einreichen!",
+    "deleted": "Die Erstellung der benutzerdefinierten Einbettung wurde abgebrochen!",
+    "input": {
+      "message": "Nachrichteninhalt",
+      "title": "Einbettungstitel",
+      "title_url": "Titel URL",
+      "description": "Beschreibung",
+      "author_name": "Autorenname",
+      "author_icon_url": "Autoren Icon URL",
+      "author_url": "Autoren URL",
+      "footer_text": "Fußzeilentext",
+      "footer_icon_irl": "Fußzeilen Icon URL",
+      "thumbnail": "Thumbnail URL",
+      "image": "Bild URL",
+      "color": "Einbettungsfarbe",
+      "field_title": "Feldtitel",
+      "field_text": "Feldtext",
+      "field_inline": "Inline Feld"
+    },
+    "button": {
+      "message": "Nachricht",
+      "title": "Titel",
+      "description": "Beschreibung",
+      "author": "Autor",
+      "footer": "Fußzeile",
+      "thumbnail": "Thumbnail",
+      "image": "Bild",
+      "color": "Farbe",
+      "add_field": "Feld hinzufügen",
+      "remove_field": "Feld entfernen",
+      "reset": "Zurücksetzen",
+      "submit": "Einreichen",
+      "delete": "Löschen"
+    }
+  },
+  "welcome": {
+    "roles": {
+      "already": "Diese Rolle ist bereits eine Willkommensrolle!",
+      "added": "Erfolgreich eine neue Willkommensrolle hinzugefügt.",
+      "invalid": "Diese Rolle ist keine Willkommensrolle!",
+      "removed": "Willkommensrolle erfolgreich entfernt.",
+      "none": "Es gibt keine Willkommensrollen!",
+      "list": "Liste der Willkommensrollen:"
+    },
+    "channel": {
+      "already": "Dieser Kanal ist bereits der Willkommenskanal!",
+      "set": "Willkommenskanal erfolgreich gesetzt.",
+      "invalid": "Es gibt keinen Willkommenskanal zum Entfernen!",
+      "removed": "Willkommenskanal erfolgreich entfernt.",
+      "none": "Es gibt keinen Willkommenskanal!",
+      "show": "Der Willkommenskanal ist derzeit auf {{channel}} gesetzt."
+    },
+    "message": {
+      "set": "Willkommensnachricht erfolgreich gesetzt.",
+      "removed": "Willkommensnachricht erfolgreich entfernt.",
+      "test": "Das Beitritts-Event wurde ausgelöst."
+    }
+  },
+  "farewell": {
+    "channel": {
+      "already": "Dieser Kanal ist bereits der Abschiedskanal!",
+      "set": "Abschiedskanal erfolgreich gesetzt.",
+      "invalid": "Es gibt keinen Abschiedskanal zum Entfernen!",
+      "removed": "Abschiedskanal erfolgreich entfernt.",
+      "none": "Es gibt keinen Abschiedskanal!",
+      "show": "Der Abschiedskanal ist derzeit auf {{channel}} gesetzt."
+    },
+    "message": {
+      "set": "Abschiedsmitteilung erfolgreich gesetzt.",
+      "removed": "Abschiedsmitteilung erfolgreich entfernt.",
+      "test": "Das Verlassen-Event wurde ausgelöst."
+    }
+  },
   "invite": {
     "title": "Bot-Einladung"
   },

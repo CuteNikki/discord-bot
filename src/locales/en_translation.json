@@ -1,4 +1,79 @@
 {
+  "custom_embed": {
+    "editing_embed": "Editing Embed",
+    "empty": "You cannot submit empty Embeds!",
+    "deleted": "Custom embed creation has been cancelled!",
+    "input": {
+      "message": "Message Content",
+      "title": "Embed Title",
+      "title_url": "Title URL",
+      "description": "Description",
+      "author_name": "Author Name",
+      "author_icon_url": "Author Icon URL",
+      "author_url": "Author URL",
+      "footer_text": "Footer Text",
+      "footer_icon_irl": "Footer Icon URL",
+      "thumbnail": "Thumbnail URL",
+      "image": "Image URL",
+      "color": "Embed Color",
+      "field_title": "Field Title",
+      "field_text": "Field Text",
+      "field_inline": "Inline Field"
+    },
+    "button": {
+      "message": "Message",
+      "title": "Title",
+      "description": "Description",
+      "author": "Author",
+      "footer": "Footer",
+      "thumbnail": "Thumbnail",
+      "image": "Image",
+      "color": "Color",
+      "add_field": "Add Field",
+      "remove_field": "Remove Field",
+      "reset": "Reset",
+      "submit": "Submit",
+      "delete": "Delete"
+    }
+  },
+  "welcome": {
+    "roles": {
+      "already": "That role is already a welcome role!",
+      "added": "Successfully added a new welcome role.",
+      "invalid": "That role is not a welcome role!",
+      "removed": "Successfully removed the welcome role.",
+      "none": "There are no welcome roles!",
+      "list": "List of welcome roles:"
+    },
+    "channel": {
+      "already": "That channel is already the welcome channel!",
+      "set": "Successfully set the welcome channel.",
+      "invalid": "There is no welcome channel to remove!",
+      "removed": "Successfully removed the welcome channel.",
+      "none": "There is no welcome channel!",
+      "show": "The welcome channel is currently set to {{channel}}."
+    },
+    "message": {
+      "set": "Successfully set the welcome message.",
+      "removed": "Successfully removed the welcome message.",
+      "test": "Emitted the join event."
+    }
+  },
+  "farewell": {
+    "channel": {
+      "already": "That channel is already the farewell channel!",
+      "set": "Successfully set the farewell channel.",
+      "invalid": "There is no farewell channel to remove!",
+      "removed": "Successfully removed the farewell channel.",
+      "none": "There is no farewell channel!",
+      "show": "The farewell channel is currently set to {{channel}}."
+    },
+    "message": {
+      "set": "Successfully set the farewell message.",
+      "removed": "Successfully removed the farewell message.",
+      "test": "Emitted the leave event."
+    }
+  },
   "invite": {
     "title": "Bot Invite"
   },

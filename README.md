@@ -157,6 +157,10 @@ npm run start
   - [x] Remember-Emoji
   - [x] Tetris
   - [x] Sokoban
+- [x] Welcome module
+  - [x] Config command
+- [x] Farewell module
+  - [x] Config command
 - [x] Log module
   - [x] Config command
   - [x] Events
@@ -223,8 +227,6 @@ npm run start
         - Supporter
         - Expert Bughunter
         - Bughunter
-- [ ] Welcomer module
-  - [ ] Config command
 - [ ] Custom VC module
   - [ ] Config command
 - [ ] Economy module

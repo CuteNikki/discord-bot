@@ -47,12 +47,67 @@ export const availableEvents = [
   'voiceStateUpdate',
 ];
 
+// !! Embed cannot be empty !!
+// Either a title, description, author-name, footer-text or field is needed
+export interface Embed {
+  color: string | number | null;
+  title: string | null; // max 256 characters
+  url: string | null; // max 256 characters
+  description: string | null; // max 4096 characters
+  thumbnail?: string; // max 256 characters
+  image?: string; // max 256 characters
+  author: {
+    name: string | null; // max 256 characters
+    icon_url: string | null; // max 256 characters
+    url: string | null; // max 256 characters
+  };
+  footer: {
+    text: string | null; // max 2048 characters
+    icon_url: string | null; // max 256 characters
+  };
+  // max 25 fields
+  fields: {
+    name: string; // max 256 characters
+    value: string; // max 1024 characters
+    inline: boolean | null;
+  }[];
+}
+
+export interface Message {
+  content: string | null; // max 2000 characters
+  embed: Embed; // max 10 embeds but not using array
+}
+
 export interface GuildSettings {
   guildId: string;
   moderation: {
     enabled: boolean;
   };
+  music: {
+    enabled: boolean;
+  };
+  level: {
+    enabled: boolean;
+    channelId?: string;
+    announcement: AnnouncementType;
+    ignoredRoles: string[];
+    ignoredChannels: string[];
+    enabledChannels: string[];
+    rewards: { roleId: string; level: number; _id: mongoose.Types.ObjectId }[];
+  };
+  welcome: {
+    enabled: boolean;
+    channelId: string;
+    roles: string[];
+    message: Message;
+  };
+  farewell: {
+    enabled: boolean;
+    channelId: string;
+    message: Message;
+  };
   log: {
+    enabled: boolean;
     channelId?: string;
     events: {
       applicationCommandPermissionsUpdate: boolean;
@@ -95,18 +150,6 @@ export interface GuildSettings {
       voiceStateUpdate: boolean;
     };
   };
-  music: {
-    enabled: boolean;
-  };
-  level: {
-    enabled: boolean;
-    channelId?: string;
-    announcement: AnnouncementType;
-    ignoredRoles: string[];
-    ignoredChannels: string[];
-    enabledChannels: string[];
-    rewards: { roleId: string; level: number; _id: mongoose.Types.ObjectId }[];
-  };
 }
 
 export const guildModel = mongoose.model(
@@ -129,8 +172,150 @@ export const guildModel = mongoose.model(
         enabled: true,
       },
     },
+    welcome: {
+      type: {
+        channelId: { type: String },
+        enabled: { type: Boolean },
+        roles: [{ type: String }],
+        message: {
+          content: { type: String },
+          embed: {
+            color: { type: String },
+            title: { type: String },
+            url: { type: String },
+            description: { type: String },
+            thumbnail: { type: String },
+            image: { type: String },
+            author: {
+              name: { type: String },
+              icon_url: { type: String },
+              url: { type: String },
+            },
+            footer: {
+              text: { type: String },
+              icon_url: { type: String },
+            },
+            fields: [
+              {
+                name: { type: String },
+                value: { type: String },
+                inline: { type: Boolean },
+              },
+            ],
+          },
+        },
+      },
+      default: {
+        enabled: true,
+        message: {
+          content: null,
+          embed: {
+            color: null,
+            description: null,
+            image: undefined,
+            thumbnail: undefined,
+            title: null,
+            url: null,
+            author: {
+              name: null,
+              icon_url: null,
+              url: null,
+            },
+            fields: [],
+            footer: {
+              text: null,
+              icon_url: null,
+            },
+          },
+        },
+        roles: [],
+      },
+    },
+    farewell: {
+      type: {
+        channelId: { type: String },
+        enabled: { type: Boolean },
+        message: {
+          content: { type: String },
+          embed: {
+            color: { type: String },
+            title: { type: String },
+            url: { type: String },
+            description: { type: String },
+            thumbnail: { type: String },
+            image: { type: String },
+            author: {
+              name: { type: String },
+              icon_url: { type: String },
+              url: { type: String },
+            },
+            footer: {
+              text: { type: String },
+              icon_url: { type: String },
+            },
+            fields: [
+              {
+                name: { type: String },
+                value: { type: String },
+                inline: { type: Boolean },
+              },
+            ],
+          },
+        },
+      },
+      default: {
+        enabled: true,
+        message: {
+          content: null,
+          embed: {
+            color: null,
+            description: null,
+            image: undefined,
+            thumbnail: undefined,
+            title: null,
+            url: null,
+            author: {
+              name: null,
+              icon_url: null,
+              url: null,
+            },
+            fields: [],
+            footer: {
+              text: null,
+              icon_url: null,
+            },
+          },
+        },
+      },
+    },
+    level: {
+      type: {
+        enabled: { type: Boolean },
+        channelId: { type: String },
+        announcement: { type: Number, enum: Object.values(AnnouncementType) },
+        ignoredRoles: [{ type: String }],
+        ignoredChannels: [{ type: String }],
+        enabledChannels: [{ type: String }],
+        rewards: [
+          {
+            level: { type: Number, required: true },
+            roleId: { type: String, required: true },
+          },
+        ],
+      },
+      default: {
+        enabled: false,
+        channelId: undefined,
+        announcement: AnnouncementType.UserChannel,
+        ignoredRoles: [],
+        ignoredChannels: [],
+        enabledChannels: [],
+        rewards: [],
+      },
+    },
     log: {
       type: {
+        enabled: { type: Boolean },
         channelId: { type: String },
         events: {
           applicationCommandPermissionsUpdate: { type: Boolean },
@@ -174,6 +359,7 @@ export const guildModel = mongoose.model(
         },
       },
       default: {
+        enabled: true,
         channelId: undefined,
         events: {
           applicationCommandPermissionsUpdate: false,
@@ -215,31 +401,6 @@ export const guildModel = mongoose.model(
           threadUpdate: false,
           voiceStateUpdate: false,
         },
-      },
-    },
-    level: {
-      type: {
-        enabled: { type: Boolean },
-        channelId: { type: String },
-        announcement: { type: Number, enum: Object.values(AnnouncementType) },
-        ignoredRoles: [{ type: String }],
-        ignoredChannels: [{ type: String }],
-        enabledChannels: [{ type: String }],
-        rewards: [
-          {
-            level: { type: Number, required: true },
-            roleId: { type: String, required: true },
-          },
-        ],
-      },
-      default: {
-        enabled: false,
-        channelId: undefined,
-        announcement: AnnouncementType.UserChannel,
-        ignoredRoles: [],
-        ignoredChannels: [],
-        enabledChannels: [],
-        rewards: [],
       },
     },
   })

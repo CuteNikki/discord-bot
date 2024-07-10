@@ -216,6 +216,11 @@
       "over": "Das Spiel ist vorbei!",
       "score": "Punktezahl",
       "pieces": "Nächste Teile"
+    },
+    "sokoban": {
+      "title": "Sokoban",
+      "win": "Du hast das Rätsel gelöst!",
+      "lose": "Du hast verloren!"
     }
   },
   "music": {
@@ -607,38 +612,38 @@
   },
   "serverinfo": {
     "title": "Server Informationen",
-    "features": "Server Features",
+    "features": "Features",
     "user_roles": "Rollen ({{showing}}/{{total}})",
     "managed_roles": "Verwaltete Rollen ({{showing}}/{{total}})",
     "banner": "Banner",
     "server": {
       "title": "Generelle Informationen",
       "name": "Name: {{name}}",
-      "id": "Id: {{id}}",
-      "vanity": "Vanity: {{vanity}}",
-      "owner": "Besitzer: {{owner}}"
+      "created": "Erstellt: {{created}}",
+      "owner": "Besitzer: {{owner}}",
+      "vanity": "Vanity: {{vanity}}"
     },
     "security": {
-      "title": "Server Sicherheit",
+      "title": "Sicherheit",
       "explicit_filter": "Expliziter Filter: {{filter}}",
       "nsfw_level": "NSFW-Level: {{level}}",
       "verification_level": "Verifizierungs-Level: {{level}}"
     },
     "boost": {
-      "title": "Server Boosts",
+      "title": "Boosts",
       "tier": "Stufe: {{tier}}",
       "count": "Boosts: {{boosts}}",
       "users": "Boosters: {{boosters}}"
     },
     "members": {
-      "title": "Server Mitglieder",
+      "title": "Mitglieder",
       "total": "Insgesamt: {{total}}",
       "humans": "Menschen: {{humans}}",
       "bots": "Bots: {{bots}}",
       "online": "Online: {{online}}"
     },
     "channels": {
-      "title": "Server Kanäle",
+      "title": "Kanäle",
       "total": "Insgesamt: {{total}}",
       "categories": "Kategorien: {{categories}}",
       "text": "Text: {{text}}",
@@ -647,7 +652,7 @@
       "other": "Andere: {{other}}"
     },
     "emojis": {
-      "title": "Server Emojis & Sticker",
+      "title": "Emojis & Sticker",
       "total": "Gesamte Emojis: {{total}}",
       "animated": "Animierte Emojis: {{animated}}",
       "static": "Statische Emojis: {{static}}",

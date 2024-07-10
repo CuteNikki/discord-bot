@@ -44,7 +44,7 @@ export default new Command({
         .addFields(
           {
             name: i18next.t('userinfo.user_title', { lng }),
-            value: [`${user} (${user.username}/${user.id})`].join('\n'),
+            value: [`${user} (\`${user.username}\` | ${user.id})`].join('\n'),
           },
           { name: i18next.t('userinfo.created_at', { lng }), value: `<t:${Math.floor(user.createdTimestamp / 1000)}:R>` }
         )
@@ -98,27 +98,40 @@ export default new Command({
             name: i18next.t('userinfo.member_embed_title', { lng }),
             iconURL: statusImage[member.presence?.status ?? 'offline'],
           })
-          .addFields({ name: i18next.t('userinfo.joined_at', { lng }), value: `<t:${Math.floor((member.joinedTimestamp ?? 0) / 1000)}:R>` });
-        if (member.presence?.activities.length)
-          memberEmbed.addFields({
-            name: i18next.t('userinfo.activities', { lng }),
-            value: member.presence.activities
-              .map((activity) => {
-                if (activity.type === ActivityType.Custom) return;
-                else return `${activities[activity.type]} ${activity.name}`;
-              })
-              .join('\n'),
-          });
-        if (devices.length)
-          memberEmbed.addFields({
-            name: i18next.t('userinfo.devices', { lng }),
-            value: devices.join(', '),
-          });
-        if (member.premiumSinceTimestamp)
-          memberEmbed.addFields({
-            name: i18next.t('userinfo.boosting', { lng }),
-            value: `<t:${Math.floor(member.premiumSinceTimestamp ?? 0 / 1000)}:R>`,
-          });
+          .addFields(
+            { name: i18next.t('userinfo.joined_at', { lng }), value: `<t:${Math.floor((member.joinedTimestamp ?? 0) / 1000)}:R>`, inline: true },
+            {
+              name: i18next.t('userinfo.activities', { lng }),
+              value:
+                member.presence?.activities
+                  ?.map((activity) => {
+                    if (activity.type === ActivityType.Custom) return;
+                    else return `${activities[activity.type]} ${activity.name}`;
+                  })
+                  .join('\n') || '/',
+              inline: true,
+            },
+            {
+              name: '\u200b',
+              value: '\u200b',
+              inline: true,
+            },
+            {
+              name: i18next.t('userinfo.devices', { lng }),
+              value: devices?.join(', ') || '/',
+              inline: true,
+            },
+            {
+              name: i18next.t('userinfo.boosting', { lng }),
+              value: member.premiumSinceTimestamp ? `<t:${Math.floor(member.premiumSinceTimestamp / 1000)}:R>` : '/',
+              inline: true,
+            },
+            {
+              name: '\u200b',
+              value: '\u200b',
+              inline: true,
+            }
+          );
         const displayRoles = maxDisplayRoles(roles);
         if (roles.length)
           memberEmbed.addFields({

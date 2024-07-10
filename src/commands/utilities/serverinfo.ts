@@ -85,11 +85,12 @@ export default new Command({
         {
           name: i18next.t('serverinfo.server.title', { lng }),
           value: [
-            i18next.t('serverinfo.server.name', { lng, name: guild.name }),
-            i18next.t('serverinfo.server.id', { lng, id: guild.id }),
+            i18next.t('serverinfo.server.name', { lng, name: `${guild.name} (${guild.id})` }),
+            i18next.t('serverinfo.server.created', { lng, created: `<t:${Math.floor(guild.createdTimestamp / 1000)}:f>` }),
             i18next.t('serverinfo.server.owner', { lng, owner: `<@${guild.ownerId}>` }),
             i18next.t('serverinfo.server.vanity', { lng, vanity: guild.vanityURLCode ?? '/' }),
           ].join('\n'),
+          inline: true,
         },
         {
           name: i18next.t('serverinfo.security.title', { lng }),
@@ -98,6 +99,7 @@ export default new Command({
             i18next.t('serverinfo.security.nsfw_level', { lng, level: GuildNSFWLevel[guild.nsfwLevel] }),
             i18next.t('serverinfo.security.verification_level', { lng, level: GuildVerificationLevel[guild.verificationLevel] }),
           ].join('\n'),
+          inline: true,
         },
         {
           name: i18next.t('serverinfo.boost.title', { lng }),
@@ -106,6 +108,7 @@ export default new Command({
             i18next.t('serverinfo.boost.count', { lng, boosts: guild.premiumSubscriptionCount }),
             i18next.t('serverinfo.boost.users', { lng, boosters: members.cache.filter((member) => member.premiumSinceTimestamp).size }),
           ].join('\n'),
+          inline: true,
         },
         {
           name: i18next.t('serverinfo.members.title', { lng }),
@@ -115,6 +118,7 @@ export default new Command({
             i18next.t('serverinfo.members.bots', { lng, bots: botMembers }),
             i18next.t('serverinfo.members.online', { lng, online: onlineMembers }),
           ].join('\n'),
+          inline: true,
         },
         {
           name: i18next.t('serverinfo.channels.title', { lng }),
@@ -126,6 +130,7 @@ export default new Command({
             i18next.t('serverinfo.channels.threads', { lng, threads: threadChannels }),
             i18next.t('serverinfo.channels.other', { lng, other: otherChannels }),
           ].join('\n'),
+          inline: true,
         }
       );
     if (guild.description) serverEmbed.setDescription(guild.description);
@@ -138,6 +143,7 @@ export default new Command({
           i18next.t('serverinfo.emojis.static', { lng, static: staticEmojis }),
           i18next.t('serverinfo.emojis.stickers', { lng, total: totalStickers }),
         ].join('\n'),
+        inline: true,
       });
     if (guild.features.length)
       serverEmbed.addFields({

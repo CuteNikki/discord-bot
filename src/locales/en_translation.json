@@ -612,38 +612,38 @@
   },
   "serverinfo": {
     "title": "Server Information",
-    "features": "Server Features",
+    "features": "Features",
     "user_roles": "Roles ({{showing}}/{{total}})",
     "managed_roles": "Managed Roles ({{showing}}/{{total}})",
     "banner": "Banner",
     "server": {
       "title": "General Information",
       "name": "Name: {{name}}",
-      "id": "Id: {{id}}",
-      "vanity": "Vanity: {{vanity}}",
-      "owner": "Owner: {{owner}}"
+      "created": "Created: {{created}}",
+      "owner": "Owner: {{owner}}",
+      "vanity": "Vanity: {{vanity}}"
     },
     "security": {
-      "title": "Server Security",
+      "title": "Security",
       "explicit_filter": "Explicit Filter: {{filter}}",
       "nsfw_level": "NSFW Level: {{level}}",
       "verification_level": "Verification Level: {{level}}"
     },
     "boost": {
-      "title": "Server Boosts",
+      "title": "Boosts",
       "tier": "Tier: {{tier}}",
       "count": "Boosts: {{boosts}}",
       "users": "Boosters: {{boosters}}"
     },
     "members": {
-      "title": "Server Members",
+      "title": "Members",
       "total": "Total: {{total}}",
       "humans": "Humans: {{humans}}",
       "bots": "Bots: {{bots}}",
       "online": "Online: {{online}}"
     },
     "channels": {
-      "title": "Server Channels",
+      "title": "Channels",
       "total": "Total: {{total}}",
       "categories": "Categories: {{categories}}",
       "text": "Text: {{text}}",
@@ -652,7 +652,7 @@
       "other": "Other: {{other}}"
     },
     "emojis": {
-      "title": "Server Emojis & Stickers",
+      "title": "Emojis & Stickers",
       "total": "Total Emojis: {{total}}",
       "animated": "Animated Emojis: {{animated}}",
       "static": "Static Emojis: {{static}}",

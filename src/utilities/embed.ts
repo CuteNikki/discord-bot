@@ -9,7 +9,6 @@ import {
   TextInputBuilder,
   TextInputStyle,
   User,
-  type APIEmbed,
   type ChatInputCommandInteraction,
   type ColorResolvable,
   type InteractionEditReplyOptions,
@@ -56,14 +55,42 @@ export class CustomEmbedBuilder extends events {
     const interaction = this.options.interaction;
     const user = interaction.user;
     const guild = interaction.guild;
+    if (!guild) return;
+
     const client = this.options.client;
     const lng = await client.getUserLanguage(user.id);
 
     const embedData = this.data.embed;
-    const embed = EmbedBuilder.from(embedData as APIEmbed).setDescription(this.isEmptyEmbed() ? '\u200b' : null);
 
-    const message = await interaction.editReply({ embeds: [embed], components: this.getComponents(lng) }).catch(() => {});
-    if (!message || !guild) return;
+    const embed = EmbedBuilder.from({
+      title: replacePlaceholders(embedData.title ?? '', user, guild),
+      author: {
+        name: replacePlaceholders(embedData.author?.name ?? '', user, guild),
+        icon_url: replacePlaceholders(embedData.author?.icon_url ?? '', user, guild),
+        url: replacePlaceholders(embedData.author.url ?? '', user, guild),
+      },
+      description: replacePlaceholders(embedData.description ?? '', user, guild),
+      fields: embedData.fields.map((field) => ({
+        name: replacePlaceholders(field.name, user, guild),
+        value: replacePlaceholders(field.value ?? '', user, guild),
+      })),
+      footer: {
+        text: replacePlaceholders(embedData.footer?.text ?? '', user, guild),
+        icon_url: replacePlaceholders(embedData.footer?.icon_url ?? '', user, guild),
+      },
+      image: { url: replacePlaceholders(embedData.image ?? '', user, guild) },
+      thumbnail: { url: replacePlaceholders(embedData.thumbnail ?? '', user, guild) },
+      url: replacePlaceholders(embedData.url ?? '', user, guild),
+    }).setColor(embedData.color as ColorResolvable);
+
+    const message = await interaction
+      .editReply({
+        content: replacePlaceholders(this.data.content ?? '', user, guild),
+        embeds: [embed],
+        components: this.getComponents(lng),
+      })
+      .catch(() => {});
+    if (!message) return;
 
     const collector = message.createMessageComponentCollector({ idle: 60 * 10 * 1000, componentType: ComponentType.Button });
 

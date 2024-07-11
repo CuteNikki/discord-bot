@@ -1,4 +1,16 @@
 {
+  "phone": {
+    "connect": {
+      "already": "Du bist bereits mit dem Telefon verbunden!",
+      "connected": "Eine Telefonverbindung wurde hergestellt!",
+      "waiting": "Es wird angerufen..."
+    },
+    "hangup": {
+      "none": "Du bist nicht in einem Anruf!",
+      "disconnecting": "Es wird aufgelegt...",
+      "disconnected": "Der Gesprächspartner hat aufgelegt!"
+    }
+  },
   "custom_embed": {
     "editing_embed": "Einbettung bearbeiten",
     "empty": "Sie können keine leeren Einbettungen einreichen!",

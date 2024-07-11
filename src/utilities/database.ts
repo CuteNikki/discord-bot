@@ -1,7 +1,7 @@
 import { CronJob } from 'cron';
 import { Colors, EmbedBuilder } from 'discord.js';
-import mongoose from 'mongoose';
 import i18next from 'i18next';
+import mongoose from 'mongoose';
 
 import { DiscordClient } from 'classes/client';
 
@@ -13,6 +13,7 @@ import { weeklyLevelModel } from 'models/weeklyLevels';
 
 import { keys } from 'utils/keys';
 import { logger } from 'utils/logger';
+import { availableChannelModel, connectionModel } from '../models/phone';
 
 export function initDatabase(client: DiscordClient) {
   mongoose
@@ -23,6 +24,7 @@ export function initDatabase(client: DiscordClient) {
       client.once('ready', () => {
         collectUserLanguages(client); // Set clients user language collection
         collectGuildSettings(client); // Set clients guild settings collection
+        clearPhones(client); // Clear all the old connections and available channels
 
         CronJob.from({
           cronTime: '*/10 * * * * *', // every 10 seconds
@@ -36,6 +38,14 @@ export function initDatabase(client: DiscordClient) {
       });
     })
     .catch((err) => logger.error(err, `[${client.cluster.id}] Failed connection to database`));
+}
+
+async function clearPhones(client: DiscordClient) {
+  const connections = await connectionModel.deleteMany({}).lean().exec();
+  const availableChannels = await availableChannelModel.deleteMany({}).lean().exec();
+  // Notify about deleted connections and available channels
+  if (connections.deletedCount) logger.info(`[${client.cluster.id}] Deleted ${connections.deletedCount} connections`);
+  if (availableChannels.deletedCount) logger.info(`[${client.cluster.id}] Deleted ${availableChannels.deletedCount} available channels`);
 }
 
 async function collectUserLanguages(client: DiscordClient) {

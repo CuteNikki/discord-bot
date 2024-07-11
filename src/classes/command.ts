@@ -28,6 +28,7 @@ export enum ModuleType {
   Config,
   Music,
   Games,
+  Fun,
 }
 
 type InteractionType<CommandType extends ApplicationCommandType> = CommandType extends ApplicationCommandType.ChatInput

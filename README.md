@@ -232,6 +232,7 @@ npm run start
 - [ ] Economy module
   - [ ] Config command
 - [ ] Fun module
+  - [x] Phone command
   - [ ] Config command
 - [ ] Ticket module
   - [ ] Config command

@@ -1,4 +1,16 @@
 {
+  "phone": {
+    "connect": {
+      "already": "You are already connected to the phone!",
+      "connected": "A phone connection has been made!",
+      "waiting": "Calling on the phone..."
+    },
+    "hangup": {
+      "none": "You are not in a call!",
+      "disconnecting": "Hanging up the phone...",
+      "disconnected": "The other party has hung up the phone!"
+    }
+  },
   "custom_embed": {
     "editing_embed": "Editing Embed",
     "empty": "You cannot submit empty Embeds!",

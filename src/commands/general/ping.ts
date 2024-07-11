@@ -39,7 +39,7 @@ export default new Command({
       ],
       components: [
         new ActionRowBuilder<ButtonBuilder>().setComponents(
-          new ButtonBuilder().setCustomId('button_ping_update').setLabel(i18next.t('ping.update', { lng })).setStyle(ButtonStyle.Primary)
+          new ButtonBuilder().setCustomId('button-ping-update').setLabel(i18next.t('ping.update', { lng })).setStyle(ButtonStyle.Primary)
         ),
       ],
     });

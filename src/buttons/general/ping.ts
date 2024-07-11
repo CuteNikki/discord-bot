@@ -4,7 +4,7 @@ import i18next from 'i18next';
 import { Button } from 'classes/button';
 
 export default new Button({
-  customId: 'button_ping_update',
+  customId: 'button-ping-update',
   isAuthorOnly: false,
   isCustomIdIncluded: false,
   permissions: [],
@@ -28,7 +28,7 @@ export default new Button({
       ],
       components: [
         new ActionRowBuilder<ButtonBuilder>().setComponents(
-          new ButtonBuilder().setCustomId('button_ping_update').setLabel(i18next.t('ping.update', { lng })).setStyle(ButtonStyle.Primary)
+          new ButtonBuilder().setCustomId('button-ping-update').setLabel(i18next.t('ping.update', { lng })).setStyle(ButtonStyle.Primary)
         ),
       ],
     });

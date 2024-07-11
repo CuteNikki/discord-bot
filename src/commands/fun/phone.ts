@@ -2,7 +2,8 @@ import { ApplicationCommandOptionType, ApplicationCommandType, ChannelType } fro
 import i18next from 'i18next';
 
 import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
-import { availableChannelModel, connectionModel } from '../../models/phone';
+
+import { availableChannelModel, connectionModel } from 'models/phone';
 
 export default new Command({
   module: ModuleType.Fun,

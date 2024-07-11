@@ -7,7 +7,7 @@ import {
   GuildExplicitContentFilter,
   GuildNSFWLevel,
   GuildVerificationLevel,
-  PresenceUpdateStatus,
+  // PresenceUpdateStatus,
   Role,
 } from 'discord.js';
 
@@ -57,9 +57,9 @@ export default new Command({
     }
 
     const totalMembers = memberCount;
-    const humanMembers = members.cache.filter((mem) => !mem.user.bot).size;
-    const botMembers = members.cache.filter((mem) => mem.user.bot).size;
-    const onlineMembers = members.cache.filter((mem) => mem.presence?.status === PresenceUpdateStatus.Online).size;
+    // const humanMembers = members.cache.filter((mem) => !mem.user.bot).size;
+    // const botMembers = members.cache.filter((mem) => mem.user.bot).size;
+    // const onlineMembers = members.cache.filter((mem) => mem.presence?.status === PresenceUpdateStatus.Online).size;
 
     function getChannelCount(types: ChannelType[]) {
       return channels.cache.filter((channel) => types.includes(channel.type)).size;
@@ -114,9 +114,9 @@ export default new Command({
           name: i18next.t('serverinfo.members.title', { lng }),
           value: [
             i18next.t('serverinfo.members.total', { lng, total: totalMembers }),
-            i18next.t('serverinfo.members.humans', { lng, humans: humanMembers }),
-            i18next.t('serverinfo.members.bots', { lng, bots: botMembers }),
-            i18next.t('serverinfo.members.online', { lng, online: onlineMembers }),
+            // i18next.t('serverinfo.members.humans', { lng, humans: humanMembers }),
+            // i18next.t('serverinfo.members.bots', { lng, bots: botMembers }),
+            // i18next.t('serverinfo.members.online', { lng, online: onlineMembers }),
           ].join('\n'),
           inline: true,
         },

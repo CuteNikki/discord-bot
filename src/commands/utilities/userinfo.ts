@@ -1,4 +1,4 @@
-import { ActivityType, ApplicationCommandOptionType, ApplicationCommandType, Colors, EmbedBuilder, Role } from 'discord.js';
+import { ApplicationCommandOptionType, ApplicationCommandType, Colors, EmbedBuilder, Role } from 'discord.js';
 import i18next from 'i18next';
 
 import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
@@ -57,23 +57,23 @@ export default new Command({
       const member = await interaction.guild?.members.fetch(user.id);
 
       if (member) {
-        const activities = [
-          i18next.t('userinfo.activity.playing', { lng }),
-          i18next.t('userinfo.activity.streaming', { lng }),
-          i18next.t('userinfo.activity.listening', { lng }),
-          i18next.t('userinfo.activity.watching', { lng }),
-          i18next.t('userinfo.activity.custom', { lng }),
-          i18next.t('userinfo.activity.competing', { lng }),
-        ];
-        const devices = Object.entries(member.presence?.clientStatus ?? {}).map(([key]) => `${key}`);
+        //   const activities = [
+        //     i18next.t('userinfo.activity.playing', { lng }),
+        //     i18next.t('userinfo.activity.streaming', { lng }),
+        //     i18next.t('userinfo.activity.listening', { lng }),
+        //     i18next.t('userinfo.activity.watching', { lng }),
+        //     i18next.t('userinfo.activity.custom', { lng }),
+        //     i18next.t('userinfo.activity.competing', { lng }),
+        //   ];
+        //   const devices = Object.entries(member.presence?.clientStatus ?? {}).map(([key]) => `${key}`);
 
-        const statusImage = {
-          idle: 'https://i.ibb.co/tB36GNW/undefined-Imgur.png',
-          dnd: 'https://i.ibb.co/SPqGC4P/undefined-Imgur-1.png',
-          online: 'https://i.ibb.co/pnnTZhK/undefined-Imgur-2.png',
-          offline: 'https://i.ibb.co/bQDDfBw/undefined-Imgur-3.png',
-          invisible: 'https://i.ibb.co/bQDDfBw/undefined-Imgur-3.png',
-        };
+        //   const statusImage = {
+        //     idle: 'https://i.ibb.co/tB36GNW/undefined-Imgur.png',
+        //     dnd: 'https://i.ibb.co/SPqGC4P/undefined-Imgur-1.png',
+        //     online: 'https://i.ibb.co/pnnTZhK/undefined-Imgur-2.png',
+        //     offline: 'https://i.ibb.co/bQDDfBw/undefined-Imgur-3.png',
+        //     invisible: 'https://i.ibb.co/bQDDfBw/undefined-Imgur-3.png',
+        //   };
 
         const roles = member.roles.cache
           .toJSON()
@@ -96,42 +96,43 @@ export default new Command({
           .setThumbnail(member.avatarURL({ size: 4096 }))
           .setAuthor({
             name: i18next.t('userinfo.member_embed_title', { lng }),
-            iconURL: statusImage[member.presence?.status ?? 'offline'],
+            // iconURL: statusImage[member.presence?.status ?? 'offline'],
           })
           .addFields(
             { name: i18next.t('userinfo.joined_at', { lng }), value: `<t:${Math.floor((member.joinedTimestamp ?? 0) / 1000)}:R>`, inline: true },
-            {
-              name: i18next.t('userinfo.activities', { lng }),
-              value:
-                member.presence?.activities
-                  ?.map((activity) => {
-                    if (activity.type === ActivityType.Custom) return;
-                    else return `${activities[activity.type]} ${activity.name}`;
-                  })
-                  .join('\n') || '/',
-              inline: true,
-            },
-            {
-              name: '\u200b',
-              value: '\u200b',
-              inline: true,
-            },
-            {
-              name: i18next.t('userinfo.devices', { lng }),
-              value: devices?.join(', ') || '/',
-              inline: true,
-            },
+            //       {
+            //         name: i18next.t('userinfo.activities', { lng }),
+            //         value:
+            //           member.presence?.activities
+            //             ?.map((activity) => {
+            //               if (activity.type === ActivityType.Custom) return;
+            //               else return `${activities[activity.type]} ${activity.name}`;
+            //             })
+            //             .join('\n') || '/',
+            //         inline: true,
+            //       },
+            //       {
+            //         name: '\u200b',
+            //         value: '\u200b',
+            //         inline: true,
+            //       },
+            //       {
+            //         name: i18next.t('userinfo.devices', { lng }),
+            //         value: devices?.join(', ') || '/',
+            //         inline: true,
+            //       },
             {
               name: i18next.t('userinfo.boosting', { lng }),
               value: member.premiumSinceTimestamp ? `<t:${Math.floor(member.premiumSinceTimestamp / 1000)}:R>` : '/',
               inline: true,
-            },
-            {
-              name: '\u200b',
-              value: '\u200b',
-              inline: true,
             }
+            //       {
+            //         name: '\u200b',
+            //         value: '\u200b',
+            //         inline: true,
+            //       }
           );
+
         const displayRoles = maxDisplayRoles(roles);
         if (roles.length)
           memberEmbed.addFields({

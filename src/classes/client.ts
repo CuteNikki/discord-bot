@@ -82,8 +82,8 @@ export class DiscordClient extends Client {
         GatewayIntentBits.GuildModeration,
 
         // !! Privileged intents !!
-        GatewayIntentBits.GuildMembers, // !! Needed for welcome messages and guild log !!
-        GatewayIntentBits.GuildPresences, // !! Needed for userinfo !!
+        // GatewayIntentBits.GuildMembers, // !! Needed for welcome messages and guild log !!
+        // GatewayIntentBits.GuildPresences, // !! Needed for userinfo !!
         GatewayIntentBits.MessageContent, // !! Needed for fast-type game !!
       ],
     });

@@ -2,8 +2,9 @@ import { ChannelType, Colors, EmbedBuilder, Events } from 'discord.js';
 
 import { Event } from 'classes/event';
 
+import { logger } from 'utils/logger';
+
 import { connectionModel } from 'models/phone';
-import { logger } from '../../utilities/logger';
 
 export default new Event({
   name: Events.MessageCreate,

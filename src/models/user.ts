@@ -29,7 +29,7 @@ export const userModel = mongoose.model(
     banned: { type: Boolean, default: false },
     badges: [
       {
-        id: { type: Number, enum: Object.values(BadgeType), required: true },
+        id: { type: Number, enum: Object.values(BadgeType).filter((value) => typeof value === 'number'), required: true },
         receivedAt: { type: Number, required: true },
       },
     ],

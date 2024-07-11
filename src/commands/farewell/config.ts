@@ -1,13 +1,14 @@
 import { ApplicationCommandOptionType, ApplicationCommandType, ChannelType, EmbedBuilder, PermissionFlagsBits, type APIEmbed } from 'discord.js';
 import i18next from 'i18next';
 
-import { Command, Contexts, IntegrationTypes } from 'classes/command';
+import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
 
 import { CustomEmbedBuilder } from 'utils/embed';
 
 import type { Message } from 'models/guild';
 
 export default new Command({
+  module: ModuleType.Config,
   data: {
     name: 'config-farewell',
     description: 'Configure the farewell module',

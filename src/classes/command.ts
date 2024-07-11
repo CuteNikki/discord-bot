@@ -46,7 +46,7 @@ export class Command<CommandType extends ApplicationCommandType = any> {
         contexts?: Contexts[];
         integration_types?: IntegrationTypes[];
       };
-      module?: ModuleType;
+      module: ModuleType;
       cooldown?: number; // Cooldown between command executes per user (in milliseconds)
       isDeveloperOnly?: boolean; // If true, can only be used by developers
       autocomplete?({ client, interaction }: { client: DiscordClient; interaction: AutocompleteInteraction }): any;

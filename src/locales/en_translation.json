@@ -167,8 +167,7 @@
       "guesses": "Guessed Letters",
       "timeout": "Your time ran out. The word was **{{word}}**!",
       "lost": "You guessed incorrectly. The word was **{{word}}**!",
-      "won": "You guessed correct!",
-      "stop": "You surrendered. The word was **{{word}}**!"
+      "won": "You guessed correct!"
     },
     "trivia": {
       "error": "No question could be found! Please try again later.",
@@ -242,6 +241,9 @@
       "voice": "You are not in a voice channel!",
       "none": "There is nothing playing!",
       "equalizer": "Could not change the equalizer!"
+    },
+    "lyrics": {
+      "none": "Could not find any lyrics for that song!"
     },
     "play": {
       "error": "Could not play that!",

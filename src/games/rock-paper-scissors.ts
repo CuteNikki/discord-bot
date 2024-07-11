@@ -6,9 +6,9 @@ import { Opponent } from 'games/opponent';
 import type { DiscordClient } from 'classes/client';
 
 enum CustomIds {
-  Rock = 'RPS_ROCK',
-  Paper = 'RPS_PAPER',
-  Scissors = 'RPS_SCISSORS',
+  Rock = 'RPS_Rock',
+  Paper = 'RPS_Paper',
+  Scissors = 'RPS_Scissors',
 }
 enum Picks {
   Rock = '🪨',

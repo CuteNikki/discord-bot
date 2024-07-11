@@ -157,10 +157,9 @@ export class Hangman {
     const interaction = this.options.interaction;
     const user = interaction.user;
 
-    let result: 'TIMEOUT' | 'WIN' | 'LOSE' | 'STOP' | null = null;
+    let result: 'TIMEOUT' | 'WIN' | 'LOSE' | null = null;
 
     if (reason === 'idle') result = 'TIMEOUT';
-    else if (reason === 'user' && !this.isGuessCorrect()) result = 'STOP';
     else if (this.isGuessCorrect()) result = 'WIN';
     else result = 'LOSE';
 
@@ -176,7 +175,6 @@ export class Hangman {
 
     if (result === 'TIMEOUT') embed.setDescription([i18next.t('games.hangman.timeout', { lng, word: this.word }), this.getBoardContent()].join('\n\n'));
     else if (result === 'LOSE') embed.setDescription([i18next.t('games.hangman.lost', { lng, word: this.word }), this.getBoardContent()].join('\n\n'));
-    else if (result === 'STOP') embed.setDescription([i18next.t('games.hangman.stop', { lng, word: this.word }), this.getBoardContent()].join('\n\n'));
     else embed.setDescription([i18next.t('games.hangman.won', { lng }), this.getBoardContent()].join('\n\n'));
 
     return await interaction.editReply({ content: null, embeds: [embed], components: [] }).catch(() => {});

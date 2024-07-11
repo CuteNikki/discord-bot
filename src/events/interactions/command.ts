@@ -25,7 +25,10 @@ export default new Event({
     // Only allowing commands if their module is enabled
     if (interaction.guild) {
       const guildSettings = await client.getGuildSettings(interaction.guild.id);
-      const message: InteractionReplyOptions = { content: i18next.t('interactions.module', { lng, module: command.options.module }), ephemeral: true };
+      const message: InteractionReplyOptions = {
+        content: i18next.t('interactions.module', { lng, module: ModuleType[command.options.module] }),
+        ephemeral: true,
+      };
       switch (command.options.module) {
         case ModuleType.Moderation:
           if (!guildSettings.moderation.enabled) return interaction.reply(message);

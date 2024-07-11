@@ -173,10 +173,10 @@ export class Tetris {
 
   private getComponents(disabled: boolean = false) {
     return new ActionRowBuilder<ButtonBuilder>().addComponents(
-      new ButtonBuilder().setCustomId('TETRIS_left').setEmoji('⬅️').setStyle(ButtonStyle.Secondary).setDisabled(disabled),
-      new ButtonBuilder().setCustomId('TETRIS_right').setEmoji('➡️').setStyle(ButtonStyle.Secondary).setDisabled(disabled),
-      new ButtonBuilder().setCustomId('TETRIS_rotate').setEmoji('🔄').setStyle(ButtonStyle.Secondary).setDisabled(disabled),
-      new ButtonBuilder().setCustomId('TETRIS_drop').setEmoji('⬇️').setStyle(ButtonStyle.Secondary).setDisabled(disabled)
+      new ButtonBuilder().setCustomId('TETRIS_left').setEmoji('⬅️').setStyle(ButtonStyle.Primary).setDisabled(disabled),
+      new ButtonBuilder().setCustomId('TETRIS_right').setEmoji('➡️').setStyle(ButtonStyle.Primary).setDisabled(disabled),
+      new ButtonBuilder().setCustomId('TETRIS_rotate').setEmoji('🔄').setStyle(ButtonStyle.Primary).setDisabled(disabled),
+      new ButtonBuilder().setCustomId('TETRIS_drop').setEmoji('⬇️').setStyle(ButtonStyle.Success).setDisabled(disabled)
     );
   }
 

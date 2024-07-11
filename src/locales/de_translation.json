@@ -167,8 +167,7 @@
       "guesses": "Geratene Buchstaben",
       "timeout": "Deine Zeit ist abgelaufen. Das Wort war **{{word}}**!",
       "lost": "Du hast falsch geraten. Das Wort war **{{word}}**!",
-      "won": "Du hast richtig geraten!",
-      "stop": "Du hast aufgegeben. Das Wort war **{{word}}**!"
+      "won": "Du hast richtig geraten!"
     },
     "trivia": {
       "error": "Es konnte keine Frage gefunden werden! Bitte versuche es später erneut.",
@@ -242,6 +241,9 @@
       "voice": "Du bist nicht in einem Sprachkanal!",
       "none": "Momentan wird nichts gespielt!",
       "equalizer": "Der Equalizer konnte nicht angepasst werden!"
+    },
+    "lyrics": {
+      "none": "Es konnte kein Songtext gefunden werden!"
     },
     "play": {
       "error": "Es konnte nichts abgespielt werden!",

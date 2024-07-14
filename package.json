@@ -15,7 +15,7 @@
   },
   "scripts": {
     "dev": "npx tsx .",
-    "deploy": "npx tsx src/utilities/register.ts",
+    "deploy": "npx tsx src/structure/utilities/register.ts",
     "start": "npx tsx dist/index.js",
     "build": "rm -rf dist && npx tsc --build ./"
   },

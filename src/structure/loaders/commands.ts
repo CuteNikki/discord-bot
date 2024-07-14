@@ -12,7 +12,7 @@ import { logger } from 'utils/logger';
 export async function loadCommands(client: DiscordClient) {
   const startTime = performance.now();
 
-  const path = process.cwd() + '\\src\\commands\\';
+  const path = process.cwd() + '/src/commands/';
   const files = await readdir(path, { recursive: true });
 
   for (const file of files) {

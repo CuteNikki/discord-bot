@@ -9,7 +9,7 @@ import { logger } from 'utils/logger';
 export async function loadEvents(client: DiscordClient) {
   const startTime = performance.now();
 
-  const path = process.cwd() + '\\src\\events\\';
+  const path = process.cwd() + '/src/events/';
   const files = await readdir(path, { recursive: true });
 
   for (const file of files) {

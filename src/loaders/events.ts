@@ -1,28 +1,35 @@
-import fs from 'fs';
-import path from 'path';
+import { readdir } from 'node:fs/promises';
+import { performance } from 'perf_hooks';
 
 import type { DiscordClient } from 'classes/client';
+import type { Event } from 'classes/event';
+
 import { logger } from 'utils/logger';
 
 export async function loadEvents(client: DiscordClient) {
-  const foldersPath = path.join(process.cwd(), 'src/events');
-  const folders = fs.readdirSync(foldersPath).filter((value) => !value.endsWith('.txt'));
+  const startTime = performance.now();
 
-  for (const folder of folders) {
-    const eventsPath = path.join(foldersPath, folder);
-    const files = fs.readdirSync(eventsPath).filter((value) => value.endsWith('.ts') || value.endsWith('.js'));
+  const path = process.cwd() + '\\src\\events\\';
+  const files = await readdir(path, { recursive: true });
 
-    for (const file of files) {
-      const filePath = path.join(eventsPath, file);
-      const event = await import('file://' + filePath);
+  for (const file of files) {
+    if (!file.endsWith('.ts') && !file.endsWith('.js')) continue;
 
-      if (event.default.options.once) {
-        client.once(event.default.options.name, (...args: any[]) => event.default.options.execute(client, ...args));
+    try {
+      const imported: { default?: Event } = await import('file://' + path + file);
+      if (!imported?.default?.options?.name) continue;
+
+      if (imported.default?.options.once) {
+        client.once(imported.default.options.name, (...args: any[]) => imported.default?.options.execute(client, ...args));
       } else {
-        client.on(event.default.options.name, (...args: any[]) => event.default.options.execute(client, ...args));
+        client.on(imported.default.options.name, (...args: any[]) => imported.default?.options.execute(client, ...args));
       }
+    } catch (e) {
+      logger.error(e, `Error while loading event (${file})`);
+      continue;
     }
   }
 
-  logger.info(`[${client.cluster.id}] Successfully loaded events`);
+  const endTime = performance.now();
+  logger.info(`[${client.cluster.id}] Loaded events in ${Math.floor(endTime - startTime)}ms`);
 }

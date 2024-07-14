@@ -96,10 +96,7 @@ export class DiscordClient extends Client {
   }
 
   private async loadModules() {
-    await loadEvents(this);
-    await loadCommands(this);
-    await loadButtons(this);
-    await loadModals(this);
+    await Promise.allSettled([loadEvents(this), loadCommands(this), loadButtons(this), loadModals(this)]);
   }
 
   private initTranslation() {

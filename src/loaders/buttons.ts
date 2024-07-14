@@ -1,30 +1,31 @@
-import fs from 'fs';
-import path from 'path';
+import { readdir } from 'node:fs/promises';
+import { performance } from 'perf_hooks';
 
+import type { Button } from 'classes/button';
 import type { DiscordClient } from 'classes/client';
 
 import { logger } from 'utils/logger';
 
 export async function loadButtons(client: DiscordClient) {
-  const foldersPath = path.join(process.cwd(), 'src/buttons');
-  const folders = fs.readdirSync(foldersPath).filter((value) => !value.endsWith('.txt'));
+  const startTime = performance.now();
 
-  for (const folder of folders) {
-    const buttonsPath = path.join(foldersPath, folder);
-    const files = fs.readdirSync(buttonsPath).filter((value) => value.endsWith('.ts') || value.endsWith('.js'));
+  const path = process.cwd() + '\\src\\buttons\\';
+  const files = await readdir(path, { recursive: true });
 
-    for (const file of files) {
-      const filePath = path.join(buttonsPath, file);
-      const button = await import('file://' + filePath);
+  for (const file of files) {
+    if (!file.endsWith('.ts') && !file.endsWith('.js')) continue;
 
-      if (!button.default) {
-        logger.error(filePath, `Failed to load button`);
-        continue;
-      }
+    try {
+      const imported: { default?: Button } = await import('file://' + path + file);
+      if (!imported?.default?.options?.customId) continue;
 
-      client.buttons.set(button.default.options.customId, button.default);
+      client.buttons.set(imported.default.options.customId, imported.default);
+    } catch (e) {
+      logger.error(e, `Error while loading button (${file})`);
+      continue;
     }
   }
 
-  logger.info(`[${client.cluster.id}] Successfully loaded buttons`);
+  const endTime = performance.now();
+  logger.info(`[${client.cluster.id}] Loaded ${client.buttons.size} buttons in ${Math.floor(endTime - startTime)}ms`);
 }

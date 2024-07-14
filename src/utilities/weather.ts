@@ -9,16 +9,13 @@ export async function getCurrentWeather(location: string): Promise<CurrentWeathe
   url.searchParams.append('q', location);
   url.searchParams.append('aqi', 'yes');
 
-  try {
-    const res = await fetch(url.href);
-    const data = await res.json();
+  const res = await fetch(url.href).catch(() => {});
+  if (!res) return null;
 
-    if (!data.location) return null;
+  const data = await res.json();
+  if (!data.location) return null;
 
-    return data;
-  } catch (err) {
-    return null;
-  }
+  return data;
 }
 
 export async function getWeatherForecast(location: string, days: string = '1'): Promise<WeatherForecastWrapper | null> {
@@ -28,16 +25,13 @@ export async function getWeatherForecast(location: string, days: string = '1'): 
   url.searchParams.append('q', location);
   url.searchParams.append('aqi', 'yes');
 
-  try {
-    const res = await fetch(url.href);
-    const data = await res.json();
+  const res = await fetch(url.href).catch(() => {});
+  if (!res) return null;
 
-    if (!data.location) return null;
+  const data = await res.json();
+  if (!data.location) return null;
 
-    return data;
-  } catch (err) {
-    return null;
-  }
+  return data;
 }
 
 export async function getHistoricWeather(location: string, date: string): Promise<HistoricWeatherWrapper | null> {
@@ -46,16 +40,13 @@ export async function getHistoricWeather(location: string, date: string): Promis
   url.searchParams.append('q', location);
   url.searchParams.append('dt', date);
 
-  try {
-    const res = await fetch(url.href);
-    const data = await res.json();
+  const res = await fetch(url.href).catch(() => {});
+  if (!res) return null;
 
-    if (!data.location) return null;
+  const data = await res.json();
+  if (!data.location) return null;
 
-    return data;
-  } catch (err) {
-    return null;
-  }
+  return data;
 }
 
 // 16-wind compass

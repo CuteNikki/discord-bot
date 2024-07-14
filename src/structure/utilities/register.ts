@@ -3,7 +3,7 @@ import { Collection, REST, Routes } from 'discord.js';
 import { readdir } from 'node:fs/promises';
 import { performance } from 'perf_hooks';
 
-import type { Command } from 'classes/command';
+import { ModuleType, type Command } from 'classes/command';
 
 import { keys } from 'utils/keys';
 import { logger } from 'utils/logger';
@@ -35,8 +35,8 @@ logger.info(`Loaded ${commands.size} commands in ${Math.floor(endTime - startTim
 const { DISCORD_BOT_ID, DISCORD_BOT_TOKEN } = keys;
 const rest = new REST().setToken(DISCORD_BOT_TOKEN);
 
-const commandsArray = commands.filter((cmd) => !cmd.options.isDeveloperOnly).map((cmd) => cmd.options.data);
-const devCommandsArray = commands.filter((cmd) => cmd.options.isDeveloperOnly).map((cmd) => cmd.options.data);
+const commandsArray = commands.filter((cmd) => !cmd.options.isDeveloperOnly && cmd.options.module !== ModuleType.Developer).map((cmd) => cmd.options.data);
+const devCommandsArray = commands.filter((cmd) => cmd.options.isDeveloperOnly || cmd.options.module === ModuleType.Developer).map((cmd) => cmd.options.data);
 
 try {
   const startTime = performance.now();

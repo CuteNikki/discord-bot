@@ -14,8 +14,8 @@ export default new Command({
     name: 'config-bot',
     description: 'Only for bot moderators/developers',
     type: ApplicationCommandType.ChatInput,
-    contexts: [Contexts.Guild, Contexts.BotDM, Contexts.PrivateChannel],
-    integration_types: [IntegrationTypes.GuildInstall, IntegrationTypes.UserInstall],
+    contexts: [Contexts.Guild],
+    integration_types: [IntegrationTypes.GuildInstall],
     options: [
       {
         name: 'support-guild-id',

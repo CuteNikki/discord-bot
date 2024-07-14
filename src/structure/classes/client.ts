@@ -108,7 +108,7 @@ export class DiscordClient extends Client {
         escapeValue: false,
       },
       backend: {
-        loadPath: 'src/locales/{{lng}}_{{ns}}.json',
+        loadPath: 'src/structure/locales/{{lng}}_{{ns}}.json',
       },
     });
   }

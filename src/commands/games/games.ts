@@ -9,10 +9,10 @@ import { Memory } from 'games/memory';
 import { RememberEmoji } from 'games/remember-emoji';
 import { RockPaperScissors } from 'games/rock-paper-scissors';
 import { Snake } from 'games/snake';
+import { Sokoban } from 'games/sokoban';
+import { Tetris } from 'games/tetris';
 import { TicTacToe } from 'games/tic-tac-toe';
 import { Trivia, TriviaDifficulty, TriviaMode } from 'games/trivia';
-import { Tetris } from 'games/tetris';
-import { Sokoban } from 'games/sokoban';
 
 import { words } from 'utils/words';
 

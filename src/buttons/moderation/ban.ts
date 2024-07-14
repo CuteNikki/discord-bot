@@ -17,7 +17,7 @@ export default new Button({
     const target = await client.users.fetch(targetId).catch(() => {});
 
     const lng = await client.getUserLanguage(interaction.user.id);
-    
+
     if (!target) return interaction.reply(i18next.t('ban.failed', { lng }));
     
     const targetLng = await client.getUserLanguage(targetId);

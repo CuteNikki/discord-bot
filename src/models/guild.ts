@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { Model, model, Schema, Types } from 'mongoose';
 
 export enum AnnouncementType {
   UserChannel,
@@ -78,7 +78,14 @@ export interface Message {
   embed: Embed; // max 10 embeds but not using array
 }
 
+export interface LevelReward {
+  roleId: string;
+  level: number;
+  _id: Types.ObjectId;
+}
+
 export interface GuildSettings {
+  _id: Types.ObjectId;
   guildId: string;
   moderation: {
     enabled: boolean;
@@ -93,7 +100,7 @@ export interface GuildSettings {
     ignoredRoles: string[];
     ignoredChannels: string[];
     enabledChannels: string[];
-    rewards: { roleId: string; level: number; _id: mongoose.Types.ObjectId }[];
+    rewards: LevelReward[];
   };
   welcome: {
     enabled: boolean;
@@ -152,256 +159,255 @@ export interface GuildSettings {
   };
 }
 
-export const guildModel = mongoose.model(
-  'guild',
-  new mongoose.Schema<GuildSettings>({
-    guildId: { type: String, required: true },
-    music: {
-      type: {
-        enabled: { type: Boolean },
-      },
-      default: {
-        enabled: false,
-      },
+const guildSchema = new Schema<GuildSettings>({
+  guildId: { type: String, required: true },
+  music: {
+    type: {
+      enabled: { type: Boolean },
     },
-    moderation: {
-      type: {
-        enabled: { type: Boolean },
-      },
-      default: {
-        enabled: true,
-      },
+    default: {
+      enabled: false,
     },
-    welcome: {
-      type: {
-        channelId: { type: String },
-        enabled: { type: Boolean },
-        roles: [{ type: String }],
-        message: {
-          content: { type: String },
-          embed: {
-            color: { type: String },
-            title: { type: String },
+  },
+  moderation: {
+    type: {
+      enabled: { type: Boolean },
+    },
+    default: {
+      enabled: true,
+    },
+  },
+  welcome: {
+    type: {
+      channelId: { type: String },
+      enabled: { type: Boolean },
+      roles: [{ type: String }],
+      message: {
+        content: { type: String },
+        embed: {
+          color: { type: String },
+          title: { type: String },
+          url: { type: String },
+          description: { type: String },
+          thumbnail: { type: String },
+          image: { type: String },
+          author: {
+            name: { type: String },
+            icon_url: { type: String },
             url: { type: String },
-            description: { type: String },
-            thumbnail: { type: String },
-            image: { type: String },
-            author: {
+          },
+          footer: {
+            text: { type: String },
+            icon_url: { type: String },
+          },
+          fields: [
+            {
               name: { type: String },
-              icon_url: { type: String },
-              url: { type: String },
+              value: { type: String },
+              inline: { type: Boolean },
             },
-            footer: {
-              text: { type: String },
-              icon_url: { type: String },
-            },
-            fields: [
-              {
-                name: { type: String },
-                value: { type: String },
-                inline: { type: Boolean },
-              },
-            ],
-          },
+          ],
         },
-      },
-      default: {
-        enabled: true,
-        message: {
-          content: null,
-          embed: {
-            color: null,
-            description: null,
-            image: undefined,
-            thumbnail: undefined,
-            title: null,
-            url: null,
-            author: {
-              name: null,
-              icon_url: null,
-              url: null,
-            },
-            fields: [],
-            footer: {
-              text: null,
-              icon_url: null,
-            },
-          },
-        },
-        roles: [],
       },
     },
-    farewell: {
-      type: {
-        channelId: { type: String },
-        enabled: { type: Boolean },
-        message: {
-          content: { type: String },
-          embed: {
-            color: { type: String },
-            title: { type: String },
+    default: {
+      enabled: true,
+      message: {
+        content: null,
+        embed: {
+          color: null,
+          description: null,
+          image: undefined,
+          thumbnail: undefined,
+          title: null,
+          url: null,
+          author: {
+            name: null,
+            icon_url: null,
+            url: null,
+          },
+          fields: [],
+          footer: {
+            text: null,
+            icon_url: null,
+          },
+        },
+      },
+      roles: [],
+    },
+  },
+  farewell: {
+    type: {
+      channelId: { type: String },
+      enabled: { type: Boolean },
+      message: {
+        content: { type: String },
+        embed: {
+          color: { type: String },
+          title: { type: String },
+          url: { type: String },
+          description: { type: String },
+          thumbnail: { type: String },
+          image: { type: String },
+          author: {
+            name: { type: String },
+            icon_url: { type: String },
             url: { type: String },
-            description: { type: String },
-            thumbnail: { type: String },
-            image: { type: String },
-            author: {
+          },
+          footer: {
+            text: { type: String },
+            icon_url: { type: String },
+          },
+          fields: [
+            {
               name: { type: String },
-              icon_url: { type: String },
-              url: { type: String },
+              value: { type: String },
+              inline: { type: Boolean },
             },
-            footer: {
-              text: { type: String },
-              icon_url: { type: String },
-            },
-            fields: [
-              {
-                name: { type: String },
-                value: { type: String },
-                inline: { type: Boolean },
-              },
-            ],
-          },
+          ],
         },
       },
-      default: {
-        enabled: true,
-        message: {
-          content: null,
-          embed: {
-            color: null,
-            description: null,
-            image: undefined,
-            thumbnail: undefined,
-            title: null,
+    },
+    default: {
+      enabled: true,
+      message: {
+        content: null,
+        embed: {
+          color: null,
+          description: null,
+          image: undefined,
+          thumbnail: undefined,
+          title: null,
+          url: null,
+          author: {
+            name: null,
+            icon_url: null,
             url: null,
-            author: {
-              name: null,
-              icon_url: null,
-              url: null,
-            },
-            fields: [],
-            footer: {
-              text: null,
-              icon_url: null,
-            },
+          },
+          fields: [],
+          footer: {
+            text: null,
+            icon_url: null,
           },
         },
       },
     },
-    level: {
-      type: {
-        enabled: { type: Boolean },
-        channelId: { type: String },
-        announcement: { type: Number, enum: Object.values(AnnouncementType).filter((value) => typeof value === 'number') },
-        ignoredRoles: [{ type: String }],
-        ignoredChannels: [{ type: String }],
-        enabledChannels: [{ type: String }],
-        rewards: [
-          {
-            level: { type: Number, required: true },
-            roleId: { type: String, required: true },
-          },
-        ],
-      },
-      default: {
-        enabled: false,
-        channelId: undefined,
-        announcement: AnnouncementType.UserChannel,
-        ignoredRoles: [],
-        ignoredChannels: [],
-        enabledChannels: [],
-        rewards: [],
+  },
+  level: {
+    type: {
+      enabled: { type: Boolean },
+      channelId: { type: String },
+      announcement: { type: Number, enum: Object.values(AnnouncementType).filter((value) => typeof value === 'number') },
+      ignoredRoles: [{ type: String }],
+      ignoredChannels: [{ type: String }],
+      enabledChannels: [{ type: String }],
+      rewards: [
+        {
+          level: { type: Number, required: true },
+          roleId: { type: String, required: true },
+        },
+      ],
+    },
+    default: {
+      enabled: false,
+      channelId: undefined,
+      announcement: AnnouncementType.UserChannel,
+      ignoredRoles: [],
+      ignoredChannels: [],
+      enabledChannels: [],
+      rewards: [],
+    },
+  },
+  log: {
+    type: {
+      enabled: { type: Boolean },
+      channelId: { type: String },
+      events: {
+        applicationCommandPermissionsUpdate: { type: Boolean },
+        autoModerationActionExecution: { type: Boolean },
+        autoModerationRuleCreate: { type: Boolean },
+        autoModerationRuleDelete: { type: Boolean },
+        autoModerationRuleUpdate: { type: Boolean },
+        channelCreate: { type: Boolean },
+        channelDelete: { type: Boolean },
+        channelUpdate: { type: Boolean },
+        emojiCreate: { type: Boolean },
+        emojiDelete: { type: Boolean },
+        emojiUpdate: { type: Boolean },
+        guildBanAdd: { type: Boolean },
+        guildBanRemove: { type: Boolean },
+        guildMemberAdd: { type: Boolean },
+        guildMemberRemove: { type: Boolean },
+        guildMemberUpdate: { type: Boolean },
+        guildScheduledEventCreate: { type: Boolean },
+        guildScheduledEventDelete: { type: Boolean },
+        guildScheduledEventUpdate: { type: Boolean },
+        guildScheduledEventUserAdd: { type: Boolean },
+        guildScheduledEventUserRemove: { type: Boolean },
+        guildUpdate: { type: Boolean },
+        inviteCreate: { type: Boolean },
+        inviteDelete: { type: Boolean },
+        messageUpdate: { type: Boolean },
+        messageDelete: { type: Boolean },
+        messageBulkDelete: { type: Boolean },
+        messageReactionRemoveAll: { type: Boolean },
+        roleCreate: { type: Boolean },
+        roleDelete: { type: Boolean },
+        roleUpdate: { type: Boolean },
+        stickerCreate: { type: Boolean },
+        stickerDelete: { type: Boolean },
+        stickerUpdate: { type: Boolean },
+        threadCreate: { type: Boolean },
+        threadDelete: { type: Boolean },
+        threadUpdate: { type: Boolean },
+        voiceStateUpdate: { type: Boolean },
       },
     },
-    log: {
-      type: {
-        enabled: { type: Boolean },
-        channelId: { type: String },
-        events: {
-          applicationCommandPermissionsUpdate: { type: Boolean },
-          autoModerationActionExecution: { type: Boolean },
-          autoModerationRuleCreate: { type: Boolean },
-          autoModerationRuleDelete: { type: Boolean },
-          autoModerationRuleUpdate: { type: Boolean },
-          channelCreate: { type: Boolean },
-          channelDelete: { type: Boolean },
-          channelUpdate: { type: Boolean },
-          emojiCreate: { type: Boolean },
-          emojiDelete: { type: Boolean },
-          emojiUpdate: { type: Boolean },
-          guildBanAdd: { type: Boolean },
-          guildBanRemove: { type: Boolean },
-          guildMemberAdd: { type: Boolean },
-          guildMemberRemove: { type: Boolean },
-          guildMemberUpdate: { type: Boolean },
-          guildScheduledEventCreate: { type: Boolean },
-          guildScheduledEventDelete: { type: Boolean },
-          guildScheduledEventUpdate: { type: Boolean },
-          guildScheduledEventUserAdd: { type: Boolean },
-          guildScheduledEventUserRemove: { type: Boolean },
-          guildUpdate: { type: Boolean },
-          inviteCreate: { type: Boolean },
-          inviteDelete: { type: Boolean },
-          messageUpdate: { type: Boolean },
-          messageDelete: { type: Boolean },
-          messageBulkDelete: { type: Boolean },
-          messageReactionRemoveAll: { type: Boolean },
-          roleCreate: { type: Boolean },
-          roleDelete: { type: Boolean },
-          roleUpdate: { type: Boolean },
-          stickerCreate: { type: Boolean },
-          stickerDelete: { type: Boolean },
-          stickerUpdate: { type: Boolean },
-          threadCreate: { type: Boolean },
-          threadDelete: { type: Boolean },
-          threadUpdate: { type: Boolean },
-          voiceStateUpdate: { type: Boolean },
-        },
-      },
-      default: {
-        enabled: true,
-        channelId: undefined,
-        events: {
-          applicationCommandPermissionsUpdate: false,
-          autoModerationActionExecution: false,
-          autoModerationRuleCreate: false,
-          autoModerationRuleDelete: false,
-          autoModerationRuleUpdate: false,
-          channelCreate: false,
-          channelDelete: false,
-          channelUpdate: false,
-          emojiCreate: false,
-          emojiDelete: false,
-          emojiUpdate: false,
-          guildBanAdd: false,
-          guildBanRemove: false,
-          guildMemberAdd: false,
-          guildMemberRemove: false,
-          guildMemberUpdate: false,
-          guildScheduledEventCreate: false,
-          guildScheduledEventDelete: false,
-          guildScheduledEventUpdate: false,
-          guildScheduledEventUserAdd: false,
-          guildScheduledEventUserRemove: false,
-          guildUpdate: false,
-          inviteCreate: false,
-          inviteDelete: false,
-          messageUpdate: false,
-          messageDelete: false,
-          messageBulkDelete: false,
-          messageReactionRemoveAll: false,
-          roleCreate: false,
-          roleDelete: false,
-          roleUpdate: false,
-          stickerCreate: false,
-          stickerDelete: false,
-          stickerUpdate: false,
-          threadCreate: false,
-          threadDelete: false,
-          threadUpdate: false,
-          voiceStateUpdate: false,
-        },
+    default: {
+      enabled: true,
+      channelId: undefined,
+      events: {
+        applicationCommandPermissionsUpdate: false,
+        autoModerationActionExecution: false,
+        autoModerationRuleCreate: false,
+        autoModerationRuleDelete: false,
+        autoModerationRuleUpdate: false,
+        channelCreate: false,
+        channelDelete: false,
+        channelUpdate: false,
+        emojiCreate: false,
+        emojiDelete: false,
+        emojiUpdate: false,
+        guildBanAdd: false,
+        guildBanRemove: false,
+        guildMemberAdd: false,
+        guildMemberRemove: false,
+        guildMemberUpdate: false,
+        guildScheduledEventCreate: false,
+        guildScheduledEventDelete: false,
+        guildScheduledEventUpdate: false,
+        guildScheduledEventUserAdd: false,
+        guildScheduledEventUserRemove: false,
+        guildUpdate: false,
+        inviteCreate: false,
+        inviteDelete: false,
+        messageUpdate: false,
+        messageDelete: false,
+        messageBulkDelete: false,
+        messageReactionRemoveAll: false,
+        roleCreate: false,
+        roleDelete: false,
+        roleUpdate: false,
+        stickerCreate: false,
+        stickerDelete: false,
+        stickerUpdate: false,
+        threadCreate: false,
+        threadDelete: false,
+        threadUpdate: false,
+        voiceStateUpdate: false,
       },
     },
-  })
-);
+  },
+});
+
+export const guildModel: Model<GuildSettings> = mongoose.models['guild'] || model<GuildSettings>('guild', guildSchema);

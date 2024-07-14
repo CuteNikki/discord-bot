@@ -1,8 +1,8 @@
-import mongoose from 'mongoose';
+import mongoose, { Model, model, Schema, Types } from 'mongoose';
 
 export interface ClientSettings {
+  _id: Types.ObjectId;
   applicationId: string;
-  inviteUrl: string;
   database: {
     lastWeeklyClear: number;
   };
@@ -10,23 +10,23 @@ export interface ClientSettings {
     guildId: string;
     inviteUrl: string;
   };
+  inviteUrl: string;
 }
 
-export const clientModel = mongoose.model(
-  'client',
-  new mongoose.Schema<ClientSettings>({
-    applicationId: { type: String, required: true },
-    database: {
-      type: { lastWeeklyClear: { type: Number, requiredPaths: false } },
-      default: { lastWeeklyClear: 0 },
+const clientSchema = new Schema<ClientSettings>({
+  applicationId: { type: String, required: true },
+  database: {
+    type: { lastWeeklyClear: { type: Number, requiredPaths: false } },
+    default: { lastWeeklyClear: 0 },
+  },
+  support: {
+    type: {
+      guildId: { type: String, required: true },
+      inviteUrl: { type: String, required: true },
     },
-    inviteUrl: { type: String, required: true, default: 'unavailable' },
-    support: {
-      type: {
-        guildId: { type: String, required: true },
-        inviteUrl: { type: String, required: true },
-      },
-      default: { guildId: 'unavailable', invite: 'unavailable' },
-    },
-  })
-);
+    default: { guildId: 'unavailable', invite: 'unavailable' },
+  },
+  inviteUrl: { type: String, required: true, default: 'unavailable' },
+});
+
+export const clientModel: Model<ClientSettings> = mongoose.models['client'] || model<ClientSettings>('client', clientSchema);

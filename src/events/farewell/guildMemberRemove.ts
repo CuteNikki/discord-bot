@@ -1,8 +1,7 @@
 import { ChannelType, EmbedBuilder, Events, type ColorResolvable } from 'discord.js';
 
 import { Event } from 'classes/event';
-
-import { replacePlaceholders } from 'utils/embed';
+import { replacePlaceholders } from 'classes/custom-embed';
 
 export default new Event({
   name: Events.GuildMemberRemove,

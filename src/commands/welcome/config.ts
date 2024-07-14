@@ -2,8 +2,7 @@ import { ApplicationCommandOptionType, ApplicationCommandType, ChannelType, Embe
 import i18next from 'i18next';
 
 import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
-
-import { CustomEmbedBuilder } from 'utils/embed';
+import { CustomEmbedBuilder } from 'classes/custom-embed';
 
 import type { Message } from 'models/guild';
 

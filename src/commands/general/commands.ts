@@ -38,7 +38,7 @@ export default new Command({
 
     const categories = Object.values(ModuleType)
       .filter((category) => typeof category !== 'string' && category !== ModuleType.Developer)
-      .map((category) => ({ label: ModuleType[category].toString(), value: category.toString() }));
+      .map((category) => ({ label: ModuleType[category as number], value: category.toString() }));
     const select = new StringSelectMenuBuilder()
       .setCustomId('HELP_SELECT')
       .setMaxValues(1)

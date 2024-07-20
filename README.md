@@ -209,7 +209,6 @@ npm run start
   - [x] Userinfo command
   - [x] Serverinfo command
   - [x] Weather command
-  - [x] Math command
   - [x] Reminder command
   - [ ] Config command
 - [ ] Developer Module
@@ -228,14 +227,14 @@ npm run start
         - Supporter
         - Expert Bughunter
         - Bughunter
-- [ ] Custom VC module
-  - [ ] Config command
-- [ ] Economy module
-  - [ ] Config command
 - [ ] Fun module
   - [x] Phone command
   - [ ] Config command
 - [ ] Ticket module
+  - [ ] Config command
+- [ ] Custom VC module
+  - [ ] Config command
+- [ ] Economy module
   - [ ] Config command
 - [ ] Giveaway module
   - [ ] Config command

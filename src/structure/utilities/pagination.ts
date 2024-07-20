@@ -105,7 +105,7 @@ export async function pagination({
 
   collector.on('end', async (_, reason) => {
     if (reason === 'extra') return;
-
+    if (extraButton) extraButton.setDisabled(true);
     buttonFirst.setDisabled(true);
     buttonPrev.setDisabled(true);
     buttonNext.setDisabled(true);

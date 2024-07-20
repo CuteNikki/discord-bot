@@ -1,7 +1,8 @@
 import { CronJob } from 'cron';
 import { Colors, EmbedBuilder } from 'discord.js';
 import i18next from 'i18next';
-import mongoose from 'mongoose';
+import { connect } from 'mongoose';
+import { performance } from 'perf_hooks';
 
 import { DiscordClient } from 'classes/client';
 
@@ -15,11 +16,12 @@ import { keys } from 'utils/keys';
 import { logger } from 'utils/logger';
 import { availableChannelModel, connectionModel } from '../models/phone';
 
-export function initDatabase(client: DiscordClient) {
-  mongoose
-    .connect(keys.DATABASE_URI)
+export async function initDatabase(client: DiscordClient) {
+  const startTime = performance.now();
+  await connect(keys.DATABASE_URI)
     .then(() => {
-      logger.info(`[${client.cluster.id}] Successfully connected to database`);
+      const endTime = performance.now();
+      logger.info(`[${client.cluster.id}] Connected to database in ${Math.floor(endTime - startTime)}ms`);
 
       client.once('ready', () => {
         collectUserLanguages(client); // Set clients user language collection

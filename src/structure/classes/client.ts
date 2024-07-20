@@ -96,11 +96,14 @@ export class DiscordClient extends Client {
   }
 
   private async loadModules() {
-    await Promise.allSettled([loadEvents(this), loadCommands(this), loadButtons(this), loadModals(this)]);
+    await loadEvents(this);
+    await loadCommands(this);
+    await loadButtons(this);
+    await loadModals(this);
   }
 
-  private initTranslation() {
-    i18next.use(i18nextFsBackend).init({
+  private async initTranslation() {
+    await i18next.use(i18nextFsBackend).init({
       // debug: true,
       preload: this.supportedLanguages,
       fallbackLng: this.supportedLanguages[0],

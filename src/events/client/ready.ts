@@ -5,9 +5,7 @@ import { logger } from 'utils/logger';
 export default new Event({
   name: 'ready',
   once: true,
-  execute(client) {
-    setTimeout(() => {
-      logger.info(`[${client.cluster.id}] Client is ready`);
-    }, 5000);
+  execute(client, readyClient) {
+    logger.info(`[${client.cluster.id}] Ready as ${readyClient.user.username}#${readyClient.user.discriminator}`);
   },
 });

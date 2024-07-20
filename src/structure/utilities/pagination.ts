@@ -23,6 +23,7 @@ export async function pagination({
   content,
   extraButton,
   extraButtonFunction,
+  disableButtons = true,
   time = 60_000, // The time a user has to use the buttons before disabling them
   ephemeral = true, // If true, the pagination will only be visible to the user
   footer = true, // If true, will replace the current embeds footer to tell that the buttons have been disabled because the time is over
@@ -36,6 +37,7 @@ export async function pagination({
   time?: number;
   ephemeral?: boolean;
   footer?: boolean;
+  disableButtons?: boolean;
 }) {
   if (!interaction.deferred) await interaction.deferReply({ ephemeral });
   const { user } = interaction;
@@ -105,6 +107,7 @@ export async function pagination({
 
   collector.on('end', async (_, reason) => {
     if (reason === 'extra') return;
+    if (!disableButtons) return;
     if (extraButton) extraButton.setDisabled(true);
     buttonFirst.setDisabled(true);
     buttonPrev.setDisabled(true);

@@ -1,4 +1,9 @@
 {
+  "commands": {
+    "placeholder": "Wähle eine Kategorie",
+    "title": "Befehlsliste",
+    "description": "Benutze die Auswahl um zwischen {{categories}} Kategorien zu suchen!"
+  },
   "phone": {
     "connect": {
       "already": "Du bist bereits mit dem Telefon verbunden!",
@@ -799,5 +804,5 @@
     "error": "Etwas ist schief gelaufen! Fehler: {{error}}",
     "module": "Du kannst diesen Befehl nur verwenden wenn das {{module}} Modul aktiviert ist!"
   },
-  "pagination": "Knöpfe wurden für {{time}} nicht benutzt und deaktiviert!"
+  "pagination": "Komponenten wurden für {{time}} nicht benutzt und deaktiviert!"
 }

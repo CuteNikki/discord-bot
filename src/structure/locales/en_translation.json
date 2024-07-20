@@ -1,4 +1,9 @@
 {
+  "commands": {
+    "placeholder": "Select a category",
+    "title": "Commands list",
+    "description": "Use the selection below to browse through {{categories}} categories!"
+  },
   "phone": {
     "connect": {
       "already": "You are already connected to the phone!",
@@ -799,5 +804,5 @@
     "error": "Something went wrong! Error: {{error}}",
     "module": "You can only use this command if the {{module}} module is enabled!"
   },
-  "pagination": "Buttons were not used for {{time}} and have been disabled!"
+  "pagination": "Components were not used for {{time}} and have been disabled!"
 }

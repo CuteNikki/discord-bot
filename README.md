@@ -84,6 +84,7 @@ npm run start
 <h3>TO-DO</h3>
 
 - [x] General module
+  - [x] Commands command
   - [x] Language command
   - [x] Support command
   - [x] Invite command

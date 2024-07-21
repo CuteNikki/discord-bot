@@ -12,7 +12,7 @@ const commands = new Collection<string, Command>();
 
 const startTime = performance.now();
 
-const path = process.cwd() + '\\src\\commands\\';
+const path = process.cwd() + '/src/commands/';
 const files = await readdir(path, { recursive: true });
 
 for (const file of files) {

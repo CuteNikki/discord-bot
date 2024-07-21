@@ -6,38 +6,25 @@ import {
   ButtonStyle,
   ComponentType,
   PermissionFlagsBits,
+  SlashCommandBuilder,
+  InteractionContextType,
+  ApplicationIntegrationType,
 } from 'discord.js';
-import i18next from 'i18next';
+import { t } from 'i18next';
 
-import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
-
+import { Command, ModuleType } from 'classes/command';
 import { InfractionType, infractionModel } from 'models/infraction';
 
 export default new Command({
   module: ModuleType.Moderation,
-  data: {
-    name: 'kick',
-    description: 'Kicks a user',
-    default_member_permissions: `${PermissionFlagsBits.KickMembers}`,
-    type: ApplicationCommandType.ChatInput,
-    contexts: [Contexts.Guild],
-    integration_types: [IntegrationTypes.GuildInstall],
-    options: [
-      {
-        name: 'user',
-        description: 'The user to kick',
-        type: ApplicationCommandOptionType.User,
-        required: true,
-      },
-      {
-        name: 'reason',
-        description: 'The reason for the kick',
-        type: ApplicationCommandOptionType.String,
-        max_length: 180,
-        required: false,
-      },
-    ],
-  },
+  data: new SlashCommandBuilder()
+    .setName('kick')
+    .setDescription('Kicks a user')
+    .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers)
+    .setContexts(InteractionContextType.Guild)
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .addUserOption((option) => option.setName('user').setDescription('The user to kick').setRequired(true))
+    .addStringOption((option) => option.setName('reason').setDescription('The reason for the kick').setMaxLength(300).setRequired(false)),
   async execute({ interaction, client }) {
     if (!interaction.inCachedGuild()) return;
     await interaction.deferReply({ ephemeral: true });
@@ -50,12 +37,8 @@ export default new Command({
     const { options, guild, member, user } = interaction;
 
     const target = options.getUser('user', true);
-
-    const lng = await client.getUserLanguage(interaction.user.id);
-    const targetLng = await client.getUserLanguage(target.id);
-
     const targetMember = await guild.members.fetch(target.id).catch(() => {});
-    if (!targetMember) return interaction.editReply(i18next.t('kick.target.invalid', { lng }));
+    if (!targetMember) return interaction.editReply(t('kick.target.invalid', { lng: await client.getUserLanguage(interaction.user.id) }));
 
     const reason = options.getString('reason', false) ?? undefined;
 
@@ -63,13 +46,13 @@ export default new Command({
     const staffRolePos = member.roles.highest.position ?? 0;
     const botRolePos = guild.members.me?.roles.highest.position ?? 0;
 
-    if (targetRolePos >= staffRolePos) return interaction.editReply(i18next.t('kick.target.pos_staff', { lng }));
-    if (targetRolePos >= botRolePos) return interaction.editReply(i18next.t('kick.target.pos_bot', { lng }));
+    if (targetRolePos >= staffRolePos) return interaction.editReply(t('kick.target.pos_staff', { lng: await client.getUserLanguage(interaction.user.id) }));
+    if (targetRolePos >= botRolePos) return interaction.editReply(t('kick.target.pos_bot', { lng: await client.getUserLanguage(interaction.user.id) }));
 
-    if (!targetMember.kickable) return interaction.editReply(i18next.t('kick.target.kickable', { lng }));
+    if (!targetMember.kickable) return interaction.editReply(t('kick.target.kickable', { lng: await client.getUserLanguage(interaction.user.id) }));
 
     const msg = await interaction.editReply({
-      content: i18next.t('kick.confirm', { lng, user: target.toString() }),
+      content: t('kick.confirm', { lng: await client.getUserLanguage(interaction.user.id), user: target.toString() }),
       components: [
         new ActionRowBuilder<ButtonBuilder>().setComponents(
           new ButtonBuilder().setCustomId(CustomIds.Confirm).setEmoji('✔').setStyle(ButtonStyle.Success),
@@ -81,15 +64,15 @@ export default new Command({
     const collector = await msg.awaitMessageComponent({ filter: (i) => i.user.id === interaction.user.id, componentType: ComponentType.Button, time: 30_000 });
 
     if (collector.customId === CustomIds.Cancel) {
-      await collector.update({ content: i18next.t('kick.cancelled', { lng }), components: [] });
+      await collector.update({ content: t('kick.cancelled', { lng: await client.getUserLanguage(interaction.user.id) }), components: [] });
     } else if (collector.customId === CustomIds.Confirm) {
       const kicked = await targetMember.kick(reason).catch(() => {});
-      if (!kicked) return collector.update(i18next.t('kick.failed', { lng }));
+      if (!kicked) return collector.update(t('kick.failed', { lng: await client.getUserLanguage(interaction.user.id) }));
 
       const receivedDM = await client.users
         .send(target.id, {
-          content: i18next.t('kick.target_dm', {
-            lng: targetLng,
+          content: t('kick.target_dm', {
+            lng: await client.getUserLanguage(target.id),
             guild: `\`${guild.name}\``,
             reason: `\`${reason ?? '/'}\``,
           }),
@@ -97,8 +80,10 @@ export default new Command({
         .catch(() => {});
       await collector.update({
         content: [
-          i18next.t('kick.confirmed', { lng, user: target.toString(), reason: `\`${reason ?? '/'}\`` }),
-          receivedDM ? i18next.t('kick.dm_received', { lng }) : i18next.t('kick.dm_not_received', { lng }),
+          t('kick.confirmed', { lng: await client.getUserLanguage(interaction.user.id), user: target.toString(), reason: `\`${reason ?? '/'}\`` }),
+          receivedDM
+            ? t('kick.dm_received', { lng: await client.getUserLanguage(interaction.user.id) })
+            : t('kick.dm_not_received', { lng: await client.getUserLanguage(interaction.user.id) }),
         ].join('\n'),
         components: [],
       });

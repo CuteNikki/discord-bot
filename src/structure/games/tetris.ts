@@ -1,5 +1,5 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, ComponentType, EmbedBuilder, type ChatInputCommandInteraction } from 'discord.js';
-import i18next from 'i18next';
+import { t } from 'i18next';
 
 import type { DiscordClient } from 'classes/client';
 
@@ -90,11 +90,11 @@ export class Tetris {
           new EmbedBuilder()
             .setColor(Colors.Yellow)
             .setAuthor({ name: user.displayName, iconURL: user.displayAvatarURL() })
-            .setTitle(i18next.t('games.tetris.title', { lng }))
+            .setTitle(t('games.tetris.title', { lng }))
             .setDescription(this.getBoardContent())
             .addFields(
-              { name: i18next.t('games.tetris.score', { lng }), value: `${this.score}` },
-              { name: i18next.t('games.tetris.pieces', { lng }), value: `${this.pieceQueue.join(', ')}` }
+              { name: t('games.tetris.score', { lng }), value: `${this.score}` },
+              { name: t('games.tetris.pieces', { lng }), value: `${this.pieceQueue.join(', ')}` }
             ),
         ],
         components: [this.getComponents()],
@@ -111,7 +111,7 @@ export class Tetris {
       if (buttonInteraction.user.id !== user.id)
         return buttonInteraction
           .followUp({
-            content: i18next.t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
+            content: t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
             ephemeral: true,
           })
           .catch(() => {});
@@ -130,11 +130,11 @@ export class Tetris {
               new EmbedBuilder()
                 .setColor(Colors.Yellow)
                 .setAuthor({ name: user.displayName, iconURL: user.displayAvatarURL() })
-                .setTitle(i18next.t('games.tetris.title', { lng }))
+                .setTitle(t('games.tetris.title', { lng }))
                 .setDescription(this.getBoardContent())
                 .addFields(
-                  { name: i18next.t('games.tetris.score', { lng }), value: `${this.score}` },
-                  { name: i18next.t('games.tetris.pieces', { lng }), value: `${this.pieceQueue.join(', ')}` }
+                  { name: t('games.tetris.score', { lng }), value: `${this.score}` },
+                  { name: t('games.tetris.pieces', { lng }), value: `${this.pieceQueue.join(', ')}` }
                 ),
             ],
           })
@@ -159,11 +159,11 @@ export class Tetris {
           new EmbedBuilder()
             .setColor(Colors.Red)
             .setAuthor({ name: user.displayName, iconURL: user.displayAvatarURL() })
-            .setTitle(i18next.t('games.tetris.title', { lng }))
-            .setDescription([i18next.t('games.tetris.over', { lng }), this.getBoardContent()].join('\n\n'))
+            .setTitle(t('games.tetris.title', { lng }))
+            .setDescription([t('games.tetris.over', { lng }), this.getBoardContent()].join('\n\n'))
             .addFields(
-              { name: i18next.t('games.tetris.score', { lng }), value: `${this.score}` },
-              { name: i18next.t('games.tetris.pieces', { lng }), value: `${this.pieceQueue.join(', ')}` }
+              { name: t('games.tetris.score', { lng }), value: `${this.score}` },
+              { name: t('games.tetris.pieces', { lng }), value: `${this.pieceQueue.join(', ')}` }
             ),
         ],
         components: [this.getComponents(true)],

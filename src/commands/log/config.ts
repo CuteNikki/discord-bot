@@ -1,105 +1,55 @@
-import { ApplicationCommandOptionType, ApplicationCommandType, ChannelType, Colors, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
-import i18next from 'i18next';
+import { ApplicationIntegrationType, ChannelType, Colors, EmbedBuilder, InteractionContextType, PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
+import { t } from 'i18next';
 
-import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
+import { Command, ModuleType } from 'classes/command';
 
 import { availableEvents } from 'models/guild';
 
 export default new Command({
   module: ModuleType.Config,
-  data: {
-    name: 'config-log',
-    description: 'Configure the log module',
-    default_member_permissions: `${PermissionFlagsBits.ManageGuild}`,
-    type: ApplicationCommandType.ChatInput,
-    contexts: [Contexts.Guild],
-    integration_types: [IntegrationTypes.GuildInstall],
-    options: [
-      {
-        name: 'show',
-        description: 'Shows the current configuration',
-        type: ApplicationCommandOptionType.SubcommandGroup,
-        options: [
-          {
-            name: 'all',
-            description: 'Shows the entire configuration',
-            type: ApplicationCommandOptionType.Subcommand,
-          },
-          {
-            name: 'channel',
-            description: 'Shows the log channel',
-            type: ApplicationCommandOptionType.Subcommand,
-          },
-          {
-            name: 'events',
-            description: 'Shows the events',
-            type: ApplicationCommandOptionType.Subcommand,
-          },
-        ],
-      },
-      {
-        name: 'channel',
-        description: 'Configure the log channel',
-        type: ApplicationCommandOptionType.SubcommandGroup,
-        options: [
-          {
-            name: 'set',
-            description: 'Sets the log channel',
-            type: ApplicationCommandOptionType.Subcommand,
-            options: [
-              {
-                name: 'channel',
-                description: 'The log channel',
-                type: ApplicationCommandOptionType.Channel,
-                channel_types: [ChannelType.GuildText],
-                required: true,
-              },
-            ],
-          },
-          {
-            name: 'remove',
-            description: 'Removes the log channel',
-            type: ApplicationCommandOptionType.Subcommand,
-          },
-        ],
-      },
-      {
-        name: 'events',
-        description: 'Manage the events',
-        type: ApplicationCommandOptionType.SubcommandGroup,
-        options: [
-          {
-            name: 'enable',
-            description: 'Enables an event',
-            type: ApplicationCommandOptionType.Subcommand,
-            options: [
-              {
-                name: 'event',
-                description: 'Name of the event',
-                type: ApplicationCommandOptionType.String,
-                autocomplete: true,
-                required: true,
-              },
-            ],
-          },
-          {
-            name: 'disable',
-            description: 'Disables an event',
-            type: ApplicationCommandOptionType.Subcommand,
-            options: [
-              {
-                name: 'event',
-                description: 'Name of the event',
-                type: ApplicationCommandOptionType.String,
-                autocomplete: true,
-                required: true,
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  },
+  data: new SlashCommandBuilder()
+    .setName('config-log')
+    .setDescription('Configure the log module')
+    .setContexts(InteractionContextType.Guild)
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
+    .addSubcommandGroup((group) =>
+      group
+        .setName('show')
+        .setDescription('Shows the current configuration')
+        .addSubcommand((subcommand) => subcommand.setName('all').setDescription('Shows the entire configuration'))
+        .addSubcommand((subcommand) => subcommand.setName('channel').setDescription('Shows the log channel'))
+        .addSubcommand((subcommand) => subcommand.setName('events').setDescription('Shows the events'))
+    )
+    .addSubcommandGroup((group) =>
+      group
+        .setName('channel')
+        .setDescription('Configure the log channel')
+        .addSubcommand((subcommand) =>
+          subcommand
+            .setName('set')
+            .setDescription('Sets the log channel')
+            .addChannelOption((option) => option.setName('channel').setDescription('The log channel').setRequired(true).addChannelTypes(ChannelType.GuildText))
+        )
+        .addSubcommand((subcommand) => subcommand.setName('remove').setDescription('Removes the log channel'))
+    )
+    .addSubcommandGroup((group) =>
+      group
+        .setName('events')
+        .setDescription('Manage the events')
+        .addSubcommand((subcommand) =>
+          subcommand
+            .setName('enable')
+            .setDescription('Enables an event')
+            .addStringOption((option) => option.setName('event').setDescription('Name of the event').setAutocomplete(true).setRequired(true))
+        )
+        .addSubcommand((subcommand) =>
+          subcommand
+            .setName('disable')
+            .setDescription('Disables an event')
+            .addStringOption((option) => option.setName('event').setDescription('Name of the event').setAutocomplete(true).setRequired(true))
+        )
+    ),
   async autocomplete({ interaction }) {
     const eventName = interaction.options.getFocused();
     if (!eventName.length)
@@ -142,10 +92,10 @@ export default new Command({
               {
                 const allConfigEmbed = new EmbedBuilder()
                   .setColor(Colors.Orange)
-                  .setTitle(i18next.t('log.title', { lng }))
+                  .setTitle(t('log.title', { lng }))
                   .setDescription(events.map((e) => `${e.name}: ${e.enabled}`).join('\n'))
                   .addFields({
-                    name: i18next.t('log.channel.title', { lng }),
+                    name: t('log.channel.title', { lng }),
                     value: config.log.channelId ? `<#${config.log.channelId}>` : '/',
                   });
                 interaction.editReply({ embeds: [allConfigEmbed] });
@@ -157,9 +107,9 @@ export default new Command({
                   embeds: [
                     new EmbedBuilder()
                       .setColor(Colors.Blurple)
-                      .setTitle(i18next.t('log.title', { lng }))
+                      .setTitle(t('log.title', { lng }))
                       .addFields({
-                        name: i18next.t('log.channel.title', { lng }),
+                        name: t('log.channel.title', { lng }),
                         value: config.log.channelId ? `<#${config.log.channelId}>` : '/',
                       }),
                   ],
@@ -172,7 +122,7 @@ export default new Command({
                   embeds: [
                     new EmbedBuilder()
                       .setColor(Colors.Blurple)
-                      .setTitle(i18next.t('log.title', { lng }))
+                      .setTitle(t('log.title', { lng }))
                       .setDescription(events.map((e) => `${e.name}: ${e.enabled}`).join('\n')),
                   ],
                 });
@@ -234,7 +184,7 @@ export default new Command({
                       },
                     },
                   });
-                  return interaction.editReply(i18next.t('log.events.enabled', { lng }));
+                  return interaction.editReply(t('log.events.enabled', { lng }));
                 }
                 if (eventName.toLowerCase() === 'all') {
                   await client.updateGuildSettings(guildId, {
@@ -281,14 +231,14 @@ export default new Command({
                       },
                     },
                   });
-                  return interaction.editReply(i18next.t('log.events.enabled', { lng }));
+                  return interaction.editReply(t('log.events.enabled', { lng }));
                 }
 
-                if (!event) return interaction.editReply(i18next.t('log.events.invalid', { lng }));
-                if (event.enabled) return interaction.editReply(i18next.t('log.events.already_enabled', { lng }));
+                if (!event) return interaction.editReply(t('log.events.invalid', { lng }));
+                if (event.enabled) return interaction.editReply(t('log.events.already_enabled', { lng }));
 
                 await client.updateGuildSettings(guildId, { $set: { [`log.events.${event.name}`]: true } });
-                interaction.editReply(i18next.t('log.events.enabled', { lng }));
+                interaction.editReply(t('log.events.enabled', { lng }));
               }
               break;
             case 'disable':
@@ -341,7 +291,7 @@ export default new Command({
                       },
                     },
                   });
-                  return interaction.editReply(i18next.t('log.events.disabled', { lng }));
+                  return interaction.editReply(t('log.events.disabled', { lng }));
                 }
                 if (eventName.toLowerCase() === 'all') {
                   await client.updateGuildSettings(guildId, {
@@ -388,14 +338,14 @@ export default new Command({
                       },
                     },
                   });
-                  return interaction.editReply(i18next.t('log.events.disabled', { lng }));
+                  return interaction.editReply(t('log.events.disabled', { lng }));
                 }
 
-                if (!event) return interaction.editReply(i18next.t('log.events.invalid', { lng }));
-                if (!event.enabled) return interaction.editReply(i18next.t('log.events.already_disabled', { lng }));
+                if (!event) return interaction.editReply(t('log.events.invalid', { lng }));
+                if (!event.enabled) return interaction.editReply(t('log.events.already_disabled', { lng }));
 
                 await client.updateGuildSettings(guildId, { $set: { [`log.events.${event.name}`]: false } });
-                interaction.editReply(i18next.t('log.events.disabled', { lng }));
+                interaction.editReply(t('log.events.disabled', { lng }));
               }
               break;
           }
@@ -408,14 +358,14 @@ export default new Command({
               {
                 const channel = options.getChannel('channel', true, [ChannelType.GuildText]);
                 await client.updateGuildSettings(guildId, { $set: { ['log.channelId']: channel.id } });
-                interaction.editReply(i18next.t('log.channel.set', { lng }));
+                interaction.editReply(t('log.channel.set', { lng }));
               }
               break;
             case 'remove':
               {
-                if (!config.log.channelId) return interaction.editReply(i18next.t('log.channel.none', { lng }));
+                if (!config.log.channelId) return interaction.editReply(t('log.channel.none', { lng }));
                 await client.updateGuildSettings(guildId, { $set: { ['log.channelId']: undefined } });
-                interaction.editReply(i18next.t('log.channel.removed', { lng }));
+                interaction.editReply(t('log.channel.removed', { lng }));
               }
               break;
           }

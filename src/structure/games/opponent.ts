@@ -1,7 +1,7 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, Message, type ChatInputCommandInteraction, type User } from 'discord.js';
 
 import type { DiscordClient } from 'classes/client';
-import i18next from 'i18next';
+import { t } from 'i18next';
 
 enum CustomIds {
   Accept = 'OPPONENT_ACCEPT',
@@ -29,22 +29,22 @@ export class Opponent {
     const opponentLng = await client.getUserLanguage(opponent.id);
 
     if (opponent.id === user.id) {
-      await interaction.editReply(i18next.t('games.invitation.yourself', { lng })).catch(() => {});
+      await interaction.editReply(t('games.invitation.yourself', { lng })).catch(() => {});
       return false;
     }
 
     if (opponent.bot) {
-      await interaction.editReply(i18next.t('games.invitation.bot', { lng })).catch(() => {});
+      await interaction.editReply(t('games.invitation.bot', { lng })).catch(() => {});
       return false;
     }
 
     return new Promise(async (resolve) => {
       const acceptButton = new ButtonBuilder()
-        .setLabel(i18next.t('games.invitation.accept', { lng: opponentLng }))
+        .setLabel(t('games.invitation.accept', { lng: opponentLng }))
         .setCustomId(CustomIds.Accept)
         .setStyle(ButtonStyle.Success);
       const rejectButton = new ButtonBuilder()
-        .setLabel(i18next.t('games.invitation.reject', { lng: opponentLng }))
+        .setLabel(t('games.invitation.reject', { lng: opponentLng }))
         .setCustomId(CustomIds.Reject)
         .setStyle(ButtonStyle.Danger);
       const row = new ActionRowBuilder<ButtonBuilder>().setComponents(acceptButton, rejectButton);
@@ -55,8 +55,8 @@ export class Opponent {
           embeds: [
             new EmbedBuilder()
               .setColor(Colors.Yellow)
-              .setTitle(i18next.t('games.invitation.title', { lng: opponentLng }))
-              .setDescription(i18next.t('games.invitation.description', { lng: opponentLng, user: user.toString() })),
+              .setTitle(t('games.invitation.title', { lng: opponentLng }))
+              .setDescription(t('games.invitation.description', { lng: opponentLng, user: user.toString() })),
           ],
           components: [row],
         })
@@ -71,7 +71,7 @@ export class Opponent {
         if (buttonInteraction.user.id !== opponent.id) {
           return buttonInteraction
             .followUp({
-              content: i18next.t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
+              content: t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
               ephemeral: true,
             })
             .catch(() => {});
@@ -86,8 +86,8 @@ export class Opponent {
 
         const embed = new EmbedBuilder().setColor(Colors.Red);
 
-        if (reason === 'reject') embed.setDescription(i18next.t('games.invitation.rejected', { lng, opponent: opponent.toString() }));
-        if (reason === 'time') embed.setDescription(i18next.t('games.invitation.timeout', { lng, opponent: opponent.toString() }));
+        if (reason === 'reject') embed.setDescription(t('games.invitation.rejected', { lng, opponent: opponent.toString() }));
+        if (reason === 'time') embed.setDescription(t('games.invitation.timeout', { lng, opponent: opponent.toString() }));
 
         interaction.editReply({ content: user.toString(), embeds: [embed], components: [] }).catch(() => {});
         return resolve(false);

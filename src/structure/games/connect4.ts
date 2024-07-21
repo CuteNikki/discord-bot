@@ -9,7 +9,7 @@ import {
   type JSONEncodable,
   type User,
 } from 'discord.js';
-import i18next from 'i18next';
+import { t } from 'i18next';
 
 import { Opponent } from 'games/opponent';
 
@@ -82,11 +82,11 @@ export class Connect4 extends Opponent {
 
     await interaction
       .editReply({
-        content: i18next.t('games.connect.start', this.playerTurn ? { lng, player: user.toString() } : { lng: opponentLng, player: opponent.toString() }),
+        content: t('games.connect.start', this.playerTurn ? { lng, player: user.toString() } : { lng: opponentLng, player: opponent.toString() }),
         embeds: [
           new EmbedBuilder()
             .setColor(Colors.Yellow)
-            .setTitle(i18next.t('games.connect.title', { lng }))
+            .setTitle(t('games.connect.title', { lng }))
             .setDescription(this.getBoardContent())
             .addFields(
               { name: user.displayName, value: '🔵', inline: true },
@@ -106,16 +106,16 @@ export class Connect4 extends Opponent {
       if (buttonInteraction.user.id !== user.id && buttonInteraction.user.id !== opponent.id)
         return buttonInteraction
           .followUp({
-            content: i18next.t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
+            content: t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
             ephemeral: true,
           })
           .catch(() => {});
 
       if (this.playerTurn && buttonInteraction.user.id !== user.id)
-        return buttonInteraction.followUp({ content: i18next.t('games.connect.turn', { lng: opponentLng }), ephemeral: true }).catch(() => {});
+        return buttonInteraction.followUp({ content: t('games.connect.turn', { lng: opponentLng }), ephemeral: true }).catch(() => {});
 
       if (!this.playerTurn && buttonInteraction.user.id !== opponent.id)
-        return buttonInteraction.followUp({ content: i18next.t('games.connect.turn', { lng }), ephemeral: true }).catch(() => {});
+        return buttonInteraction.followUp({ content: t('games.connect.turn', { lng }), ephemeral: true }).catch(() => {});
 
       const column = parseInt(buttonInteraction.customId.split('_')[1]) - 1;
       const coords = { x: -1, y: -1 };
@@ -143,11 +143,11 @@ export class Connect4 extends Opponent {
 
       return await buttonInteraction
         .editReply({
-          content: i18next.t('games.connect.wait', this.playerTurn ? { lng, player: user.toString() } : { lng: opponentLng, player: opponent.toString() }),
+          content: t('games.connect.wait', this.playerTurn ? { lng, player: user.toString() } : { lng: opponentLng, player: opponent.toString() }),
           embeds: [
             new EmbedBuilder()
               .setColor(Colors.Yellow)
-              .setTitle(i18next.t('games.connect.title', { lng }))
+              .setTitle(t('games.connect.title', { lng }))
               .setDescription(this.getBoardContent())
               .addFields(
                 { name: user.displayName, value: '🔵', inline: true },
@@ -244,7 +244,7 @@ export class Connect4 extends Opponent {
     else if (reason === 'user') result = this.playerTurn ? 'PLAYER' : 'OPPONENT';
 
     const embed = new EmbedBuilder()
-      .setTitle(i18next.t('games.connect.title', { lng }))
+      .setTitle(t('games.connect.title', { lng }))
       .setColor(result === 'TIE' ? Colors.Yellow : result === 'TIMEOUT' ? Colors.Yellow : result === 'OPPONENT' ? Colors.Red : Colors.Green)
       .addFields(
         { name: user.displayName, value: '🔵', inline: true },
@@ -252,11 +252,10 @@ export class Connect4 extends Opponent {
         { name: opponent.displayName, value: '🔴', inline: true }
       );
 
-    if (result === 'TIMEOUT') embed.setDescription([i18next.t('games.connect.timeout', { lng }), this.getBoardContent()].join('\n\n'));
-    else if (result === 'TIE') embed.setDescription([i18next.t('games.connect.tied', { lng }), this.getBoardContent()].join('\n\n'));
-    else if (result === 'PLAYER')
-      embed.setDescription([i18next.t('games.connect.winner', { lng, winner: user.toString() }), this.getBoardContent()].join('\n\n'));
-    else embed.setDescription([i18next.t('games.connect.winner', { lng, winner: opponent.toString() }), this.getBoardContent()].join('\n\n'));
+    if (result === 'TIMEOUT') embed.setDescription([t('games.connect.timeout', { lng }), this.getBoardContent()].join('\n\n'));
+    else if (result === 'TIE') embed.setDescription([t('games.connect.tied', { lng }), this.getBoardContent()].join('\n\n'));
+    else if (result === 'PLAYER') embed.setDescription([t('games.connect.winner', { lng, winner: user.toString() }), this.getBoardContent()].join('\n\n'));
+    else embed.setDescription([t('games.connect.winner', { lng, winner: opponent.toString() }), this.getBoardContent()].join('\n\n'));
 
     return await interaction.editReply({ content: null, embeds: [embed], components: this.disableButtons(this.getComponents()) }).catch(() => {});
   }

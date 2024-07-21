@@ -1,5 +1,5 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, type ChatInputCommandInteraction } from 'discord.js';
-import i18next from 'i18next';
+import { t } from 'i18next';
 
 import type { DiscordClient } from 'classes/client';
 
@@ -28,8 +28,8 @@ export class RememberEmoji {
     const embed = new EmbedBuilder()
       .setColor(Colors.Yellow)
       .setAuthor({ name: user.displayName, iconURL: user.displayAvatarURL() })
-      .setTitle(i18next.t('games.remember.title', { lng }))
-      .setDescription(i18next.t('games.remember.starting', { lng }));
+      .setTitle(t('games.remember.title', { lng }))
+      .setDescription(t('games.remember.starting', { lng }));
 
     const message = await interaction
       .editReply({
@@ -41,7 +41,7 @@ export class RememberEmoji {
     if (!message) return;
 
     setTimeout(async () => {
-      embed.setDescription(i18next.t('games.remember.started', { lng, emoji: this.emoji }));
+      embed.setDescription(t('games.remember.started', { lng, emoji: this.emoji }));
       await interaction.editReply({ embeds: [embed], components: this.getComponents(false) });
 
       const collector = message.createMessageComponentCollector({ idle: 60 * 1000 });
@@ -52,7 +52,7 @@ export class RememberEmoji {
         if (buttonInteraction.user.id !== user.id)
           return buttonInteraction
             .followUp({
-              content: i18next.t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
+              content: t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
               ephemeral: true,
             })
             .catch(() => {});
@@ -83,17 +83,17 @@ export class RememberEmoji {
         new EmbedBuilder()
           .setColor(result === 'WIN' ? Colors.Green : Colors.Red)
           .setAuthor({ name: user.displayName, iconURL: user.displayAvatarURL() })
-          .setTitle(i18next.t('games.remember.title', { lng }))
+          .setTitle(t('games.remember.title', { lng }))
           .setDescription(
             result === 'WIN'
-              ? i18next.t('games.remember.correct', { lng })
+              ? t('games.remember.correct', { lng })
               : result === 'TIMEOUT'
-              ? i18next.t('games.remember.timeout', { lng })
-              : i18next.t('games.remember.incorrect', { lng })
+              ? t('games.remember.timeout', { lng })
+              : t('games.remember.incorrect', { lng })
           )
           .addFields(
-            { name: i18next.t('games.remember.answer', { lng }), value: this.emoji },
-            { name: i18next.t('games.remember.input', { lng }), value: this.selected || '/' }
+            { name: t('games.remember.answer', { lng }), value: this.emoji },
+            { name: t('games.remember.input', { lng }), value: this.selected || '/' }
           ),
       ],
       components: this.disableButtons(this.getComponents(true)),

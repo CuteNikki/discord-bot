@@ -1,17 +1,26 @@
 import { GoogleTranslator } from '@translate-tools/core/translators/GoogleTranslator';
-import { ApplicationCommandType, Colors, EmbedBuilder, codeBlock } from 'discord.js';
+import {
+  ApplicationCommandType,
+  ApplicationIntegrationType,
+  Colors,
+  ContextMenuCommandBuilder,
+  EmbedBuilder,
+  InteractionContextType,
+  codeBlock,
+} from 'discord.js';
+import { t } from 'i18next';
 
-import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
-import i18next from 'i18next';
+import { Command, ModuleType } from 'classes/command';
 
-export default new Command({
+const commandType = ApplicationCommandType.Message;
+
+export default new Command<typeof commandType>({
   module: ModuleType.Utilities,
-  data: {
-    name: 'Translate',
-    type: ApplicationCommandType.Message,
-    contexts: [Contexts.Guild, Contexts.BotDM, Contexts.PrivateChannel],
-    integration_types: [IntegrationTypes.GuildInstall, IntegrationTypes.UserInstall],
-  },
+  data: new ContextMenuCommandBuilder()
+    .setName('Translate')
+    .setType(commandType)
+    .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel)
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall),
   async execute({ interaction, client }) {
     const { user, targetMessage } = interaction;
     await interaction.deferReply({ ephemeral: true });
@@ -24,18 +33,18 @@ export default new Command({
       },
     });
 
-    if (!targetMessage.content) return interaction.editReply(i18next.t('translate.none', { lng }));
+    if (!targetMessage.content) return interaction.editReply(t('translate.none', { lng }));
     const translated = await translator.translate(targetMessage.content, 'auto', lng);
-    if (!translated) return interaction.editReply(i18next.t('translate.none', { lng }));
+    if (!translated) return interaction.editReply(t('translate.none', { lng }));
 
     interaction.editReply({
       embeds: [
         new EmbedBuilder()
           .setColor(Colors.Aqua)
-          .setTitle(i18next.t('translate.title', { lng }))
+          .setTitle(t('translate.title', { lng }))
           .addFields(
-            { name: i18next.t('translate.input', { lng }), value: codeBlock(targetMessage.content.substring(0, 4000)) },
-            { name: i18next.t('translate.output', { lng }), value: codeBlock(translated.substring(0, 4000)) }
+            { name: t('translate.input', { lng }), value: codeBlock(targetMessage.content.substring(0, 4000)) },
+            { name: t('translate.output', { lng }), value: codeBlock(translated.substring(0, 4000)) }
           ),
       ],
     });

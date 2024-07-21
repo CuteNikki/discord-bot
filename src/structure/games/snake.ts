@@ -1,5 +1,5 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, type ChatInputCommandInteraction } from 'discord.js';
-import i18next from 'i18next';
+import { t } from 'i18next';
 
 import type { DiscordClient } from 'classes/client';
 
@@ -94,9 +94,9 @@ export class Snake {
           new EmbedBuilder()
             .setColor(Colors.Yellow)
             .setAuthor({ name: user.displayName, iconURL: user.displayAvatarURL() })
-            .setTitle(i18next.t('games.snake.title', { lng }))
+            .setTitle(t('games.snake.title', { lng }))
             .setDescription(this.getBoardContent())
-            .addFields({ name: i18next.t('games.snake.score', { lng }), value: `${this.score}` }),
+            .addFields({ name: t('games.snake.score', { lng }), value: `${this.score}` }),
         ],
         components: this.getComponents(),
       })
@@ -111,7 +111,7 @@ export class Snake {
       if (buttonInteraction.user.id !== user.id)
         return buttonInteraction
           .followUp({
-            content: i18next.t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
+            content: t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
             ephemeral: true,
           })
           .catch(() => {});
@@ -153,9 +153,9 @@ export class Snake {
             new EmbedBuilder()
               .setColor(Colors.Yellow)
               .setAuthor({ name: user.displayName, iconURL: user.displayAvatarURL() })
-              .setTitle(i18next.t('games.snake.title', { lng }))
+              .setTitle(t('games.snake.title', { lng }))
               .setDescription(this.getBoardContent())
-              .addFields({ name: i18next.t('games.snake.score', { lng }), value: `${this.score}` }),
+              .addFields({ name: t('games.snake.score', { lng }), value: `${this.score}` }),
           ],
         })
         .catch(() => {});
@@ -177,9 +177,9 @@ export class Snake {
           new EmbedBuilder()
             .setColor(Colors.Red)
             .setAuthor({ name: user.displayName, iconURL: user.displayAvatarURL() })
-            .setTitle(i18next.t('games.snake.title', { lng }))
-            .setDescription([i18next.t('games.snake.over', { lng }), this.getBoardContent(true)].join('\n\n'))
-            .addFields({ name: i18next.t('games.snake.score', { lng }), value: `${this.score}` }),
+            .setTitle(t('games.snake.title', { lng }))
+            .setDescription([t('games.snake.over', { lng }), this.getBoardContent(true)].join('\n\n'))
+            .addFields({ name: t('games.snake.score', { lng }), value: `${this.score}` }),
         ],
         components: this.disableButtons(this.getComponents()),
       })

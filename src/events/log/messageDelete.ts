@@ -46,7 +46,7 @@ export default new Event({
             }
           ),
       ],
-      files: message.attachments.toJSON(),
+      files: message.attachments.map((a) => a),
     });
   },
 });

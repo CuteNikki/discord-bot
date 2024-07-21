@@ -1,6 +1,6 @@
-import { ApplicationCommandOptionType, ApplicationCommandType } from 'discord.js';
+import { ApplicationIntegrationType, InteractionContextType, SlashCommandBuilder } from 'discord.js';
 
-import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
+import { Command, ModuleType } from 'classes/command';
 
 import { Connect4 } from 'games/connect4';
 import { FastType } from 'games/fast-type';
@@ -18,86 +18,51 @@ import { words } from 'utils/words';
 
 export default new Command({
   module: ModuleType.Games,
-  data: {
-    name: 'games',
-    description: 'Choose one of the fun games to play',
-    type: ApplicationCommandType.ChatInput,
-    contexts: [Contexts.Guild, Contexts.BotDM, Contexts.PrivateChannel],
-    integration_types: [IntegrationTypes.GuildInstall, IntegrationTypes.UserInstall],
-    options: [
-      {
-        name: 'rock-paper-scissors',
-        description: 'Play a game of rock, paper and scissors!',
-        type: ApplicationCommandOptionType.Subcommand,
-        options: [
-          {
-            name: 'opponent',
-            description: 'The user to play against',
-            type: ApplicationCommandOptionType.User,
-            required: false,
-          },
-        ],
-      },
-      {
-        name: 'tic-tac-toe',
-        description: 'Play a game of Tic Tac Toe!',
-        type: ApplicationCommandOptionType.Subcommand,
-        options: [
-          {
-            name: 'opponent',
-            description: 'The user to play against',
-            type: ApplicationCommandOptionType.User,
-            required: true,
-          },
-        ],
-      },
-      {
-        name: 'connect4',
-        description: 'Play a game of Connect4!',
-        type: ApplicationCommandOptionType.Subcommand,
-        options: [
-          {
-            name: 'opponent',
-            description: 'The user to play against',
-            type: ApplicationCommandOptionType.User,
-            required: true,
-          },
-          {
-            name: 'size',
-            description: 'The size of connect4',
-            type: ApplicationCommandOptionType.String,
-            required: false,
-            choices: [
-              {
-                name: 'Original (7x6)',
-                value: 'original',
-              },
-              {
-                name: 'Small (6x5)',
-                value: 'small',
-              },
-              {
-                name: 'Medium (8x7)',
-                value: 'medium',
-              },
-              {
-                name: 'Big (10x9)',
-                value: 'big',
-              },
-            ],
-          },
-        ],
-      },
-      {
-        name: 'hangman',
-        description: 'Play a game of hangman!',
-        type: ApplicationCommandOptionType.Subcommand,
-        options: [
-          {
-            name: 'theme',
-            description: 'The theme you want your word to be from',
-            type: ApplicationCommandOptionType.String,
-            choices: [
+  data: new SlashCommandBuilder()
+    .setName('games')
+    .setDescription('Choose one of the fun games to play')
+    .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel)
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
+    .addSubcommand((subcommand) =>
+      subcommand
+        .setName('rock-paper-scissors')
+        .setDescription('Play a game of rock, paper and scissors!')
+        .addUserOption((option) => option.setName('opponent').setDescription('The user to play against').setRequired(false))
+    )
+    .addSubcommand((subcommand) =>
+      subcommand
+        .setName('tic-tac-toe')
+        .setDescription('Play a game of Tic Tac Toe!')
+        .addUserOption((option) => option.setName('opponent').setDescription('The user to play against').setRequired(true))
+    )
+    .addSubcommand((subcommand) =>
+      subcommand
+        .setName('connect4')
+        .setDescription('Play a game of Connect4!')
+        .addUserOption((option) => option.setName('opponent').setDescription('The user to play against').setRequired(true))
+        .addStringOption((option) =>
+          option
+            .setName('size')
+            .setDescription('The size of connect4')
+            .setRequired(false)
+            .addChoices(
+              { name: 'Original (7x6)', value: 'original' },
+              { name: 'Small (6x5)', value: 'small' },
+              { name: 'Medium (8x7)', value: 'medium' },
+              { name: 'Big (10x9)', value: 'big' }
+            )
+        )
+    )
+    .addSubcommand((subcommand) =>
+      subcommand
+        .setName('hangman')
+        .setDescription('Play a game of hangman!')
+        .addStringOption((option) =>
+          option
+            .setName('theme')
+            .setDescription('The theme you want your word to be from')
+            .setRequired(false)
+            .addChoices(
               { name: 'Random', value: 'random' },
               { name: 'Discord', value: 'discord' },
               { name: 'Fruit', value: 'fruit' },
@@ -107,58 +72,38 @@ export default new Command({
               { name: 'Camping', value: 'camping' },
               { name: 'Winter', value: 'winter' },
               { name: 'Pokemon', value: 'pokemon' },
-              { name: 'Wordle', value: 'wordle' },
-            ],
-          },
-        ],
-      },
-      {
-        name: 'trivia',
-        description: 'Play a game of Trivia!',
-        type: ApplicationCommandOptionType.Subcommand,
-        options: [
-          {
-            name: 'mode',
-            description: 'Choose between single or multiple choice answers',
-            type: ApplicationCommandOptionType.String,
-            required: true,
-            choices: [
-              {
-                name: 'single choice',
-                value: TriviaMode.Single,
-              },
-              {
-                name: 'multiple choice',
-                value: TriviaMode.Multiple,
-              },
-            ],
-          },
-          {
-            name: 'difficulty',
-            description: 'Choose a difficulty',
-            type: ApplicationCommandOptionType.String,
-            required: true,
-            choices: [
-              {
-                name: 'easy',
-                value: TriviaDifficulty.Easy,
-              },
-              {
-                name: 'medium',
-                value: TriviaDifficulty.Medium,
-              },
-              {
-                name: 'hard',
-                value: TriviaDifficulty.Hard,
-              },
-            ],
-          },
-          {
-            name: 'category',
-            description: 'Choose a category',
-            type: ApplicationCommandOptionType.Integer,
-            required: false,
-            choices: [
+              { name: 'Wordle', value: 'wordle' }
+            )
+        )
+    )
+    .addSubcommand((subcommand) =>
+      subcommand
+        .setName('trivia')
+        .setDescription('Play a game of Trivia!')
+        .addStringOption((option) =>
+          option
+            .setName('mode')
+            .setDescription('Choose between single or multiple choice answers')
+            .setRequired(true)
+            .addChoices({ name: 'single choice', value: TriviaMode.Single }, { name: 'multiple choice', value: TriviaMode.Multiple })
+        )
+        .addStringOption((option) =>
+          option
+            .setName('difficulty')
+            .setDescription('Choose a difficulty')
+            .setRequired(true)
+            .addChoices(
+              { name: 'easy', value: TriviaDifficulty.Easy },
+              { name: 'medium', value: TriviaDifficulty.Medium },
+              { name: 'hard', value: TriviaDifficulty.Hard }
+            )
+        )
+        .addIntegerOption((option) =>
+          option
+            .setName('category')
+            .setDescription('Choose a category')
+            .setRequired(false)
+            .addChoices(
               { name: 'Any Category', value: 0 },
               { name: 'General Knowledge', value: 9 },
               { name: 'Books', value: 10 },
@@ -180,76 +125,34 @@ export default new Command({
               { name: 'Vehicles', value: 28 },
               { name: 'Comics', value: 29 },
               { name: 'Japanese Anime & Manga', value: 31 },
-              { name: 'Cartoon & Animation', value: 32 },
-            ],
-          },
-        ],
-      },
-      {
-        name: 'snake',
-        description: 'Play a game of Snake!',
-        type: ApplicationCommandOptionType.Subcommand,
-        options: [
-          {
-            name: 'size',
-            description: 'The size of the board',
-            type: ApplicationCommandOptionType.String,
-            choices: [
-              {
-                name: 'Very small (5x5)',
-                value: 'very_small',
-              },
-              {
-                name: 'Small (6x6)',
-                value: 'small',
-              },
-              {
-                name: 'Medium (7x7)',
-                value: 'medium',
-              },
-              {
-                name: 'Big (8x8)',
-                value: 'big',
-              },
-              {
-                name: 'Very Big (9x9)',
-                value: 'very_big',
-              },
-              {
-                name: 'Huge (10x10)',
-                value: 'huge',
-              },
-            ],
-          },
-        ],
-      },
-      {
-        name: 'fast-type',
-        description: 'Play a game of Fast-Type!',
-        type: ApplicationCommandOptionType.Subcommand,
-      },
-      {
-        name: 'memory',
-        description: 'Play a game of Memory!',
-        type: ApplicationCommandOptionType.Subcommand,
-      },
-      {
-        name: 'remember-emoji',
-        description: 'Play a game of remember emoji!',
-        type: ApplicationCommandOptionType.Subcommand,
-      },
-      {
-        name: 'tetris',
-        description: 'Play a game of Tetris!',
-        type: ApplicationCommandOptionType.Subcommand,
-      },
-      {
-        name: 'sokoban',
-        description: 'Play a game of Sokoban!',
-        type: ApplicationCommandOptionType.Subcommand,
-      },
-    ],
-  },
+              { name: 'Cartoon & Animation', value: 32 }
+            )
+        )
+    )
+    .addSubcommand((subcommand) =>
+      subcommand
+        .setName('snake')
+        .setDescription('Play a game of Snake!')
+        .addStringOption((option) =>
+          option
+            .setName('size')
+            .setDescription('The size of the board')
+            .setRequired(false)
+            .addChoices(
+              { name: 'Very small (5x5)', value: 'very_small' },
+              { name: 'Small (6x6)', value: 'small' },
+              { name: 'Medium (7x7)', value: 'medium' },
+              { name: 'Big (8x8)', value: 'big' },
+              { name: 'Very Big (9x9)', value: 'very_big' },
+              { name: 'Huge (10x10)', value: 'huge' }
+            )
+        )
+    )
+    .addSubcommand((subcommand) => subcommand.setName('fast-type').setDescription('Play a game of Fast-Type!'))
+    .addSubcommand((subcommand) => subcommand.setName('memory').setDescription('Play a game of Memory!'))
+    .addSubcommand((subcommand) => subcommand.setName('remember-emoji').setDescription('Play a game of remember emoji!'))
+    .addSubcommand((subcommand) => subcommand.setName('tetris').setDescription('Play a game of Tetris!'))
+    .addSubcommand((subcommand) => subcommand.setName('sokoban').setDescription('Play a game of Sokoban!')),
   async execute({ interaction, client }) {
     await interaction.deferReply();
 

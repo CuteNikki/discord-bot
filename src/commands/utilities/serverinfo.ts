@@ -1,35 +1,28 @@
 import {
-  ApplicationCommandOptionType,
-  ApplicationCommandType,
+  ApplicationIntegrationType,
   ChannelType,
   Colors,
   EmbedBuilder,
   GuildExplicitContentFilter,
   GuildNSFWLevel,
   GuildVerificationLevel,
+  InteractionContextType,
   // PresenceUpdateStatus,
   Role,
+  SlashCommandBuilder,
 } from 'discord.js';
+import { t } from 'i18next';
 
-import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
-import i18next from 'i18next';
+import { Command, ModuleType } from 'classes/command';
 
 export default new Command({
   module: ModuleType.Utilities,
-  data: {
-    name: 'serverinfo',
-    description: 'Get information about the server',
-    type: ApplicationCommandType.ChatInput,
-    contexts: [Contexts.Guild],
-    integration_types: [IntegrationTypes.GuildInstall],
-    options: [
-      {
-        name: 'ephemeral',
-        description: 'When set to false will show the message to everyone',
-        type: ApplicationCommandOptionType.Boolean,
-      },
-    ],
-  },
+  data: new SlashCommandBuilder()
+    .setName('serverinfo')
+    .setDescription('Get information about the server')
+    .setContexts(InteractionContextType.Guild)
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .addBooleanOption((option) => option.setName('ephemeral').setDescription('When set to false will show the message to everyone')),
   async execute({ interaction, client }) {
     if (!interaction.isChatInputCommand() || !interaction.inCachedGuild()) return;
     const lng = await client.getUserLanguage(interaction.user.id);
@@ -40,7 +33,7 @@ export default new Command({
     const { channels, emojis, roles, stickers, members, memberCount } = guild;
 
     const sortedRoles = roles.cache
-      .toJSON()
+      .map((r) => r)
       .slice(1, roles.cache.size)
       .sort((a, b) => b.position - a.position);
     const userRoles = sortedRoles.filter((role) => !role.managed);
@@ -79,56 +72,56 @@ export default new Command({
     const serverEmbed = new EmbedBuilder()
       .setColor(Colors.Aqua)
       .setThumbnail(guild.iconURL({ size: 4096 }))
-      .setTitle(i18next.t('serverinfo.title', { lng }))
+      .setTitle(t('serverinfo.title', { lng }))
       .setImage(guild.bannerURL({ size: 4096 }))
       .addFields(
         {
-          name: i18next.t('serverinfo.server.title', { lng }),
+          name: t('serverinfo.server.title', { lng }),
           value: [
-            i18next.t('serverinfo.server.name', { lng, name: `${guild.name} (${guild.id})` }),
-            i18next.t('serverinfo.server.created', { lng, created: `<t:${Math.floor(guild.createdTimestamp / 1000)}:f>` }),
-            i18next.t('serverinfo.server.owner', { lng, owner: `<@${guild.ownerId}>` }),
-            i18next.t('serverinfo.server.vanity', { lng, vanity: guild.vanityURLCode ?? '/' }),
+            t('serverinfo.server.name', { lng, name: `${guild.name} (${guild.id})` }),
+            t('serverinfo.server.created', { lng, created: `<t:${Math.floor(guild.createdTimestamp / 1000)}:f>` }),
+            t('serverinfo.server.owner', { lng, owner: `<@${guild.ownerId}>` }),
+            t('serverinfo.server.vanity', { lng, vanity: guild.vanityURLCode ?? '/' }),
           ].join('\n'),
           inline: true,
         },
         {
-          name: i18next.t('serverinfo.security.title', { lng }),
+          name: t('serverinfo.security.title', { lng }),
           value: [
-            i18next.t('serverinfo.security.explicit_filter', { lng, filter: GuildExplicitContentFilter[guild.explicitContentFilter] }),
-            i18next.t('serverinfo.security.nsfw_level', { lng, level: GuildNSFWLevel[guild.nsfwLevel] }),
-            i18next.t('serverinfo.security.verification_level', { lng, level: GuildVerificationLevel[guild.verificationLevel] }),
+            t('serverinfo.security.explicit_filter', { lng, filter: GuildExplicitContentFilter[guild.explicitContentFilter] }),
+            t('serverinfo.security.nsfw_level', { lng, level: GuildNSFWLevel[guild.nsfwLevel] }),
+            t('serverinfo.security.verification_level', { lng, level: GuildVerificationLevel[guild.verificationLevel] }),
           ].join('\n'),
           inline: true,
         },
         {
-          name: i18next.t('serverinfo.boost.title', { lng }),
+          name: t('serverinfo.boost.title', { lng }),
           value: [
-            i18next.t('serverinfo.boost.tier', { lng, tier: guild.premiumTier }),
-            i18next.t('serverinfo.boost.count', { lng, boosts: guild.premiumSubscriptionCount }),
-            i18next.t('serverinfo.boost.users', { lng, boosters: members.cache.filter((member) => member.premiumSinceTimestamp).size }),
+            t('serverinfo.boost.tier', { lng, tier: guild.premiumTier }),
+            t('serverinfo.boost.count', { lng, boosts: guild.premiumSubscriptionCount }),
+            t('serverinfo.boost.users', { lng, boosters: members.cache.filter((member) => member.premiumSinceTimestamp).size }),
           ].join('\n'),
           inline: true,
         },
         {
-          name: i18next.t('serverinfo.members.title', { lng }),
+          name: t('serverinfo.members.title', { lng }),
           value: [
-            i18next.t('serverinfo.members.total', { lng, total: totalMembers }),
-            // i18next.t('serverinfo.members.humans', { lng, humans: humanMembers }),
-            // i18next.t('serverinfo.members.bots', { lng, bots: botMembers }),
-            // i18next.t('serverinfo.members.online', { lng, online: onlineMembers }),
+            t('serverinfo.members.total', { lng, total: totalMembers }),
+            // t('serverinfo.members.humans', { lng, humans: humanMembers }),
+            // t('serverinfo.members.bots', { lng, bots: botMembers }),
+            // t('serverinfo.members.online', { lng, online: onlineMembers }),
           ].join('\n'),
           inline: true,
         },
         {
-          name: i18next.t('serverinfo.channels.title', { lng }),
+          name: t('serverinfo.channels.title', { lng }),
           value: [
-            i18next.t('serverinfo.channels.total', { lng, total: totalChannels }),
-            i18next.t('serverinfo.channels.categories', { lng, categories: categoryChannels }),
-            i18next.t('serverinfo.channels.text', { lng, text: textChannels }),
-            i18next.t('serverinfo.channels.voice', { lng, voice: voiceChannels }),
-            i18next.t('serverinfo.channels.threads', { lng, threads: threadChannels }),
-            i18next.t('serverinfo.channels.other', { lng, other: otherChannels }),
+            t('serverinfo.channels.total', { lng, total: totalChannels }),
+            t('serverinfo.channels.categories', { lng, categories: categoryChannels }),
+            t('serverinfo.channels.text', { lng, text: textChannels }),
+            t('serverinfo.channels.voice', { lng, voice: voiceChannels }),
+            t('serverinfo.channels.threads', { lng, threads: threadChannels }),
+            t('serverinfo.channels.other', { lng, other: otherChannels }),
           ].join('\n'),
           inline: true,
         }
@@ -136,33 +129,33 @@ export default new Command({
     if (guild.description) serverEmbed.setDescription(guild.description);
     if (totalEmojis)
       serverEmbed.addFields({
-        name: i18next.t('serverinfo.emojis.title'),
+        name: t('serverinfo.emojis.title'),
         value: [
-          i18next.t('serverinfo.emojis.total', { lng, total: totalEmojis }),
-          i18next.t('serverinfo.emojis.animated', { lng, animated: animatedEmojis }),
-          i18next.t('serverinfo.emojis.static', { lng, static: staticEmojis }),
-          i18next.t('serverinfo.emojis.stickers', { lng, total: totalStickers }),
+          t('serverinfo.emojis.total', { lng, total: totalEmojis }),
+          t('serverinfo.emojis.animated', { lng, animated: animatedEmojis }),
+          t('serverinfo.emojis.static', { lng, static: staticEmojis }),
+          t('serverinfo.emojis.stickers', { lng, total: totalStickers }),
         ].join('\n'),
         inline: true,
       });
     if (guild.features.length)
       serverEmbed.addFields({
-        name: i18next.t('serverinfo.features', { lng }),
+        name: t('serverinfo.features', { lng }),
         value: guild.features.map((feature) => `\`${feature.toLowerCase().replace(/_/g, ' ')}\``).join(' '),
       });
     const displayUserRoles = maxDisplayRoles(userRoles);
     if (userRoles.length)
       serverEmbed.addFields({
-        name: i18next.t('serverinfo.user_roles', { lng, showing: displayUserRoles.length, total: userRoles.length }),
+        name: t('serverinfo.user_roles', { lng, showing: displayUserRoles.length, total: userRoles.length }),
         value: displayUserRoles.join(''),
       });
     const displayManagedRoles = maxDisplayRoles(managedRoles);
     if (managedRoles.length)
       serverEmbed.addFields({
-        name: i18next.t('serverinfo.managed_roles', { lng, showing: displayManagedRoles.length, total: managedRoles.length }),
+        name: t('serverinfo.managed_roles', { lng, showing: displayManagedRoles.length, total: managedRoles.length }),
         value: displayManagedRoles.join(''),
       });
-    if (guild.banner) serverEmbed.addFields({ name: i18next.t('serverinfo.banner', { lng }), value: '** **' });
+    if (guild.banner) serverEmbed.addFields({ name: t('serverinfo.banner', { lng }), value: '** **' });
 
     await interaction.editReply({
       embeds: [serverEmbed],

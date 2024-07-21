@@ -1,86 +1,52 @@
-import { ApplicationCommandOptionType, ApplicationCommandType, ChannelType, EmbedBuilder, PermissionFlagsBits, type APIEmbed } from 'discord.js';
-import i18next from 'i18next';
+import {
+  ApplicationIntegrationType,
+  ChannelType,
+  EmbedBuilder,
+  InteractionContextType,
+  PermissionFlagsBits,
+  SlashCommandBuilder,
+  type APIEmbed,
+} from 'discord.js';
+import { t } from 'i18next';
 
-import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
+import { Command, ModuleType } from 'classes/command';
 import { CustomEmbedBuilder } from 'classes/custom-embed';
 
 import type { Message } from 'models/guild';
 
 export default new Command({
   module: ModuleType.Config,
-  data: {
-    name: 'config-farewell',
-    description: 'Configure the farewell module',
-    default_member_permissions: `${PermissionFlagsBits.ManageGuild}`,
-    type: ApplicationCommandType.ChatInput,
-    contexts: [Contexts.Guild],
-    integration_types: [IntegrationTypes.GuildInstall],
-    options: [
-      {
-        name: 'channel',
-        description: 'Configure the leave channel',
-        type: ApplicationCommandOptionType.SubcommandGroup,
-        options: [
-          {
-            name: 'set',
-            description: 'Sets the leave channel',
-            type: ApplicationCommandOptionType.Subcommand,
-            options: [
-              {
-                name: 'channel',
-                description: 'The channel to set it to',
-                type: ApplicationCommandOptionType.Channel,
-                channel_types: [ChannelType.GuildText],
-                required: true,
-              },
-            ],
-          },
-          {
-            name: 'remove',
-            description: 'Removes the leave channel',
-            type: ApplicationCommandOptionType.Subcommand,
-          },
-          {
-            name: 'show',
-            description: 'Shows the current leave channel',
-            type: ApplicationCommandOptionType.Subcommand,
-          },
-        ],
-      },
-      {
-        name: 'message',
-        description: 'Configure the leave message',
-        type: ApplicationCommandOptionType.SubcommandGroup,
-        options: [
-          {
-            name: 'set',
-            description: 'Sets the leave message',
-            type: ApplicationCommandOptionType.Subcommand,
-          },
-          {
-            name: 'remove',
-            description: 'Removes the leave message',
-            type: ApplicationCommandOptionType.Subcommand,
-          },
-          {
-            name: 'show',
-            description: 'Shows the current leave message',
-            type: ApplicationCommandOptionType.Subcommand,
-          },
-          {
-            name: 'test',
-            description: 'Emits the leave event to test farewell messages',
-            type: ApplicationCommandOptionType.Subcommand,
-          },
-          {
-            name: 'placeholders',
-            description: 'Shows you all available placeholders',
-            type: ApplicationCommandOptionType.Subcommand,
-          },
-        ],
-      },
-    ],
-  },
+  data: new SlashCommandBuilder()
+    .setName('config-farewell')
+    .setDescription('Configure the farewell module')
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
+    .setContexts(InteractionContextType.Guild)
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .addSubcommandGroup((subcommandGroup) =>
+      subcommandGroup
+        .setName('channel')
+        .setDescription('Configure the leave channel')
+        .addSubcommand((subcommand) =>
+          subcommand
+            .setName('set')
+            .setDescription('Sets the leave channel')
+            .addChannelOption((option) =>
+              option.setName('channel').setDescription('The channel to set it to').setRequired(true).addChannelTypes(ChannelType.GuildText)
+            )
+        )
+        .addSubcommand((subcommand) => subcommand.setName('remove').setDescription('Removes the leave channel'))
+        .addSubcommand((subcommand) => subcommand.setName('show').setDescription('Shows the current leave channel'))
+    )
+    .addSubcommandGroup((subcommandGroup) =>
+      subcommandGroup
+        .setName('message')
+        .setDescription('Configure the leave message')
+        .addSubcommand((subcommand) => subcommand.setName('set').setDescription('Sets the leave message'))
+        .addSubcommand((subcommand) => subcommand.setName('remove').setDescription('Removes the leave message'))
+        .addSubcommand((subcommand) => subcommand.setName('show').setDescription('Shows the current leave message'))
+        .addSubcommand((subcommand) => subcommand.setName('test').setDescription('Emits the leave event to test farewell messages'))
+        .addSubcommand((subcommand) => subcommand.setName('placeholders').setDescription('Shows you all available placeholders'))
+    ),
   async execute({ client, interaction }) {
     if (!interaction.inCachedGuild()) return;
     await interaction.deferReply({ ephemeral: true });
@@ -97,22 +63,22 @@ export default new Command({
             case 'set':
               {
                 const channel = options.getChannel('channel', true, [ChannelType.GuildText]);
-                if (settings.farewell.channelId === channel.id) return interaction.editReply(i18next.t('farewell.channel.already', { lng }));
+                if (settings.farewell.channelId === channel.id) return interaction.editReply(t('farewell.channel.already', { lng }));
                 await client.updateGuildSettings(guild.id, { $set: { ['farewell.channelId']: channel.id } });
-                await interaction.editReply(i18next.t('farewell.channel.set', { lng }));
+                await interaction.editReply(t('farewell.channel.set', { lng }));
               }
               break;
             case 'remove':
               {
-                if (!settings.farewell.channelId) return interaction.editReply(i18next.t('farewell.channel.invalid', { lng }));
+                if (!settings.farewell.channelId) return interaction.editReply(t('farewell.channel.invalid', { lng }));
                 await client.updateGuildSettings(guild.id, { $set: { ['farewell.channelId']: undefined } });
-                await interaction.editReply(i18next.t('farewell.channel.removed', { lng }));
+                await interaction.editReply(t('farewell.channel.removed', { lng }));
               }
               break;
             case 'show':
               {
-                if (!settings.farewell.channelId) return interaction.editReply(i18next.t('farewell.channel.none', { lng }));
-                await interaction.editReply(i18next.t('farewell.channel.show', { lng, channel: `<#${settings.farewell.channelId}>` }));
+                if (!settings.farewell.channelId) return interaction.editReply(t('farewell.channel.none', { lng }));
+                await interaction.editReply(t('farewell.channel.show', { lng, channel: `<#${settings.farewell.channelId}>` }));
               }
               break;
           }
@@ -126,7 +92,7 @@ export default new Command({
                 const customBuilder = new CustomEmbedBuilder({ client, interaction, data: settings.farewell.message });
                 customBuilder.once('submit', async (data: Message) => {
                   await client.updateGuildSettings(guild.id, { $set: { ['farewell.message']: data } });
-                  interaction.editReply({ content: i18next.t('farewell.message.set', { lng }), embeds: [], components: [] }).catch(() => {});
+                  interaction.editReply({ content: t('farewell.message.set', { lng }), embeds: [], components: [] }).catch(() => {});
                 });
               }
               break;
@@ -157,7 +123,7 @@ export default new Command({
                     },
                   },
                 });
-                interaction.editReply(i18next.t('farewell.message.removed', { lng })).catch(() => {});
+                interaction.editReply(t('farewell.message.removed', { lng })).catch(() => {});
               }
               break;
             case 'show':
@@ -171,7 +137,7 @@ export default new Command({
             case 'test':
               {
                 client.emit('guildMemberRemove', interaction.member);
-                interaction.editReply(i18next.t('farewell.message.test', { lng }));
+                interaction.editReply(t('farewell.message.test', { lng }));
               }
               break;
             case 'placeholders':

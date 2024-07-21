@@ -1,5 +1,5 @@
 import { ChannelType, Colors, EmbedBuilder, Events, type MessageCreateOptions } from 'discord.js';
-import i18next from 'i18next';
+import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
@@ -73,11 +73,11 @@ export default new Event({
           {
             const lng = await client.getUserLanguage(author.id);
 
-            levelUpMessage.content = i18next.t('level.dm.message', { lng, guild: guild.name });
-            levelUpEmbed.setFields({ name: i18next.t('level.dm.title', { lng }), value: i18next.t('level.dm.description', { lng }) });
+            levelUpMessage.content = t('level.dm.message', { lng, guild: guild.name });
+            levelUpEmbed.setFields({ name: t('level.dm.title', { lng }), value: t('level.dm.description', { lng }) });
             if (rewards?.length)
               levelUpEmbed.addFields({
-                name: i18next.t('level.dm.title_roles', { lng, count: rewards.length }),
+                name: t('level.dm.title_roles', { lng, count: rewards.length }),
                 value: rewards.map((r) => `<@&${r.roleId}>`).join(' '),
               });
             client.users.send(author.id, levelUpMessage).catch(() => {});

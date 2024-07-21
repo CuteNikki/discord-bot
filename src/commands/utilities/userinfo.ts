@@ -1,29 +1,17 @@
-import { ApplicationCommandOptionType, ApplicationCommandType, Colors, EmbedBuilder, Role } from 'discord.js';
-import i18next from 'i18next';
+import { ApplicationIntegrationType, Colors, EmbedBuilder, InteractionContextType, Role, SlashCommandBuilder } from 'discord.js';
+import { t } from 'i18next';
 
-import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
+import { Command, ModuleType } from 'classes/command';
 
 export default new Command({
   module: ModuleType.Utilities,
-  data: {
-    name: 'userinfo',
-    description: 'Get information about a user',
-    type: ApplicationCommandType.ChatInput,
-    contexts: [Contexts.Guild, Contexts.BotDM, Contexts.PrivateChannel],
-    integration_types: [IntegrationTypes.GuildInstall, IntegrationTypes.UserInstall],
-    options: [
-      {
-        name: 'user',
-        description: 'User to get the information about',
-        type: ApplicationCommandOptionType.User,
-      },
-      {
-        name: 'ephemeral',
-        description: 'When set to false will show the message to everyone',
-        type: ApplicationCommandOptionType.Boolean,
-      },
-    ],
-  },
+  data: new SlashCommandBuilder()
+    .setName('userinfo')
+    .setDescription('Get information about a user')
+    .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel)
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
+    .addUserOption((option) => option.setName('user').setDescription('User to get the information about').setRequired(false))
+    .addBooleanOption((option) => option.setName('ephemeral').setDescription('When set to false will show the message to everyone').setRequired(false)),
   async execute({ interaction, client }) {
     const lng = await client.getUserLanguage(interaction.user.id);
     const ephemeral = interaction.options.getBoolean('ephemeral', false) ?? true;
@@ -31,7 +19,7 @@ export default new Command({
 
     try {
       const user = await client.users.fetch(interaction.options.getUser('user', false) ?? interaction.user, { force: true });
-      if (!user) return interaction.editReply({ content: i18next.t('userinfo.user', { lng }) });
+      if (!user) return interaction.editReply({ content: t('userinfo.user', { lng }) });
 
       const flags = user.flags?.toArray() ?? [];
 
@@ -40,17 +28,17 @@ export default new Command({
       const userEmbed = new EmbedBuilder()
         .setColor(Colors.Aqua)
         .setThumbnail(user.displayAvatarURL({ size: 4096 }))
-        .setTitle(i18next.t('userinfo.user_embed_title', { lng }))
+        .setTitle(t('userinfo.user_embed_title', { lng }))
         .addFields(
           {
-            name: i18next.t('userinfo.user_title', { lng }),
+            name: t('userinfo.user_title', { lng }),
             value: [`${user} (\`${user.username}\` | ${user.id})`].join('\n'),
           },
-          { name: i18next.t('userinfo.created_at', { lng }), value: `<t:${Math.floor(user.createdTimestamp / 1000)}:R>` }
+          { name: t('userinfo.created_at', { lng }), value: `<t:${Math.floor(user.createdTimestamp / 1000)}:R>` }
         )
         .setImage(user.bannerURL({ size: 4096 }) ?? null);
-      if (flags.length) userEmbed.addFields({ name: i18next.t('userinfo.badges', { lng }), value: flags.map((v) => `\`${v}\``).join(' ') });
-      if (user.banner) userEmbed.addFields({ name: i18next.t('userinfo.banner', { lng }), value: '** **' });
+      if (flags.length) userEmbed.addFields({ name: t('userinfo.badges', { lng }), value: flags.map((v) => `\`${v}\``).join(' ') });
+      if (user.banner) userEmbed.addFields({ name: t('userinfo.banner', { lng }), value: '** **' });
 
       embeds.push(userEmbed);
 
@@ -58,12 +46,12 @@ export default new Command({
 
       if (member) {
         //   const activities = [
-        //     i18next.t('userinfo.activity.playing', { lng }),
-        //     i18next.t('userinfo.activity.streaming', { lng }),
-        //     i18next.t('userinfo.activity.listening', { lng }),
-        //     i18next.t('userinfo.activity.watching', { lng }),
-        //     i18next.t('userinfo.activity.custom', { lng }),
-        //     i18next.t('userinfo.activity.competing', { lng }),
+        //     t('userinfo.activity.playing', { lng }),
+        //     t('userinfo.activity.streaming', { lng }),
+        //     t('userinfo.activity.listening', { lng }),
+        //     t('userinfo.activity.watching', { lng }),
+        //     t('userinfo.activity.custom', { lng }),
+        //     t('userinfo.activity.competing', { lng }),
         //   ];
         //   const devices = Object.entries(member.presence?.clientStatus ?? {}).map(([key]) => `${key}`);
 
@@ -76,7 +64,7 @@ export default new Command({
         //   };
 
         const roles = member.roles.cache
-          .toJSON()
+          .map((r) => r)
           .sort((a, b) => b.position - a.position)
           .slice(0, member.roles.cache.size);
 
@@ -95,13 +83,13 @@ export default new Command({
           .setColor(Colors.Aqua)
           .setThumbnail(member.avatarURL({ size: 4096 }))
           .setAuthor({
-            name: i18next.t('userinfo.member_embed_title', { lng }),
+            name: t('userinfo.member_embed_title', { lng }),
             // iconURL: statusImage[member.presence?.status ?? 'offline'],
           })
           .addFields(
-            { name: i18next.t('userinfo.joined_at', { lng }), value: `<t:${Math.floor((member.joinedTimestamp ?? 0) / 1000)}:R>`, inline: true },
+            { name: t('userinfo.joined_at', { lng }), value: `<t:${Math.floor((member.joinedTimestamp ?? 0) / 1000)}:R>`, inline: true },
             //       {
-            //         name: i18next.t('userinfo.activities', { lng }),
+            //         name: t('userinfo.activities', { lng }),
             //         value:
             //           member.presence?.activities
             //             ?.map((activity) => {
@@ -117,12 +105,12 @@ export default new Command({
             //         inline: true,
             //       },
             //       {
-            //         name: i18next.t('userinfo.devices', { lng }),
+            //         name: t('userinfo.devices', { lng }),
             //         value: devices?.join(', ') || '/',
             //         inline: true,
             //       },
             {
-              name: i18next.t('userinfo.boosting', { lng }),
+              name: t('userinfo.boosting', { lng }),
               value: member.premiumSinceTimestamp ? `<t:${Math.floor(member.premiumSinceTimestamp / 1000)}:R>` : '/',
               inline: true,
             }
@@ -136,7 +124,7 @@ export default new Command({
         const displayRoles = maxDisplayRoles(roles);
         if (roles.length)
           memberEmbed.addFields({
-            name: i18next.t('userinfo.roles', { lng, showing: roles.length, total: displayRoles.length }),
+            name: t('userinfo.roles', { lng, showing: roles.length, total: displayRoles.length }),
             value: displayRoles.join(''),
           });
 
@@ -145,7 +133,7 @@ export default new Command({
 
       interaction.editReply({ embeds });
     } catch (err) {
-      interaction.editReply({ content: i18next.t('userinfo.failed', { lng }) });
+      interaction.editReply({ content: t('userinfo.failed', { lng }) });
     }
   },
 });

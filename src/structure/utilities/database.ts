@@ -1,6 +1,6 @@
 import { CronJob } from 'cron';
 import { Colors, EmbedBuilder } from 'discord.js';
-import i18next from 'i18next';
+import { t } from 'i18next';
 import { connect } from 'mongoose';
 import { performance } from 'perf_hooks';
 
@@ -104,8 +104,8 @@ async function clearReminders(client: DiscordClient) {
     const lng = await client.getUserLanguage(reminder.userId);
     const embed = new EmbedBuilder()
       .setColor(Colors.Aqua)
-      .setTitle(i18next.t('reminder.title', { lng }))
-      .setDescription(i18next.t('reminder.reminding', { lng, message: reminder.message }));
+      .setTitle(t('reminder.title', { lng }))
+      .setDescription(t('reminder.reminding', { lng, message: reminder.message }));
 
     // Notify user in DM if possible
     const user = await client.users.fetch(reminder.userId).catch(() => {});

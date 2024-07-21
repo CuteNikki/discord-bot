@@ -1,23 +1,18 @@
 import {
   ApplicationCommandType,
-  AutocompleteInteraction,
-  ChatInputCommandInteraction,
-  MessageContextMenuCommandInteraction,
-  UserContextMenuCommandInteraction,
-  type RESTPostAPIApplicationCommandsJSONBody,
+  ContextMenuCommandBuilder,
+  type AutocompleteInteraction,
+  type ChatInputCommandInteraction,
+  type MessageContextMenuCommandInteraction,
+  type SlashCommandBuilder,
+  type SlashCommandOptionsOnlyBuilder,
+  type SlashCommandSubcommandBuilder,
+  type SlashCommandSubcommandGroupBuilder,
+  type SlashCommandSubcommandsOnlyBuilder,
+  type UserContextMenuCommandInteraction,
 } from 'discord.js';
-import { DiscordClient } from './client';
 
-export enum Contexts {
-  Guild,
-  BotDM,
-  PrivateChannel,
-}
-
-export enum IntegrationTypes {
-  GuildInstall,
-  UserInstall,
-}
+import { DiscordClient } from 'classes/client';
 
 export enum ModuleType {
   Developer,
@@ -39,14 +34,17 @@ type InteractionType<CommandType extends ApplicationCommandType> = CommandType e
   ? UserContextMenuCommandInteraction
   : never;
 
-export class Command<CommandType extends ApplicationCommandType = any> {
+export class Command<CommandType extends ApplicationCommandType = ApplicationCommandType.ChatInput> {
   constructor(
     public options: {
-      data: RESTPostAPIApplicationCommandsJSONBody & {
-        type: CommandType;
-        contexts?: Contexts[];
-        integration_types?: IntegrationTypes[];
-      };
+      data: CommandType extends ApplicationCommandType.ChatInput
+        ?
+            | SlashCommandBuilder
+            | SlashCommandOptionsOnlyBuilder
+            | SlashCommandSubcommandBuilder
+            | SlashCommandSubcommandGroupBuilder
+            | SlashCommandSubcommandsOnlyBuilder
+        : ContextMenuCommandBuilder;
       module: ModuleType;
       cooldown?: number; // Cooldown between command executes per user (in milliseconds)
       isDeveloperOnly?: boolean; // If true, can only be used by developers

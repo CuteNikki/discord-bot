@@ -1,45 +1,54 @@
-import { ApplicationCommandType, Colors, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
-import i18next from 'i18next';
+import {
+  ApplicationCommandType,
+  ApplicationIntegrationType,
+  Colors,
+  ContextMenuCommandBuilder,
+  EmbedBuilder,
+  InteractionContextType,
+  PermissionFlagsBits,
+} from 'discord.js';
+import { t } from 'i18next';
 
-import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
+import { Command, ModuleType } from 'classes/command';
 
 import { infractionModel } from 'models/infraction';
 
 import { chunk, pagination } from 'utils/pagination';
 
-export default new Command({
+const commandType = ApplicationCommandType.User
+
+export default new Command<typeof commandType>({
   module: ModuleType.Moderation,
-  data: {
-    name: 'View Infractions',
-    type: ApplicationCommandType.User,
-    contexts: [Contexts.Guild],
-    integration_types: [IntegrationTypes.GuildInstall],
-    default_member_permissions: `${PermissionFlagsBits.ModerateMembers}`,
-  },
+  data: new ContextMenuCommandBuilder()
+    .setName('View Infractions')
+    .setType(commandType)
+    .setContexts(InteractionContextType.Guild)
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers),
   async execute({ interaction, client }) {
     if (!interaction.inCachedGuild()) return;
     await interaction.deferReply({ ephemeral: true });
 
-    const { options, user, guildId } = interaction;
+    const { user, guildId } = interaction;
 
     const lng = await client.getUserLanguage(user.id);
 
-    const target = options.getUser('user', true);
+    const target = interaction.targetUser;
 
     const targetInfractions = await infractionModel.find({ guildId, userId: target.id }).lean().exec();
-    if (!targetInfractions.length) return interaction.editReply(i18next.t('infractions.history.none', { lng }));
+    if (!targetInfractions.length) return interaction.editReply(t('infractions.history.none', { lng }));
     const chunkedInfractions = chunk(
       targetInfractions.sort((a, b) => b.createdAt - a.createdAt),
       3
     );
 
     const infractionTypes = {
-      0: i18next.t('infractions.types.ban', { lng }),
-      1: i18next.t('infractions.types.unban', { lng }),
-      2: i18next.t('infractions.types.tempban', { lng }),
-      3: i18next.t('infractions.types.kick', { lng }),
-      4: i18next.t('infractions.types.timeout', { lng }),
-      5: i18next.t('infractions.types.warn', { lng }),
+      0: t('infractions.types.ban', { lng }),
+      1: t('infractions.types.unban', { lng }),
+      2: t('infractions.types.tempban', { lng }),
+      3: t('infractions.types.kick', { lng }),
+      4: t('infractions.types.timeout', { lng }),
+      5: t('infractions.types.warn', { lng }),
     };
 
     await pagination({
@@ -48,17 +57,17 @@ export default new Command({
       embeds: chunkedInfractions.map((chunk, index) =>
         new EmbedBuilder()
           .setColor(Colors.Orange)
-          .setTitle(i18next.t('infractions.history.title', { lng, page: index + 1, pages: chunkedInfractions.length }))
+          .setTitle(t('infractions.history.title', { lng, page: index + 1, pages: chunkedInfractions.length }))
           .setDescription(
             chunk
               .map((infraction) =>
                 [
-                  i18next.t('infractions.history.id', { lng, id: infraction._id }),
-                  i18next.t('infractions.history.type', { lng, type: infractionTypes[infraction.action as keyof typeof infractionTypes] }),
-                  i18next.t('infractions.history.moderator', { lng, moderator: `<@${infraction.moderatorId}>` }),
-                  i18next.t('infractions.history.reason', { lng, reason: infraction.reason ?? '/' }),
-                  i18next.t('infractions.history.date', { lng, date: `<t:${Math.floor(infraction.createdAt / 1000)}:f>` }),
-                  i18next.t('infractions.history.ends_at', { lng, date: infraction.endsAt ? `<t:${Math.floor(infraction.endsAt / 1000)}:f>` : '/' }),
+                  t('infractions.history.id', { lng, id: infraction._id }),
+                  t('infractions.history.type', { lng, type: infractionTypes[infraction.action as keyof typeof infractionTypes] }),
+                  t('infractions.history.moderator', { lng, moderator: `<@${infraction.moderatorId}>` }),
+                  t('infractions.history.reason', { lng, reason: infraction.reason ?? '/' }),
+                  t('infractions.history.date', { lng, date: `<t:${Math.floor(infraction.createdAt / 1000)}:f>` }),
+                  t('infractions.history.ends_at', { lng, date: infraction.endsAt ? `<t:${Math.floor(infraction.endsAt / 1000)}:f>` : '/' }),
                 ].join('\n')
               )
               .join('\n\n')

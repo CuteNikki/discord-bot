@@ -1,5 +1,5 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, type ChatInputCommandInteraction, type User } from 'discord.js';
-import i18next from 'i18next';
+import { t } from 'i18next';
 
 import { Opponent } from 'games/opponent';
 
@@ -41,17 +41,17 @@ export class RockPaperScissors extends Opponent {
     const opponentLng = await client.getUserLanguage(opponent?.id);
 
     const rockButton = new ButtonBuilder()
-      .setLabel(i18next.t('games.rpc.choices.rock', { lng }))
+      .setLabel(t('games.rpc.choices.rock', { lng }))
       .setEmoji('🪨')
       .setCustomId(CustomIds.Rock)
       .setStyle(ButtonStyle.Primary);
     const paperButton = new ButtonBuilder()
-      .setLabel(i18next.t('games.rpc.choices.paper', { lng }))
+      .setLabel(t('games.rpc.choices.paper', { lng }))
       .setEmoji('🧻')
       .setCustomId(CustomIds.Paper)
       .setStyle(ButtonStyle.Primary);
     const scissorsButton = new ButtonBuilder()
-      .setLabel(i18next.t('games.rpc.choices.scissors', { lng }))
+      .setLabel(t('games.rpc.choices.scissors', { lng }))
       .setEmoji('✂️')
       .setCustomId(CustomIds.Scissors)
       .setStyle(ButtonStyle.Primary);
@@ -69,7 +69,7 @@ export class RockPaperScissors extends Opponent {
 
       message = await interaction
         .editReply({
-          content: i18next.t('games.rpc.bot', { lng }),
+          content: t('games.rpc.bot', { lng }),
         })
         .catch(() => {});
     }
@@ -82,8 +82,8 @@ export class RockPaperScissors extends Opponent {
         embeds: [
           new EmbedBuilder()
             .setColor(Colors.Yellow)
-            .setTitle(i18next.t('games.rpc.title', { lng }))
-            .setDescription(i18next.t('games.rpc.description', { lng, player: user.toString() })),
+            .setTitle(t('games.rpc.title', { lng }))
+            .setDescription(t('games.rpc.description', { lng, player: user.toString() })),
         ],
         components: [row],
       })
@@ -96,7 +96,7 @@ export class RockPaperScissors extends Opponent {
 
       if (buttonInteraction.user.id !== user.id && buttonInteraction.user.id !== opponent?.id) {
         return buttonInteraction.followUp({
-          content: i18next.t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
+          content: t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
           ephemeral: true,
         });
       }
@@ -105,26 +105,24 @@ export class RockPaperScissors extends Opponent {
         if (this.playerPick)
           return buttonInteraction
             .followUp({
-              content: i18next.t('games.rpc.already', { lng }),
+              content: t('games.rpc.already', { lng }),
               ephemeral: true,
             })
             .catch(() => {});
         this.playerPick = Picks[buttonInteraction.customId.split('_')[1] as keyof typeof Picks];
-        await buttonInteraction.followUp({ content: i18next.t('games.rpc.picked', { lng, pick: this.playerPick }), ephemeral: true }).catch(() => {});
+        await buttonInteraction.followUp({ content: t('games.rpc.picked', { lng, pick: this.playerPick }), ephemeral: true }).catch(() => {});
       }
 
       if (buttonInteraction.user.id === opponent?.id) {
         if (this.opponentPick)
           return buttonInteraction
             .followUp({
-              content: i18next.t('games.rpc.already', { lng: opponentLng }),
+              content: t('games.rpc.already', { lng: opponentLng }),
               ephemeral: true,
             })
             .catch(() => {});
         this.opponentPick = Picks[buttonInteraction.customId.split('_')[1] as keyof typeof Picks];
-        await buttonInteraction
-          .followUp({ content: i18next.t('games.rpc.picked', { lng: opponentLng, pick: this.opponentPick }), ephemeral: true })
-          .catch(() => {});
+        await buttonInteraction.followUp({ content: t('games.rpc.picked', { lng: opponentLng, pick: this.opponentPick }), ephemeral: true }).catch(() => {});
       }
 
       if (this.opponentPick && this.playerPick) return collector.stop();
@@ -157,7 +155,7 @@ export class RockPaperScissors extends Opponent {
     else result = 'OPPONENT';
 
     const embed = new EmbedBuilder()
-      .setTitle(i18next.t('games.rpc.title', { lng }))
+      .setTitle(t('games.rpc.title', { lng }))
       .setColor(result === 'TIE' ? Colors.Yellow : result === 'TIMEOUT' ? Colors.Yellow : result === 'OPPONENT' ? Colors.Red : Colors.Green)
       .addFields(
         { name: user.displayName, value: this.playerPick ?? '❔', inline: true },
@@ -165,10 +163,10 @@ export class RockPaperScissors extends Opponent {
         { name: opponent?.displayName ?? client.user.displayName, value: this.opponentPick ?? '❔', inline: true }
       );
 
-    if (result === 'TIMEOUT') embed.setDescription(i18next.t('games.rpc.timeout', { lng }));
-    else if (result === 'TIE') embed.setDescription(i18next.t('games.rpc.tied', { lng }));
-    else if (result === 'PLAYER') embed.setDescription(i18next.t('games.rpc.winner', { lng, winner: user.toString() }));
-    else embed.setDescription(i18next.t('games.rpc.winner', { lng, winner: opponent?.toString() ?? client.user.toString() }));
+    if (result === 'TIMEOUT') embed.setDescription(t('games.rpc.timeout', { lng }));
+    else if (result === 'TIE') embed.setDescription(t('games.rpc.tied', { lng }));
+    else if (result === 'PLAYER') embed.setDescription(t('games.rpc.winner', { lng, winner: user.toString() }));
+    else embed.setDescription(t('games.rpc.winner', { lng, winner: opponent?.toString() ?? client.user.toString() }));
 
     return await interaction
       .editReply({

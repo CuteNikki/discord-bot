@@ -1,5 +1,5 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, ComponentType, type CommandInteraction, type EmbedBuilder } from 'discord.js';
-import i18next from 'i18next';
+import { t } from 'i18next';
 import ms from 'ms';
 
 import type { DiscordClient } from 'classes/client';
@@ -115,7 +115,7 @@ export async function pagination({
     buttonLast.setDisabled(true);
 
     const embed = embeds[index];
-    if (footer) embed.setFooter({ text: i18next.t('pagination', { lng, time: ms(time, { long: true }) }) });
+    if (footer) embed.setFooter({ text: t('pagination', { lng, time: ms(time, { long: true }) }) });
 
     interaction.editReply({ embeds: [embed], components: [components] }).catch(() => {});
   });

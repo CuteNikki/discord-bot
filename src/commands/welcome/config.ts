@@ -1,124 +1,70 @@
-import { ApplicationCommandOptionType, ApplicationCommandType, ChannelType, EmbedBuilder, PermissionFlagsBits, type APIEmbed } from 'discord.js';
-import i18next from 'i18next';
+import {
+  ApplicationIntegrationType,
+  ChannelType,
+  EmbedBuilder,
+  InteractionContextType,
+  PermissionFlagsBits,
+  SlashCommandBuilder,
+  type APIEmbed,
+} from 'discord.js';
+import { t } from 'i18next';
 
-import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
+import { Command, ModuleType } from 'classes/command';
 import { CustomEmbedBuilder } from 'classes/custom-embed';
 
 import type { Message } from 'models/guild';
 
 export default new Command({
   module: ModuleType.Config,
-  data: {
-    name: 'config-welcome',
-    description: 'Configure the welcome module',
-    default_member_permissions: `${PermissionFlagsBits.ManageGuild}`,
-    type: ApplicationCommandType.ChatInput,
-    contexts: [Contexts.Guild],
-    integration_types: [IntegrationTypes.GuildInstall],
-    options: [
-      {
-        name: 'roles',
-        description: 'Configure the join roles',
-        type: ApplicationCommandOptionType.SubcommandGroup,
-        options: [
-          {
-            name: 'add',
-            description: 'Adds a join role to the list',
-            type: ApplicationCommandOptionType.Subcommand,
-            options: [
-              {
-                name: 'role',
-                description: 'The role to add',
-                type: ApplicationCommandOptionType.Role,
-                required: true,
-              },
-            ],
-          },
-          {
-            name: 'remove',
-            description: 'Removes a join role from the list',
-            type: ApplicationCommandOptionType.Subcommand,
-            options: [
-              {
-                name: 'role-id',
-                description: 'The role to remove',
-                type: ApplicationCommandOptionType.String,
-                required: true,
-              },
-            ],
-          },
-          {
-            name: 'list',
-            description: 'Shows all the current join roles',
-            type: ApplicationCommandOptionType.Subcommand,
-          },
-        ],
-      },
-      {
-        name: 'channel',
-        description: 'Configure the join channel',
-        type: ApplicationCommandOptionType.SubcommandGroup,
-        options: [
-          {
-            name: 'set',
-            description: 'Sets the join channel',
-            type: ApplicationCommandOptionType.Subcommand,
-            options: [
-              {
-                name: 'channel',
-                description: 'The channel to set it to',
-                type: ApplicationCommandOptionType.Channel,
-                channel_types: [ChannelType.GuildText],
-                required: true,
-              },
-            ],
-          },
-          {
-            name: 'remove',
-            description: 'Removes the join channel',
-            type: ApplicationCommandOptionType.Subcommand,
-          },
-          {
-            name: 'show',
-            description: 'Shows the current join channel',
-            type: ApplicationCommandOptionType.Subcommand,
-          },
-        ],
-      },
-      {
-        name: 'message',
-        description: 'Configure the join message',
-        type: ApplicationCommandOptionType.SubcommandGroup,
-        options: [
-          {
-            name: 'set',
-            description: 'Sets the join message',
-            type: ApplicationCommandOptionType.Subcommand,
-          },
-          {
-            name: 'remove',
-            description: 'Removes the join message',
-            type: ApplicationCommandOptionType.Subcommand,
-          },
-          {
-            name: 'show',
-            description: 'Shows the current join message',
-            type: ApplicationCommandOptionType.Subcommand,
-          },
-          {
-            name: 'test',
-            description: 'Emits the join event to test welcome messages',
-            type: ApplicationCommandOptionType.Subcommand,
-          },
-          {
-            name: 'placeholders',
-            description: 'Shows you all available placeholders',
-            type: ApplicationCommandOptionType.Subcommand,
-          },
-        ],
-      },
-    ],
-  },
+  data: new SlashCommandBuilder()
+    .setName('config-welcome')
+    .setDescription('Configure the welcome module')
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
+    .setContexts(InteractionContextType.Guild)
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .addSubcommandGroup((group) =>
+      group
+        .setName('roles')
+        .setDescription('Configure the join roles')
+        .addSubcommand((subcommand) =>
+          subcommand
+            .setName('add')
+            .setDescription('Adds a join role to the list')
+            .addRoleOption((option) => option.setName('role').setDescription('The role to add').setRequired(true))
+        )
+        .addSubcommand((subcommand) =>
+          subcommand
+            .setName('remove')
+            .setDescription('Removes a join role from the list')
+            .addStringOption((option) => option.setName('role-id').setDescription('The role to remove').setRequired(true))
+        )
+        .addSubcommand((subcommand) => subcommand.setName('list').setDescription('Shows all the current join roles'))
+    )
+    .addSubcommandGroup((group) =>
+      group
+        .setName('channel')
+        .setDescription('Configure the join channel')
+        .addSubcommand((subcommand) =>
+          subcommand
+            .setName('set')
+            .setDescription('Sets the join channel')
+            .addChannelOption((option) =>
+              option.setName('channel').setDescription('The channel to set it to').addChannelTypes(ChannelType.GuildText).setRequired(true)
+            )
+        )
+        .addSubcommand((subcommand) => subcommand.setName('remove').setDescription('Removes the join channel'))
+        .addSubcommand((subcommand) => subcommand.setName('show').setDescription('Shows the current join channel'))
+    )
+    .addSubcommandGroup((group) =>
+      group
+        .setName('message')
+        .setDescription('Configure the join message')
+        .addSubcommand((subcommand) => subcommand.setName('set').setDescription('Sets the join message'))
+        .addSubcommand((subcommand) => subcommand.setName('remove').setDescription('Removes the join message'))
+        .addSubcommand((subcommand) => subcommand.setName('show').setDescription('Shows the current join message'))
+        .addSubcommand((subcommand) => subcommand.setName('test').setDescription('Emits the join event to test welcome messages'))
+        .addSubcommand((subcommand) => subcommand.setName('placeholders').setDescription('Shows you all available placeholders'))
+    ),
   async execute({ client, interaction }) {
     if (!interaction.inCachedGuild()) return;
     await interaction.deferReply({ ephemeral: true });
@@ -135,23 +81,23 @@ export default new Command({
             case 'add':
               {
                 const role = options.getRole('role', true);
-                if (settings.welcome.roles.includes(role.id)) return interaction.editReply(i18next.t('welcome.roles.already', { lng }));
+                if (settings.welcome.roles.includes(role.id)) return interaction.editReply(t('welcome.roles.already', { lng }));
                 await client.updateGuildSettings(guild.id, { $push: { ['welcome.roles']: role.id } });
-                await interaction.editReply(i18next.t('welcome.roles.added', { lng }));
+                await interaction.editReply(t('welcome.roles.added', { lng }));
               }
               break;
             case 'remove':
               {
                 const roleId = options.getString('role-id', true);
-                if (!settings.welcome.roles.includes(roleId)) return interaction.editReply(i18next.t('welcome.roles.invalid', { lng }));
+                if (!settings.welcome.roles.includes(roleId)) return interaction.editReply(t('welcome.roles.invalid', { lng }));
                 await client.updateGuildSettings(guild.id, { $pull: { ['welcome.roles']: roleId } });
-                await interaction.editReply(i18next.t('welcome.roles.removed', { lng }));
+                await interaction.editReply(t('welcome.roles.removed', { lng }));
               }
               break;
             case 'list':
               {
-                if (!settings.welcome.roles.length) return interaction.editReply(i18next.t('welcome.roles.none', { lng }));
-                await interaction.editReply(`${i18next.t('welcome.roles.list', { lng })}\n\n${settings.welcome.roles.map((role) => `<@&${role}>`).join(', ')}`);
+                if (!settings.welcome.roles.length) return interaction.editReply(t('welcome.roles.none', { lng }));
+                await interaction.editReply(`${t('welcome.roles.list', { lng })}\n\n${settings.welcome.roles.map((role) => `<@&${role}>`).join(', ')}`);
               }
               break;
           }
@@ -163,22 +109,22 @@ export default new Command({
             case 'set':
               {
                 const channel = options.getChannel('channel', true, [ChannelType.GuildText]);
-                if (settings.welcome.channelId === channel.id) return interaction.editReply(i18next.t('welcome.channel.already', { lng }));
+                if (settings.welcome.channelId === channel.id) return interaction.editReply(t('welcome.channel.already', { lng }));
                 await client.updateGuildSettings(guild.id, { $set: { ['welcome.channelId']: channel.id } });
-                await interaction.editReply(i18next.t('welcome.channel.set', { lng }));
+                await interaction.editReply(t('welcome.channel.set', { lng }));
               }
               break;
             case 'remove':
               {
-                if (!settings.welcome.channelId) return interaction.editReply(i18next.t('welcome.channel.invalid', { lng }));
+                if (!settings.welcome.channelId) return interaction.editReply(t('welcome.channel.invalid', { lng }));
                 await client.updateGuildSettings(guild.id, { $set: { ['welcome.channelId']: undefined } });
-                await interaction.editReply(i18next.t('welcome.channel.removed', { lng }));
+                await interaction.editReply(t('welcome.channel.removed', { lng }));
               }
               break;
             case 'show':
               {
-                if (!settings.welcome.channelId) return interaction.editReply(i18next.t('welcome.channel.none', { lng }));
-                await interaction.editReply(i18next.t('welcome.channel.show', { lng, channel: `<#${settings.welcome.channelId}>` }));
+                if (!settings.welcome.channelId) return interaction.editReply(t('welcome.channel.none', { lng }));
+                await interaction.editReply(t('welcome.channel.show', { lng, channel: `<#${settings.welcome.channelId}>` }));
               }
               break;
           }
@@ -192,7 +138,7 @@ export default new Command({
                 const customBuilder = new CustomEmbedBuilder({ client, interaction, data: settings.welcome.message });
                 customBuilder.once('submit', async (data: Message) => {
                   await client.updateGuildSettings(guild.id, { $set: { ['welcome.message']: data } });
-                  interaction.editReply({ content: i18next.t('welcome.message.set', { lng }), embeds: [], components: [] }).catch(() => {});
+                  interaction.editReply({ content: t('welcome.message.set', { lng }), embeds: [], components: [] }).catch(() => {});
                 });
               }
               break;
@@ -223,7 +169,7 @@ export default new Command({
                     },
                   },
                 });
-                interaction.editReply(i18next.t('welcome.message.removed', { lng })).catch(() => {});
+                interaction.editReply(t('welcome.message.removed', { lng })).catch(() => {});
               }
               break;
             case 'show':
@@ -237,7 +183,7 @@ export default new Command({
             case 'test':
               {
                 client.emit('guildMemberAdd', interaction.member);
-                interaction.editReply(i18next.t('welcome.message.test', { lng }));
+                interaction.editReply(t('welcome.message.test', { lng }));
               }
               break;
             case 'placeholders':

@@ -1,5 +1,5 @@
 import { Collection, Events, PermissionsBitField } from 'discord.js';
-import i18next from 'i18next';
+import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 import type { Modal } from 'classes/modal';
@@ -35,15 +35,15 @@ export default new Event({
 
     // Permissions check
     if (modal.options.permissions?.length) {
-      if (!interaction.member) return interaction.reply({ content: i18next.t('interactions.guild_only', { lng }), ephemeral: true });
+      if (!interaction.member) return interaction.reply({ content: t('interactions.guild_only', { lng }), ephemeral: true });
       const permissions = interaction.member.permissions as PermissionsBitField;
-      if (!permissions.has(modal.options.permissions)) return interaction.reply({ content: i18next.t('interactions.permissions', { lng }), ephemeral: true });
+      if (!permissions.has(modal.options.permissions)) return interaction.reply({ content: t('interactions.permissions', { lng }), ephemeral: true });
     }
 
     // Check if button is developer only and return if the user's id doesn't match the developer's id
     const developerIds = keys.DEVELOPER_USER_IDS;
     if (modal.options.isDeveloperOnly && !developerIds.includes(interaction.user.id))
-      return interaction.reply({ content: i18next.t('interactions.developer_only', { lng }), ephemeral: true });
+      return interaction.reply({ content: t('interactions.developer_only', { lng }), ephemeral: true });
 
     // Check if cooldowns has the current button and add the button if it doesn't have the button
     const cooldowns = client.cooldowns;
@@ -61,7 +61,7 @@ export default new Event({
       if (now < expirationTime) {
         const expiredTimestamp = Math.round(expirationTime / 1_000);
         return interaction.reply({
-          content: i18next.t('interactions.cooldown', { lng, action: `\`${modal.options.customId}\``, timestamp: `<t:${expiredTimestamp}:R>` }),
+          content: t('interactions.cooldown', { lng, action: `\`${modal.options.customId}\``, timestamp: `<t:${expiredTimestamp}:R>` }),
           ephemeral: true,
         });
       }
@@ -75,7 +75,7 @@ export default new Event({
     try {
       modal.options.execute({ client, interaction });
     } catch (err: any) {
-      const message = i18next.t('interactions.error', { lng, error: err.message });
+      const message = t('interactions.error', { lng, error: err.message });
 
       if (interaction.deferred) interaction.editReply({ content: message });
       else interaction.reply({ content: message, ephemeral: true });

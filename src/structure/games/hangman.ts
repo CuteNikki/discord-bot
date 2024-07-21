@@ -1,5 +1,5 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, type ChatInputCommandInteraction } from 'discord.js';
-import i18next from 'i18next';
+import { t } from 'i18next';
 
 import type { DiscordClient } from 'classes/client';
 
@@ -78,11 +78,11 @@ export class Hangman {
           new EmbedBuilder()
             .setColor(Colors.Yellow)
             .setAuthor({ name: user.displayName, iconURL: user.displayAvatarURL() })
-            .setTitle(i18next.t('games.hangman.title', { lng }))
+            .setTitle(t('games.hangman.title', { lng }))
             .setDescription(this.getBoardContent())
             .addFields(
-              { name: i18next.t('games.hangman.theme', { lng }), value: this.options.theme },
-              { name: i18next.t('games.hangman.word', { lng, length: this.word.length }), value: this.getCensoredWord() }
+              { name: t('games.hangman.theme', { lng }), value: this.options.theme },
+              { name: t('games.hangman.word', { lng, length: this.word.length }), value: this.getCensoredWord() }
             ),
         ],
         components: this.getComponents(),
@@ -97,7 +97,7 @@ export class Hangman {
 
       if (buttonInteraction.user.id !== user.id)
         return buttonInteraction.followUp({
-          content: i18next.t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
+          content: t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
           ephemeral: true,
         });
       const guess = buttonInteraction.customId.split('_')[1];
@@ -116,12 +116,12 @@ export class Hangman {
               new EmbedBuilder()
                 .setColor(Colors.Yellow)
                 .setAuthor({ name: user.displayName, iconURL: user.displayAvatarURL() })
-                .setTitle(i18next.t('games.hangman.title', { lng }))
+                .setTitle(t('games.hangman.title', { lng }))
                 .setDescription(this.getBoardContent())
                 .addFields(
-                  { name: i18next.t('games.hangman.theme', { lng }), value: this.options.theme },
-                  { name: i18next.t('games.hangman.word', { lng, length: this.word.length }), value: this.getCensoredWord() },
-                  { name: i18next.t('games.hangman.guesses', { lng }), value: this.guesses.map((letter) => `\`${letter}\``).join(', ') || '/' }
+                  { name: t('games.hangman.theme', { lng }), value: this.options.theme },
+                  { name: t('games.hangman.word', { lng, length: this.word.length }), value: this.getCensoredWord() },
+                  { name: t('games.hangman.guesses', { lng }), value: this.guesses.map((letter) => `\`${letter}\``).join(', ') || '/' }
                 ),
             ],
             components: this.getComponents(this.buttonPage),
@@ -166,16 +166,16 @@ export class Hangman {
     const embed = new EmbedBuilder()
       .setColor(result === 'TIMEOUT' ? Colors.Yellow : result === 'WIN' ? Colors.Green : Colors.Red)
       .setAuthor({ name: user.displayName, iconURL: user.displayAvatarURL() })
-      .setTitle(i18next.t('games.hangman.title', { lng }))
+      .setTitle(t('games.hangman.title', { lng }))
       .addFields(
-        { name: i18next.t('games.hangman.theme', { lng }), value: this.options.theme },
-        { name: i18next.t('games.hangman.word', { lng, length: this.word.length }), value: this.getCensoredWord() },
-        { name: i18next.t('games.hangman.guesses', { lng }), value: this.guesses.map((letter) => `\`${letter}\``).join(', ') || '/' }
+        { name: t('games.hangman.theme', { lng }), value: this.options.theme },
+        { name: t('games.hangman.word', { lng, length: this.word.length }), value: this.getCensoredWord() },
+        { name: t('games.hangman.guesses', { lng }), value: this.guesses.map((letter) => `\`${letter}\``).join(', ') || '/' }
       );
 
-    if (result === 'TIMEOUT') embed.setDescription([i18next.t('games.hangman.timeout', { lng, word: this.word }), this.getBoardContent()].join('\n\n'));
-    else if (result === 'LOSE') embed.setDescription([i18next.t('games.hangman.lost', { lng, word: this.word }), this.getBoardContent()].join('\n\n'));
-    else embed.setDescription([i18next.t('games.hangman.won', { lng }), this.getBoardContent()].join('\n\n'));
+    if (result === 'TIMEOUT') embed.setDescription([t('games.hangman.timeout', { lng, word: this.word }), this.getBoardContent()].join('\n\n'));
+    else if (result === 'LOSE') embed.setDescription([t('games.hangman.lost', { lng, word: this.word }), this.getBoardContent()].join('\n\n'));
+    else embed.setDescription([t('games.hangman.won', { lng }), this.getBoardContent()].join('\n\n'));
 
     return await interaction.editReply({ content: null, embeds: [embed], components: [] }).catch(() => {});
   }

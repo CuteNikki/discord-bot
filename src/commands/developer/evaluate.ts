@@ -1,19 +1,26 @@
-import { ActionRowBuilder, ApplicationCommandType, ModalBuilder, PermissionFlagsBits, TextInputBuilder, TextInputStyle } from 'discord.js';
+import {
+  ActionRowBuilder,
+  ApplicationIntegrationType,
+  InteractionContextType,
+  ModalBuilder,
+  PermissionFlagsBits,
+  SlashCommandBuilder,
+  TextInputBuilder,
+  TextInputStyle,
+} from 'discord.js';
 
-import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
+import { Command, ModuleType } from 'classes/command';
 
 export default new Command({
   module: ModuleType.Developer,
   isDeveloperOnly: true,
   cooldown: 0,
-  data: {
-    name: 'eval',
-    description: 'Evaluates code',
-    default_member_permissions: `${PermissionFlagsBits.Administrator}`,
-    type: ApplicationCommandType.ChatInput,
-    contexts: [Contexts.Guild],
-    integration_types: [IntegrationTypes.GuildInstall],
-  },
+  data: new SlashCommandBuilder()
+    .setName('eval')
+    .setDescription('Evaluates code')
+    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+    .setContexts(InteractionContextType.Guild)
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall),
   async execute({ interaction }) {
     await interaction.showModal(
       new ModalBuilder()

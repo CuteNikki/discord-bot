@@ -1,18 +1,19 @@
 import { Font, RankCardBuilder } from 'canvacord';
-import { ApplicationCommandType, AttachmentBuilder } from 'discord.js';
-import i18next from 'i18next';
+import { ApplicationCommandType, ApplicationIntegrationType, AttachmentBuilder, ContextMenuCommandBuilder, InteractionContextType } from 'discord.js';
+import { t } from 'i18next';
 
-import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
+import { Command, ModuleType } from 'classes/command';
 import { getDataWithRank, levelToXP } from 'utils/level';
 
-export default new Command({
+const commandType = ApplicationCommandType.User
+
+export default new Command<typeof commandType>({
   module: ModuleType.Moderation,
-  data: {
-    name: 'View Rank',
-    type: ApplicationCommandType.User,
-    contexts: [Contexts.Guild],
-    integration_types: [IntegrationTypes.GuildInstall],
-  },
+  data: new ContextMenuCommandBuilder()
+    .setName('View Rank')
+    .setType(commandType)
+    .setContexts(InteractionContextType.Guild)
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall),
   async execute({ interaction, client }) {
     if (!interaction.inCachedGuild()) return;
     await interaction.deferReply({ ephemeral: true });
@@ -25,7 +26,7 @@ export default new Command({
     const member = guild.members.cache.get(target.id);
 
     const rank = await getDataWithRank({ userId: target.id, guildId }, client);
-    if (!rank) return interaction.editReply(i18next.t('level.none', { lng }));
+    if (!rank) return interaction.editReply(t('level.none', { lng }));
 
     Font.loadDefault();
     const card = new RankCardBuilder()

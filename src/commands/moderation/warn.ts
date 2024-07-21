@@ -1,43 +1,28 @@
 import {
   ActionRowBuilder,
-  ApplicationCommandOptionType,
-  ApplicationCommandType,
+  ApplicationIntegrationType,
   ButtonBuilder,
   ButtonStyle,
   ComponentType,
+  InteractionContextType,
   PermissionFlagsBits,
+  SlashCommandBuilder,
 } from 'discord.js';
-import i18next from 'i18next';
+import { t } from 'i18next';
 
-import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
-
+import { Command, ModuleType } from 'classes/command';
 import { InfractionType, infractionModel } from 'models/infraction';
 
 export default new Command({
   module: ModuleType.Moderation,
-  data: {
-    name: 'warn',
-    description: 'Warn a user',
-    default_member_permissions: `${PermissionFlagsBits.ModerateMembers}`,
-    type: ApplicationCommandType.ChatInput,
-    contexts: [Contexts.Guild],
-    integration_types: [IntegrationTypes.GuildInstall],
-    options: [
-      {
-        name: 'user',
-        description: 'The user to warn',
-        type: ApplicationCommandOptionType.User,
-        required: true,
-      },
-      {
-        name: 'reason',
-        description: 'The reason for the warn',
-        type: ApplicationCommandOptionType.String,
-        max_length: 180,
-        required: false,
-      },
-    ],
-  },
+  data: new SlashCommandBuilder()
+    .setName('warn')
+    .setDescription('Warn a user')
+    .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
+    .setContexts(InteractionContextType.Guild)
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .addUserOption((option) => option.setName('user').setDescription('The user to warn').setRequired(true))
+    .addStringOption((option) => option.setName('reason').setDescription('The reason for the warn').setMaxLength(300).setRequired(false)),
   async execute({ interaction, client }) {
     if (!interaction.inCachedGuild()) return;
     await interaction.deferReply({ ephemeral: true });
@@ -57,7 +42,7 @@ export default new Command({
     const reason = options.getString('reason', false) ?? undefined;
 
     const msg = await interaction.editReply({
-      content: i18next.t('warn.confirm', { lng, user: target.toString() }),
+      content: t('warn.confirm', { lng, user: target.toString() }),
       components: [
         new ActionRowBuilder<ButtonBuilder>().setComponents(
           new ButtonBuilder().setCustomId(CustomIds.Confirm).setEmoji('✔').setStyle(ButtonStyle.Success),
@@ -66,14 +51,18 @@ export default new Command({
       ],
     });
 
-    const collector = await msg.awaitMessageComponent({ filter: (i) => i.user.id === interaction.user.id, componentType: ComponentType.Button, time: 30_000 });
+    const collector = await msg.awaitMessageComponent({
+      filter: (i) => i.user.id === interaction.user.id,
+      componentType: ComponentType.Button,
+      time: 30_000,
+    });
 
     if (collector.customId === CustomIds.Cancel) {
-      await collector.update({ content: i18next.t('warn.cancelled', { lng }), components: [] });
+      await collector.update({ content: t('warn.cancelled', { lng }), components: [] });
     } else if (collector.customId === CustomIds.Confirm) {
       const receivedDM = await client.users
         .send(target.id, {
-          content: i18next.t('warn.target_dm', {
+          content: t('warn.target_dm', {
             lng: targetLng,
             guild: `\`${guild.name}\``,
             reason: `\`${reason ?? '/'}\``,
@@ -82,8 +71,8 @@ export default new Command({
         .catch(() => {});
       await collector.update({
         content: [
-          i18next.t('warn.confirmed', { lng, user: target.toString(), reason: `\`${reason ?? '/'}\`` }),
-          receivedDM ? i18next.t('warn.dm_received', { lng }) : i18next.t('warn.dm_not_received', { lng }),
+          t('warn.confirmed', { lng, user: target.toString(), reason: `\`${reason ?? '/'}\`` }),
+          receivedDM ? t('warn.dm_received', { lng }) : t('warn.dm_not_received', { lng }),
         ].join('\n'),
         components: [],
       });

@@ -1,14 +1,5 @@
-import {
-  ActionRowBuilder,
-  ButtonBuilder,
-  ButtonStyle,
-  Colors,
-  EmbedBuilder,
-  type APIButtonComponent,
-  type ButtonComponentData,
-  type ChatInputCommandInteraction,
-} from 'discord.js';
-import i18next from 'i18next';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, type ChatInputCommandInteraction } from 'discord.js';
+import { t } from 'i18next';
 
 import type { DiscordClient } from 'classes/client';
 
@@ -24,7 +15,7 @@ export class Memory {
   tilesTurned: number = 0;
   remainingPairs: number = 12;
   selected?: EmojiCoordinates;
-  components: ActionRowBuilder<CustomButtonBuilder>[];
+  components: ActionRowBuilder<ButtonBuilder>[];
   size: number = 5; // max size is 5x5
   constructor(
     public options: {
@@ -54,8 +45,8 @@ export class Memory {
           new EmbedBuilder()
             .setColor(Colors.Yellow)
             .setAuthor({ name: user.displayName, iconURL: user.displayAvatarURL() })
-            .setTitle(i18next.t('games.memory.title', { lng }))
-            .setDescription(i18next.t('games.memory.description', { lng })),
+            .setTitle(t('games.memory.title', { lng }))
+            .setDescription(t('games.memory.description', { lng })),
         ],
         components: this.components,
       })
@@ -70,7 +61,7 @@ export class Memory {
       if (buttonInteraction.user.id !== user.id)
         return buttonInteraction
           .followUp({
-            content: i18next.t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
+            content: t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
             ephemeral: true,
           })
           .catch(() => {});
@@ -85,10 +76,10 @@ export class Memory {
 
       if (!this.selected) {
         this.selected = { x, y, id };
-        emojiButton.setEmoji(emoji).setStyle(ButtonStyle.Primary).removeLabel();
+        emojiButton.setEmoji(emoji).setStyle(ButtonStyle.Primary).setLabel('\u200b');
       } else if (this.selected.id === id) {
         this.selected = undefined;
-        emojiButton.removeEmoji().setStyle(ButtonStyle.Secondary).setLabel('\u200b');
+        emojiButton.setEmoji('\u200b').setStyle(ButtonStyle.Secondary).setLabel('\u200b');
       } else {
         const selectedEmoji = this.emojis[this.selected.id];
         const selectedButton = this.components[this.selected.y].components[this.selected.x];
@@ -98,25 +89,25 @@ export class Memory {
           const joker = emoji === '🃏' ? this.selected : { x, y, id };
           const pair = this.getPair(this.emojis[joker.id]).filter((b) => b.id !== joker.id)[0];
           const pairButton = this.components[pair.y].components[pair.x];
-          pairButton.setEmoji(this.emojis[pair.id]).setStyle(ButtonStyle.Success).setDisabled(true).removeLabel();
+          pairButton.setEmoji(this.emojis[pair.id]).setStyle(ButtonStyle.Success).setDisabled(true).setLabel('\u200b');
         }
 
         emojiButton
           .setEmoji(emoji)
           .setStyle(matched ? ButtonStyle.Success : ButtonStyle.Danger)
           .setDisabled(matched)
-          .removeLabel();
+          .setLabel('\u200b');
         selectedButton
           .setEmoji(selectedEmoji)
           .setStyle(matched ? ButtonStyle.Success : ButtonStyle.Danger)
           .setDisabled(matched)
-          .removeLabel();
+          .setLabel('\u200b');
 
         if (!matched) {
           await buttonInteraction.editReply({ components: this.components }).catch(() => {});
 
-          emojiButton.removeEmoji().setStyle(ButtonStyle.Secondary).setLabel('\u200b');
-          selectedButton.removeEmoji().setStyle(ButtonStyle.Secondary).setLabel('\u200b');
+          emojiButton.setEmoji('\u200b').setStyle(ButtonStyle.Secondary).setLabel('\u200b');
+          selectedButton.setEmoji('\u200b').setStyle(ButtonStyle.Secondary).setLabel('\u200b');
 
           this.selected = undefined;
 
@@ -150,8 +141,8 @@ export class Memory {
           new EmbedBuilder()
             .setColor(isDone ? Colors.Green : Colors.Red)
             .setAuthor({ name: user.displayName, iconURL: user.displayAvatarURL() })
-            .setTitle(i18next.t('games.memory.title', { lng }))
-            .setDescription(i18next.t('games.memory.finished', { lng, tiles: this.tilesTurned })),
+            .setTitle(t('games.memory.title', { lng }))
+            .setDescription(t('games.memory.finished', { lng, tiles: this.tilesTurned })),
         ],
         components: this.disableButtons(this.components),
       })
@@ -172,12 +163,12 @@ export class Memory {
   }
 
   private getComponents() {
-    const components: ActionRowBuilder<CustomButtonBuilder>[] = [];
+    const components: ActionRowBuilder<ButtonBuilder>[] = [];
 
     for (let y = 0; y < this.size; y++) {
-      const row = new ActionRowBuilder<CustomButtonBuilder>();
+      const row = new ActionRowBuilder<ButtonBuilder>();
       for (let x = 0; x < this.size; x++) {
-        row.addComponents(new CustomButtonBuilder().setStyle(ButtonStyle.Secondary).setLabel('\u200b').setCustomId(`MEMORY_${x}_${y}`));
+        row.addComponents(new ButtonBuilder().setStyle(ButtonStyle.Secondary).setLabel('\u200b').setCustomId(`MEMORY_${x}_${y}`));
       }
       components.push(row);
     }
@@ -192,7 +183,7 @@ export class Memory {
     return array;
   }
 
-  private disableButtons(components: ActionRowBuilder<ButtonBuilder | CustomButtonBuilder>[]) {
+  private disableButtons(components: ActionRowBuilder<ButtonBuilder>[]) {
     for (let x = 0; x < components.length; x++) {
       for (let y = 0; y < components[x].components.length; y++) {
         components[x].components[y] = ButtonBuilder.from(components[x].components[y]);
@@ -200,21 +191,5 @@ export class Memory {
       }
     }
     return components;
-  }
-}
-
-class CustomButtonBuilder extends ButtonBuilder {
-  constructor(data?: Partial<ButtonComponentData> | Partial<APIButtonComponent>) {
-    super(data);
-  }
-
-  removeLabel() {
-    this.data.label = undefined;
-    return this;
-  }
-
-  removeEmoji() {
-    this.data.emoji = undefined;
-    return this;
   }
 }

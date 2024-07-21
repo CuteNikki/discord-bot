@@ -1,5 +1,5 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, type ChatInputCommandInteraction, type User } from 'discord.js';
-import i18next from 'i18next';
+import { t } from 'i18next';
 
 import { Opponent } from 'games/opponent';
 
@@ -40,11 +40,11 @@ export class TicTacToe extends Opponent {
 
     interaction
       .editReply({
-        content: i18next.t('games.ttt.start', this.playerTurn ? { lng, player: user.toString() } : { lng: opponentLng, player: opponent.toString() }),
+        content: t('games.ttt.start', this.playerTurn ? { lng, player: user.toString() } : { lng: opponentLng, player: opponent.toString() }),
         embeds: [
           new EmbedBuilder()
             .setColor(Colors.Yellow)
-            .setTitle(i18next.t('games.ttt.title', { lng }))
+            .setTitle(t('games.ttt.title', { lng }))
             .addFields(
               { name: user.displayName, value: '🔹', inline: true },
               { name: 'vs', value: '⚡', inline: true },
@@ -63,16 +63,16 @@ export class TicTacToe extends Opponent {
       if (buttonInteraction.user.id !== user.id && buttonInteraction.user.id !== opponent.id)
         return buttonInteraction
           .followUp({
-            content: i18next.t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
+            content: t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
             ephemeral: true,
           })
           .catch(() => {});
 
       if (this.playerTurn && buttonInteraction.user.id !== user.id)
-        return buttonInteraction.followUp({ content: i18next.t('games.ttt.turn', { lng: opponentLng }), ephemeral: true }).catch(() => {});
+        return buttonInteraction.followUp({ content: t('games.ttt.turn', { lng: opponentLng }), ephemeral: true }).catch(() => {});
 
       if (!this.playerTurn && buttonInteraction.user.id !== opponent.id)
-        return buttonInteraction.followUp({ content: i18next.t('games.ttt.turn', { lng }), ephemeral: true }).catch(() => {});
+        return buttonInteraction.followUp({ content: t('games.ttt.turn', { lng }), ephemeral: true }).catch(() => {});
 
       this.board[parseInt(buttonInteraction.customId.split('_')[1])] = this.playerTurn ? 1 : 2;
 
@@ -84,11 +84,11 @@ export class TicTacToe extends Opponent {
 
       return await buttonInteraction
         .editReply({
-          content: i18next.t('games.ttt.wait', this.playerTurn ? { lng, player: user.toString() } : { lng: opponentLng, player: opponent.toString() }),
+          content: t('games.ttt.wait', this.playerTurn ? { lng, player: user.toString() } : { lng: opponentLng, player: opponent.toString() }),
           embeds: [
             new EmbedBuilder()
               .setColor(Colors.Yellow)
-              .setTitle(i18next.t('games.ttt.title', { lng }))
+              .setTitle(t('games.ttt.title', { lng }))
               .addFields(
                 { name: user.displayName, value: '🔹', inline: true },
                 { name: 'vs', value: '⚡', inline: true },
@@ -117,7 +117,7 @@ export class TicTacToe extends Opponent {
     else result = 'OPPONENT';
 
     const embed = new EmbedBuilder()
-      .setTitle(i18next.t('games.ttt.title', { lng }))
+      .setTitle(t('games.ttt.title', { lng }))
       .setColor(result === 'TIE' ? Colors.Yellow : result === 'TIMEOUT' ? Colors.Yellow : result === 'OPPONENT' ? Colors.Red : Colors.Green)
       .addFields(
         { name: user.displayName, value: '🔹', inline: true },
@@ -125,10 +125,10 @@ export class TicTacToe extends Opponent {
         { name: opponent.displayName, value: '🔺', inline: true }
       );
 
-    if (result === 'TIMEOUT') embed.setDescription(i18next.t('games.ttt.timeout', { lng }));
-    else if (result === 'TIE') embed.setDescription(i18next.t('games.ttt.tied', { lng }));
-    else if (result === 'PLAYER') embed.setDescription(i18next.t('games.ttt.winner', { lng, winner: user.toString() }));
-    else embed.setDescription(i18next.t('games.ttt.winner', { lng, winner: opponent.toString() }));
+    if (result === 'TIMEOUT') embed.setDescription(t('games.ttt.timeout', { lng }));
+    else if (result === 'TIE') embed.setDescription(t('games.ttt.tied', { lng }));
+    else if (result === 'PLAYER') embed.setDescription(t('games.ttt.winner', { lng, winner: user.toString() }));
+    else embed.setDescription(t('games.ttt.winner', { lng, winner: opponent.toString() }));
 
     return await interaction.editReply({ content: null, embeds: [embed], components: this.disableButtons(this.getComponents()) }).catch(() => {});
   }

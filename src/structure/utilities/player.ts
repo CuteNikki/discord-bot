@@ -1,6 +1,6 @@
 import type { DiscordClient } from 'classes/client';
 import { Colors, EmbedBuilder } from 'discord.js';
-import i18next from 'i18next';
+import { t } from 'i18next';
 
 import { logger } from 'utils/logger';
 
@@ -23,15 +23,15 @@ export async function initMusicPlayer(client: DiscordClient) {
           new EmbedBuilder()
             .setColor(Colors.Fuchsia)
             .setThumbnail(track.thumbnail)
-            .setTitle(i18next.t('music.nowplaying.title_now', { lng }))
+            .setTitle(t('music.nowplaying.title_now', { lng }))
             .setURL(track.url)
             .addFields(
-              { name: i18next.t('music.nowplaying.author', { lng }), value: track.author, inline: true },
-              { name: i18next.t('music.nowplaying.title', { lng }), value: track.title, inline: true },
-              { name: i18next.t('music.nowplaying.duration', { lng }), value: track.duration, inline: true }
+              { name: t('music.nowplaying.author', { lng }), value: track.author, inline: true },
+              { name: t('music.nowplaying.title', { lng }), value: track.title, inline: true },
+              { name: t('music.nowplaying.duration', { lng }), value: track.duration, inline: true }
             )
             .setFooter({
-              text: i18next.t('music.nowplaying.requested_by', { lng, user: track.requestedBy?.username }),
+              text: t('music.nowplaying.requested_by', { lng, user: track.requestedBy?.username }),
               iconURL: track.requestedBy?.displayAvatarURL(),
             }),
         ],
@@ -46,8 +46,8 @@ export async function initMusicPlayer(client: DiscordClient) {
         embeds: [
           new EmbedBuilder()
             .setColor(Colors.Fuchsia)
-            .setTitle(i18next.t('music.empty_queue.title', { lng }))
-            .setDescription(i18next.t('music.empty_queue.description', { lng })),
+            .setTitle(t('music.empty_queue.title', { lng }))
+            .setDescription(t('music.empty_queue.description', { lng })),
         ],
       })
       .catch(() => {});
@@ -60,8 +60,8 @@ export async function initMusicPlayer(client: DiscordClient) {
         embeds: [
           new EmbedBuilder()
             .setColor(Colors.Fuchsia)
-            .setTitle(i18next.t('music.empty_voice_channel.title', { lng }))
-            .setDescription(i18next.t('music.empty_voice_channel.description', { lng })),
+            .setTitle(t('music.empty_voice_channel.title', { lng }))
+            .setDescription(t('music.empty_voice_channel.description', { lng })),
         ],
       })
       .catch(() => {});

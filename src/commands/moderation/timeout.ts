@@ -1,50 +1,30 @@
 import {
   ActionRowBuilder,
-  ApplicationCommandOptionType,
-  ApplicationCommandType,
+  ApplicationIntegrationType,
   ButtonBuilder,
   ButtonStyle,
   ComponentType,
+  InteractionContextType,
   PermissionFlagsBits,
+  SlashCommandBuilder,
 } from 'discord.js';
-import i18next from 'i18next';
+import { t } from 'i18next';
 import ms from 'ms';
 
-import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
-
+import { Command, ModuleType } from 'classes/command';
 import { InfractionType, infractionModel } from 'models/infraction';
 
 export default new Command({
   module: ModuleType.Moderation,
-  data: {
-    name: 'timeout',
-    description: 'Times out a user',
-    default_member_permissions: `${PermissionFlagsBits.ModerateMembers}`,
-    type: ApplicationCommandType.ChatInput,
-    contexts: [Contexts.Guild],
-    integration_types: [IntegrationTypes.GuildInstall],
-    options: [
-      {
-        name: 'user',
-        description: 'The user to timeout',
-        type: ApplicationCommandOptionType.User,
-        required: true,
-      },
-      {
-        name: 'duration',
-        description: 'The duration of the timeout',
-        type: ApplicationCommandOptionType.String,
-        required: true,
-      },
-      {
-        name: 'reason',
-        description: 'The reason for the timeout',
-        type: ApplicationCommandOptionType.String,
-        max_length: 180,
-        required: false,
-      },
-    ],
-  },
+  data: new SlashCommandBuilder()
+    .setName('timeout')
+    .setDescription('Times out a user')
+    .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
+    .setContexts(InteractionContextType.Guild)
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .addUserOption((option) => option.setName('user').setDescription('The user to timeout').setRequired(true))
+    .addStringOption((option) => option.setName('duration').setDescription('The duration of the timeout').setRequired(true))
+    .addStringOption((option) => option.setName('reason').setDescription('The reason for the timeout').setMaxLength(300).setRequired(false)),
   async execute({ interaction, client }) {
     if (!interaction.inCachedGuild()) return;
     await interaction.deferReply({ ephemeral: true });
@@ -62,11 +42,11 @@ export default new Command({
     const targetLng = await client.getUserLanguage(target.id);
 
     const targetMember = await guild.members.fetch(target.id).catch(() => {});
-    if (!targetMember) return interaction.editReply(i18next.t('timeout.target.invalid', { lng }));
+    if (!targetMember) return interaction.editReply(t('timeout.target.invalid', { lng }));
 
     const userDuration = options.getString('duration', true);
     const duration = ms(userDuration);
-    if (!duration) return interaction.editReply(i18next.t('timeout.invalid_duration', { lng }));
+    if (!duration) return interaction.editReply(t('timeout.invalid_duration', { lng }));
     const durationText = ms(duration, { long: true });
 
     const reason = options.getString('reason', false) ?? undefined;
@@ -75,19 +55,19 @@ export default new Command({
     const staffRolePos = member.roles.highest.position ?? 0;
     const botRolePos = guild.members.me?.roles.highest.position ?? 0;
 
-    if (targetRolePos >= staffRolePos) return interaction.editReply(i18next.t('timeout.target.pos_staff', { lng }));
-    if (targetRolePos >= botRolePos) return interaction.editReply(i18next.t('timeout.target.pos_bot', { lng }));
+    if (targetRolePos >= staffRolePos) return interaction.editReply(t('timeout.target.pos_staff', { lng }));
+    if (targetRolePos >= botRolePos) return interaction.editReply(t('timeout.target.pos_bot', { lng }));
 
-    if (!targetMember.moderatable) return interaction.editReply(i18next.t('timeout.target.moderatable', { lng }));
+    if (!targetMember.moderatable) return interaction.editReply(t('timeout.target.moderatable', { lng }));
 
     const isTimed = targetMember.isCommunicationDisabled();
     if (isTimed)
       return interaction.editReply(
-        i18next.t('timeout.target.timed_out', { lng, date: `<t:${Math.floor(targetMember.communicationDisabledUntilTimestamp / 1000)}:f>` })
+        t('timeout.target.timed_out', { lng, date: `<t:${Math.floor(targetMember.communicationDisabledUntilTimestamp / 1000)}:f>` })
       );
 
     const msg = await interaction.editReply({
-      content: i18next.t('timeout.confirm', { lng, user: target.toString() }),
+      content: t('timeout.confirm', { lng, user: target.toString() }),
       components: [
         new ActionRowBuilder<ButtonBuilder>().setComponents(
           new ButtonBuilder().setCustomId(CustomIds.Confirm).setEmoji('✔').setStyle(ButtonStyle.Success),
@@ -99,14 +79,14 @@ export default new Command({
     const collector = await msg.awaitMessageComponent({ filter: (i) => i.user.id === interaction.user.id, componentType: ComponentType.Button, time: 30_000 });
 
     if (collector.customId === CustomIds.Cancel) {
-      await collector.update({ content: i18next.t('timeout.cancelled', { lng }), components: [] });
+      await collector.update({ content: t('timeout.cancelled', { lng }), components: [] });
     } else if (collector.customId === CustomIds.Confirm) {
       const timeout = await targetMember.disableCommunicationUntil(Date.now() + duration, reason).catch(() => {});
-      if (!timeout) return collector.update(i18next.t('timeout.failed', { lng }));
+      if (!timeout) return collector.update(t('timeout.failed', { lng }));
 
       const receivedDM = await client.users
         .send(target.id, {
-          content: i18next.t('timeout.target_dm', {
+          content: t('timeout.target_dm', {
             lng: targetLng,
             guild: `\`${guild.name}\``,
             reason: `\`${reason ?? '/'}\``,
@@ -116,9 +96,9 @@ export default new Command({
         .catch(() => {});
       await collector.update({
         content: [
-          i18next.t('timeout.confirmed', { lng, user: target.toString(), reason: `\`${reason ?? '/'}\`` }),
-          receivedDM ? i18next.t('timeout.dm_received', { lng }) : i18next.t('timeout.dm_not_received', { lng }),
-          i18next.t('timeout.duration', { lng, duration: durationText }),
+          t('timeout.confirmed', { lng, user: target.toString(), reason: `\`${reason ?? '/'}\`` }),
+          receivedDM ? t('timeout.dm_received', { lng }) : t('timeout.dm_not_received', { lng }),
+          t('timeout.duration', { lng, duration: durationText }),
         ].join('\n'),
         components: [],
       });

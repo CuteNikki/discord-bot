@@ -1,5 +1,5 @@
 import { Collection, Events, type InteractionReplyOptions } from 'discord.js';
-import i18next from 'i18next';
+import { t } from 'i18next';
 
 import { ModuleType } from 'classes/command';
 import { Event } from 'classes/event';
@@ -26,7 +26,7 @@ export default new Event({
     if (interaction.guild) {
       const guildSettings = await client.getGuildSettings(interaction.guild.id);
       const message: InteractionReplyOptions = {
-        content: i18next.t('interactions.module', { lng, module: ModuleType[command.options.module] }),
+        content: t('interactions.module', { lng, module: ModuleType[command.options.module] }),
         ephemeral: true,
       };
       switch (command.options.module) {
@@ -45,7 +45,7 @@ export default new Event({
     // Check if command is developer only and return if the user's id doesn't match the developer's id
     const developerIds = keys.DEVELOPER_USER_IDS;
     if (command.options.isDeveloperOnly && !developerIds.includes(interaction.user.id))
-      return interaction.reply({ content: i18next.t('interactions.developer_only', { lng }), ephemeral: true });
+      return interaction.reply({ content: t('interactions.developer_only', { lng }), ephemeral: true });
 
     // Check if cooldowns has the current command and add the command if it doesn't have the command
     const cooldowns = client.cooldowns;
@@ -63,7 +63,7 @@ export default new Event({
       if (now < expirationTime) {
         const expiredTimestamp = Math.round(expirationTime / 1_000);
         return interaction.reply({
-          content: i18next.t('interactions.cooldown', { lng, action: `\`${command.options.data.name}\``, timestamp: `<t:${expiredTimestamp}:R>` }),
+          content: t('interactions.cooldown', { lng, action: `\`${command.options.data.name}\``, timestamp: `<t:${expiredTimestamp}:R>` }),
           ephemeral: true,
         });
       }
@@ -77,7 +77,7 @@ export default new Event({
     try {
       command.options.execute({ client, interaction });
     } catch (err: any) {
-      const message = i18next.t('interactions.error', { lng, error: err.message });
+      const message = t('interactions.error', { lng, error: err.message });
 
       if (interaction.deferred) interaction.editReply({ content: message });
       else interaction.reply({ content: message, ephemeral: true });

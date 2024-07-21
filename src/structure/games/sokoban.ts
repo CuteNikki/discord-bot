@@ -1,5 +1,5 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, ComponentType, EmbedBuilder, type ChatInputCommandInteraction } from 'discord.js';
-import i18next from 'i18next';
+import { t } from 'i18next';
 
 import type { DiscordClient } from 'classes/client';
 
@@ -30,7 +30,7 @@ export class Sokoban {
           new EmbedBuilder()
             .setColor(Colors.Yellow)
             .setAuthor({ name: user.displayName, iconURL: user.displayAvatarURL() })
-            .setTitle(i18next.t('games.sokoban.title', { lng }))
+            .setTitle(t('games.sokoban.title', { lng }))
             .setDescription(this.getBoardContent()),
         ],
         components: this.getComponents(),
@@ -46,7 +46,7 @@ export class Sokoban {
       if (buttonInteraction.user.id !== user.id)
         return buttonInteraction
           .followUp({
-            content: i18next.t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
+            content: t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
             ephemeral: true,
           })
           .catch(() => {});
@@ -65,7 +65,7 @@ export class Sokoban {
             new EmbedBuilder()
               .setColor(Colors.Yellow)
               .setAuthor({ name: user.displayName, iconURL: user.displayAvatarURL() })
-              .setTitle(i18next.t('games.sokoban.title', { lng }))
+              .setTitle(t('games.sokoban.title', { lng }))
               .setDescription(this.getBoardContent()),
           ],
         })
@@ -91,8 +91,8 @@ export class Sokoban {
           new EmbedBuilder()
             .setColor(isWon ? Colors.Green : Colors.Red)
             .setAuthor({ name: user.displayName, iconURL: user.displayAvatarURL() })
-            .setTitle(i18next.t('games.sokoban.title', { lng }))
-            .setDescription([isWon ? i18next.t('games.sokoban.win', { lng }) : i18next.t('games.sokoban.lose', { lng }), this.getBoardContent()].join('\n\n')),
+            .setTitle(t('games.sokoban.title', { lng }))
+            .setDescription([isWon ? t('games.sokoban.win', { lng }) : t('games.sokoban.lose', { lng }), this.getBoardContent()].join('\n\n')),
         ],
         components: this.getComponents(true),
       })

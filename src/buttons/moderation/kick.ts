@@ -1,5 +1,4 @@
-import i18next from 'i18next';
-
+import { t } from 'i18next';
 import { Button } from 'classes/button';
 
 import { infractionModel, InfractionType } from 'models/infraction';
@@ -18,16 +17,16 @@ export default new Button({
 
     const lng = await client.getUserLanguage(interaction.user.id);
 
-    if (!targetMember) return interaction.reply(i18next.t('kick.target.invalid', { lng }));
+    if (!targetMember) return interaction.reply(t('kick.target.invalid', { lng }));
     const targetLng = await client.getUserLanguage(targetId);
     const reason = 'Suspicious Account';
 
     const kicked = await targetMember.kick(reason).catch(() => {});
-    if (!kicked) return interaction.reply(i18next.t('kick.failed', { lng }));
+    if (!kicked) return interaction.reply(t('kick.failed', { lng }));
 
     const receivedDM = await client.users
       .send(targetMember.user.id, {
-        content: i18next.t('kick.target_dm', {
+        content: t('kick.target_dm', {
           lng: targetLng,
           guild: `\`${guild.name}\``,
           reason: `\`${reason ?? '/'}\``,
@@ -36,8 +35,8 @@ export default new Button({
       .catch(() => {});
     await interaction.reply({
       content: [
-        i18next.t('kick.confirmed', { lng, user: targetMember.toString(), reason: `\`${reason ?? '/'}\`` }),
-        receivedDM ? i18next.t('kick.dm_received', { lng }) : i18next.t('kick.dm_not_received', { lng }),
+        t('kick.confirmed', { lng, user: targetMember.toString(), reason: `\`${reason ?? '/'}\`` }),
+        receivedDM ? t('kick.dm_received', { lng }) : t('kick.dm_not_received', { lng }),
       ].join('\n'),
       components: [],
     });

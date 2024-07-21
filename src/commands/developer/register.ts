@@ -1,6 +1,6 @@
-import { ApplicationCommandType, PermissionFlagsBits } from 'discord.js';
+import { ApplicationIntegrationType, InteractionContextType, PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
 
-import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
+import { Command, ModuleType } from 'classes/command';
 
 import { registerCommands } from 'loaders/commands';
 
@@ -8,14 +8,12 @@ export default new Command({
   module: ModuleType.Developer,
   isDeveloperOnly: true,
   cooldown: 0,
-  data: {
-    name: 'register',
-    description: 'Registers commands',
-    default_member_permissions: `${PermissionFlagsBits.Administrator}`,
-    type: ApplicationCommandType.ChatInput,
-    contexts: [Contexts.Guild],
-    integration_types: [IntegrationTypes.GuildInstall],
-  },
+  data: new SlashCommandBuilder()
+    .setName('register')
+    .setDescription('Registers commands')
+    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+    .setContexts(InteractionContextType.Guild)
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall),
   async execute({ interaction, client }) {
     await interaction.deferReply();
 

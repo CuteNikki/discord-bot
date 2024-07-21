@@ -1,39 +1,20 @@
 import { Font, RankCardBuilder } from 'canvacord';
-import { ApplicationCommandOptionType, ApplicationCommandType, AttachmentBuilder } from 'discord.js';
-import i18next from 'i18next';
+import { ApplicationIntegrationType, AttachmentBuilder, InteractionContextType, SlashCommandBuilder } from 'discord.js';
+import { t } from 'i18next';
 
-import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
+import { Command, ModuleType } from 'classes/command';
 import { getDataWithRank, getWeeklyDataWithRank, levelToXP, type PositionLevel } from 'utils/level';
 
 export default new Command({
   module: ModuleType.Level,
-  data: {
-    name: 'rank',
-    description: 'Shows the rank of a user',
-    type: ApplicationCommandType.ChatInput,
-    contexts: [Contexts.Guild],
-    integration_types: [IntegrationTypes.GuildInstall],
-    options: [
-      {
-        name: 'user',
-        description: 'The user to show the rank of',
-        type: ApplicationCommandOptionType.User,
-        required: false,
-      },
-      {
-        name: 'weekly',
-        description: 'When set to true will show the users weekly rank',
-        type: ApplicationCommandOptionType.Boolean,
-        required: false,
-      },
-      {
-        name: 'ephemeral',
-        description: 'When set to false will show the message to everyone',
-        type: ApplicationCommandOptionType.Boolean,
-        required: false,
-      },
-    ],
-  },
+  data: new SlashCommandBuilder()
+    .setName('rank')
+    .setDescription('Shows the rank of a user')
+    .setContexts(InteractionContextType.Guild)
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .addUserOption((option) => option.setName('user').setDescription('The user to show the rank of').setRequired(false))
+    .addBooleanOption((option) => option.setName('weekly').setDescription("When set to true will show the user's weekly rank").setRequired(false))
+    .addBooleanOption((option) => option.setName('ephemeral').setDescription('When set to false will show the message to everyone').setRequired(false)),
   async execute({ interaction, client }) {
     if (!interaction.inCachedGuild()) return;
     const { options, guildId, user, guild } = interaction;
@@ -52,7 +33,7 @@ export default new Command({
     if (!weekly) rank = await getDataWithRank({ userId: target.id, guildId }, client);
     else rank = await getWeeklyDataWithRank({ userId: target.id, guildId }, client);
 
-    if (!rank) return interaction.editReply(i18next.t('level.none', { lng }));
+    if (!rank) return interaction.editReply(t('level.none', { lng }));
 
     Font.loadDefault();
 

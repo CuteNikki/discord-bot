@@ -1,27 +1,19 @@
-import { ApplicationCommandOptionType, ApplicationCommandType, Colors, EmbedBuilder, Status } from 'discord.js';
-import i18next from 'i18next';
+import { ApplicationIntegrationType, Colors, EmbedBuilder, InteractionContextType, SlashCommandBuilder, Status } from 'discord.js';
+import { t } from 'i18next';
 import ms from 'ms';
 
-import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
+import { Command, ModuleType } from 'classes/command';
 
 import { pagination } from 'utils/pagination';
 
 export default new Command({
   module: ModuleType.General,
-  data: {
-    name: 'clusters',
-    description: 'Shows info about all clusters and shards',
-    type: ApplicationCommandType.ChatInput,
-    contexts: [Contexts.Guild, Contexts.BotDM, Contexts.PrivateChannel],
-    integration_types: [IntegrationTypes.GuildInstall, IntegrationTypes.UserInstall],
-    options: [
-      {
-        name: 'ephemeral',
-        description: 'When set to false will show the message to everyone',
-        type: ApplicationCommandOptionType.Boolean,
-      },
-    ],
-  },
+  data: new SlashCommandBuilder()
+    .setName('clusters')
+    .setDescription('Shows info about all clusters and shards')
+    .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel)
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
+    .addBooleanOption((option) => option.setName('ephemeral').setDescription('When set to false will show the message to everyone')),
   async execute({ interaction, client }) {
     const lng = await client.getUserLanguage(interaction.user.id);
     const ephemeral = interaction.options.getBoolean('ephemeral', false) ?? true;
@@ -73,34 +65,34 @@ export default new Command({
       embeds.push(
         new EmbedBuilder()
           .setColor(Colors.Blurple)
-          .setTitle(i18next.t('clusters.title', { lng, id: cluster.clusterId }))
+          .setTitle(t('clusters.title', { lng, id: cluster.clusterId }))
           .setDescription(
             [
-              i18next.t('clusters.uptime', { lng, uptime: ms(cluster.uptime ?? 0, { long: true }) }),
-              i18next.t('clusters.ping', { lng, ping: cluster.ping }),
-              i18next.t('clusters.memory', { lng, memory: cluster.memoryUsage.rss }),
-              i18next.t('clusters.guilds', { lng, guilds: cluster.totalGuilds }),
-              i18next.t('clusters.members', { lng, members: cluster.totalMembers }),
+              t('clusters.uptime', { lng, uptime: ms(cluster.uptime ?? 0, { long: true }) }),
+              t('clusters.ping', { lng, ping: cluster.ping }),
+              t('clusters.memory', { lng, memory: cluster.memoryUsage.rss }),
+              t('clusters.guilds', { lng, guilds: cluster.totalGuilds }),
+              t('clusters.members', { lng, members: cluster.totalMembers }),
             ].join('\n')
           )
           .addFields(
             cluster.perShardData.map((shard) => {
               return {
-                name: i18next.t('clusters.shards.title', { lng, id: `${shard.shardId} ${interaction.guild?.shardId === shard.shardId ? '📍' : ''}` }),
+                name: t('clusters.shards.title', { lng, id: `${shard.shardId} ${interaction.guild?.shardId === shard.shardId ? '📍' : ''}` }),
                 value: [
-                  i18next.t('clusters.shards.status', { lng, status: shard.status }),
-                  i18next.t('clusters.shards.ping', { lng, ping: shard.ping }),
-                  i18next.t('clusters.shards.guilds', { lng, guilds: shard.guilds }),
-                  i18next.t('clusters.shards.members', { lng, members: shard.members }),
+                  t('clusters.shards.status', { lng, status: shard.status }),
+                  t('clusters.shards.ping', { lng, ping: shard.ping }),
+                  t('clusters.shards.guilds', { lng, guilds: shard.guilds }),
+                  t('clusters.shards.members', { lng, members: shard.members }),
                 ].join('\n'),
                 inline: true,
               };
             })
           )
-          .setFooter({ text: i18next.t('clusters.page', { lng, page: cluster.clusterId + 1, pages: clusterData.length }) })
+          .setFooter({ text: t('clusters.page', { lng, page: cluster.clusterId + 1, pages: clusterData.length }) })
       );
     }
 
-    await pagination({ client, interaction, embeds, content: i18next.t('clusters.pin', { lng }) });
+    await pagination({ client, interaction, embeds, content: t('clusters.pin', { lng }) });
   },
 });

@@ -56,8 +56,8 @@ export default new Event({
         emptyField
       );
     if (JSON.stringify(newMember.roles.cache.toJSON()) !== JSON.stringify(oldMember.roles.cache.toJSON())) {
-      const removedRoles = oldMember.roles.cache.toJSON().filter((role) => !newMember.roles.cache.map((r) => r.id).includes(role.id));
-      const addedRoles = newMember.roles.cache.toJSON().filter((role) => !oldMember.roles.cache.map((r) => r.id).includes(role.id));
+      const removedRoles = oldMember.roles.cache.map((r) => r).filter((role) => !newMember.roles.cache.map((r) => r.id).includes(role.id));
+      const addedRoles = newMember.roles.cache.map((r) => r).filter((role) => !oldMember.roles.cache.map((r) => r.id).includes(role.id));
 
       embed.addFields(
         {

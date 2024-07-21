@@ -1,24 +1,16 @@
-import { ApplicationCommandOptionType, ApplicationCommandType, Colors, EmbedBuilder } from 'discord.js';
-import i18next from 'i18next';
+import { ApplicationIntegrationType, Colors, EmbedBuilder, InteractionContextType, SlashCommandBuilder } from 'discord.js';
+import { t } from 'i18next';
 
-import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
+import { Command, ModuleType } from 'classes/command';
 
 export default new Command({
   module: ModuleType.General,
-  data: {
-    name: 'uptime',
-    description: 'Shows how long the bot has been running for',
-    type: ApplicationCommandType.ChatInput,
-    contexts: [Contexts.Guild, Contexts.BotDM, Contexts.PrivateChannel],
-    integration_types: [IntegrationTypes.GuildInstall, IntegrationTypes.UserInstall],
-    options: [
-      {
-        name: 'ephemeral',
-        description: 'When set to false will show the message to everyone',
-        type: ApplicationCommandOptionType.Boolean,
-      },
-    ],
-  },
+  data: new SlashCommandBuilder()
+    .setName('uptime')
+    .setDescription('Shows how long the bot has been running for')
+    .setContexts(InteractionContextType.Guild, InteractionContextType.PrivateChannel, InteractionContextType.BotDM)
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
+    .addBooleanOption((option) => option.setName('ephemeral').setDescription('Shows the message to everyone when false').setRequired(false)),
   async execute({ interaction, client }) {
     const lng = await client.getUserLanguage(interaction.user.id);
     const ephemeral = interaction.options.getBoolean('ephemeral', false) ?? true;
@@ -28,8 +20,8 @@ export default new Command({
       embeds: [
         new EmbedBuilder()
           .setColor(Colors.Blurple)
-          .setTitle(i18next.t('uptime.title', { lng }))
-          .setDescription(i18next.t('uptime.description', { lng, uptime: `<t:${Math.floor(interaction.client.readyTimestamp / 1000)}:R>` })),
+          .setTitle(t('uptime.title', { lng }))
+          .setDescription(t('uptime.description', { lng, uptime: `<t:${Math.floor(interaction.client.readyTimestamp / 1000)}:R>` })),
       ],
     });
   },

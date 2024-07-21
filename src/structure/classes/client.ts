@@ -32,7 +32,7 @@ export class DiscordClient extends Client {
   public player = new Player(this);
 
   // Collections for loading and running commands, buttons and modals
-  public commands = new Collection<string, Command>(); // Collection<commandName, commandData>
+  public commands = new Collection<string, Command<any>>(); // Collection<commandName, commandData>
   public buttons = new Collection<string, Button>(); // Collection<customId, buttonOptions>
   public modals = new Collection<string, Modal>(); // Collection<customId, modalOptions>
 

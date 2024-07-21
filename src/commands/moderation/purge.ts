@@ -1,63 +1,33 @@
 import {
-  ApplicationCommandOptionType,
-  ApplicationCommandType,
+  ApplicationIntegrationType,
   AttachmentBuilder,
   ChannelType,
   Colors,
   EmbedBuilder,
+  InteractionContextType,
   PermissionFlagsBits,
+  SlashCommandBuilder,
   type FetchMessagesOptions,
 } from 'discord.js';
-import i18next from 'i18next';
+import { t } from 'i18next';
 
-import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
+import { Command, ModuleType } from 'classes/command';
 
 export default new Command({
   module: ModuleType.Moderation,
-  data: {
-    name: 'purge',
-    description: 'Delete x amount of messages, by anyone, anywhere',
-    dm_permission: false,
-    default_member_permissions: `${PermissionFlagsBits.ManageMessages}`,
-    type: ApplicationCommandType.ChatInput,
-    contexts: [Contexts.Guild],
-    integration_types: [IntegrationTypes.GuildInstall],
-    options: [
-      {
-        name: 'amount',
-        description: 'The amount of messages',
-        type: ApplicationCommandOptionType.Integer,
-        min_value: 1,
-        max_value: 50,
-        required: true,
-      },
-      {
-        name: 'user',
-        description: 'The user to delete messages of',
-        type: ApplicationCommandOptionType.User,
-        required: false,
-      },
-      {
-        name: 'channel',
-        description: 'The channel to delete messages in',
-        type: ApplicationCommandOptionType.Channel,
-        channel_types: [ChannelType.GuildText],
-        required: false,
-      },
-      {
-        name: 'before',
-        description: 'Only delete sent messages before the given message link',
-        type: ApplicationCommandOptionType.String,
-        required: false,
-      },
-      {
-        name: 'after',
-        description: 'Only delete sent messages after the given message link',
-        type: ApplicationCommandOptionType.String,
-        required: false,
-      },
-    ],
-  },
+  data: new SlashCommandBuilder()
+    .setName('purge')
+    .setDescription('Delete x amount of messages, by anyone, anywhere')
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
+    .setContexts(InteractionContextType.Guild)
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .addIntegerOption((option) => option.setName('amount').setDescription('The amount of messages').setMinValue(1).setMaxValue(50).setRequired(true))
+    .addUserOption((option) => option.setName('user').setDescription('The user to delete messages of').setRequired(false))
+    .addChannelOption((option) =>
+      option.setName('channel').setDescription('The channel to delete messages in').addChannelTypes(ChannelType.GuildText).setRequired(false)
+    )
+    .addStringOption((option) => option.setName('before').setDescription('Only delete sent messages before the given message link').setRequired(false))
+    .addStringOption((option) => option.setName('after').setDescription('Only delete sent messages after the given message link').setRequired(false)),
   async execute({ interaction, client }) {
     if (!interaction.inCachedGuild() || !interaction.channel) return;
     await interaction.deferReply({ ephemeral: true });
@@ -81,20 +51,20 @@ export default new Command({
     if (afterLink) {
       const splitLink = afterLink.split('/');
       const messageId = splitLink[splitLink.length - 1];
-      fetchOptions = { limit: amount, before: messageId };
+      fetchOptions = { limit: amount, after: messageId };
     }
 
     let fetchedMessages = await channel.messages.fetch(fetchOptions).catch(() => {});
-    if (!fetchedMessages) return interaction.editReply(i18next.t('purge.no_messages', { lng }));
+    if (!fetchedMessages) return interaction.editReply(t('purge.no_messages', { lng }));
     if (user) fetchedMessages = fetchedMessages.filter((msg) => msg.author.id === user.id);
     const deletedMessages = await channel.bulkDelete(fetchedMessages, true).catch(() => {});
-    if (!deletedMessages) return interaction.editReply(i18next.t('purge.none_deleted', { lng }));
+    if (!deletedMessages) return interaction.editReply(t('purge.none_deleted', { lng }));
 
     interaction.editReply({
       embeds: [
         new EmbedBuilder()
           .setColor(Colors.Orange)
-          .setDescription(i18next.t('purge.success', { lng, deleted: deletedMessages.size, amount, channel: channel.toString() })),
+          .setDescription(t('purge.success', { lng, deleted: deletedMessages.size, amount, channel: channel.toString() })),
       ],
       files: [
         new AttachmentBuilder(

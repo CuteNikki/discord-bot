@@ -1,34 +1,20 @@
-import { ApplicationCommandOptionType, ApplicationCommandType, Colors, EmbedBuilder } from 'discord.js';
-import i18next from 'i18next';
+import { ApplicationIntegrationType, Colors, EmbedBuilder, InteractionContextType, SlashCommandBuilder } from 'discord.js';
+import { t } from 'i18next';
 
-import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
+import { Command, ModuleType } from 'classes/command';
 
 import { computeLeaderboard, getLeaderboard, getWeeklyLeaderboard } from 'utils/level';
 import { chunk, pagination } from 'utils/pagination';
 
 export default new Command({
   module: ModuleType.Level,
-  data: {
-    name: 'levels',
-    description: 'Shows the level leaderboard',
-    type: ApplicationCommandType.ChatInput,
-    contexts: [Contexts.Guild],
-    integration_types: [IntegrationTypes.GuildInstall],
-    options: [
-      {
-        name: 'weekly',
-        description: 'When set to true will show the weekly leaderboard',
-        type: ApplicationCommandOptionType.Boolean,
-        required: false,
-      },
-      {
-        name: 'ephemeral',
-        description: 'When set to false will show the message to everyone',
-        type: ApplicationCommandOptionType.Boolean,
-        required: false,
-      },
-    ],
-  },
+  data: new SlashCommandBuilder()
+    .setName('levels')
+    .setDescription('Shows the level leaderboard')
+    .setContexts(InteractionContextType.Guild)
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .addBooleanOption((option) => option.setName('weekly').setDescription('When set to true will show the weekly leaderboard').setRequired(false))
+    .addBooleanOption((option) => option.setName('ephemeral').setDescription('When set to false will show the message to everyone').setRequired(false)),
   async execute({ interaction, client }) {
     if (!interaction.inCachedGuild()) return;
     const { options, guildId } = interaction;
@@ -45,7 +31,7 @@ export default new Command({
     const computedLeaderboard = await computeLeaderboard(leaderboard, client);
 
     const chunkedLeaderboard = chunk(computedLeaderboard, 10);
-    if (!chunkedLeaderboard.length) return interaction.editReply(i18next.t('level.none'));
+    if (!chunkedLeaderboard.length) return interaction.editReply(t('level.none'));
 
     await pagination({
       client,
@@ -55,14 +41,14 @@ export default new Command({
           .setColor(Colors.Blurple)
           .setTitle(
             weekly
-              ? i18next.t('level.leaderboard.weekly', { lng, page: index + 1, pages: chunkedLeaderboard.length })
-              : i18next.t('level.leaderboard.title', { lng, page: index + 1, pages: chunkedLeaderboard.length })
+              ? t('level.leaderboard.weekly', { lng, page: index + 1, pages: chunkedLeaderboard.length })
+              : t('level.leaderboard.title', { lng, page: index + 1, pages: chunkedLeaderboard.length })
           )
           .setDescription(
             level
               .map(
                 ({ position, username, xp, level }) =>
-                  i18next.t('level.leaderboard.position', { lng, position, username, xp, level }) +
+                  t('level.leaderboard.position', { lng, position, username, xp, level }) +
                   `${position === 1 ? ' 🥇' : position === 2 ? ' 🥈' : position === 3 ? ' 🥉' : ''}`
               )
               .join('\n')

@@ -40,8 +40,8 @@ export default new Event({
         emptyField
       );
     if (newMessage.attachments.size !== oldMessage.attachments.size) {
-      const oldAttachments = oldMessage.attachments.toJSON();
-      const newAttachments = newMessage.attachments.toJSON();
+      const oldAttachments = oldMessage.attachments.map((a) => a);
+      const newAttachments = newMessage.attachments.map((a) => a);
 
       embed.addFields({
         name: 'Deleted Attachments',

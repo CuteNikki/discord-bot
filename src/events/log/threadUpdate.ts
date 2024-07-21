@@ -49,8 +49,8 @@ export default new Event({
         emptyField
       );
     if (JSON.stringify(newThread.members.cache.toJSON()) !== JSON.stringify(oldThread.members.cache.toJSON())) {
-      const addedMembers = newThread.members.cache.toJSON().filter((member) => !oldThread.members.cache.map((mem) => mem.id).includes(member.id));
-      const removedMembers = oldThread.members.cache.toJSON().filter((member) => !newThread.members.cache.map((mem) => mem.id).includes(member.id));
+      const addedMembers = newThread.members.cache.map((m) => m).filter((member) => !oldThread.members.cache.map((mem) => mem.id).includes(member.id));
+      const removedMembers = oldThread.members.cache.map((m) => m).filter((member) => !newThread.members.cache.map((mem) => mem.id).includes(member.id));
       embed.addFields(
         {
           name: 'Added Members',

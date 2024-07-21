@@ -43,10 +43,10 @@ export default new Event({
       );
 
     const oldPerms = oldChannel.permissionOverwrites.cache
-      .toJSON()
+      .map((p) => p)
       .filter((permission) => !newChannel.permissionOverwrites.cache.map((p) => JSON.stringify(p)).includes(JSON.stringify(permission)));
     const newPerms = newChannel.permissionOverwrites.cache
-      .toJSON()
+      .map((p) => p)
       .filter((permission) => !oldChannel.permissionOverwrites.cache.map((p) => JSON.stringify(p)).includes(JSON.stringify(permission)));
 
     if (oldPerms.length || newPerms.length)

@@ -1,36 +1,30 @@
 import {
   ActionRowBuilder,
-  ApplicationCommandOptionType,
   ApplicationCommandType,
+  ApplicationIntegrationType,
   ButtonBuilder,
   ButtonStyle,
   Colors,
   ComponentType,
   EmbedBuilder,
+  InteractionContextType,
+  SlashCommandBuilder,
   StringSelectMenuBuilder,
 } from 'discord.js';
-import i18next from 'i18next';
-
-import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
+import { t } from 'i18next';
 import ms from 'ms';
+
+import { Command, ModuleType } from 'classes/command';
 import { chunk, pagination } from 'utils/pagination';
 
 export default new Command({
   module: ModuleType.General,
-  data: {
-    name: 'commands',
-    description: 'List of all commands',
-    type: ApplicationCommandType.ChatInput,
-    contexts: [Contexts.Guild, Contexts.BotDM, Contexts.PrivateChannel],
-    integration_types: [IntegrationTypes.GuildInstall, IntegrationTypes.UserInstall],
-    options: [
-      {
-        name: 'ephemeral',
-        description: 'When set to false will show the message to everyone',
-        type: ApplicationCommandOptionType.Boolean,
-      },
-    ],
-  },
+  data: new SlashCommandBuilder()
+    .setName('commands')
+    .setDescription('List of all commands')
+    .setContexts(InteractionContextType.Guild, InteractionContextType.PrivateChannel, InteractionContextType.BotDM)
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
+    .addBooleanOption((option) => option.setName('ephemeral').setDescription('When set to false will show the message to everyone').setRequired(false)),
   async execute({ interaction, client }) {
     const lng = await client.getUserLanguage(interaction.user.id);
     const ephemeral = interaction.options.getBoolean('ephemeral', false) ?? true;
@@ -42,12 +36,12 @@ export default new Command({
     const select = new StringSelectMenuBuilder()
       .setCustomId('HELP_SELECT')
       .setMaxValues(1)
-      .setPlaceholder(i18next.t('commands.placeholder', { lng }))
+      .setPlaceholder(t('commands.placeholder', { lng }))
       .setOptions(...categories);
     const helpEmbed = new EmbedBuilder()
       .setColor(Colors.Blurple)
-      .setTitle(i18next.t('commands.title', { lng }))
-      .setDescription(i18next.t('commands.description', { lng, categories: categories.length }));
+      .setTitle(t('commands.title', { lng }))
+      .setDescription(t('commands.description', { lng, categories: categories.length }));
     const msg = await interaction
       .editReply({
         embeds: [helpEmbed],
@@ -65,7 +59,7 @@ export default new Command({
       if (selectInteraction.user.id !== interaction.user.id)
         return await interaction
           .followUp({
-            content: i18next.t('interactions.author_only', { lng: await client.getUserLanguage(selectInteraction.user.id) }),
+            content: t('interactions.author_only', { lng: await client.getUserLanguage(selectInteraction.user.id) }),
             ephemeral: true,
           })
           .catch(() => {});
@@ -74,8 +68,8 @@ export default new Command({
       const categoryName = ModuleType[categoryId];
 
       const commands: Command<ApplicationCommandType.ChatInput>[] = client.commands
-        .toJSON()
-        .filter((cmd) => cmd.options.module === categoryId && cmd.options.data.type === ApplicationCommandType.ChatInput);
+        .map((cmd) => cmd)
+        .filter((cmd) => cmd.options.data.toJSON().type !== ApplicationCommandType.Message && cmd.options.data.toJSON().type !== ApplicationCommandType.User);
       const mappedCmds = commands.map((cmd) => ({ name: cmd.options.data.name, description: cmd.options.data.description }));
       const chunkedCmds = chunk(mappedCmds, 10);
 
@@ -106,7 +100,7 @@ export default new Command({
     collector.on('end', () => {
       interaction
         .editReply({
-          embeds: [helpEmbed.setFooter({ text: i18next.t('pagination', { lng, time: ms(TIME, { long: true }) }) })],
+          embeds: [helpEmbed.setFooter({ text: t('pagination', { lng, time: ms(TIME, { long: true }) }) })],
           components: [new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(select.setDisabled(true))],
         })
         .catch(() => {});

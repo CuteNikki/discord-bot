@@ -1,5 +1,4 @@
-import i18next from 'i18next';
-
+import { t } from 'i18next';
 import { Button } from 'classes/button';
 
 import { infractionModel, InfractionType } from 'models/infraction';
@@ -18,29 +17,29 @@ export default new Button({
 
     const lng = await client.getUserLanguage(interaction.user.id);
 
-    if (!target) return interaction.reply(i18next.t('ban.failed', { lng }));
-    
+    if (!target) return interaction.reply(t('ban.failed', { lng }));
+
     const targetLng = await client.getUserLanguage(targetId);
     const reason = 'Suspicious Account';
 
     const banned = await guild.bans.create(target.id, { reason, deleteMessageSeconds: 604800 }).catch(() => {});
-    if (!banned) return interaction.reply(i18next.t('ban.failed', { lng }));
+    if (!banned) return interaction.reply(t('ban.failed', { lng }));
 
     const historyOptions = {
-      0: i18next.t('ban.history.none', { lng }), // 'Delete none'
-      1800: i18next.t('ban.history.minutes_30', { lng }), // 'Previous 30 minutes'
-      3600: i18next.t('ban.history.minutes_60', { lng }), // 'Previous 60 minutes'
-      10800: i18next.t('ban.history.hours_3', { lng }), // 'Previous 3 hours'
-      21600: i18next.t('ban.history.hours_6', { lng }), //'Previous 6 hours'
-      43200: i18next.t('ban.history.hours_12', { lng }), // 'Previous 12 hours'
-      86400: i18next.t('ban.history.hours_24', { lng }), // 'Previous 24 hours'
-      259200: i18next.t('ban.history.days_3', { lng }), // 'Previous 3 days'
-      604800: i18next.t('ban.history.days_7', { lng }), // 'Previous 7 days'
+      0: t('ban.history.none', { lng }), // 'Delete none'
+      1800: t('ban.history.minutes_30', { lng }), // 'Previous 30 minutes'
+      3600: t('ban.history.minutes_60', { lng }), // 'Previous 60 minutes'
+      10800: t('ban.history.hours_3', { lng }), // 'Previous 3 hours'
+      21600: t('ban.history.hours_6', { lng }), //'Previous 6 hours'
+      43200: t('ban.history.hours_12', { lng }), // 'Previous 12 hours'
+      86400: t('ban.history.hours_24', { lng }), // 'Previous 24 hours'
+      259200: t('ban.history.days_3', { lng }), // 'Previous 3 days'
+      604800: t('ban.history.days_7', { lng }), // 'Previous 7 days'
     };
 
     const receivedDM = await client.users
       .send(target.id, {
-        content: i18next.t('ban.target_dm', {
+        content: t('ban.target_dm', {
           lng: targetLng,
           guild: `\`${guild.name}\``,
           reason: `\`${reason ?? '/'}\``,
@@ -50,10 +49,10 @@ export default new Button({
       .catch(() => {});
     await interaction.reply({
       content: [
-        i18next.t('ban.confirmed', { lng, user: target.toString(), reason: `\`${reason ?? '/'}\`` }),
-        i18next.t('ban.deleted_history', { lng, deleted: historyOptions[604800] }),
-        receivedDM ? i18next.t('ban.dm_received', { lng }) : i18next.t('ban.dm_not_received', { lng }),
-        i18next.t('ban.permanent', { lng }),
+        t('ban.confirmed', { lng, user: target.toString(), reason: `\`${reason ?? '/'}\`` }),
+        t('ban.deleted_history', { lng, deleted: historyOptions[604800] }),
+        receivedDM ? t('ban.dm_received', { lng }) : t('ban.dm_not_received', { lng }),
+        t('ban.permanent', { lng }),
       ].join('\n'),
       components: [],
     });

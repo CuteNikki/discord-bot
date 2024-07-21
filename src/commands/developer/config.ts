@@ -1,6 +1,6 @@
-import { ApplicationCommandOptionType, ApplicationCommandType, Colors, EmbedBuilder } from 'discord.js';
+import { ApplicationIntegrationType, Colors, EmbedBuilder, InteractionContextType, SlashCommandBuilder } from 'discord.js';
 
-import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
+import { Command, ModuleType } from 'classes/command';
 
 import { BadgeType, userModel } from 'models/user';
 
@@ -10,217 +10,119 @@ import { chunk, pagination } from 'utils/pagination';
 export default new Command({
   module: ModuleType.Developer,
   cooldown: 0,
-  data: {
-    name: 'config-bot',
-    description: 'Only for bot moderators/developers',
-    type: ApplicationCommandType.ChatInput,
-    contexts: [Contexts.Guild],
-    integration_types: [IntegrationTypes.GuildInstall],
-    options: [
-      {
-        name: 'support-guild-id',
-        description: 'Configure the support guild id',
-        type: ApplicationCommandOptionType.SubcommandGroup,
-        options: [
-          {
-            name: 'set',
-            description: 'Sets the support guild id',
-            type: ApplicationCommandOptionType.Subcommand,
-            options: [
-              {
-                name: 'guild-id',
-                description: 'The guild id',
-                type: ApplicationCommandOptionType.String,
-                required: true,
-              },
-            ],
-          },
-          {
-            name: 'remove',
-            description: 'Removes the support guild id',
-            type: ApplicationCommandOptionType.Subcommand,
-          },
-          {
-            name: 'show',
-            description: 'Shows the support guild id',
-            type: ApplicationCommandOptionType.Subcommand,
-          },
-        ],
-      },
-      {
-        name: 'support-invite-url',
-        description: 'Configure the support invite url',
-        type: ApplicationCommandOptionType.SubcommandGroup,
-        options: [
-          {
-            name: 'set',
-            description: 'Sets the support invite url',
-            type: ApplicationCommandOptionType.Subcommand,
-            options: [
-              {
-                name: 'invite-url',
-                description: 'The invite url',
-                type: ApplicationCommandOptionType.String,
-                required: true,
-              },
-            ],
-          },
-          {
-            name: 'remove',
-            description: 'Removes the support invite url',
-            type: ApplicationCommandOptionType.Subcommand,
-          },
-          {
-            name: 'show',
-            description: 'Shows the support invite url',
-            type: ApplicationCommandOptionType.Subcommand,
-          },
-        ],
-      },
-      {
-        name: 'bot-invite-url',
-        description: 'Configure the bot invite url',
-        type: ApplicationCommandOptionType.SubcommandGroup,
-        options: [
-          {
-            name: 'set',
-            description: 'Sets the bot invite url',
-            type: ApplicationCommandOptionType.Subcommand,
-            options: [
-              {
-                name: 'invite-url',
-                description: 'The invite url',
-                type: ApplicationCommandOptionType.String,
-                required: true,
-              },
-            ],
-          },
-          {
-            name: 'remove',
-            description: 'Removes the bot invite url',
-            type: ApplicationCommandOptionType.Subcommand,
-          },
-          {
-            name: 'show',
-            description: 'Shows the bot invite url',
-            type: ApplicationCommandOptionType.Subcommand,
-          },
-        ],
-      },
-      {
-        name: 'badges',
-        description: 'Configure the badges of a user',
-        type: ApplicationCommandOptionType.SubcommandGroup,
-        options: [
-          {
-            name: 'add',
-            description: 'Adds a badge to a user',
-            type: ApplicationCommandOptionType.Subcommand,
-            options: [
-              {
-                name: 'user',
-                description: 'The user to add a badge to',
-                type: ApplicationCommandOptionType.User,
-                required: true,
-              },
-              {
-                name: 'badge',
-                description: 'The badge to add',
-                type: ApplicationCommandOptionType.Integer,
-                choices: [
+  data: new SlashCommandBuilder()
+    .setName('config-bot')
+    .setDescription('Only for bot moderators/developers')
+    .setContexts(InteractionContextType.Guild)
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .addSubcommandGroup((subcommandGroup) =>
+      subcommandGroup
+        .setName('support-guild-id')
+        .setDescription('Configure the support guild id')
+        .addSubcommand((subcommand) =>
+          subcommand
+            .setName('set')
+            .setDescription('Sets the support guild id')
+            .addStringOption((option) => option.setName('guild-id').setDescription('The guild id').setRequired(true))
+        )
+        .addSubcommand((subcommand) => subcommand.setName('remove').setDescription('Removes the support guild id'))
+        .addSubcommand((subcommand) => subcommand.setName('show').setDescription('Shows the support guild id'))
+    )
+    .addSubcommandGroup((subcommandGroup) =>
+      subcommandGroup
+        .setName('support-invite-url')
+        .setDescription('Configure the support invite url')
+        .addSubcommand((subcommand) =>
+          subcommand
+            .setName('set')
+            .setDescription('Sets the support invite url')
+            .addStringOption((option) => option.setName('invite-url').setDescription('The invite url').setRequired(true))
+        )
+        .addSubcommand((subcommand) => subcommand.setName('remove').setDescription('Removes the support invite url'))
+        .addSubcommand((subcommand) => subcommand.setName('show').setDescription('Shows the support invite url'))
+    )
+    .addSubcommandGroup((subcommandGroup) =>
+      subcommandGroup
+        .setName('bot-invite-url')
+        .setDescription('Configure the bot invite url')
+        .addSubcommand((subcommand) =>
+          subcommand
+            .setName('set')
+            .setDescription('Sets the bot invite url')
+            .addStringOption((option) => option.setName('invite-url').setDescription('The invite url').setRequired(true))
+        )
+        .addSubcommand((subcommand) => subcommand.setName('remove').setDescription('Removes the bot invite url'))
+        .addSubcommand((subcommand) => subcommand.setName('show').setDescription('Shows the bot invite url'))
+    )
+    .addSubcommandGroup((subcommandGroup) =>
+      subcommandGroup
+        .setName('badges')
+        .setDescription('Configure the badges of a user')
+        .addSubcommand((subcommand) =>
+          subcommand
+            .setName('add')
+            .setDescription('Adds a badge to a user')
+            .addUserOption((option) => option.setName('user').setDescription('The user to add a badge to').setRequired(true))
+            .addIntegerOption((option) =>
+              option
+                .setName('badge')
+                .setDescription('The badge to add')
+                .setRequired(true)
+                .addChoices(
                   { name: 'translator', value: BadgeType.Translator },
                   { name: 'bughunter', value: BadgeType.Bughunter },
                   { name: 'expert bughunter', value: BadgeType.ExpertBughunter },
                   { name: 'supporter', value: BadgeType.Supporter },
                   { name: 'moderator', value: BadgeType.Moderator },
-                  { name: 'developer', value: BadgeType.Developer },
-                ],
-                required: true,
-              },
-            ],
-          },
-          {
-            name: 'remove',
-            description: 'Removes a badge from a user',
-            type: ApplicationCommandOptionType.Subcommand,
-            options: [
-              {
-                name: 'user',
-                description: 'The user to remove a badge from',
-                type: ApplicationCommandOptionType.User,
-                required: true,
-              },
-              {
-                name: 'badge',
-                description: 'The badge to remove',
-                type: ApplicationCommandOptionType.Integer,
-                choices: [
+                  { name: 'developer', value: BadgeType.Developer }
+                )
+            )
+        )
+        .addSubcommand((subcommand) =>
+          subcommand
+            .setName('remove')
+            .setDescription('Removes a badge from a user')
+            .addUserOption((option) => option.setName('user').setDescription('The user to remove a badge from').setRequired(true))
+            .addIntegerOption((option) =>
+              option
+                .setName('badge')
+                .setDescription('The badge to remove')
+                .setRequired(true)
+                .addChoices(
                   { name: 'translator', value: BadgeType.Translator },
                   { name: 'bughunter', value: BadgeType.Bughunter },
                   { name: 'expert bughunter', value: BadgeType.ExpertBughunter },
                   { name: 'supporter', value: BadgeType.Supporter },
                   { name: 'moderator', value: BadgeType.Moderator },
-                  { name: 'developer', value: BadgeType.Developer },
-                ],
-                required: true,
-              },
-            ],
-          },
-          {
-            name: 'list',
-            description: 'Lists all badges of a user',
-            type: ApplicationCommandOptionType.Subcommand,
-            options: [
-              {
-                name: 'user',
-                description: 'The user to view badges of',
-                type: ApplicationCommandOptionType.User,
-                required: true,
-              },
-            ],
-          },
-        ],
-      },
-      {
-        name: 'bans',
-        description: 'Configures the banned users',
-        type: ApplicationCommandOptionType.SubcommandGroup,
-        options: [
-          {
-            name: 'add',
-            description: 'Bans a user',
-            type: ApplicationCommandOptionType.Subcommand,
-            options: [
-              {
-                name: 'user',
-                description: 'The user to ban',
-                type: ApplicationCommandOptionType.User,
-                required: true,
-              },
-            ],
-          },
-          {
-            name: 'remove',
-            description: 'Unban a user',
-            type: ApplicationCommandOptionType.Subcommand,
-            options: [
-              {
-                name: 'user',
-                description: 'The user to unban',
-                type: ApplicationCommandOptionType.User,
-                required: true,
-              },
-            ],
-          },
-          {
-            name: 'list',
-            description: 'Lists all banned users',
-            type: ApplicationCommandOptionType.Subcommand,
-          },
-        ],
-      },
-    ],
-  },
+                  { name: 'developer', value: BadgeType.Developer }
+                )
+            )
+        )
+        .addSubcommand((subcommand) =>
+          subcommand
+            .setName('list')
+            .setDescription('Lists all badges of a user')
+            .addUserOption((option) => option.setName('user').setDescription('The user to view badges of').setRequired(true))
+        )
+    )
+    .addSubcommandGroup((subcommandGroup) =>
+      subcommandGroup
+        .setName('bans')
+        .setDescription('Configures the banned users')
+        .addSubcommand((subcommand) =>
+          subcommand
+            .setName('add')
+            .setDescription('Bans a user')
+            .addUserOption((option) => option.setName('user').setDescription('The user to ban').setRequired(true))
+        )
+        .addSubcommand((subcommand) =>
+          subcommand
+            .setName('remove')
+            .setDescription('Unban a user')
+            .addUserOption((option) => option.setName('user').setDescription('The user to unban').setRequired(true))
+        )
+        .addSubcommand((subcommand) => subcommand.setName('list').setDescription('Lists all banned users'))
+    ),
   async execute({ client, interaction }) {
     await interaction.deferReply();
     const { options, user } = interaction;

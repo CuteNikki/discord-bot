@@ -14,9 +14,9 @@ import {
   type InteractionEditReplyOptions,
 } from 'discord.js';
 import events from 'events';
+import { t } from 'i18next';
 
 import type { DiscordClient } from 'classes/client';
-import i18next from 'i18next';
 import type { Message } from 'models/guild';
 
 export class CustomEmbedBuilder extends events {
@@ -105,13 +105,13 @@ export class CustomEmbedBuilder extends events {
             await buttonInteraction
               .showModal(
                 new ModalBuilder()
-                  .setTitle(i18next.t('custom_embed.editing_embed', { lng }))
+                  .setTitle(t('custom_embed.editing_embed', { lng }))
                   .setCustomId('CEM_message')
                   .setComponents(
                     new ActionRowBuilder<TextInputBuilder>().addComponents(
                       new TextInputBuilder()
                         .setCustomId('CEI_message')
-                        .setLabel(i18next.t('custom_embed.input.message', { lng }))
+                        .setLabel(t('custom_embed.input.message', { lng }))
                         .setStyle(TextInputStyle.Paragraph)
                         .setMaxLength(2000)
                         .setRequired(false)
@@ -135,13 +135,13 @@ export class CustomEmbedBuilder extends events {
             await buttonInteraction
               .showModal(
                 new ModalBuilder()
-                  .setTitle(i18next.t('custom_embed.editing_embed', { lng }))
+                  .setTitle(t('custom_embed.editing_embed', { lng }))
                   .setCustomId('CEM_title')
                   .setComponents(
                     new ActionRowBuilder<TextInputBuilder>().addComponents(
                       new TextInputBuilder()
                         .setCustomId('CEI_title')
-                        .setLabel(i18next.t('custom_embed.input.title', { lng }))
+                        .setLabel(t('custom_embed.input.title', { lng }))
                         .setStyle(TextInputStyle.Short)
                         .setMaxLength(256)
                         .setRequired(false)
@@ -150,7 +150,7 @@ export class CustomEmbedBuilder extends events {
                     new ActionRowBuilder<TextInputBuilder>().addComponents(
                       new TextInputBuilder()
                         .setCustomId('CEI_url')
-                        .setLabel(i18next.t('custom_embed.input.title_url', { lng }))
+                        .setLabel(t('custom_embed.input.title_url', { lng }))
                         .setStyle(TextInputStyle.Short)
                         .setMaxLength(256)
                         .setRequired(false)
@@ -174,13 +174,13 @@ export class CustomEmbedBuilder extends events {
             await buttonInteraction
               .showModal(
                 new ModalBuilder()
-                  .setTitle(i18next.t('custom_embed.editing_embed', { lng }))
+                  .setTitle(t('custom_embed.editing_embed', { lng }))
                   .setCustomId('CEM_description')
                   .setComponents(
                     new ActionRowBuilder<TextInputBuilder>().addComponents(
                       new TextInputBuilder()
                         .setCustomId('CEI_description')
-                        .setLabel(i18next.t('custom_embed.input.description', { lng }))
+                        .setLabel(t('custom_embed.input.description', { lng }))
                         .setStyle(TextInputStyle.Paragraph)
                         .setMaxLength(4000)
                         .setRequired(false)
@@ -204,13 +204,13 @@ export class CustomEmbedBuilder extends events {
             await buttonInteraction
               .showModal(
                 new ModalBuilder()
-                  .setTitle(i18next.t('custom_embed.editing_embed', { lng }))
+                  .setTitle(t('custom_embed.editing_embed', { lng }))
                   .setCustomId('CEM_author')
                   .setComponents(
                     new ActionRowBuilder<TextInputBuilder>().addComponents(
                       new TextInputBuilder()
                         .setCustomId('CEI_name')
-                        .setLabel(i18next.t('custom_embed.input.author_name', { lng }))
+                        .setLabel(t('custom_embed.input.author_name', { lng }))
                         .setStyle(TextInputStyle.Short)
                         .setMaxLength(256)
                         .setRequired(false)
@@ -219,7 +219,7 @@ export class CustomEmbedBuilder extends events {
                     new ActionRowBuilder<TextInputBuilder>().addComponents(
                       new TextInputBuilder()
                         .setCustomId('CEI_icon')
-                        .setLabel(i18next.t('custom_embed.input.author_icon_url', { lng }))
+                        .setLabel(t('custom_embed.input.author_icon_url', { lng }))
                         .setStyle(TextInputStyle.Short)
                         .setMaxLength(256)
                         .setRequired(false)
@@ -228,7 +228,7 @@ export class CustomEmbedBuilder extends events {
                     new ActionRowBuilder<TextInputBuilder>().addComponents(
                       new TextInputBuilder()
                         .setCustomId('CEI_url')
-                        .setLabel(i18next.t('custom_embed.input.author_url', { lng }))
+                        .setLabel(t('custom_embed.input.author_url', { lng }))
                         .setStyle(TextInputStyle.Short)
                         .setMaxLength(256)
                         .setRequired(false)
@@ -254,13 +254,13 @@ export class CustomEmbedBuilder extends events {
             await buttonInteraction
               .showModal(
                 new ModalBuilder()
-                  .setTitle(i18next.t('custom_embed.editing_embed', { lng }))
+                  .setTitle(t('custom_embed.editing_embed', { lng }))
                   .setCustomId('CEM_footer')
                   .setComponents(
                     new ActionRowBuilder<TextInputBuilder>().addComponents(
                       new TextInputBuilder()
                         .setCustomId('CEI_text')
-                        .setLabel(i18next.t('custom_embed.input.footer_text', { lng }))
+                        .setLabel(t('custom_embed.input.footer_text', { lng }))
                         .setStyle(TextInputStyle.Short)
                         .setMaxLength(256)
                         .setRequired(false)
@@ -269,7 +269,7 @@ export class CustomEmbedBuilder extends events {
                     new ActionRowBuilder<TextInputBuilder>().addComponents(
                       new TextInputBuilder()
                         .setCustomId('CEI_icon')
-                        .setLabel(i18next.t('custom_embed.input.footer_icon_url', { lng }))
+                        .setLabel(t('custom_embed.input.footer_icon_url', { lng }))
                         .setStyle(TextInputStyle.Short)
                         .setMaxLength(256)
                         .setRequired(false)
@@ -294,13 +294,13 @@ export class CustomEmbedBuilder extends events {
             await buttonInteraction
               .showModal(
                 new ModalBuilder()
-                  .setTitle(i18next.t('custom_embed.editing_embed', { lng }))
+                  .setTitle(t('custom_embed.editing_embed', { lng }))
                   .setCustomId('CEM_thumbnail')
                   .setComponents(
                     new ActionRowBuilder<TextInputBuilder>().addComponents(
                       new TextInputBuilder()
                         .setCustomId('CEI_thumbnail')
-                        .setLabel(i18next.t('custom_embed.input.thumbnail', { lng }))
+                        .setLabel(t('custom_embed.input.thumbnail', { lng }))
                         .setStyle(TextInputStyle.Short)
                         .setMaxLength(256)
                         .setRequired(false)
@@ -324,13 +324,13 @@ export class CustomEmbedBuilder extends events {
             await buttonInteraction
               .showModal(
                 new ModalBuilder()
-                  .setTitle(i18next.t('custom_embed.editing_embed', { lng }))
+                  .setTitle(t('custom_embed.editing_embed', { lng }))
                   .setCustomId('CEM_image')
                   .setComponents(
                     new ActionRowBuilder<TextInputBuilder>().addComponents(
                       new TextInputBuilder()
                         .setCustomId('CEI_image')
-                        .setLabel(i18next.t('custom_embed.input.image', { lng }))
+                        .setLabel(t('custom_embed.input.image', { lng }))
                         .setStyle(TextInputStyle.Short)
                         .setMaxLength(256)
                         .setRequired(false)
@@ -352,13 +352,13 @@ export class CustomEmbedBuilder extends events {
             await buttonInteraction
               .showModal(
                 new ModalBuilder()
-                  .setTitle(i18next.t('custom_embed.editing_embed', { lng }))
+                  .setTitle(t('custom_embed.editing_embed', { lng }))
                   .setCustomId('CEM_color')
                   .setComponents(
                     new ActionRowBuilder<TextInputBuilder>().addComponents(
                       new TextInputBuilder()
                         .setCustomId('CEI_color')
-                        .setLabel(i18next.t('custom_embed.input.color', { lng }))
+                        .setLabel(t('custom_embed.input.color', { lng }))
                         .setStyle(TextInputStyle.Short)
                         .setMaxLength(256)
                         .setRequired(false)
@@ -382,13 +382,13 @@ export class CustomEmbedBuilder extends events {
             await buttonInteraction
               .showModal(
                 new ModalBuilder()
-                  .setTitle(i18next.t('custom_embed.editing_embed', { lng }))
+                  .setTitle(t('custom_embed.editing_embed', { lng }))
                   .setCustomId('CEM_add-field')
                   .setComponents(
                     new ActionRowBuilder<TextInputBuilder>().addComponents(
                       new TextInputBuilder()
                         .setCustomId('CEI_title')
-                        .setLabel(i18next.t('custom_embed.input.field_title', { lng }))
+                        .setLabel(t('custom_embed.input.field_title', { lng }))
                         .setStyle(TextInputStyle.Short)
                         .setMaxLength(256)
                         .setRequired(false)
@@ -396,7 +396,7 @@ export class CustomEmbedBuilder extends events {
                     new ActionRowBuilder<TextInputBuilder>().addComponents(
                       new TextInputBuilder()
                         .setCustomId('CEI_text')
-                        .setLabel(i18next.t('custom_embed.input.field_text', { lng }))
+                        .setLabel(t('custom_embed.input.field_text', { lng }))
                         .setStyle(TextInputStyle.Paragraph)
                         .setMaxLength(1024)
                         .setRequired(false)
@@ -404,7 +404,7 @@ export class CustomEmbedBuilder extends events {
                     new ActionRowBuilder<TextInputBuilder>().addComponents(
                       new TextInputBuilder()
                         .setCustomId('CEI_inline')
-                        .setLabel(i18next.t('custom_embed.input.field_inline', { lng }))
+                        .setLabel(t('custom_embed.input.field_inline', { lng }))
                         .setStyle(TextInputStyle.Short)
                         .setMaxLength(5)
                         .setRequired(true)
@@ -451,16 +451,14 @@ export class CustomEmbedBuilder extends events {
         case 'submit':
           {
             if (this.isEmptyEmbed())
-              return buttonInteraction
-                .reply({ content: i18next.t('custom_embed.empty', { lng }), embeds: [], components: [], ephemeral: true })
-                .catch(() => {});
+              return buttonInteraction.reply({ content: t('custom_embed.empty', { lng }), embeds: [], components: [], ephemeral: true }).catch(() => {});
             this.emit('submit', this.data);
             collector.stop();
           }
           break;
         case 'delete':
           {
-            await buttonInteraction.update({ content: i18next.t('custom_embed.deleted', { lng }), embeds: [], components: [] }).catch(() => {});
+            await buttonInteraction.update({ content: t('custom_embed.deleted', { lng }), embeds: [], components: [] }).catch(() => {});
             collector.stop();
           }
           break;
@@ -516,73 +514,41 @@ export class CustomEmbedBuilder extends events {
       new ActionRowBuilder<ButtonBuilder>().setComponents(
         new ButtonBuilder()
           .setCustomId('CEB_message')
-          .setLabel(i18next.t('custom_embed.button.message', { lng }))
+          .setLabel(t('custom_embed.button.message', { lng }))
           .setStyle(ButtonStyle.Secondary)
           .setDisabled(disabled),
-        new ButtonBuilder()
-          .setCustomId('CEB_title')
-          .setLabel(i18next.t('custom_embed.button.title', { lng }))
-          .setStyle(ButtonStyle.Secondary)
-          .setDisabled(disabled),
+        new ButtonBuilder().setCustomId('CEB_title').setLabel(t('custom_embed.button.title', { lng })).setStyle(ButtonStyle.Secondary).setDisabled(disabled),
         new ButtonBuilder()
           .setCustomId('CEB_description')
-          .setLabel(i18next.t('custom_embed.button.description', { lng }))
+          .setLabel(t('custom_embed.button.description', { lng }))
           .setStyle(ButtonStyle.Secondary)
           .setDisabled(disabled),
-        new ButtonBuilder()
-          .setCustomId('CEB_author')
-          .setLabel(i18next.t('custom_embed.button.author', { lng }))
-          .setStyle(ButtonStyle.Secondary)
-          .setDisabled(disabled),
-        new ButtonBuilder()
-          .setCustomId('CEB_footer')
-          .setLabel(i18next.t('custom_embed.button.footer', { lng }))
-          .setStyle(ButtonStyle.Secondary)
-          .setDisabled(disabled)
+        new ButtonBuilder().setCustomId('CEB_author').setLabel(t('custom_embed.button.author', { lng })).setStyle(ButtonStyle.Secondary).setDisabled(disabled),
+        new ButtonBuilder().setCustomId('CEB_footer').setLabel(t('custom_embed.button.footer', { lng })).setStyle(ButtonStyle.Secondary).setDisabled(disabled)
       ),
       new ActionRowBuilder<ButtonBuilder>().setComponents(
         new ButtonBuilder()
           .setCustomId('CEB_thumbnail')
-          .setLabel(i18next.t('custom_embed.button.thumbnail', { lng }))
+          .setLabel(t('custom_embed.button.thumbnail', { lng }))
           .setStyle(ButtonStyle.Secondary)
           .setDisabled(disabled),
-        new ButtonBuilder()
-          .setCustomId('CEB_image')
-          .setLabel(i18next.t('custom_embed.button.image', { lng }))
-          .setStyle(ButtonStyle.Secondary)
-          .setDisabled(disabled),
-        new ButtonBuilder()
-          .setCustomId('CEB_color')
-          .setLabel(i18next.t('custom_embed.button.color', { lng }))
-          .setStyle(ButtonStyle.Secondary)
-          .setDisabled(disabled),
+        new ButtonBuilder().setCustomId('CEB_image').setLabel(t('custom_embed.button.image', { lng })).setStyle(ButtonStyle.Secondary).setDisabled(disabled),
+        new ButtonBuilder().setCustomId('CEB_color').setLabel(t('custom_embed.button.color', { lng })).setStyle(ButtonStyle.Secondary).setDisabled(disabled),
         new ButtonBuilder()
           .setCustomId('CEB_add-field')
-          .setLabel(i18next.t('custom_embed.button.add_field', { lng }))
+          .setLabel(t('custom_embed.button.add_field', { lng }))
           .setStyle(ButtonStyle.Secondary)
           .setDisabled(disabled),
         new ButtonBuilder()
           .setCustomId('CEB_remove-field')
-          .setLabel(i18next.t('custom_embed.button.remove_field', { lng }))
+          .setLabel(t('custom_embed.button.remove_field', { lng }))
           .setStyle(ButtonStyle.Secondary)
           .setDisabled(disabled)
       ),
       new ActionRowBuilder<ButtonBuilder>().setComponents(
-        new ButtonBuilder()
-          .setCustomId('CEB_reset')
-          .setLabel(i18next.t('custom_embed.button.reset', { lng }))
-          .setStyle(ButtonStyle.Primary)
-          .setDisabled(disabled),
-        new ButtonBuilder()
-          .setCustomId('CEB_submit')
-          .setLabel(i18next.t('custom_embed.button.submit', { lng }))
-          .setStyle(ButtonStyle.Success)
-          .setDisabled(disabled),
-        new ButtonBuilder()
-          .setCustomId('CEB_delete')
-          .setLabel(i18next.t('custom_embed.button.delete', { lng }))
-          .setStyle(ButtonStyle.Danger)
-          .setDisabled(disabled)
+        new ButtonBuilder().setCustomId('CEB_reset').setLabel(t('custom_embed.button.reset', { lng })).setStyle(ButtonStyle.Primary).setDisabled(disabled),
+        new ButtonBuilder().setCustomId('CEB_submit').setLabel(t('custom_embed.button.submit', { lng })).setStyle(ButtonStyle.Success).setDisabled(disabled),
+        new ButtonBuilder().setCustomId('CEB_delete').setLabel(t('custom_embed.button.delete', { lng })).setStyle(ButtonStyle.Danger).setDisabled(disabled)
       ),
     ];
   }

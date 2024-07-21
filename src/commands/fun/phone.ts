@@ -1,31 +1,19 @@
-import { ApplicationCommandOptionType, ApplicationCommandType, ChannelType } from 'discord.js';
-import i18next from 'i18next';
+import { ApplicationIntegrationType, ChannelType, InteractionContextType, SlashCommandBuilder } from 'discord.js';
+import { t } from 'i18next';
 
-import { Command, Contexts, IntegrationTypes, ModuleType } from 'classes/command';
+import { Command, ModuleType } from 'classes/command';
 
 import { availableChannelModel, connectionModel } from 'models/phone';
 
 export default new Command({
   module: ModuleType.Fun,
-  data: {
-    name: 'phone',
-    description: 'Start a phone call with a random person',
-    type: ApplicationCommandType.ChatInput,
-    contexts: [Contexts.Guild],
-    integration_types: [IntegrationTypes.GuildInstall],
-    options: [
-      {
-        name: 'connect',
-        description: 'Connects you to another random caller',
-        type: ApplicationCommandOptionType.Subcommand,
-      },
-      {
-        name: 'hangup',
-        description: 'Disconnects you from the call',
-        type: ApplicationCommandOptionType.Subcommand,
-      },
-    ],
-  },
+  data: new SlashCommandBuilder()
+    .setName('phone')
+    .setDescription('Start a phone call with a random person')
+    .setContexts(InteractionContextType.Guild)
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .addSubcommand((subcommand) => subcommand.setName('connect').setDescription('Connects you to another random caller'))
+    .addSubcommand((subcommand) => subcommand.setName('hangup').setDescription('Disconnects you from the call')),
   async execute({ client, interaction }) {
     await interaction.deferReply();
     if (!interaction.inCachedGuild()) return;
@@ -41,7 +29,7 @@ export default new Command({
             .findOne({ $or: [{ channelIdOne: channelId }, { channelIdTwo: channelId }] })
             .lean()
             .exec();
-          if (existingConnection) return interaction.editReply(i18next.t('phone.connect.already', { lng }));
+          if (existingConnection) return interaction.editReply(t('phone.connect.already', { lng }));
 
           // Check for available channels
           const availablePhones = await availableChannelModel
@@ -60,16 +48,16 @@ export default new Command({
             await connectionModel.create({ channelIdOne: channelId, channelIdTwo: randomTarget.channelId });
 
             // Inform channel
-            interaction.editReply(i18next.t('phone.connect.connected', { lng }));
+            interaction.editReply(t('phone.connect.connected', { lng }));
 
             // Inform target channel
             const targetChannel = await client.channels.fetch(randomTarget.channelId).catch(() => {});
             if (!targetChannel || targetChannel.type !== ChannelType.GuildText) return;
-            targetChannel.send(i18next.t('phone.connect.connected'));
+            targetChannel.send(t('phone.connect.connected'));
           } else {
             // No available channels, add this channel to the pool
             await availableChannelModel.create({ channelId });
-            interaction.editReply(i18next.t('phone.connect.waiting', { lng }));
+            interaction.editReply(t('phone.connect.waiting', { lng }));
           }
         }
         break;
@@ -78,7 +66,7 @@ export default new Command({
           const availableChannel = await availableChannelModel.findOne({ channelId }).lean().exec();
           if (availableChannel) {
             await availableChannelModel.findByIdAndDelete(availableChannel._id);
-            return interaction.editReply(i18next.t('phone.hangup.disconnecting', { lng }));
+            return interaction.editReply(t('phone.hangup.disconnecting', { lng }));
           }
 
           const existingConnection = await connectionModel
@@ -87,7 +75,7 @@ export default new Command({
             })
             .lean()
             .exec();
-          if (!existingConnection) return interaction.editReply(i18next.t('phone.hangup.none', { lng }));
+          if (!existingConnection) return interaction.editReply(t('phone.hangup.none', { lng }));
 
           // Find the connected channel ID
           const connectedChannelId = existingConnection.channelIdOne === channelId ? existingConnection.channelIdTwo : existingConnection.channelIdOne;
@@ -95,12 +83,12 @@ export default new Command({
           await connectionModel.deleteOne({ _id: existingConnection._id });
 
           // Inform channel
-          interaction.editReply(i18next.t('phone.hangup.disconnecting', { lng }));
+          interaction.editReply(t('phone.hangup.disconnecting', { lng }));
 
           // Inform the other channel
           const targetChannel = await client.channels.fetch(connectedChannelId).catch(() => {});
           if (!targetChannel || targetChannel.type !== ChannelType.GuildText) return;
-          targetChannel.send(i18next.t('phone.hangup.disconnected'));
+          targetChannel.send(t('phone.hangup.disconnected'));
         }
         break;
     }

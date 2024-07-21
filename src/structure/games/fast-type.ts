@@ -1,5 +1,5 @@
 import { Colors, EmbedBuilder, type ChatInputCommandInteraction } from 'discord.js';
-import i18next from 'i18next';
+import { t } from 'i18next';
 
 import type { DiscordClient } from 'classes/client';
 
@@ -32,14 +32,14 @@ export class FastType {
           new EmbedBuilder()
             .setColor(Colors.Yellow)
             .setAuthor({ name: user.displayName, iconURL: user.displayAvatarURL() })
-            .setTitle(i18next.t('games.typing.title', { lng }))
+            .setTitle(t('games.typing.title', { lng }))
             .addFields(
               {
-                name: i18next.t('games.typing.info', { lng }), // Info
-                value: i18next.t('games.typing.timer', { lng }), // You have 60 seconds to type the sentence below
+                name: t('games.typing.info', { lng }), // Info
+                value: t('games.typing.timer', { lng }), // You have 60 seconds to type the sentence below
               },
               {
-                name: i18next.t('games.typing.sentence', { lng }),
+                name: t('games.typing.sentence', { lng }),
                 value: this.sentence
                   .split(' ')
                   .map((word) => `\`${word}\``)
@@ -85,22 +85,22 @@ export class FastType {
         new EmbedBuilder()
           .setColor(isSentenceCorrect ? Colors.Green : Colors.Yellow)
           .setAuthor({ name: user.displayName, iconURL: user.displayAvatarURL() })
-          .setTitle(i18next.t('games.typing.title', { lng }))
+          .setTitle(t('games.typing.title', { lng }))
           .addFields(
             {
-              name: i18next.t('games.typing.sentence', { lng }),
+              name: t('games.typing.sentence', { lng }),
               value: this.sentence,
             },
             {
-              name: i18next.t('games.typing.input', { lng }),
+              name: t('games.typing.input', { lng }),
               value: userSentence,
             },
             {
-              name: i18next.t('games.typing.similarity', { lng }),
+              name: t('games.typing.similarity', { lng }),
               value: isSentenceCorrect ? '100%' : `${Math.floor(this.stringSimilarity(this.sentence, userSentence, 2, true) * 100)}%`,
             },
-            { name: i18next.t('games.typing.wpm', { lng }), value: `${this.wordsPerMinute}` },
-            { name: i18next.t('games.typing.time', { lng }), value: `${Math.floor(this.timeTaken / 1000)}s` }
+            { name: t('games.typing.wpm', { lng }), value: `${this.wordsPerMinute}` },
+            { name: t('games.typing.time', { lng }), value: `${Math.floor(this.timeTaken / 1000)}s` }
           ),
       ],
       components: [],

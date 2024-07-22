@@ -15,8 +15,6 @@ const manager = new ClusterManager(`${process.cwd()}/src/bot.ts`, {
   execArgv: [...process.execArgv],
 });
 
-manager.extend(new HeartbeatManager({ maxMissedHeartbeats: 5, interval: 5000 }));
-
 // Setup cluster events
 manager.on('clusterCreate', (cluster) => {
   cluster.on('spawn', (_thread) => logger.info(`[${cluster.id}] CLUSTER SPAWN`));
@@ -25,10 +23,8 @@ manager.on('clusterCreate', (cluster) => {
   cluster.on('message', (message) => logger.info(message, `[${cluster.id}] CLUSTER MESSAGE`));
 });
 
-manager.spawn({ timeout: Infinity });
+// Cluster will respawn after missing 4 heartbeats in a 5 second interval (unresponsive for 20 seconds) 
+manager.extend(new HeartbeatManager({ maxMissedHeartbeats: 4, interval: 5_000 }));
 
-/**
- * IGNORE (SAVED FOR WHEN NEEDED)
- * https://www.i18next.com/translation-function/plurals#singular-plural
- * https://www.i18next.com/translation-function/plurals#languages-with-multiple-plurals
- */
+// Start spawning clusters
+manager.spawn({ timeout: Infinity });

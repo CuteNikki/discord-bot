@@ -26,9 +26,9 @@ import type { Level, LevelIdentifier } from 'utils/level';
 import { initMusicPlayer } from 'utils/player';
 
 export class DiscordClient extends Client {
-  // Cluster for sharding
+  // Cluster used for sharding
   public cluster = new ClusterClient(this);
-  // Player for music
+  // Player used to play music
   public player = new Player(this);
 
   // Collections for loading and running commands, buttons and modals
@@ -54,6 +54,8 @@ export class DiscordClient extends Client {
     super({
       shards: getInfo().SHARD_LIST,
       shardCount: getInfo().TOTAL_SHARDS,
+      // Partials are a way to handle objects that may not have all their data available
+      // By enabling partials, your bot can still process events involving these incomplete objects by fetching additional data when needed
       partials: [
         Partials.Reaction,
         Partials.Message,
@@ -63,6 +65,7 @@ export class DiscordClient extends Client {
         Partials.ThreadMember,
         Partials.User,
       ],
+      // Intents are a way to specify which events your bot should receive from the Discord gateway
       intents: [
         // !! Needed for guilds, channels, roles and messages !!
         GatewayIntentBits.Guilds,
@@ -78,19 +81,19 @@ export class DiscordClient extends Client {
         GatewayIntentBits.GuildScheduledEvents,
 
         // !! Needed to keep track of bans !!
-        // Without GatewayIntentBits.GuildModeration users will show up as banned after being unbanned
+        // Without this users will show up as banned after being unbanned
         GatewayIntentBits.GuildModeration,
 
         // !! Privileged intents !!
-        // GatewayIntentBits.GuildMembers, // !! Needed for welcome messages and guild log !!
-        // GatewayIntentBits.GuildPresences, // !! Needed for userinfo !!
+        // Some intents are considered "privileged" and require additional permissions or approval from Discord:
+        GatewayIntentBits.GuildMembers, // !! Needed for welcome messages and guild log !!
         GatewayIntentBits.MessageContent, // !! Needed for fast-type game !!
+        GatewayIntentBits.GuildPresences,
       ],
     });
 
-    // Loading everything
+    // Loading everything and logging in once everything is loaded
     Promise.allSettled([this.loadModules(), this.initTranslation(), initDatabase(this), initMusicPlayer(this)]).then(() => {
-      // Logging in once everything is loaded
       this.login(keys.DISCORD_BOT_TOKEN);
     });
   }
@@ -102,6 +105,7 @@ export class DiscordClient extends Client {
     await loadModals(this);
   }
 
+  // We use i18next to translate messages into a user specified language
   private async initTranslation() {
     await i18next.use(i18nextFsBackend).init({
       // debug: true,

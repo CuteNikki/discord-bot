@@ -146,22 +146,12 @@ npm run start
     - [x] User
     - [x] ID
   - [x] Config command
-- [x] Game command
-  - [x] Rock-Paper-Scissors
-  - [x] Tic-Tac-Toe
-  - [x] Connect-4
-  - [x] Trivia
-  - [x] Hangman
-  - [x] Memory
-  - [x] Snake
-  - [x] Fast-Type
-  - [x] Remember-Emoji
-  - [x] Tetris
-  - [x] Sokoban
 - [x] Welcome module
   - [x] Config command
+  - [x] Events
 - [x] Farewell module
   - [x] Config command
+  - [x] Events
 - [x] Log module
   - [x] Config command
   - [x] Events
@@ -204,13 +194,15 @@ npm run start
     - [x] threadUpdate
     - [x] voiceStateUpdate
 - [ ] Utility module
-      (Planning on adding more)
   - [x] Avatar/Banner command
   - [x] Userinfo command
   - [x] Serverinfo command
   - [x] Weather command
   - [x] Reminder command
   - [ ] Config command
+  - [ ] Custom VC
+    - [ ] Config command
+    - [ ] Events
 - [ ] Developer Module
   - [x] Evaluate command
   - [x] Execute command
@@ -229,11 +221,23 @@ npm run start
         - Bughunter
 - [ ] Fun module
   - [x] Phone command
+  - [x] Game command
+    - [x] Rock-Paper-Scissors
+    - [x] Tic-Tac-Toe
+    - [x] Connect-4
+    - [x] Trivia
+    - [x] Hangman
+    - [x] Memory
+    - [x] Snake
+    - [x] Fast-Type
+    - [x] Remember-Emoji
+    - [x] Tetris
+    - [x] Sokoban
   - [ ] Config command
 - [ ] Ticket module
   - [ ] Config command
-- [ ] Custom VC module
-  - [ ] Config command
+  - [ ] Events
+  - [ ] Buttons
 - [ ] Economy module
   - [ ] Config command
 - [ ] Giveaway module

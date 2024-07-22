@@ -1,5 +1,5 @@
 import { ButtonInteraction, type PermissionsString } from 'discord.js';
-import type { DiscordClient } from './client';
+import type { DiscordClient } from 'classes/client';
 
 export class Button {
   constructor(

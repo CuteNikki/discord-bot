@@ -11,10 +11,10 @@ import { infractionModel, InfractionType } from 'models/infraction';
 import { reminderModel } from 'models/reminder';
 import { userModel } from 'models/user';
 import { weeklyLevelModel } from 'models/weeklyLevels';
+import { availableChannelModel, connectionModel } from 'models/phone';
 
 import { keys } from 'utils/keys';
 import { logger } from 'utils/logger';
-import { availableChannelModel, connectionModel } from '../models/phone';
 
 export async function initDatabase(client: DiscordClient) {
   const startTime = performance.now();

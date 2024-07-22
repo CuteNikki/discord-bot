@@ -1,4 +1,4 @@
-import { keys } from './keys';
+import { keys } from 'utils/keys';
 
 const API_KEY = keys.WEATHER_API_KEY;
 const API_URL = 'http://api.weatherapi.com/v1';

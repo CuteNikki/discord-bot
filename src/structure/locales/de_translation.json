@@ -611,7 +611,7 @@
       "connecting": "wird verbunden",
       "disconnecting": "wird getrennt",
       "uninitialized": "nicht initialisiert",
-      "weekly": "Letzte wöchentliche Level Löschung: {{date}}"
+      "weekly": "Letzte wöchentliche Löschung: {{date}}"
     },
     "system": {
       "title": "System",

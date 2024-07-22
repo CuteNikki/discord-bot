@@ -611,7 +611,7 @@
       "connecting": "connecting",
       "disconnecting": "disconnecting",
       "uninitialized": "uninitialized",
-      "weekly": "Last weekly level clear: {{date}}"
+      "weekly": "Last weekly clear: {{date}}"
     },
     "system": {
       "title": "System",

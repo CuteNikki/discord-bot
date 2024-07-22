@@ -11,7 +11,7 @@ export default new Command({
   module: ModuleType.Developer,
   cooldown: 0,
   data: new SlashCommandBuilder()
-    .setName('config-bot')
+    .setName('config-developer')
     .setDescription('Only for bot moderators/developers')
     .setContexts(InteractionContextType.Guild)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)

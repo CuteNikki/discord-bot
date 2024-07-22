@@ -22,7 +22,6 @@ export enum ModuleType {
   Utilities,
   Config,
   Music,
-  Games,
   Fun,
 }
 

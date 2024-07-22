@@ -17,7 +17,7 @@ import { Trivia, TriviaDifficulty, TriviaMode } from 'games/trivia';
 import { words } from 'utils/words';
 
 export default new Command({
-  module: ModuleType.Games,
+  module: ModuleType.Fun,
   data: new SlashCommandBuilder()
     .setName('games')
     .setDescription('Choose one of the fun games to play')

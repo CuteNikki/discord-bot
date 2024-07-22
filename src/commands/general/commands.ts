@@ -69,7 +69,12 @@ export default new Command({
 
       const commands: Command<ApplicationCommandType.ChatInput>[] = client.commands
         .map((cmd) => cmd)
-        .filter((cmd) => cmd.options.data.toJSON().type !== ApplicationCommandType.Message && cmd.options.data.toJSON().type !== ApplicationCommandType.User);
+        .filter(
+          (cmd) =>
+            cmd.options.data.toJSON().type !== ApplicationCommandType.Message &&
+            cmd.options.data.toJSON().type !== ApplicationCommandType.User &&
+            cmd.options.module === categoryId
+        );
       const mappedCmds = commands.map((cmd) => ({ name: cmd.options.data.name, description: cmd.options.data.description }));
       const chunkedCmds = chunk(mappedCmds, 10);
 

@@ -152,6 +152,8 @@ npm run start
 - [x] Farewell module
   - [x] Config command
   - [x] Events
+- [x] Ticket module
+  - [x] Config command
 - [x] Log module
   - [x] Config command
   - [x] Events
@@ -234,10 +236,6 @@ npm run start
     - [x] Tetris
     - [x] Sokoban
   - [ ] Config command
-- [ ] Ticket module
-  - [ ] Config command
-  - [ ] Events
-  - [ ] Buttons
 - [ ] Economy module
   - [ ] Config command
 - [ ] Giveaway module

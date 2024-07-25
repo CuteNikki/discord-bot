@@ -96,7 +96,7 @@ export interface TicketSystem {
 export interface GuildSettings {
   _id: Types.ObjectId;
   guildId: string;
-  language: string;
+  language?: string;
   moderation: {
     enabled: boolean;
   };

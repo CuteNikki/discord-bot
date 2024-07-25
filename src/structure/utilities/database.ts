@@ -8,10 +8,10 @@ import { DiscordClient } from 'classes/client';
 
 import { guildModel } from 'models/guild';
 import { infractionModel, InfractionType } from 'models/infraction';
+import { availableChannelModel, connectionModel } from 'models/phone';
 import { reminderModel } from 'models/reminder';
 import { userModel } from 'models/user';
 import { weeklyLevelModel } from 'models/weeklyLevels';
-import { availableChannelModel, connectionModel } from 'models/phone';
 
 import { keys } from 'utils/keys';
 import { logger } from 'utils/logger';
@@ -54,16 +54,18 @@ async function collectUserLanguages(client: DiscordClient) {
   // Loop through each collected user and set language
   for (const user of client.users.cache.values()) {
     const userData = await userModel.findOne({ userId: user.id, banned: false }, {}, { upsert: false }).lean().exec();
-    if (userData && userData.language && !user.bot) client.userLanguages.set(user.id, userData.language ?? client.supportedLanguages[0]);
+    if (userData && !user.bot) client.userLanguages.set(user.id, userData.language ?? client.supportedLanguages[0]);
   }
   // Notify about collected languages
   logger.info(`[${client.cluster.id}] Collected ${client.userLanguages.size} user languages`);
 }
+
 async function collectGuildSettings(client: DiscordClient) {
   // Loop through each collected guild and set settings if found
   for (const guild of client.guilds.cache.values()) {
     const guildSettings = await guildModel.findOne({ guildId: guild.id }, {}, { upsert: false }).lean().exec();
     if (guildSettings) client.guildSettings.set(guild.id, guildSettings);
+    if (guildSettings) client.guildLanguages.set(guild.id, guildSettings.language ?? client.supportedLanguages[0]);
   }
   // Notify about collected guild settings
   logger.info(`[${client.cluster.id}] Collected ${client.guildSettings.size} guild settings`);

@@ -84,9 +84,19 @@ export interface LevelReward {
   _id: Types.ObjectId;
 }
 
+export interface TicketSystem {
+  _id: Types.ObjectId;
+  maxTickets: number;
+  transcriptChannelId: string;
+  parentChannelId: string;
+  staffRoleId: string;
+  choices: string[];
+}
+
 export interface GuildSettings {
   _id: Types.ObjectId;
   guildId: string;
+  language: string;
   moderation: {
     enabled: boolean;
   };
@@ -101,6 +111,10 @@ export interface GuildSettings {
     ignoredChannels: string[];
     enabledChannels: string[];
     rewards: LevelReward[];
+  };
+  ticket: {
+    enabled: boolean;
+    systems: TicketSystem[];
   };
   welcome: {
     enabled: boolean;
@@ -161,6 +175,7 @@ export interface GuildSettings {
 
 const guildSchema = new Schema<GuildSettings>({
   guildId: { type: String, required: true },
+  language: { type: String, required: false },
   music: {
     type: {
       enabled: { type: Boolean },
@@ -175,6 +190,50 @@ const guildSchema = new Schema<GuildSettings>({
     },
     default: {
       enabled: true,
+    },
+  },
+  ticket: {
+    type: {
+      enabled: { type: Boolean },
+      systems: [
+        {
+          channelId: { type: String, required: true },
+          maxTickets: { type: Number, required: true },
+          transcriptChannelId: { type: String, required: true },
+          parentChannelId: { type: String, required: true },
+          staffRoleId: { type: String, required: true },
+          choices: [{ type: String, required: true }],
+        },
+      ],
+    },
+    default: {
+      enabled: true,
+      systems: [],
+    },
+  },
+  level: {
+    type: {
+      enabled: { type: Boolean },
+      channelId: { type: String },
+      announcement: { type: Number, enum: Object.values(AnnouncementType).filter((value) => typeof value === 'number') },
+      ignoredRoles: [{ type: String }],
+      ignoredChannels: [{ type: String }],
+      enabledChannels: [{ type: String }],
+      rewards: [
+        {
+          level: { type: Number, required: true },
+          roleId: { type: String, required: true },
+        },
+      ],
+    },
+    default: {
+      enabled: false,
+      channelId: undefined,
+      announcement: AnnouncementType.UserChannel,
+      ignoredRoles: [],
+      ignoredChannels: [],
+      enabledChannels: [],
+      rewards: [],
     },
   },
   welcome: {
@@ -291,31 +350,6 @@ const guildSchema = new Schema<GuildSettings>({
           },
         },
       },
-    },
-  },
-  level: {
-    type: {
-      enabled: { type: Boolean },
-      channelId: { type: String },
-      announcement: { type: Number, enum: Object.values(AnnouncementType).filter((value) => typeof value === 'number') },
-      ignoredRoles: [{ type: String }],
-      ignoredChannels: [{ type: String }],
-      enabledChannels: [{ type: String }],
-      rewards: [
-        {
-          level: { type: Number, required: true },
-          roleId: { type: String, required: true },
-        },
-      ],
-    },
-    default: {
-      enabled: false,
-      channelId: undefined,
-      announcement: AnnouncementType.UserChannel,
-      ignoredRoles: [],
-      ignoredChannels: [],
-      enabledChannels: [],
-      rewards: [],
     },
   },
   log: {

@@ -24,7 +24,7 @@ export interface UserData {
 
 const userSchema = new Schema<UserData>({
   userId: { type: String, required: true },
-  language: { type: String, requiredPaths: false },
+  language: { type: String, required: false },
   banned: { type: Boolean, default: false },
   badges: [
     {

@@ -201,7 +201,7 @@ export default new Command({
                       value:
                         config.level.announcement === AnnouncementType.OtherChannel
                           ? `${config.level.announcement}: <#${config.level.channelId}>`
-                          : config.level.announcement.toString(),
+                          : AnnouncementType[config.level.announcement],
                     }
                   );
                 if (config.level.ignoredRoles.length)
@@ -270,7 +270,7 @@ export default new Command({
                   embeds: [
                     new EmbedBuilder().addFields({
                       name: t('level.announcement.title', { lng }),
-                      value: config.level.announcement.toString(),
+                      value: AnnouncementType[config.level.announcement],
                     }),
                   ],
                 });

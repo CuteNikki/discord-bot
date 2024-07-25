@@ -35,16 +35,18 @@ export default new Event({
 
     if (currentData.level < newData.level) {
       const rewards = await getLevelRewards(client, newData);
+      const lng =
+        guildSettings.level.announcement === AnnouncementType.OtherChannel ? await client.getGuildLanguage(guild.id) : await client.getUserLanguage(author.id);
 
       const levelUpEmbed = new EmbedBuilder()
         .setColor(Colors.Blurple)
         .setAuthor({ name: author.displayName, iconURL: author.displayAvatarURL() })
-        .addFields({ name: 'Congratulations', value: `You are now level **${newData.level}**!` });
+        .addFields({ name: t('level.up.title', { lng }), value: t('level.up.description', { lng, level: newData.level }) });
 
       if (rewards?.length) {
         const added = await member.roles.add(rewards.map((r) => r.roleId)).catch(() => {});
-        if (added) levelUpEmbed.addFields({ name: 'New Role(s)', value: rewards.map((r) => `<@&${r.roleId}>`).join(' ') });
-        else levelUpEmbed.addFields({ name: 'Could not add new Role(s)', value: rewards.map((r) => `<@&${r.roleId}>`).join('\n') });
+        if (added) levelUpEmbed.addFields({ name: t('level.up.title_roles', { lng }), value: rewards.map((r) => `<@&${r.roleId}>`).join(' ') });
+        else levelUpEmbed.addFields({ name: t('level.up.title_roles_error', { lng }), value: rewards.map((r) => `<@&${r.roleId}>`).join(' ') });
       }
 
       const levelUpMessage: MessageCreateOptions = {
@@ -71,13 +73,11 @@ export default new Event({
           break;
         case AnnouncementType.PrivateMessage:
           {
-            const lng = await client.getUserLanguage(author.id);
-
-            levelUpMessage.content = t('level.dm.message', { lng, guild: guild.name });
-            levelUpEmbed.setFields({ name: t('level.dm.title', { lng }), value: t('level.dm.description', { lng }) });
+            levelUpMessage.content = t('level.up.message', { lng, guild: guild.name });
+            levelUpEmbed.setFields({ name: t('level.up.title', { lng }), value: t('level.up.description', { lng }) });
             if (rewards?.length)
               levelUpEmbed.addFields({
-                name: t('level.dm.title_roles', { lng, count: rewards.length }),
+                name: t('level.up.title_roles', { lng, count: rewards.length }),
                 value: rewards.map((r) => `<@&${r.roleId}>`).join(' '),
               });
             client.users.send(author.id, levelUpMessage).catch(() => {});

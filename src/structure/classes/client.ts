@@ -2,7 +2,7 @@ import { ClusterClient, getInfo } from 'discord-hybrid-sharding';
 import { Player } from 'discord-player';
 import { Client, Collection, GatewayIntentBits, Partials } from 'discord.js';
 
-import i18next from 'i18next';
+import { use } from 'i18next';
 import i18nextFsBackend from 'i18next-fs-backend';
 
 import { type UpdateQuery } from 'mongoose';
@@ -45,6 +45,7 @@ export class DiscordClient extends Client {
   // Collections for database (used as "cache")
   public settings = new Collection<string, ClientSettings>(); // Collection<applicationId, settings>
   public guildSettings = new Collection<string, GuildSettings>(); // Collection<guildId, settings>
+  public guildLanguages = new Collection<string, string>(); // Collection<guildId, language>
   public userData = new Collection<string, UserData>(); // Collection<userId, data>
   public userLanguages = new Collection<string, string>(); // Collection<userId, language>
   public level = new Collection<LevelIdentifier, Level>(); // Collection<{guildId, userId}, {level, xp}>
@@ -111,7 +112,7 @@ export class DiscordClient extends Client {
 
   // We use i18next to translate messages into a user specified language
   private async initTranslation() {
-    await i18next.use(i18nextFsBackend).init({
+    await use(i18nextFsBackend).init({
       // debug: true,
       preload: this.supportedLanguages,
       fallbackLng: this.supportedLanguages[0],
@@ -144,6 +145,39 @@ export class DiscordClient extends Client {
 
     // Return updated settings
     return updatedSettings;
+  }
+
+  public async getGuildLanguage(guildId: string | null | undefined): Promise<string> {
+    // Return default language if no valid userId is provided
+    if (!guildId) return this.supportedLanguages[0];
+
+    // Return language from language collection if found
+    const languageInCollection = this.guildLanguages.get(guildId);
+    if (languageInCollection) return languageInCollection;
+
+    // Return language from guild settings collection if found
+    const guildDataInCollection = this.guildSettings.get(guildId);
+    if (guildDataInCollection && guildDataInCollection.language) {
+      // Setting language collection and returning language
+      this.guildLanguages.set(guildId, guildDataInCollection.language);
+      return guildDataInCollection.language;
+    }
+
+    // Set language collection and return default language
+    this.guildLanguages.set(guildId, this.supportedLanguages[0]);
+    return this.supportedLanguages[0];
+  }
+
+  public async updateGuildLanguage(userId: string, language: string): Promise<string> {
+    // If language is not supported, use the default language
+    if (!this.supportedLanguages.includes(language)) language = this.supportedLanguages[0];
+
+    // Update the guild data model and language collection
+    await this.updateGuildSettings(userId, { $set: { language } });
+    this.guildLanguages.set(userId, language);
+
+    // Return language
+    return language;
   }
 
   public async getUserLanguage(userId: string | null | undefined): Promise<string> {

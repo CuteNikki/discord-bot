@@ -3,13 +3,10 @@
 
   <h1>DiscordJS Bot written in TypeScript</h3>
 
-  <p>This discord bot was built with custom classes, <a href="https://www.i18next.com/">i18next</a> for translations, <a href="https://discord-player.js.org/">Discord Player</a> for music, <a href="https://getpino.io/">Pino</a> as logger and <a href="https://www.mongodb.com/">MongoDB</a> as database.</p>
+  <p>This discord bot was built with custom classes, <a href="https://www.i18next.com/">i18next</a> for translations, <a href="https://getpino.io/">Pino</a> as logger and <a href="https://www.mongodb.com/">MongoDB</a> as database.</p>
 
   <a href="https://www.i18next.com/" >
     <img src="https://img.shields.io/badge/translation-i18next-blue?style=for-the-badge" />
-  </a>
-  <a href="https://discord-player.js.org/" >
-    <img src="https://img.shields.io/badge/music-discord_player-blue?style=for-the-badge" />
   </a>
   <a href="https://getpino.io/" >
     <img src="https://img.shields.io/badge/logger-pino-blue?style=for-the-badge" />
@@ -116,9 +113,6 @@ npm run start
           (Messages in channel will not give any XP)
     - [x] Enabled channels
           (When set will only enable level module in those channels)
-- [x] Music module
-  - [x] Play command
-    - [x] Autocompletion
   - [x] Stop command
   - [x] Leave command
   - [x] Skip command

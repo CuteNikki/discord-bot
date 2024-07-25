@@ -25,13 +25,10 @@ import { loadSelections } from 'loaders/selection';
 import { initDatabase } from 'utils/database';
 import { keys } from 'utils/keys';
 import type { Level, LevelIdentifier } from 'utils/level';
-import { initMusicPlayer } from 'utils/player';
 
 export class DiscordClient extends Client {
   // Cluster used for sharding
   public cluster = new ClusterClient(this);
-  // Player used to play music
-  public player = new Player(this);
 
   // Collections for loading and running commands, buttons and modals
   public commands = new Collection<string, Command<any>>(); // Collection<commandName, commandData>
@@ -76,7 +73,7 @@ export class DiscordClient extends Client {
         GatewayIntentBits.GuildMessages,
 
         // !! Needed for guild log !!
-        GatewayIntentBits.GuildVoiceStates, // !! also needed for music module !!
+        GatewayIntentBits.GuildVoiceStates, 
         GatewayIntentBits.AutoModerationExecution,
         GatewayIntentBits.AutoModerationConfiguration,
         GatewayIntentBits.GuildEmojisAndStickers,
@@ -97,7 +94,7 @@ export class DiscordClient extends Client {
     });
 
     // Loading everything and logging in once everything is loaded
-    Promise.allSettled([this.loadModules(), this.initTranslation(), initDatabase(this), initMusicPlayer(this)]).then(() => {
+    Promise.allSettled([this.loadModules(), this.initTranslation(), initDatabase(this)]).then(() => {
       this.login(keys.DISCORD_BOT_TOKEN);
     });
   }

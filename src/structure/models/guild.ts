@@ -100,9 +100,6 @@ export interface GuildSettings {
   moderation: {
     enabled: boolean;
   };
-  music: {
-    enabled: boolean;
-  };
   level: {
     enabled: boolean;
     channelId?: string;
@@ -176,14 +173,6 @@ export interface GuildSettings {
 const guildSchema = new Schema<GuildSettings>({
   guildId: { type: String, required: true },
   language: { type: String, required: false },
-  music: {
-    type: {
-      enabled: { type: Boolean },
-    },
-    default: {
-      enabled: false,
-    },
-  },
   moderation: {
     type: {
       enabled: { type: Boolean },

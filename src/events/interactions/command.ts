@@ -36,9 +36,6 @@ export default new Event({
         case ModuleType.Level:
           if (!guildSettings.level.enabled) return interaction.reply(message);
           break;
-        case ModuleType.Music:
-          if (!guildSettings.music.enabled) return interaction.reply(message);
-          break;
       }
     }
 

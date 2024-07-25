@@ -14,13 +14,13 @@ export default new Selection({
       values: [targetId],
       guildId,
       customId,
-      member
+      member,
     } = interaction;
     const targetMember = interaction.guild.members.cache.get(targetId);
 
     const currentConfig = await client.getGuildSettings(guildId);
     const lng = currentConfig.language;
-    
+
     const system = currentConfig.ticket.systems.find((system) => system._id.toString() === customId.split('_')[1]);
 
     if (!system) return interaction.reply({ content: t('tickets.invalid_system', { lng }), ephemeral: true });
@@ -30,7 +30,7 @@ export default new Selection({
 
     if (ticket.closed || ticket.locked) return interaction.reply({ content: t('tickets.user_unavailable', { lng }), ephemeral: true });
 
-    if (user.id !== ticket.createdBy || member.roles.cache.has(system.staffRoleId)) return interaction.reply({ content: t('tickets.user_permissions')})
+    if (user.id !== ticket.createdBy || !member.roles.cache.has(system.staffRoleId)) return interaction.reply({ content: t('tickets.user_permissions') });
 
     if (!targetMember) return interaction.reply({ content: t('tickets.user_invalid', { lng }), ephemeral: true });
     if (targetMember.roles.cache.has(system.staffRoleId)) return interaction.reply({ content: t('tickets.user_staff', { lng }), ephemeral: true });
@@ -42,9 +42,7 @@ export default new Selection({
       await ticketModel.findOneAndUpdate({ channelId: channel.id }, { $pull: { users: targetId } });
 
       return interaction.reply({
-        embeds: [
-          new EmbedBuilder().setDescription(t('tickets.user_removed', { lng, target_user: `<@${targetId}>`, removed_by: `${user.toString}` })),
-        ],
+        embeds: [new EmbedBuilder().setDescription(t('tickets.user_removed', { lng, target_user: `<@${targetId}>`, removed_by: `${user.toString}` }))],
       });
     } else {
       const channel = interaction.channel as TextChannel;

@@ -76,7 +76,7 @@ npm run dev
 npm run build
 npm run start
 
-# 9. (optional) Use the config-bot command to configure support and bot links
+# 9. (optional) Use the config-developer command to configure support and bot links
 ```
 
 <hr>

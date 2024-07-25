@@ -39,7 +39,7 @@
 
 <h3>How to Install and Run the Project</h3>
 
-All it takes is just 8 simple steps.
+All it takes is just 7 simple steps.
 
 ```bash
 # 1. Clone repository
@@ -55,25 +55,19 @@ npm install
 #    Rename example.config.json to config.json
 #    Fill in each field (for more details read config).
 
-# 6. Install ffmpeg:
-#    It is recommended to install it from the official source.
-#    https://ffmpeg.org/download.html
-#    Do not recommend installing ffmpeg via npm
-#    because binaries pulled from npm are known to be unstable!
-
-# 7. Deploy slash commands:
+# 5. Deploy slash commands:
 npm run deploy
 #    can also use the /register command on discord
 #    after the commands have been registered once.
 
-# 8. Run the bot:
+# 6. Run the bot:
 # You can run the typescript version
 npm run dev
 # Or compile it into js and run
 npm run build
 npm run start
 
-# 9. (optional) Use the config-developer command to configure support and bot links
+# 7. (optional) Use the config-developer command to configure support and bot links
 ```
 
 <hr>

@@ -349,9 +349,15 @@ export default new Command({
               if (!system) return await interaction.editReply({ content: t('tickets.invalid', { lng }) });
               if (!system.choices.length) return await interaction.editReply({ content: t('tickets.no_choices', { lng }) });
 
+              const guildLng = currentConfig.language;
+
               const msg = await channel
                 .send({
-                  embeds: [new EmbedBuilder().setTitle(t('tickets.create_title', { lng })).setDescription(t('tickets.create_description', { lng }))],
+                  embeds: [
+                    new EmbedBuilder()
+                      .setTitle(t('tickets.create_title', { lng: guildLng }))
+                      .setDescription(t('tickets.create_description', { lng: guildLng })),
+                  ],
                   components: [
                     new ActionRowBuilder<ButtonBuilder>().addComponents(
                       system.choices.map((choice, index) =>

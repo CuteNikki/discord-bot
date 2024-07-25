@@ -1,4 +1,13 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, type ChatInputCommandInteraction } from 'discord.js';
+import {
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  Colors,
+  EmbedBuilder,
+  type APIButtonComponent,
+  type ButtonComponentData,
+  type ChatInputCommandInteraction,
+} from 'discord.js';
 import { t } from 'i18next';
 
 import type { DiscordClient } from 'classes/client';
@@ -15,7 +24,7 @@ export class Memory {
   tilesTurned: number = 0;
   remainingPairs: number = 12;
   selected?: EmojiCoordinates;
-  components: ActionRowBuilder<ButtonBuilder>[];
+  components: ActionRowBuilder<CustomButtonBuilder>[];
   size: number = 5; // max size is 5x5
   constructor(
     public options: {
@@ -76,10 +85,10 @@ export class Memory {
 
       if (!this.selected) {
         this.selected = { x, y, id };
-        emojiButton.setEmoji(emoji).setStyle(ButtonStyle.Primary).setLabel('\u200b');
+        emojiButton.setEmoji(emoji).setStyle(ButtonStyle.Primary).removeLabel();
       } else if (this.selected.id === id) {
         this.selected = undefined;
-        emojiButton.setEmoji('\u200b').setStyle(ButtonStyle.Secondary).setLabel('\u200b');
+        emojiButton.removeEmoji().setStyle(ButtonStyle.Secondary).setLabel('\u200b');
       } else {
         const selectedEmoji = this.emojis[this.selected.id];
         const selectedButton = this.components[this.selected.y].components[this.selected.x];
@@ -89,25 +98,25 @@ export class Memory {
           const joker = emoji === '🃏' ? this.selected : { x, y, id };
           const pair = this.getPair(this.emojis[joker.id]).filter((b) => b.id !== joker.id)[0];
           const pairButton = this.components[pair.y].components[pair.x];
-          pairButton.setEmoji(this.emojis[pair.id]).setStyle(ButtonStyle.Success).setDisabled(true).setLabel('\u200b');
+          pairButton.setEmoji(this.emojis[pair.id]).setStyle(ButtonStyle.Success).setDisabled(true).removeLabel();
         }
 
         emojiButton
           .setEmoji(emoji)
           .setStyle(matched ? ButtonStyle.Success : ButtonStyle.Danger)
           .setDisabled(matched)
-          .setLabel('\u200b');
+          .removeLabel();
         selectedButton
           .setEmoji(selectedEmoji)
           .setStyle(matched ? ButtonStyle.Success : ButtonStyle.Danger)
           .setDisabled(matched)
-          .setLabel('\u200b');
+          .removeLabel();
 
         if (!matched) {
           await buttonInteraction.editReply({ components: this.components }).catch(() => {});
 
-          emojiButton.setEmoji('\u200b').setStyle(ButtonStyle.Secondary).setLabel('\u200b');
-          selectedButton.setEmoji('\u200b').setStyle(ButtonStyle.Secondary).setLabel('\u200b');
+          emojiButton.removeEmoji().setStyle(ButtonStyle.Secondary).setLabel('\u200b');
+          selectedButton.removeEmoji().setStyle(ButtonStyle.Secondary).setLabel('\u200b');
 
           this.selected = undefined;
 
@@ -163,12 +172,12 @@ export class Memory {
   }
 
   private getComponents() {
-    const components: ActionRowBuilder<ButtonBuilder>[] = [];
+    const components: ActionRowBuilder<CustomButtonBuilder>[] = [];
 
     for (let y = 0; y < this.size; y++) {
-      const row = new ActionRowBuilder<ButtonBuilder>();
+      const row = new ActionRowBuilder<CustomButtonBuilder>();
       for (let x = 0; x < this.size; x++) {
-        row.addComponents(new ButtonBuilder().setStyle(ButtonStyle.Secondary).setLabel('\u200b').setCustomId(`MEMORY_${x}_${y}`));
+        row.addComponents(new CustomButtonBuilder().setStyle(ButtonStyle.Secondary).setLabel('\u200b').setCustomId(`MEMORY_${x}_${y}`));
       }
       components.push(row);
     }
@@ -183,13 +192,27 @@ export class Memory {
     return array;
   }
 
-  private disableButtons(components: ActionRowBuilder<ButtonBuilder>[]) {
+  private disableButtons(components: ActionRowBuilder<ButtonBuilder | CustomButtonBuilder>[]) {
     for (let x = 0; x < components.length; x++) {
       for (let y = 0; y < components[x].components.length; y++) {
-        components[x].components[y] = ButtonBuilder.from(components[x].components[y]);
+        components[x].components[y] = CustomButtonBuilder.from(components[x].components[y]);
         components[x].components[y].setDisabled(true);
       }
     }
     return components;
+  }
+}
+
+class CustomButtonBuilder extends ButtonBuilder {
+  constructor(data?: Partial<ButtonComponentData> | Partial<APIButtonComponent>) {
+    super(data);
+  }
+  removeLabel() {
+    if (this.data && 'label' in this.data) this.data.label = undefined;
+    return this;
+  }
+  removeEmoji() {
+    if (this.data && 'emoji' in this.data) this.data.emoji = undefined;
+    return this;
   }
 }

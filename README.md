@@ -39,7 +39,7 @@
 
 <h3>How to Install and Run the Project</h3>
 
-All it takes is just 7 simple steps.
+All it takes is just 6-7 simple steps.
 
 ```bash
 # 1. Clone repository

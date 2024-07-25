@@ -1,5 +1,4 @@
 import { ClusterClient, getInfo } from 'discord-hybrid-sharding';
-import { Player } from 'discord-player';
 import { Client, Collection, GatewayIntentBits, Partials } from 'discord.js';
 
 import { use } from 'i18next';

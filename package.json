@@ -47,7 +47,6 @@
     "dayjs": "^1.11.12",
     "discord-html-transcripts": "^3.2.0",
     "discord-hybrid-sharding": "^2.2.0",
-    "discord-player": "^6.7.0",
     "discord.js": "14.16.0-dev.1721607097-b2970bb2d",
     "i18next": "^23.12.2",
     "i18next-fs-backend": "^2.3.1",

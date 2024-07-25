@@ -57,12 +57,12 @@ export default new Button({
             new ButtonBuilder()
               .setCustomId(`tickets-save_${system._id.toString()}`)
               .setLabel(t('tickets.save', { lng }))
-              .setEmoji('💾')
+              .setEmoji('🗂️')
               .setStyle(ButtonStyle.Success),
             new ButtonBuilder()
               .setCustomId(`tickets-delete_${system._id.toString()}`)
               .setLabel(t('tickets.delete', { lng }))
-              .setEmoji('🗑️')
+              .setEmoji('✖️')
               .setStyle(ButtonStyle.Danger)
           ),
         ],

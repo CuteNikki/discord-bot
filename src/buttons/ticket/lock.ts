@@ -45,7 +45,7 @@ export default new Button({
             new ButtonBuilder()
               .setCustomId(`tickets-close_${system._id.toString()}`)
               .setLabel(t('tickets.close', { lng }))
-              .setEmoji('📦')
+              .setEmoji('🛑')
               .setStyle(ButtonStyle.Danger)
           ),
         ],

@@ -39,7 +39,7 @@ export default new Button({
               .setCustomId(`tickets-lock_${system._id.toString()}`)
               .setLabel(t('tickets.lock', { lng }))
               .setEmoji('🔐')
-              .setStyle(ButtonStyle.Secondary)
+              .setStyle(ButtonStyle.Primary)
           ),
         ],
       });

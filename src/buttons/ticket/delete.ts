@@ -32,7 +32,7 @@ export default new Button({
           new ButtonBuilder()
             .setCustomId(`tickets-save_${system._id.toString()}`)
             .setLabel(t('tickets.save', { lng }))
-            .setEmoji('💾')
+            .setEmoji('🗂️')
             .setStyle(ButtonStyle.Success)
         ),
       ],

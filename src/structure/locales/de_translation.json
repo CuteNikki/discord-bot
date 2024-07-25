@@ -34,7 +34,7 @@
     "already_closed": "Dieses Ticket wurde bereits geschlossen!",
     "limit": "Du kannst nicht mehr als {{limit}} Tickets haben!",
     "invalid_option": "Ungültige Option!",
-    "created_channel": "Ticket erstellt von {{created_by}}",
+    "created_channel": "Bitte sende relevante Informationen bevor ein Teammitglied bereit ist.\nDies vereinfacht den Prozess und macht es für das Teammitglied leichter, deine Probleme zu lösen.",
     "user_select": "Zum Ticket hinzufügen/entfernen",
     "created_user": "Ein Kanal ({{channel}}) wurde für dich erstellt!",
     "ticket_deleted": "Ticket wurde von {{deleted_by}} gelöscht!",

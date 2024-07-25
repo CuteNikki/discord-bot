@@ -70,18 +70,18 @@ export default new Button({
             new ButtonBuilder()
               .setCustomId(`tickets-claim_${system._id.toString()}`)
               .setLabel(t('tickets.claim', { lng }))
-              .setEmoji('🎟️')
+              .setEmoji('✋')
               .setStyle(ButtonStyle.Success),
             new ButtonBuilder()
               .setCustomId(`tickets-close_${system._id.toString()}`)
               .setLabel(t('tickets.close', { lng }))
-              .setEmoji('📦')
+              .setEmoji('🛑')
               .setStyle(ButtonStyle.Danger),
             new ButtonBuilder()
               .setCustomId(`tickets-lock_${system._id.toString()}`)
               .setLabel(t('tickets.lock', { lng }))
               .setEmoji('🔐')
-              .setStyle(ButtonStyle.Secondary)
+              .setStyle(ButtonStyle.Primary)
           ),
           new ActionRowBuilder<UserSelectMenuBuilder>().addComponents(
             new UserSelectMenuBuilder().setCustomId(`tickets-user_${system._id.toString()}`).setPlaceholder(t('tickets.user_select', { lng })).setMaxValues(1)

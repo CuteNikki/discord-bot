@@ -31,7 +31,7 @@
     "already_claimed": "This ticket has already been claimed by {{claimed_by}}!",
     "claimed": "{{claimed_by}} claimed this ticket!",
     "closed": "This ticket has been closed!",
-    "already_closed": "This ticket has already been closed by {{closed_by}}!",
+    "already_closed": "This ticket has already been closed!",
     "limit": "You cannot have more than {{limit}} tickets!",
     "invalid_option": "Invalid option!",
     "created_channel": "Ticket created by {{created_by}}",

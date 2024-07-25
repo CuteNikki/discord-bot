@@ -14,11 +14,13 @@ import { userModel, type UserData } from 'models/user';
 import type { Button } from 'classes/button';
 import type { Command } from 'classes/command';
 import type { Modal } from 'classes/modal';
+import type { Selection } from 'classes/selection';
 
 import { loadButtons } from 'loaders/buttons';
 import { loadCommands } from 'loaders/commands';
 import { loadEvents } from 'loaders/events';
 import { loadModals } from 'loaders/modals';
+import { loadSelections } from 'loaders/selection';
 
 import { initDatabase } from 'utils/database';
 import { keys } from 'utils/keys';
@@ -35,6 +37,7 @@ export class DiscordClient extends Client {
   public commands = new Collection<string, Command<any>>(); // Collection<commandName, commandData>
   public buttons = new Collection<string, Button>(); // Collection<customId, buttonOptions>
   public modals = new Collection<string, Modal>(); // Collection<customId, modalOptions>
+  public selections = new Collection<string, Selection>(); // Collection<customId, selectionOptions>
 
   // Collection of cooldowns so commands cannot be spammed
   public cooldowns = new Collection<string, Collection<string, number>>(); // Collection<commandName, Collection<userId, timestamp>>
@@ -103,6 +106,7 @@ export class DiscordClient extends Client {
     await loadCommands(this);
     await loadButtons(this);
     await loadModals(this);
+    await loadSelections(this);
   }
 
   // We use i18next to translate messages into a user specified language

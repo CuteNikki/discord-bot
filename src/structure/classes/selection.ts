@@ -1,8 +1,8 @@
-import type { ButtonInteraction, PermissionsString } from 'discord.js';
+import type { AnySelectMenuInteraction, PermissionsString } from 'discord.js';
 
 import type { DiscordClient } from 'classes/client';
 
-export class Button {
+export class Selection {
   constructor(
     public options: {
       customId: string;
@@ -11,7 +11,7 @@ export class Button {
       isAuthorOnly?: boolean; // If true, can only be used by the original command executor
       isCustomIdIncluded?: boolean; // If true, customId does not need to be an exact match
       permissions?: PermissionsString[]; // Array of permissions required to use the button
-      execute({ client, interaction }: { client: DiscordClient; interaction: ButtonInteraction }): any;
+      execute({ client, interaction }: { client: DiscordClient; interaction: AnySelectMenuInteraction }): any;
     }
   ) {}
 }

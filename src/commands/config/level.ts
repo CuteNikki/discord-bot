@@ -200,7 +200,7 @@ export default new Command({
                       name: t('level.announcement.title', { lng }),
                       value:
                         config.level.announcement === AnnouncementType.OtherChannel
-                          ? `${config.level.announcement}: <#${config.level.channelId}>`
+                          ? `${AnnouncementType[config.level.announcement]}: <#${config.level.channelId}>`
                           : AnnouncementType[config.level.announcement],
                     }
                   );
@@ -270,7 +270,10 @@ export default new Command({
                   embeds: [
                     new EmbedBuilder().addFields({
                       name: t('level.announcement.title', { lng }),
-                      value: AnnouncementType[config.level.announcement],
+                      value:
+                        config.level.announcement === AnnouncementType.OtherChannel
+                          ? `${AnnouncementType[config.level.announcement]}: <#${config.level.channelId}>`
+                          : AnnouncementType[config.level.announcement],
                     }),
                   ],
                 });

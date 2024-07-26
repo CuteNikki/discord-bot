@@ -9,4 +9,7 @@ const keys = {
   WEATHER_API_KEY: config.API_KEYS.WEATHER ?? 'abc123',
 };
 
+// Check if config variables are set
+if (Object.values(keys).includes('abc123')) throw new Error('Not all config variables are defined!');
+
 export { keys };

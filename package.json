@@ -20,16 +20,7 @@
     "build": "rm -rf dist && npx tsc --build ./"
   },
   "overrides": {
-    "@discordjs/brokers": "dev",
-    "@discordjs/builders": "dev",
-    "@discordjs/collection": "dev",
-    "@discordjs/core": "dev",
-    "@discordjs/formatters": "dev",
-    "@discordjs/proxy": "dev",
-    "@discordjs/rest": "dev",
-    "@discordjs/voice": "dev",
-    "@discordjs/util": "dev",
-    "@discordjs/ws": "dev"
+    "@discordjs/builders": "dev"
   },
   "devDependencies": {
     "@types/bun": "latest",
@@ -37,7 +28,7 @@
     "@types/ms": "^0.7.34"
   },
   "peerDependencies": {
-    "typescript": "^5.5.3"
+    "typescript": "^5.4.5"
   },
   "dependencies": {
     "@translate-tools/core": "^1.0.0",

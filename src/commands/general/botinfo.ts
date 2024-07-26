@@ -1,4 +1,4 @@
-import { ApplicationIntegrationType, Colors, EmbedBuilder, InteractionContextType, SlashCommandBuilder, version } from 'discord.js';
+import { ApplicationIntegrationType, Colors, EmbedBuilder, InteractionContextType, SlashCommandBuilder, Team, version } from 'discord.js';
 import { t } from 'i18next';
 import mongoose from 'mongoose';
 import osu from 'node-os-utils';
@@ -58,7 +58,15 @@ export default new Command({
               {
                 name: t('botinfo.general.title', { lng }),
                 value: [
-                  t('botinfo.general.owner', { lng, owner: `<@${application.owner?.id}>`, id: application.owner?.id }),
+                  t('botinfo.general.owner', {
+                    lng,
+                    owner:
+                      application.owner instanceof Team
+                        ? `<@${application.owner.ownerId}> (\`${application.owner.members.get(application.owner.ownerId ?? '')?.user.username}\` | ${
+                            application.owner.ownerId
+                          })`
+                        : `<@${application.owner?.id}> (\`${application.owner?.username}\` | ${application.owner?.id})`,
+                  }),
                   t('botinfo.general.created', { lng, created: `<t:${Math.floor(application.createdTimestamp / 1000)}:D>` }),
                   t('botinfo.general.ping', { lng, ping: client.ws.ping }),
                   t('botinfo.general.uptime', { lng, uptime: `<t:${Math.floor(interaction.client.readyTimestamp / 1000)}:R>` }),

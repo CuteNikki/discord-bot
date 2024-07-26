@@ -547,7 +547,7 @@
     "failed": "Beim Abrufen der Bot Informationen ist ein Fehler aufgetreten!",
     "general": {
       "title": "Generelle Informationen",
-      "owner": "Besitzer: {{owner}} ({{id}})",
+      "owner": "Besitzer: {{owner}}",
       "created": "Erstellt: {{created}}",
       "ping": "API Latenz: {{ping}}ms",
       "uptime": "Betriebszeit: {{uptime}}"

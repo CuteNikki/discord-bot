@@ -1,79 +1,59 @@
-<div align="center">
-  <h6 > - A WORK IN PROGRESS - </h6>
+###### - A WORK IN PROGRESS -
+# DiscordJS Bot written in TypeScript
+This discord bot was built with custom classes, <a href="https://www.i18next.com/">i18next</a> for translations, <a href="https://getpino.io/">Pino</a> as logger and <a href="https://www.mongodb.com/">MongoDB</a> as database.</p>
 
-  <h1>DiscordJS Bot written in TypeScript</h3>
+![i18next](https://img.shields.io/badge/translation-i18next-blue?style=for-the-badge) ![Pino](https://img.shields.io/badge/logger-pino-blue?style=for-the-badge) ![MongoDB](https://img.shields.io/badge/database-mongodb-blue?style=for-the-badge) <br /> ![Discord.JS version 14](https://img.shields.io/badge/discord.js-v14-blue?style=for-the-badge) ![Repository Stars](https://img.shields.io/github/stars/CuteNikki/discord-bot?style=for-the-badge) ![Repository Forks](https://img.shields.io/github/forks/CuteNikki/discord-bot?style=for-the-badge) ![MIT License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge) ![Repository Issues](https://img.shields.io/github/issues/CuteNikki/discord-bot?style=for-the-badge)
 
-  <p>This discord bot was built with custom classes, <a href="https://www.i18next.com/">i18next</a> for translations, <a href="https://getpino.io/">Pino</a> as logger and <a href="https://www.mongodb.com/">MongoDB</a> as database.</p>
+###### Made with 💖 by <a href="https://github.com/CuteNikki/">Nikki</a>
 
-  <a href="https://www.i18next.com/" >
-    <img src="https://img.shields.io/badge/translation-i18next-blue?style=for-the-badge" />
-  </a>
-  <a href="https://getpino.io/" >
-    <img src="https://img.shields.io/badge/logger-pino-blue?style=for-the-badge" />
-  </a>
-  <a href="https://www.mongodb.com/" >
-    <img src="https://img.shields.io/badge/database-mongodb-blue?style=for-the-badge" />
-  </a>
-  <br>
-  <a href="https://github.com/discordjs/discord.js/">
-    <img src="https://img.shields.io/badge/discord.js-v14-blue?style=for-the-badge" alt="Discord.JS version 14" />
-  </a>
-  <a href="https://github.com/CuteNikki/discord-bot/stargazers">
-    <img src="https://img.shields.io/github/stars/CuteNikki/discord-bot?style=for-the-badge" alt="Repository Stars" />
-  </a>
-  <a href="https://github.com/CuteNikki/discord-bot/forks">
-    <img src="https://img.shields.io/github/forks/CuteNikki/discord-bot?style=for-the-badge" alt="Repository Forks" />
-  </a>
-  <a href="https://opensource.org/licenses/MIT" >
-    <img src="https://img.shields.io/badge/license-MIT-blue?style=for-the-badge" alt="MIT License" />
-  </a>
-  <a href="https://github.com/CuteNikki/discord-bot/issues">
-    <img src="https://img.shields.io/github/issues/CuteNikki/discord-bot?style=for-the-badge" alt="Repository Issues" />
-  </a>
-  <h6>
-    Made with 💖 by <a href="https://github.com/CuteNikki/">Nikki</a>
-  </h6>
-</div>
+## Run Locally
+All it takes is just 6 simple steps.
 
-<hr>
-
-<h3>How to Install and Run the Project</h3>
-
-All it takes is just 6-7 simple steps.
-
+1 - Clone the repository
 ```bash
-# 1. Clone repository
 git clone https://github.com/CuteNikki/discord-bot.git
-
-# 2. Navigate into folder:
+```
+2 - Go to the project directory
+```bash
 cd discord-bot
-
-# 3. Install dependencies:
+```
+3 - Install dependencies
+```bash
 npm install
-
-# 4. Setup your config:
-#    Rename example.config.json to config.json
-#    Fill in each field (for more details read config).
-
-# 5. Deploy slash commands:
+```
+4 - Setup your config
+```bash
+# Copy example.config.json and rename to config.json
+# Fill in all values (more details in the config file)
+```
+5 - Deploy slash commands
+```bash
 npm run deploy
-#    can also use the /register command on discord
-#    after the commands have been registered once.
-
-# 6. Run the bot:
-# You can run the typescript version
+# You may also use the /register command on discord
+# once the commands have been registered using the above command.
+```
+6 - Run the bot
+```bash
+# Run in development
 npm run dev
-# Or compile it into js and run
+# Or compile and run
 npm run build
 npm run start
-
-# 7. (optional) Use the config-developer command to configure support and bot links
 ```
+7 - Use the config-developer command to configure more settings (optional)
 
-<hr>
+## Contributing
+Contributions, issues and feature requests are welcome.
+Feel free to check <a href="https://github.com/CuteNikki/discord-bot/issues">issues page</a> if you want to contribute.
 
-<h3>TO-DO</h3>
+## Show your support
+Please ⭐️ this repository if this project helped you!
 
+## License
+Copyright © 2024 <a href="https://github.com/CuteNikki">CuteNikki</a>.
+This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICENSE">MIT</a> licensed.
+
+## TO-DO
 - [x] General module
   - [x] Commands command
   - [x] Language command
@@ -232,25 +212,3 @@ npm run start
   - [ ] Config command
 - [ ] Confession module
   - [ ] Config command
-
-<hr>
-
-<h3>Contributing</h3>
-
-Contributions, issues and feature requests are welcome.
-Feel free to check <a href="https://github.com/CuteNikki/discord-bot/issues">issues page</a> if you want to contribute.
-
-<hr>
-
-<h3>Show your support</h3>
-
-Please ⭐️ this repository if this project helped you!
-
-<hr>
-
-<h3>License</h3>
-
-Copyright © 2024 <a href="https://github.com/CuteNikki">CuteNikki</a>.
-This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICENSE">MIT</a> licensed.
-
-<hr>

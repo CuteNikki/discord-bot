@@ -9,7 +9,8 @@ const manager = new ClusterManager(`${process.cwd()}/src/bot.ts`, {
   mode: 'process',
   shardsPerClusters: 10,
   totalShards: 'auto',
-  execArgv: [...process.execArgv],
+  execArgv: process.execArgv,
+  shardArgs: process.argv,
 });
 
 // Setup cluster events

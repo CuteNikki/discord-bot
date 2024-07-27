@@ -8,7 +8,6 @@ export default new Event({
   async execute(client, oldMessage, newMessage) {
     const guild = newMessage.guild;
     if (!guild || !newMessage.author || newMessage.author.bot) return;
-    if (newMessage.partial) await newMessage.fetch().catch(() => {});
 
     const config = await client.getGuildSettings(guild.id);
 

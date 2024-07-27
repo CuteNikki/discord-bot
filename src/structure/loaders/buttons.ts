@@ -20,8 +20,8 @@ export async function loadButtons(client: DiscordClient) {
       if (!imported?.default?.options?.customId) continue;
 
       client.buttons.set(imported.default.options.customId, imported.default);
-    } catch (e) {
-      logger.error(e, `Error while loading button (${file})`);
+    } catch (error) {
+      logger.error({ error }, `Error while loading button (${file})`);
       continue;
     }
   }

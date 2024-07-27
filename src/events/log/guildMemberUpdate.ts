@@ -7,7 +7,6 @@ export default new Event({
   once: false,
   async execute(client, oldMember, newMember) {
     const guild = newMember.guild;
-    if (oldMember.partial) await oldMember.fetch().catch(() => {});
 
     const config = await client.getGuildSettings(guild.id);
 

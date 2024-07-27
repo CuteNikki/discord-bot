@@ -2,6 +2,8 @@ import { ChannelType, Colors, EmbedBuilder, Events } from 'discord.js';
 
 import { Event } from 'classes/event';
 
+import { logger } from 'utils/logger';
+
 export default new Event({
   name: Events.ThreadDelete,
   once: false,
@@ -15,7 +17,7 @@ export default new Event({
     const logChannel = await guild.channels.fetch(config.log.channelId);
     if (!logChannel || logChannel.type !== ChannelType.GuildText) return;
 
-    const owner = await thread.fetchOwner().catch(() => {});
+    const owner = await thread.fetchOwner().catch((error) => logger.debug({ error }, 'Could not fetch thread owner'));
 
     await logChannel.send({
       embeds: [

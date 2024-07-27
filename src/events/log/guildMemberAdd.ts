@@ -2,12 +2,14 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelType, Colors, Embe
 
 import { Event } from 'classes/event';
 
+import { logger } from 'utils/logger';
+
 export default new Event({
   name: Events.GuildMemberAdd,
   once: false,
   async execute(client, member) {
     const { guild, user, partial } = member;
-    if (partial) await member.fetch().catch(() => {});
+    if (partial) await member.fetch().catch((error) => logger.debug({ error }, 'Could not fetch member'));
 
     const config = await client.getGuildSettings(guild.id);
 

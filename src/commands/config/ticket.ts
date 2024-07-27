@@ -13,6 +13,8 @@ import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
+import { logger } from 'utils/logger';
+
 export default new Command({
   module: ModuleType.Config,
   botPermissions: ['SendMessages'],
@@ -382,7 +384,7 @@ export default new Command({
                     ),
                   ],
                 })
-                .catch(() => {});
+                .catch((error) => logger.debug({ error, userId: interaction.user.id }, 'Could not send ticket message'));
               if (!msg) return await interaction.editReply({ content: t('tickets.send_fail', { lng }) });
               await interaction.editReply({ content: t('tickets.send_success', { lng }) });
             }

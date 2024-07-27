@@ -4,6 +4,8 @@ import ms from 'ms';
 
 import type { DiscordClient } from 'classes/client';
 
+import { logger } from 'utils/logger';
+
 // Slices an array into chunks of a given size and returns chunks
 export function chunk<type>(arr: type[], size: number): type[][] {
   return Array.from({ length: Math.ceil(arr.length / size) }, (_: type, i: number) => arr.slice(i * size, i * size + size));
@@ -32,7 +34,7 @@ export async function pagination({
   interaction: CommandInteraction;
   embeds: EmbedBuilder[];
   extraButton?: ButtonBuilder;
-  extraButtonFunction?: (buttonInteraction: ButtonInteraction) => any;
+  extraButtonFunction?: (buttonInteraction: ButtonInteraction) => Promise<any>;
   content?: string;
   time?: number;
   ephemeral?: boolean;
@@ -64,13 +66,15 @@ export async function pagination({
   const firstPageIndex = 0;
   const lastPageIndex = embeds.length - 1;
 
-  const msg = await interaction.editReply({ content, embeds: [embeds[index]], components: [components] }).catch(() => {});
+  const msg = await interaction
+    .editReply({ content, embeds: [embeds[index]], components: [components] })
+    .catch((error) => logger.debug({ error }, 'Could not edit message'));
   if (!msg) return;
 
   const collector = msg.createMessageComponentCollector({ filter: (i) => i.user.id === user.id, idle: time, componentType: ComponentType.Button });
 
   collector.on('collect', async (int) => {
-    await int.deferUpdate().catch(() => {});
+    await int.deferUpdate().catch((error) => logger.debug({ error }, 'Could not defer update'));
 
     if (int.customId === CustomIds.First) {
       if (index > firstPageIndex) index = firstPageIndex;
@@ -82,9 +86,7 @@ export async function pagination({
       if (index < lastPageIndex) index = lastPageIndex;
     } else if (extraButton && extraButtonFunction) {
       collector.stop('extra');
-      try {
-        return await extraButtonFunction(int);
-      } catch (e) {}
+      return await extraButtonFunction(int).catch((error) => logger.debug({ error }, 'Could not execute extra button function'));
     }
 
     if (index === firstPageIndex) {
@@ -102,7 +104,7 @@ export async function pagination({
       buttonLast.setDisabled(false);
     }
 
-    await int.editReply({ embeds: [embeds[index]], components: [components] }).catch(() => {});
+    await int.editReply({ embeds: [embeds[index]], components: [components] }).catch((error) => logger.debug({ error }, 'Could not edit message'));
   });
 
   collector.on('end', async (_, reason) => {
@@ -117,6 +119,6 @@ export async function pagination({
     const embed = embeds[index];
     if (footer) embed.setFooter({ text: t('pagination', { lng, time: ms(time, { long: true }) }) });
 
-    interaction.editReply({ embeds: [embed], components: [components] }).catch(() => {});
+    interaction.editReply({ embeds: [embed], components: [components] }).catch((error) => logger.debug({ error }, 'Could not edit message'));
   });
 }

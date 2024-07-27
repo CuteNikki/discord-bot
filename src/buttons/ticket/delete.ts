@@ -2,7 +2,10 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 import { t } from 'i18next';
 
 import { Button } from 'classes/button';
+
 import { ticketModel } from 'models/ticket';
+
+import { logger } from 'utils/logger';
 
 export default new Button({
   customId: 'button-tickets-delete',
@@ -24,29 +27,29 @@ export default new Button({
     const ticket = await ticketModel.findOne({ channelId });
     if (!ticket) return interaction.reply({ content: `${t('tickets.invalid_ticket', { lng })}` });
 
-    interaction.reply({
-      content: `${t('tickets.ticket_deleted', { lng, deleted_by: `${interaction.user}` })}\n${t('tickets.delete_time', { lng })}\n${t(
-        'tickets.delete_reminder',
-        { lng }
-      )}`,
-      components: [
-        new ActionRowBuilder<ButtonBuilder>().addComponents(
-          new ButtonBuilder()
-            .setCustomId(`button-tickets-save_${system._id.toString()}`)
-            .setLabel(t('tickets.save', { lng }))
-            .setEmoji('🗂️')
-            .setStyle(ButtonStyle.Success)
-        ),
-      ],
+    const hasTranscriptChannel = system.transcriptChannelId ? true : false;
+
+    await interaction.reply({
+      content: `${t('tickets.ticket_deleted', { lng, deleted_by: `${interaction.user}` })}\n${t('tickets.delete_time', { lng })}\n${
+        hasTranscriptChannel ? t('tickets.delete_reminder', { lng }) : ''
+      }`,
+      components: hasTranscriptChannel
+        ? [
+            new ActionRowBuilder<ButtonBuilder>().addComponents(
+              new ButtonBuilder()
+                .setCustomId(`button-tickets-save_${system._id.toString()}`)
+                .setLabel(t('tickets.save', { lng }))
+                .setEmoji('🗂️')
+                .setStyle(ButtonStyle.Success)
+            ),
+          ]
+        : [],
     });
 
     setTimeout(async () => {
-      try {
-        await interaction.channel?.delete();
-        await ticketModel.deleteOne({ _id: ticket._id });
-      } catch (error) {
-        interaction.editReply({ content: `${t('tickets.error', { lng })}\n${t('tickets.invalid_ticket', { lng })}` });
-      }
+      const isDeleted = await interaction.channel?.delete().catch((error) => logger.debug({ error, channelId }, 'Could not delete ticket channel'));
+      if (!isDeleted) return interaction.editReply({ content: t('tickets.error', { lng }) });
+      await ticketModel.deleteOne({ _id: ticket._id });
     }, 5000);
   },
 });

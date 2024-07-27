@@ -2,7 +2,10 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle, TextChannel } from 'disco
 import { t } from 'i18next';
 
 import { Button } from 'classes/button';
+
 import { ticketModel } from 'models/ticket';
+
+import { logger } from 'utils/logger';
 
 export default new Button({
   customId: 'button-tickets-lock',
@@ -28,32 +31,34 @@ export default new Button({
 
     if (ticket.locked) return interaction.reply({ content: t('tickets.already_locked', { lng }), ephemeral: true });
 
-    try {
-      const channel = interaction.channel as TextChannel;
-      for (const userId of ticket.users) {
-        await channel.permissionOverwrites.edit(userId, { SendMessages: false });
+    const channel = interaction.channel as TextChannel;
+    for (const userId of ticket.users) {
+      const overwrite = await channel.permissionOverwrites
+        .edit(userId, { SendMessages: false })
+        .catch((error) => logger.debug({ error, userId }, 'Could not edit channel permissions'));
+      if (!overwrite) {
+        interaction.reply({ content: t('tickets.error', { lng }) });
+        break;
       }
-      await ticketModel.findOneAndUpdate({ channelId }, { locked: true });
-
-      interaction.reply({
-        content: t('tickets.locked', { lng, locked_by: `${user.toString()}` }),
-        components: [
-          new ActionRowBuilder<ButtonBuilder>().addComponents(
-            new ButtonBuilder()
-              .setCustomId(`button-tickets-unlock_${system._id.toString()}`)
-              .setLabel(t('tickets.unlock', { lng }))
-              .setEmoji('🔓')
-              .setStyle(ButtonStyle.Success),
-            new ButtonBuilder()
-              .setCustomId(`button-tickets-close_${system._id.toString()}`)
-              .setLabel(t('tickets.close', { lng }))
-              .setEmoji('🛑')
-              .setStyle(ButtonStyle.Danger)
-          ),
-        ],
-      });
-    } catch (error) {
-      interaction.reply({ content: t('tickets.error', { lng }) });
     }
+    await ticketModel.findOneAndUpdate({ channelId }, { locked: true });
+
+    interaction.reply({
+      content: t('tickets.locked', { lng, locked_by: `${user.toString()}` }),
+      components: [
+        new ActionRowBuilder<ButtonBuilder>().addComponents(
+          new ButtonBuilder()
+            .setCustomId(`button-tickets-unlock_${system._id.toString()}`)
+            .setLabel(t('tickets.unlock', { lng }))
+            .setEmoji('🔓')
+            .setStyle(ButtonStyle.Success),
+          new ButtonBuilder()
+            .setCustomId(`button-tickets-close_${system._id.toString()}`)
+            .setLabel(t('tickets.close', { lng }))
+            .setEmoji('🛑')
+            .setStyle(ButtonStyle.Danger)
+        ),
+      ],
+    });
   },
 });

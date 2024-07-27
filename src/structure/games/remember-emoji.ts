@@ -3,6 +3,8 @@ import { t } from 'i18next';
 
 import type { DiscordClient } from 'classes/client';
 
+import { logger } from 'utils/logger';
+
 export class RememberEmoji {
   styles: string[][] = [
     ['🍉', '🍇', '🍊', '🍋', '🥭', '🍎', '🍏', '🥝'],
@@ -37,7 +39,7 @@ export class RememberEmoji {
         embeds: [embed],
         components: this.getComponents(true),
       })
-      .catch(() => {});
+      .catch((error) => logger.debug({ error }, 'Could not send message'));
     if (!message) return;
 
     setTimeout(async () => {
@@ -47,7 +49,7 @@ export class RememberEmoji {
       const collector = message.createMessageComponentCollector({ idle: 60 * 1000 });
 
       collector.on('collect', async (buttonInteraction) => {
-        await buttonInteraction.deferUpdate().catch(() => {});
+        await buttonInteraction.deferUpdate().catch((error) => logger.debug({ error }, 'Could not defer update'));
 
         if (buttonInteraction.user.id !== user.id)
           return buttonInteraction
@@ -55,7 +57,7 @@ export class RememberEmoji {
               content: t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
               ephemeral: true,
             })
-            .catch(() => {});
+            .catch((error) => logger.debug({ error }, 'Could not follow up'));
 
         this.selected = this.emojis[parseInt(buttonInteraction.customId.split('_')[1])];
         return collector.stop();

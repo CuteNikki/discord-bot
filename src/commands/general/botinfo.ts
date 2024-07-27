@@ -6,6 +6,7 @@ import osu from 'node-os-utils';
 import { Command, ModuleType } from 'classes/command';
 
 import { keys } from 'utils/keys';
+import { logger } from 'utils/logger';
 
 export default new Command({
   module: ModuleType.General,
@@ -106,7 +107,8 @@ export default new Command({
             ),
         ],
       });
-    } catch (err) {
+    } catch (error: any) {
+      logger.debug({ error }, 'Could not send botinfo');
       interaction.editReply(t('botinfo.failed', { lng }));
     }
   },

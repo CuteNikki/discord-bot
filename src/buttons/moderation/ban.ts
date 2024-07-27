@@ -4,6 +4,8 @@ import { Button } from 'classes/button';
 
 import { infractionModel, InfractionType } from 'models/infraction';
 
+import { logger } from 'utils/logger';
+
 export default new Button({
   customId: 'button-ban',
   isAuthorOnly: false,
@@ -15,7 +17,7 @@ export default new Button({
     const { guild } = interaction;
 
     const targetId = interaction.customId.split('_')[1];
-    const target = await client.users.fetch(targetId).catch(() => {});
+    const target = await client.users.fetch(targetId).catch((error) => logger.debug({ error, targetId }, 'Could not fetch user'));
 
     const lng = await client.getUserLanguage(interaction.user.id);
 
@@ -24,7 +26,9 @@ export default new Button({
     const targetLng = await client.getUserLanguage(targetId);
     const reason = 'Suspicious Account';
 
-    const banned = await guild.bans.create(target.id, { reason, deleteMessageSeconds: 604800 }).catch(() => {});
+    const banned = await guild.bans
+      .create(target.id, { reason, deleteMessageSeconds: 604800 })
+      .catch((error) => logger.debug({ error, targetId }, 'Could not ban user'));
     if (!banned) return interaction.reply(t('ban.failed', { lng }));
 
     const historyOptions = {
@@ -48,7 +52,7 @@ export default new Button({
           duration: 'forever',
         }),
       })
-      .catch(() => {});
+      .catch((error) => logger.debug({ error, targetId }, 'Could not send DM to user'));
     await interaction.reply({
       content: [
         t('ban.confirmed', { lng, user: target.toString(), reason: `\`${reason ?? '/'}\`` }),

@@ -11,7 +11,10 @@ import {
 import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
+
 import { InfractionType, infractionModel } from 'models/infraction';
+
+import { logger } from 'utils/logger';
 
 export default new Command({
   module: ModuleType.Moderation,
@@ -69,7 +72,7 @@ export default new Command({
             reason: `\`${reason ?? '/'}\``,
           }),
         })
-        .catch(() => {});
+        .catch((error) => logger.debug({ error, userId: target.id }, 'Could not send DM'));
       await collector.update({
         content: [
           t('warn.confirmed', { lng, user: target.toString(), reason: `\`${reason ?? '/'}\`` }),

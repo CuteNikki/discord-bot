@@ -3,6 +3,8 @@ import { t } from 'i18next';
 
 import type { DiscordClient } from 'classes/client';
 
+import { logger } from 'utils/logger';
+
 type Cell = 0 | 1 | 2 | 3 | 4 | 5; // 0: empty space, 1: wall, 2: box, 3: storage, 4: player, 5: box on storage
 
 export class Sokoban {
@@ -35,13 +37,13 @@ export class Sokoban {
         ],
         components: this.getComponents(),
       })
-      .catch(() => {});
+      .catch((error) => logger.debug({ error }, 'Could not send message'));
     if (!message) return;
 
     const collector = message.createMessageComponentCollector({ idle: 60 * 1000, componentType: ComponentType.Button });
 
     collector.on('collect', async (buttonInteraction) => {
-      await buttonInteraction.deferUpdate().catch(() => {});
+      await buttonInteraction.deferUpdate().catch((error) => logger.debug({ error }, 'Could not defer update'));
 
       if (buttonInteraction.user.id !== user.id)
         return buttonInteraction
@@ -49,7 +51,7 @@ export class Sokoban {
             content: t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
             ephemeral: true,
           })
-          .catch(() => {});
+          .catch((error) => logger.debug({ error }, 'Could not follow up'));
 
       const move = buttonInteraction.customId.split('_')[1];
 
@@ -69,7 +71,7 @@ export class Sokoban {
               .setDescription(this.getBoardContent()),
           ],
         })
-        .catch(() => {});
+        .catch((error) => logger.debug({ error }, 'Could not edit message'));
 
       if (this.isWon()) collector.stop();
     });
@@ -96,7 +98,7 @@ export class Sokoban {
         ],
         components: this.getComponents(true),
       })
-      .catch(() => {});
+      .catch((error) => logger.debug({ error }, 'Could not edit message'));
   }
 
   private getComponents(disabled: boolean = false) {

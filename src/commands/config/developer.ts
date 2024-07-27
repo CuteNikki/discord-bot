@@ -5,6 +5,7 @@ import { Command, ModuleType } from 'classes/command';
 import { BadgeType, userModel } from 'models/user';
 
 import { keys } from 'utils/keys';
+import { logger } from 'utils/logger';
 import { chunk, pagination } from 'utils/pagination';
 
 export default new Command({
@@ -242,7 +243,9 @@ export default new Command({
                 const targetData = await client.getUserData(target.id);
                 if (targetData.badges.map((badge) => badge.id).includes(badge)) return interaction.editReply('User already has that badge!');
                 await client.updateUserData(target.id, { $push: { badges: { id: badge, receivedAt: Date.now() } } });
-                await target.send(`You have received the ${BadgeType[badge]} badge!`).catch(() => {});
+                await target
+                  .send(`You have received the ${BadgeType[badge]} badge!`)
+                  .catch((error) => logger.debug({ error, targetId: target.id }, 'Could not send user a DM'));
                 interaction.editReply(`User has received the ${BadgeType[badge]} badge`);
               }
               break;
@@ -253,7 +256,9 @@ export default new Command({
                 const targetData = await client.getUserData(target.id);
                 if (!targetData.badges.map((badge) => badge.id).includes(badge)) return interaction.editReply('User does not have that badge!');
                 await client.updateUserData(target.id, { $pull: { badges: { id: badge } } });
-                await target.send(`Your ${BadgeType[badge]} badge has been removed!`).catch(() => {});
+                await target
+                  .send(`Your ${BadgeType[badge]} badge has been removed!`)
+                  .catch((error) => logger.debug({ error, targetId: target.id }, 'Could not send user a DM'));
                 interaction.editReply(`${BadgeType[badge]} badge has been removed from user`);
               }
               break;
@@ -283,7 +288,9 @@ export default new Command({
                 const targetSettings = await client.getUserData(target.id);
                 if (targetSettings.banned) return interaction.editReply('User is already banned!');
                 await client.updateUserData(target.id, { $set: { banned: true } });
-                await target.send('You have been banned. You can no longer use this bot.').catch(() => {});
+                await target
+                  .send('You have been banned. You can no longer use this bot.')
+                  .catch((error) => logger.debug({ error, targetId: target.id }, 'Could not send user a DM'));
                 interaction.editReply('User has been banned');
               }
               break;
@@ -293,7 +300,9 @@ export default new Command({
                 const targetSettings = await client.getUserData(target.id);
                 if (!targetSettings.banned) return interaction.editReply('User is not banned!');
                 await client.updateUserData(target.id, { $set: { banned: false } });
-                await target.send('You have been unbanned. You can use this bot again.').catch(() => {});
+                await target
+                  .send('You have been unbanned. You can use this bot again.')
+                  .catch((error) => logger.debug({ error, targetId: target.id }, 'Could not send user a DM'));
                 interaction.editReply('User has been unbanned');
               }
               break;

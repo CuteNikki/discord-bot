@@ -5,7 +5,7 @@ import { ModuleType } from 'classes/command';
 import { Event } from 'classes/event';
 
 import { keys } from 'utils/keys';
-import { logger } from 'utils/logger';
+import { sendError } from 'utils/error';
 
 export default new Event({
   name: Events.InteractionCreate,
@@ -83,14 +83,14 @@ export default new Event({
 
     // Try to run the command and send an error message if it couldn't run
     try {
-      command.options.execute({ client, interaction });
-    } catch (err: any) {
-      const message = t('interactions.error', { lng, error: err.message });
+      await command.options.execute({ client, interaction });
+    } catch (error: any) {
+      const message = t('interactions.error', { lng, error: `\`${error.message}\`` });
 
       if (interaction.deferred) interaction.editReply({ content: message });
       else interaction.reply({ content: message, ephemeral: true });
 
-      logger.error(err, message);
+      await sendError({ client, error, location: 'Command Interaction Error' });
     }
   },
 });

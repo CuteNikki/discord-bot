@@ -3,6 +3,8 @@ import { ChannelType, EmbedBuilder, Events, type ColorResolvable } from 'discord
 import { Event } from 'classes/event';
 import { replacePlaceholders } from 'classes/custom-embed';
 
+import { logger } from 'utils/logger';
+
 export default new Event({
   name: Events.GuildMemberRemove,
   once: false,
@@ -44,6 +46,6 @@ export default new Event({
           }).setColor(embedData.color as ColorResolvable),
         ],
       })
-      .catch(() => {});
+      .catch((error) => logger.debug({ error }, 'Could not send farewell message'));
   },
 });

@@ -23,8 +23,8 @@ export async function loadCommands(client: DiscordClient) {
       if (!imported?.default?.options?.data?.name) continue;
 
       client.commands.set(imported.default.options.data.name, imported.default);
-    } catch (e) {
-      logger.error(e, `Error while loading command (${file})`);
+    } catch (error) {
+      logger.error({ error}, `Error while loading command (${file})`);
       continue;
     }
   }
@@ -50,8 +50,8 @@ export async function registerCommands(client: DiscordClient) {
     const endTime = performance.now();
 
     logger.info(`[${client.cluster.id}] Registered ${commands.length} application commands in ${Math.floor(endTime - startTime)}ms`);
-  } catch (err) {
-    logger.error(err, `[${client.cluster.id}] Failed to register application commands`);
+  } catch (error) {
+    logger.error({ error }, `[${client.cluster.id}] Failed to register application commands`);
   }
 
   // Register developer commands
@@ -62,8 +62,8 @@ export async function registerCommands(client: DiscordClient) {
       const endTime = performance.now();
 
       logger.info(`[${client.cluster.id}] Registered ${devCommands.length} application guild commands for ${guildId} in ${Math.floor(endTime - startTime)}ms`);
-    } catch (err) {
-      logger.error(err, `[${client.cluster.id}] Failed to register application guild commands for ${guildId}`);
+    } catch (error) {
+      logger.error({ error }, `[${client.cluster.id}] Failed to register application guild commands for ${guildId}`);
     }
   }
 }

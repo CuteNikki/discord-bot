@@ -4,6 +4,8 @@ import { inspect, promisify } from 'util';
 
 import { Modal } from 'classes/modal';
 
+import { logger } from 'utils/logger';
+
 export default new Modal({
   customId: 'modal_execute',
   isCustomIdIncluded: false,
@@ -65,7 +67,9 @@ export default new Modal({
             ),
         ],
       });
-    } catch (err) {
+    } catch (error: any) {
+      logger.debug(error, 'Execute Error');
+
       return interaction.editReply({
         embeds: [
           new EmbedBuilder()
@@ -78,7 +82,7 @@ export default new Modal({
             .setDescription(
               codeBlock(
                 'ts',
-                inspect(err, { depth: 0 })
+                inspect(error, { depth: 2 })
                   .replaceAll(interaction.client.token, 'no')
                   .replaceAll(interaction.client.token.split('').reverse().join(''), 'no')
                   .replaceAll('\\n', '\n')

@@ -1,7 +1,7 @@
 import { Events } from 'discord.js';
 
 import { Event } from 'classes/event';
-import { logger } from 'utils/logger';
+import { sendError } from 'utils/error';
 
 export default new Event({
   name: Events.InteractionCreate,
@@ -12,13 +12,12 @@ export default new Event({
     const command = client.commands.get(interaction.commandName);
     if (!command || !command.options.autocomplete) return;
 
-    const user = await client.getUserData(interaction.user.id);
-    if (user.banned) return;
-
     try {
       await command.options.autocomplete({ interaction, client });
-    } catch (err) {
-      logger.error(err, `Could not autocomplete ${command.options.data.name}`);
+    } catch (error: any) {
+      await interaction.respond([]);
+
+      await sendError({ client, error, location: 'Autocomplete Interaction Error' });
     }
   },
 });

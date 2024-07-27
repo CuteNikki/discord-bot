@@ -2,12 +2,14 @@ import { ChannelType, Colors, EmbedBuilder, Events } from 'discord.js';
 
 import { Event } from 'classes/event';
 
+import { logger } from 'utils/logger';
+
 export default new Event({
   name: Events.GuildBanRemove,
   once: false,
   async execute(client, ban) {
     const { guild, user, reason, partial } = ban;
-    if (partial) await ban.fetch().catch(() => {});
+    if (partial) await ban.fetch().catch((error) => logger.debug({ error }, 'Could not fetch ban'));
 
     const config = await client.getGuildSettings(guild.id);
 

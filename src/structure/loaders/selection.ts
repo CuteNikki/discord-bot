@@ -1,8 +1,8 @@
 import { readdir } from 'node:fs/promises';
 import { performance } from 'perf_hooks';
 
-import type { Selection } from 'classes/selection';
 import type { DiscordClient } from 'classes/client';
+import type { Selection } from 'classes/selection';
 
 import { logger } from 'utils/logger';
 
@@ -20,8 +20,8 @@ export async function loadSelections(client: DiscordClient) {
       if (!imported?.default?.options?.customId) continue;
 
       client.selections.set(imported.default.options.customId, imported.default);
-    } catch (e) {
-      logger.error(e, `Error while loading selection (${file})`);
+    } catch (error) {
+      logger.error({ error }, `Error while loading selection (${file})`);
       continue;
     }
   }

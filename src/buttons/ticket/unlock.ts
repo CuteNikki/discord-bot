@@ -2,7 +2,10 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle, TextChannel } from 'disco
 import { t } from 'i18next';
 
 import { Button } from 'classes/button';
+
 import { ticketModel } from 'models/ticket';
+
+import { logger } from 'utils/logger';
 
 export default new Button({
   customId: 'button-tickets-unlock',
@@ -26,27 +29,29 @@ export default new Button({
 
     if (!ticket.locked) return interaction.reply({ content: t('tickets.already_unlocked', { lng }), ephemeral: true });
 
-    try {
-      const channel = interaction.channel as TextChannel;
-      for (const userId of ticket.users) {
-        await channel.permissionOverwrites.edit(userId, { SendMessages: true });
+    const channel = interaction.channel as TextChannel;
+    for (const userId of ticket.users) {
+      const overwrite = await channel.permissionOverwrites
+        .edit(userId, { SendMessages: true })
+        .catch((error) => logger.debug({ error, userId }, 'Could not edit channel permissions'));
+      if (!overwrite) {
+        interaction.reply({ content: t('tickets.error', { lng }) });
+        break;
       }
-      await ticketModel.findOneAndUpdate({ channelId: interaction.channel?.id }, { locked: false });
-
-      interaction.reply({
-        content: t('tickets.unlocked', { lng, unlocked_by: `${interaction.user}` }),
-        components: [
-          new ActionRowBuilder<ButtonBuilder>().addComponents(
-            new ButtonBuilder()
-              .setCustomId(`button-tickets-lock_${system._id.toString()}`)
-              .setLabel(t('tickets.lock', { lng }))
-              .setEmoji('🔐')
-              .setStyle(ButtonStyle.Primary)
-          ),
-        ],
-      });
-    } catch (error) {
-      interaction.reply({ content: t('tickets.error', { lng }) });
     }
+
+    await ticketModel.findOneAndUpdate({ channelId: interaction.channel?.id }, { locked: false });
+    await interaction.reply({
+      content: t('tickets.unlocked', { lng, unlocked_by: `${interaction.user}` }),
+      components: [
+        new ActionRowBuilder<ButtonBuilder>().addComponents(
+          new ButtonBuilder()
+            .setCustomId(`button-tickets-lock_${system._id.toString()}`)
+            .setLabel(t('tickets.lock', { lng }))
+            .setEmoji('🔐')
+            .setStyle(ButtonStyle.Primary)
+        ),
+      ],
+    });
   },
 });

@@ -8,7 +8,6 @@ export default new Event({
   async execute(client, oldEvent, newEvent) {
     const guild = newEvent.guild;
     if (!guild || !oldEvent || !newEvent) return;
-    if (oldEvent.partial) await oldEvent.fetch().catch(() => {});
 
     const config = await client.getGuildSettings(guild.id);
 

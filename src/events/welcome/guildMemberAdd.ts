@@ -1,7 +1,9 @@
 import { ChannelType, EmbedBuilder, Events, type ColorResolvable } from 'discord.js';
 
-import { Event } from 'classes/event';
 import { replacePlaceholders } from 'classes/custom-embed';
+import { Event } from 'classes/event';
+
+import { logger } from 'utils/logger';
 
 export default new Event({
   name: Events.GuildMemberAdd,
@@ -9,12 +11,12 @@ export default new Event({
   async execute(client, member) {
     const { guild, user, partial, pending } = member;
     if (user.bot || pending) return;
-    if (partial) await member.fetch().catch(() => {});
+    if (partial) await member.fetch().catch((error) => logger.debug({ error }, 'Could not fetch member'));
 
     const config = await client.getGuildSettings(guild.id);
 
     if (!config.welcome.enabled) return;
-    await member.roles.add(config.welcome.roles).catch(() => {});
+    await member.roles.add(config.welcome.roles).catch((error) => logger.debug({ error }, 'Could not add role(s)'));
 
     if (!config.welcome.channelId) return;
     const welcomeChannel = await guild.channels.fetch(config.welcome.channelId);
@@ -48,6 +50,6 @@ export default new Event({
           }).setColor(embedData.color as ColorResolvable),
         ],
       })
-      .catch(() => {});
+      .catch((error) => logger.debug({ error }, 'Could not send welcome message'));
   },
 });

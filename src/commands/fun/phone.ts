@@ -5,6 +5,8 @@ import { Command, ModuleType } from 'classes/command';
 
 import { availableChannelModel, connectionModel } from 'models/phone';
 
+import { logger } from 'utils/logger';
+
 export default new Command({
   module: ModuleType.Fun,
   botPermissions: ['SendMessages'],
@@ -55,7 +57,9 @@ export default new Command({
             interaction.editReply(t('phone.connect.connected', { lng }));
 
             // Inform target channel
-            const targetChannel = await client.channels.fetch(randomTarget.channelId).catch(() => {});
+            const targetChannel = await client.channels
+              .fetch(randomTarget.channelId)
+              .catch((error) => logger.debug({ error, targetChannelId: randomTarget.channelId }, 'Could not fetch target channel'));
             if (!targetChannel || targetChannel.type !== ChannelType.GuildText) return;
             targetChannel.send(t('phone.connect.connected'));
           } else {
@@ -93,7 +97,9 @@ export default new Command({
           interaction.editReply(t('phone.hangup.disconnecting', { lng }));
 
           // Inform the other channel
-          const targetChannel = await client.channels.fetch(connectedChannelId).catch(() => {});
+          const targetChannel = await client.channels
+            .fetch(connectedChannelId)
+            .catch((error) => logger.debug({ error, targetChannelId: connectedChannelId }, 'Could not fetch target channel'));
           if (!targetChannel || targetChannel.type !== ChannelType.GuildText) return;
           targetChannel.send(t('phone.hangup.disconnected', { lng: otherLng }));
         }

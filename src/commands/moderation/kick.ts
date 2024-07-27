@@ -11,7 +11,10 @@ import {
 import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
+
 import { InfractionType, infractionModel } from 'models/infraction';
+
+import { logger } from 'utils/logger';
 
 export default new Command({
   module: ModuleType.Moderation,
@@ -36,7 +39,7 @@ export default new Command({
     const { options, guild, member, user } = interaction;
 
     const target = options.getUser('user', true);
-    const targetMember = await guild.members.fetch(target.id).catch(() => {});
+    const targetMember = await guild.members.fetch(target.id).catch((error) => logger.debug({ error, userId: target.id }, 'Could not fetch target member'));
     if (!targetMember) return interaction.editReply(t('kick.target.invalid', { lng: await client.getUserLanguage(interaction.user.id) }));
 
     const reason = options.getString('reason', false) ?? undefined;
@@ -65,7 +68,7 @@ export default new Command({
     if (collector.customId === CustomIds.Cancel) {
       await collector.update({ content: t('kick.cancelled', { lng: await client.getUserLanguage(interaction.user.id) }), components: [] });
     } else if (collector.customId === CustomIds.Confirm) {
-      const kicked = await targetMember.kick(reason).catch(() => {});
+      const kicked = await targetMember.kick(reason).catch((error) => logger.debug({ error, userId: target.id }, 'Could not kick user'));
       if (!kicked) return collector.update(t('kick.failed', { lng: await client.getUserLanguage(interaction.user.id) }));
 
       const receivedDM = await client.users
@@ -76,7 +79,7 @@ export default new Command({
             reason: `\`${reason ?? '/'}\``,
           }),
         })
-        .catch(() => {});
+        .catch((error) => logger.debug({ error, userId: target.id }, 'Could not send DM'));
       await collector.update({
         content: [
           t('kick.confirmed', { lng: await client.getUserLanguage(interaction.user.id), user: target.toString(), reason: `\`${reason ?? '/'}\`` }),

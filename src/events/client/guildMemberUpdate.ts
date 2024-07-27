@@ -5,6 +5,7 @@ import { Event } from 'classes/event';
 import { BadgeType } from 'models/user';
 
 import { keys } from 'utils/keys';
+import { logger } from 'utils/logger';
 
 export default new Event({
   name: Events.GuildMemberUpdate,
@@ -19,7 +20,9 @@ export default new Event({
     const userData = await client.getUserData(newMember.user.id);
     if (userData.badges.map((badge) => badge.id).includes(BadgeType.Supporter)) return;
 
-    await newMember.send('Thank you for boosting the support server. You received the Supporter badge!').catch(() => {});
+    await newMember
+      .send('Thank you for boosting the support server. You received the Supporter badge!')
+      .catch((error) => logger.debug({ error, userId: newMember.user.id }, 'Could not send DM'));
     await client.updateUserData(newMember.user.id, { $push: { badges: { id: BadgeType.Supporter, receivedAt: Date.now() } } });
   },
 });

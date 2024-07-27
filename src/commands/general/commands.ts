@@ -15,7 +15,9 @@ import { t } from 'i18next';
 import ms from 'ms';
 
 import { Command, ModuleType } from 'classes/command';
+
 import { chunk, pagination } from 'utils/pagination';
+import { logger } from 'utils/logger';
 
 export default new Command({
   module: ModuleType.General,
@@ -48,14 +50,14 @@ export default new Command({
         embeds: [helpEmbed],
         components: [new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(select)],
       })
-      .catch(() => {});
+      .catch((error) => logger.debug({ error }, 'Could not send help message'));
     if (!msg) return;
 
     const TIME = 60_000;
     const collector = msg.createMessageComponentCollector({ componentType: ComponentType.StringSelect, idle: TIME });
 
     collector.on('collect', async (selectInteraction) => {
-      await selectInteraction.deferUpdate().catch(() => {});
+      await selectInteraction.deferUpdate().catch((error) => logger.debug({ error }, 'Could not defer update'));
 
       if (selectInteraction.user.id !== interaction.user.id)
         return await interaction
@@ -63,7 +65,7 @@ export default new Command({
             content: t('interactions.author_only', { lng: await client.getUserLanguage(selectInteraction.user.id) }),
             ephemeral: true,
           })
-          .catch(() => {});
+          .catch((error) => logger.debug({ error }, 'Could not send author only message'));
 
       const categoryId = parseInt(selectInteraction.values[0]);
       const categoryName = ModuleType[categoryId];
@@ -93,7 +95,7 @@ export default new Command({
               embeds: [helpEmbed],
               components: [new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(select)],
             })
-            .catch(() => {}),
+            .catch((error) => logger.debug({ error }, 'Could not edit help message')),
         embeds: chunkedCmds.map((chunk) =>
           new EmbedBuilder()
             .setColor(Colors.Blurple)
@@ -109,7 +111,7 @@ export default new Command({
           embeds: [helpEmbed.setFooter({ text: t('pagination', { lng, time: ms(TIME, { long: true }) }) })],
           components: [new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(select.setDisabled(true))],
         })
-        .catch(() => {});
+        .catch((error) => logger.debug({ error }, 'Could not edit help message'));
     });
   },
 });

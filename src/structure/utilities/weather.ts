@@ -1,4 +1,5 @@
 import { keys } from 'utils/keys';
+import { logger } from 'utils/logger';
 
 const API_KEY = keys.WEATHER_API_KEY;
 const API_URL = 'http://api.weatherapi.com/v1';
@@ -9,7 +10,7 @@ export async function getCurrentWeather(location: string): Promise<CurrentWeathe
   url.searchParams.append('q', location);
   url.searchParams.append('aqi', 'yes');
 
-  const res = await fetch(url.href).catch(() => {});
+  const res = await fetch(url.href).catch((error) => logger.debug({ error }, 'Could not fetch weather'));
   if (!res) return null;
 
   const data = await res.json();
@@ -25,7 +26,7 @@ export async function getWeatherForecast(location: string, days: string = '1'): 
   url.searchParams.append('q', location);
   url.searchParams.append('aqi', 'yes');
 
-  const res = await fetch(url.href).catch(() => {});
+  const res = await fetch(url.href).catch((error) => logger.debug({ error }, 'Could not fetch weather'));
   if (!res) return null;
 
   const data = await res.json();
@@ -40,7 +41,7 @@ export async function getHistoricWeather(location: string, date: string): Promis
   url.searchParams.append('q', location);
   url.searchParams.append('dt', date);
 
-  const res = await fetch(url.href).catch(() => {});
+  const res = await fetch(url.href).catch((error) => logger.debug({ error }, 'Could not fetch weather'));
   if (!res) return null;
 
   const data = await res.json();

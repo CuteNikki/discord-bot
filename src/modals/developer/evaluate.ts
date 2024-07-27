@@ -3,6 +3,8 @@ import { inspect } from 'util';
 
 import { Modal } from 'classes/modal';
 
+import { logger } from 'utils/logger';
+
 export default new Modal({
   customId: 'modal_eval',
   isCustomIdIncluded: false,
@@ -43,7 +45,9 @@ export default new Modal({
             ),
         ],
       });
-    } catch (err) {
+    } catch (error: any) {
+      logger.error(error, 'Eval Error');
+
       return interaction.editReply({
         embeds: [
           new EmbedBuilder()
@@ -56,7 +60,7 @@ export default new Modal({
             .setDescription(
               codeBlock(
                 'ts',
-                inspect(err, { depth })
+                inspect(error, { depth })
                   .replaceAll(interaction.client.token, 'no')
                   .replaceAll(interaction.client.token.split('').reverse().join(''), 'no')
                   .replaceAll('\\n', '\n')

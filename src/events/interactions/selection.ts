@@ -4,8 +4,8 @@ import { t } from 'i18next';
 import { Event } from 'classes/event';
 import type { Selection } from 'classes/selection';
 
+import { sendError } from 'utils/error';
 import { keys } from 'utils/keys';
-import { logger } from 'utils/logger';
 
 export default new Event({
   name: Events.InteractionCreate,
@@ -94,13 +94,13 @@ export default new Event({
     // Try to run the selection and send an error message if it couldn't run
     try {
       selection.options.execute({ client, interaction });
-    } catch (err: any) {
-      const message = t('interactions.error', { lng, error: `\`${err.message}\`` });
+    } catch (error: any) {
+      const message = t('interactions.error', { lng, error: `\`${error.message}\`` });
 
       if (interaction.deferred) interaction.editReply({ content: message });
       else interaction.reply({ content: message, ephemeral: true });
 
-      logger.error(err, message);
+      sendError({ client, error, location: 'Selection Interaction Error' });
     }
   },
 });

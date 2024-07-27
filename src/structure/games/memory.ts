@@ -12,6 +12,8 @@ import { t } from 'i18next';
 
 import type { DiscordClient } from 'classes/client';
 
+import { logger } from 'utils/logger';
+
 type EmojiCoordinates = {
   x: number;
   y: number;
@@ -59,13 +61,13 @@ export class Memory {
         ],
         components: this.components,
       })
-      .catch(() => {});
+      .catch((error) => logger.debug({ error }, 'Could not send message'));
     if (!message) return;
 
     const collector = message.createMessageComponentCollector({ idle: 60 * 1000 });
 
     collector.on('collect', async (buttonInteraction) => {
-      await buttonInteraction.deferUpdate().catch(() => {});
+      await buttonInteraction.deferUpdate().catch((error) => logger.debug({ error }, 'Could not defer update'));
 
       if (buttonInteraction.user.id !== user.id)
         return buttonInteraction
@@ -73,7 +75,7 @@ export class Memory {
             content: t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
             ephemeral: true,
           })
-          .catch(() => {});
+          .catch((error) => logger.debug({ error }, 'Could not follow up'));
 
       const x = parseInt(buttonInteraction.customId.split('_')[1]);
       const y = parseInt(buttonInteraction.customId.split('_')[2]);
@@ -113,7 +115,7 @@ export class Memory {
           .removeLabel();
 
         if (!matched) {
-          await buttonInteraction.editReply({ components: this.components }).catch(() => {});
+          await buttonInteraction.editReply({ components: this.components }).catch((error) => logger.debug({ error }, 'Could not edit message'));
 
           emojiButton.removeEmoji().setStyle(ButtonStyle.Secondary).setLabel('\u200b');
           selectedButton.removeEmoji().setStyle(ButtonStyle.Secondary).setLabel('\u200b');
@@ -128,7 +130,7 @@ export class Memory {
       }
 
       if (this.remainingPairs === 0) return collector.stop();
-      return await buttonInteraction.editReply({ components: this.components }).catch(() => {});
+      return await buttonInteraction.editReply({ components: this.components }).catch((error) => logger.debug({ error }, 'Could not edit message'));
     });
 
     collector.on('end', async (_, reason) => {
@@ -155,7 +157,7 @@ export class Memory {
         ],
         components: this.disableButtons(this.components),
       })
-      .catch(() => {});
+      .catch((error) => logger.debug({ error }, 'Could not edit message'));
   }
 
   private getPair(emoji: string) {

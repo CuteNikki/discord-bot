@@ -2,11 +2,13 @@ import { ChannelType, Colors, EmbedBuilder, Events } from 'discord.js';
 
 import { Event } from 'classes/event';
 
+import { logger } from 'utils/logger';
+
 export default new Event({
   name: Events.GuildScheduledEventUserRemove,
   once: false,
   async execute(client, event, user) {
-    if (event.partial) await event.fetch().catch(() => {});
+    if (event.partial) await event.fetch().catch((error) => logger.debug({ error }, 'Could not fetch guild scheduled event'));
     const guild = event.guild;
     if (!guild) return;
 

@@ -15,6 +15,8 @@ import { Opponent } from 'games/opponent';
 
 import type { DiscordClient } from 'classes/client';
 
+import { logger } from 'utils/logger';
+
 export class Connect4 extends Opponent {
   numberEmojis: string[] = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟'];
   board: string[] = [];
@@ -96,12 +98,12 @@ export class Connect4 extends Opponent {
         ],
         components: this.getComponents(),
       })
-      .catch(() => {});
+      .catch((error) => logger.debug({ error }, 'Could not send message'));
 
     const collector = message.createMessageComponentCollector({ idle: 60 * 1000 });
 
     collector.on('collect', async (buttonInteraction) => {
-      await buttonInteraction.deferUpdate().catch(() => {});
+      await buttonInteraction.deferUpdate().catch((error) => logger.debug({ error }, 'Could not defer update'));
 
       if (buttonInteraction.user.id !== user.id && buttonInteraction.user.id !== opponent.id)
         return buttonInteraction
@@ -109,13 +111,17 @@ export class Connect4 extends Opponent {
             content: t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
             ephemeral: true,
           })
-          .catch(() => {});
+          .catch((error) => logger.debug({ error }, 'Could not follow up'));
 
       if (this.playerTurn && buttonInteraction.user.id !== user.id)
-        return buttonInteraction.followUp({ content: t('games.connect.turn', { lng: opponentLng }), ephemeral: true }).catch(() => {});
+        return buttonInteraction
+          .followUp({ content: t('games.connect.turn', { lng: opponentLng }), ephemeral: true })
+          .catch((error) => logger.debug({ error }, 'Could not follow up'));
 
       if (!this.playerTurn && buttonInteraction.user.id !== opponent.id)
-        return buttonInteraction.followUp({ content: t('games.connect.turn', { lng }), ephemeral: true }).catch(() => {});
+        return buttonInteraction
+          .followUp({ content: t('games.connect.turn', { lng }), ephemeral: true })
+          .catch((error) => logger.debug({ error }, 'Could not follow up'));
 
       const column = parseInt(buttonInteraction.customId.split('_')[1]) - 1;
       const coords = { x: -1, y: -1 };
@@ -157,7 +163,7 @@ export class Connect4 extends Opponent {
           ],
           components: buttonInteraction.message.components,
         })
-        .catch(() => {});
+        .catch((error) => logger.debug({ error }, 'Could not edit message'));
     });
 
     collector.on('end', async (_, reason) => {
@@ -257,7 +263,9 @@ export class Connect4 extends Opponent {
     else if (result === 'PLAYER') embed.setDescription([t('games.connect.winner', { lng, winner: user.toString() }), this.getBoardContent()].join('\n\n'));
     else embed.setDescription([t('games.connect.winner', { lng, winner: opponent.toString() }), this.getBoardContent()].join('\n\n'));
 
-    return await interaction.editReply({ content: null, embeds: [embed], components: this.disableButtons(this.getComponents()) }).catch(() => {});
+    return await interaction
+      .editReply({ content: null, embeds: [embed], components: this.disableButtons(this.getComponents()) })
+      .catch((error) => logger.debug({ error }, 'Could not edit message'));
   }
 
   private getComponents() {

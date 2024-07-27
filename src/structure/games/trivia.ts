@@ -2,6 +2,7 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, typ
 import { t } from 'i18next';
 
 import type { DiscordClient } from 'classes/client';
+import { logger } from 'utils/logger';
 
 export enum TriviaMode {
   Single = 'boolean',
@@ -48,7 +49,10 @@ export class Trivia {
     const lng = await client.getUserLanguage(user.id);
 
     const trivia = await this.getTrivia();
-    if (!trivia) return interaction.editReply({ content: t('games.trivia.error', { lng }), embeds: [], components: [] }).catch(() => {});
+    if (!trivia)
+      return interaction
+        .editReply({ content: t('games.trivia.error', { lng }), embeds: [], components: [] })
+        .catch((error) => logger.debug({ error }, 'Could not edit message'));
 
     const message = await interaction
       .editReply({
@@ -66,13 +70,13 @@ export class Trivia {
         ],
         components: this.getComponents(),
       })
-      .catch(() => {});
+      .catch((error) => logger.debug({ error }, 'Could not send message'));
     if (!message) return;
 
     const collector = message.createMessageComponentCollector({ idle: 60 * 1000 });
 
     collector.on('collect', async (buttonInteraction) => {
-      await buttonInteraction.deferUpdate().catch(() => {});
+      await buttonInteraction.deferUpdate().catch((error) => logger.debug({ error }, 'Could not defer update'));
 
       if (buttonInteraction.user.id !== user.id)
         return buttonInteraction
@@ -80,7 +84,7 @@ export class Trivia {
             content: t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
             ephemeral: true,
           })
-          .catch(() => {});
+          .catch((error) => logger.debug({ error }, 'Could not follow up'));
 
       collector.stop();
       this.selected = buttonInteraction.customId.split('_')[1];
@@ -116,7 +120,7 @@ export class Trivia {
         ],
         components: this.disableButtons(this.getComponents()),
       })
-      .catch(() => {});
+      .catch((error) => logger.debug({ error }, 'Could not edit message'));
   }
 
   private getComponents() {
@@ -158,7 +162,7 @@ export class Trivia {
     )
       .then(async (res) => await res.json())
       .then((res) => res.results[0])
-      .catch(() => {})) as TriviaQuestion;
+      .catch((error) => logger.debug({ error }, 'Could not fetch trivia'))) as TriviaQuestion;
     if (!response) return false;
 
     response.incorrect_answers = response.incorrect_answers.map((ia) => this.decodeEntities(ia));

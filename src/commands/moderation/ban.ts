@@ -15,6 +15,8 @@ import { Command, ModuleType } from 'classes/command';
 
 import { InfractionType, infractionModel } from 'models/infraction';
 
+import { logger } from 'utils/logger';
+
 export default new Command({
   module: ModuleType.Moderation,
   botPermissions: ['BanMembers', 'SendMessages'],
@@ -56,7 +58,7 @@ export default new Command({
     const { options, guild, member, user } = interaction;
 
     const target = options.getUser('user', true);
-    const targetMember = await guild.members.fetch(target.id).catch(() => {});
+    const targetMember = await guild.members.fetch(target.id).catch((error) => logger.debug({ error, userId: target.id }, 'Could not fetch target member'));
 
     const lng = await client.getUserLanguage(interaction.user.id);
     const targetLng = await client.getUserLanguage(target.id);
@@ -88,7 +90,7 @@ export default new Command({
 
     if (targetMember && !targetMember.bannable) return interaction.editReply(t('ban.target.bannable', { lng }));
 
-    const isBanned = await guild.bans.fetch(target.id).catch(() => {});
+    const isBanned = await guild.bans.fetch(target.id).catch((error) => logger.debug({ error, userId: target.id }, 'Could not fetch target ban'));
     if (isBanned) return interaction.editReply(t('ban.target.banned', { lng }));
 
     const msg = await interaction.editReply({
@@ -106,7 +108,7 @@ export default new Command({
     if (collector.customId === CustomIds.Cancel) {
       await collector.update({ content: t('ban.cancelled', { lng }), components: [] });
     } else if (collector.customId === CustomIds.Confirm) {
-      const banned = await guild.bans.create(target.id, { reason, deleteMessageSeconds: history }).catch(() => {});
+      const banned = await guild.bans.create(target.id, { reason, deleteMessageSeconds: history }).catch((error) => logger.debug({ error, userId: target.id }, 'Could not ban user'));
       if (!banned) return collector.update(t('ban.failed', { lng }));
 
       const receivedDM = await client.users
@@ -118,7 +120,7 @@ export default new Command({
             duration: duration ? durationText : 'forever',
           }),
         })
-        .catch(() => {});
+        .catch((error) => logger.debug({ error, userId: target.id }, 'Could not send DM'));
       await collector.update({
         content: [
           t('ban.confirmed', { lng, user: target.toString(), reason: `\`${reason ?? '/'}\`` }),

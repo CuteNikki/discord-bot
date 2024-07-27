@@ -2,6 +2,8 @@ import { ChannelType, Colors, EmbedBuilder, Events } from 'discord.js';
 
 import { Event } from 'classes/event';
 
+import { logger } from 'utils/logger';
+
 export default new Event({
   name: Events.GuildEmojiCreate,
   once: false,
@@ -15,7 +17,7 @@ export default new Event({
     const logChannel = await guild.channels.fetch(config.log.channelId);
     if (!logChannel || logChannel.type !== ChannelType.GuildText) return;
 
-    const author = await emoji.fetchAuthor().catch(() => {});
+    const author = await emoji.fetchAuthor().catch((error) => logger.debug({ error }, 'Could not fetch emoji author'));
 
     await logChannel.send({
       embeds: [

@@ -4,7 +4,9 @@ import { t } from 'i18next';
 import { Event } from 'classes/event';
 
 import { AnnouncementType } from 'models/guild';
+
 import { appendXP, getDataOrCreate, getLevelRewards, randomXP } from 'utils/level';
+import { logger } from 'utils/logger';
 
 const cooldowns = new Set();
 
@@ -44,7 +46,7 @@ export default new Event({
         .addFields({ name: t('level.up.title', { lng }), value: t('level.up.description', { lng, level: newData.level }) });
 
       if (rewards?.length) {
-        const added = await member.roles.add(rewards.map((r) => r.roleId)).catch(() => {});
+        const added = await member.roles.add(rewards.map((r) => r.roleId)).catch((error) => logger.debug({ error }, 'Could not add role(s)'));
         if (added) levelUpEmbed.addFields({ name: t('level.up.title_roles', { lng }), value: rewards.map((r) => `<@&${r.roleId}>`).join(' ') });
         else levelUpEmbed.addFields({ name: t('level.up.title_roles_error', { lng }), value: rewards.map((r) => `<@&${r.roleId}>`).join(' ') });
       }
@@ -57,9 +59,9 @@ export default new Event({
       switch (guildSettings.level.announcement) {
         case AnnouncementType.UserChannel:
           {
-            const msg = await channel.send(levelUpMessage).catch(() => {});
+            const msg = await channel.send(levelUpMessage).catch((error) => logger.debug({ error }, 'Could not send message'));
             setTimeout(() => {
-              if (msg) msg.delete().catch(() => {});
+              if (msg && msg.deletable) msg.delete().catch((error) => logger.debug({ error }, 'Could not delete message'));
             }, 5000);
           }
           break;
@@ -68,7 +70,7 @@ export default new Event({
             if (!guildSettings.level.channelId) return;
             const channel = guild.channels.cache.get(guildSettings.level.channelId);
             if (!channel || channel.type !== ChannelType.GuildText) return;
-            channel.send(levelUpMessage).catch(() => {});
+            channel.send(levelUpMessage).catch((error) => logger.debug({ error }, 'Could not send message'));
           }
           break;
         case AnnouncementType.PrivateMessage:
@@ -80,7 +82,7 @@ export default new Event({
                 name: t('level.up.title_roles', { lng, count: rewards.length }),
                 value: rewards.map((r) => `<@&${r.roleId}>`).join(' '),
               });
-            client.users.send(author.id, levelUpMessage).catch(() => {});
+            client.users.send(author.id, levelUpMessage).catch((error) => logger.debug({ error, userId: author.id }, 'Could not send DM'));
           }
           break;
       }

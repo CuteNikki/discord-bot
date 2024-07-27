@@ -23,8 +23,8 @@ for (const file of files) {
     if (!imported?.default?.options?.data?.name) continue;
 
     commands.set(imported.default.options.data.name, imported.default);
-  } catch (e) {
-    logger.error(e, `Error while loading command (${file})`);
+  } catch (error) {
+    logger.error({ error }, `Error while loading command (${file})`);
     continue;
   }
 }
@@ -44,8 +44,8 @@ try {
   const endTime = performance.now();
 
   logger.info(`Registered ${commandsArray.length} application commands in ${Math.floor(endTime - startTime)}ms`);
-} catch (err) {
-  logger.error(err, 'Failed to register commands');
+} catch (error) {
+  logger.error({ error }, 'Failed to register commands');
 }
 
 for (const guildId of keys.DEVELOPER_GUILD_IDS) {
@@ -55,7 +55,7 @@ for (const guildId of keys.DEVELOPER_GUILD_IDS) {
     const endTime = performance.now();
 
     logger.info(`Registered ${devCommandsArray.length} application guild commands for ${guildId} in ${Math.floor(endTime - startTime)}ms`);
-  } catch (err) {
-    logger.error(err, `Failed to register guild commands for ${guildId}`);
+  } catch (error) {
+    logger.error({ error }, `Failed to register guild commands for ${guildId}`);
   }
 }

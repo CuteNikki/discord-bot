@@ -13,6 +13,7 @@ import { Command, ModuleType } from 'classes/command';
 import { CustomEmbedBuilder } from 'classes/custom-embed';
 
 import type { Message } from 'models/guild';
+import { logger } from 'utils/logger';
 
 export default new Command({
   module: ModuleType.Config,
@@ -93,7 +94,9 @@ export default new Command({
                 const customBuilder = new CustomEmbedBuilder({ client, interaction, data: settings.farewell.message });
                 customBuilder.once('submit', async (data: Message) => {
                   await client.updateGuildSettings(guild.id, { $set: { ['farewell.message']: data } });
-                  interaction.editReply({ content: t('farewell.message.set', { lng }), embeds: [], components: [] }).catch(() => {});
+                  interaction
+                    .editReply({ content: t('farewell.message.set', { lng }), embeds: [], components: [] })
+                    .catch((error) => logger.debug({ error }, 'Could not edit reply'));
                 });
               }
               break;
@@ -124,7 +127,7 @@ export default new Command({
                     },
                   },
                 });
-                interaction.editReply(t('farewell.message.removed', { lng })).catch(() => {});
+                interaction.editReply(t('farewell.message.removed', { lng }));
               }
               break;
             case 'show':

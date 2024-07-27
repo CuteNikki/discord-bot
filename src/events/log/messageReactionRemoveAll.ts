@@ -2,13 +2,15 @@ import { ChannelType, Colors, EmbedBuilder, Events } from 'discord.js';
 
 import { Event } from 'classes/event';
 
+import { logger } from 'utils/logger';
+
 export default new Event({
   name: Events.MessageReactionRemoveAll,
   once: false,
   async execute(client, message, reactions) {
     const guild = message.guild;
     if (!guild || !message.author || message.author.bot) return;
-    if (message.partial) await message.fetch().catch(() => {});
+    if (message.partial) await message.fetch().catch((error) => logger.debug({ error }, 'Could not fetch message'));
 
     const config = await client.getGuildSettings(guild.id);
 

@@ -5,6 +5,8 @@ import { Opponent } from 'games/opponent';
 
 import type { DiscordClient } from 'classes/client';
 
+import { logger } from 'utils/logger';
+
 export class TicTacToe extends Opponent {
   board: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
   playerTurn: boolean;
@@ -53,12 +55,12 @@ export class TicTacToe extends Opponent {
         ],
         components: this.getComponents(),
       })
-      .catch(() => {});
+      .catch((error) => logger.debug({ error }, 'Could not send message'));
 
     const collector = message.createMessageComponentCollector({ idle: 60 * 1000 });
 
     collector.on('collect', async (buttonInteraction) => {
-      await buttonInteraction.deferUpdate().catch(() => {});
+      await buttonInteraction.deferUpdate().catch((error) => logger.debug({ error }, 'Could not defer update'));
 
       if (buttonInteraction.user.id !== user.id && buttonInteraction.user.id !== opponent.id)
         return buttonInteraction
@@ -66,13 +68,17 @@ export class TicTacToe extends Opponent {
             content: t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
             ephemeral: true,
           })
-          .catch(() => {});
+          .catch((error) => logger.debug({ error }, 'Could not follow up'));
 
       if (this.playerTurn && buttonInteraction.user.id !== user.id)
-        return buttonInteraction.followUp({ content: t('games.ttt.turn', { lng: opponentLng }), ephemeral: true }).catch(() => {});
+        return buttonInteraction
+          .followUp({ content: t('games.ttt.turn', { lng: opponentLng }), ephemeral: true })
+          .catch((error) => logger.debug({ error }, 'Could not follow up'));
 
       if (!this.playerTurn && buttonInteraction.user.id !== opponent.id)
-        return buttonInteraction.followUp({ content: t('games.ttt.turn', { lng }), ephemeral: true }).catch(() => {});
+        return buttonInteraction
+          .followUp({ content: t('games.ttt.turn', { lng }), ephemeral: true })
+          .catch((error) => logger.debug({ error }, 'Could not follow up'));
 
       this.board[parseInt(buttonInteraction.customId.split('_')[1])] = this.playerTurn ? 1 : 2;
 
@@ -97,7 +103,7 @@ export class TicTacToe extends Opponent {
           ],
           components: this.getComponents(),
         })
-        .catch(() => {});
+        .catch((error) => logger.debug({ error }, 'Could not edit message'));
     });
 
     collector.on('end', async () => {
@@ -130,7 +136,9 @@ export class TicTacToe extends Opponent {
     else if (result === 'PLAYER') embed.setDescription(t('games.ttt.winner', { lng, winner: user.toString() }));
     else embed.setDescription(t('games.ttt.winner', { lng, winner: opponent.toString() }));
 
-    return await interaction.editReply({ content: null, embeds: [embed], components: this.disableButtons(this.getComponents()) }).catch(() => {});
+    return await interaction
+      .editReply({ content: null, embeds: [embed], components: this.disableButtons(this.getComponents()) })
+      .catch((error) => logger.debug({ error }, 'Could not edit message'));
   }
 
   private isWinner(player: number) {

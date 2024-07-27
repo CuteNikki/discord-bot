@@ -2,6 +2,8 @@ import { ChannelType, Colors, EmbedBuilder, Events, StickerFormatType } from 'di
 
 import { Event } from 'classes/event';
 
+import { logger } from 'utils/logger';
+
 export default new Event({
   name: Events.GuildStickerCreate,
   once: false,
@@ -16,7 +18,7 @@ export default new Event({
     const logChannel = await guild.channels.fetch(config.log.channelId);
     if (!logChannel || logChannel.type !== ChannelType.GuildText) return;
 
-    const user = await sticker.user?.fetch().catch(() => {});
+    const user = await sticker.user?.fetch().catch((error) => logger.debug({ error }, 'Could not fetch sticker author'));
 
     await logChannel.send({
       embeds: [

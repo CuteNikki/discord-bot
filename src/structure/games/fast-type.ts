@@ -3,6 +3,8 @@ import { t } from 'i18next';
 
 import type { DiscordClient } from 'classes/client';
 
+import { logger } from 'utils/logger';
+
 export class FastType {
   timeTaken: number = 0;
   wordsPerMinute: number = 0;
@@ -49,7 +51,7 @@ export class FastType {
         ],
         components: [],
       })
-      .catch(() => {});
+      .catch((error) => logger.debug({ error }, 'Could not send message'));
 
     if (!message) return;
 

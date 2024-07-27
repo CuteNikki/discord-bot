@@ -13,6 +13,7 @@ import { Command, ModuleType } from 'classes/command';
 import { CustomEmbedBuilder } from 'classes/custom-embed';
 
 import type { Message } from 'models/guild';
+import { logger } from '../../structure/utilities/logger';
 
 export default new Command({
   module: ModuleType.Config,
@@ -139,7 +140,9 @@ export default new Command({
                 const customBuilder = new CustomEmbedBuilder({ client, interaction, data: settings.welcome.message });
                 customBuilder.once('submit', async (data: Message) => {
                   await client.updateGuildSettings(guild.id, { $set: { ['welcome.message']: data } });
-                  interaction.editReply({ content: t('welcome.message.set', { lng }), embeds: [], components: [] }).catch(() => {});
+                  interaction
+                    .editReply({ content: t('welcome.message.set', { lng }), embeds: [], components: [] })
+                    .catch((error) => logger.debug({ error }, 'Could not send reply'));
                 });
               }
               break;
@@ -170,7 +173,7 @@ export default new Command({
                     },
                   },
                 });
-                interaction.editReply(t('welcome.message.removed', { lng })).catch(() => {});
+                interaction.editReply(t('welcome.message.removed', { lng }));
               }
               break;
             case 'show':

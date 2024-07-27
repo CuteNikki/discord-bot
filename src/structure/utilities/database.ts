@@ -13,6 +13,7 @@ import { reminderModel } from 'models/reminder';
 import { userModel } from 'models/user';
 import { weeklyLevelModel } from 'models/weeklyLevels';
 
+import { sendError } from 'utils/error';
 import { keys } from 'utils/keys';
 import { logger } from 'utils/logger';
 
@@ -26,20 +27,20 @@ export async function initDatabase(client: DiscordClient) {
       client.once('ready', () => {
         collectUserLanguages(client); // Set clients user language collection
         collectGuildSettings(client); // Set clients guild settings collection
-        clearPhones(client); // Clear all the old connections and available channels
+        clearPhones(client); // Clear all connections and available channels made before start/restart
 
         CronJob.from({
-          cronTime: '*/10 * * * * *', // every 10 seconds
+          cronTime: '*/20 * * * * *', // every 20 seconds
           onTick: () => {
             clearExpiredInfractions(client); // Handle expired infractions
             clearWeekly(client); // Handle weekly clear
             clearReminders(client); // Handle reminders
           },
-          start: true,
+          runOnInit: true,
         });
       });
     })
-    .catch((err) => logger.error(err, `[${client.cluster.id}] Failed connection to database`));
+    .catch((error) => sendError({ client, error, location: 'Mongoose Connection Error' }));
 }
 
 async function clearPhones(client: DiscordClient) {
@@ -57,7 +58,7 @@ async function collectUserLanguages(client: DiscordClient) {
     if (userData && !user.bot) client.userLanguages.set(user.id, userData.language ?? client.supportedLanguages[0]);
   }
   // Notify about collected languages
-  logger.info(`[${client.cluster.id}] Collected ${client.userLanguages.size} user languages`);
+  logger.debug(`[${client.cluster.id}] Collected ${client.userLanguages.size} user languages`);
 }
 
 async function collectGuildSettings(client: DiscordClient) {
@@ -68,7 +69,7 @@ async function collectGuildSettings(client: DiscordClient) {
     if (guildSettings) client.guildLanguages.set(guild.id, guildSettings.language ?? client.supportedLanguages[0]);
   }
   // Notify about collected guild settings
-  logger.info(`[${client.cluster.id}] Collected ${client.guildSettings.size} guild settings`);
+  logger.debug(`[${client.cluster.id}] Collected ${client.guildSettings.size} guild settings`);
 }
 
 async function clearWeekly(client: DiscordClient) {
@@ -90,7 +91,7 @@ async function clearWeeklyLevel(client: DiscordClient, applicationId: string) {
   client.levelWeekly.clear();
 
   // Notify that weekly level have been cleared
-  logger.info(`[${client.cluster.id}] Cleared ${clearedLevel.deletedCount} weekly level`);
+  logger.debug(`[${client.cluster.id}] Cleared ${clearedLevel.deletedCount} weekly level`);
 
   // Update last weekly level clear with current date
   await client.updateClientSettings(applicationId, { $set: { ['database.lastWeeklyClear']: Date.now() } });
@@ -110,20 +111,23 @@ async function clearReminders(client: DiscordClient) {
       .setDescription(t('reminder.reminding', { lng, message: reminder.message }));
 
     // Notify user in DM if possible
-    const user = await client.users.fetch(reminder.userId).catch(() => {});
+    const user = await client.users.fetch(reminder.userId).catch((error) => logger.debug({ error, reminder }, 'Could not fetch user'));
     if (user) {
-      user.send({ embeds: [embed] }).catch(() => {});
+      user.send({ embeds: [embed] }).catch((error) => logger.debug({ error, reminder }, 'Could not send reminder in DM'));
       continue;
     }
     // Notify in reminder channel if DM fails
-    const channel = await client.channels.fetch(reminder.channelId).catch(() => {});
+    const channel = await client.channels.fetch(reminder.channelId).catch((error) => logger.debug({ error, reminder }, 'Could not fetch channel'));
     if (channel && channel.isTextBased()) {
-      channel.send({ embeds: [embed], content: `<@${reminder.userId}>` }).catch(() => {});
+      channel
+        .send({ embeds: [embed], content: `<@${reminder.userId}>` })
+        .catch((error) => logger.debug({ error, reminder }, 'Could not send reminder in channel'));
       continue;
     }
   }
   // Deleting due reminders
-  await reminderModel.deleteMany({ remindAt: { $lte: NOW } });
+  const deletedReminders = await reminderModel.deleteMany({ remindAt: { $lte: NOW } });
+  logger.debug(`[${client.cluster.id}] Deleted ${deletedReminders.deletedCount} due reminders`);
 }
 
 async function clearExpiredInfractions(client: DiscordClient) {
@@ -138,11 +142,13 @@ async function clearExpiredInfractions(client: DiscordClient) {
   for (const infraction of expiredInfractions) {
     if (infraction.action === InfractionType.TempBan) {
       // Fetch the infraction's guild to unban the user
-      const guild = await client.guilds.fetch(infraction.guildId).catch(() => {});
+      const guild = await client.guilds.fetch(infraction.guildId).catch((error) => logger.debug({ error, infraction }, 'Could not fetch guild'));
       // If we can't find the guild, we can't unban so we close the infraction
       if (!guild) return closeInfraction();
       // If we have a guild, we try to unban the user and close the infraction
-      await guild.bans.remove(infraction.userId, 'Temporary Ban has expired').catch(() => {});
+      await guild.bans
+        .remove(infraction.userId, 'Temporary Ban has expired')
+        .catch((error) => logger.debug({ error, infraction }, 'Could not unban member after tempban '));
       closeInfraction();
     } else if (infraction.action === InfractionType.Timeout) {
       // Discord handles timeouts for us so we don't need to fetch the guild and remove the timeout
@@ -156,5 +162,5 @@ async function clearExpiredInfractions(client: DiscordClient) {
   }
 
   // Notify about closed infractions
-  if (closedInfractions.length > 0) logger.info(`[${client.cluster.id}] Closed ${closedInfractions.length} infractions`);
+  logger.debug(`[${client.cluster.id}] Closed ${closedInfractions.length} infractions`);
 }

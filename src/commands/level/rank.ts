@@ -3,7 +3,9 @@ import { ApplicationIntegrationType, AttachmentBuilder, InteractionContextType, 
 import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
+
 import { getDataWithRank, getWeeklyDataWithRank, levelToXP, type PositionLevel } from 'utils/level';
+import { logger } from 'utils/logger';
 
 export default new Command({
   module: ModuleType.Level,
@@ -47,7 +49,7 @@ export default new Command({
       .setLevel(rank.level)
       .setRank(rank.position)
       .setStatus(member?.presence?.status ?? 'none');
-    const image = await card.build({ format: 'png' }).catch(() => {});
+    const image = await card.build({ format: 'png' }).catch((error) => logger.debug({ error }, 'Could not build rank card'));
     if (image) return interaction.editReply({ files: [new AttachmentBuilder(image, { name: 'rank.png' })] });
   },
 });

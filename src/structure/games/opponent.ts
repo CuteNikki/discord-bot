@@ -3,6 +3,8 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, Mes
 import type { DiscordClient } from 'classes/client';
 import { t } from 'i18next';
 
+import { logger } from 'utils/logger';
+
 enum CustomIds {
   Accept = 'OPPONENT_ACCEPT',
   Reject = 'OPPONENT_REJECT',
@@ -29,7 +31,7 @@ export class Opponent {
     const opponentLng = await client.getUserLanguage(opponent.id);
 
     if (opponent.id === user.id) {
-      await interaction.editReply(t('games.invitation.yourself', { lng })).catch(() => {});
+      await interaction.editReply(t('games.invitation.yourself', { lng })).catch((error) => logger.debug({ error }, 'Could not edit message'));
       return false;
     }
 
@@ -60,13 +62,13 @@ export class Opponent {
           ],
           components: [row],
         })
-        .catch(() => {});
+        .catch((error) => logger.debug({ error }, 'Could not edit message'));
       if (!message) return;
 
       const collector = message.createMessageComponentCollector({ time: 30 * 1000 });
 
       collector.on('collect', async (buttonInteraction) => {
-        await buttonInteraction.deferUpdate().catch(() => {});
+        await buttonInteraction.deferUpdate().catch((error) => logger.debug({ error }, 'Could not defer update'));
 
         if (buttonInteraction.user.id !== opponent.id) {
           return buttonInteraction
@@ -74,7 +76,7 @@ export class Opponent {
               content: t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
               ephemeral: true,
             })
-            .catch(() => {});
+            .catch((error) => logger.debug({ error }, 'Could not follow up'));
         }
 
         if (buttonInteraction.customId === CustomIds.Accept) return collector.stop('accept');
@@ -89,7 +91,9 @@ export class Opponent {
         if (reason === 'reject') embed.setDescription(t('games.invitation.rejected', { lng, opponent: opponent.toString() }));
         if (reason === 'time') embed.setDescription(t('games.invitation.timeout', { lng, opponent: opponent.toString() }));
 
-        interaction.editReply({ content: user.toString(), embeds: [embed], components: [] }).catch(() => {});
+        interaction
+          .editReply({ content: user.toString(), embeds: [embed], components: [] })
+          .catch((error) => logger.debug({ error }, 'Could not edit message'));
         return resolve(false);
       });
     });

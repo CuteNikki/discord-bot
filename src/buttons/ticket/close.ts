@@ -2,7 +2,10 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle, TextChannel } from 'disco
 import { t } from 'i18next';
 
 import { Button } from 'classes/button';
+
 import { ticketModel } from 'models/ticket';
+
+import { logger } from 'utils/logger';
 
 export default new Button({
   customId: 'button-tickets-close',
@@ -26,51 +29,75 @@ export default new Button({
 
     if (!ticket.claimedBy) return interaction.reply({ content: t('tickets.not_claimed', { lng }), ephemeral: true });
 
+    const hasTranscriptChannel = system.transcriptChannelId ? true : false;
+
     if (ticket.closed)
       return interaction.reply({
         content: t('tickets.already_closed', { lng }),
-        components: [
-          new ActionRowBuilder<ButtonBuilder>().addComponents(
-            new ButtonBuilder()
-              .setCustomId(`button-tickets-save_${system._id.toString()}`)
-              .setLabel(t('tickets.save', { lng }))
-              .setEmoji('💾')
-              .setStyle(ButtonStyle.Success),
-            new ButtonBuilder()
-              .setCustomId(`button-tickets-delete_${system._id.toString()}`)
-              .setLabel(t('tickets.delete', { lng }))
-              .setEmoji('🗑️')
-              .setStyle(ButtonStyle.Danger)
-          ),
-        ],
+        components: hasTranscriptChannel
+          ? [
+              new ActionRowBuilder<ButtonBuilder>().addComponents(
+                new ButtonBuilder()
+                  .setCustomId(`button-tickets-save_${system._id.toString()}`)
+                  .setLabel(t('tickets.save', { lng }))
+                  .setEmoji('💾')
+                  .setStyle(ButtonStyle.Success),
+                new ButtonBuilder()
+                  .setCustomId(`button-tickets-delete_${system._id.toString()}`)
+                  .setLabel(t('tickets.delete', { lng }))
+                  .setEmoji('🗑️')
+                  .setStyle(ButtonStyle.Danger)
+              ),
+            ]
+          : [
+              new ActionRowBuilder<ButtonBuilder>().addComponents(
+                new ButtonBuilder()
+                  .setCustomId(`button-tickets-delete_${system._id.toString()}`)
+                  .setLabel(t('tickets.delete', { lng }))
+                  .setEmoji('🗑️')
+                  .setStyle(ButtonStyle.Danger)
+              ),
+            ],
       });
 
-    try {
-      const channel = interaction.channel as TextChannel;
-      for (const userId of ticket.users) {
-        await channel.permissionOverwrites.edit(userId, { ViewChannel: false });
+    const channel = interaction.channel as TextChannel;
+    for (const userId of ticket.users) {
+      const overwrite = await channel.permissionOverwrites
+        .edit(userId, { ViewChannel: false })
+        .catch((error) => logger.debug({ error, userId }, 'Could not edit channel permissions'));
+      if (!overwrite) {
+        interaction.reply({ content: t('tickets.error', { lng }) });
+        break;
       }
-      await ticketModel.findOneAndUpdate({ channelId }, { closed: true });
-
-      interaction.reply({
-        content: t('tickets.closed', { lng, closed_by: `${user.toString()}` }),
-        components: [
-          new ActionRowBuilder<ButtonBuilder>().addComponents(
-            new ButtonBuilder()
-              .setCustomId(`tickets-save_${system._id.toString()}`)
-              .setLabel(t('tickets.save', { lng }))
-              .setEmoji('🗂️')
-              .setStyle(ButtonStyle.Success),
-            new ButtonBuilder()
-              .setCustomId(`tickets-delete_${system._id.toString()}`)
-              .setLabel(t('tickets.delete', { lng }))
-              .setEmoji('✖️')
-              .setStyle(ButtonStyle.Danger)
-          ),
-        ],
-      });
-    } catch (error) {
-      interaction.reply({ content: t('tickets.error', { lng }) });
     }
+
+    await ticketModel.findOneAndUpdate({ channelId }, { closed: true });
+    await interaction.reply({
+      content: t('tickets.closed', { lng, closed_by: `${user.toString()}` }),
+      components: hasTranscriptChannel
+        ? [
+            new ActionRowBuilder<ButtonBuilder>().addComponents(
+              new ButtonBuilder()
+                .setCustomId(`tickets-save_${system._id.toString()}`)
+                .setLabel(t('tickets.save', { lng }))
+                .setEmoji('🗂️')
+                .setStyle(ButtonStyle.Success),
+              new ButtonBuilder()
+                .setCustomId(`tickets-delete_${system._id.toString()}`)
+                .setLabel(t('tickets.delete', { lng }))
+                .setEmoji('✖️')
+                .setStyle(ButtonStyle.Danger)
+            ),
+          ]
+        : [
+            new ActionRowBuilder<ButtonBuilder>().addComponents(
+              new ButtonBuilder()
+                .setCustomId(`button-tickets-delete_${system._id.toString()}`)
+                .setLabel(t('tickets.delete', { lng }))
+                .setEmoji('🗑️')
+                .setStyle(ButtonStyle.Danger)
+            ),
+          ],
+    });
   },
 });

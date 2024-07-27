@@ -22,6 +22,7 @@ import { loadModals } from 'loaders/modals';
 import { loadSelections } from 'loaders/selection';
 
 import { initDatabase } from 'utils/database';
+import { listenToErrors } from 'utils/error';
 import { keys } from 'utils/keys';
 import type { Level, LevelIdentifier } from 'utils/level';
 
@@ -72,7 +73,7 @@ export class DiscordClient extends Client {
         GatewayIntentBits.GuildMessages,
 
         // !! Needed for guild log !!
-        GatewayIntentBits.GuildVoiceStates, 
+        GatewayIntentBits.GuildVoiceStates,
         GatewayIntentBits.AutoModerationExecution,
         GatewayIntentBits.AutoModerationConfiguration,
         GatewayIntentBits.GuildEmojisAndStickers,
@@ -93,17 +94,13 @@ export class DiscordClient extends Client {
     });
 
     // Loading everything and logging in once everything is loaded
-    Promise.allSettled([this.loadModules(), this.initTranslation(), initDatabase(this)]).then(() => {
+    Promise.allSettled([this.loadModules(), this.initTranslation(), initDatabase(this), listenToErrors(this)]).then(() => {
       this.login(keys.DISCORD_BOT_TOKEN);
     });
   }
 
   private async loadModules() {
-    await loadEvents(this);
-    await loadCommands(this);
-    await loadButtons(this);
-    await loadModals(this);
-    await loadSelections(this);
+    Promise.allSettled([loadEvents(this), loadCommands(this), loadButtons(this), loadModals(this), loadSelections(this)]);
   }
 
   // We use i18next to translate messages into a user specified language

@@ -3,6 +3,8 @@ import { t } from 'i18next';
 
 import type { DiscordClient } from 'classes/client';
 
+import { logger } from 'utils/logger';
+
 const TETROMINOES = {
   I: [[1, 1, 1, 1]],
   J: [
@@ -99,14 +101,14 @@ export class Tetris {
         ],
         components: [this.getComponents()],
       })
-      .catch(() => {});
+      .catch((error) => logger.debug({ error }, 'Could not send message'));
 
     if (!message) return;
 
     const collector = message.createMessageComponentCollector({ idle: 60 * 1000, componentType: ComponentType.Button });
 
     collector.on('collect', async (buttonInteraction) => {
-      await buttonInteraction.deferUpdate().catch(() => {});
+      await buttonInteraction.deferUpdate().catch((error) => logger.debug({ error }, 'Could not defer update'));
 
       if (buttonInteraction.user.id !== user.id)
         return buttonInteraction
@@ -114,7 +116,7 @@ export class Tetris {
             content: t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
             ephemeral: true,
           })
-          .catch(() => {});
+          .catch((error) => logger.debug({ error }, 'Could not follow up'));
 
       const move = buttonInteraction.customId.split('_')[1];
 
@@ -138,8 +140,9 @@ export class Tetris {
                 ),
             ],
           })
-          .catch(() => {});
-      } catch (e) {
+          .catch((error) => logger.debug({ error }, 'Could not edit message'));
+      } catch (error: any) {
+        logger.debug({ error }, 'Could not move piece');
         collector.stop();
       }
     });
@@ -168,7 +171,7 @@ export class Tetris {
         ],
         components: [this.getComponents(true)],
       })
-      .catch(() => {});
+      .catch((error) => logger.debug({ error }, 'Could not edit message'));
   }
 
   private getComponents(disabled: boolean = false) {

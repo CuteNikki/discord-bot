@@ -3,7 +3,10 @@ import { ChannelType, EmbedBuilder, type TextBasedChannel } from 'discord.js';
 import { t } from 'i18next';
 
 import { Button } from 'classes/button';
+
 import { ticketModel } from 'models/ticket';
+
+import { logger } from 'utils/logger';
 
 export default new Button({
   customId: 'button-tickets-save',
@@ -39,8 +42,8 @@ export default new Button({
     const ticket = await ticketModel.findOne({ channelId: interaction.channel?.id });
     if (!ticket) return interaction.reply({ content: t('tickets.invalid_ticket', { lng }), ephemeral: true });
 
-    try {
-      await channel.send({
+    const msg = await channel
+      .send({
         embeds: [
           new EmbedBuilder().setTitle(t('tickets.transcript_title', { lng })).addFields(
             { name: t('tickets.claimed_by', { lng }), value: `<@${ticket.claimedBy}>` },
@@ -58,10 +61,11 @@ export default new Button({
           ),
         ],
         files: [transcript],
-      });
-      interaction.reply({ content: t('tickets.saved_transcript', { lng }) });
-    } catch (error) {
-      interaction.reply({ content: t('tickets.error', { lng }) }).catch(() => {});
-    }
+      })
+      .catch((error) => logger.debug({ error }, 'Could not send transcript'));
+
+    if (!msg) return interaction.reply({ content: t('tickets.error', { lng }) });
+
+    await interaction.reply({ content: t('tickets.saved_transcript', { lng }) });
   },
 });

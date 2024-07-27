@@ -37,6 +37,7 @@ export async function initDatabase(client: DiscordClient) {
             clearReminders(client); // Handle reminders
           },
           runOnInit: true,
+          start: true,
         });
       });
     })

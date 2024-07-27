@@ -29,6 +29,7 @@ export default new Button({
 
     if (!ticket.claimedBy) return interaction.reply({ content: t('tickets.not_claimed', { lng }), ephemeral: true });
 
+    if (ticket.closed) return interaction.reply({ content: t('tickets.already_closed', { lng }), ephemeral: true });
     if (ticket.locked) return interaction.reply({ content: t('tickets.already_locked', { lng }), ephemeral: true });
 
     const channel = interaction.channel as TextChannel;

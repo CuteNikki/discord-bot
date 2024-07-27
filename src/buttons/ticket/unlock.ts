@@ -27,6 +27,9 @@ export default new Button({
     const ticket = await ticketModel.findOne({ channelId: interaction.channel?.id });
     if (!ticket) return interaction.reply({ content: t('tickets.invalid_ticket', { lng }), ephemeral: true });
 
+    if (!ticket.claimedBy) return interaction.reply({ content: t('tickets.not_claimed', { lng }), ephemeral: true });
+
+    if (ticket.closed) return interaction.reply({ content: t('tickets.already_closed', { lng }), ephemeral: true });
     if (!ticket.locked) return interaction.reply({ content: t('tickets.already_unlocked', { lng }), ephemeral: true });
 
     const channel = interaction.channel as TextChannel;

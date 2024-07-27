@@ -72,6 +72,8 @@
     "description": "Use the selection below to browse through {{categories}} categories!"
   },
   "phone": {
+    "link": "This message contains a link so it has been hidden.",
+    "profanity": "This message may be inappropriate so it has been hidden.",
     "connect": {
       "already": "You are already connected to the phone!",
       "connected": "A phone connection has been made!",

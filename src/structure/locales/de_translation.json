@@ -72,6 +72,8 @@
     "description": "Benutze die Auswahl um zwischen {{categories}} Kategorien zu suchen!"
   },
   "phone": {
+    "link": "Diese Nachricht enthält einen Link, deshalb wurde sie versteckt.",
+    "profanity": "Diese Nachricht ist möglicherweise unangemessen, deshalb wurde sie versteckt.",
     "connect": {
       "already": "Du bist bereits mit dem Telefon verbunden!",
       "connected": "Eine Telefonverbindung wurde hergestellt!",

@@ -31,6 +31,9 @@ export default new Command({
             .lean()
             .exec();
           if (existingConnection) return interaction.editReply(t('phone.connect.already', { lng }));
+          // Check if this channel is already searching for a connection
+          const availableChannel = await availableChannelModel.findOne({ channelId }).lean().exec();
+          if (availableChannel) return interaction.editReply(t('phone.connect.already', { lng }));
 
           // Check for available channels
           const availablePhones = await availableChannelModel
@@ -46,7 +49,7 @@ export default new Command({
             // Remove target channel from pool
             await availableChannelModel.deleteOne({ channelId: randomTarget.channelId }).lean().exec();
             // Save the connection
-            await connectionModel.create({ channelIdOne: channelId, channelIdTwo: randomTarget.channelId });
+            await connectionModel.create({ channelIdOne: channelId, userIdOne: user.id, channelIdTwo: randomTarget.channelId, userIdTwo: randomTarget.userId });
 
             // Inform channel
             interaction.editReply(t('phone.connect.connected', { lng }));
@@ -57,7 +60,7 @@ export default new Command({
             targetChannel.send(t('phone.connect.connected'));
           } else {
             // No available channels, add this channel to the pool
-            await availableChannelModel.create({ channelId });
+            await availableChannelModel.create({ channelId, userId: user.id });
             interaction.editReply(t('phone.connect.waiting', { lng }));
           }
         }

@@ -95,6 +95,8 @@ export default new Event({
     // Try to run the button and send an error message if it couldn't run
     try {
       await button.options.execute({ client, interaction });
+
+      await client.updateClientSettings(keys.DISCORD_BOT_ID, { $inc: { ['stats.buttonsExecuted']: 1 } });
     } catch (error: any) {
       const message = t('interactions.error', { lng, error: `\`${error.message}\`` });
 
@@ -102,6 +104,7 @@ export default new Event({
       else interaction.reply({ content: message, ephemeral: true });
 
       await sendError({ client, error, location: 'Button Interaction Error' });
+      await client.updateClientSettings(keys.DISCORD_BOT_ID, { $inc: { ['stats.buttonsFailed']: 1 } });
     }
   },
 });

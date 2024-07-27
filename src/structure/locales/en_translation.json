@@ -556,7 +556,6 @@
     },
     "database": {
       "title": "Database",
-      "name": "Name: {{name}}",
       "state": "State: {{state}}",
       "disconnected": "disconnected",
       "connected": "connected",
@@ -578,7 +577,13 @@
       "title": "Statistics",
       "guilds": "Total Guilds: {{guildCount}}",
       "members": "Total Users: {{memberCount}}",
-      "commands": "Total Commands: {{commandCount}}"
+      "commands": "Total Commands: {{commandCount}}",
+      "executed_commands": "Commands Executed: {{executedCommands}}",
+      "failed_commands": "Commands Failed: {{failedCommands}}",
+      "buttons_executed": "Buttons Executed: {{buttonsExecuted}}",
+      "buttons_failed": "Buttons Failed: {{buttonsFailed}}",
+      "guilds_joined": "Guilds Joined: {{guildsJoined}}",
+      "guilds_left": "Guilds Left: {{guildsLeft}}"
     }
   },
   "serverinfo": {

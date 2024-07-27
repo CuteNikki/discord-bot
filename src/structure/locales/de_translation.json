@@ -556,7 +556,6 @@
     },
     "database": {
       "title": "Datenbank",
-      "name": "Name: {{name}}",
       "state": "Status: {{state}}",
       "disconnected": "getrennt",
       "connected": "verbunden",
@@ -578,7 +577,13 @@
       "title": "Statistiken",
       "guilds": "Server Insgesamt: {{guildCount}}",
       "members": "Benutzer Insgesamt: {{memberCount}}",
-      "commands": "Befehle Insgesamt: {{commandCount}}"
+      "commands": "Befehle Insgesamt: {{commandCount}}",
+      "executed_commands": "Befehle Ausgeführt: {{executedCommands}}",
+      "failed_commands": "Befehle Fehlgeschlagen: {{failedCommands}}",
+      "buttons_executed": "Knöpfe Ausgeführt: {{buttonsExecuted}}",
+      "buttons_failed": "Knöpfe Fehlgeschlagen: {{buttonsFailed}}",
+      "guilds_joined": "Server betreten: {{guildsJoined}}",
+      "guilds_left": "Server verlassen: {{guildsLeft}}"
     }
   },
   "serverinfo": {

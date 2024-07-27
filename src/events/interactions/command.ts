@@ -4,8 +4,8 @@ import { t } from 'i18next';
 import { ModuleType } from 'classes/command';
 import { Event } from 'classes/event';
 
-import { keys } from 'utils/keys';
 import { sendError } from 'utils/error';
+import { keys } from 'utils/keys';
 
 export default new Event({
   name: Events.InteractionCreate,
@@ -84,6 +84,8 @@ export default new Event({
     // Try to run the command and send an error message if it couldn't run
     try {
       await command.options.execute({ client, interaction });
+
+      await client.updateClientSettings(keys.DISCORD_BOT_ID, { $inc: { ['stats.commandsExecuted']: 1 } });
     } catch (error: any) {
       const message = t('interactions.error', { lng, error: `\`${error.message}\`` });
 
@@ -91,6 +93,7 @@ export default new Event({
       else interaction.reply({ content: message, ephemeral: true });
 
       await sendError({ client, error, location: 'Command Interaction Error' });
+      await client.updateClientSettings(keys.DISCORD_BOT_ID, { $inc: { ['stats.commandsFailed']: 1 } });
     }
   },
 });

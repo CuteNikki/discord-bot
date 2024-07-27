@@ -34,7 +34,7 @@ export default new Command({
       const memoryUsed = (memoryInfo.usedMemMb / 1024).toFixed(2);
       const memoryTotal = Math.round(memoryInfo.totalMemMb / 1024);
 
-      const { database } = await client.getClientSettings(keys.DISCORD_BOT_ID);
+      const { database, stats } = await client.getClientSettings(keys.DISCORD_BOT_ID);
 
       const dbStates = {
         0: t('botinfo.database.disconnected', { lng }),
@@ -75,14 +75,6 @@ export default new Command({
                 ].join('\n'),
               },
               {
-                name: t('botinfo.stats.title', { lng }),
-                value: [
-                  t('botinfo.stats.guilds', { lng, guildCount }),
-                  t('botinfo.stats.members', { lng, memberCount }),
-                  t('botinfo.stats.commands', { lng, commandCount: commands.size }),
-                ].join('\n'),
-              },
-              {
                 name: t('botinfo.system.title', { lng }),
                 value: [
                   t('botinfo.system.os', { lng, operatingSystem }),
@@ -96,12 +88,25 @@ export default new Command({
               {
                 name: t('botinfo.database.title', { lng }),
                 value: [
-                  t('botinfo.database.name', { lng, name: 'MongoDB' }),
                   t('botinfo.database.state', { lng, state: dbStates[mongoose.connection.readyState] }),
                   t('botinfo.database.weekly', {
                     lng,
                     date: database.lastWeeklyClear ? `<t:${Math.floor(database.lastWeeklyClear / 1000)}:F>` : '/',
                   }),
+                ].join('\n'),
+              },
+              {
+                name: t('botinfo.stats.title', { lng }),
+                value: [
+                  t('botinfo.stats.guilds', { lng, guildCount }),
+                  t('botinfo.stats.members', { lng, memberCount }),
+                  t('botinfo.stats.commands', { lng, commandCount: commands.size }),
+                  t('botinfo.stats.executed_commands', { lng, executedCommands: stats.commandsExecuted }),
+                  t('botinfo.stats.failed_commands', { lng, failedCommands: stats.commandsFailed }),
+                  t('botinfo.stats.buttons_executed', { lng, buttonsExecuted: stats.buttonsExecuted }),
+                  t('botinfo.stats.buttons_failed', { lng, buttonsFailed: stats.buttonsFailed }),
+                  t('botinfo.stats.guilds_joined', { lng, guildsJoined: stats.guildsJoined }),
+                  t('botinfo.stats.guilds_left', { lng, guildsLeft: stats.guildsLeft }),
                 ].join('\n'),
               }
             ),

@@ -100,7 +100,7 @@ export class DiscordClient extends Client {
   }
 
   private async loadModules() {
-    Promise.allSettled([loadEvents(this), loadCommands(this), loadButtons(this), loadModals(this), loadSelections(this)]);
+    await Promise.allSettled([loadEvents(this), loadCommands(this), loadButtons(this), loadModals(this), loadSelections(this)]);
   }
 
   // We use i18next to translate messages into a user specified language

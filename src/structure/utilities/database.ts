@@ -48,8 +48,8 @@ async function clearPhones(client: DiscordClient) {
   const connections = await connectionModel.deleteMany({}).lean().exec();
   const availableChannels = await availableChannelModel.deleteMany({}).lean().exec();
   // Notify about deleted connections and available channels
-  if (connections.deletedCount) logger.info(`[${client.cluster.id}] Deleted ${connections.deletedCount} connections`);
-  if (availableChannels.deletedCount) logger.info(`[${client.cluster.id}] Deleted ${availableChannels.deletedCount} available channels`);
+  logger.debug(`[${client.cluster.id}] Deleted ${connections.deletedCount} connections`);
+  logger.debug(`[${client.cluster.id}] Deleted ${availableChannels.deletedCount} available channels`);
 }
 
 async function collectUserLanguages(client: DiscordClient) {

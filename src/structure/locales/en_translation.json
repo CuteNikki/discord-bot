@@ -749,7 +749,8 @@
   "interactions": {
     "author_only": "This is not for you!",
     "guild_only": "This can only be done in a guild!",
-    "permissions": "You are missing permissions!",
+    "permissions": "You are missing permissions!\n{{permissions}}",
+    "bot_permissions": "The bot is missing permissions!\n{{permissions}}",
     "developer_only": "This can only be done by developers!",
     "cooldown": "Please wait, you are on cooldown for {{action}}. You can use it again {{timestamp}}.",
     "error": "Something went wrong! Error: {{error}}",

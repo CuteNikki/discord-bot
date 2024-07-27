@@ -1,7 +1,7 @@
 import { Collection, Events, PermissionsBitField } from 'discord.js';
 import { t } from 'i18next';
 
-import { type Button } from 'classes/button';
+import type { Button } from 'classes/button';
 import { Event } from 'classes/event';
 
 import { keys } from 'utils/keys';
@@ -46,7 +46,19 @@ export default new Event({
     if (button.options.permissions?.length) {
       if (!interaction.member) return interaction.reply({ content: t('interactions.guild_only', { lng }), ephemeral: true });
       const permissions = interaction.member.permissions as PermissionsBitField;
-      if (!permissions.has(button.options.permissions)) return interaction.reply({ content: t('interactions.permissions', { lng }), ephemeral: true });
+      if (!permissions.has(button.options.permissions))
+        return interaction.reply({ content: t('interactions.permissions', { lng, permissions: button.options.permissions.join(', ') }), ephemeral: true });
+    }
+
+    // Bot permissions check
+    if (button.options.botPermissions?.length) {
+      if (!interaction.guild?.members.me) return;
+      const permissions = interaction.guild.members.me.permissions;
+      if (!permissions.has(button.options.botPermissions))
+        return interaction.reply({
+          content: t('interactions.bot_permissions', { lng, permissions: button.options.botPermissions.join(', ') }),
+          ephemeral: true,
+        });
     }
 
     // Check if button is developer only and return if the user's id doesn't match the developer's id

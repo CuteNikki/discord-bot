@@ -9,11 +9,12 @@ const commandType = ApplicationCommandType.User
 
 export default new Command<typeof commandType>({
   module: ModuleType.Moderation,
+  botPermissions: ['SendMessages'],
   data: new ContextMenuCommandBuilder()
     .setName('View Rank')
     .setType(commandType)
-    .setContexts(InteractionContextType.Guild)
-    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall),
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .setContexts(InteractionContextType.Guild),
   async execute({ interaction, client }) {
     if (!interaction.inCachedGuild()) return;
     await interaction.deferReply({ ephemeral: true });

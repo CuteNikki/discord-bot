@@ -749,7 +749,8 @@
   "interactions": {
     "author_only": "Das ist nicht für dich!",
     "guild_only": "Das kann nur auf einem Server gemacht werden!",
-    "permissions": "Dir fehlen dafür Rechte!",
+    "permissions": "Dir fehlen dafür Berechtigungen!\n{{permissions}}",
+    "bot_permissions": "Dem Bot fehlen Berechtigungen!\n{{permissions}}",
     "developer_only": "Das können nur die Entwickler!",
     "cooldown": "Bitte warte, bis du {{action}} erneut benutzen kannst. Du kannst es erneut versuchen {{timestamp}}.",
     "error": "Etwas ist schief gelaufen! Fehler: {{error}}",

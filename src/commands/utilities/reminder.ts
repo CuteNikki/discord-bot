@@ -8,11 +8,12 @@ import { reminderModel } from 'models/reminder';
 
 export default new Command({
   module: ModuleType.Utilities,
+  botPermissions: ['SendMessages'],
   data: new SlashCommandBuilder()
     .setName('reminder')
     .setDescription('Create, delete and view reminders')
-    .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
+    .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel)
     .addSubcommand((subcommand) =>
       subcommand
         .setName('create')

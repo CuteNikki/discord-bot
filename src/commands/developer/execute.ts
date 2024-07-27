@@ -19,8 +19,8 @@ export default new Command({
     .setName('execute')
     .setDescription('Executes a console command')
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
-    .setContexts(InteractionContextType.Guild)
-    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall),
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .setContexts(InteractionContextType.Guild),
   async execute({ interaction }) {
     await interaction.showModal(
       new ModalBuilder()

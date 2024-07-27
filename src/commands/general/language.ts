@@ -5,11 +5,12 @@ import { Command, ModuleType } from 'classes/command';
 
 export default new Command({
   module: ModuleType.General,
+  botPermissions: ['SendMessages'],
   data: new SlashCommandBuilder()
     .setName('language')
     .setDescription('See or change the language of replies by the bot')
-    .setContexts(InteractionContextType.Guild, InteractionContextType.PrivateChannel, InteractionContextType.BotDM)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
+    .setContexts(InteractionContextType.Guild, InteractionContextType.PrivateChannel, InteractionContextType.BotDM)
     .addSubcommand((subcommand) =>
       subcommand
         .setName('user')

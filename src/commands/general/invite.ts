@@ -7,11 +7,12 @@ import { keys } from 'utils/keys';
 
 export default new Command({
   module: ModuleType.General,
+  botPermissions: ['SendMessages'],
   data: new SlashCommandBuilder()
     .setName('invite')
     .setDescription('Gives you an invite link for the bot')
-    .setContexts(InteractionContextType.Guild, InteractionContextType.PrivateChannel, InteractionContextType.BotDM)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
+    .setContexts(InteractionContextType.Guild, InteractionContextType.PrivateChannel, InteractionContextType.BotDM)
     .addBooleanOption((option) => option.setName('ephemeral').setDescription('When set to false will show the message to everyone').setRequired(false)),
   async execute({ interaction, client }) {
     const lng = await client.getUserLanguage(interaction.user.id);

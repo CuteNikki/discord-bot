@@ -16,12 +16,13 @@ import type { Message } from 'models/guild';
 
 export default new Command({
   module: ModuleType.Config,
+  botPermissions: ['SendMessages'],
   data: new SlashCommandBuilder()
     .setName('config-welcome')
     .setDescription('Configure the welcome module')
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
-    .setContexts(InteractionContextType.Guild)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .setContexts(InteractionContextType.Guild)
     .addSubcommandGroup((group) =>
       group
         .setName('roles')

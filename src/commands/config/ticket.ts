@@ -1,14 +1,27 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelType, EmbedBuilder, PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
+import {
+  ActionRowBuilder,
+  ApplicationIntegrationType,
+  ButtonBuilder,
+  ButtonStyle,
+  ChannelType,
+  EmbedBuilder,
+  InteractionContextType,
+  PermissionFlagsBits,
+  SlashCommandBuilder,
+} from 'discord.js';
 import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
 export default new Command({
   module: ModuleType.Config,
+  botPermissions: ['SendMessages'],
   data: new SlashCommandBuilder()
     .setName('config-ticket')
     .setDescription('Configure the ticket module')
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .setContexts(InteractionContextType.Guild)
     .addSubcommandGroup((group) =>
       group
         .setName('show')
@@ -361,7 +374,10 @@ export default new Command({
                   components: [
                     new ActionRowBuilder<ButtonBuilder>().addComponents(
                       system.choices.map((choice, index) =>
-                        new ButtonBuilder().setCustomId(`tickets-create_${system._id.toString()}_${index}`).setLabel(choice).setStyle(ButtonStyle.Secondary)
+                        new ButtonBuilder()
+                          .setCustomId(`button-tickets-create_${system._id.toString()}_${index}`)
+                          .setLabel(choice)
+                          .setStyle(ButtonStyle.Secondary)
                       )
                     ),
                   ],

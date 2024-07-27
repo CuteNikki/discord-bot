@@ -10,6 +10,7 @@ export class Modal {
       isDeveloperOnly?: boolean; // If true, can only be used by developers
       isCustomIdIncluded?: boolean; // If true, customId does not need to be an exact match
       permissions?: PermissionsString[]; // Array of permissions required to use the modal
+      botPermissions?: PermissionsString[]; // Array of permissions the bot requires
       execute({ interaction, client }: { client: DiscordClient; interaction: ModalSubmitInteraction }): any;
     }
   ) {}

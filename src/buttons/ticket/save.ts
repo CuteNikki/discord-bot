@@ -6,8 +6,10 @@ import { Button } from 'classes/button';
 import { ticketModel } from 'models/ticket';
 
 export default new Button({
-  customId: 'tickets-save',
+  customId: 'button-tickets-save',
   isCustomIdIncluded: true,
+  permissions: [],
+  botPermissions: ['SendMessages'],
   async execute({ interaction, client }) {
     if (!interaction.inCachedGuild()) return;
     const { guildId, customId } = interaction;

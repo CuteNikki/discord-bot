@@ -1,4 +1,5 @@
 import { t } from 'i18next';
+
 import { Button } from 'classes/button';
 
 import { infractionModel, InfractionType } from 'models/infraction';
@@ -7,7 +8,8 @@ export default new Button({
   customId: 'button-ban',
   isAuthorOnly: false,
   isCustomIdIncluded: true,
-  permissions: [],
+  permissions: ['BanMembers'],
+  botPermissions: ['BanMembers', 'SendMessages'],
   async execute({ interaction, client }) {
     if (!interaction.inCachedGuild()) return;
     const { guild } = interaction;

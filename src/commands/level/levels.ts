@@ -8,11 +8,12 @@ import { chunk, pagination } from 'utils/pagination';
 
 export default new Command({
   module: ModuleType.Level,
+  botPermissions: ['SendMessages'],
   data: new SlashCommandBuilder()
     .setName('levels')
     .setDescription('Shows the level leaderboard')
-    .setContexts(InteractionContextType.Guild)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .setContexts(InteractionContextType.Guild)
     .addBooleanOption((option) => option.setName('weekly').setDescription('When set to true will show the weekly leaderboard').setRequired(false))
     .addBooleanOption((option) => option.setName('ephemeral').setDescription('When set to false will show the message to everyone').setRequired(false)),
   async execute({ interaction, client }) {

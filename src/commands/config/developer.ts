@@ -10,11 +10,12 @@ import { chunk, pagination } from 'utils/pagination';
 export default new Command({
   module: ModuleType.Developer,
   cooldown: 0,
+  botPermissions: ['SendMessages'],
   data: new SlashCommandBuilder()
     .setName('config-developer')
     .setDescription('Only for bot moderators/developers')
-    .setContexts(InteractionContextType.Guild)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .setContexts(InteractionContextType.Guild)
     .addSubcommandGroup((subcommandGroup) =>
       subcommandGroup
         .setName('support-guild-id')

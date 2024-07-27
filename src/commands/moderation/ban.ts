@@ -17,12 +17,13 @@ import { InfractionType, infractionModel } from 'models/infraction';
 
 export default new Command({
   module: ModuleType.Moderation,
+  botPermissions: ['BanMembers', 'SendMessages'],
   data: new SlashCommandBuilder()
     .setName('ban')
     .setDescription('Bans a user')
-    .setContexts(InteractionContextType.Guild)
-    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
     .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .setContexts(InteractionContextType.Guild)
     .addUserOption((option) => option.setName('user').setDescription('The user to ban').setRequired(true))
     .addStringOption((option) => option.setName('reason').setDescription('The reason for the ban').setMaxLength(300).setRequired(false))
     .addStringOption((option) => option.setName('duration').setDescription('The duration of the ban').setRequired(false))

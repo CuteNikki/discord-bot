@@ -9,11 +9,12 @@ import { keys } from 'utils/keys';
 
 export default new Command({
   module: ModuleType.General,
+  botPermissions: ['SendMessages'],
   data: new SlashCommandBuilder()
     .setName('botinfo')
     .setDescription('Shows information about the bot')
-    .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
+    .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel)
     .addBooleanOption((option) => option.setName('ephemeral').setDescription('When set to false will show the message to everyone')),
   async execute({ interaction, client }) {
     const lng = await client.getUserLanguage(interaction.user.id);

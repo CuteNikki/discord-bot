@@ -16,12 +16,13 @@ import { InfractionType, infractionModel } from 'models/infraction';
 
 export default new Command({
   module: ModuleType.Moderation,
+  botPermissions: ['ModerateMembers', 'SendMessages'],
   data: new SlashCommandBuilder()
     .setName('timeout')
     .setDescription('Times out a user')
     .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
-    .setContexts(InteractionContextType.Guild)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .setContexts(InteractionContextType.Guild)
     .addUserOption((option) => option.setName('user').setDescription('The user to timeout').setRequired(true))
     .addStringOption((option) => option.setName('duration').setDescription('The duration of the timeout').setRequired(true))
     .addStringOption((option) => option.setName('reason').setDescription('The reason for the timeout').setMaxLength(300).setRequired(false)),

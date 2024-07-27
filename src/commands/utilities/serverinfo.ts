@@ -17,11 +17,12 @@ import { Command, ModuleType } from 'classes/command';
 
 export default new Command({
   module: ModuleType.Utilities,
+  botPermissions: ['SendMessages'],
   data: new SlashCommandBuilder()
     .setName('serverinfo')
     .setDescription('Get information about the server')
-    .setContexts(InteractionContextType.Guild)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .setContexts(InteractionContextType.Guild)
     .addBooleanOption((option) => option.setName('ephemeral').setDescription('When set to false will show the message to everyone')),
   async execute({ interaction, client }) {
     if (!interaction.isChatInputCommand() || !interaction.inCachedGuild()) return;

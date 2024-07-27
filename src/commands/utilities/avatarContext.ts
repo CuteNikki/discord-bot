@@ -5,11 +5,12 @@ import { Command, ModuleType } from 'classes/command';
 
 export default new Command<ApplicationCommandType.User>({
   module: ModuleType.Utilities,
+  botPermissions: ['SendMessages'],
   data: new ContextMenuCommandBuilder()
     .setName('Avatar & Banner')
     .setType(ApplicationCommandType.User)
-    .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel)
-    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall),
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
+    .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel),
   async execute({ interaction, client }) {
     const lng = await client.getUserLanguage(interaction.user.id);
     await interaction.deferReply({ ephemeral: true });

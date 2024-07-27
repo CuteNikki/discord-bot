@@ -9,12 +9,13 @@ import { chunk, pagination } from 'utils/pagination';
 
 export default new Command({
   module: ModuleType.Moderation,
+  botPermissions: ['SendMessages'],
   data: new SlashCommandBuilder()
     .setName('infractions')
     .setDescription('Manage infractions of a user')
-    .setContexts(InteractionContextType.Guild)
-    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
     .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .setContexts(InteractionContextType.Guild)
     .addSubcommand((subcommand) =>
       subcommand
         .setName('history')

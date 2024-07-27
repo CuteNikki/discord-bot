@@ -40,6 +40,17 @@ export default new Event({
       if (!permissions.has(modal.options.permissions)) return interaction.reply({ content: t('interactions.permissions', { lng }), ephemeral: true });
     }
 
+    // Bot permissions check
+    if (modal.options.botPermissions?.length) {
+      if (!interaction.guild?.members.me) return;
+      const permissions = interaction.guild.members.me.permissions;
+      if (!permissions.has(modal.options.botPermissions))
+        return interaction.reply({
+          content: t('interactions.bot_permissions', { lng, permissions: modal.options.botPermissions.join(', ') }),
+          ephemeral: true,
+        });
+    }
+
     // Check if button is developer only and return if the user's id doesn't match the developer's id
     const developerIds = keys.DEVELOPER_USER_IDS;
     if (modal.options.isDeveloperOnly && !developerIds.includes(interaction.user.id))

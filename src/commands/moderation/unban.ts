@@ -15,12 +15,13 @@ import { InfractionType, infractionModel } from 'models/infraction';
 
 export default new Command({
   module: ModuleType.Moderation,
+  botPermissions: ['BanMembers', 'SendMessages'],
   data: new SlashCommandBuilder()
     .setName('unban')
     .setDescription('Unban a user')
     .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
-    .setContexts(InteractionContextType.Guild)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .setContexts(InteractionContextType.Guild)
     .addUserOption((option) => option.setName('user').setDescription('The user to unban').setRequired(true))
     .addStringOption((option) => option.setName('reason').setDescription('The reason for the unban').setMaxLength(300).setRequired(false)),
   async execute({ interaction, client }) {

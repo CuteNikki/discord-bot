@@ -5,8 +5,10 @@ import { Button } from 'classes/button';
 import { ticketModel } from 'models/ticket';
 
 export default new Button({
-  customId: 'tickets-create',
+  customId: 'button-tickets-create',
   isCustomIdIncluded: true,
+  permissions: [],
+  botPermissions: ['ManageChannels', 'SendMessages'],
   async execute({ interaction, client }) {
     if (!interaction.inCachedGuild()) return;
     await interaction.deferReply({ ephemeral: true });
@@ -68,23 +70,26 @@ export default new Button({
         components: [
           new ActionRowBuilder<ButtonBuilder>().addComponents(
             new ButtonBuilder()
-              .setCustomId(`tickets-claim_${system._id.toString()}`)
+              .setCustomId(`button-tickets-claim_${system._id.toString()}`)
               .setLabel(t('tickets.claim', { lng }))
               .setEmoji('✋')
               .setStyle(ButtonStyle.Success),
             new ButtonBuilder()
-              .setCustomId(`tickets-close_${system._id.toString()}`)
+              .setCustomId(`button-tickets-close_${system._id.toString()}`)
               .setLabel(t('tickets.close', { lng }))
               .setEmoji('🛑')
               .setStyle(ButtonStyle.Danger),
             new ButtonBuilder()
-              .setCustomId(`tickets-lock_${system._id.toString()}`)
+              .setCustomId(`button-tickets-lock_${system._id.toString()}`)
               .setLabel(t('tickets.lock', { lng }))
               .setEmoji('🔐')
               .setStyle(ButtonStyle.Primary)
           ),
           new ActionRowBuilder<UserSelectMenuBuilder>().addComponents(
-            new UserSelectMenuBuilder().setCustomId(`tickets-user_${system._id.toString()}`).setPlaceholder(t('tickets.user_select', { lng })).setMaxValues(1)
+            new UserSelectMenuBuilder()
+              .setCustomId(`selection-tickets-user_${system._id.toString()}`)
+              .setPlaceholder(t('tickets.user_select', { lng }))
+              .setMaxValues(1)
           ),
         ],
       });

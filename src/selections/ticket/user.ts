@@ -5,8 +5,10 @@ import { Selection } from 'classes/selection';
 import { ticketModel } from 'models/ticket';
 
 export default new Selection({
-  customId: 'tickets-user',
+  customId: 'selection-tickets-user',
   isCustomIdIncluded: true,
+  permissions: [],
+  botPermissions: ['ManageChannels', 'SendMessages'],
   async execute({ interaction, client }) {
     if (!interaction.inCachedGuild() || !interaction.isUserSelectMenu()) return;
     const {

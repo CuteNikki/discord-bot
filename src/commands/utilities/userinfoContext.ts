@@ -7,11 +7,12 @@ const commandType = ApplicationCommandType.User;
 
 export default new Command<typeof commandType>({
   module: ModuleType.Utilities,
+  botPermissions: ['SendMessages'],
   data: new ContextMenuCommandBuilder()
     .setName('View Userinfo')
     .setType(commandType)
-    .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel)
-    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall),
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
+    .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel),
   async execute({ interaction, client }) {
     const lng = await client.getUserLanguage(interaction.user.id);
     await interaction.deferReply({ ephemeral: true });

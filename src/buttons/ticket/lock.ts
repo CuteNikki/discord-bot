@@ -5,8 +5,10 @@ import { Button } from 'classes/button';
 import { ticketModel } from 'models/ticket';
 
 export default new Button({
-  customId: 'tickets-lock',
+  customId: 'button-tickets-lock',
   isCustomIdIncluded: true,
+  permissions: [],
+  botPermissions: ['ManageChannels', 'SendMessages'],
   async execute({ interaction, client }) {
     if (!interaction.inCachedGuild()) return;
     const { user, guildId, channelId, customId } = interaction;
@@ -38,12 +40,12 @@ export default new Button({
         components: [
           new ActionRowBuilder<ButtonBuilder>().addComponents(
             new ButtonBuilder()
-              .setCustomId(`tickets-unlock_${system._id.toString()}`)
+              .setCustomId(`button-tickets-unlock_${system._id.toString()}`)
               .setLabel(t('tickets.unlock', { lng }))
               .setEmoji('🔓')
               .setStyle(ButtonStyle.Success),
             new ButtonBuilder()
-              .setCustomId(`tickets-close_${system._id.toString()}`)
+              .setCustomId(`button-tickets-close_${system._id.toString()}`)
               .setLabel(t('tickets.close', { lng }))
               .setEmoji('🛑')
               .setStyle(ButtonStyle.Danger)

@@ -1,8 +1,8 @@
 import { Collection, Events, PermissionsBitField } from 'discord.js';
 import { t } from 'i18next';
 
-import { type Selection } from 'classes/selection';
 import { Event } from 'classes/event';
+import type { Selection } from 'classes/selection';
 
 import { keys } from 'utils/keys';
 import { logger } from 'utils/logger';
@@ -47,6 +47,17 @@ export default new Event({
       if (!interaction.member) return interaction.reply({ content: t('interactions.guild_only', { lng }), ephemeral: true });
       const permissions = interaction.member.permissions as PermissionsBitField;
       if (!permissions.has(selection.options.permissions)) return interaction.reply({ content: t('interactions.permissions', { lng }), ephemeral: true });
+    }
+
+    // Bot permissions check
+    if (selection.options.botPermissions?.length) {
+      if (!interaction.guild?.members.me) return;
+      const permissions = interaction.guild.members.me.permissions;
+      if (!permissions.has(selection.options.botPermissions))
+        return interaction.reply({
+          content: t('interactions.bot_permissions', { lng, permissions: selection.options.botPermissions.join(', ') }),
+          ephemeral: true,
+        });
     }
 
     // Check if selection is developer only and return if the user's id doesn't match the developer's id

@@ -5,8 +5,10 @@ import { Button } from 'classes/button';
 import { ticketModel } from 'models/ticket';
 
 export default new Button({
-  customId: 'tickets-unlock',
+  customId: 'button-tickets-unlock',
   isCustomIdIncluded: true,
+  permissions: [],
+  botPermissions: ['ManageChannels', 'SendMessages'],
   async execute({ interaction, client }) {
     if (!interaction.inCachedGuild()) return;
     const { guildId, customId } = interaction;
@@ -36,7 +38,7 @@ export default new Button({
         components: [
           new ActionRowBuilder<ButtonBuilder>().addComponents(
             new ButtonBuilder()
-              .setCustomId(`tickets-lock_${system._id.toString()}`)
+              .setCustomId(`button-tickets-lock_${system._id.toString()}`)
               .setLabel(t('tickets.lock', { lng }))
               .setEmoji('🔐')
               .setStyle(ButtonStyle.Primary)

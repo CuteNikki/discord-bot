@@ -9,6 +9,7 @@ export default new Modal({
   isCustomIdIncluded: false,
   isDeveloperOnly: true,
   permissions: ['Administrator'],
+  botPermissions: ['SendMessages'],
   cooldown: 0,
   async execute({ interaction }) {
     await interaction.deferReply();

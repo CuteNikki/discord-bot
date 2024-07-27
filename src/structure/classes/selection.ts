@@ -11,6 +11,7 @@ export class Selection {
       isAuthorOnly?: boolean; // If true, can only be used by the original command executor
       isCustomIdIncluded?: boolean; // If true, customId does not need to be an exact match
       permissions?: PermissionsString[]; // Array of permissions required to use the button
+      botPermissions?: PermissionsString[]; // Array of permissions the bot requires
       execute({ client, interaction }: { client: DiscordClient; interaction: AnySelectMenuInteraction }): any;
     }
   ) {}

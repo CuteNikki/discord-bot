@@ -9,12 +9,13 @@ import { addLevel, addXP, getDataOrCreate, getLevelRewards, setLevel, setXP } fr
 
 export default new Command({
   module: ModuleType.Config,
+  botPermissions: ['SendMessages'],
   data: new SlashCommandBuilder()
     .setName('config-level')
     .setDescription('Configure the level module')
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
-    .setContexts(InteractionContextType.Guild)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .setContexts(InteractionContextType.Guild)
     .addSubcommandGroup((group) =>
       group
         .setName('show')

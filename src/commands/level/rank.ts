@@ -7,11 +7,12 @@ import { getDataWithRank, getWeeklyDataWithRank, levelToXP, type PositionLevel }
 
 export default new Command({
   module: ModuleType.Level,
+  botPermissions: ['SendMessages'],
   data: new SlashCommandBuilder()
     .setName('rank')
     .setDescription('Shows the rank of a user')
-    .setContexts(InteractionContextType.Guild)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .setContexts(InteractionContextType.Guild)
     .addUserOption((option) => option.setName('user').setDescription('The user to show the rank of').setRequired(false))
     .addBooleanOption((option) => option.setName('weekly').setDescription("When set to true will show the user's weekly rank").setRequired(false))
     .addBooleanOption((option) => option.setName('ephemeral').setDescription('When set to false will show the message to everyone').setRequired(false)),

@@ -15,12 +15,13 @@ import { InfractionType, infractionModel } from 'models/infraction';
 
 export default new Command({
   module: ModuleType.Moderation,
+  botPermissions: ['SendMessages'],
   data: new SlashCommandBuilder()
     .setName('warn')
     .setDescription('Warn a user')
     .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
-    .setContexts(InteractionContextType.Guild)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .setContexts(InteractionContextType.Guild)
     .addUserOption((option) => option.setName('user').setDescription('The user to warn').setRequired(true))
     .addStringOption((option) => option.setName('reason').setDescription('The reason for the warn').setMaxLength(300).setRequired(false)),
   async execute({ interaction, client }) {

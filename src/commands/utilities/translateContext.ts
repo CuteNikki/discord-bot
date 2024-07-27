@@ -16,11 +16,12 @@ const commandType = ApplicationCommandType.Message;
 
 export default new Command<typeof commandType>({
   module: ModuleType.Utilities,
+  botPermissions: ['SendMessages'],
   data: new ContextMenuCommandBuilder()
     .setName('Translate')
     .setType(commandType)
-    .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel)
-    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall),
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
+    .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel),
   async execute({ interaction, client }) {
     const { user, targetMessage } = interaction;
     await interaction.deferReply({ ephemeral: true });

@@ -1,14 +1,12 @@
 import {
   ActionRowBuilder,
-  ApplicationCommandOptionType,
-  ApplicationCommandType,
+  ApplicationIntegrationType,
   ButtonBuilder,
   ButtonStyle,
   ComponentType,
+  InteractionContextType,
   PermissionFlagsBits,
   SlashCommandBuilder,
-  InteractionContextType,
-  ApplicationIntegrationType,
 } from 'discord.js';
 import { t } from 'i18next';
 
@@ -17,12 +15,13 @@ import { InfractionType, infractionModel } from 'models/infraction';
 
 export default new Command({
   module: ModuleType.Moderation,
+  botPermissions: ['KickMembers', 'SendMessages'],
   data: new SlashCommandBuilder()
     .setName('kick')
     .setDescription('Kicks a user')
     .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers)
-    .setContexts(InteractionContextType.Guild)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .setContexts(InteractionContextType.Guild)
     .addUserOption((option) => option.setName('user').setDescription('The user to kick').setRequired(true))
     .addStringOption((option) => option.setName('reason').setDescription('The reason for the kick').setMaxLength(300).setRequired(false)),
   async execute({ interaction, client }) {

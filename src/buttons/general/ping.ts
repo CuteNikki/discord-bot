@@ -8,6 +8,7 @@ export default new Button({
   isAuthorOnly: false,
   isCustomIdIncluded: false,
   permissions: [],
+  botPermissions: ['SendMessages'],
   async execute({ interaction, client }) {
     const lng = await client.getUserLanguage(interaction.user.id);
 

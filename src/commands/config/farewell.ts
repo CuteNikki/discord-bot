@@ -16,12 +16,13 @@ import type { Message } from 'models/guild';
 
 export default new Command({
   module: ModuleType.Config,
+  botPermissions: ['SendMessages'],
   data: new SlashCommandBuilder()
     .setName('config-farewell')
     .setDescription('Configure the farewell module')
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
-    .setContexts(InteractionContextType.Guild)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .setContexts(InteractionContextType.Guild)
     .addSubcommandGroup((subcommandGroup) =>
       subcommandGroup
         .setName('channel')

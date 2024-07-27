@@ -15,12 +15,13 @@ import { Command, ModuleType } from 'classes/command';
 
 export default new Command({
   module: ModuleType.Moderation,
+  botPermissions: ['ManageMessages', 'SendMessages'],
   data: new SlashCommandBuilder()
     .setName('purge')
     .setDescription('Delete x amount of messages, by anyone, anywhere')
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
-    .setContexts(InteractionContextType.Guild)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .setContexts(InteractionContextType.Guild)
     .addIntegerOption((option) => option.setName('amount').setDescription('The amount of messages').setMinValue(1).setMaxValue(50).setRequired(true))
     .addUserOption((option) => option.setName('user').setDescription('The user to delete messages of').setRequired(false))
     .addChannelOption((option) =>

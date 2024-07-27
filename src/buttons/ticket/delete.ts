@@ -5,8 +5,10 @@ import { Button } from 'classes/button';
 import { ticketModel } from 'models/ticket';
 
 export default new Button({
-  customId: 'tickets-delete',
+  customId: 'button-tickets-delete',
   isCustomIdIncluded: true,
+  permissions: [],
+  botPermissions: ['ManageChannels', 'SendMessages'],
   async execute({ interaction, client }) {
     if (!interaction.inCachedGuild()) return;
     const { guildId, channelId, customId } = interaction;
@@ -30,7 +32,7 @@ export default new Button({
       components: [
         new ActionRowBuilder<ButtonBuilder>().addComponents(
           new ButtonBuilder()
-            .setCustomId(`tickets-save_${system._id.toString()}`)
+            .setCustomId(`button-tickets-save_${system._id.toString()}`)
             .setLabel(t('tickets.save', { lng }))
             .setEmoji('🗂️')
             .setStyle(ButtonStyle.Success)

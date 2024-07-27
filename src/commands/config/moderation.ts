@@ -5,12 +5,13 @@ import { Command, ModuleType } from 'classes/command';
 
 export default new Command({
   module: ModuleType.Config,
+  botPermissions: ['SendMessages'],
   data: new SlashCommandBuilder()
     .setName('config-moderation')
     .setDescription('Configure the moderation module')
-    .setContexts(InteractionContextType.Guild)
-    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .setContexts(InteractionContextType.Guild)
     .addSubcommandGroup((group) =>
       group
         .setName('show')

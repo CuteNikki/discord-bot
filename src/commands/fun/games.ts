@@ -18,6 +18,7 @@ import { words } from 'utils/words';
 
 export default new Command({
   module: ModuleType.Fun,
+  botPermissions: ['SendMessages'],
   data: new SlashCommandBuilder()
     .setName('games')
     .setDescription('Choose one of the fun games to play')

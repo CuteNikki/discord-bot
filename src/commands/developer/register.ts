@@ -8,12 +8,13 @@ export default new Command({
   module: ModuleType.Developer,
   isDeveloperOnly: true,
   cooldown: 0,
+  botPermissions: ['SendMessages'],
   data: new SlashCommandBuilder()
     .setName('register')
     .setDescription('Registers commands')
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
-    .setContexts(InteractionContextType.Guild)
-    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall),
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .setContexts(InteractionContextType.Guild),
   async execute({ interaction, client }) {
     await interaction.deferReply();
 

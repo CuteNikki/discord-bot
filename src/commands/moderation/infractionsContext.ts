@@ -19,12 +19,13 @@ const commandType = ApplicationCommandType.User
 
 export default new Command<typeof commandType>({
   module: ModuleType.Moderation,
+  botPermissions: ['SendMessages'],
   data: new ContextMenuCommandBuilder()
     .setName('View Infractions')
     .setType(commandType)
-    .setContexts(InteractionContextType.Guild)
+    .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
-    .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers),
+    .setContexts(InteractionContextType.Guild),
   async execute({ interaction, client }) {
     if (!interaction.inCachedGuild()) return;
     await interaction.deferReply({ ephemeral: true });

@@ -39,6 +39,17 @@ export default new Event({
       }
     }
 
+    // Bot permissions check
+    if (command.options.botPermissions?.length) {
+      if (!interaction.guild?.members.me) return;
+      const permissions = interaction.guild.members.me.permissions;
+      if (!permissions.has(command.options.botPermissions))
+        return interaction.reply({
+          content: t('interactions.bot_permissions', { lng, permissions: command.options.botPermissions.join(', ') }),
+          ephemeral: true,
+        });
+    }
+
     // Check if command is developer only and return if the user's id doesn't match the developer's id
     const developerIds = keys.DEVELOPER_USER_IDS;
     if (command.options.isDeveloperOnly && !developerIds.includes(interaction.user.id))

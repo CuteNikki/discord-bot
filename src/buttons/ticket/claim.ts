@@ -4,8 +4,10 @@ import { Button } from 'classes/button';
 import { ticketModel } from 'models/ticket';
 
 export default new Button({
-  customId: 'tickets-claim',
+  customId: 'button-tickets-claim',
   isCustomIdIncluded: true,
+  permissions: [],
+  botPermissions: ['SendMessages'],
   async execute({ client, interaction }) {
     if (!interaction.inCachedGuild() || !interaction.channelId) return;
     const { user, guildId, channelId, customId } = interaction;

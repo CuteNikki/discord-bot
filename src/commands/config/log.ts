@@ -7,12 +7,13 @@ import { availableEvents } from 'models/guild';
 
 export default new Command({
   module: ModuleType.Config,
+  botPermissions: ['SendMessages'],
   data: new SlashCommandBuilder()
     .setName('config-log')
     .setDescription('Configure the log module')
-    .setContexts(InteractionContextType.Guild)
-    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .setContexts(InteractionContextType.Guild)
     .addSubcommandGroup((group) =>
       group
         .setName('show')

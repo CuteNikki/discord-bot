@@ -4,7 +4,7 @@ import { Client, Collection, GatewayIntentBits, Partials } from 'discord.js';
 import { use } from 'i18next';
 import i18nextFsBackend from 'i18next-fs-backend';
 
-import { type UpdateQuery } from 'mongoose';
+import type { UpdateQuery } from 'mongoose';
 
 import { clientModel, type ClientSettings } from 'models/client';
 import { guildModel, type GuildSettings } from 'models/guild';
@@ -31,12 +31,12 @@ export class DiscordClient extends Client {
 
   // Collections for loading and running commands, buttons and modals
   public commands = new Collection<string, Command<any>>(); // Collection<commandName, commandData>
-  public buttons = new Collection<string, Button>(); // Collection<customId, buttonOptions>
-  public modals = new Collection<string, Modal>(); // Collection<customId, modalOptions>
-  public selections = new Collection<string, Selection>(); // Collection<customId, selectionOptions>
+  public buttons = new Collection<string, Button>(); // Collection<customId, buttonData>
+  public modals = new Collection<string, Modal>(); // Collection<customId, modalData>
+  public selections = new Collection<string, Selection>(); // Collection<customId, selectionData>
 
   // Collection of cooldowns so commands cannot be spammed
-  public cooldowns = new Collection<string, Collection<string, number>>(); // Collection<commandName, Collection<userId, timestamp>>
+  public cooldowns = new Collection<string, Collection<string, number>>(); // Collection<identifier, Collection<userId, timestamp>>
 
   // Collections for database (used as "cache")
   public settings = new Collection<string, ClientSettings>(); // Collection<applicationId, settings>

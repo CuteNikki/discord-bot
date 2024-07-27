@@ -81,8 +81,11 @@ export default new Command({
             .exec();
           if (!existingConnection) return interaction.editReply(t('phone.hangup.none', { lng }));
 
+          const otherLng = await client.getUserLanguage(existingConnection.userIdOne === user.id ? existingConnection.userIdTwo : existingConnection.userIdOne);
+
           // Find the connected channel ID
           const connectedChannelId = existingConnection.channelIdOne === channelId ? existingConnection.channelIdTwo : existingConnection.channelIdOne;
+
           // Remove the connection
           await connectionModel.deleteOne({ _id: existingConnection._id });
 
@@ -92,7 +95,7 @@ export default new Command({
           // Inform the other channel
           const targetChannel = await client.channels.fetch(connectedChannelId).catch(() => {});
           if (!targetChannel || targetChannel.type !== ChannelType.GuildText) return;
-          targetChannel.send(t('phone.hangup.disconnected'));
+          targetChannel.send(t('phone.hangup.disconnected', { lng: otherLng }));
         }
         break;
     }

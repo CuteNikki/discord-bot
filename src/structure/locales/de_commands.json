@@ -599,6 +599,150 @@
       }
     ]
   },
+  "config-ticket": {
+    "name": "ticket-konfiguration",
+    "description": "Konfiguriere das Ticket-Modul",
+    "options": [
+      {
+        "name": "ansehen",
+        "description": "Zeigt die aktuelle Konfiguration an",
+        "options": [
+          {
+            "name": "alles",
+            "description": "Zeigt die gesamte Konfiguration an"
+          },
+          {
+            "name": "status",
+            "description": "Zeigt den Status des Ticket-Moduls an"
+          },
+          {
+            "name": "systeme",
+            "description": "Zeigt die konfigurierten Ticket-Systeme an"
+          }
+        ]
+      },
+      {
+        "name": "status",
+        "description": "Schaltet das Ticket-Modul um",
+        "options": [
+          {
+            "name": "an",
+            "description": "Schaltet das Ticket-Modul an"
+          },
+          {
+            "name": "aus",
+            "description": "Schaltet das Ticket-Modul aus"
+          }
+        ]
+      },
+      {
+        "name": "systeme",
+        "description": "Konfiguriere die Ticket-Systeme",
+        "options": [
+          {
+            "name": "erstellen",
+            "description": "Erstelle ein neues Ticket-System",
+            "options": [
+              {
+                "name": "teammitglieds-rolle",
+                "description": "Benutzer mit dieser Rolle können Tickets verwalten (beanspruchen, schließen, etc.)"
+              },
+              {
+                "name": "transkript-kanal",
+                "description": "Der Kanal, in den der Transkripte gesendet werden"
+              },
+              {
+                "name": "kategorie",
+                "description": "Die Kategorie, in der die Tickets erstellt werden"
+              },
+              {
+                "name": "maximale-tickets",
+                "description": "Die maximale Anzahl an Tickets, die ein Benutzer gleichzeitig haben kann"
+              }
+            ]
+          },
+          {
+            "name": "bearbeiten",
+            "description": "Bearbeite ein Ticket-System",
+            "options": [
+              {
+                "name": "system-id",
+                "description": "Die ID des Ticket-Systems, das bearbeitet werden soll"
+              },
+              {
+                "name": "teammitglieds-rolle",
+                "description": "Benutzer mit dieser Rolle können Tickets verwalten (beanspruchen, schließen, etc.)"
+              },
+              {
+                "name": "transkript-kanal",
+                "description": "Der Kanal, in den der Transkripte gesendet werden"
+              },
+              {
+                "name": "kategorie",
+                "description": "Die Kategorie, in der die Tickets erstellt werden"
+              },
+              {
+                "name": "maximale-tickets",
+                "description": "Die maximale Anzahl an Tickets, die ein Benutzer gleichzeitig haben kann"
+              }
+            ]
+          },
+          {
+            "name": "löschen",
+            "description": "Lösche ein Ticket-System",
+            "options": [
+              {
+                "name": "system-id",
+                "description": "Die ID des Ticket-Systems, das gelöscht werden soll"
+              }
+            ]
+          },
+          {
+            "name": "wahl-hinzufügen",
+            "description": "Fügt eine Wahl zu einem Ticket-System hinzu",
+            "options": [
+              {
+                "name": "system-id",
+                "description": "Die ID des Ticket-Systems, dem die Wahl hinzugefügt werden soll"
+              },
+              {
+                "name": "wahl",
+                "description": "Die Wahl, die hinzugefügt werden soll"
+              }
+            ]
+          },
+          {
+            "name": "wahl-entfernen",
+            "description": "Entfernt eine Wahl von einem Ticket-System",
+            "options": [
+              {
+                "name": "system-id",
+                "description": "Die ID des Ticket-Systems, vom die Wahl entfernt werden soll"
+              },
+              {
+                "name": "wahl",
+                "description": "Die Wahl, die entfernt werden soll"
+              }
+            ]
+          },
+          {
+            "name": "sended",
+            "description": "Sendet ein Ticket-System in einen Kanal, damit Benutzer Tickets erstellen können",
+            "options": [
+              {
+                "name": "system-id",
+                "description": "Die ID des Ticket-Systems, das gesendet werden soll"
+              },
+              {
+                "name": "kanal",
+                "description": "Der Kanal, in den das Ticket-System gesendet werden soll"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
   "botinfo": {
     "name": "bot-informationen",
     "description": "Zeigt Informationen über den Bot",

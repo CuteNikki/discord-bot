@@ -359,7 +359,9 @@
       "already_user": "The announcement is already set to user's channel!",
       "user": "Level ups will now be announced where the user levels up.",
       "already_private": "The announcement is already set to private message!",
-      "private": "Level ups will now be announced in user's direct messages."
+      "private": "Level ups will now be announced in user's direct messages.",
+      "already_none": "The announcement is already set to none!",
+      "none": "Level ups will no longer not be announced."
     },
     "ignored_roles": {
       "title": "Ignored Roles",

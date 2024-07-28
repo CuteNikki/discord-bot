@@ -4,6 +4,7 @@ export enum AnnouncementType {
   UserChannel,
   OtherChannel,
   PrivateMessage,
+  None,
 }
 
 export const availableEvents = [

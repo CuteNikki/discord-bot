@@ -50,6 +50,7 @@ export default new Command({
             )
         )
         .addSubcommand((subcommand) => subcommand.setName('private-message').setDescription('Sends a direct message to the user'))
+        .addSubcommand((subcommand) => subcommand.setName('none').setDescription('Level ups will not be announced'))
     )
     .addSubcommandGroup((group) =>
       group
@@ -407,6 +408,13 @@ export default new Command({
                 interaction.editReply(t('level.announcement.private', { lng }));
               }
               break;
+            case 'none':
+              {
+                if (config.level.announcement !== AnnouncementType.None) return interaction.editReply(t('level.announcement.already_none', { lng }));
+                await client.updateGuildSettings(guildId, { $set: { ['level.channelId']: undefined, ['level.announcement']: AnnouncementType.None } });
+                interaction.editReply(t('level.announcement.none', { lng }));
+              }
+              break;
           }
         }
         break;
@@ -565,7 +573,9 @@ export default new Command({
                 const rewards = await getLevelRewards(client, userLevel);
 
                 if (member && rewards.length) {
-                  await member.roles.add(rewards.map((reward) => reward.roleId)).catch((error) => logger.debug({ error, userId: user.id }, 'Could not add role(s)'));
+                  await member.roles
+                    .add(rewards.map((reward) => reward.roleId))
+                    .catch((error) => logger.debug({ error, userId: user.id }, 'Could not add role(s)'));
                 }
 
                 interaction.editReply(t('level.xp.set', { lng, user: user.toString(), xp, new_xp: userLevel.xp, new_level: userLevel.level }));
@@ -589,7 +599,9 @@ export default new Command({
                 const rewards = await getLevelRewards(client, userLevel);
 
                 if (member && rewards.length) {
-                  await member.roles.add(rewards.map((reward) => reward.roleId)).catch((error) => logger.debug({ error, userId: user.id }, 'Could not add role(s)'));
+                  await member.roles
+                    .add(rewards.map((reward) => reward.roleId))
+                    .catch((error) => logger.debug({ error, userId: user.id }, 'Could not add role(s)'));
                 }
 
                 interaction.editReply(t('level.level.added', { lng, user: user.toString(), level, new_xp: userLevel.xp, new_level: userLevel.level }));
@@ -632,7 +644,9 @@ export default new Command({
                 const rewards = await getLevelRewards(client, userLevel);
 
                 if (member && rewards.length) {
-                  await member.roles.add(rewards.map((reward) => reward.roleId)).catch((error) => logger.debug({ error, userId: user.id }, 'Could not add role(s)'));
+                  await member.roles
+                    .add(rewards.map((reward) => reward.roleId))
+                    .catch((error) => logger.debug({ error, userId: user.id }, 'Could not add role(s)'));
                 }
 
                 interaction.editReply(t('level.level.set', { lng, user: user.toString(), new_xp: userLevel.xp, new_level: userLevel.level }));

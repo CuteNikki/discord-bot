@@ -359,7 +359,9 @@
       "already_user": "Die Ankündigung ist bereits auf User-Kanal gesetzt!",
       "user": "Level ups werden jetzt dort angekündigt, wo der User ein Level aufsteigt.",
       "already_private": "Die Ankündigung ist bereits auf Privatnachricht gesetzt!",
-      "private": "Level ups werden jetzt in den Direktnachrichten der User angekündigt."
+      "private": "Level ups werden jetzt in den Direktnachrichten der User angekündigt.",
+      "already_none": "Die Ankündigung ist bereits auf keine Ankündigung gesetzt!",
+      "none": "Level ups werden nun nicht mehr angekündigt."
     },
     "ignored_roles": {
       "title": "Ignorierte Rollen",

@@ -174,7 +174,7 @@ export async function registerCommands() {
     });
   // Stop timer and log the time it took to translate the commands
   const translateStopTime = performance.now();
-  logger.debug(`Translated ${translatedCommands.length} commands in ${Math.floor(translateStopTime - translateStartTime)}ms`);
+  logger.debug(`Translated commands in ${Math.floor(translateStopTime - translateStartTime)}ms`);
 
   // Split the commands into two arrays, for developer only and non-developer only commands
   const commandsArray = translatedCommands.filter(

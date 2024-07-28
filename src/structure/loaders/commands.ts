@@ -34,18 +34,20 @@ export async function getCommandsCollection() {
   }
 
   const endTime = performance.now();
-  logger.info(`Loaded ${commands.size} commands in ${Math.floor(endTime - startTime)}ms`);
-
-  return commands;
+  return { commands, startTime, endTime };
 }
 
 export async function loadCommands(client: DiscordClient) {
-  client.commands = await getCommandsCollection();
+  const { commands, startTime, endTime } = await getCommandsCollection();
+  client.commands = commands;
+
+  logger.info(`[${client.cluster.id}] Loaded ${commands.size} commands in ${Math.floor(endTime - startTime)}ms`);
 }
 
 export async function registerCommands() {
   // Get the commands collection from helper function
-  const commands = await getCommandsCollection();
+  const { commands, startTime, endTime } = await getCommandsCollection();
+  logger.info(`Loaded ${commands.size} commands in ${Math.floor(endTime - startTime)}ms`);
 
   // Get the bot token and bot id from the keys file and create a new REST instance
   const { DISCORD_BOT_ID, DISCORD_BOT_TOKEN } = keys;

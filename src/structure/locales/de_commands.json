@@ -1109,5 +1109,8 @@
         "description": "Wenn *True*, kann die Nachricht nur von dir gesehen werden"
       }
     ]
+  },
+  "rank-context": {
+    "name": "Level/Platz ansehen"
   }
 }

@@ -11,7 +11,7 @@ export default new Command<typeof commandType>({
   module: ModuleType.Moderation,
   botPermissions: ['SendMessages'],
   data: new ContextMenuCommandBuilder()
-    .setName('View Rank')
+    .setName('rank-context')
     .setType(commandType)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
     .setContexts(InteractionContextType.Guild),

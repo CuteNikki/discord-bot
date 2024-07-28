@@ -1109,5 +1109,8 @@
         "description": "If *True*, message can only be seen by you"
       }
     ]
+  },
+  "rank-context": {
+    "name": "Show Level/Rank"
   }
 }

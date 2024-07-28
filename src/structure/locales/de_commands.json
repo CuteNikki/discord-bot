@@ -1135,5 +1135,31 @@
         "choices": ["Gar nichts", "30 Minuten", "60 Minuten", "3 Stunden", "6 Stunden", "12 Stunden", "24 Stunden", "3 Tage", "7 Tage"]
       }
     ]
+  },
+  "infractions": {
+    "name": "verstöße",
+    "description": "Verwalte die Verstöße eines Benutzers",
+    "options": [
+      {
+        "name": "verlauf",
+        "description": "Zeigt die Verstöße eines Benutzers",
+        "options": [
+          {
+            "name": "benutzer",
+            "description": "Der Benutzer, dessen Verstöße angezeigt werden sollen"
+          }
+        ]
+      },
+      {
+        "name": "löschen",
+        "description": "Löscht einen Verstoß eines Benutzers",
+        "options": [
+          {
+            "name": "verstoß-id",
+            "description": "Die ID des Verstoßes, der gelöscht werden soll"
+          }
+        ]
+      }
+    ]
   }
 }

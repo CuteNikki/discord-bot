@@ -1135,5 +1135,31 @@
         "choices": ["delete none", "30 minutes", "60 minutes", "3 hours", "6 hours", "12 hours", "24 hours", "3 days", "7 days"]
       }
     ]
+  },
+  "infractions": {
+    "name": "infractions",
+    "description": "Manage the infractions of a user",
+    "options": [
+      {
+        "name": "history",
+        "description": "Shows the infractions of a user",
+        "options": [
+          {
+            "name": "user",
+            "description": "The user to show the infractions of"
+          }
+        ]
+      },
+      {
+        "name": "delete",
+        "description": "Deletes an infraction of a user",
+        "options": [
+          {
+            "name": "infraction-id",
+            "description": "The id of the infraction to delete"
+          }
+        ]
+      }
+    ]
   }
 }

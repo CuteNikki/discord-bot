@@ -2,179 +2,507 @@
   "config-developer": {
     "name": "developer-configuration",
     "description": "Only for staff/developers of the bot",
-    "options": {
-      "0": {
+    "options": [
+      {
         "name": "support-guild-id",
         "description": "Configures the support guild id",
-        "options": {
-          "0": {
+        "options": [
+          {
             "name": "set",
             "description": "Sets the support guild id",
-            "options": {
-              "0": {
+            "options": [
+              {
                 "name": "guild-id",
                 "description": "The support guild id"
               }
-            }
+            ]
           },
-          "1": {
+          {
             "name": "remove",
             "description": "Removes the support guild id"
           },
-          "2": {
+          {
             "name": "show",
             "description": "Shows the support guild id"
           }
-        }
+        ]
       },
-      "1": {
+      {
         "name": "support-invite-url",
         "description": "Configures the support invite url",
-        "options": {
-          "0": {
+        "options": [
+          {
             "name": "set",
             "description": "Sets the support invite url",
-            "options": {
-              "0": {
+            "options": [
+              {
                 "name": "invite-url",
                 "description": "The support invite url"
               }
-            }
+            ]
           },
-          "1": {
+          {
             "name": "remove",
             "description": "Removes the support invite url"
           },
-          "2": {
+          {
             "name": "show",
             "description": "Shows the support invite url"
           }
-        }
+        ]
       },
-      "2": {
+      {
         "name": "bot-invite-url",
         "description": "Configures the bot invite url",
-        "options": {
-          "0": {
+        "options": [
+          {
             "name": "set",
             "description": "Sets the bot invite url",
-            "options": {
-              "0": {
+            "options": [
+              {
                 "name": "invite-url",
                 "description": "The bot invite url"
               }
-            }
+            ]
           },
-          "1": {
+          {
             "name": "remove",
             "description": "Removes the bot invite url"
           },
-          "2": {
+          {
             "name": "show",
             "description": "Shows the bot invite url"
           }
-        }
+        ]
       },
-      "3": {
+      {
         "name": "badges",
         "description": "Configures the badges of a user",
-        "options": {
-          "0": {
+        "options": [
+          {
             "name": "add",
             "description": "Adds a badge to a user",
-            "options": {
-              "0": {
+            "options": [
+              {
                 "name": "user",
                 "description": "The user to add a badge to"
               },
-              "1": {
+              {
                 "name": "badge",
                 "description": "The badge to add",
-                "choices": {
-                  "0": "Translator",
-                  "1": "Bughunter",
-                  "2": "Expert Bughunter",
-                  "3": "Supporter",
-                  "4": "Staff Member",
-                  "5": "Developer"
-                }
+                "choices": ["Translator", "Bughunter", "Expert Bughunter", "Supporter", "Staff Member", "Developer"]
               }
-            }
+            ]
           },
-          "1": {
+          {
             "name": "remove",
             "description": "Removes a badge from a user",
-            "options": {
-              "0": {
+            "options": [
+              {
                 "name": "user",
                 "description": "The user to remove a badge from"
               },
-              "1": {
+              {
                 "name": "badge",
                 "description": "The badge to remove",
-                "choices": {
-                  "0": "Translator",
-                  "1": "Bughunter",
-                  "2": "Expert Bughunter",
-                  "3": "Supporter",
-                  "4": "Staff Member",
-                  "5": "Developer"
-                }
+                "choices": ["Translator", "Bughunter", "Expert Bughunter", "Supporter", "Staff Member", "Developer"]
               }
-            }
+            ]
           },
-          "2": {
+          {
             "name": "show",
             "description": "Lists all badges of a user",
-            "options": {
-              "0": {
+            "options": [
+              {
                 "name": "user",
                 "description": "The user to view badges of"
               }
-            }
+            ]
           }
-        }
+        ]
       },
-      "4": {
+      {
         "name": "bans",
         "description": "Configures the banned users",
-        "options": {
-          "0": {
+        "options": [
+          {
             "name": "add",
             "description": "Bans a user from the bot",
-            "options": {
-              "0": {
+            "options": [
+              {
                 "name": "user",
                 "description": "The user to ban"
               }
-            }
+            ]
           },
-          "1": {
+          {
             "name": "remove",
             "description": "Unban a user from the bot",
-            "options": {
-              "0": {
+            "options": [
+              {
                 "name": "user",
                 "description": "The user to unban"
               }
-            }
+            ]
           },
-          "2": {
+          {
             "name": "show",
             "description": "Lists all banned users"
           }
-        }
+        ]
       }
-    }
+    ]
+  },
+  "config-farewell": {
+    "name": "farewell-configuration",
+    "description": "Configure the farewell module",
+    "options": [
+      {
+        "name": "channel",
+        "description": "Configure the farewell channel",
+        "options": [
+          {
+            "name": "set",
+            "description": "Sets the farewell channel",
+            "options": [
+              {
+                "name": "channel",
+                "description": "The farewell channel"
+              }
+            ]
+          },
+          {
+            "name": "remove",
+            "description": "Removes the farewell channel"
+          },
+          {
+            "name": "show",
+            "description": "Shows the farewell channel"
+          }
+        ]
+      },
+      {
+        "name": "message",
+        "description": "Configure the farewell message",
+        "options": [
+          {
+            "name": "set",
+            "description": "Sets the farewell message"
+          },
+          {
+            "name": "remove",
+            "description": "Removes the farewell message"
+          },
+          {
+            "name": "show",
+            "description": "Shows the farewell message"
+          },
+          {
+            "name": "test",
+            "description": "Send a test farewell message"
+          },
+          {
+            "name": "placeholders",
+            "description": "Shows you the available placeholders"
+          }
+        ]
+      }
+    ]
+  },
+  "config-level": {
+    "name": "level-configuration",
+    "description": "Configure the level module",
+    "options": [
+      {
+        "name": "show",
+        "description": "Shows the current configuration",
+        "options": [
+          {
+            "name": "all",
+            "description": "Shows the entire configuration"
+          },
+          {
+            "name": "state",
+            "description": "Shows the state of the level module"
+          },
+          {
+            "name": "announcement",
+            "description": "Shows the announcement configuration"
+          },
+          {
+            "name": "rewards",
+            "description": "Shows the reward roles and their required level"
+          },
+          {
+            "name": "ignored-roles",
+            "description": "Shows the roles that won't be gaining XP"
+          },
+          {
+            "name": "ignored-channels",
+            "description": "Shows the channels that users won't be gaining XP in"
+          },
+          {
+            "name": "enabled-channels",
+            "description": "If enabled channels are set, users will only be gaining XP in those"
+          }
+        ]
+      },
+      {
+        "name": "toggle",
+        "description": "Toggles the level module",
+        "options": [
+          {
+            "name": "on",
+            "description": "Turns the level module on"
+          },
+          {
+            "name": "off",
+            "description": "Turns the level module off"
+          }
+        ]
+      },
+      {
+        "name": "announcement",
+        "description": "Configures where the level up is announced",
+        "options": [
+          {
+            "name": "user-channel",
+            "description": "Level ups will be announced in the user's channel and deleted within 5 seconds"
+          },
+          {
+            "name": "other-channel",
+            "description": "Level ups will be announced in a specified channel",
+            "options": [
+              {
+                "name": "channel",
+                "description": "The channel to send the level up announcement in"
+              }
+            ]
+          },
+          {
+            "name": "direct-message",
+            "description": "Level ups will be announced in direct messages with the user"
+          },
+          {
+            "name": "none",
+            "description": "Level ups will not be announced"
+          }
+        ]
+      },
+      {
+        "name": "rewards",
+        "description": "Configure the level up rewards",
+        "options": [
+          {
+            "name": "add",
+            "description": "Adds a level up reward",
+            "options": [
+              {
+                "name": "role",
+                "description": "The role to give at level"
+              },
+              {
+                "name": "level",
+                "description": "The level required to get the role"
+              }
+            ]
+          },
+          {
+            "name": "remove",
+            "description": "Removes a level up reward",
+            "options": [
+              {
+                "name": "role-id",
+                "description": "The id of role to remove"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "ignored-roles",
+        "description": "Configure the ignored roles",
+        "options": [
+          {
+            "name": "add",
+            "description": "Adds an ignored role",
+            "options": [
+              {
+                "name": "role",
+                "description": "The role to ignore"
+              }
+            ]
+          },
+          {
+            "name": "remove",
+            "description": "Removes an ignored role",
+            "options": [
+              {
+                "name": "role-id",
+                "description": "The id of role to remove"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "ignored-channels",
+        "description": "Configure the ignored channels",
+        "options": [
+          {
+            "name": "add",
+            "description": "Adds an ignored channel",
+            "options": [
+              {
+                "name": "channel",
+                "description": "The channel to ignore"
+              }
+            ]
+          },
+          {
+            "name": "remove",
+            "description": "Removes an ignored channel",
+            "options": [
+              {
+                "name": "channel-id",
+                "description": "The id of channel to remove"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "enabled-channels",
+        "description": "Configure the enabled channels",
+        "options": [
+          {
+            "name": "add",
+            "description": "Adds an enabled channel",
+            "options": [
+              {
+                "name": "channel",
+                "description": "The channel to add"
+              }
+            ]
+          },
+          {
+            "name": "remove",
+            "description": "Removes an enabled channel",
+            "options": [
+              {
+                "name": "channel-id",
+                "description": "The id of channel to remove"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "xp",
+        "description": "Manage the XP of a user",
+        "options": [
+          {
+            "name": "add",
+            "description": "Adds XP to a user",
+            "options": [
+              {
+                "name": "user",
+                "description": "The user to add XP to"
+              },
+              {
+                "name": "xp",
+                "description": "The XP to add to user"
+              }
+            ]
+          },
+          {
+            "name": "remove",
+            "description": "Removes XP from a user",
+            "options": [
+              {
+                "name": "user",
+                "description": "The user to remove XP from"
+              },
+              {
+                "name": "xp",
+                "description": "The XP to remove from user"
+              }
+            ]
+          },
+          {
+            "name": "set",
+            "description": "Sets XP of a user",
+            "options": [
+              {
+                "name": "user",
+                "description": "The user to set XP of"
+              },
+              {
+                "name": "xp",
+                "description": "The XP to set the user to"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "level",
+        "description": "Manage the level of a user",
+        "options": [
+          {
+            "name": "add",
+            "description": "Adds level to a user",
+            "options": [
+              {
+                "name": "user",
+                "description": "The user to add level to"
+              },
+              {
+                "name": "level",
+                "description": "The level to add to user"
+              }
+            ]
+          },
+          {
+            "name": "remove",
+            "description": "Removes level from a user",
+            "options": [
+              {
+                "name": "user",
+                "description": "The user to remove level from"
+              },
+              {
+                "name": "level",
+                "description": "The level to remove from user"
+              }
+            ]
+          },
+          {
+            "name": "set",
+            "description": "Sets level of a user",
+            "options": [
+              {
+                "name": "user",
+                "description": "The user to set level of"
+              },
+              {
+                "name": "level",
+                "description": "The level to set the user to"
+              }
+            ]
+          }
+        ]
+      }
+    ]
   },
   "botinfo": {
     "name": "botinfo",
     "description": "Shows information about the bot",
-    "options": {
-      "0": {
+    "options": [
+      {
         "name": "ephemeral",
         "description": "If true, message can only be seen and used by you"
       }
-    }
+    ]
   }
 }

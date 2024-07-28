@@ -1,180 +1,508 @@
 {
   "config-developer": {
-    "name": "entwickler-konfiguration",
+    "name": "developer-konfiguration",
     "description": "Nur für Teammitglieder/Entwickler des Bots",
-    "options": {
-      "0": {
+    "options": [
+      {
         "name": "support-server-id",
-        "description": "Konfiguriert die Support-Server-ID",
-        "options": {
-          "0": {
-            "name": "setzten",
+        "description": "Konfiguriere die Support-Server-ID",
+        "options": [
+          {
+            "name": "setzen",
             "description": "Setzt die Support-Server-ID",
-            "options": {
-              "0": {
+            "options": [
+              {
                 "name": "server-id",
                 "description": "Die Support-Server-ID"
               }
-            }
+            ]
           },
-          "1": {
+          {
             "name": "entfernen",
             "description": "Entfernt die Support-Server-ID"
           },
-          "2": {
+          {
             "name": "ansehen",
             "description": "Zeigt die Support-Server-ID"
           }
-        }
+        ]
       },
-      "1": {
+      {
         "name": "support-einladungs-url",
-        "description": "Konfiguriert die Support-Einladungs-URL",
-        "options": {
-          "0": {
+        "description": "Konfiguriere die Support-Einladungs-URL",
+        "options": [
+          {
             "name": "setzen",
             "description": "Setzt die Support-Einladungs-URL",
-            "options": {
-              "0": {
+            "options": [
+              {
                 "name": "einladungs-url",
                 "description": "Die Support-Einladungs-URL"
               }
-            }
+            ]
           },
-          "1": {
+          {
             "name": "entfernen",
             "description": "Entfernt die Support-Einladungs-URL"
           },
-          "2": {
+          {
             "name": "ansehen",
             "description": "Zeigt die Support-Einladungs-URL"
           }
-        }
+        ]
       },
-      "2": {
+      {
         "name": "bot-einladungs-url",
-        "description": "Konfiguriert die Bot-Einladungs-URL",
-        "options": {
-          "0": {
+        "description": "Konfiguriere die Bot-Einladungs-URL",
+        "options": [
+          {
             "name": "setzen",
             "description": "Setzt die Bot-Einladungs-URL",
-            "options": {
-              "0": {
+            "options": [
+              {
                 "name": "einladungs-url",
                 "description": "Die Bot-Einladungs-URL"
               }
-            }
+            ]
           },
-          "1": {
+          {
             "name": "entfernen",
             "description": "Entfernt die Bot-Einladungs-URL"
           },
-          "2": {
+          {
             "name": "ansehen",
             "description": "Zeigt die Bot-Einladungs-URL"
           }
-        }
+        ]
       },
-      "3": {
+      {
         "name": "abzeichen",
-        "description": "Konfiguriert die Abzeichen eines Benutzers",
-        "options": {
-          "0": {
+        "description": "Konfiguriere die Abzeichen eines Benutzers",
+        "options": [
+          {
             "name": "geben",
             "description": "Gibt ein Abzeichen einem Benutzer",
-            "options": {
-              "0": {
+            "options": [
+              {
                 "name": "benutzer",
                 "description": "Der Benutzer, dem ein Abzeichen hinzugefügt werden soll"
               },
-              "1": {
+              {
                 "name": "abzeichen",
                 "description": "Das Abzeichen was hinzugefügt werden soll",
-                "choices": {
-                  "0": "Übersetzer",
-                  "1": "Fehler-Finder",
-                  "2": "Experten Fehler-Finder",
-                  "3": "Unterstützer",
-                  "4": "Teammitglied",
-                  "5": "Entwickler"
-                }
+                "choices": ["Übersetzer", "Fehler-Finder", "Experten Fehler-Finder", "Unterstützer", "Teammitglied", "Entwickler"]
               }
-            }
+            ]
           },
-          "1": {
+          {
             "name": "entfernen",
             "description": "Entfernt ein Abzeichen eines Benutzers",
-            "options": {
-              "0": {
+            "options": [
+              {
                 "name": "benutzer",
                 "description": "Der Benutzer, von dem ein Abzeichen entfernt werden soll"
               },
-              "1": {
+              {
                 "name": "abzeichen",
                 "description": "Das Abzeichen was entfernt werden soll",
-                "choices": {
-                  "0": "Übersetzer",
-                  "1": "Fehler-Finder",
-                  "2": "Experten Fehler-Finder",
-                  "3": "Unterstützer",
-                  "4": "Teammitglied",
-                  "5": "Entwickler"
-                }
+                "choices": ["Übersetzer", "Fehler-Finder", "Experten Fehler-Finder", "Unterstützer", "Teammitglied", "Entwickler"]
               }
-            }
+            ]
           },
-          "2": {
+          {
             "name": "ansehen",
             "description": "Zeigt alle Abzeichen eines Benutzers",
-            "options": {
-              "0": {
+            "options": [
+              {
                 "name": "benutzer",
                 "description": "Der Benutzer, von dem alle Abzeichen angezeigt werden sollen"
               }
-            }
+            ]
           }
-        }
+        ]
       },
-      "4": {
+      {
         "name": "verbannungen",
-        "description": "Konfiguriert die Verbannungen von Benutzern",
-        "options": {
-          "0": {
-            "name": "verbannen",
+        "description": "Konfiguriere die Verbannungen des Bots von Benutzern",
+        "options": [
+          {
+            "name": "hinzufügen",
             "description": "Verbannt einen Benutzer vom Bot",
-            "options": {
-              "0": {
+            "options": [
+              {
                 "name": "benutzer",
                 "description": "Der Benutzer, der gebannt werden soll"
               }
-            }
+            ]
           },
-          "1": {
-            "name": "entbannen",
+          {
+            "name": "entfernen",
             "description": "Entfernt die Verbannung eines Benutzers vom Bot",
-            "options": {
-              "0": {
+            "options": [
+              {
                 "name": "benutzer",
                 "description": "Der Benutzer, der entbannt werden soll"
               }
-            }
+            ]
           },
-          "2": {
+          {
             "name": "ansehen",
             "description": "Zeigt alle Verbannungen an"
           }
-        }
+        ]
       }
-    }
+    ]
+  },
+  "config-farewell": {
+    "name": "abschieds-konfiguration",
+    "description": "Konfiguriere das Abschieds-Modul",
+    "options": [
+      {
+        "name": "kanal",
+        "description": "Konfiguriere den Abschieds-Kanal",
+        "options": [
+          {
+            "name": "setzen",
+            "description": "Setzt den Abschieds-Kanal",
+            "options": [
+              {
+                "name": "kanal",
+                "description": "Der Abschieds-Kanal"
+              }
+            ]
+          },
+          {
+            "name": "entfernen",
+            "description": "Entfernt den Abschieds-Kanal"
+          },
+          {
+            "name": "ansehen",
+            "description": "Zeigt den Abschieds-Kanal"
+          }
+        ]
+      },
+      {
+        "name": "nachricht",
+        "description": "Konfiguriere die Abschieds-Nachricht",
+        "options": [
+          {
+            "name": "setzen",
+            "description": "Setzt die Abschieds-Nachricht"
+          },
+          {
+            "name": "entfernen",
+            "description": "Entfernt die Abschieds-Nachricht"
+          },
+          {
+            "name": "ansehen",
+            "description": "Zeigt die Abschieds-Nachricht"
+          },
+          {
+            "name": "testen",
+            "description": "Sendet eine Test-Abschieds-Nachricht"
+          },
+          {
+            "name": "platzhalter",
+            "description": "Zeigt dir die verfügbaren Platzhalter"
+          }
+        ]
+      }
+    ]
+  },
+  "config-level": {
+    "name": "level-konfiguration",
+    "description": "Konfiguriere das Level-Modul",
+    "options": [
+      {
+        "name": "ansehen",
+        "description": "Zeigt die aktuelle Konfiguration an",
+        "options": [
+          {
+            "name": "alles",
+            "description": "Zeigt die gesamte Konfiguration an"
+          },
+          {
+            "name": "status",
+            "description": "Zeigt den Status des Level-Moduls an"
+          },
+          {
+            "name": "ankündigung",
+            "description": "Zeigt die Ankündigungs-Konfiguration an"
+          },
+          {
+            "name": "belohnungen",
+            "description": "Zeigt die Belohnungen-Rollen und deren benötigte Level an"
+          },
+          {
+            "name": "ignorierte-rollen",
+            "description": "Zeigt die Rollen, die keine XP erhalten"
+          },
+          {
+            "name": "ignorierte-kanäle",
+            "description": "Zeigt die Kanäle, in denen keine XP erhalten wird"
+          },
+          {
+            "name": "aktivierte-kanäle",
+            "description": "Zeigt die aktivierten Kanäle an, in denen XP erhalten wird"
+          }
+        ]
+      },
+      {
+        "name": "status",
+        "description": "Schaltet das Level-Modul um",
+        "options": [
+          {
+            "name": "an",
+            "description": "Schaltet das Level-Modul an"
+          },
+          {
+            "name": "aus",
+            "description": "Schaltet das Level-Modul aus"
+          }
+        ]
+      },
+      {
+        "name": "ankündigung",
+        "description": "Konfiguriere, wo die Level-Ankündigung erfolgt",
+        "options": [
+          {
+            "name": "benutzer-kanal",
+            "description": "Level-Ups werden in dem Kanal des Benutzers angekündigt und in 5 Sekunden gelöscht"
+          },
+          {
+            "name": "anderer-kanal",
+            "description": "Level-Ups werden in einem bestimmten Kanal angekündigt",
+            "options": [
+              {
+                "name": "kanal",
+                "description": "Der Kanal, in dem die Level-Ankündigung gesendet wird"
+              }
+            ]
+          },
+          {
+            "name": "private-nachricht",
+            "description": "Level-Ups werden in privaten Nachrichten mit dem Benutzer angekündigt"
+          },
+          {
+            "name": "keine",
+            "description": "Level-Ups werden nicht angekündigt"
+          }
+        ]
+      },
+      {
+        "name": "belohnungen",
+        "description": "Konfiguriere die Belohnungen für Level-Ups",
+        "options": [
+          {
+            "name": "hinzufügen",
+            "description": "Fügt eine Belohnung für Level-Ups hinzu",
+            "options": [
+              {
+                "name": "rolle",
+                "description": "Die Rolle, die bei Level-Up gegeben wird"
+              },
+              {
+                "name": "level",
+                "description": "Das Level, für das die Rolle gegeben wird"
+              }
+            ]
+          },
+          {
+            "name": "entfernen",
+            "description": "Entfernt eine Belohnung für Level-Ups",
+            "options": [
+              {
+                "name": "rollen-id",
+                "description": "Die ID der Rolle, die entfernt werden soll"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "ignorierte-rollen",
+        "description": "Konfiguriere die ignorierten Rollen",
+        "options": [
+          {
+            "name": "hinzufügen",
+            "description": "Fügt eine ignorierte Rolle hinzu",
+            "options": [
+              {
+                "name": "rolle",
+                "description": "Die Rolle, die ignoriert werden soll"
+              }
+            ]
+          },
+          {
+            "name": "entfernen",
+            "description": "Entfernt eine ignorierte Rolle",
+            "options": [
+              {
+                "name": "rollen-id",
+                "description": "Die ID der Rolle, die entfernt werden soll"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "ignorierte-kanäle",
+        "description": "Konfiguriere die ignorierten Kanäle",
+        "options": [
+          {
+            "name": "hinzufügen",
+            "description": "Fügt einen ignorierte Kanal hinzu",
+            "options": [
+              {
+                "name": "kanal",
+                "description": "Der Kanal, der ignoriert werden soll"
+              }
+            ]
+          },
+          {
+            "name": "entfernen",
+            "description": "Entfernt einen ignorierte Kanal",
+            "options": [
+              {
+                "name": "kanal-id",
+                "description": "Die ID des Kanals, der entfernt werden soll"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "aktivierte-kanäle",
+        "description": "Konfiguriere die aktivierten Kanäle",
+        "options": [
+          {
+            "name": "hinzufügen",
+            "description": "Fügt einen aktivierten Kanal hinzu",
+            "options": [
+              {
+                "name": "kanal",
+                "description": "Der Kanal, der hinzugefügt werden soll"
+              }
+            ]
+          },
+          {
+            "name": "entfernen",
+            "description": "Entfernt einen aktivierten Kanal",
+            "options": [
+              {
+                "name": "kanal-id",
+                "description": "Die ID des Kanals, der entfernt werden soll"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "xp",
+        "description": "Verwalte die XP eines Benutzers",
+        "options": [
+          {
+            "name": "hinzufügen",
+            "description": "Fügt XP einem Benutzer hinzu",
+            "options": [
+              {
+                "name": "benutzer",
+                "description": "Der Benutzer, dem XP hinzugefügt werden soll"
+              },
+              {
+                "name": "xp",
+                "description": "Die XP, die dem Benutzer hinzugefügt werden soll"
+              }
+            ]
+          },
+          {
+            "name": "entfernen",
+            "description": "Entfernt XP eines Benutzers",
+            "options": [
+              {
+                "name": "benutzer",
+                "description": "Der Benutzer, von dem XP entfernt werden soll"
+              },
+              {
+                "name": "xp",
+                "description": "Die XP, die vom Benutzer entfernt werden soll"
+              }
+            ]
+          },
+          {
+            "name": "setzen",
+            "description": "Setzt XP eines Benutzers",
+            "options": [
+              {
+                "name": "benutzer",
+                "description": "Der Benutzer, für den XP gesetzt werden soll"
+              },
+              {
+                "name": "xp",
+                "description": "Die XP, die für den Benutzer gesetzt werden soll"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "level",
+        "description": "Verwalte das Level eines Benutzers",
+        "options": [
+          {
+            "name": "hinzufügen",
+            "description": "Fügt Level einem Benutzer hinzu",
+            "options": [
+              {
+                "name": "benutzer",
+                "description": "Der Benutzer, dem Level hinzugefügt werden soll"
+              },
+              {
+                "name": "level",
+                "description": "Das Level, das dem Benutzer hinzugefügt werden soll"
+              }
+            ]
+          },
+          {
+            "name": "entfernen",
+            "description": "Entfernt Level eines Benutzers",
+            "options": [
+              {
+                "name": "benutzer",
+                "description": "Der Benutzer, von dem Level entfernt werden soll"
+              },
+              {
+                "name": "level",
+                "description": "Das Level, das vom Benutzer entfernt werden soll"
+              }
+            ]
+          },
+          {
+            "name": "setzen",
+            "description": "Setzt Level eines Benutzers",
+            "options": [
+              {
+                "name": "benutzer",
+                "description": "Der Benutzer, für den Level gesetzt werden soll"
+              },
+              {
+                "name": "level",
+                "description": "Das Level, das für den Benutzer gesetzt werden soll"
+              }
+            ]
+          }
+        ]
+      }
+    ]
   },
   "botinfo": {
-    "name": "botinfo",
+    "name": "bot-informationen",
     "description": "Zeigt Informationen über den Bot",
-    "options": {
-      "0": {
-        "name": "ephemeral",
-        "description": "Wenn true, kann die Nachricht nur von dir gesehen und verwendet werden"
+    "options": [
+      {
+        "name": "geheim",
+        "description": "Die Nachricht kann nur von dir gesehen und verwendet werden"
       }
-    }
+    ]
   }
 }

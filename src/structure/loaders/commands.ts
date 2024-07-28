@@ -44,17 +44,21 @@ export async function loadCommands(client: DiscordClient) {
 }
 
 export async function registerCommands() {
+  // Get the commands collection from helper function
   const commands = await getCommandsCollection();
 
+  // Get the bot token and bot id from the keys file and create a new REST instance
   const { DISCORD_BOT_ID, DISCORD_BOT_TOKEN } = keys;
   const rest = new REST().setToken(DISCORD_BOT_TOKEN);
 
+  // Start timer and initialize i18next
+  const translateStartTime = performance.now();
   await initTranslation();
-
+  // Translate the commands
   const translatedCommands = commands
     .map((cmd) => cmd.options.data.toJSON())
     .map((cmd) => {
-      // If there is no translation for the command name, don't translate anything and return the command data
+      // If there is no translation for the command, don't translate anything and return the command data
       if (t(`${cmd.name}.name`, { lng: 'en', ns: 'commands' }) === `${cmd.name}.name`) return cmd;
 
       // Translate the command name
@@ -168,6 +172,11 @@ export async function registerCommands() {
       }
       return cmd;
     });
+  // Stop timer and log the time it took to translate the commands
+  const translateStopTime = performance.now();
+  logger.debug(`Translated ${translatedCommands.length} commands in ${Math.floor(translateStopTime - translateStartTime)}ms`);
+
+  // Split the commands into two arrays, for developer only and non-developer only commands
   const commandsArray = translatedCommands.filter(
     (cmd) => !commands.get(cmd.name)?.options.isDeveloperOnly && commands.get(cmd.name)?.options.module !== ModuleType.Developer
   );
@@ -175,6 +184,7 @@ export async function registerCommands() {
     (cmd) => commands.get(cmd.name)?.options.isDeveloperOnly || commands.get(cmd.name)?.options.module === ModuleType.Developer
   );
 
+  // Register the commands globally
   const commandsStartTime = performance.now();
   await rest
     .put(Routes.applicationCommands(DISCORD_BOT_ID), { body: commandsArray })
@@ -182,9 +192,10 @@ export async function registerCommands() {
     .then(() => {
       const commandsEndTime = performance.now();
 
-      logger.info(`Registered ${commandsArray.length} application commands in ${Math.floor(commandsEndTime - commandsStartTime)}ms`);
+      logger.info(`Registered ${commandsArray.length} global application commands in ${Math.floor(commandsEndTime - commandsStartTime)}ms`);
     });
 
+  // Register the commands for each developer guild
   for (const guildId of keys.DEVELOPER_GUILD_IDS) {
     const guildCommandsStartTime = performance.now();
     await rest
@@ -192,9 +203,7 @@ export async function registerCommands() {
       .catch((error) => logger.error({ error }, `Failed to register guild commands for ${guildId}`))
       .then(() => {
         const guildCommandsEndTime = performance.now();
-        logger.info(
-          `Registered ${devCommandsArray.length} application guild commands for ${guildId} in ${Math.floor(guildCommandsEndTime - guildCommandsStartTime)}ms`
-        );
+        logger.info(`Registered ${devCommandsArray.length} guild commands for ${guildId} in ${Math.floor(guildCommandsEndTime - guildCommandsStartTime)}ms`);
       });
   }
 }

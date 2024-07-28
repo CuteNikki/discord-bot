@@ -1112,5 +1112,28 @@
   },
   "rank-context": {
     "name": "Level/Platz ansehen"
+  },
+  "ban": {
+    "name": "ban",
+    "description": "Bannt einen Benutzer vom Server",
+    "options": [
+      {
+        "name": "benutzer",
+        "description": "Der Benutzer, der verbannt werden soll"
+      },
+      {
+        "name": "grund",
+        "description": "Der Grund für den Bann"
+      },
+      {
+        "name": "dauer",
+        "description": "Die Dauer des Banns"
+      },
+      {
+        "name": "verlauf",
+        "description": "Wie viel des Benutzers Nachrichtenverlaufs gelöscht werden soll",
+        "choices": ["Gar nichts", "30 Minuten", "60 Minuten", "3 Stunden", "6 Stunden", "12 Stunden", "24 Stunden", "3 Tage", "7 Tage"]
+      }
+    ]
   }
 }

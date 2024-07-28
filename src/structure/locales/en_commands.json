@@ -1112,5 +1112,28 @@
   },
   "rank-context": {
     "name": "Show Level/Rank"
+  },
+  "ban": {
+    "name": "ban",
+    "description": "Ban a user from the server",
+    "options": [
+      {
+        "name": "user",
+        "description": "The user to ban"
+      },
+      {
+        "name": "reason",
+        "description": "The reason for the ban"
+      },
+      {
+        "name": "duration",
+        "description": "The duration of the ban"
+      },
+      {
+        "name": "history",
+        "description": "How much of the users message history to delete",
+        "choices": ["delete none", "30 minutes", "60 minutes", "3 hours", "6 hours", "12 hours", "24 hours", "3 days", "7 days"]
+      }
+    ]
   }
 }

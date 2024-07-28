@@ -1067,5 +1067,15 @@
         "description": "Wenn *True*, kann die Nachricht nur von dir gesehen werden"
       }
     ]
+  },
+  "uptime": {
+    "name": "betriebszeit",
+    "description": "Zeigt dir die Betriebszeit des Bots",
+    "options": [
+      {
+        "name": "geheim",
+        "description": "Wenn *True*, kann die Nachricht nur von dir gesehen werden"
+      }
+    ]
   }
 }

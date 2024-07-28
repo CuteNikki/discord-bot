@@ -1067,5 +1067,15 @@
         "description": "If *True*, message can only be seen by you"
       }
     ]
+  },
+  "uptime": {
+    "name": "uptime",
+    "description": "Shows you the uptime of the bot",
+    "options": [
+      {
+        "name": "ephemeral",
+        "description": "If *True*, message can only be seen by you"
+      }
+    ]
   }
 }

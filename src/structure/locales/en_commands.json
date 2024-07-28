@@ -743,6 +743,62 @@
       }
     ]
   },
+  "config-welcome": {
+    "name": "welcome-configuration",
+    "description": "Configure the welcome module",
+    "options": [
+      {
+        "name": "channel",
+        "description": "Configure the welcome channel",
+        "options": [
+          {
+            "name": "set",
+            "description": "Sets the welcome channel",
+            "options": [
+              {
+                "name": "channel",
+                "description": "The welcome channel"
+              }
+            ]
+          },
+          {
+            "name": "remove",
+            "description": "Removes the welcome channel"
+          },
+          {
+            "name": "show",
+            "description": "Shows the welcome channel"
+          }
+        ]
+      },
+      {
+        "name": "message",
+        "description": "Configure the welcome message",
+        "options": [
+          {
+            "name": "set",
+            "description": "Sets the welcome message"
+          },
+          {
+            "name": "remove",
+            "description": "Removes the welcome message"
+          },
+          {
+            "name": "show",
+            "description": "Shows the welcome message"
+          },
+          {
+            "name": "test",
+            "description": "Send a test welcome message"
+          },
+          {
+            "name": "placeholders",
+            "description": "Shows you the available placeholders"
+          }
+        ]
+      }
+    ]
+  },
   "botinfo": {
     "name": "botinfo",
     "description": "Shows information about the bot",

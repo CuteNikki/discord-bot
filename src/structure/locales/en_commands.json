@@ -968,6 +968,20 @@
       }
     ]
   },
+  "phone": {
+    "name": "phone",
+    "description": "Connect to a random person on Discord",
+    "options": [
+      {
+        "name": "connect",
+        "description": "Connects you to a random caller"
+      },
+      {
+        "name": "hangup",
+        "description": "Hangs up the phone call"
+      }
+    ]
+  },
   "botinfo": {
     "name": "botinfo",
     "description": "Shows information about the bot",

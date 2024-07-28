@@ -968,6 +968,20 @@
       }
     ]
   },
+  "phone": {
+    "name": "telefon",
+    "description": "Verbindet dich mit einem zufälligen Anrufer auf Discord",
+    "options": [
+      {
+        "name": "anrufen",
+        "description": "Verbinde dich mit einem zufälligen Anrufer"
+      },
+      {
+        "name": "auflegen",
+        "description": "Trenne den Telefonanruf"
+      }
+    ]
+  },
   "botinfo": {
     "name": "bot-informationen",
     "description": "Zeigt Informationen über den Bot",

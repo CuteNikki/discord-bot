@@ -14,7 +14,7 @@ export default new Command({
   botPermissions: ['SendMessages'],
   data: new SlashCommandBuilder()
     .setName('config-developer')
-    .setDescription('Only for bot moderators/developers')
+    .setDescription('Only for bot staff/developers')
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
     .setContexts(InteractionContextType.Guild)
     .addSubcommandGroup((subcommandGroup) =>
@@ -75,7 +75,7 @@ export default new Command({
                   { name: 'bughunter', value: BadgeType.Bughunter },
                   { name: 'expert bughunter', value: BadgeType.ExpertBughunter },
                   { name: 'supporter', value: BadgeType.Supporter },
-                  { name: 'moderator', value: BadgeType.Moderator },
+                  { name: 'staff member', value: BadgeType.StaffMember },
                   { name: 'developer', value: BadgeType.Developer }
                 )
             )
@@ -95,7 +95,7 @@ export default new Command({
                   { name: 'bughunter', value: BadgeType.Bughunter },
                   { name: 'expert bughunter', value: BadgeType.ExpertBughunter },
                   { name: 'supporter', value: BadgeType.Supporter },
-                  { name: 'moderator', value: BadgeType.Moderator },
+                  { name: 'staff member', value: BadgeType.StaffMember },
                   { name: 'developer', value: BadgeType.Developer }
                 )
             )
@@ -277,8 +277,8 @@ export default new Command({
       case 'bans':
         {
           if (!keys.DEVELOPER_USER_IDS.includes(user.id)) {
-            if (!badges.includes(BadgeType.Moderator) || !badges.includes(BadgeType.Developer))
-              return interaction.editReply('You are not a moderator or developer of this bot!');
+            if (!badges.includes(BadgeType.StaffMember) || !badges.includes(BadgeType.Developer))
+              return interaction.editReply('You are not a staff member or developer of this bot!');
           }
 
           switch (options.getSubcommand()) {

@@ -135,7 +135,7 @@ export default new Command({
       await infractionModel.create({
         guildId: guild.id,
         userId: target.id,
-        moderatorId: user.id,
+        staffId: user.id,
         action: duration ? InfractionType.TempBan : InfractionType.Ban,
         closed: duration ? false : true,
         endsAt: duration ? Date.now() + duration : undefined,

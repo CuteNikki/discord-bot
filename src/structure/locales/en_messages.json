@@ -442,7 +442,7 @@
       "title": "Infractions (Page {{page}}/{{pages}})",
       "id": "Id: {{id}}",
       "type": "Type: {{type}}",
-      "moderator": "Moderator: {{moderator}}",
+      "staff": "Staff: {{staff}}",
       "reason": "Reason: {{reason}}",
       "date": "Date: {{date}}",
       "ends_at": "Ending Date: {{date}}"

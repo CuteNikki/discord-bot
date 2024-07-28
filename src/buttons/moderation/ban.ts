@@ -67,7 +67,7 @@ export default new Button({
     await infractionModel.create({
       guildId: guild.id,
       userId: target.id,
-      moderatorId: interaction.user.id,
+      staffId: interaction.user.id,
       action: InfractionType.Ban,
       closed: true,
       endsAt: undefined,

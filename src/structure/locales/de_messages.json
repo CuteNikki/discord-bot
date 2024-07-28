@@ -442,7 +442,7 @@
       "title": "Verstöße (Seite {{page}}/{{pages}})",
       "id": "Id: {{id}}",
       "type": "Typ: {{type}}",
-      "moderator": "Moderator: {{moderator}}",
+      "staff": "Teammitglied: {{staff}}",
       "reason": "Grund: {{reason}}",
       "date": "Datum: {{date}}",
       "ends_at": "Ende: {{date}}"

@@ -13,7 +13,7 @@ export interface Infraction {
   _id: Types.ObjectId;
   userId: string;
   guildId: string;
-  moderatorId: string;
+  staffId: string;
   action: number;
   createdAt: number;
   reason?: string;
@@ -24,7 +24,7 @@ export interface Infraction {
 const infractionSchema = new Schema<Infraction>({
   userId: { type: String, required: true },
   guildId: { type: String, required: true },
-  moderatorId: { type: String, required: true },
+  staffId: { type: String, required: true },
   action: { type: Number, enum: Object.values(InfractionType).filter((value) => typeof value === 'number'), required: true },
   createdAt: { type: Number, default: Date.now() },
   reason: { type: String, required: false },

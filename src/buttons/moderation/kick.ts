@@ -49,7 +49,7 @@ export default new Button({
     await infractionModel.create({
       guildId: guild.id,
       userId: targetMember.id,
-      moderatorId: interaction.user.id,
+      staffId: interaction.user.id,
       action: InfractionType.Kick,
       createdAt: Date.now(),
       reason,

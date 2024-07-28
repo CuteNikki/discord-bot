@@ -2,7 +2,7 @@ import mongoose, { Model, model, Schema, Types } from 'mongoose';
 
 export enum BadgeType {
   Developer,
-  Moderator,
+  StaffMember,
   Translator,
   Supporter,
   ExpertBughunter,

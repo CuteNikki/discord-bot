@@ -85,7 +85,7 @@ export default new Command({
       await infractionModel.create({
         guildId: guild.id,
         userId: target.id,
-        moderatorId: user.id,
+        staffId: user.id,
         action: InfractionType.Warn,
         createdAt: Date.now(),
         reason,

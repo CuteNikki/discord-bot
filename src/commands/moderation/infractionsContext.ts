@@ -65,7 +65,7 @@ export default new Command<typeof commandType>({
                 [
                   t('infractions.history.id', { lng, id: infraction._id }),
                   t('infractions.history.type', { lng, type: infractionTypes[infraction.action as keyof typeof infractionTypes] }),
-                  t('infractions.history.moderator', { lng, moderator: `<@${infraction.moderatorId}>` }),
+                  t('infractions.history.staff', { lng, staff: `<@${infraction.staffId}>` }),
                   t('infractions.history.reason', { lng, reason: infraction.reason ?? '/' }),
                   t('infractions.history.date', { lng, date: `<t:${Math.floor(infraction.createdAt / 1000)}:f>` }),
                   t('infractions.history.ends_at', { lng, date: infraction.endsAt ? `<t:${Math.floor(infraction.endsAt / 1000)}:f>` : '/' }),

@@ -1,7 +1,7 @@
 {
   "config-developer": {
     "name": "entwickler-konfiguration",
-    "description": "Nur für Moderatoren/Entwickler des Bots",
+    "description": "Nur für Teammitglieder/Entwickler des Bots",
     "options": {
       "0": {
         "name": "support-server-id",

@@ -1,7 +1,7 @@
 {
   "config-developer": {
     "name": "developer-configuration",
-    "description": "Only for moderators/developers of the bot",
+    "description": "Only for staff/developers of the bot",
     "options": {
       "0": {
         "name": "support-guild-id",
@@ -92,10 +92,10 @@
                 "description": "The badge to add",
                 "choices": {
                   "0": "Translator",
-                  "1": "Bug Hunter",
-                  "2": "Expert Bug Hunter",
+                  "1": "Bughunter",
+                  "2": "Expert Bughunter",
                   "3": "Supporter",
-                  "4": "Staff",
+                  "4": "Staff Member",
                   "5": "Developer"
                 }
               }
@@ -114,10 +114,10 @@
                 "description": "The badge to remove",
                 "choices": {
                   "0": "Translator",
-                  "1": "Bug Hunter",
-                  "2": "Expert Bug Hunter",
+                  "1": "Bughunter",
+                  "2": "Expert Bughunter",
                   "3": "Supporter",
-                  "4": "Staff",
+                  "4": "Staff Member",
                   "5": "Developer"
                 }
               }

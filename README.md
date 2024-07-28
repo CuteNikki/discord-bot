@@ -184,7 +184,7 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
       - [x] Add supporter badge on server boost
       - [x] List of badges:
         - Developer
-        - Moderator
+        - Staff Member
         - Translator
         - Supporter
         - Expert Bughunter

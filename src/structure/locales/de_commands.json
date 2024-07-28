@@ -743,62 +743,6 @@
       }
     ]
   },
-  "config-welcome": {
-    "name": "willkommens-konfiguration",
-    "description": "Konfiguriere das Willkommens-Modul",
-    "options": [
-      {
-        "name": "kanal",
-        "description": "Konfiguriere den Willkommens-Kanal",
-        "options": [
-          {
-            "name": "setzen",
-            "description": "Setzt den Willkommens-Kanal",
-            "options": [
-              {
-                "name": "kanal",
-                "description": "Der Willkommens-Kanal"
-              }
-            ]
-          },
-          {
-            "name": "entfernen",
-            "description": "Entfernt den Willkommens-Kanal"
-          },
-          {
-            "name": "ansehen",
-            "description": "Zeigt den Willkommens-Kanal"
-          }
-        ]
-      },
-      {
-        "name": "nachricht",
-        "description": "Konfiguriere die Willkommens-Nachricht",
-        "options": [
-          {
-            "name": "setzen",
-            "description": "Setzt die Willkommens-Nachricht"
-          },
-          {
-            "name": "entfernen",
-            "description": "Entfernt die Willkommens-Nachricht"
-          },
-          {
-            "name": "ansehen",
-            "description": "Zeigt die Willkommens-Nachricht"
-          },
-          {
-            "name": "testen",
-            "description": "Sendet eine Test-Willkommens-Nachricht"
-          },
-          {
-            "name": "platzhalter",
-            "description": "Zeigt dir die verfügbaren Platzhalter"
-          }
-        ]
-      }
-    ]
-  },
   "botinfo": {
     "name": "bot-informationen",
     "description": "Zeigt Informationen über den Bot",

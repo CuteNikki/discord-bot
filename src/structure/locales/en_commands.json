@@ -998,7 +998,7 @@
     "options": [
       {
         "name": "ephemeral",
-        "description": "If *true*, message can only be seen by you"
+        "description": "If *True*, message can only be seen by you"
       }
     ]
   },
@@ -1008,7 +1008,7 @@
     "options": [
       {
         "name": "ephemeral",
-        "description": "If *true*, message can only be seen by you"
+        "description": "If *True*, message can only be seen by you"
       }
     ]
   },
@@ -1018,7 +1018,7 @@
     "options": [
       {
         "name": "ephemeral",
-        "description": "If *true*, message can only be seen by you"
+        "description": "If *True*, message can only be seen by you"
       }
     ]
   },
@@ -1054,7 +1054,17 @@
     "options": [
       {
         "name": "ephemeral",
-        "description": "If *true*, message can only be seen by you"
+        "description": "If *True*, message can only be seen by you"
+      }
+    ]
+  },
+  "support": {
+    "name": "support-url",
+    "description": "Shows you the invite link to the support server",
+    "options": [
+      {
+        "name": "ephemeral",
+        "description": "If *True*, message can only be seen by you"
       }
     ]
   }

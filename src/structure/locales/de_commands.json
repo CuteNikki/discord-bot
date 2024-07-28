@@ -1057,5 +1057,15 @@
         "description": "Wenn *True*, kann die Nachricht nur von dir gesehen werden"
       }
     ]
+  },
+  "support": {
+    "name": "support",
+    "description": "Zeigt dir den Einladungslink zum Support-Server",
+    "options": [
+      {
+        "name": "geheim",
+        "description": "Wenn *True*, kann die Nachricht nur von dir gesehen werden"
+      }
+    ]
   }
 }

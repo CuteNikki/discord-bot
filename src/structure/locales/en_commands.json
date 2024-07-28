@@ -1,0 +1,180 @@
+{
+  "config-developer": {
+    "name": "developer-configuration",
+    "description": "Only for moderators/developers of the bot",
+    "options": {
+      "0": {
+        "name": "support-guild-id",
+        "description": "Configures the support guild id",
+        "options": {
+          "0": {
+            "name": "set",
+            "description": "Sets the support guild id",
+            "options": {
+              "0": {
+                "name": "guild-id",
+                "description": "The support guild id"
+              }
+            }
+          },
+          "1": {
+            "name": "remove",
+            "description": "Removes the support guild id"
+          },
+          "2": {
+            "name": "show",
+            "description": "Shows the support guild id"
+          }
+        }
+      },
+      "1": {
+        "name": "support-invite-url",
+        "description": "Configures the support invite url",
+        "options": {
+          "0": {
+            "name": "set",
+            "description": "Sets the support invite url",
+            "options": {
+              "0": {
+                "name": "invite-url",
+                "description": "The support invite url"
+              }
+            }
+          },
+          "1": {
+            "name": "remove",
+            "description": "Removes the support invite url"
+          },
+          "2": {
+            "name": "show",
+            "description": "Shows the support invite url"
+          }
+        }
+      },
+      "2": {
+        "name": "bot-invite-url",
+        "description": "Configures the bot invite url",
+        "options": {
+          "0": {
+            "name": "set",
+            "description": "Sets the bot invite url",
+            "options": {
+              "0": {
+                "name": "invite-url",
+                "description": "The bot invite url"
+              }
+            }
+          },
+          "1": {
+            "name": "remove",
+            "description": "Removes the bot invite url"
+          },
+          "2": {
+            "name": "show",
+            "description": "Shows the bot invite url"
+          }
+        }
+      },
+      "3": {
+        "name": "badges",
+        "description": "Configures the badges of a user",
+        "options": {
+          "0": {
+            "name": "add",
+            "description": "Adds a badge to a user",
+            "options": {
+              "0": {
+                "name": "user",
+                "description": "The user to add a badge to"
+              },
+              "1": {
+                "name": "badge",
+                "description": "The badge to add",
+                "choices": {
+                  "0": "Translator",
+                  "1": "Bug Hunter",
+                  "2": "Expert Bug Hunter",
+                  "3": "Supporter",
+                  "4": "Staff",
+                  "5": "Developer"
+                }
+              }
+            }
+          },
+          "1": {
+            "name": "remove",
+            "description": "Removes a badge from a user",
+            "options": {
+              "0": {
+                "name": "user",
+                "description": "The user to remove a badge from"
+              },
+              "1": {
+                "name": "badge",
+                "description": "The badge to remove",
+                "choices": {
+                  "0": "Translator",
+                  "1": "Bug Hunter",
+                  "2": "Expert Bug Hunter",
+                  "3": "Supporter",
+                  "4": "Staff",
+                  "5": "Developer"
+                }
+              }
+            }
+          },
+          "2": {
+            "name": "show",
+            "description": "Lists all badges of a user",
+            "options": {
+              "0": {
+                "name": "user",
+                "description": "The user to view badges of"
+              }
+            }
+          }
+        }
+      },
+      "4": {
+        "name": "bans",
+        "description": "Configures the banned users",
+        "options": {
+          "0": {
+            "name": "add",
+            "description": "Bans a user from the bot",
+            "options": {
+              "0": {
+                "name": "user",
+                "description": "The user to ban"
+              }
+            }
+          },
+          "1": {
+            "name": "remove",
+            "description": "Unban a user from the bot",
+            "options": {
+              "0": {
+                "name": "user",
+                "description": "The user to unban"
+              }
+            }
+          },
+          "2": {
+            "name": "show",
+            "description": "Lists all banned users"
+          }
+        }
+      }
+    }
+  },
+  "botinfo": {
+    "name": "botinfo",
+    "description": "Shows information about the bot",
+    "options": {
+      "0": {
+        "name": "ephemeral",
+        "description": "If true, message can only be seen and used by you"
+      }
+    }
+  }
+}

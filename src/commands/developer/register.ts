@@ -15,10 +15,10 @@ export default new Command({
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
     .setContexts(InteractionContextType.Guild),
-  async execute({ interaction, client }) {
+  async execute({ interaction }) {
     await interaction.deferReply();
 
-    await registerCommands(client);
+    await registerCommands();
 
     await interaction.editReply('Commands have been registered!');
   },

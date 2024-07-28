@@ -3,6 +3,8 @@ import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
+import { supportedLanguages } from 'utils/language';
+
 export default new Command({
   module: ModuleType.General,
   botPermissions: ['SendMessages'],
@@ -23,8 +25,8 @@ export default new Command({
         .setDescription("The server's language preference")
         .addStringOption((option) => option.setName('language').setDescription('The new language to set').setAutocomplete(true).setRequired(false))
     ),
-  async autocomplete({ interaction, client }) {
-    const choices = client.supportedLanguages;
+  async autocomplete({ interaction }) {
+    const choices = supportedLanguages;
     const focused = interaction.options.getFocused();
     if (!focused.length) return interaction.respond(choices.map((choice) => ({ name: choice, value: choice })).slice(0, 25));
     const filtered = choices.filter((choice) => choice.toLowerCase().includes(focused.toLowerCase()));
@@ -45,11 +47,11 @@ export default new Command({
           if (!language) {
             return interaction.editReply({ content: t('language.current', { lng, language: lng }) });
           } else if (language) {
-            if (!client.supportedLanguages.includes(language))
+            if (!supportedLanguages.includes(language))
               return interaction.editReply({
                 content: [
                   t('language.invalid', { lng, language }),
-                  t('language.supported', { lng, languages: client.supportedLanguages.map((value) => `\`${value}\``).join(', ') }),
+                  t('language.supported', { lng, languages: supportedLanguages.map((value) => `\`${value}\``).join(', ') }),
                 ].join('\n'),
               });
             await client.updateUserLanguage(user.id, language);
@@ -69,11 +71,11 @@ export default new Command({
             if (!interaction.member.permissions.has(PermissionFlagsBits.ManageGuild))
               return interaction.editReply({ content: t('language.no_permission', { lng }) });
 
-            if (!client.supportedLanguages.includes(language))
+            if (!supportedLanguages.includes(language))
               return interaction.editReply({
                 content: [
                   t('language.invalid', { lng, language }),
-                  t('language.supported', { lng, languages: client.supportedLanguages.map((value) => `\`${value}\``).join(', ') }),
+                  t('language.supported', { lng, languages: supportedLanguages.map((value) => `\`${value}\``).join(', ') }),
                 ].join('\n'),
               });
 

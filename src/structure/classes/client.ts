@@ -1,9 +1,6 @@
 import { ClusterClient, getInfo } from 'discord-hybrid-sharding';
 import { Client, Collection, GatewayIntentBits, Partials } from 'discord.js';
 
-import { use } from 'i18next';
-import i18nextFsBackend from 'i18next-fs-backend';
-
 import type { UpdateQuery } from 'mongoose';
 
 import { clientModel, type ClientSettings } from 'models/client';
@@ -25,6 +22,7 @@ import { initDatabase } from 'utils/database';
 import { listenToErrors } from 'utils/error';
 import { keys } from 'utils/keys';
 import type { Level, LevelIdentifier } from 'utils/level';
+import { supportedLanguages, initTranslation } from 'utils/language';
 
 export class DiscordClient extends Client {
   // Cluster used for sharding
@@ -47,9 +45,6 @@ export class DiscordClient extends Client {
   public userLanguages = new Collection<string, string>(); // Collection<userId, language>
   public level = new Collection<LevelIdentifier, Level>(); // Collection<{guildId, userId}, {level, xp}>
   public levelWeekly = new Collection<LevelIdentifier, Level>(); // Collection<{guildId, userId}, {level, xp}>
-
-  // List of all currently available languages
-  public readonly supportedLanguages = ['en', 'de'];
 
   constructor() {
     super({
@@ -94,28 +89,13 @@ export class DiscordClient extends Client {
     });
 
     // Loading everything and logging in once everything is loaded
-    Promise.allSettled([this.loadModules(), this.initTranslation(), initDatabase(this), listenToErrors(this)]).then(() => {
+    Promise.allSettled([this.loadModules(), initTranslation(), initDatabase(this), listenToErrors(this)]).then(() => {
       this.login(keys.DISCORD_BOT_TOKEN);
     });
   }
 
   private async loadModules() {
     await Promise.allSettled([loadEvents(this), loadCommands(this), loadButtons(this), loadModals(this), loadSelections(this)]);
-  }
-
-  // We use i18next to translate messages into a user specified language
-  private async initTranslation() {
-    await use(i18nextFsBackend).init({
-      // debug: true,
-      preload: this.supportedLanguages,
-      fallbackLng: this.supportedLanguages[0],
-      interpolation: {
-        escapeValue: false,
-      },
-      backend: {
-        loadPath: 'src/structure/locales/{{lng}}_{{ns}}.json',
-      },
-    });
   }
 
   public async getGuildSettings(guildId: string): Promise<GuildSettings> {
@@ -142,7 +122,7 @@ export class DiscordClient extends Client {
 
   public async getGuildLanguage(guildId: string | null | undefined): Promise<string> {
     // Return default language if no valid userId is provided
-    if (!guildId) return this.supportedLanguages[0];
+    if (!guildId) return supportedLanguages[0];
 
     // Return language from language collection if found
     const languageInCollection = this.guildLanguages.get(guildId);
@@ -157,13 +137,13 @@ export class DiscordClient extends Client {
     }
 
     // Set language collection and return default language
-    this.guildLanguages.set(guildId, this.supportedLanguages[0]);
-    return this.supportedLanguages[0];
+    this.guildLanguages.set(guildId, supportedLanguages[0]);
+    return supportedLanguages[0];
   }
 
   public async updateGuildLanguage(userId: string, language: string): Promise<string> {
     // If language is not supported, use the default language
-    if (!this.supportedLanguages.includes(language)) language = this.supportedLanguages[0];
+    if (!supportedLanguages.includes(language)) language = supportedLanguages[0];
 
     // Update the guild data model and language collection
     await this.updateGuildSettings(userId, { $set: { language } });
@@ -175,7 +155,7 @@ export class DiscordClient extends Client {
 
   public async getUserLanguage(userId: string | null | undefined): Promise<string> {
     // Return default language if no valid userId is provided
-    if (!userId) return this.supportedLanguages[0];
+    if (!userId) return supportedLanguages[0];
 
     // Return language from language collection if found
     const languageInCollection = this.userLanguages.get(userId);
@@ -198,13 +178,13 @@ export class DiscordClient extends Client {
     }
 
     // Set language collection and return default language
-    this.userLanguages.set(userId, this.supportedLanguages[0]);
-    return this.supportedLanguages[0];
+    this.userLanguages.set(userId, supportedLanguages[0]);
+    return supportedLanguages[0];
   }
 
   public async updateUserLanguage(userId: string, language: string): Promise<string> {
     // If language is not supported, use the default language
-    if (!this.supportedLanguages.includes(language)) language = this.supportedLanguages[0];
+    if (!supportedLanguages.includes(language)) language = supportedLanguages[0];
 
     // Update the user data model and language collection
     await this.updateUserData(userId, { $set: { language } });

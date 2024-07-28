@@ -15,6 +15,7 @@ import { weeklyLevelModel } from 'models/weeklyLevels';
 
 import { sendError } from 'utils/error';
 import { keys } from 'utils/keys';
+import { supportedLanguages } from 'utils/language';
 import { logger } from 'utils/logger';
 
 export async function initDatabase(client: DiscordClient) {
@@ -56,7 +57,7 @@ async function collectUserLanguages(client: DiscordClient) {
   // Loop through each collected user and set language
   for (const user of client.users.cache.values()) {
     const userData = await userModel.findOne({ userId: user.id, banned: false }, {}, { upsert: false }).lean().exec();
-    if (userData && !user.bot) client.userLanguages.set(user.id, userData.language ?? client.supportedLanguages[0]);
+    if (userData && !user.bot) client.userLanguages.set(user.id, userData.language ?? supportedLanguages[0]);
   }
   // Notify about collected languages
   logger.debug(`[${client.cluster.id}] Collected ${client.userLanguages.size} user languages`);
@@ -67,7 +68,7 @@ async function collectGuildSettings(client: DiscordClient) {
   for (const guild of client.guilds.cache.values()) {
     const guildSettings = await guildModel.findOne({ guildId: guild.id }, {}, { upsert: false }).lean().exec();
     if (guildSettings) client.guildSettings.set(guild.id, guildSettings);
-    if (guildSettings) client.guildLanguages.set(guild.id, guildSettings.language ?? client.supportedLanguages[0]);
+    if (guildSettings) client.guildLanguages.set(guild.id, guildSettings.language ?? supportedLanguages[0]);
   }
   // Notify about collected guild settings
   logger.debug(`[${client.cluster.id}] Collected ${client.guildSettings.size} guild settings`);

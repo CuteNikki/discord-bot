@@ -1,0 +1,180 @@
+{
+  "config-developer": {
+    "name": "entwickler-konfiguration",
+    "description": "Nur für Moderatoren/Entwickler des Bots",
+    "options": {
+      "0": {
+        "name": "support-server-id",
+        "description": "Konfiguriert die Support-Server-ID",
+        "options": {
+          "0": {
+            "name": "setzten",
+            "description": "Setzt die Support-Server-ID",
+            "options": {
+              "0": {
+                "name": "server-id",
+                "description": "Die Support-Server-ID"
+              }
+            }
+          },
+          "1": {
+            "name": "entfernen",
+            "description": "Entfernt die Support-Server-ID"
+          },
+          "2": {
+            "name": "ansehen",
+            "description": "Zeigt die Support-Server-ID"
+          }
+        }
+      },
+      "1": {
+        "name": "support-einladungs-url",
+        "description": "Konfiguriert die Support-Einladungs-URL",
+        "options": {
+          "0": {
+            "name": "setzen",
+            "description": "Setzt die Support-Einladungs-URL",
+            "options": {
+              "0": {
+                "name": "einladungs-url",
+                "description": "Die Support-Einladungs-URL"
+              }
+            }
+          },
+          "1": {
+            "name": "entfernen",
+            "description": "Entfernt die Support-Einladungs-URL"
+          },
+          "2": {
+            "name": "ansehen",
+            "description": "Zeigt die Support-Einladungs-URL"
+          }
+        }
+      },
+      "2": {
+        "name": "bot-einladungs-url",
+        "description": "Konfiguriert die Bot-Einladungs-URL",
+        "options": {
+          "0": {
+            "name": "setzen",
+            "description": "Setzt die Bot-Einladungs-URL",
+            "options": {
+              "0": {
+                "name": "einladungs-url",
+                "description": "Die Bot-Einladungs-URL"
+              }
+            }
+          },
+          "1": {
+            "name": "entfernen",
+            "description": "Entfernt die Bot-Einladungs-URL"
+          },
+          "2": {
+            "name": "ansehen",
+            "description": "Zeigt die Bot-Einladungs-URL"
+          }
+        }
+      },
+      "3": {
+        "name": "abzeichen",
+        "description": "Konfiguriert die Abzeichen eines Benutzers",
+        "options": {
+          "0": {
+            "name": "geben",
+            "description": "Gibt ein Abzeichen einem Benutzer",
+            "options": {
+              "0": {
+                "name": "benutzer",
+                "description": "Der Benutzer, dem ein Abzeichen hinzugefügt werden soll"
+              },
+              "1": {
+                "name": "abzeichen",
+                "description": "Das Abzeichen was hinzugefügt werden soll",
+                "choices": {
+                  "0": "Übersetzer",
+                  "1": "Fehler-Finder",
+                  "2": "Experten Fehler-Finder",
+                  "3": "Unterstützer",
+                  "4": "Teammitglied",
+                  "5": "Entwickler"
+                }
+              }
+            }
+          },
+          "1": {
+            "name": "entfernen",
+            "description": "Entfernt ein Abzeichen eines Benutzers",
+            "options": {
+              "0": {
+                "name": "benutzer",
+                "description": "Der Benutzer, von dem ein Abzeichen entfernt werden soll"
+              },
+              "1": {
+                "name": "abzeichen",
+                "description": "Das Abzeichen was entfernt werden soll",
+                "choices": {
+                  "0": "Übersetzer",
+                  "1": "Fehler-Finder",
+                  "2": "Experten Fehler-Finder",
+                  "3": "Unterstützer",
+                  "4": "Teammitglied",
+                  "5": "Entwickler"
+                }
+              }
+            }
+          },
+          "2": {
+            "name": "ansehen",
+            "description": "Zeigt alle Abzeichen eines Benutzers",
+            "options": {
+              "0": {
+                "name": "benutzer",
+                "description": "Der Benutzer, von dem alle Abzeichen angezeigt werden sollen"
+              }
+            }
+          }
+        }
+      },
+      "4": {
+        "name": "verbannungen",
+        "description": "Konfiguriert die Verbannungen von Benutzern",
+        "options": {
+          "0": {
+            "name": "verbannen",
+            "description": "Verbannt einen Benutzer vom Bot",
+            "options": {
+              "0": {
+                "name": "benutzer",
+                "description": "Der Benutzer, der gebannt werden soll"
+              }
+            }
+          },
+          "1": {
+            "name": "entbannen",
+            "description": "Entfernt die Verbannung eines Benutzers vom Bot",
+            "options": {
+              "0": {
+                "name": "benutzer",
+                "description": "Der Benutzer, der entbannt werden soll"
+              }
+            }
+          },
+          "2": {
+            "name": "ansehen",
+            "description": "Zeigt alle Verbannungen an"
+          }
+        }
+      }
+    }
+  },
+  "botinfo": {
+    "name": "botinfo",
+    "description": "Zeigt Informationen über den Bot",
+    "options": {
+      "0": {
+        "name": "ephemeral",
+        "description": "Wenn true, kann die Nachricht nur von dir gesehen und verwendet werden"
+      }
+    }
+  }
+}

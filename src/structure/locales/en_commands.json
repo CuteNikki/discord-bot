@@ -1047,5 +1047,15 @@
         ]
       }
     ]
+  },
+  "ping": {
+    "name": "ping",
+    "description": "Shows you roundtrip and websocket heartbeat latency",
+    "options": [
+      {
+        "name": "ephemeral",
+        "description": "If *true*, message can only be seen by you"
+      }
+    ]
   }
 }

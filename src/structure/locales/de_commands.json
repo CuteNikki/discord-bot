@@ -1024,7 +1024,7 @@
   },
   "language": {
     "name": "sprache",
-    "description": "Sehe oder ändere die Sprache des Bots",  
+    "description": "Sehe oder ändere die Sprache des Bots",
     "options": [
       {
         "name": "benutzer",
@@ -1045,6 +1045,16 @@
             "description": "Die Sprache, die gesetzt werden soll"
           }
         ]
+      }
+    ]
+  },
+  "ping": {
+    "name": "ping",
+    "description": "Zeigt dir die Rundtrip und Websocket Herzschlag Latenz",
+    "options": [
+      {
+        "name": "geheim",
+        "description": "Wenn *True*, kann die Nachricht nur von dir gesehen werden"
       }
     ]
   }

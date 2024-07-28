@@ -1011,5 +1011,15 @@
         "description": "If *true*, message can only be seen by you"
       }
     ]
+  },
+  "invite": {
+    "name": "invite-url",
+    "description": "Shows the invite link to add the bot to your server",
+    "options": [
+      {
+        "name": "ephemeral",
+        "description": "If *true*, message can only be seen by you"
+      }
+    ]
   }
 }

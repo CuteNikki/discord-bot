@@ -1011,5 +1011,15 @@
         "description": "Wenn *True*, kann die Nachricht nur von dir gesehen werden"
       }
     ]
+  },
+  "invite": {
+    "name": "einladungs-url",
+    "description": "Zeigt dir den Link zum Hinzufügen des Bots zu deinem Server",
+    "options": [
+      {
+        "name": "geheim",
+        "description": "Wenn *True*, kann die Nachricht nur von dir gesehen werden"
+      }
+    ]
   }
 }

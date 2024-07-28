@@ -743,6 +743,92 @@
       }
     ]
   },
+  "config-welcome": {
+    "name": "willkommens-konfiguration",
+    "description": "Konfiguriere das Willkommens-Modul",
+    "options": [
+      {
+        "name": "rollen",
+        "description": "Konfiguriere die Willkommens-Rollen",
+        "options": [
+          {
+            "name": "hinzufügen",
+            "description": "Fügt eine Willkommens-Rolle hinzu",
+            "options": [
+              {
+                "name": "rolle",
+                "description": "Die Rolle, die hinzugefügt werden soll"
+              }
+            ]
+          },
+          {
+            "name": "entfernen",
+            "description": "Entfernt eine Willkommens-Rolle",
+            "options": [
+              {
+                "name": "rollen-id",
+                "description": "Die ID der Rolle, die entfernt werden soll"
+              }
+            ]
+          },
+          {
+            "name": "ansehen",
+            "description": "Zeigt alle Willkommens-Rollen an"
+          }
+        ]
+      },
+      {
+        "name": "kanal",
+        "description": "Konfiguriere den Willkommens-Kanal",
+        "options": [
+          {
+            "name": "setzen",
+            "description": "Setzt den Willkommens-Kanal",
+            "options": [
+              {
+                "name": "kanal",
+                "description": "Der Willkommens-Kanal"
+              }
+            ]
+          },
+          {
+            "name": "entfernen",
+            "description": "Entfernt den Willkommens-Kanal"
+          },
+          {
+            "name": "ansehen",
+            "description": "Zeigt den Willkommens-Kanal an"
+          }
+        ]
+      },
+      {
+        "name": "nachricht",
+        "description": "Konfiguriere die Willkommens-Nachricht",
+        "options": [
+          {
+            "name": "setzen",
+            "description": "Setzt die Willkommens-Nachricht"
+          },
+          {
+            "name": "entfernen",
+            "description": "Entfernt die Willkommens-Nachricht"
+          },
+          {
+            "name": "ansehen",
+            "description": "Zeigt die Willkommens-Nachricht an"
+          },
+          {
+            "name": "testen",
+            "description": "Sendet eine Test-Willkommens-Nachricht"
+          },
+          {
+            "name": "platzhalter",
+            "description": "Zeigt dir die verfügbaren Platzhalter an"
+          }
+        ]
+      }
+    ]
+  },
   "botinfo": {
     "name": "bot-informationen",
     "description": "Zeigt Informationen über den Bot",

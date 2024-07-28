@@ -743,6 +743,92 @@
       }
     ]
   },
+  "config-welcome": {
+    "name": "welcome-configuration",
+    "description": "Configure the welcome module",
+    "options": [
+      {
+        "name": "roles",
+        "description": "Configure the welcome roles",
+        "options": [
+          {
+            "name": "add",
+            "description": "Adds a welcome role",
+            "options": [
+              {
+                "name": "role",
+                "description": "The role to add"
+              }
+            ]
+          },
+          {
+            "name": "remove",
+            "description": "Removes a welcome role",
+            "options": [
+              {
+                "name": "role-id",
+                "description": "The id of role to remove"
+              }
+            ]
+          },
+          {
+            "name": "list",
+            "description": "Lists all welcome roles"
+          }
+        ]
+      },
+      {
+        "name": "channel",
+        "description": "Configure the welcome channel",
+        "options": [
+          {
+            "name": "set",
+            "description": "Sets the welcome channel",
+            "options": [
+              {
+                "name": "channel",
+                "description": "The welcome channel"
+              }
+            ]
+          },
+          {
+            "name": "remove",
+            "description": "Removes the welcome channel"
+          },
+          {
+            "name": "show",
+            "description": "Shows the welcome channel"
+          }
+        ]
+      },
+      {
+        "name": "message",
+        "description": "Configure the welcome message",
+        "options": [
+          {
+            "name": "set",
+            "description": "Sets the welcome message"
+          },
+          {
+            "name": "remove",
+            "description": "Removes the welcome message"
+          },
+          {
+            "name": "show",
+            "description": "Shows the welcome message"
+          },
+          {
+            "name": "test",
+            "description": "Send a test welcome message"
+          },
+          {
+            "name": "placeholders",
+            "description": "Shows you the available placeholders"
+          }
+        ]
+      }
+    ]
+  },
   "botinfo": {
     "name": "botinfo",
     "description": "Shows information about the bot",

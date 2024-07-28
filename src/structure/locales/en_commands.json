@@ -1021,5 +1021,31 @@
         "description": "If *true*, message can only be seen by you"
       }
     ]
+  },
+  "language": {
+    "name": "language",
+    "description": "See or change the language of the bot",
+    "options": [
+      {
+        "name": "user",
+        "description": "See or change your personal language preference",
+        "options": [
+          {
+            "name": "language",
+            "description": "The language to set"
+          }
+        ]
+      },
+      {
+        "name": "guild",
+        "description": "See or change the language of the guild",
+        "options": [
+          {
+            "name": "language",
+            "description": "The language to set"
+          }
+        ]
+      }
+    ]
   }
 }

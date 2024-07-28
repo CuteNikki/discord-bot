@@ -1021,5 +1021,31 @@
         "description": "Wenn *True*, kann die Nachricht nur von dir gesehen werden"
       }
     ]
+  },
+  "language": {
+    "name": "sprache",
+    "description": "Sehe oder ändere die Sprache des Bots",  
+    "options": [
+      {
+        "name": "benutzer",
+        "description": "Sehe oder ändere deine persönliche Spracheinstellung",
+        "options": [
+          {
+            "name": "sprache",
+            "description": "Die Sprache, die gesetzt werden soll"
+          }
+        ]
+      },
+      {
+        "name": "server",
+        "description": "Sehe oder ändere die Sprache des Servers",
+        "options": [
+          {
+            "name": "sprache",
+            "description": "Die Sprache, die gesetzt werden soll"
+          }
+        ]
+      }
+    ]
   }
 }

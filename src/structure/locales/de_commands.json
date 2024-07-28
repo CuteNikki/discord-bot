@@ -495,6 +495,76 @@
       }
     ]
   },
+  "config-log": {
+    "name": "log-konfiguration",
+    "description": "Konfiguriere das Log-Modul",
+    "options": [
+      {
+        "name": "ansehen",
+        "description": "Zeigt die aktuelle Konfiguration an",
+        "options": [
+          {
+            "name": "alles",
+            "description": "Zeigt die gesamte Konfiguration an"
+          },
+          {
+            "name": "kanal",
+            "description": "Zeigt den Log-Kanal an"
+          },
+          {
+            "name": "events",
+            "description": "Zeigt den Status der Events an"
+          }
+        ]
+      },
+      {
+        "name": "kanal",
+        "description": "Konfiguriere den Log-Kanal",
+        "options": [
+          {
+            "name": "setzen",
+            "description": "Setzt den Log-Kanal",
+            "options": [
+              {
+                "name": "kanal",
+                "description": "Der Log-Kanal"
+              }
+            ]
+          },
+          {
+            "name": "entfernen",
+            "description": "Entfernt den Log-Kanal"
+          }
+        ]
+      },
+      {
+        "name": "events",
+        "description": "Konfiguriere die Events",
+        "options": [
+          {
+            "name": "aktivieren",
+            "description": "Aktiviert ein Event",
+            "options": [
+              {
+                "name": "event",
+                "description": "Name des Events"
+              }
+            ]
+          },
+          {
+            "name": "deaktivieren",
+            "description": "Deaktiviert ein Event",
+            "options": [
+              {
+                "name": "event",
+                "description": "Name des Events"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
   "botinfo": {
     "name": "bot-informationen",
     "description": "Zeigt Informationen über den Bot",

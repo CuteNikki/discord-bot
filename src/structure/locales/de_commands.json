@@ -565,6 +565,40 @@
       }
     ]
   },
+  "config-moderation": {
+    "name": "moderation-konfiguration",
+    "description": "Konfiguriere das Moderation-Modul",
+    "options": [
+      {
+        "name": "ansehen",
+        "description": "Zeigt die aktuelle Konfiguration an",
+        "options": [
+          {
+            "name": "alles",
+            "description": "Zeigt die gesamte Konfiguration an"
+          },
+          {
+            "name": "status",
+            "description": "Zeigt den Status des Moderation-Moduls an"
+          }
+        ]
+      },
+      {
+        "name": "status",
+        "description": "Schaltet das Moderation-Modul um",
+        "options": [
+          {
+            "name": "an",
+            "description": "Schaltet das Moderation-Modul an"
+          },
+          {
+            "name": "aus",
+            "description": "Schaltet das Moderation-Modul aus"
+          }
+        ]
+      }
+    ]
+  },
   "botinfo": {
     "name": "bot-informationen",
     "description": "Zeigt Informationen über den Bot",

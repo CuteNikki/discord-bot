@@ -565,6 +565,40 @@
       }
     ]
   },
+  "config-moderation": {
+    "name": "moderation-configuration",
+    "description": "Configure the moderation module",
+    "options": [
+      {
+        "name": "show",
+        "description": "Shows the current configuration",
+        "options": [
+          {
+            "name": "all",
+            "description": "Shows the entire configuration"
+          },
+          {
+            "name": "state",
+            "description": "Shows the state of the moderation module"
+          }
+        ]
+      },
+      {
+        "name": "toggle",
+        "description": "Toggles the moderation module",
+        "options": [
+          {
+            "name": "on",
+            "description": "Turns the moderation module on"
+          },
+          {
+            "name": "off",
+            "description": "Turns the moderation module off"
+          }
+        ]
+      }
+    ]
+  },
   "botinfo": {
     "name": "botinfo",
     "description": "Shows information about the bot",

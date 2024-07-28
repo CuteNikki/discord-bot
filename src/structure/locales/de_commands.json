@@ -1091,5 +1091,23 @@
         "description": "Wenn *True*, kann die Nachricht nur von dir gesehen werden"
       }
     ]
+  },
+  "rank": {
+    "name": "rank",
+    "description": "Zeigt das Level und den Platz auf der Bestenliste eines Benutzers",
+    "options": [
+      {
+        "name": "benutzer",
+        "description": "Der Benutzer, dessen Level angezeigt werden soll"
+      },
+      {
+        "name": "wöchentlich",
+        "description": "Wenn *True*, wird das wöchentliche Level angezeigt"
+      },
+      {
+        "name": "geheim",
+        "description": "Wenn *True*, kann die Nachricht nur von dir gesehen werden"
+      }
+    ]
   }
 }

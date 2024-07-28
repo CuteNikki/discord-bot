@@ -1091,5 +1091,23 @@
         "description": "If *True*, message can only be seen by you"
       }
     ]
+  },
+  "rank": {
+    "name": "rank",
+    "description": "Shows the level and rank of a user on the leaderboard",
+    "options": [
+      {
+        "name": "user",
+        "description": "The user to show the rank of"
+      },
+      {
+        "name": "weekly",
+        "description": "If *True*, will show the weekly rank"
+      },
+      {
+        "name": "ephemeral",
+        "description": "If *True*, message can only be seen by you"
+      }
+    ]
   }
 }

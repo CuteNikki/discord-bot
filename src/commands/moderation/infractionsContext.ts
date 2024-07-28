@@ -21,7 +21,7 @@ export default new Command<typeof commandType>({
   module: ModuleType.Moderation,
   botPermissions: ['SendMessages'],
   data: new ContextMenuCommandBuilder()
-    .setName('View Infractions')
+    .setName('infractions-context')
     .setType(commandType)
     .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)

@@ -1161,5 +1161,8 @@
         ]
       }
     ]
+  },
+  "infractions-context": {
+    "name": "Verstöße ansehen"
   }
 }

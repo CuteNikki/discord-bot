@@ -988,7 +988,17 @@
     "options": [
       {
         "name": "ephemeral",
-        "description": "If true, message can only be seen and used by you"
+        "description": "If *True*, message can only be seen by you"
+      }
+    ]
+  },
+  "clusters": {
+    "name": "clusters",
+    "description": "Shows information about all clusters and shards",
+    "options": [
+      {
+        "name": "ephemeral",
+        "description": "If *true*, message can only be seen by you"
       }
     ]
   }

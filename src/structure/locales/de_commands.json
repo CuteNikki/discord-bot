@@ -988,7 +988,17 @@
     "options": [
       {
         "name": "geheim",
-        "description": "Die Nachricht kann nur von dir gesehen und verwendet werden"
+        "description": "Wenn *True*, kann die Nachricht nur von dir gesehen werden"
+      }
+    ]
+  },
+  "clusters": {
+    "name": "clusters",
+    "description": "Zeigt Informationen über alle Cluster und Shards",
+    "options": [
+      {
+        "name": "geheim",
+        "description": "Wenn *True*, kann die Nachricht nur von dir gesehen werden"
       }
     ]
   }

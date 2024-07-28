@@ -829,6 +829,18 @@
       }
     ]
   },
+  "eval": {
+    "name": "eval",
+    "description": "Evaluates code"
+  },
+  "execute": {
+    "name": "execute",
+    "description": "Executes a console command"
+  },
+  "register": {
+    "name": "register-commands",
+    "description": "Registers the commands"
+  },
   "botinfo": {
     "name": "botinfo",
     "description": "Shows information about the bot",

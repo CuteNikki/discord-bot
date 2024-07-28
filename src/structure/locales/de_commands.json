@@ -829,6 +829,18 @@
       }
     ]
   },
+  "eval": {
+    "name": "eval",
+    "description": "Führt Code aus"
+  },
+  "execute": {
+    "name": "execute",
+    "description": "Führt einen Konsolen-Befehl aus"
+  },
+  "register": {
+    "name": "befehle-registrieren",
+    "description": "Registriert die Befehle"
+  },
   "botinfo": {
     "name": "bot-informationen",
     "description": "Zeigt Informationen über den Bot",

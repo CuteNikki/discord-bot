@@ -841,6 +841,133 @@
     "name": "register-commands",
     "description": "Registers the commands"
   },
+  "games": {
+    "name": "games",
+    "description": "Choose one of many fun games to play",
+    "options": [
+      {
+        "name": "rock-paper-scissors",
+        "description": "Play rock paper scissors",
+        "options": [
+          {
+            "name": "opponent",
+            "description": "The opponent to play against"
+          }
+        ]
+      },
+      {
+        "name": "tic-tac-toe",
+        "description": "Play tic tac toe",
+        "options": [
+          {
+            "name": "opponent",
+            "description": "The opponent to play against"
+          }
+        ]
+      },
+      {
+        "name": "connect-four",
+        "description": "Play connect four",
+        "options": [
+          {
+            "name": "opponent",
+            "description": "The opponent to play against"
+          },
+          {
+            "name": "size",
+            "description": "The size of the board",
+            "choices": ["Original (7x6)", "Small (6x5)", "Medium (8x7)", "Large (10x9)"]
+          }
+        ]
+      },
+      {
+        "name": "hangman",
+        "description": "Play hangman",
+        "options": [
+          {
+            "name": "theme",
+            "description": "The theme you want the word to be from",
+            "choices": ["Random", "Discord", "Fruit", "Color", "Sport", "Nature", "Camping", "Winter", "Pokemon", "Wordle"]
+          }
+        ]
+      },
+      {
+        "name": "trivia",
+        "description": "Play trivia",
+        "options": [
+          {
+            "name": "mode",
+            "description": "Choose between single or multiple choice",
+            "choices": ["Single choice", "Multiple choice"]
+          },
+          {
+            "name": "difficulty",
+            "description": "Choose the difficulty of the trivia",
+            "choices": ["Easy", "Medium", "Hard"]
+          },
+          {
+            "name": "category",
+            "description": "Choose the category of the trivia",
+            "choices": [
+              "Any Category",
+              "General Knowledge",
+              "Books",
+              "Music",
+              "Television",
+              "Video Games",
+              "Board Games",
+              "Science and Nature",
+              "Computers",
+              "Mathematics",
+              "Mythology",
+              "Sports",
+              "Geography",
+              "History",
+              "Politics",
+              "Art",
+              "Celebrities",
+              "Animals",
+              "Vehicles",
+              "Comics",
+              "Japanese Anime and Manga",
+              "Cartoon and Animations"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "snake",
+        "description": "Play a game of snake",
+        "options": [
+          {
+            "name": "size",
+            "description": "The size of the board",
+            "choices": ["Very Small (5x5)", "Small (6x6)", "Medium (7x7)", "Large (8x8)", "Very Large (9x9)", "Huge (10x10)"]
+          }
+        ]
+      },
+      {
+        "name": "fast-type",
+        "description": "Test your typing skills and speed!"
+      },
+      {
+        "name": "memory",
+        "description": "Remember the tile and match the pairs!"
+      },
+      {
+        "name": "remember-emoji",
+        "description": "Remember the emojis and find the correct one!"
+      },
+      {
+        "name": "tetris",
+        "description": "Play a game of tetris!"
+      },
+      {
+        "name": "sokoban",
+        "description": "Move all the boxes to a goal to win!"
+      }
+    ]
+  },
   "botinfo": {
     "name": "botinfo",
     "description": "Shows information about the bot",

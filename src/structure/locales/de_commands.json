@@ -841,6 +841,133 @@
     "name": "befehle-registrieren",
     "description": "Registriert die Befehle"
   },
+  "games": {
+    "name": "spiele",
+    "description": "Wähle eines der vielen spaßigen Spiele aus",
+    "options": [
+      {
+        "name": "stein-schere-papier",
+        "description": "Spiele stein, schere und papier",
+        "options": [
+          {
+            "name": "gegner",
+            "description": "Der Gegner, gegen du spielen möchtest"
+          }
+        ]
+      },
+      {
+        "name": "tic-tac-toe",
+        "description": "Spiele tic tac toe",
+        "options": [
+          {
+            "name": "gegner",
+            "description": "Der Gegner, gegen du spielen möchtest"
+          }
+        ]
+      },
+      {
+        "name": "verbinde-vier",
+        "description": "Spiele verbinde vier (connect four)",
+        "options": [
+          {
+            "name": "gegner",
+            "description": "Der Gegner, gegen du spielen möchtest"
+          },
+          {
+            "name": "größe",
+            "description": "Die Größe des Spielfelds",
+            "choices": ["Original (7x6)", "Klein (6x5)", "Mittel (8x7)", "Groß (10x9)"]
+          }
+        ]
+      },
+      {
+        "name": "galgenmännchen",
+        "description": "Spiele galgenmännchen",
+        "options": [
+          {
+            "name": "thema",
+            "description": "Das Thema, aus dem das Wort kommt",
+            "choices": ["Zufällig", "Discord", "Früchte", "Farben", "Sport", "Natur", "Camping", "Winter", "Pokemon", "Wordle"]
+          }
+        ]
+      },
+      {
+        "name": "trivia",
+        "description": "Spiele Trivia",
+        "options": [
+          {
+            "name": "modus",
+            "description": "Wähle zwischen einfache oder mehrfache Antwort",
+            "choices": ["Einfache Antwort", "Mehrfache Antwort"]
+          },
+          {
+            "name": "schwierigkeit",
+            "description": "Wähle die Schwierigkeit des Trivia",
+            "choices": ["Einfach", "Mittel", "Schwer"]
+          },
+          {
+            "name": "kategorie",
+            "description": "Wähle die Kategorie des Trivia",
+            "choices": [
+              "Irgendeine Kategorie",
+              "Allgemeinwissen",
+              "Bücher",
+              "Musik",
+              "Fernsehen",
+              "Videospiele",
+              "Brettspiele",
+              "Wissenschaft und Natur",
+              "Computer",
+              "Mathematik",
+              "Mythologie",
+              "Sport",
+              "Geographie",
+              "Geschichte",
+              "Politik",
+              "Kunst",
+              "Helden",
+              "Tiere",
+              "Fahrzeuge",
+              "Comics",
+              "Japanische Anime und Manga",
+              "Cartoon und Animationen"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "schlange",
+        "description": "Spiele das klassische Schlangen Spiel (Snake)",
+        "options": [
+          {
+            "name": "größe",
+            "description": "Die Größe des Spielfelds",
+            "choices": ["Sehr klein (5x5)", "Klein (6x6)", "Mittel (7x7)", "Groß (8x8)", "Sehr groß (9x9)", "Riesig (10x10)"]
+          }
+        ]
+      },
+      {
+        "name": "schnelles-schreiben",
+        "description": "Teste deine Schreibfähigkeiten und Geschwindigkeit!"
+      },
+      {
+        "name": "memory",
+        "description": "Merke dir die Karte und finde die Paare!"
+      },
+      {
+        "name": "remember-emoji",
+        "description": "Merke dir wo die Emojis sind und finde den richtigen!"
+      },
+      {
+        "name": "tetris",
+        "description": "Spiele Tetris!"
+      },
+      {
+        "name": "sokoban",
+        "description": "Bewege alle die Boxen zu einem Ziel, um zu gewinnen!"
+      }
+    ]
+  },
   "botinfo": {
     "name": "bot-informationen",
     "description": "Zeigt Informationen über den Bot",

@@ -1001,5 +1001,15 @@
         "description": "Wenn *True*, kann die Nachricht nur von dir gesehen werden"
       }
     ]
+  },
+  "commands": {
+    "name": "befehle",
+    "description": "Zeigt eine Liste aller Befehle",
+    "options": [
+      {
+        "name": "geheim",
+        "description": "Wenn *True*, kann die Nachricht nur von dir gesehen werden"
+      }
+    ]
   }
 }

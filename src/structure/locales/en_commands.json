@@ -1001,5 +1001,15 @@
         "description": "If *true*, message can only be seen by you"
       }
     ]
+  },
+  "commands": {
+    "name": "commands",
+    "description": "Shows a list of all commands",
+    "options": [
+      {
+        "name": "ephemeral",
+        "description": "If *true*, message can only be seen by you"
+      }
+    ]
   }
 }

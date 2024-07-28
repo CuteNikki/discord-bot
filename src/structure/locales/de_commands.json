@@ -1077,5 +1077,19 @@
         "description": "Wenn *True*, kann die Nachricht nur von dir gesehen werden"
       }
     ]
+  },
+  "levels": {
+    "name": "level",
+    "description": "Zeigt dir die Level-Bestenliste",
+    "options": [
+      {
+        "name": "wöchentlich",
+        "description": "Wenn *True*, wird die Wochenliste angezeigt"
+      },
+      {
+        "name": "geheim",
+        "description": "Wenn *True*, kann die Nachricht nur von dir gesehen werden"
+      }
+    ]
   }
 }

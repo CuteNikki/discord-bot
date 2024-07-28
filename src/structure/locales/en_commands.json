@@ -1077,5 +1077,19 @@
         "description": "If *True*, message can only be seen by you"
       }
     ]
+  },
+  "levels": {
+    "name": "levels",
+    "description": "Shows you the level leaderboard",
+    "options": [
+      {
+        "name": "weekly",
+        "description": "If *True*, will show the weekly leaderboard"
+      },
+      {
+        "name": "ephemeral",
+        "description": "If *True*, message can only be seen by you"
+      }
+    ]
   }
 }

@@ -50,14 +50,14 @@ export default new Event({
     }
 
     // Bot permissions check
-    if (selection.options.botPermissions?.length) {
-      if (!interaction.guild?.members.me) return;
+    if (selection.options.botPermissions?.length && interaction.guild?.members.me) {
       const permissions = interaction.guild.members.me.permissions;
-      if (!permissions.has(selection.options.botPermissions))
+      if (!permissions.has(selection.options.botPermissions)) {
         return interaction.reply({
           content: t('interactions.bot_permissions', { lng, permissions: selection.options.botPermissions.join(', ') }),
           ephemeral: true,
         });
+      }
     }
 
     // Check if selection is developer only and return if the user's id doesn't match the developer's id

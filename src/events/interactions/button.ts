@@ -4,8 +4,8 @@ import { t } from 'i18next';
 import type { Button } from 'classes/button';
 import { Event } from 'classes/event';
 
-import { keys } from 'utils/keys';
 import { sendError } from 'utils/error';
+import { keys } from 'utils/keys';
 
 export default new Event({
   name: Events.InteractionCreate,
@@ -51,14 +51,14 @@ export default new Event({
     }
 
     // Bot permissions check
-    if (button.options.botPermissions?.length) {
-      if (!interaction.guild?.members.me) return;
+    if (button.options.botPermissions?.length && interaction.guild?.members.me) {
       const permissions = interaction.guild.members.me.permissions;
-      if (!permissions.has(button.options.botPermissions))
+      if (!permissions.has(button.options.botPermissions)) {
         return interaction.reply({
           content: t('interactions.bot_permissions', { lng, permissions: button.options.botPermissions.join(', ') }),
           ephemeral: true,
         });
+      }
     }
 
     // Check if button is developer only and return if the user's id doesn't match the developer's id

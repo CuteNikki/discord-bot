@@ -1222,5 +1222,19 @@
         "description": "The reason for the mute"
       }
     ]
+  },
+  "unban": {
+    "name": "unban",
+    "description": "Unban a user from the server",
+    "options": [
+      {
+        "name": "user",
+        "description": "The user to unban"
+      },
+      {
+        "name": "reason",
+        "description": "The reason for the unban"
+      }
+    ]
   }
 }

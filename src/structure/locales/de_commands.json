@@ -1222,5 +1222,19 @@
         "description": "Der Grund für die Stummschaltung"
       }
     ]
+  },
+  "unban": {
+    "name": "entbannen",
+    "description": "Entbannt einen Benutzer vom Server",
+    "options": [
+      {
+        "name": "benutzer",
+        "description": "Der Benutzer, der entbannt werden soll"
+      },
+      {
+        "name": "grund",
+        "description": "Der Grund für die Entbannung"
+      }
+    ]
   }
 }

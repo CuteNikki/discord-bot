@@ -1,4 +1,5 @@
 import { ChannelType, Colors, EmbedBuilder, Events, GuildScheduledEventPrivacyLevel, GuildScheduledEventStatus } from 'discord.js';
+import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
@@ -16,34 +17,40 @@ export default new Event({
     const logChannel = await guild.channels.fetch(config.log.channelId);
     if (!logChannel || logChannel.type !== ChannelType.GuildText) return;
 
+    const lng = config.language;
+
     await logChannel.send({
       embeds: [
         new EmbedBuilder()
           .setColor(Colors.Green)
-          .setTitle('Guild Scheduled Event Create')
+          .setTitle(t('log.guildScheduledEventCreate.title', { lng }))
           .setImage(event.coverImageURL({ size: 1024 }))
           .addFields(
-            { name: 'Name', value: name },
-            { name: 'Description', value: description || '/' },
-            { name: 'URL', value: url },
+            { name: t('log.guildScheduledEventCreate.name', { lng }), value: name },
+            { name: t('log.guildScheduledEventCreate.description', { lng }), value: description || '/' },
+            { name: t('log.guildScheduledEventCreate.url', { lng }), value: url },
             {
-              name: 'Location',
+              name: t('log.guildScheduledEventCreate.location', { lng }),
               value: channel ? `${channel.toString()} (\`${channel.name}\` | ${channel.id})` : entityMetadata?.location ? `${entityMetadata?.location}` : '/',
             },
-            { name: 'Creator', value: creator ? `${creator.toString()} (\`${creator.username}\` | ${creator.id})` : '/' },
-            { name: 'Status', value: GuildScheduledEventStatus[status] },
-            { name: 'Privacy Level', value: GuildScheduledEventPrivacyLevel[privacyLevel] },
             {
-              name: 'Start',
+              name: t('log.guildScheduledEventCreate.creator', { lng }),
+              value: creator ? `${creator.toString()} (\`${creator.username}\` | ${creator.id})` : '/',
+            },
+            { name: t('log.guildScheduledEventCreate.status', { lng }), value: GuildScheduledEventStatus[status] },
+            { name: t('log.guildScheduledEventCreate.privacy_level', { lng }), value: GuildScheduledEventPrivacyLevel[privacyLevel] },
+            {
+              name: t('log.guildScheduledEventCreate.start', { lng }),
               value: scheduledStartTimestamp
                 ? `<t:${Math.floor(scheduledStartTimestamp / 1000)}:f> (<t:${Math.floor(scheduledStartTimestamp / 1000)}:R>)`
                 : '/',
             },
             {
-              name: 'End',
+              name: t('log.guildScheduledEventCreate.end', { lng }),
               value: scheduledEndTimestamp ? `<t:${Math.floor(scheduledEndTimestamp / 1000)}:f> (<t:${Math.floor(scheduledEndTimestamp / 1000)}:R>)` : '/',
             }
-          ),
+          )
+          .setTimestamp(),
       ],
     });
   },

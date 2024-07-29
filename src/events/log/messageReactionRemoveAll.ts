@@ -1,4 +1,5 @@
 import { ChannelType, Colors, EmbedBuilder, Events } from 'discord.js';
+import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
@@ -19,29 +20,31 @@ export default new Event({
     const logChannel = await guild.channels.fetch(config.log.channelId);
     if (!config.log.enabled || !logChannel || logChannel.type !== ChannelType.GuildText) return;
 
+    const lng = config.language;
+
     await logChannel.send({
       embeds: [
         new EmbedBuilder()
           .setColor(Colors.Orange)
-          .setTitle('Message Reaction Remove All')
+          .setTitle(t('log.messageReactionRemoveAll.title', { lng }))
           .addFields(
             {
-              name: 'Author',
+              name: t('log.messageReactionRemoveAll.author', { lng }),
               value: `${message.author.toString()} (\`${message.author.username}\` | ${message.author.id})`,
             },
             {
-              name: 'Message',
+              name: t('log.messageReactionRemoveAll.message', { lng }),
               value: message.url,
             },
             {
-              name: 'Reactions',
+              name: t('log.messageReactionRemoveAll.reactions', { lng }),
               value:
                 reactions
                   .map((reaction) => `${reaction.count}x ${reaction.emoji}`)
                   .join('\n')
                   .slice(0, 1000) || '/',
             }
-          ),
+          ).setTimestamp(),
       ],
       files: message.attachments.map((a) => a),
     });

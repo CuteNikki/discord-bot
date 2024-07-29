@@ -1,4 +1,5 @@
 import { AutoModerationActionType, AutoModerationRuleTriggerType, ChannelType, Colors, EmbedBuilder, Events } from 'discord.js';
+import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
@@ -15,36 +16,38 @@ export default new Event({
     const logChannel = await guild.channels.fetch(config.log.channelId);
     if (!logChannel || logChannel.type !== ChannelType.GuildText) return;
 
+    const lng = config.language;
+
     await logChannel.send({
       embeds: [
         new EmbedBuilder()
           .setColor(Colors.Green)
-          .setTitle('Auto Moderation Rule Create')
+          .setTitle(t('log.autoModerationRuleCreate.title', { lng }))
           .addFields(
-            { name: 'Created by', value: `<@${creatorId}>` },
-            { name: 'Rule Name', value: name },
-            { name: 'Rule Trigger Type', value: AutoModerationRuleTriggerType[triggerType] },
+            { name: t('log.autoModerationRuleCreate.created_by', { lng }), value: `<@${creatorId}>` },
+            { name: t('log.autoModerationRuleCreate.rule_name', { lng }), value: name },
+            { name: t('log.autoModerationRuleCreate.rule_trigger_type', { lng }), value: AutoModerationRuleTriggerType[triggerType] },
             {
-              name: 'Trigger Metadata',
+              name: t('log.autoModerationRuleCreate.trigger_metadata', { lng }),
               value: [
-                `Keyword Filter: ${
+                `${t('log.autoModerationRuleCreate.keyword_filter', { lng })}: ${
                   triggerMetadata.keywordFilter
                     .map((word) => `\`${word}\``)
                     .join(', ')
                     .slice(0, 200) || '/'
                 }`,
-                `Regex Patterns: ${
+                `${t('log.autoModerationRuleCreate.regex_patterns', { lng })}: ${
                   triggerMetadata.regexPatterns
                     .map((pattern) => `\`${pattern}\``)
                     .join(', ')
                     .slice(0, 200) || '/'
                 }`,
-                `Mention Total Limit: ${triggerMetadata.mentionTotalLimit || '/'}`,
-                `Mention Raid Protection: ${triggerMetadata.mentionRaidProtectionEnabled}`,
+                `${t('log.autoModerationRuleCreate.mention_total_limit', { lng })}: ${triggerMetadata.mentionTotalLimit || '/'}`,
+                `${t('log.autoModerationRuleCreate.mention_raid_protection', { lng })}: ${triggerMetadata.mentionRaidProtectionEnabled}`,
               ].join('\n'),
             },
             {
-              name: 'Actions',
+              name: t('log.autoModerationRuleCreate.action', { lng }),
               value:
                 actions
                   .map((action) => `${AutoModerationActionType[action.type]}`)
@@ -52,7 +55,7 @@ export default new Event({
                   .slice(0, 1000) || '/',
             },
             {
-              name: 'Exempt Roles',
+              name: t('log.autoModerationRuleCreate.exempt_roles', { lng }),
               value:
                 exemptRoles
                   .map((role) => `<@&${role.id}>`)
@@ -60,14 +63,15 @@ export default new Event({
                   .slice(0, 1000) || '/',
             },
             {
-              name: 'Exempt Channels',
+              name: t('log.autoModerationRuleCreate.exempt_channels', { lng }),
               value:
                 exemptChannels
                   .map((channel) => `<#${channel.id}>`)
                   .join(', ')
                   .slice(0, 1000) || '/',
             }
-          ),
+          )
+          .setTimestamp(),
       ],
     });
   },

@@ -1,4 +1,5 @@
 import { ChannelType, Colors, EmbedBuilder, Events } from 'discord.js';
+import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
@@ -15,34 +16,45 @@ export default new Event({
     const logChannel = await guild.channels.fetch(config.log.channelId);
     if (!logChannel || logChannel.type !== ChannelType.GuildText) return;
 
+    const lng = config.language;
+
     const embed = new EmbedBuilder()
       .setColor(Colors.Yellow)
-      .setTitle('Role Update')
+      .setTitle(t('log.roleUpdate.title', { lng }))
       .setThumbnail(newRole.iconURL({ size: 1024 }))
-      .addFields({ name: 'Role', value: `${newRole.toString()} (\`${newRole.name}\` | ${newRole.id})` });
+      .addFields({ name: t('log.roleUpdate.role', { lng }), value: `${newRole.toString()} (\`${newRole.name}\` | ${newRole.id})` })
+      .setTimestamp();
 
     const emptyField = { name: '\u200b', value: '\u200b', inline: true };
 
     if (newRole.name !== oldRole.name)
-      embed.addFields({ name: 'Old Name', value: oldRole.name, inline: true }, { name: 'New Name', value: newRole.name, inline: true }, emptyField);
+      embed.addFields(
+        { name: t('log.roleUpdate.old_name', { lng }), value: oldRole.name, inline: true },
+        { name: t('log.roleUpdate.new_name', { lng }), value: newRole.name, inline: true },
+        emptyField
+      );
     if (newRole.hexColor !== oldRole.hexColor)
-      embed.addFields({ name: 'Old Color', value: oldRole.hexColor, inline: true }, { name: 'New Color', value: newRole.hexColor, inline: true }, emptyField);
+      embed.addFields(
+        { name: t('log.roleUpdate.old_color', { lng }), value: oldRole.hexColor, inline: true },
+        { name: t('log.roleUpdate.new_color', { lng }), value: newRole.hexColor, inline: true },
+        emptyField
+      );
     if (newRole.hoist !== oldRole.hoist)
       embed.addFields(
-        { name: 'Old Displayed Separately', value: `${oldRole.hoist}`, inline: true },
-        { name: 'New Displayed Separately', value: `${newRole.hexColor}`, inline: true },
+        { name: t('log.roleUpdate.old_displayed_separately', { lng }), value: `${oldRole.hoist}`, inline: true },
+        { name: t('log.roleUpdate.new_displayed_separately', { lng }), value: `${newRole.hoist}`, inline: true },
         emptyField
       );
     if (newRole.mentionable !== oldRole.mentionable)
       embed.addFields(
-        { name: 'Old Mentionable', value: `${oldRole.mentionable}`, inline: true },
-        { name: 'New Mentionable', value: `${newRole.mentionable}`, inline: true },
+        { name: t('log.roleUpdate.old_mentionable', { lng }), value: `${oldRole.mentionable}`, inline: true },
+        { name: t('log.roleUpdate.new_mentionable', { lng }), value: `${newRole.mentionable}`, inline: true },
         emptyField
       );
     if (newRole.unicodeEmoji !== oldRole.unicodeEmoji)
       embed.addFields(
-        { name: 'Old Emoji', value: `${oldRole.unicodeEmoji}`, inline: true },
-        { name: 'New Emoji', value: `${newRole.unicodeEmoji}`, inline: true },
+        { name: t('log.roleUpdate.old_emoji', { lng }), value: `${oldRole.unicodeEmoji}`, inline: true },
+        { name: t('log.roleUpdate.new_emoji', { lng }), value: `${newRole.unicodeEmoji}`, inline: true },
         emptyField
       );
     if (newRole.permissions.bitfield !== oldRole.permissions.bitfield) {
@@ -50,7 +62,7 @@ export default new Event({
       const addedPerms = oldRole.permissions.toArray().filter((perm) => !newRole.permissions.toArray().includes(perm));
       embed.addFields(
         {
-          name: 'Removed Permissions',
+          name: t('log.roleUpdate.removed_permissions', { lng }),
           value:
             removedPerms
               .map((perm) => `\`${perm}\``)
@@ -58,7 +70,7 @@ export default new Event({
               .slice(0, 1000) || '/',
         },
         {
-          name: 'Added Permissions',
+          name: t('log.roleUpdate.added_permissions', { lng }),
           value:
             addedPerms
               .map((perm) => `\`${perm}\``)

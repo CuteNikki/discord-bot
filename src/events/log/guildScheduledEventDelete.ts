@@ -1,4 +1,5 @@
 import { ChannelType, Colors, EmbedBuilder, Events } from 'discord.js';
+import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
@@ -19,33 +20,39 @@ export default new Event({
     const logChannel = await guild.channels.fetch(config.log.channelId);
     if (!logChannel || logChannel.type !== ChannelType.GuildText) return;
 
+    const lng = config.language;
+
     await logChannel.send({
       embeds: [
         new EmbedBuilder()
           .setColor(Colors.Red)
-          .setTitle('Guild Scheduled Event Delete')
+          .setTitle(t('log.guildScheduledEventDelete.title', { lng }))
           .setImage(event.coverImageURL({ size: 1024 }))
           .addFields(
-            { name: 'Name', value: name || '/' },
-            { name: 'Description', value: description || '/' },
-            { name: 'URL', value: url },
+            { name: t('log.guildScheduledEventDelete.name', { lng }), value: name || '/' },
+            { name: t('log.guildScheduledEventDelete.description', { lng }), value: description || '/' },
+            { name: t('log.guildScheduledEventDelete.url', { lng }), value: url },
             {
-              name: 'Location',
+              name: t('log.guildScheduledEventDelete.location', { lng }),
               value: channel ? `${channel.toString()} (\`${channel.name}\` | ${channel.id})` : entityMetadata?.location ? `${entityMetadata?.location}` : '/',
             },
-            { name: 'Creator', value: creator ? `${creator.toString()} (\`${creator.username}\` | ${creator.id})` : '/' },
-            { name: 'Created at', value: `<t:${Math.floor(createdTimestamp / 1000)}:f>` },
             {
-              name: 'Start',
+              name: t('log.guildScheduledEventDelete.creator', { lng }),
+              value: creator ? `${creator.toString()} (\`${creator.username}\` | ${creator.id})` : '/',
+            },
+            { name: t('log.guildScheduledEventDelete.created_at', { lng }), value: `<t:${Math.floor(createdTimestamp / 1000)}:f>` },
+            {
+              name: t('log.guildScheduledEventDelete.start', { lng }),
               value: scheduledStartTimestamp
                 ? `<t:${Math.floor(scheduledStartTimestamp / 1000)}:f> (<t:${Math.floor(scheduledStartTimestamp / 1000)}:R>)`
                 : '/',
             },
             {
-              name: 'End',
+              name: t('log.guildScheduledEventDelete.end', { lng }),
               value: scheduledEndTimestamp ? `<t:${Math.floor(scheduledEndTimestamp / 1000)}:f> (<t:${Math.floor(scheduledEndTimestamp / 1000)}:R>)` : '/',
             }
-          ),
+          )
+          .setTimestamp(),
       ],
     });
   },

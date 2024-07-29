@@ -1,4 +1,5 @@
 import { ChannelType, Colors, EmbedBuilder, Events } from 'discord.js';
+import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
@@ -18,16 +19,25 @@ export default new Event({
     const logChannel = await guild.channels.fetch(config.log.channelId);
     if (!logChannel || logChannel.type !== ChannelType.GuildText) return;
 
+    const lng = config.language;
+
     await logChannel.send({
       embeds: [
         new EmbedBuilder()
           .setColor(Colors.Red)
-          .setTitle('Guild Member Remove')
+          .setTitle(t('log.guildMemberRemove.title', { lng }))
           .addFields(
-            { name: 'Member', value: `${user.toString()} (\`${user.username}\` | ${user.id})` },
-            { name: 'Created at', value: `<t:${Math.floor(user.createdTimestamp / 1000)}:f> (<t:${Math.floor(user.createdTimestamp / 1000)}:R>)` },
-            { name: 'Joined at', value: `<t:${Math.floor((joinedTimestamp || 0) / 1000)}:f> (<t:${Math.floor((joinedTimestamp || 0) / 1000)}:R>)` }
-          ),
+            { name: t('log.guildMemberRemove.member', { lng }), value: `${user.toString()} (\`${user.username}\` | ${user.id})` },
+            {
+              name: t('log.guildMemberRemove.created_at', { lng }),
+              value: `<t:${Math.floor(user.createdTimestamp / 1000)}:f> (<t:${Math.floor(user.createdTimestamp / 1000)}:R>)`,
+            },
+            {
+              name: t('log.guildMemberRemove.joined_at', { lng }),
+              value: `<t:${Math.floor((joinedTimestamp || 0) / 1000)}:f> (<t:${Math.floor((joinedTimestamp || 0) / 1000)}:R>)`,
+            }
+          )
+          .setTimestamp(),
       ],
     });
   },

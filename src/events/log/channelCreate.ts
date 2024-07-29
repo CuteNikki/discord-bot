@@ -1,4 +1,5 @@
 import { ChannelType, Colors, EmbedBuilder, Events } from 'discord.js';
+import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
@@ -15,21 +16,23 @@ export default new Event({
     const logChannel = await guild.channels.fetch(config.log.channelId);
     if (!logChannel || logChannel.type !== ChannelType.GuildText) return;
 
+    const lng = config.language;
+
     const embed = new EmbedBuilder()
       .setColor(Colors.Green)
-      .setTitle('Channel Create')
+      .setTitle(t('log.channelCreate.title', { lng }))
       .addFields(
-        { name: 'Channel', value: `${channel.toString()} (\`${name}\` | ${id})` },
-        { name: 'Type', value: ChannelType[type] },
+        { name: t('log.channelCreate.channel', { lng }), value: `${channel.toString()} (\`${name}\` | ${id})` },
+        { name: t('log.channelCreate.type', { lng }), value: ChannelType[type] },
         {
-          name: 'Permissions',
+          name: t('log.channelCreate.permission_overwrites', { lng }),
           value:
             permissionOverwrites.cache
               .map(
                 (permission) =>
                   `<@${permission.type ? '' : '&'}${permission.id}>${
                     permission.allow.toArray().length
-                      ? `\n- Allowed: ` +
+                      ? `\n- ${t('log.channelCreate.allowed', { lng })}: ` +
                         permission.allow
                           .toArray()
                           .map((perm) => `\`${perm}\``)
@@ -37,7 +40,7 @@ export default new Event({
                       : ''
                   }${
                     permission.deny.toArray().length
-                      ? `\n- Denied: ` +
+                      ? `\n- ${t('log.channelCreate.denied', { lng })}: ` +
                         permission.deny
                           .toArray()
                           .map((perm) => `\`${perm}\``)
@@ -48,9 +51,10 @@ export default new Event({
               .join('\n')
               .slice(0, 1000) || '/',
         }
-      );
+      )
+      .setTimestamp();
 
-    if (parent) embed.addFields({ name: 'Category', value: `\`${parent.name}\` (${parent.id})` });
+    if (parent) embed.addFields({ name: t('log.channelCreate.category', { lng }), value: `\`${parent.name}\` (${parent.id})` });
 
     await logChannel.send({
       embeds: [embed],

@@ -1,4 +1,5 @@
 import { ApplicationCommandPermissionType, ChannelType, Colors, EmbedBuilder, Events } from 'discord.js';
+import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
@@ -20,16 +21,18 @@ export default new Event({
     const logChannel = await guild.channels.fetch(config.log.channelId);
     if (!logChannel || logChannel.type !== ChannelType.GuildText) return;
 
+    const lng = config.language;
+
     await logChannel.send({
       embeds: [
         new EmbedBuilder()
           .setColor(Colors.Yellow)
-          .setTitle('Application Command Permissions Update')
+          .setTitle(t('log.applicationCommandPermissionsUpdate.title', { lng }))
           .addFields(
-            { name: 'Application', value: `<@${applicationId}>` },
-            { name: 'Command ID', value: `${id}` },
+            { name: t('log.applicationCommandPermissionsUpdate.application', { lng }), value: `<@${applicationId}>` },
+            { name: t('log.applicationCommandPermissionsUpdate.command_id', { lng }), value: `${id}` },
             {
-              name: 'Updated Permissions',
+              name: t('log.applicationCommandPermissionsUpdate.updated_permissions', { lng }),
               value:
                 permissions
                   .map(
@@ -40,7 +43,8 @@ export default new Event({
                   )
                   .join('\n') || '/',
             }
-          ),
+          )
+          .setTimestamp(),
       ],
     });
   },

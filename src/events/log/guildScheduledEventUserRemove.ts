@@ -1,4 +1,5 @@
 import { ChannelType, Colors, EmbedBuilder, Events } from 'discord.js';
+import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
@@ -19,16 +20,19 @@ export default new Event({
     const logChannel = await guild.channels.fetch(config.log.channelId);
     if (!logChannel || logChannel.type !== ChannelType.GuildText) return;
 
+    const lng = config.language;
+
     await logChannel.send({
       embeds: [
         new EmbedBuilder()
           .setColor(Colors.Red)
-          .setTitle('Guild Scheduled Event User Remove')
+          .setTitle(t('log.guildScheduledEventUserRemove.title', { lng }))
           .setImage(event.coverImageURL({ size: 1024 }))
           .addFields(
-            { name: 'Event', value: `[${event.name}](${event.url})` },
-            { name: 'User', value: `${user.toString()} (\`${user.username}\` | ${user.id})` }
-          ),
+            { name: t('log.guildScheduledEventUserRemove.event', { lng }), value: `[${event.name}](${event.url})` },
+            { name: t('log.guildScheduledEventUserRemove.user', { lng }), value: `${user.toString()} (\`${user.username}\` | ${user.id})` }
+          )
+          .setTimestamp(),
       ],
     });
   },

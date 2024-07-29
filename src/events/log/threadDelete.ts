@@ -1,4 +1,5 @@
 import { ChannelType, Colors, EmbedBuilder, Events } from 'discord.js';
+import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
@@ -19,19 +20,22 @@ export default new Event({
 
     const owner = await thread.fetchOwner().catch((error) => logger.debug({ error }, 'Could not fetch thread owner'));
 
+    const lng = config.language;
+
     await logChannel.send({
       embeds: [
         new EmbedBuilder()
           .setColor(Colors.Red)
-          .setTitle('Thread Delete')
+          .setTitle(t('log.threadDelete.title', { lng }))
           .addFields(
-            { name: 'Thread', value: `\`${name}\` (${id})` },
-            { name: 'Owner', value: owner ? `<@${ownerId}> (\`${owner.user?.username}\` | ${ownerId})` : '/' },
-            { name: 'Locked', value: `${locked}` },
-            { name: 'Applied Tags', value: appliedTags.join('\n').slice(0, 1000) || '/' },
-            { name: 'Archived at', value: archiveTimestamp ? `<t:${Math.floor(archiveTimestamp / 1000)}:f>` : '/' },
-            { name: 'Created at', value: createdTimestamp ? `<t:${Math.floor(createdTimestamp / 1000)}:f>` : '/' }
-          ),
+            { name: t('log.threadDelete.thread', { lng }), value: `\`${name}\` (${id})` },
+            { name: t('log.threadDelete.owner', { lng }), value: owner ? `<@${ownerId}> (\`${owner.user?.username}\` | ${ownerId})` : '/' },
+            { name: t('log.threadDelete.locked', { lng }), value: `${locked}` },
+            { name: t('log.threadDelete.applied_tags', { lng }), value: appliedTags.join('\n').slice(0, 1000) || '/' },
+            { name: t('log.threadDelete.archived_at', { lng }), value: archiveTimestamp ? `<t:${Math.floor(archiveTimestamp / 1000)}:f>` : '/' },
+            { name: t('log.threadDelete.created_at', { lng }), value: createdTimestamp ? `<t:${Math.floor(createdTimestamp / 1000)}:f>` : '/' }
+          )
+          .setTimestamp(),
       ],
     });
   },

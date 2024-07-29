@@ -1,4 +1,5 @@
 import { ChannelType, Colors, EmbedBuilder, Events } from 'discord.js';
+import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
@@ -19,16 +20,19 @@ export default new Event({
 
     const owner = await thread.fetchOwner().catch((error) => logger.debug({ error }, 'Could not fetch thread owner'));
 
+    const lng = config.language;
+
     await logChannel.send({
       embeds: [
         new EmbedBuilder()
           .setColor(Colors.Green)
-          .setTitle('Thread Create')
+          .setTitle(t('log.threadCreate.title', { lng }))
           .addFields(
-            { name: 'Thread', value: `${thread.toString()} (\`${name}\` | ${id})` },
-            { name: 'Owner', value: owner ? `<@${owner.id}> (\`${owner.user?.username}\` | ${ownerId})` : '/' },
-            { name: 'Applied Tags', value: appliedTags.join('\n').slice(0, 1000) || '/' }
-          ),
+            { name: t('log.threadCreate.thread', { lng }), value: `${thread.toString()} (\`${name}\` | ${id})` },
+            { name: t('log.threadCreate.owner', { lng }), value: owner ? `<@${owner.id}> (\`${owner.user?.username}\` | ${ownerId})` : '/' },
+            { name: t('log.threadCreate.applied_tags', { lng }), value: appliedTags.join('\n').slice(0, 1000) || '/' }
+          )
+          .setTimestamp(),
       ],
     });
   },

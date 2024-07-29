@@ -1,4 +1,5 @@
 import { ChannelType, Colors, EmbedBuilder, Events } from 'discord.js';
+import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
@@ -19,23 +20,30 @@ export default new Event({
 
     const author = await newEmoji.fetchAuthor().catch((error) => logger.debug({ error }, 'Could not fetch emoji author'));
 
+    const lng = config.language;
+
     const embed = new EmbedBuilder()
       .setColor(Colors.Yellow)
-      .setTitle('Emoji Update')
+      .setTitle(t('log.emojiUpdate.title', { lng }))
       .setThumbnail(newEmoji.imageURL({ size: 1024 }))
       .addFields(
-        { name: 'Emoji', value: `${newEmoji.toString()} (\`${newEmoji.name}\` | ${newEmoji.id})` },
-        { name: 'Author', value: author ? `${author.toString()} (\`${author.username}\` | ${author.id})` : '/' }
-      );
+        { name: t('log.emojiUpdate.emoji', { lng }), value: `${newEmoji.toString()} (\`${newEmoji.name}\` | ${newEmoji.id})` },
+        { name: t('log.emojiUpdate.author', { lng }), value: author ? `${author.toString()} (\`${author.username}\` | ${author.id})` : '/' }
+      )
+      .setTimestamp();
 
     const emptyField = { name: '\u200b', value: '\u200b', inline: true };
 
     if (newEmoji.name !== oldEmoji.name)
-      embed.addFields({ name: 'Old Name', value: `${oldEmoji.name}`, inline: true }, { name: 'New Name', value: `${newEmoji.name}`, inline: true }, emptyField);
+      embed.addFields(
+        { name: t('log.emojiUpdate.old_name', { lng }), value: `${oldEmoji.name}`, inline: true },
+        { name: t('log.emojiUpdate.new_name', { lng }), value: `${newEmoji.name}`, inline: true },
+        emptyField
+      );
     if (JSON.stringify(newEmoji.roles.cache.toJSON()) !== JSON.stringify(oldEmoji.roles.cache.toJSON())) {
       embed.addFields(
         {
-          name: 'Old Roles',
+          name: t('log.emojiUpdate.old_roles', { lng }),
           value:
             oldEmoji.roles.cache
               .map((role) => role.toString())
@@ -44,7 +52,7 @@ export default new Event({
           inline: true,
         },
         {
-          name: 'New Roles',
+          name: t('log.emojiUpdate.new_roles', { lng }),
           value:
             newEmoji.roles.cache
               .map((role) => role.toString())

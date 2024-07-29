@@ -1,4 +1,5 @@
 import { AutoModerationActionType, AutoModerationRuleTriggerType, ChannelType, Colors, EmbedBuilder, Events } from 'discord.js';
+import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
@@ -15,18 +16,21 @@ export default new Event({
     const logChannel = await guild.channels.fetch(config.log.channelId);
     if (!logChannel || logChannel.type !== ChannelType.GuildText) return;
 
+    const lng = config.language;
+
     await logChannel.send({
       embeds: [
         new EmbedBuilder()
           .setColor(Colors.Orange)
-          .setTitle('Auto Moderation Action Execution')
+          .setTitle(t('log.autoModerationActionExecution.title', { lng }))
           .addFields(
-            { name: 'Action Type', value: AutoModerationActionType[action.type] },
-            { name: 'Rule Trigger Type', value: AutoModerationRuleTriggerType[ruleTriggerType] },
-            { name: 'User', value: `<@${userId}>` },
-            { name: 'Channel', value: `<@${channelId}>` },
-            { name: 'Matched Content', value: matchedContent || '/' }
-          ),
+            { name: t('log.autoModerationActionExecution.action_type', { lng }), value: AutoModerationActionType[action.type] },
+            { name: t('log.autoModerationActionExecution.rule_trigger_type', { lng }), value: AutoModerationRuleTriggerType[ruleTriggerType] },
+            { name: t('log.autoModerationActionExecution.user', { lng }), value: `<@${userId}>` },
+            { name: t('log.autoModerationActionExecution.channel', { lng }), value: `<@${channelId}>` },
+            { name: t('log.autoModerationActionExecution.matched_content', { lng }), value: matchedContent || '/' }
+          )
+          .setTimestamp(),
       ],
     });
   },

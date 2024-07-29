@@ -1,4 +1,5 @@
 import { AttachmentBuilder, ChannelType, Colors, EmbedBuilder, Events } from 'discord.js';
+import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
@@ -19,12 +20,15 @@ export default new Event({
     const logChannel = await guild.channels.fetch(config.log.channelId);
     if (!logChannel || logChannel.type !== ChannelType.GuildText) return;
 
+    const lng = config.language;
+
     await logChannel.send({
       embeds: [
         new EmbedBuilder()
           .setColor(Colors.Red)
-          .setTitle('Message Bulk Delete')
-          .setDescription(`${messages.size} deleted messages in ${messages.first()?.channel.toString()}`),
+          .setTitle(t('log.messageBulkDelete.title', { lng }))
+          .setDescription(t('log.messageBulkDelete.description', { lng, messages: messages.size, channel: messages.first()?.channel.toString() }))
+          .setTimestamp(),
       ],
       files: [
         new AttachmentBuilder(
@@ -32,13 +36,16 @@ export default new Event({
             `${messages
               .map(
                 (message) =>
-                  `Author: ${message.author?.username} (${message.author?.id})\nAttachments: ${message.attachments
-                    .map((attachment) => attachment.url)
-                    .join('\n          ')}\nContent: ${message.content}`
+                  `${t('log.messageBulkDelete.author', { lng })}: ${message.author?.username} (${message.author?.id})\n${t(
+                    'log.messageBulkDelete.attachments',
+                    { lng }
+                  )}: ${message.attachments.map((attachment) => attachment.url).join('\n          ')}\n${t('log.messageBulkDelete.content', { lng })}: ${
+                    message.content
+                  }`
               )
               .join('\n\n')}`
           ),
-          { name: 'message-bulk-delete.txt', description: 'List of all deleted messages with their author, content and attachments' }
+          { name: 'message-bulk-delete.txt', description: t('log.messageBulkDelete.file_description', { lng }) }
         ),
       ],
     });

@@ -1,4 +1,5 @@
 import { ChannelType, Colors, EmbedBuilder, Events } from 'discord.js';
+import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
@@ -18,12 +19,18 @@ export default new Event({
     const logChannel = await guild.channels.fetch(config.log.channelId);
     if (!logChannel || logChannel.type !== ChannelType.GuildText) return;
 
+    const lng = config.language;
+
     await logChannel.send({
       embeds: [
         new EmbedBuilder()
           .setColor(Colors.Green)
-          .setTitle('Guild Ban Remove')
-          .addFields({ name: 'User', value: `${user.toString()} (\`${user.username}\` | ${user.id})` }, { name: 'Reason', value: reason || '/' }),
+          .setTitle(t('log.guildBanRemove.title', { lng }))
+          .addFields(
+            { name: t('log.guildBanRemove.user', { lng }), value: `${user.toString()} (\`${user.username}\` | ${user.id})` },
+            { name: t('log.guildBanRemove.reason', { lng }), value: reason || '/' }
+          )
+          .setTimestamp(),
       ],
     });
   },

@@ -1,4 +1,5 @@
 import { ChannelType, Colors, EmbedBuilder, Events } from 'discord.js';
+import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
@@ -15,40 +16,43 @@ export default new Event({
     const logChannel = await guild.channels.fetch(config.log.channelId);
     if (!logChannel || logChannel.type !== ChannelType.GuildText) return;
 
+    const lng = config.language;
+
     const embed = new EmbedBuilder()
       .setColor(Colors.Yellow)
-      .setTitle('Guild Member Update')
-      .addFields({ name: 'Member', value: `${newMember.toString()} (\`${newMember.user.username}\` | ${newMember.user.id})` });
+      .setTitle(t('log.guildMemberUpdate.title', { lng }))
+      .addFields({ name: t('log.guildMemberUpdate.member', { lng }), value: `${newMember.toString()} (\`${newMember.user.username}\` | ${newMember.user.id})` })
+      .setTimestamp();
 
     const emptyField = { name: '\u200b', value: '\u200b', inline: true };
 
     if (newMember.nickname !== oldMember.nickname)
       embed.addFields(
-        { name: 'Old Nickname', value: oldMember.nickname || oldMember.displayName, inline: true },
-        { name: 'New Nickname', value: newMember.nickname || newMember.displayName, inline: true },
+        { name: t('log.guildMemberUpdate.old_nickname', { lng }), value: oldMember.nickname ?? oldMember.displayName, inline: true },
+        { name: t('log.guildMemberUpdate.new_nickname', { lng }), value: newMember.nickname ?? newMember.displayName, inline: true },
         emptyField
       );
     if (newMember.displayAvatarURL() !== oldMember.displayAvatarURL())
       embed.addFields(
-        { name: 'Old Avatar', value: oldMember.displayAvatarURL(), inline: true },
-        { name: 'New Avatar', value: newMember.displayAvatarURL(), inline: true },
+        { name: t('log.guildMemberUpdate.old_avatar', { lng }), value: oldMember.displayAvatarURL(), inline: true },
+        { name: t('log.guildMemberUpdate.new_avatar', { lng }), value: newMember.displayAvatarURL(), inline: true },
         emptyField
       );
     if (newMember.pending !== oldMember.pending)
       embed.addFields(
-        { name: 'Old Pending', value: `${oldMember.pending}`, inline: true },
-        { name: 'New Pending', value: `${newMember.pending}`, inline: true },
+        { name: t('log.guildMemberUpdate.old_pending', { lng }), value: `${oldMember.pending}`, inline: true },
+        { name: t('log.guildMemberUpdate.new_pending', { lng }), value: `${newMember.pending}`, inline: true },
         emptyField
       );
     if (newMember.communicationDisabledUntilTimestamp !== oldMember.communicationDisabledUntilTimestamp)
       embed.addFields(
         {
-          name: 'Old Timeout',
+          name: t('log.guildMemberUpdate.old_timeout', { lng }),
           value: oldMember.communicationDisabledUntilTimestamp ? `<t:${Math.floor(oldMember.communicationDisabledUntilTimestamp / 1000)}:f>` : '/',
           inline: true,
         },
         {
-          name: 'New Timeout',
+          name: t('log.guildMemberUpdate.new_timeout', { lng }),
           value: newMember.communicationDisabledUntilTimestamp ? `<t:${Math.floor(newMember.communicationDisabledUntilTimestamp / 1000)}:f>` : '/',
           inline: true,
         },
@@ -60,7 +64,7 @@ export default new Event({
 
       embed.addFields(
         {
-          name: 'Removed Roles',
+          name: t('log.guildMemberUpdate.removed_roles', { lng }),
           value:
             removedRoles
               .map((role) => role.toString())
@@ -69,7 +73,7 @@ export default new Event({
           inline: true,
         },
         {
-          name: 'Added Roles',
+          name: t('log.guildMemberUpdate.added_roles', { lng }),
           value:
             addedRoles
               .map((role) => role.toString())
@@ -86,7 +90,7 @@ export default new Event({
 
       embed.addFields(
         {
-          name: 'Removed Permissions',
+          name: t('log.guildMemberUpdate.removed_permissions', { lng }),
           value:
             removedPerms
               .map((perm) => `\`${perm}\``)
@@ -95,7 +99,7 @@ export default new Event({
           inline: true,
         },
         {
-          name: 'Added Permissions',
+          name: t('log.guildMemberUpdate.added_permissions', { lng }),
           value:
             addedPerms
               .map((perm) => `\`${perm}\``)

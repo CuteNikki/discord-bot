@@ -1,4 +1,5 @@
 import { ChannelType, Colors, EmbedBuilder, Events, StickerFormatType } from 'discord.js';
+import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
@@ -20,19 +21,22 @@ export default new Event({
 
     const user = await sticker.user?.fetch().catch((error) => logger.debug({ error }, 'Could not fetch sticker author'));
 
+    const lng = config.language;
+
     await logChannel.send({
       embeds: [
         new EmbedBuilder()
           .setColor(Colors.Green)
-          .setTitle('Sticker Create')
+          .setTitle(t('log.stickerCreate.title', { lng }))
           .setThumbnail(url)
           .addFields(
-            { name: 'Sticker', value: `\`${name}\` (${id})` },
-            { name: 'Description', value: description || '/' },
-            { name: 'Format', value: StickerFormatType[format] },
-            { name: 'Tags', value: tags || '/' },
-            { name: 'Author', value: user ? `${user.toString()} (\`${user.username}\` | ${user.id})` : '/' }
-          ),
+            { name: t('log.stickerCreate.sticker', { lng }), value: `\`${name}\` (${id})` },
+            { name: t('log.stickerCreate.description', { lng }), value: description || '/' },
+            { name: t('log.stickerCreate.format', { lng }), value: StickerFormatType[format] },
+            { name: t('log.stickerCreate.tags', { lng }), value: tags || '/' },
+            { name: t('log.stickerCreate.author', { lng }), value: user ? `${user.toString()} (\`${user.username}\` | ${user.id})` : '/' }
+          )
+          .setTimestamp(),
       ],
     });
   },

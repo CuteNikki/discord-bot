@@ -1,4 +1,5 @@
 import { ChannelType, Colors, EmbedBuilder, Events } from 'discord.js';
+import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
@@ -19,19 +20,22 @@ export default new Event({
 
     const author = await emoji.fetchAuthor().catch((error) => logger.debug({ error }, 'Could not fetch emoji author'));
 
+    const lng = config.language;
+
     await logChannel.send({
       embeds: [
         new EmbedBuilder()
           .setColor(Colors.Green)
-          .setTitle('Emoji Create')
+          .setTitle(t('log.emojiCreate.title', { lng }))
           .setThumbnail(emoji.imageURL({ size: 1024 }))
           .addFields(
-            { name: 'Emoji', value: `${emoji.toString()} (\`${name}\` | ${id})` },
-            { name: 'Author', value: author ? `${author.toString()} (\`${author.username}\` | ${author.id})` : '/' },
-            { name: 'Identifier', value: `\`${identifier}\`` },
-            { name: 'Animated', value: `${animated ?? '/'}` },
-            { name: 'Managed', value: `${managed ?? '/'}` }
-          ),
+            { name: t('log.emojiCreate.emoji', { lng }), value: `${emoji.toString()} (\`${name}\` | ${id})` },
+            { name: t('log.emojiCreate.author', { lng }), value: author ? `${author.toString()} (\`${author.username}\` | ${author.id})` : '/' },
+            { name: t('log.emojiCreate.identifier', { lng }), value: `\`${identifier}\`` },
+            { name: t('log.emojiCreate.animated', { lng }), value: `${animated ?? '/'}` },
+            { name: t('log.emojiCreate.managed', { lng }), value: `${managed ?? '/'}` }
+          )
+          .setTimestamp(),
       ],
     });
   },

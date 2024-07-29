@@ -1236,5 +1236,19 @@
         "description": "The reason for the unban"
       }
     ]
+  },
+  "warn": {
+    "name": "warn",
+    "description": "Warn a user",
+    "options": [
+      {
+        "name": "user",
+        "description": "The user to warn"
+      },
+      {
+        "name": "reason",
+        "description": "The reason for the warn"
+      }
+    ]
   }
 }

@@ -1236,5 +1236,19 @@
         "description": "Der Grund für die Entbannung"
       }
     ]
+  },
+  "warn": {
+    "name": "verwarnen",
+    "description": "Verwarnt einen Benutzer",
+    "options": [
+      {
+        "name": "benutzer",
+        "description": "Der Benutzer, der verwarnt werden soll"
+      },
+      {
+        "name": "grund",
+        "description": "Der Grund für die Verwarnung"
+      }
+    ]
   }
 }

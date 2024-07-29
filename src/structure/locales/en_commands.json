@@ -1178,5 +1178,31 @@
         "description": "The reason for the kick"
       }
     ]
+  },
+  "purge": {
+    "name": "purge",
+    "description": "Deletes x messages by anyone, anywhere",
+    "options": [
+      {
+        "name": "amount",
+        "description": "The amount of messages to delete"
+      },
+      {
+        "name": "user",
+        "description": "The user to delete messages of"
+      },
+      {
+        "name": "channel",
+        "description": "The channel to delete messages in"
+      },
+      {
+        "name": "before",
+        "description": "Only delete messages sent before given message link"
+      },
+      {
+        "name": "after",
+        "description": "Only delete messages sent after given message link"
+      }
+    ]
   }
 }

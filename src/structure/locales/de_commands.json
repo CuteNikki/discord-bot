@@ -1178,5 +1178,31 @@
         "description": "Der Grund für den Kick"
       }
     ]
+  },
+  "purge": {
+    "name": "bereinigen",
+    "description": "Löscht x Nachrichten von jedem, überall",
+    "options": [
+      {
+        "name": "anzahl",
+        "description": "Die Anzahl der Nachrichten, die gelöscht werden sollen"
+      },
+      {
+        "name": "benutzer",
+        "description": "Der Benutzer, von dem Nachrichten gelöscht werden sollen"
+      },
+      {
+        "name": "kanal",
+        "description": "Der Kanal, in dem die Nachrichten gelöscht werden sollen"
+      },
+      {
+        "name": "bevor",
+        "description": "Löscht nur Nachrichten, die vor dem angegebenen Nachrichtenlink gesendet wurden"
+      },
+      {
+        "name": "nach",
+        "description": "Löscht nur Nachrichten, die nach dem angegebenen Nachrichtenlink gesendet wurden"
+      }
+    ]
   }
 }

@@ -1332,6 +1332,10 @@
   "userinfo-context": {
     "name": "User-Informationen ansehen"
   },
+  "vanity": {
+    "name": "vanity-check",
+    "description": "Überprüft, ob eine Vanity-URL verfügbar ist"
+  },
   "weather": {
     "name": "wetter",
     "description": "Zeigt aktuelle, historische und Prognose Wetterinformationen für jeden Ort auf der Erde",

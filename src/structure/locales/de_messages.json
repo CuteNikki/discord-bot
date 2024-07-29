@@ -1,4 +1,8 @@
 {
+  "vanity": {
+    "not_found": "Konnte keinen Server mit der Vanity-URL finden!",
+    "found": "Die Vanity-URL ist bereits vergeben!\nServername: {{guildName}}\nMitglieder: {{guildMemberCount}}\nVanity-URL: {{vanity}}"
+  },
   "tickets": {
     "create_title": "Ticket erstellen",
     "title": "Ticket Modul",

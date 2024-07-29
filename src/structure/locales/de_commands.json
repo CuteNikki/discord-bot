@@ -1267,5 +1267,39 @@
   },
   "avatar-context": {
     "name": "Avatar/Banner ansehen"
+  },
+  "reminder": {
+    "name": "erinnerungen",
+    "description": "Erstelle, lösche und schaue dir deine erinnerungen an",
+    "options": [
+      {
+        "name": "erstellen",
+        "description": "Erstelle eine Erinnerung",
+        "options": [
+          {
+            "name": "nachricht",
+            "description": "Worüber du erinnerst werden möchtest"
+          },
+          {
+            "name": "zeit",
+            "description": "Wann du erinnerst werden möchtest (z.B. 2 Stunden)"
+          }
+        ]
+      },
+      {
+        "name": "löschen",
+        "description": "Lösche eine Erinnerung",
+        "options": [
+          {
+            "name": "erinnerungs-id",
+            "description": "Die ID der Erinnerung, die du löschen möchtest"
+          }
+        ]
+      },
+      {
+        "name": "ansehen",
+        "description": "Zeigt deine Erinnerungen"
+      }
+    ]
   }
 }

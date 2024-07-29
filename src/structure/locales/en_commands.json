@@ -1330,6 +1330,63 @@
     ]
   },
   "userinfo-context": {
-    "name": "View user-information" 
+    "name": "View user-information"
+  },
+  "weather": {
+    "name": "weather",
+    "description": "Get current, historic and forecast weather information for any location on earth",
+    "options": [
+      {
+        "name": "current",
+        "description": "Get the current weather for a location",
+        "options": [
+          {
+            "name": "location",
+            "description": "The location to get the weather for"
+          },
+          {
+            "name": "ephemeral",
+            "description": "If *True*, message can only be seen by you"
+          }
+        ]
+      },
+      {
+        "name": "forecast",
+        "description": "Get the weather forecast for a location",
+        "options": [
+          {
+            "name": "location",
+            "description": "The location to get the weather for"
+          },
+          {
+            "name": "days",
+            "description": "The amount of days to get the weather forecast for",
+            "choices": ["1 day", "2 days", "3 days"]
+          },
+          {
+            "name": "ephemeral",
+            "description": "If *True*, message can only be seen by you"
+          }
+        ]
+      },
+      {
+        "name": "history",
+        "description": "Get the weather history of a location",
+        "options": [
+          {
+            "name": "location",
+            "description": "The location to get the weather for"
+          },
+          {
+            "name": "date",
+            "description": "The date to get the weather for"
+          },
+          {
+            "name": "ephemeral",
+            "description": "If *True*, message can only be seen by you"
+          }
+        ]
+      }
+    ]
   }
 }

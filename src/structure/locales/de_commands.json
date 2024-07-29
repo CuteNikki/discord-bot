@@ -1331,5 +1331,62 @@
   },
   "userinfo-context": {
     "name": "User-Informationen ansehen"
+  },
+  "weather": {
+    "name": "wetter",
+    "description": "Zeigt aktuelle, historische und Prognose Wetterinformationen für jeden Ort auf der Erde",
+    "options": [
+      {
+        "name": "aktuell",
+        "description": "Zeigt die aktuellen Wetterdaten für einen Ort",
+        "options": [
+          {
+            "name": "ort",
+            "description": "Der Ort, für den die Wetterdaten angezeigt werden sollen"
+          },
+          {
+            "name": "geheim",
+            "description": "Wenn *True*, kann die Nachricht nur von dir gesehen werden"
+          }
+        ]
+      },
+      {
+        "name": "prognose",
+        "description": "Zeigt die Prognose für einen Ort",
+        "options": [
+          {
+            "name": "ort",
+            "description": "Der Ort, für den die Prognose angezeigt werden sollen"
+          },
+          {
+            "name": "tage",
+            "description": "Die Anzahl der Tage, für die die Prognose angezeigt werden soll",
+            "choices": ["1 Tag", "2 Tage", "3 Tage"]
+          },
+          {
+            "name": "geheim",
+            "description": "Wenn *True*, kann die Nachricht nur von dir gesehen werden"
+          }
+        ]
+      },
+      {
+        "name": "historisch",
+        "description": "Zeigt die Wetter Historie für einen Ort",
+        "options": [
+          {
+            "name": "ort",
+            "description": "Der Ort, für den die Wetter Historie angezeigt werden sollen"
+          },
+          {
+            "name": "datum",
+            "description": "Das Datum, für den die Wetter Historie angezeigt werden soll"
+          },
+          {
+            "name": "geheim",
+            "description": "Wenn *True*, kann die Nachricht nur von dir gesehen werden"
+          }
+        ]
+      }
+    ]
   }
 }

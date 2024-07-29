@@ -77,15 +77,15 @@
       },
       {
         "name": "abzeichen",
-        "description": "Konfiguriere die Abzeichen eines Benutzers",
+        "description": "Konfiguriere die Abzeichen eines Users",
         "options": [
           {
             "name": "geben",
-            "description": "Gibt ein Abzeichen einem Benutzer",
+            "description": "Gibt ein Abzeichen einem User",
             "options": [
               {
-                "name": "benutzer",
-                "description": "Der Benutzer, dem ein Abzeichen hinzugefügt werden soll"
+                "name": "user",
+                "description": "Der User, dem ein Abzeichen hinzugefügt werden soll"
               },
               {
                 "name": "abzeichen",
@@ -96,11 +96,11 @@
           },
           {
             "name": "entfernen",
-            "description": "Entfernt ein Abzeichen eines Benutzers",
+            "description": "Entfernt ein Abzeichen eines Users",
             "options": [
               {
-                "name": "benutzer",
-                "description": "Der Benutzer, von dem ein Abzeichen entfernt werden soll"
+                "name": "user",
+                "description": "Der User, von dem ein Abzeichen entfernt werden soll"
               },
               {
                 "name": "abzeichen",
@@ -111,11 +111,11 @@
           },
           {
             "name": "ansehen",
-            "description": "Zeigt alle Abzeichen eines Benutzers",
+            "description": "Zeigt alle Abzeichen eines Users",
             "options": [
               {
-                "name": "benutzer",
-                "description": "Der Benutzer, von dem alle Abzeichen angezeigt werden sollen"
+                "name": "user",
+                "description": "Der User, von dem alle Abzeichen angezeigt werden sollen"
               }
             ]
           }
@@ -123,25 +123,25 @@
       },
       {
         "name": "verbannungen",
-        "description": "Konfiguriere die Verbannungen des Bots von Benutzern",
+        "description": "Konfiguriere die Verbannungen des Bots von Usern",
         "options": [
           {
             "name": "hinzufügen",
-            "description": "Verbannt einen Benutzer vom Bot",
+            "description": "Verbannt einen User vom Bot",
             "options": [
               {
-                "name": "benutzer",
-                "description": "Der Benutzer, der gebannt werden soll"
+                "name": "user",
+                "description": "Der User, der gebannt werden soll"
               }
             ]
           },
           {
             "name": "entfernen",
-            "description": "Entfernt die Verbannung eines Benutzers vom Bot",
+            "description": "Entfernt die Verbannung eines Users vom Bot",
             "options": [
               {
-                "name": "benutzer",
-                "description": "Der Benutzer, der entbannt werden soll"
+                "name": "user",
+                "description": "Der User, der entbannt werden soll"
               }
             ]
           },
@@ -266,8 +266,8 @@
         "description": "Konfiguriere, wo die Level-Ankündigung erfolgt",
         "options": [
           {
-            "name": "benutzer-kanal",
-            "description": "Level-Ups werden in dem Kanal des Benutzers angekündigt und in 5 Sekunden gelöscht"
+            "name": "user-kanal",
+            "description": "Level-Ups werden in dem Kanal des Users angekündigt und in 5 Sekunden gelöscht"
           },
           {
             "name": "anderer-kanal",
@@ -281,7 +281,7 @@
           },
           {
             "name": "private-nachricht",
-            "description": "Level-Ups werden in privaten Nachrichten mit dem Benutzer angekündigt"
+            "description": "Level-Ups werden in privaten Nachrichten mit dem User angekündigt"
           },
           {
             "name": "keine",
@@ -399,47 +399,47 @@
       },
       {
         "name": "xp",
-        "description": "Verwalte die XP eines Benutzers",
+        "description": "Verwalte die XP eines Users",
         "options": [
           {
             "name": "hinzufügen",
-            "description": "Fügt XP einem Benutzer hinzu",
+            "description": "Fügt XP einem User hinzu",
             "options": [
               {
-                "name": "benutzer",
-                "description": "Der Benutzer, dem XP hinzugefügt werden soll"
+                "name": "user",
+                "description": "Der User, dem XP hinzugefügt werden soll"
               },
               {
                 "name": "xp",
-                "description": "Die XP, die dem Benutzer hinzugefügt werden soll"
+                "description": "Die XP, die dem User hinzugefügt werden soll"
               }
             ]
           },
           {
             "name": "entfernen",
-            "description": "Entfernt XP eines Benutzers",
+            "description": "Entfernt XP eines Users",
             "options": [
               {
-                "name": "benutzer",
-                "description": "Der Benutzer, von dem XP entfernt werden soll"
+                "name": "user",
+                "description": "Der User, von dem XP entfernt werden soll"
               },
               {
                 "name": "xp",
-                "description": "Die XP, die vom Benutzer entfernt werden soll"
+                "description": "Die XP, die vom User entfernt werden soll"
               }
             ]
           },
           {
             "name": "setzen",
-            "description": "Setzt XP eines Benutzers",
+            "description": "Setzt XP eines Users",
             "options": [
               {
-                "name": "benutzer",
-                "description": "Der Benutzer, für den XP gesetzt werden soll"
+                "name": "user",
+                "description": "Der User, für den XP gesetzt werden soll"
               },
               {
                 "name": "xp",
-                "description": "Die XP, die für den Benutzer gesetzt werden soll"
+                "description": "Die XP, die für den User gesetzt werden soll"
               }
             ]
           }
@@ -447,47 +447,47 @@
       },
       {
         "name": "level",
-        "description": "Verwalte das Level eines Benutzers",
+        "description": "Verwalte das Level eines Users",
         "options": [
           {
             "name": "hinzufügen",
-            "description": "Fügt Level einem Benutzer hinzu",
+            "description": "Fügt Level einem User hinzu",
             "options": [
               {
-                "name": "benutzer",
-                "description": "Der Benutzer, dem Level hinzugefügt werden soll"
+                "name": "user",
+                "description": "Der User, dem Level hinzugefügt werden soll"
               },
               {
                 "name": "level",
-                "description": "Das Level, das dem Benutzer hinzugefügt werden soll"
+                "description": "Das Level, das dem User hinzugefügt werden soll"
               }
             ]
           },
           {
             "name": "entfernen",
-            "description": "Entfernt Level eines Benutzers",
+            "description": "Entfernt Level eines Users",
             "options": [
               {
-                "name": "benutzer",
-                "description": "Der Benutzer, von dem Level entfernt werden soll"
+                "name": "user",
+                "description": "Der User, von dem Level entfernt werden soll"
               },
               {
                 "name": "level",
-                "description": "Das Level, das vom Benutzer entfernt werden soll"
+                "description": "Das Level, das vom User entfernt werden soll"
               }
             ]
           },
           {
             "name": "setzen",
-            "description": "Setzt Level eines Benutzers",
+            "description": "Setzt Level eines Users",
             "options": [
               {
-                "name": "benutzer",
-                "description": "Der Benutzer, für den Level gesetzt werden soll"
+                "name": "user",
+                "description": "Der User, für den Level gesetzt werden soll"
               },
               {
                 "name": "level",
-                "description": "Das Level, das für den Benutzer gesetzt werden soll"
+                "description": "Das Level, das für den User gesetzt werden soll"
               }
             ]
           }
@@ -645,7 +645,7 @@
             "options": [
               {
                 "name": "teammitglieds-rolle",
-                "description": "Benutzer mit dieser Rolle können Tickets verwalten (beanspruchen, schließen, etc.)"
+                "description": "User mit dieser Rolle können Tickets verwalten (beanspruchen, schließen, etc.)"
               },
               {
                 "name": "transkript-kanal",
@@ -657,7 +657,7 @@
               },
               {
                 "name": "maximale-tickets",
-                "description": "Die maximale Anzahl an Tickets, die ein Benutzer gleichzeitig haben kann"
+                "description": "Die maximale Anzahl an Tickets, die ein User gleichzeitig haben kann"
               }
             ]
           },
@@ -671,7 +671,7 @@
               },
               {
                 "name": "teammitglieds-rolle",
-                "description": "Benutzer mit dieser Rolle können Tickets verwalten (beanspruchen, schließen, etc.)"
+                "description": "User mit dieser Rolle können Tickets verwalten (beanspruchen, schließen, etc.)"
               },
               {
                 "name": "transkript-kanal",
@@ -683,7 +683,7 @@
               },
               {
                 "name": "maximale-tickets",
-                "description": "Die maximale Anzahl an Tickets, die ein Benutzer gleichzeitig haben kann"
+                "description": "Die maximale Anzahl an Tickets, die ein User gleichzeitig haben kann"
               }
             ]
           },
@@ -727,7 +727,7 @@
           },
           {
             "name": "sended",
-            "description": "Sendet ein Ticket-System in einen Kanal, damit Benutzer Tickets erstellen können",
+            "description": "Sendet ein Ticket-System in einen Kanal, damit User Tickets erstellen können",
             "options": [
               {
                 "name": "system-id",
@@ -1027,7 +1027,7 @@
     "description": "Sehe oder ändere die Sprache des Bots",
     "options": [
       {
-        "name": "benutzer",
+        "name": "user",
         "description": "Sehe oder ändere deine persönliche Spracheinstellung",
         "options": [
           {
@@ -1094,11 +1094,11 @@
   },
   "rank": {
     "name": "rank",
-    "description": "Zeigt das Level und den Platz auf der Bestenliste eines Benutzers",
+    "description": "Zeigt das Level und den Platz auf der Bestenliste eines Users",
     "options": [
       {
-        "name": "benutzer",
-        "description": "Der Benutzer, dessen Level angezeigt werden soll"
+        "name": "user",
+        "description": "Der User, dessen Level angezeigt werden soll"
       },
       {
         "name": "wöchentlich",
@@ -1115,11 +1115,11 @@
   },
   "ban": {
     "name": "ban",
-    "description": "Bannt einen Benutzer vom Server",
+    "description": "Bannt einen User vom Server",
     "options": [
       {
-        "name": "benutzer",
-        "description": "Der Benutzer, der verbannt werden soll"
+        "name": "user",
+        "description": "Der User, der verbannt werden soll"
       },
       {
         "name": "grund",
@@ -1131,28 +1131,28 @@
       },
       {
         "name": "verlauf",
-        "description": "Wie viel des Benutzers Nachrichtenverlaufs gelöscht werden soll",
+        "description": "Wie viel des Users Nachrichtenverlaufs gelöscht werden soll",
         "choices": ["Gar nichts", "30 Minuten", "60 Minuten", "3 Stunden", "6 Stunden", "12 Stunden", "24 Stunden", "3 Tage", "7 Tage"]
       }
     ]
   },
   "infractions": {
     "name": "verstöße",
-    "description": "Verwalte die Verstöße eines Benutzers",
+    "description": "Verwalte die Verstöße eines Users",
     "options": [
       {
         "name": "verlauf",
-        "description": "Zeigt die Verstöße eines Benutzers",
+        "description": "Zeigt die Verstöße eines Users",
         "options": [
           {
-            "name": "benutzer",
-            "description": "Der Benutzer, dessen Verstöße angezeigt werden sollen"
+            "name": "user",
+            "description": "Der User, dessen Verstöße angezeigt werden sollen"
           }
         ]
       },
       {
         "name": "löschen",
-        "description": "Löscht einen Verstoß eines Benutzers",
+        "description": "Löscht einen Verstoß eines Users",
         "options": [
           {
             "name": "verstoß-id",
@@ -1167,11 +1167,11 @@
   },
   "kick": {
     "name": "kick",
-    "description": "Kickt einen Benutzer aus dem Server",
+    "description": "Kickt einen User aus dem Server",
     "options": [
       {
-        "name": "benutzer",
-        "description": "Der Benutzer, der gekickt werden soll"
+        "name": "user",
+        "description": "Der User, der gekickt werden soll"
       },
       {
         "name": "grund",
@@ -1188,8 +1188,8 @@
         "description": "Die Anzahl der Nachrichten, die gelöscht werden sollen"
       },
       {
-        "name": "benutzer",
-        "description": "Der Benutzer, von dem Nachrichten gelöscht werden sollen"
+        "name": "user",
+        "description": "Der User, von dem Nachrichten gelöscht werden sollen"
       },
       {
         "name": "kanal",
@@ -1207,11 +1207,11 @@
   },
   "timeout": {
     "name": "timeout",
-    "description": "Schaltet einen Benutzer im Server für eine bestimmte Zeit stumm",
+    "description": "Schaltet einen User im Server für eine bestimmte Zeit stumm",
     "options": [
       {
-        "name": "benutzer",
-        "description": "Der Benutzer, der stummgeschaltet werden soll"
+        "name": "user",
+        "description": "Der User, der stummgeschaltet werden soll"
       },
       {
         "name": "dauer",
@@ -1225,11 +1225,11 @@
   },
   "unban": {
     "name": "entbannen",
-    "description": "Entbannt einen Benutzer vom Server",
+    "description": "Entbannt einen User vom Server",
     "options": [
       {
-        "name": "benutzer",
-        "description": "Der Benutzer, der entbannt werden soll"
+        "name": "user",
+        "description": "Der User, der entbannt werden soll"
       },
       {
         "name": "grund",
@@ -1239,11 +1239,11 @@
   },
   "warn": {
     "name": "verwarnen",
-    "description": "Verwarnt einen Benutzer",
+    "description": "Verwarnt einen User",
     "options": [
       {
-        "name": "benutzer",
-        "description": "Der Benutzer, der verwarnt werden soll"
+        "name": "user",
+        "description": "Der User, der verwarnt werden soll"
       },
       {
         "name": "grund",
@@ -1253,11 +1253,11 @@
   },
   "avatar": {
     "name": "avatar",
-    "description": "Zeigt den Avatar und Banner eines Benutzers",
+    "description": "Zeigt den Avatar und Banner eines Users",
     "options": [
       {
-        "name": "benutzer",
-        "description": "Der Benutzer, dessen Avatar angezeigt werden soll"
+        "name": "user",
+        "description": "Der User, dessen Avatar angezeigt werden soll"
       },
       {
         "name": "geheim",
@@ -1314,5 +1314,22 @@
   },
   "translate-context": {
     "name": "Zu englisch übersetzen"
+  },
+  "userinfo": {
+    "name": "user-informationen",
+    "description": "Zeigt Informationen über einen User",
+    "options": [
+      {
+        "name": "user",
+        "description": "Der User, dessen Informationen angezeigt werden sollen"
+      },
+      {
+        "name": "geheim",
+        "description": "Wenn *True*, kann die Nachricht nur von dir gesehen werden"
+      }
+    ]
+  },
+  "userinfo-context": {
+    "name": "User-Informationen ansehen"
   }
 }

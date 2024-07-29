@@ -1314,5 +1314,22 @@
   },
   "translate-context": {
     "name": "Translate to english"
+  },
+  "userinfo": {
+    "name": "user-information",
+    "description": "Shows information about a user",
+    "options": [
+      {
+        "name": "user",
+        "description": "The user to show information of"
+      },
+      {
+        "name": "ephemeral",
+        "description": "If *True*, message can only be seen by you"
+      }
+    ]
+  },
+  "userinfo-context": {
+    "name": "View user-information" 
   }
 }

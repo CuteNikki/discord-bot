@@ -1301,5 +1301,15 @@
         "description": "Zeigt deine Erinnerungen"
       }
     ]
+  },
+  "serverinfo": {
+    "name": "server-informationen",
+    "description": "Zeigt Informationen über den Server",
+    "options": [
+      {
+        "name": "geheim",
+        "description": "Wenn *True*, kann die Nachricht nur von dir gesehen werden"
+      }
+    ]
   }
 }

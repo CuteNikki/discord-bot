@@ -1301,5 +1301,15 @@
         "description": "View your reminders"
       }
     ]
+  },
+  "serverinfo": {
+    "name": "server-information",
+    "description": "Shows information about the server",
+    "options": [
+      {
+        "name": "ephemeral",
+        "description": "If *True*, message can only be seen by you"
+      }
+    ]
   }
 }

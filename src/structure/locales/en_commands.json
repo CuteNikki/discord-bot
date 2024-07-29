@@ -1164,5 +1164,19 @@
   },
   "infractions-context": {
     "name": "Show Infractions"
+  },
+  "kick": {
+    "name": "kick",
+    "description": "Kick a user from the server",
+    "options": [
+      {
+        "name": "user",
+        "description": "The user to kick"
+      },
+      {
+        "name": "reason",
+        "description": "The reason for the kick"
+      }
+    ]
   }
 }

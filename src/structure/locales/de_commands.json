@@ -1164,5 +1164,19 @@
   },
   "infractions-context": {
     "name": "Verstöße ansehen"
+  },
+  "kick": {
+    "name": "kick",
+    "description": "Kickt einen Benutzer aus dem Server",
+    "options": [
+      {
+        "name": "benutzer",
+        "description": "Der Benutzer, der gekickt werden soll"
+      },
+      {
+        "name": "grund",
+        "description": "Der Grund für den Kick"
+      }
+    ]
   }
 }

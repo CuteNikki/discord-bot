@@ -18,7 +18,7 @@ export default new Command<typeof commandType>({
   module: ModuleType.Utilities,
   botPermissions: ['SendMessages'],
   data: new ContextMenuCommandBuilder()
-    .setName('Translate')
+    .setName('translate-context')
     .setType(commandType)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
     .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel),

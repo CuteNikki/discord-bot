@@ -1311,5 +1311,8 @@
         "description": "If *True*, message can only be seen by you"
       }
     ]
+  },
+  "translate-context": {
+    "name": "Translate to english"
   }
 }

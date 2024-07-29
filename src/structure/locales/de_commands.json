@@ -1311,5 +1311,8 @@
         "description": "Wenn *True*, kann die Nachricht nur von dir gesehen werden"
       }
     ]
+  },
+  "translate-context": {
+    "name": "Zu englisch übersetzen"
   }
 }

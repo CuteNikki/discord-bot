@@ -1204,5 +1204,23 @@
         "description": "Only delete messages sent after given message link"
       }
     ]
+  },
+  "timeout": {
+    "name": "timeout",
+    "description": "Mutes a user in the server for a certain amount of time",
+    "options": [
+      {
+        "name": "user",
+        "description": "The user to mute"
+      },
+      {
+        "name": "duration",
+        "description": "The duration of the mute"
+      },
+      {
+        "name": "reason",
+        "description": "The reason for the mute"
+      }
+    ]
   }
 }

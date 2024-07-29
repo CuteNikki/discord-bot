@@ -1204,5 +1204,23 @@
         "description": "Löscht nur Nachrichten, die nach dem angegebenen Nachrichtenlink gesendet wurden"
       }
     ]
+  },
+  "timeout": {
+    "name": "timeout",
+    "description": "Schaltet einen Benutzer im Server für eine bestimmte Zeit stumm",
+    "options": [
+      {
+        "name": "benutzer",
+        "description": "Der Benutzer, der stummgeschaltet werden soll"
+      },
+      {
+        "name": "dauer",
+        "description": "Die Dauer der Stummschaltung"
+      },
+      {
+        "name": "grund",
+        "description": "Der Grund für die Stummschaltung"
+      }
+    ]
   }
 }

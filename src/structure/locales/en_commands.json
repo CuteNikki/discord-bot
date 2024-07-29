@@ -1079,7 +1079,7 @@
     ]
   },
   "levels": {
-    "name": "levels",
+    "name": "level-leaderboard",
     "description": "Shows you the level leaderboard",
     "options": [
       {

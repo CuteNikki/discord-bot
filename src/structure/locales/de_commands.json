@@ -1079,7 +1079,7 @@
     ]
   },
   "levels": {
-    "name": "level",
+    "name": "level-bestenliste",
     "description": "Zeigt dir die Level-Bestenliste",
     "options": [
       {

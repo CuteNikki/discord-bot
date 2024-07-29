@@ -9,7 +9,7 @@ export default new Command<ApplicationCommandType.User>({
   module: ModuleType.Utilities,
   botPermissions: ['SendMessages'],
   data: new ContextMenuCommandBuilder()
-    .setName('Avatar & Banner')
+    .setName('avatar-context')
     .setType(ApplicationCommandType.User)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
     .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel),

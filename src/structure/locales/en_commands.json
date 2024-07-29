@@ -1250,5 +1250,22 @@
         "description": "The reason for the warn"
       }
     ]
+  },
+  "avatar": {
+    "name": "avatar",
+    "description": "Shows the avatar and banner of a user",
+    "options": [
+      {
+        "name": "user",
+        "description": "The user to show the avatar of"
+      },
+      {
+        "name": "ephemeral",
+        "description": "If *True*, message can only be seen by you"
+      }
+    ]
+  },
+  "avatar-context": {
+    "name": "Show Avatar/Banner"
   }
 }

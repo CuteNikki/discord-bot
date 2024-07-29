@@ -1250,5 +1250,22 @@
         "description": "Der Grund für die Verwarnung"
       }
     ]
+  },
+  "avatar": {
+    "name": "avatar",
+    "description": "Zeigt den Avatar und Banner eines Benutzers",
+    "options": [
+      {
+        "name": "benutzer",
+        "description": "Der Benutzer, dessen Avatar angezeigt werden soll"
+      },
+      {
+        "name": "geheim",
+        "description": "Wenn *True*, kann die Nachricht nur von dir gesehen werden"
+      }
+    ]
+  },
+  "avatar-context": {
+    "name": "Avatar/Banner ansehen"
   }
 }

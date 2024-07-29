@@ -17,13 +17,13 @@ export default new Command({
       subcommand
         .setName('user')
         .setDescription('Your personal language preference')
-        .addStringOption((option) => option.setName('language').setDescription('The new language to set').setAutocomplete(true).setRequired(false))
+        .addStringOption((option) => option.setName('language').setDescription('The new language to set').setAutocomplete(true).setRequired(false)),
     )
     .addSubcommand((subcommand) =>
       subcommand
         .setName('server')
         .setDescription("The server's language preference")
-        .addStringOption((option) => option.setName('language').setDescription('The new language to set').setAutocomplete(true).setRequired(false))
+        .addStringOption((option) => option.setName('language').setDescription('The new language to set').setAutocomplete(true).setRequired(false)),
     ),
   async autocomplete({ interaction }) {
     const choices = supportedLanguages;
@@ -45,17 +45,24 @@ export default new Command({
           const language = options.getString('language', false);
 
           if (!language) {
-            return interaction.editReply({ content: t('language.current', { lng, language: lng }) });
+            return interaction.editReply({
+              content: t('language.current', { lng, language: lng }),
+            });
           } else if (language) {
             if (!supportedLanguages.includes(language))
               return interaction.editReply({
                 content: [
                   t('language.invalid', { lng, language }),
-                  t('language.supported', { lng, languages: supportedLanguages.map((value) => `\`${value}\``).join(', ') }),
+                  t('language.supported', {
+                    lng,
+                    languages: supportedLanguages.map((value) => `\`${value}\``).join(', '),
+                  }),
                 ].join('\n'),
               });
             await client.updateUserLanguage(user.id, language);
-            return interaction.editReply({ content: t('language.success', { lng, language }) });
+            return interaction.editReply({
+              content: t('language.success', { lng, language }),
+            });
           }
         }
         break;
@@ -63,24 +70,36 @@ export default new Command({
         {
           const language = options.getString('language', false);
 
-          if (!interaction.inCachedGuild()) return interaction.editReply({ content: t('language.invalid_guild', { lng }) });
+          if (!interaction.inCachedGuild())
+            return interaction.editReply({
+              content: t('language.invalid_guild', { lng }),
+            });
 
           if (!language) {
-            return interaction.editReply({ content: t('language.current', { lng, language: guildLng }) });
+            return interaction.editReply({
+              content: t('language.current', { lng, language: guildLng }),
+            });
           } else if (language) {
             if (!interaction.member.permissions.has(PermissionFlagsBits.ManageGuild))
-              return interaction.editReply({ content: t('language.no_permission', { lng }) });
+              return interaction.editReply({
+                content: t('language.no_permission', { lng }),
+              });
 
             if (!supportedLanguages.includes(language))
               return interaction.editReply({
                 content: [
                   t('language.invalid', { lng, language }),
-                  t('language.supported', { lng, languages: supportedLanguages.map((value) => `\`${value}\``).join(', ') }),
+                  t('language.supported', {
+                    lng,
+                    languages: supportedLanguages.map((value) => `\`${value}\``).join(', '),
+                  }),
                 ].join('\n'),
               });
 
             await client.updateGuildLanguage(interaction.guildId, language);
-            return interaction.editReply({ content: t('language.success', { lng, language }) });
+            return interaction.editReply({
+              content: t('language.success', { lng, language }),
+            });
           }
         }
         break;

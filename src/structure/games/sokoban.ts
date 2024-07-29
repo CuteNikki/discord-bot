@@ -12,7 +12,14 @@ export class Sokoban {
   private initialBoard: Cell[][];
   private playerPosition: { x: number; y: number };
 
-  constructor(public options: { client: DiscordClient; interaction: ChatInputCommandInteraction; rows?: number; cols?: number }) {
+  constructor(
+    public options: {
+      client: DiscordClient;
+      interaction: ChatInputCommandInteraction;
+      rows?: number;
+      cols?: number;
+    },
+  ) {
     this.board = this.generateSolvableLevel(options.rows ?? 10, options.cols ?? 10);
     this.initialBoard = this.cloneBoard(this.board);
     this.playerPosition = this.findPlayerPosition();
@@ -31,7 +38,10 @@ export class Sokoban {
         embeds: [
           new EmbedBuilder()
             .setColor(Colors.Yellow)
-            .setAuthor({ name: user.displayName, iconURL: user.displayAvatarURL() })
+            .setAuthor({
+              name: user.displayName,
+              iconURL: user.displayAvatarURL(),
+            })
             .setTitle(t('games.sokoban.title', { lng }))
             .setDescription(this.getBoardContent()),
         ],
@@ -40,7 +50,10 @@ export class Sokoban {
       .catch((error) => logger.debug({ error }, 'Could not send message'));
     if (!message) return;
 
-    const collector = message.createMessageComponentCollector({ idle: 60 * 1000, componentType: ComponentType.Button });
+    const collector = message.createMessageComponentCollector({
+      idle: 60 * 1000,
+      componentType: ComponentType.Button,
+    });
 
     collector.on('collect', async (buttonInteraction) => {
       await buttonInteraction.deferUpdate().catch((error) => logger.debug({ error }, 'Could not defer update'));
@@ -48,7 +61,9 @@ export class Sokoban {
       if (buttonInteraction.user.id !== user.id)
         return buttonInteraction
           .followUp({
-            content: t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
+            content: t('interactions.author_only', {
+              lng: await client.getUserLanguage(buttonInteraction.user.id),
+            }),
             ephemeral: true,
           })
           .catch((error) => logger.debug({ error }, 'Could not follow up'));
@@ -66,7 +81,10 @@ export class Sokoban {
           embeds: [
             new EmbedBuilder()
               .setColor(Colors.Yellow)
-              .setAuthor({ name: user.displayName, iconURL: user.displayAvatarURL() })
+              .setAuthor({
+                name: user.displayName,
+                iconURL: user.displayAvatarURL(),
+              })
               .setTitle(t('games.sokoban.title', { lng }))
               .setDescription(this.getBoardContent()),
           ],
@@ -92,7 +110,10 @@ export class Sokoban {
         embeds: [
           new EmbedBuilder()
             .setColor(isWon ? Colors.Green : Colors.Red)
-            .setAuthor({ name: user.displayName, iconURL: user.displayAvatarURL() })
+            .setAuthor({
+              name: user.displayName,
+              iconURL: user.displayAvatarURL(),
+            })
             .setTitle(t('games.sokoban.title', { lng }))
             .setDescription([isWon ? t('games.sokoban.win', { lng }) : t('games.sokoban.lose', { lng }), this.getBoardContent()].join('\n\n')),
         ],
@@ -107,12 +128,12 @@ export class Sokoban {
         new ButtonBuilder().setCustomId('SOKOBAN_disabled_one').setLabel('\u200b').setStyle(ButtonStyle.Secondary).setDisabled(true),
         new ButtonBuilder().setCustomId('SOKOBAN_up').setEmoji('⬆️').setStyle(ButtonStyle.Primary).setDisabled(disabled),
         new ButtonBuilder().setCustomId('SOKOBAN_disabled_two').setLabel('\u200b').setStyle(ButtonStyle.Secondary).setDisabled(true),
-        new ButtonBuilder().setCustomId('SOKOBAN_restart').setEmoji('🔄').setStyle(ButtonStyle.Danger).setDisabled(disabled)
+        new ButtonBuilder().setCustomId('SOKOBAN_restart').setEmoji('🔄').setStyle(ButtonStyle.Danger).setDisabled(disabled),
       ),
       new ActionRowBuilder<ButtonBuilder>().addComponents(
         new ButtonBuilder().setCustomId('SOKOBAN_left').setEmoji('⬅️').setStyle(ButtonStyle.Primary).setDisabled(disabled),
         new ButtonBuilder().setCustomId('SOKOBAN_down').setEmoji('⬇️').setStyle(ButtonStyle.Primary).setDisabled(disabled),
-        new ButtonBuilder().setCustomId('SOKOBAN_right').setEmoji('➡️').setStyle(ButtonStyle.Primary).setDisabled(disabled)
+        new ButtonBuilder().setCustomId('SOKOBAN_right').setEmoji('➡️').setStyle(ButtonStyle.Primary).setDisabled(disabled),
       ),
     ];
   }
@@ -181,7 +202,10 @@ export class Sokoban {
     return { playerX, playerY };
   }
 
-  private placeBoxesAndStorages(board: Cell[][]): { boxes: { x: number; y: number }[]; storages: { x: number; y: number }[] } {
+  private placeBoxesAndStorages(board: Cell[][]): {
+    boxes: { x: number; y: number }[];
+    storages: { x: number; y: number }[];
+  } {
     const boxes: { x: number; y: number }[] = [];
     const storages: { x: number; y: number }[] = [];
     const rows = board.length;
@@ -371,7 +395,7 @@ export class Sokoban {
                 return '';
             }
           })
-          .join('')
+          .join(''),
       )
       .join('\n');
   }

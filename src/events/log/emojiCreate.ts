@@ -29,11 +29,26 @@ export default new Event({
           .setTitle(t('log.emojiCreate.title', { lng }))
           .setThumbnail(emoji.imageURL({ size: 1024 }))
           .addFields(
-            { name: t('log.emojiCreate.emoji', { lng }), value: `${emoji.toString()} (\`${name}\` | ${id})` },
-            { name: t('log.emojiCreate.author', { lng }), value: author ? `${author.toString()} (\`${author.username}\` | ${author.id})` : '/' },
-            { name: t('log.emojiCreate.identifier', { lng }), value: `\`${identifier}\`` },
-            { name: t('log.emojiCreate.animated', { lng }), value: `${animated ?? '/'}` },
-            { name: t('log.emojiCreate.managed', { lng }), value: `${managed ?? '/'}` }
+            {
+              name: t('log.emojiCreate.emoji', { lng }),
+              value: `${emoji.toString()} (\`${name}\` | ${id})`,
+            },
+            {
+              name: t('log.emojiCreate.author', { lng }),
+              value: author ? `${author.toString()} (\`${author.username}\` | ${author.id})` : '/',
+            },
+            {
+              name: t('log.emojiCreate.identifier', { lng }),
+              value: `\`${identifier}\``,
+            },
+            {
+              name: t('log.emojiCreate.animated', { lng }),
+              value: `${animated ?? '/'}`,
+            },
+            {
+              name: t('log.emojiCreate.managed', { lng }),
+              value: `${managed ?? '/'}`,
+            },
           )
           .setTimestamp(),
       ],

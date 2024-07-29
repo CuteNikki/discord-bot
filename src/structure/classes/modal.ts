@@ -12,6 +12,6 @@ export class Modal {
       permissions?: PermissionsString[]; // Array of permissions required to use the modal
       botPermissions?: PermissionsString[]; // Array of permissions the bot requires
       execute({ interaction, client }: { client: DiscordClient; interaction: ModalSubmitInteraction }): any;
-    }
+    },
   ) {}
 }

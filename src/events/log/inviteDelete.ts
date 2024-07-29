@@ -26,7 +26,10 @@ export default new Event({
           .setTitle(t('log.inviteDelete.title', { lng }))
           .addFields(
             { name: t('log.inviteDelete.url', { lng }), value: url },
-            { name: t('log.inviteDelete.channel', { lng }), value: channel ? `${channel.toString()} (\`${channel.name}\` | ${channel.id})` : '/' }
+            {
+              name: t('log.inviteDelete.channel', { lng }),
+              value: channel ? `${channel.toString()} (\`${channel.name}\` | ${channel.id})` : '/',
+            },
           )
           .setTimestamp(),
       ],

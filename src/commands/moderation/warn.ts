@@ -50,7 +50,7 @@ export default new Command({
       components: [
         new ActionRowBuilder<ButtonBuilder>().setComponents(
           new ButtonBuilder().setCustomId(CustomIds.Confirm).setEmoji('✔').setStyle(ButtonStyle.Success),
-          new ButtonBuilder().setCustomId(CustomIds.Cancel).setEmoji('✖').setStyle(ButtonStyle.Danger)
+          new ButtonBuilder().setCustomId(CustomIds.Cancel).setEmoji('✖').setStyle(ButtonStyle.Danger),
         ),
       ],
     });
@@ -62,7 +62,10 @@ export default new Command({
     });
 
     if (collector.customId === CustomIds.Cancel) {
-      await collector.update({ content: t('warn.cancelled', { lng }), components: [] });
+      await collector.update({
+        content: t('warn.cancelled', { lng }),
+        components: [],
+      });
     } else if (collector.customId === CustomIds.Confirm) {
       const receivedDM = await client.users
         .send(target.id, {
@@ -75,7 +78,11 @@ export default new Command({
         .catch((error) => logger.debug({ error, userId: target.id }, 'Could not send DM'));
       await collector.update({
         content: [
-          t('warn.confirmed', { lng, user: target.toString(), reason: `\`${reason ?? '/'}\`` }),
+          t('warn.confirmed', {
+            lng,
+            user: target.toString(),
+            reason: `\`${reason ?? '/'}\``,
+          }),
           receivedDM ? t('warn.dm_received', { lng }) : t('warn.dm_not_received', { lng }),
         ].join('\n'),
         components: [],

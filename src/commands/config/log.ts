@@ -20,7 +20,7 @@ export default new Command({
         .setDescription('Shows the current configuration')
         .addSubcommand((subcommand) => subcommand.setName('all').setDescription('Shows the entire configuration'))
         .addSubcommand((subcommand) => subcommand.setName('channel').setDescription('Shows the log channel'))
-        .addSubcommand((subcommand) => subcommand.setName('events').setDescription('Shows the events'))
+        .addSubcommand((subcommand) => subcommand.setName('events').setDescription('Shows the events')),
     )
     .addSubcommandGroup((group) =>
       group
@@ -30,9 +30,9 @@ export default new Command({
           subcommand
             .setName('set')
             .setDescription('Sets the log channel')
-            .addChannelOption((option) => option.setName('channel').setDescription('The log channel').setRequired(true).addChannelTypes(ChannelType.GuildText))
+            .addChannelOption((option) => option.setName('channel').setDescription('The log channel').setRequired(true).addChannelTypes(ChannelType.GuildText)),
         )
-        .addSubcommand((subcommand) => subcommand.setName('remove').setDescription('Removes the log channel'))
+        .addSubcommand((subcommand) => subcommand.setName('remove').setDescription('Removes the log channel')),
     )
     .addSubcommandGroup((group) =>
       group
@@ -42,14 +42,14 @@ export default new Command({
           subcommand
             .setName('enable')
             .setDescription('Enables an event')
-            .addStringOption((option) => option.setName('event').setDescription('Name of the event').setAutocomplete(true).setRequired(true))
+            .addStringOption((option) => option.setName('event').setDescription('Name of the event').setAutocomplete(true).setRequired(true)),
         )
         .addSubcommand((subcommand) =>
           subcommand
             .setName('disable')
             .setDescription('Disables an event')
-            .addStringOption((option) => option.setName('event').setDescription('Name of the event').setAutocomplete(true).setRequired(true))
-        )
+            .addStringOption((option) => option.setName('event').setDescription('Name of the event').setAutocomplete(true).setRequired(true)),
+        ),
     ),
   async autocomplete({ interaction }) {
     const eventName = interaction.options.getFocused();
@@ -59,7 +59,7 @@ export default new Command({
           { name: 'all events', value: 'all' },
           { name: 'recommended events', value: 'recommended' },
           ...availableEvents.sort((a, b) => a.localeCompare(b)).map((event) => ({ name: event, value: event })),
-        ].slice(0, 25)
+        ].slice(0, 25),
       );
     await interaction.respond(
       [
@@ -68,7 +68,7 @@ export default new Command({
         ...availableEvents.sort((a, b) => a.localeCompare(b)).map((event) => ({ name: event, value: event })),
       ]
         .filter((event) => event.name.toLowerCase().includes(eventName.toLowerCase()))
-        .slice(0, 25)
+        .slice(0, 25),
     );
   },
   async execute({ client, interaction }) {
@@ -238,7 +238,9 @@ export default new Command({
                 if (!event) return interaction.editReply(t('log.events.invalid', { lng }));
                 if (event.enabled) return interaction.editReply(t('log.events.already_enabled', { lng }));
 
-                await client.updateGuildSettings(guildId, { $set: { [`log.events.${event.name}`]: true } });
+                await client.updateGuildSettings(guildId, {
+                  $set: { [`log.events.${event.name}`]: true },
+                });
                 interaction.editReply(t('log.events.enabled', { lng }));
               }
               break;
@@ -345,7 +347,9 @@ export default new Command({
                 if (!event) return interaction.editReply(t('log.events.invalid', { lng }));
                 if (!event.enabled) return interaction.editReply(t('log.events.already_disabled', { lng }));
 
-                await client.updateGuildSettings(guildId, { $set: { [`log.events.${event.name}`]: false } });
+                await client.updateGuildSettings(guildId, {
+                  $set: { [`log.events.${event.name}`]: false },
+                });
                 interaction.editReply(t('log.events.disabled', { lng }));
               }
               break;
@@ -358,14 +362,18 @@ export default new Command({
             case 'set':
               {
                 const channel = options.getChannel('channel', true, [ChannelType.GuildText]);
-                await client.updateGuildSettings(guildId, { $set: { ['log.channelId']: channel.id } });
+                await client.updateGuildSettings(guildId, {
+                  $set: { ['log.channelId']: channel.id },
+                });
                 interaction.editReply(t('log.channel.set', { lng }));
               }
               break;
             case 'remove':
               {
                 if (!config.log.channelId) return interaction.editReply(t('log.channel.none', { lng }));
-                await client.updateGuildSettings(guildId, { $set: { ['log.channelId']: undefined } });
+                await client.updateGuildSettings(guildId, {
+                  $set: { ['log.channelId']: undefined },
+                });
                 interaction.editReply(t('log.channel.removed', { lng }));
               }
               break;

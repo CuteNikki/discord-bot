@@ -35,7 +35,7 @@ export class Trivia {
       mode: TriviaMode;
       difficulty: TriviaDifficulty;
       category: number;
-    }
+    },
   ) {
     this.trivia = {} as TriviaQuestion;
 
@@ -51,7 +51,11 @@ export class Trivia {
     const trivia = await this.getTrivia();
     if (!trivia)
       return interaction
-        .editReply({ content: t('games.trivia.error', { lng }), embeds: [], components: [] })
+        .editReply({
+          content: t('games.trivia.error', { lng }),
+          embeds: [],
+          components: [],
+        })
         .catch((error) => logger.debug({ error }, 'Could not edit message'));
 
     const message = await interaction
@@ -60,12 +64,24 @@ export class Trivia {
         embeds: [
           new EmbedBuilder()
             .setColor(Colors.Yellow)
-            .setAuthor({ name: user.displayName, iconURL: user.displayAvatarURL() })
+            .setAuthor({
+              name: user.displayName,
+              iconURL: user.displayAvatarURL(),
+            })
             .setTitle(t('games.trivia.title', { lng }))
             .addFields(
-              { name: t('games.trivia.category', { lng }), value: this.trivia.category },
-              { name: t('games.trivia.difficulty', { lng }), value: this.trivia.difficulty },
-              { name: t('games.trivia.question', { lng }), value: this.trivia.question }
+              {
+                name: t('games.trivia.category', { lng }),
+                value: this.trivia.category,
+              },
+              {
+                name: t('games.trivia.difficulty', { lng }),
+                value: this.trivia.difficulty,
+              },
+              {
+                name: t('games.trivia.question', { lng }),
+                value: this.trivia.question,
+              },
             ),
         ],
         components: this.getComponents(),
@@ -73,7 +89,9 @@ export class Trivia {
       .catch((error) => logger.debug({ error }, 'Could not send message'));
     if (!message) return;
 
-    const collector = message.createMessageComponentCollector({ idle: 60 * 1000 });
+    const collector = message.createMessageComponentCollector({
+      idle: 60 * 1000,
+    });
 
     collector.on('collect', async (buttonInteraction) => {
       await buttonInteraction.deferUpdate().catch((error) => logger.debug({ error }, 'Could not defer update'));
@@ -81,7 +99,9 @@ export class Trivia {
       if (buttonInteraction.user.id !== user.id)
         return buttonInteraction
           .followUp({
-            content: t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
+            content: t('interactions.author_only', {
+              lng: await client.getUserLanguage(buttonInteraction.user.id),
+            }),
             ephemeral: true,
           })
           .catch((error) => logger.debug({ error }, 'Could not follow up'));
@@ -107,15 +127,33 @@ export class Trivia {
         embeds: [
           new EmbedBuilder()
             .setColor(result ? Colors.Green : Colors.Red)
-            .setAuthor({ name: user.displayName, iconURL: user.displayAvatarURL() })
+            .setAuthor({
+              name: user.displayName,
+              iconURL: user.displayAvatarURL(),
+            })
             .setTitle(t('games.trivia.title', { lng }))
             .setDescription(result ? t('games.trivia.correct', { lng }) : t('games.trivia.incorrect', { lng }))
             .addFields(
-              { name: t('games.trivia.category', { lng }), value: this.trivia.category },
-              { name: t('games.trivia.difficulty', { lng }), value: this.trivia.difficulty },
-              { name: t('games.trivia.question', { lng }), value: this.trivia.question },
-              { name: t('games.trivia.answer', { lng }), value: this.trivia.correct_answer },
-              { name: t('games.trivia.input', { lng }), value: this.selected || '/' }
+              {
+                name: t('games.trivia.category', { lng }),
+                value: this.trivia.category,
+              },
+              {
+                name: t('games.trivia.difficulty', { lng }),
+                value: this.trivia.difficulty,
+              },
+              {
+                name: t('games.trivia.question', { lng }),
+                value: this.trivia.question,
+              },
+              {
+                name: t('games.trivia.answer', { lng }),
+                value: this.trivia.correct_answer,
+              },
+              {
+                name: t('games.trivia.input', { lng }),
+                value: this.selected || '/',
+              },
             ),
         ],
         components: this.disableButtons(this.getComponents()),
@@ -158,7 +196,7 @@ export class Trivia {
 
   private async getTrivia() {
     const response = (await fetch(
-      `https://opentdb.com/api.php?amount=1&type=${this.options.mode}&difficulty=${this.options.difficulty}&category=${this.options.category}`
+      `https://opentdb.com/api.php?amount=1&type=${this.options.mode}&difficulty=${this.options.difficulty}&category=${this.options.category}`,
     )
       .then(async (res) => await res.json())
       .then((res) => res.results[0])

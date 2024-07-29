@@ -20,13 +20,13 @@ export default new Command({
       subcommand
         .setName('history')
         .setDescription('Shows infractions of a user')
-        .addUserOption((option) => option.setName('user').setDescription('The user to see the history of').setRequired(true))
+        .addUserOption((option) => option.setName('user').setDescription('The user to see the history of').setRequired(true)),
     )
     .addSubcommand((subcommand) =>
       subcommand
         .setName('delete')
         .setDescription('Deletes an infraction')
-        .addStringOption((option) => option.setName('infraction').setDescription('The id of the infraction').setRequired(true))
+        .addStringOption((option) => option.setName('infraction').setDescription('The id of the infraction').setRequired(true)),
     ),
   async execute({ interaction, client }) {
     if (!interaction.inCachedGuild()) return;
@@ -43,7 +43,7 @@ export default new Command({
         if (!targetInfractions.length) return interaction.editReply(t('infractions.history.none', { lng }));
         const chunkedInfractions = chunk(
           targetInfractions.sort((a, b) => b.createdAt - a.createdAt),
-          3
+          3,
         );
 
         const infractionTypes = {
@@ -61,21 +61,42 @@ export default new Command({
           embeds: chunkedInfractions.map((chunk, index) =>
             new EmbedBuilder()
               .setColor(Colors.Orange)
-              .setTitle(t('infractions.history.title', { lng, page: index + 1, pages: chunkedInfractions.length }))
+              .setTitle(
+                t('infractions.history.title', {
+                  lng,
+                  page: index + 1,
+                  pages: chunkedInfractions.length,
+                }),
+              )
               .setDescription(
                 chunk
                   .map((infraction) =>
                     [
                       t('infractions.history.id', { lng, id: infraction._id }),
-                      t('infractions.history.type', { lng, type: infractionTypes[infraction.action as keyof typeof infractionTypes] }),
-                      t('infractions.history.staff', { lng, staff: `<@${infraction.staffId}>` }),
-                      t('infractions.history.reason', { lng, reason: infraction.reason ?? '/' }),
-                      t('infractions.history.date', { lng, date: `<t:${Math.floor(infraction.createdAt / 1000)}:f>` }),
-                      t('infractions.history.ends_at', { lng, date: infraction.endsAt ? `<t:${Math.floor(infraction.endsAt / 1000)}:f>` : '/' }),
-                    ].join('\n')
+                      t('infractions.history.type', {
+                        lng,
+                        type: infractionTypes[infraction.action as keyof typeof infractionTypes],
+                      }),
+                      t('infractions.history.staff', {
+                        lng,
+                        staff: `<@${infraction.staffId}>`,
+                      }),
+                      t('infractions.history.reason', {
+                        lng,
+                        reason: infraction.reason ?? '/',
+                      }),
+                      t('infractions.history.date', {
+                        lng,
+                        date: `<t:${Math.floor(infraction.createdAt / 1000)}:f>`,
+                      }),
+                      t('infractions.history.ends_at', {
+                        lng,
+                        date: infraction.endsAt ? `<t:${Math.floor(infraction.endsAt / 1000)}:f>` : '/',
+                      }),
+                    ].join('\n'),
                   )
-                  .join('\n\n')
-              )
+                  .join('\n\n'),
+              ),
           ),
         });
         break;

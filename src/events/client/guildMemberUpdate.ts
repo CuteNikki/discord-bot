@@ -23,6 +23,8 @@ export default new Event({
     await newMember
       .send('Thank you for boosting the support server. You received the Supporter badge!')
       .catch((error) => logger.debug({ error, userId: newMember.user.id }, 'Could not send DM'));
-    await client.updateUserData(newMember.user.id, { $push: { badges: { id: BadgeType.Supporter, receivedAt: Date.now() } } });
+    await client.updateUserData(newMember.user.id, {
+      $push: { badges: { id: BadgeType.Supporter, receivedAt: Date.now() } },
+    });
   },
 });

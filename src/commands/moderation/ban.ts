@@ -43,8 +43,8 @@ export default new Command({
           { name: 'Previous 12 hours', value: 43200 },
           { name: 'Previous 24 hours', value: 86400 },
           { name: 'Previous 3 days', value: 259200 },
-          { name: 'Previous 7 days', value: 604800 }
-        )
+          { name: 'Previous 7 days', value: 604800 },
+        ),
     ),
   async execute({ interaction, client }) {
     if (!interaction.inCachedGuild()) return;
@@ -98,17 +98,26 @@ export default new Command({
       components: [
         new ActionRowBuilder<ButtonBuilder>().setComponents(
           new ButtonBuilder().setCustomId(CustomIds.Confirm).setEmoji('✔').setStyle(ButtonStyle.Success),
-          new ButtonBuilder().setCustomId(CustomIds.Cancel).setEmoji('✖').setStyle(ButtonStyle.Danger)
+          new ButtonBuilder().setCustomId(CustomIds.Cancel).setEmoji('✖').setStyle(ButtonStyle.Danger),
         ),
       ],
     });
 
-    const collector = await msg.awaitMessageComponent({ filter: (i) => i.user.id === interaction.user.id, componentType: ComponentType.Button, time: 30_000 });
+    const collector = await msg.awaitMessageComponent({
+      filter: (i) => i.user.id === interaction.user.id,
+      componentType: ComponentType.Button,
+      time: 30_000,
+    });
 
     if (collector.customId === CustomIds.Cancel) {
-      await collector.update({ content: t('ban.cancelled', { lng }), components: [] });
+      await collector.update({
+        content: t('ban.cancelled', { lng }),
+        components: [],
+      });
     } else if (collector.customId === CustomIds.Confirm) {
-      const banned = await guild.bans.create(target.id, { reason, deleteMessageSeconds: history }).catch((error) => logger.debug({ error, userId: target.id }, 'Could not ban user'));
+      const banned = await guild.bans
+        .create(target.id, { reason, deleteMessageSeconds: history })
+        .catch((error) => logger.debug({ error, userId: target.id }, 'Could not ban user'));
       if (!banned) return collector.update(t('ban.failed', { lng }));
 
       const receivedDM = await client.users
@@ -123,8 +132,15 @@ export default new Command({
         .catch((error) => logger.debug({ error, userId: target.id }, 'Could not send DM'));
       await collector.update({
         content: [
-          t('ban.confirmed', { lng, user: target.toString(), reason: `\`${reason ?? '/'}\`` }),
-          t('ban.deleted_history', { lng, deleted: historyOptions[history as keyof typeof historyOptions] }),
+          t('ban.confirmed', {
+            lng,
+            user: target.toString(),
+            reason: `\`${reason ?? '/'}\``,
+          }),
+          t('ban.deleted_history', {
+            lng,
+            deleted: historyOptions[history as keyof typeof historyOptions],
+          }),
           receivedDM ? t('ban.dm_received', { lng }) : t('ban.dm_not_received', { lng }),
           duration ? t('ban.duration', { lng, duration: durationText }) : t('ban.permanent', { lng }),
         ].join('\n'),

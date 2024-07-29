@@ -34,7 +34,7 @@ export class Connect4 extends Opponent {
         height: number;
         max_buttons: number;
       };
-    }
+    },
   ) {
     super(options);
 
@@ -93,14 +93,16 @@ export class Connect4 extends Opponent {
             .addFields(
               { name: user.displayName, value: '🔵', inline: true },
               { name: 'vs', value: '⚡', inline: true },
-              { name: opponent.displayName, value: '🔴', inline: true }
+              { name: opponent.displayName, value: '🔴', inline: true },
             ),
         ],
         components: this.getComponents(),
       })
       .catch((error) => logger.debug({ error }, 'Could not send message'));
 
-    const collector = message.createMessageComponentCollector({ idle: 60 * 1000 });
+    const collector = message.createMessageComponentCollector({
+      idle: 60 * 1000,
+    });
 
     collector.on('collect', async (buttonInteraction) => {
       await buttonInteraction.deferUpdate().catch((error) => logger.debug({ error }, 'Could not defer update'));
@@ -108,19 +110,27 @@ export class Connect4 extends Opponent {
       if (buttonInteraction.user.id !== user.id && buttonInteraction.user.id !== opponent.id)
         return buttonInteraction
           .followUp({
-            content: t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
+            content: t('interactions.author_only', {
+              lng: await client.getUserLanguage(buttonInteraction.user.id),
+            }),
             ephemeral: true,
           })
           .catch((error) => logger.debug({ error }, 'Could not follow up'));
 
       if (this.playerTurn && buttonInteraction.user.id !== user.id)
         return buttonInteraction
-          .followUp({ content: t('games.connect.turn', { lng: opponentLng }), ephemeral: true })
+          .followUp({
+            content: t('games.connect.turn', { lng: opponentLng }),
+            ephemeral: true,
+          })
           .catch((error) => logger.debug({ error }, 'Could not follow up'));
 
       if (!this.playerTurn && buttonInteraction.user.id !== opponent.id)
         return buttonInteraction
-          .followUp({ content: t('games.connect.turn', { lng }), ephemeral: true })
+          .followUp({
+            content: t('games.connect.turn', { lng }),
+            ephemeral: true,
+          })
           .catch((error) => logger.debug({ error }, 'Could not follow up'));
 
       const column = parseInt(buttonInteraction.customId.split('_')[1]) - 1;
@@ -158,7 +168,7 @@ export class Connect4 extends Opponent {
               .addFields(
                 { name: user.displayName, value: '🔵', inline: true },
                 { name: 'vs', value: '⚡', inline: true },
-                { name: opponent.displayName, value: '🔴', inline: true }
+                { name: opponent.displayName, value: '🔴', inline: true },
               ),
           ],
           components: buttonInteraction.message.components,
@@ -255,7 +265,7 @@ export class Connect4 extends Opponent {
       .addFields(
         { name: user.displayName, value: '🔵', inline: true },
         { name: 'vs', value: '⚡', inline: true },
-        { name: opponent.displayName, value: '🔴', inline: true }
+        { name: opponent.displayName, value: '🔴', inline: true },
       );
 
     if (result === 'TIMEOUT') embed.setDescription([t('games.connect.timeout', { lng }), this.getBoardContent()].join('\n\n'));
@@ -264,7 +274,11 @@ export class Connect4 extends Opponent {
     else embed.setDescription([t('games.connect.winner', { lng, winner: opponent.toString() }), this.getBoardContent()].join('\n\n'));
 
     return await interaction
-      .editReply({ content: null, embeds: [embed], components: this.disableButtons(this.getComponents()) })
+      .editReply({
+        content: null,
+        embeds: [embed],
+        components: this.disableButtons(this.getComponents()),
+      })
       .catch((error) => logger.debug({ error }, 'Could not edit message'));
   }
 

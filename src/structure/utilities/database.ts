@@ -96,7 +96,9 @@ async function clearWeeklyLevel(client: DiscordClient, applicationId: string) {
   logger.debug(`[${client.cluster.id}] Cleared ${clearedLevel.deletedCount} weekly level`);
 
   // Update last weekly level clear with current date
-  await client.updateClientSettings(applicationId, { $set: { ['database.lastWeeklyClear']: Date.now() } });
+  await client.updateClientSettings(applicationId, {
+    $set: { ['database.lastWeeklyClear']: Date.now() },
+  });
 }
 
 async function clearReminders(client: DiscordClient) {
@@ -128,7 +130,9 @@ async function clearReminders(client: DiscordClient) {
     }
   }
   // Deleting due reminders
-  const deletedReminders = await reminderModel.deleteMany({ remindAt: { $lte: NOW } });
+  const deletedReminders = await reminderModel.deleteMany({
+    remindAt: { $lte: NOW },
+  });
   logger.debug(`[${client.cluster.id}] Deleted ${deletedReminders.deletedCount} due reminders`);
 }
 
@@ -158,7 +162,9 @@ async function clearExpiredInfractions(client: DiscordClient) {
     }
 
     async function closeInfraction() {
-      await infractionModel.findByIdAndUpdate(infraction._id, { $set: { closed: true } });
+      await infractionModel.findByIdAndUpdate(infraction._id, {
+        $set: { closed: true },
+      });
       closedInfractions.push();
     }
   }

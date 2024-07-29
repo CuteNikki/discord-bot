@@ -30,14 +30,14 @@ export default new Command({
         .setDescription('Shows the current configuration of the ticket module')
         .addSubcommand((subcommand) => subcommand.setName('all').setDescription('Shows the entire configuration'))
         .addSubcommand((subcommand) => subcommand.setName('state').setDescription('Check the ticket module state'))
-        .addSubcommand((subcommand) => subcommand.setName('systems').setDescription('Show the ticket systems'))
+        .addSubcommand((subcommand) => subcommand.setName('systems').setDescription('Show the ticket systems')),
     )
     .addSubcommandGroup((group) =>
       group
         .setName('toggle')
         .setDescription('Toggle the ticket module')
         .addSubcommand((subcommand) => subcommand.setName('on').setDescription('Enable the ticket module'))
-        .addSubcommand((subcommand) => subcommand.setName('off').setDescription('Disable the ticket module'))
+        .addSubcommand((subcommand) => subcommand.setName('off').setDescription('Disable the ticket module')),
     )
     .addSubcommandGroup((group) =>
       group
@@ -53,10 +53,10 @@ export default new Command({
                 .setName('transcript-channel')
                 .setDescription('The channel to send transcripts to')
                 .setRequired(false)
-                .addChannelTypes(ChannelType.GuildText)
+                .addChannelTypes(ChannelType.GuildText),
             )
             .addChannelOption((option) =>
-              option.setName('category').setDescription('The category to create tickets in').setRequired(false).addChannelTypes(ChannelType.GuildCategory)
+              option.setName('category').setDescription('The category to create tickets in').setRequired(false).addChannelTypes(ChannelType.GuildCategory),
             )
             .addIntegerOption((option) =>
               option
@@ -64,8 +64,8 @@ export default new Command({
                 .setDescription('Max amount of tickets a member can have open at once')
                 .setRequired(false)
                 .setMinValue(1)
-                .setMaxValue(25)
-            )
+                .setMaxValue(25),
+            ),
         )
         .addSubcommand((subcommand) =>
           subcommand
@@ -78,10 +78,10 @@ export default new Command({
                 .setName('transcript-channel')
                 .setDescription('The channel to send transcripts to')
                 .setRequired(false)
-                .addChannelTypes(ChannelType.GuildText)
+                .addChannelTypes(ChannelType.GuildText),
             )
             .addChannelOption((option) =>
-              option.setName('category').setDescription('The category to create tickets in').setRequired(false).addChannelTypes(ChannelType.GuildCategory)
+              option.setName('category').setDescription('The category to create tickets in').setRequired(false).addChannelTypes(ChannelType.GuildCategory),
             )
             .addIntegerOption((option) =>
               option
@@ -89,36 +89,36 @@ export default new Command({
                 .setDescription('Max amount of tickets a member can have open at once')
                 .setRequired(false)
                 .setMinValue(1)
-                .setMaxValue(25)
-            )
+                .setMaxValue(25),
+            ),
         )
         .addSubcommand((subcommand) =>
           subcommand
             .setName('delete')
             .setDescription('Delete a ticket system')
-            .addStringOption((option) => option.setName('id').setDescription('The id of the ticket system to delete').setRequired(true))
+            .addStringOption((option) => option.setName('id').setDescription('The id of the ticket system to delete').setRequired(true)),
         )
         .addSubcommand((subcommand) =>
           subcommand
             .setName('add-choice')
             .setDescription('Add a choice to a ticket system')
             .addStringOption((option) => option.setName('id').setDescription('The id of the ticket system to add a choice to').setRequired(true))
-            .addStringOption((option) => option.setName('choice').setDescription('The choice to add').setRequired(true).setMaxLength(80))
+            .addStringOption((option) => option.setName('choice').setDescription('The choice to add').setRequired(true).setMaxLength(80)),
         )
         .addSubcommand((subcommand) =>
           subcommand
             .setName('remove-choice')
             .setDescription('Remove a choice from a ticket system')
             .addStringOption((option) => option.setName('id').setDescription('The id of the ticket system to remove a choice from').setRequired(true))
-            .addStringOption((option) => option.setName('choice').setDescription('The choice to remove').setRequired(true))
+            .addStringOption((option) => option.setName('choice').setDescription('The choice to remove').setRequired(true)),
         )
         .addSubcommand((subcommand) =>
           subcommand
             .setName('send')
             .setDescription('Send a ticket system')
             .addStringOption((option) => option.setName('id').setDescription('The id of the ticket system to delete').setRequired(true))
-            .addChannelOption((option) => option.setName('channel').setDescription('The channel to send the ticket system to').setRequired(true))
-        )
+            .addChannelOption((option) => option.setName('channel').setDescription('The channel to send the ticket system to').setRequired(true)),
+        ),
     ),
   async execute({ client, interaction }) {
     if (!interaction.inCachedGuild()) return;
@@ -144,7 +144,10 @@ export default new Command({
                     }),
                     ...currentConfig.ticket.systems.map((system) =>
                       new EmbedBuilder().addFields(
-                        { name: t('tickets.id', { lng }), value: system._id.toString() },
+                        {
+                          name: t('tickets.id', { lng }),
+                          value: system._id.toString(),
+                        },
                         {
                           name: t('tickets.staff_role', { lng }),
                           value: `<@&${system.staffRoleId}>`,
@@ -160,8 +163,8 @@ export default new Command({
                         {
                           name: t('tickets.max_tickets', { lng }),
                           value: system.maxTickets.toString(),
-                        }
-                      )
+                        },
+                      ),
                     ),
                   ],
                 });
@@ -182,11 +185,17 @@ export default new Command({
               break;
             case 'systems':
               {
-                if (!currentConfig.ticket.systems.length) return await interaction.editReply({ content: 'No ticket systems have been created' });
+                if (!currentConfig.ticket.systems.length)
+                  return await interaction.editReply({
+                    content: 'No ticket systems have been created',
+                  });
                 await interaction.editReply({
                   embeds: currentConfig.ticket.systems.map((system) =>
                     new EmbedBuilder().addFields(
-                      { name: t('tickets.id', { lng }), value: system._id.toString() },
+                      {
+                        name: t('tickets.id', { lng }),
+                        value: system._id.toString(),
+                      },
                       {
                         name: t('tickets.staff_role', { lng }),
                         value: `<@&${system.staffRoleId}>`,
@@ -202,8 +211,8 @@ export default new Command({
                       {
                         name: t('tickets.max_tickets', { lng }),
                         value: system.maxTickets.toString(),
-                      }
-                    )
+                      },
+                    ),
                   ),
                 });
               }
@@ -216,16 +225,30 @@ export default new Command({
           switch (options.getSubcommand()) {
             case 'on':
               {
-                if (currentConfig.ticket.enabled) return await interaction.editReply({ content: 'The ticket module is already enabled' });
-                await client.updateGuildSettings(guild.id, { $set: { ['ticket.enabled']: true } });
-                await interaction.editReply({ content: t('tickets.enabled', { lng }) });
+                if (currentConfig.ticket.enabled)
+                  return await interaction.editReply({
+                    content: 'The ticket module is already enabled',
+                  });
+                await client.updateGuildSettings(guild.id, {
+                  $set: { ['ticket.enabled']: true },
+                });
+                await interaction.editReply({
+                  content: t('tickets.enabled', { lng }),
+                });
               }
               break;
             case 'off':
               {
-                if (!currentConfig.ticket.enabled) return await interaction.editReply({ content: 'The ticket module is already disabled' });
-                await client.updateGuildSettings(guild.id, { $set: { ['ticket.enabled']: false } });
-                await interaction.editReply({ content: t('tickets.disabled', { lng }) });
+                if (!currentConfig.ticket.enabled)
+                  return await interaction.editReply({
+                    content: 'The ticket module is already disabled',
+                  });
+                await client.updateGuildSettings(guild.id, {
+                  $set: { ['ticket.enabled']: false },
+                });
+                await interaction.editReply({
+                  content: t('tickets.disabled', { lng }),
+                });
               }
               break;
           }
@@ -235,7 +258,10 @@ export default new Command({
         switch (options.getSubcommand()) {
           case 'create':
             {
-              if (currentConfig.ticket.systems.length >= 10) return await interaction.editReply({ content: 'The ticket system limit has been reached' });
+              if (currentConfig.ticket.systems.length >= 10)
+                return await interaction.editReply({
+                  content: 'The ticket system limit has been reached',
+                });
 
               const staffRole = options.getRole('staff-role', true);
               const transcriptChannel = options.getChannel('transcript-channel', false);
@@ -254,7 +280,10 @@ export default new Command({
               });
 
               await interaction.editReply({
-                content: t('tickets.created', { lng, id: config.ticket.systems[config.ticket.systems.length - 1]._id.toString() }),
+                content: t('tickets.created', {
+                  lng,
+                  id: config.ticket.systems[config.ticket.systems.length - 1]._id.toString(),
+                }),
               });
             }
             break;
@@ -267,7 +296,10 @@ export default new Command({
               const maxTickets = options.getInteger('max-tickets', false);
 
               const system = currentConfig.ticket.systems.find((system) => system._id.toString() === id);
-              if (!system) return await interaction.editReply({ content: 'The ticket system does not exist' });
+              if (!system)
+                return await interaction.editReply({
+                  content: 'The ticket system does not exist',
+                });
 
               await client.updateGuildSettings(guild.id, {
                 $set: {
@@ -286,7 +318,9 @@ export default new Command({
                 },
               });
 
-              await interaction.editReply({ content: t('tickets.edited', { lng }) });
+              await interaction.editReply({
+                content: t('tickets.edited', { lng }),
+              });
             }
             break;
           case 'delete':
@@ -298,7 +332,9 @@ export default new Command({
                   },
                 },
               });
-              await interaction.editReply({ content: t('tickets.deleted', { lng }) });
+              await interaction.editReply({
+                content: t('tickets.deleted', { lng }),
+              });
             }
             break;
           case 'add-choice':
@@ -307,9 +343,18 @@ export default new Command({
               const choice = options.getString('choice', true);
 
               const system = currentConfig.ticket.systems.find((system) => system._id.toString() === id);
-              if (!system) return await interaction.editReply({ content: t('tickets.invalid', { lng }) });
-              if (system.choices.includes(choice)) return await interaction.editReply({ content: t('tickets.choice_already', { lng }) });
-              if (system.choices.length >= 5) return await interaction.editReply({ content: t('tickets.choice_limit', { lng }) });
+              if (!system)
+                return await interaction.editReply({
+                  content: t('tickets.invalid', { lng }),
+                });
+              if (system.choices.includes(choice))
+                return await interaction.editReply({
+                  content: t('tickets.choice_already', { lng }),
+                });
+              if (system.choices.length >= 5)
+                return await interaction.editReply({
+                  content: t('tickets.choice_limit', { lng }),
+                });
 
               await client.updateGuildSettings(guild.id, {
                 $set: {
@@ -325,7 +370,9 @@ export default new Command({
                 },
               });
 
-              await interaction.editReply({ content: t('tickets.choice_added', { lng }) });
+              await interaction.editReply({
+                content: t('tickets.choice_added', { lng }),
+              });
             }
             break;
           case 'remove-choice':
@@ -334,8 +381,14 @@ export default new Command({
               const choice = options.getString('choice', true);
 
               const system = currentConfig.ticket.systems.find((system) => system._id.toString() === id);
-              if (!system) return await interaction.editReply({ content: t('tickets.invalid', { lng }) });
-              if (!system.choices.includes(choice)) return await interaction.editReply({ content: t('tickets.choice_invalid', { lng }) });
+              if (!system)
+                return await interaction.editReply({
+                  content: t('tickets.invalid', { lng }),
+                });
+              if (!system.choices.includes(choice))
+                return await interaction.editReply({
+                  content: t('tickets.choice_invalid', { lng }),
+                });
 
               await client.updateGuildSettings(guild.id, {
                 $set: {
@@ -351,18 +404,29 @@ export default new Command({
                 },
               });
 
-              await interaction.editReply({ content: t('tickets.choice_removed', { lng }) });
+              await interaction.editReply({
+                content: t('tickets.choice_removed', { lng }),
+              });
             }
             break;
           case 'send':
             {
               const id = options.getString('id', true);
               const channel = options.getChannel('channel', true);
-              if (!channel || channel.type !== ChannelType.GuildText) return await interaction.editReply({ content: 'The channel is invalid' });
+              if (!channel || channel.type !== ChannelType.GuildText)
+                return await interaction.editReply({
+                  content: 'The channel is invalid',
+                });
 
               const system = currentConfig.ticket.systems.find((system) => system._id.toString() === id);
-              if (!system) return await interaction.editReply({ content: t('tickets.invalid', { lng }) });
-              if (!system.choices.length) return await interaction.editReply({ content: t('tickets.no_choices', { lng }) });
+              if (!system)
+                return await interaction.editReply({
+                  content: t('tickets.invalid', { lng }),
+                });
+              if (!system.choices.length)
+                return await interaction.editReply({
+                  content: t('tickets.no_choices', { lng }),
+                });
 
               const guildLng = currentConfig.language;
 
@@ -379,14 +443,19 @@ export default new Command({
                         new ButtonBuilder()
                           .setCustomId(`button-tickets-create_${system._id.toString()}_${index}`)
                           .setLabel(choice)
-                          .setStyle(ButtonStyle.Secondary)
-                      )
+                          .setStyle(ButtonStyle.Secondary),
+                      ),
                     ),
                   ],
                 })
                 .catch((error) => logger.debug({ error, userId: interaction.user.id }, 'Could not send ticket message'));
-              if (!msg) return await interaction.editReply({ content: t('tickets.send_fail', { lng }) });
-              await interaction.editReply({ content: t('tickets.send_success', { lng }) });
+              if (!msg)
+                return await interaction.editReply({
+                  content: t('tickets.send_fail', { lng }),
+                });
+              await interaction.editReply({
+                content: t('tickets.send_success', { lng }),
+              });
             }
             break;
         }

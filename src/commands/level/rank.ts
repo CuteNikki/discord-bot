@@ -43,13 +43,22 @@ export default new Command({
     const card = new RankCardBuilder()
       .setDisplayName(target.displayName)
       .setUsername(target.username)
-      .setAvatar(target.displayAvatarURL({ size: 1024, forceStatic: true, extension: 'png' }))
+      .setAvatar(
+        target.displayAvatarURL({
+          size: 1024,
+          forceStatic: true,
+          extension: 'png',
+        }),
+      )
       .setCurrentXP(rank.xp)
       .setRequiredXP(levelToXP(rank.level + 1))
       .setLevel(rank.level)
       .setRank(rank.position)
       .setStatus(member?.presence?.status ?? 'none');
     const image = await card.build({ format: 'png' }).catch((error) => logger.debug({ error }, 'Could not build rank card'));
-    if (image) return interaction.editReply({ files: [new AttachmentBuilder(image, { name: 'rank.png' })] });
+    if (image)
+      return interaction.editReply({
+        files: [new AttachmentBuilder(image, { name: 'rank.png' })],
+      });
   },
 });

@@ -27,7 +27,7 @@ export default new Command({
     .addIntegerOption((option) => option.setName('amount').setDescription('The amount of messages').setMinValue(1).setMaxValue(50).setRequired(true))
     .addUserOption((option) => option.setName('user').setDescription('The user to delete messages of').setRequired(false))
     .addChannelOption((option) =>
-      option.setName('channel').setDescription('The channel to delete messages in').addChannelTypes(ChannelType.GuildText).setRequired(false)
+      option.setName('channel').setDescription('The channel to delete messages in').addChannelTypes(ChannelType.GuildText).setRequired(false),
     )
     .addStringOption((option) => option.setName('before').setDescription('Only delete sent messages before the given message link').setRequired(false))
     .addStringOption((option) => option.setName('after').setDescription('Only delete sent messages after the given message link').setRequired(false)),
@@ -57,7 +57,9 @@ export default new Command({
       fetchOptions = { limit: amount, after: messageId };
     }
 
-    let fetchedMessages = await channel.messages.fetch(fetchOptions).catch((error) => logger.debug({ error, channelId: channel.id }, 'Could not fetch messages'));
+    let fetchedMessages = await channel.messages
+      .fetch(fetchOptions)
+      .catch((error) => logger.debug({ error, channelId: channel.id }, 'Could not fetch messages'));
     if (!fetchedMessages) return interaction.editReply(t('purge.no_messages', { lng }));
     if (user) fetchedMessages = fetchedMessages.filter((msg) => msg.author.id === user.id);
     const deletedMessages = await channel
@@ -67,9 +69,14 @@ export default new Command({
 
     interaction.editReply({
       embeds: [
-        new EmbedBuilder()
-          .setColor(Colors.Orange)
-          .setDescription(t('purge.success', { lng, deleted: deletedMessages.size, amount, channel: channel.toString() })),
+        new EmbedBuilder().setColor(Colors.Orange).setDescription(
+          t('purge.success', {
+            lng,
+            deleted: deletedMessages.size,
+            amount,
+            channel: channel.toString(),
+          }),
+        ),
       ],
       files: [
         new AttachmentBuilder(
@@ -79,11 +86,14 @@ export default new Command({
                 (message) =>
                   `Author: ${message?.author?.username} (${message?.author?.id})\nAttachments: ${message?.attachments
                     .map((attachment) => attachment.url)
-                    .join('\n          ')}\nContent: ${message?.content}`
+                    .join('\n          ')}\nContent: ${message?.content}`,
               )
-              .join('\n\n')}`
+              .join('\n\n')}`,
           ),
-          { name: 'message-bulk-delete.txt', description: 'List of all deleted messages with their author, content and attachments' }
+          {
+            name: 'message-bulk-delete.txt',
+            description: 'List of all deleted messages with their author, content and attachments',
+          },
         ),
       ],
     });

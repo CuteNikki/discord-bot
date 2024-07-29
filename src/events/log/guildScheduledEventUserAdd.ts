@@ -29,8 +29,14 @@ export default new Event({
           .setTitle(t('log.guildScheduledEventUserAdd.title', { lng }))
           .setImage(event.coverImageURL({ size: 1024 }))
           .addFields(
-            { name: t('log.guildScheduledEventUserAdd.event', { lng }), value: `[${event.name}](${event.url})` },
-            { name: t('log.guildScheduledEventUserAdd.user', { lng }), value: `${user.toString()} (\`${user.username}\` | ${user.id})` }
+            {
+              name: t('log.guildScheduledEventUserAdd.event', { lng }),
+              value: `[${event.name}](${event.url})`,
+            },
+            {
+              name: t('log.guildScheduledEventUserAdd.user', { lng }),
+              value: `${user.toString()} (\`${user.username}\` | ${user.id})`,
+            },
           )
           .setTimestamp(),
       ],

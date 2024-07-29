@@ -26,11 +26,23 @@ export default new Event({
           .setTitle(t('log.stickerDelete.title', { lng }))
           .setThumbnail(url)
           .addFields(
-            { name: t('log.stickerDelete.sticker', { lng }), value: `\`${name}\` (${id})` },
-            { name: t('log.stickerDelete.description', { lng }), value: description || '/' },
-            { name: t('log.stickerDelete.format', { lng }), value: StickerFormatType[format] },
+            {
+              name: t('log.stickerDelete.sticker', { lng }),
+              value: `\`${name}\` (${id})`,
+            },
+            {
+              name: t('log.stickerDelete.description', { lng }),
+              value: description || '/',
+            },
+            {
+              name: t('log.stickerDelete.format', { lng }),
+              value: StickerFormatType[format],
+            },
             { name: t('log.stickerDelete.tags', { lng }), value: tags || '/' },
-            { name: t('log.stickerDelete.created_at', { lng }), value: `<t:${Math.floor(createdTimestamp / 1000)}:f>` }
+            {
+              name: t('log.stickerDelete.created_at', { lng }),
+              value: `<t:${Math.floor(createdTimestamp / 1000)}:f>`,
+            },
           )
           .setTimestamp(),
       ],

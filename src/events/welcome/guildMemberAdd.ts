@@ -44,8 +44,12 @@ export default new Event({
               text: replacePlaceholders(embedData.footer?.text ?? '', user, guild),
               icon_url: replacePlaceholders(embedData.footer?.icon_url ?? '', user, guild),
             },
-            image: { url: replacePlaceholders(embedData.image ?? '', user, guild) },
-            thumbnail: { url: replacePlaceholders(embedData.thumbnail ?? '', user, guild) },
+            image: {
+              url: replacePlaceholders(embedData.image ?? '', user, guild),
+            },
+            thumbnail: {
+              url: replacePlaceholders(embedData.thumbnail ?? '', user, guild),
+            },
             url: replacePlaceholders(embedData.url ?? '', user, guild),
           }).setColor(embedData.color as ColorResolvable),
         ],

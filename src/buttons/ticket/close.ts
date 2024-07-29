@@ -20,14 +20,29 @@ export default new Button({
     const lng = currentConfig.language;
 
     const system = currentConfig.ticket.systems.find((system) => system._id.toString() === customId.split('_')[1]);
-    if (!system) return interaction.reply({ content: t('tickets.invalid_system', { lng }), ephemeral: true });
+    if (!system)
+      return interaction.reply({
+        content: t('tickets.invalid_system', { lng }),
+        ephemeral: true,
+      });
 
-    if (!interaction.member.roles.cache.has(system.staffRoleId)) return interaction.reply({ content: t('tickets.staff_only', { lng }), ephemeral: true });
+    if (!interaction.member.roles.cache.has(system.staffRoleId))
+      return interaction.reply({
+        content: t('tickets.staff_only', { lng }),
+        ephemeral: true,
+      });
 
     const ticket = await ticketModel.findOne({ channelId });
-    if (!ticket) return interaction.reply({ content: t('tickets.invalid_ticket', { lng }) });
+    if (!ticket)
+      return interaction.reply({
+        content: t('tickets.invalid_ticket', { lng }),
+      });
 
-    if (!ticket.claimedBy) return interaction.reply({ content: t('tickets.not_claimed', { lng }), ephemeral: true });
+    if (!ticket.claimedBy)
+      return interaction.reply({
+        content: t('tickets.not_claimed', { lng }),
+        ephemeral: true,
+      });
 
     const hasTranscriptChannel = system.transcriptChannelId ? true : false;
 
@@ -46,7 +61,7 @@ export default new Button({
                   .setCustomId(`button-tickets-delete_${system._id.toString()}`)
                   .setLabel(t('tickets.delete', { lng }))
                   .setEmoji('🗑️')
-                  .setStyle(ButtonStyle.Danger)
+                  .setStyle(ButtonStyle.Danger),
               ),
             ]
           : [
@@ -55,7 +70,7 @@ export default new Button({
                   .setCustomId(`button-tickets-delete_${system._id.toString()}`)
                   .setLabel(t('tickets.delete', { lng }))
                   .setEmoji('🗑️')
-                  .setStyle(ButtonStyle.Danger)
+                  .setStyle(ButtonStyle.Danger),
               ),
             ],
       });
@@ -86,7 +101,7 @@ export default new Button({
                 .setCustomId(`tickets-delete_${system._id.toString()}`)
                 .setLabel(t('tickets.delete', { lng }))
                 .setEmoji('✖️')
-                .setStyle(ButtonStyle.Danger)
+                .setStyle(ButtonStyle.Danger),
             ),
           ]
         : [
@@ -95,7 +110,7 @@ export default new Button({
                 .setCustomId(`button-tickets-delete_${system._id.toString()}`)
                 .setLabel(t('tickets.delete', { lng }))
                 .setEmoji('🗑️')
-                .setStyle(ButtonStyle.Danger)
+                .setStyle(ButtonStyle.Danger),
             ),
           ],
     });

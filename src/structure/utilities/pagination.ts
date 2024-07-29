@@ -71,7 +71,11 @@ export async function pagination({
     .catch((error) => logger.debug({ error }, 'Could not edit message'));
   if (!msg) return;
 
-  const collector = msg.createMessageComponentCollector({ filter: (i) => i.user.id === user.id, idle: time, componentType: ComponentType.Button });
+  const collector = msg.createMessageComponentCollector({
+    filter: (i) => i.user.id === user.id,
+    idle: time,
+    componentType: ComponentType.Button,
+  });
 
   collector.on('collect', async (int) => {
     await int.deferUpdate().catch((error) => logger.debug({ error }, 'Could not defer update'));
@@ -117,7 +121,10 @@ export async function pagination({
     buttonLast.setDisabled(true);
 
     const embed = embeds[index];
-    if (footer) embed.setFooter({ text: t('pagination', { lng, time: ms(time, { long: true }) }) });
+    if (footer)
+      embed.setFooter({
+        text: t('pagination', { lng, time: ms(time, { long: true }) }),
+      });
 
     interaction.editReply({ embeds: [embed], components: [components] }).catch((error) => logger.debug({ error }, 'Could not edit message'));
   });

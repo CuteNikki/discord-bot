@@ -53,15 +53,22 @@ export default new Command({
       components: [
         new ActionRowBuilder<ButtonBuilder>().setComponents(
           new ButtonBuilder().setCustomId(CustomIds.Confirm).setEmoji('✔').setStyle(ButtonStyle.Success),
-          new ButtonBuilder().setCustomId(CustomIds.Cancel).setEmoji('✖').setStyle(ButtonStyle.Danger)
+          new ButtonBuilder().setCustomId(CustomIds.Cancel).setEmoji('✖').setStyle(ButtonStyle.Danger),
         ),
       ],
     });
 
-    const collector = await msg.awaitMessageComponent({ filter: (i) => i.user.id === interaction.user.id, componentType: ComponentType.Button, time: 30_000 });
+    const collector = await msg.awaitMessageComponent({
+      filter: (i) => i.user.id === interaction.user.id,
+      componentType: ComponentType.Button,
+      time: 30_000,
+    });
 
     if (collector.customId === CustomIds.Cancel) {
-      await collector.update({ content: t('unban.cancelled', { lng }), components: [] });
+      await collector.update({
+        content: t('unban.cancelled', { lng }),
+        components: [],
+      });
     } else if (collector.customId === CustomIds.Confirm) {
       const banned = await guild.bans.remove(target.id, reason).catch((error) => logger.debug({ error, userId: target.id }, 'Could not unban user'));
       if (!banned) return collector.update(t('unban.failed', { lng }));
@@ -77,7 +84,11 @@ export default new Command({
         .catch(() => {});
       await collector.update({
         content: [
-          t('unban.confirmed', { lng, user: target.toString(), reason: `\`${reason ?? '/'}\`` }),
+          t('unban.confirmed', {
+            lng,
+            user: target.toString(),
+            reason: `\`${reason ?? '/'}\``,
+          }),
           receivedDM ? t('unban.dm_received', { lng }) : t('unban.dm_not_received', { lng }),
         ].join('\n'),
         components: [],

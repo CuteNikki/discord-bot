@@ -25,10 +25,10 @@ export default new Command({
           subcommand
             .setName('set')
             .setDescription('Sets the support guild id')
-            .addStringOption((option) => option.setName('guild-id').setDescription('The guild id').setRequired(true))
+            .addStringOption((option) => option.setName('guild-id').setDescription('The guild id').setRequired(true)),
         )
         .addSubcommand((subcommand) => subcommand.setName('remove').setDescription('Removes the support guild id'))
-        .addSubcommand((subcommand) => subcommand.setName('show').setDescription('Shows the support guild id'))
+        .addSubcommand((subcommand) => subcommand.setName('show').setDescription('Shows the support guild id')),
     )
     .addSubcommandGroup((subcommandGroup) =>
       subcommandGroup
@@ -38,10 +38,10 @@ export default new Command({
           subcommand
             .setName('set')
             .setDescription('Sets the support invite url')
-            .addStringOption((option) => option.setName('invite-url').setDescription('The invite url').setRequired(true))
+            .addStringOption((option) => option.setName('invite-url').setDescription('The invite url').setRequired(true)),
         )
         .addSubcommand((subcommand) => subcommand.setName('remove').setDescription('Removes the support invite url'))
-        .addSubcommand((subcommand) => subcommand.setName('show').setDescription('Shows the support invite url'))
+        .addSubcommand((subcommand) => subcommand.setName('show').setDescription('Shows the support invite url')),
     )
     .addSubcommandGroup((subcommandGroup) =>
       subcommandGroup
@@ -51,10 +51,10 @@ export default new Command({
           subcommand
             .setName('set')
             .setDescription('Sets the bot invite url')
-            .addStringOption((option) => option.setName('invite-url').setDescription('The invite url').setRequired(true))
+            .addStringOption((option) => option.setName('invite-url').setDescription('The invite url').setRequired(true)),
         )
         .addSubcommand((subcommand) => subcommand.setName('remove').setDescription('Removes the bot invite url'))
-        .addSubcommand((subcommand) => subcommand.setName('show').setDescription('Shows the bot invite url'))
+        .addSubcommand((subcommand) => subcommand.setName('show').setDescription('Shows the bot invite url')),
     )
     .addSubcommandGroup((subcommandGroup) =>
       subcommandGroup
@@ -66,19 +66,18 @@ export default new Command({
             .setDescription('Adds a badge to a user')
             .addUserOption((option) => option.setName('user').setDescription('The user to add a badge to').setRequired(true))
             .addIntegerOption((option) =>
-              option
-                .setName('badge')
-                .setDescription('The badge to add')
-                .setRequired(true)
-                .addChoices(
-                  { name: 'translator', value: BadgeType.Translator },
-                  { name: 'bughunter', value: BadgeType.Bughunter },
-                  { name: 'expert bughunter', value: BadgeType.ExpertBughunter },
-                  { name: 'supporter', value: BadgeType.Supporter },
-                  { name: 'staff member', value: BadgeType.StaffMember },
-                  { name: 'developer', value: BadgeType.Developer }
-                )
-            )
+              option.setName('badge').setDescription('The badge to add').setRequired(true).addChoices(
+                { name: 'translator', value: BadgeType.Translator },
+                { name: 'bughunter', value: BadgeType.Bughunter },
+                {
+                  name: 'expert bughunter',
+                  value: BadgeType.ExpertBughunter,
+                },
+                { name: 'supporter', value: BadgeType.Supporter },
+                { name: 'staff member', value: BadgeType.StaffMember },
+                { name: 'developer', value: BadgeType.Developer },
+              ),
+            ),
         )
         .addSubcommand((subcommand) =>
           subcommand
@@ -86,26 +85,25 @@ export default new Command({
             .setDescription('Removes a badge from a user')
             .addUserOption((option) => option.setName('user').setDescription('The user to remove a badge from').setRequired(true))
             .addIntegerOption((option) =>
-              option
-                .setName('badge')
-                .setDescription('The badge to remove')
-                .setRequired(true)
-                .addChoices(
-                  { name: 'translator', value: BadgeType.Translator },
-                  { name: 'bughunter', value: BadgeType.Bughunter },
-                  { name: 'expert bughunter', value: BadgeType.ExpertBughunter },
-                  { name: 'supporter', value: BadgeType.Supporter },
-                  { name: 'staff member', value: BadgeType.StaffMember },
-                  { name: 'developer', value: BadgeType.Developer }
-                )
-            )
+              option.setName('badge').setDescription('The badge to remove').setRequired(true).addChoices(
+                { name: 'translator', value: BadgeType.Translator },
+                { name: 'bughunter', value: BadgeType.Bughunter },
+                {
+                  name: 'expert bughunter',
+                  value: BadgeType.ExpertBughunter,
+                },
+                { name: 'supporter', value: BadgeType.Supporter },
+                { name: 'staff member', value: BadgeType.StaffMember },
+                { name: 'developer', value: BadgeType.Developer },
+              ),
+            ),
         )
         .addSubcommand((subcommand) =>
           subcommand
             .setName('list')
             .setDescription('Lists all badges of a user')
-            .addUserOption((option) => option.setName('user').setDescription('The user to view badges of').setRequired(true))
-        )
+            .addUserOption((option) => option.setName('user').setDescription('The user to view badges of').setRequired(true)),
+        ),
     )
     .addSubcommandGroup((subcommandGroup) =>
       subcommandGroup
@@ -115,15 +113,15 @@ export default new Command({
           subcommand
             .setName('add')
             .setDescription('Bans a user')
-            .addUserOption((option) => option.setName('user').setDescription('The user to ban').setRequired(true))
+            .addUserOption((option) => option.setName('user').setDescription('The user to ban').setRequired(true)),
         )
         .addSubcommand((subcommand) =>
           subcommand
             .setName('remove')
             .setDescription('Unban a user')
-            .addUserOption((option) => option.setName('user').setDescription('The user to unban').setRequired(true))
+            .addUserOption((option) => option.setName('user').setDescription('The user to unban').setRequired(true)),
         )
-        .addSubcommand((subcommand) => subcommand.setName('list').setDescription('Lists all banned users'))
+        .addSubcommand((subcommand) => subcommand.setName('list').setDescription('Lists all banned users')),
     ),
   async execute({ client, interaction }) {
     await interaction.deferReply();
@@ -146,14 +144,18 @@ export default new Command({
               {
                 const guildId = options.getString('guild-id', true);
                 if (settings.support.guildId === guildId) return interaction.editReply('That is already the guild id');
-                await client.updateClientSettings(keys.DISCORD_BOT_ID, { $set: { ['support.guildId']: guildId } });
+                await client.updateClientSettings(keys.DISCORD_BOT_ID, {
+                  $set: { ['support.guildId']: guildId },
+                });
                 interaction.editReply('Guild id has been set');
               }
               break;
             case 'remove':
               {
                 if (settings.support.guildId === 'unavailable') return interaction.editReply('There is no guild id to remove');
-                await client.updateClientSettings(keys.DISCORD_BOT_ID, { $set: { ['support.guildId']: 'unavailable' } });
+                await client.updateClientSettings(keys.DISCORD_BOT_ID, {
+                  $set: { ['support.guildId']: 'unavailable' },
+                });
                 interaction.editReply('Guild id has been removed');
               }
               break;
@@ -178,14 +180,18 @@ export default new Command({
               {
                 const inviteUrl = options.getString('invite-url', true);
                 if (settings.support.inviteUrl === inviteUrl) return interaction.editReply('That is already the invite url');
-                await client.updateClientSettings(keys.DISCORD_BOT_ID, { $set: { ['support.inviteUrl']: inviteUrl } });
+                await client.updateClientSettings(keys.DISCORD_BOT_ID, {
+                  $set: { ['support.inviteUrl']: inviteUrl },
+                });
                 interaction.editReply('Invite url has been set');
               }
               break;
             case 'remove':
               {
                 if (settings.support.inviteUrl === 'unavailable') return interaction.editReply('There is no invite url to remove');
-                await client.updateClientSettings(keys.DISCORD_BOT_ID, { $set: { ['support.inviteUrl']: 'unavailable' } });
+                await client.updateClientSettings(keys.DISCORD_BOT_ID, {
+                  $set: { ['support.inviteUrl']: 'unavailable' },
+                });
                 interaction.editReply('Invite url has been removed');
               }
               break;
@@ -210,14 +216,18 @@ export default new Command({
               {
                 const inviteUrl = options.getString('invite-url', true);
                 if (settings.inviteUrl === inviteUrl) return interaction.editReply('That is already the invite url');
-                await client.updateClientSettings(keys.DISCORD_BOT_ID, { $set: { inviteUrl: inviteUrl } });
+                await client.updateClientSettings(keys.DISCORD_BOT_ID, {
+                  $set: { inviteUrl: inviteUrl },
+                });
                 interaction.editReply('Invite url has been set');
               }
               break;
             case 'remove':
               {
                 if (settings.inviteUrl === 'unavailable') return interaction.editReply('There is no invite url to remove');
-                await client.updateClientSettings(keys.DISCORD_BOT_ID, { $set: { inviteUrl: 'unavailable' } });
+                await client.updateClientSettings(keys.DISCORD_BOT_ID, {
+                  $set: { inviteUrl: 'unavailable' },
+                });
                 interaction.editReply('Invite url has been removed');
               }
               break;
@@ -242,7 +252,9 @@ export default new Command({
                 const badge = options.getInteger('badge', true);
                 const targetData = await client.getUserData(target.id);
                 if (targetData.badges.map((badge) => badge.id).includes(badge)) return interaction.editReply('User already has that badge!');
-                await client.updateUserData(target.id, { $push: { badges: { id: badge, receivedAt: Date.now() } } });
+                await client.updateUserData(target.id, {
+                  $push: { badges: { id: badge, receivedAt: Date.now() } },
+                });
                 await target
                   .send(`You have received the ${BadgeType[badge]} badge!`)
                   .catch((error) => logger.debug({ error, targetId: target.id }, 'Could not send user a DM'));
@@ -255,7 +267,9 @@ export default new Command({
                 const badge = options.getInteger('badge', true);
                 const targetData = await client.getUserData(target.id);
                 if (!targetData.badges.map((badge) => badge.id).includes(badge)) return interaction.editReply('User does not have that badge!');
-                await client.updateUserData(target.id, { $pull: { badges: { id: badge } } });
+                await client.updateUserData(target.id, {
+                  $pull: { badges: { id: badge } },
+                });
                 await target
                   .send(`Your ${BadgeType[badge]} badge has been removed!`)
                   .catch((error) => logger.debug({ error, targetId: target.id }, 'Could not send user a DM'));
@@ -267,7 +281,7 @@ export default new Command({
                 const target = options.getUser('user', true);
                 const targetData = await client.getUserData(target.id);
                 interaction.editReply(
-                  `Badges:\n${targetData.badges.map((badge) => `${BadgeType[badge.id]}: <t:${Math.floor(badge.receivedAt / 1000)}:f>`).join('\n')}`
+                  `Badges:\n${targetData.badges.map((badge) => `${BadgeType[badge.id]}: <t:${Math.floor(badge.receivedAt / 1000)}:f>`).join('\n')}`,
                 );
               }
               break;
@@ -287,7 +301,9 @@ export default new Command({
                 const target = options.getUser('user', true);
                 const targetSettings = await client.getUserData(target.id);
                 if (targetSettings.banned) return interaction.editReply('User is already banned!');
-                await client.updateUserData(target.id, { $set: { banned: true } });
+                await client.updateUserData(target.id, {
+                  $set: { banned: true },
+                });
                 await target
                   .send('You have been banned. You can no longer use this bot.')
                   .catch((error) => logger.debug({ error, targetId: target.id }, 'Could not send user a DM'));
@@ -299,7 +315,9 @@ export default new Command({
                 const target = options.getUser('user', true);
                 const targetSettings = await client.getUserData(target.id);
                 if (!targetSettings.banned) return interaction.editReply('User is not banned!');
-                await client.updateUserData(target.id, { $set: { banned: false } });
+                await client.updateUserData(target.id, {
+                  $set: { banned: false },
+                });
                 await target
                   .send('You have been unbanned. You can use this bot again.')
                   .catch((error) => logger.debug({ error, targetId: target.id }, 'Could not send user a DM'));
@@ -318,7 +336,7 @@ export default new Command({
                     new EmbedBuilder()
                       .setColor(Colors.Aqua)
                       .setTitle(`Banned Users (Page ${index + 1}/${chunkedUsers.length})`)
-                      .setDescription(chunk.map((user) => `<@${user.userId}> (${user.userId})`).join('\n\n') || '/')
+                      .setDescription(chunk.map((user) => `<@${user.userId}> (${user.userId})`).join('\n\n') || '/'),
                   ),
                 });
               }

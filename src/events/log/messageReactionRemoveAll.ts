@@ -43,8 +43,9 @@ export default new Event({
                   .map((reaction) => `${reaction.count}x ${reaction.emoji}`)
                   .join('\n')
                   .slice(0, 1000) || '/',
-            }
-          ).setTimestamp(),
+            },
+          )
+          .setTimestamp(),
       ],
       files: message.attachments.map((a) => a),
     });

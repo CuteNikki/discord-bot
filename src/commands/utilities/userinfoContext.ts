@@ -35,11 +35,22 @@ export default new Command<typeof commandType>({
           name: t('userinfo.user_title', { lng }),
           value: [`${user} (\`${user.username}\` | ${user.id})`].join('\n'),
         },
-        { name: t('userinfo.created_at', { lng }), value: `<t:${Math.floor(user.createdTimestamp / 1000)}:R>` }
+        {
+          name: t('userinfo.created_at', { lng }),
+          value: `<t:${Math.floor(user.createdTimestamp / 1000)}:R>`,
+        },
       )
       .setImage(user.bannerURL({ size: 4096 }) ?? null);
-    if (flags.length) userEmbed.addFields({ name: t('userinfo.badges', { lng }), value: flags.map((v) => `\`${v}\``).join(' ') });
-    if (user.banner) userEmbed.addFields({ name: t('userinfo.banner', { lng }), value: '** **' });
+    if (flags.length)
+      userEmbed.addFields({
+        name: t('userinfo.badges', { lng }),
+        value: flags.map((v) => `\`${v}\``).join(' '),
+      });
+    if (user.banner)
+      userEmbed.addFields({
+        name: t('userinfo.banner', { lng }),
+        value: '** **',
+      });
 
     embeds.push(userEmbed);
 
@@ -88,7 +99,10 @@ export default new Command<typeof commandType>({
           // iconURL: statusImage[member.presence?.status ?? 'offline'],
         })
         .addFields(
-          { name: t('userinfo.joined_at', { lng }), value: `<t:${Math.floor((member.joinedTimestamp ?? 0) / 1000)}:R>` },
+          {
+            name: t('userinfo.joined_at', { lng }),
+            value: `<t:${Math.floor((member.joinedTimestamp ?? 0) / 1000)}:R>`,
+          },
           //       {
           //         name: t('userinfo.activities', { lng }),
           //         value:
@@ -114,7 +128,7 @@ export default new Command<typeof commandType>({
             name: t('userinfo.boosting', { lng }),
             value: member.premiumSinceTimestamp ? `<t:${Math.floor(member.premiumSinceTimestamp / 1000)}:R>` : '/',
             inline: true,
-          }
+          },
           //       {
           //         name: '\u200b',
           //         value: '\u200b',
@@ -125,7 +139,11 @@ export default new Command<typeof commandType>({
       const displayRoles = maxDisplayRoles(roles);
       if (roles.length)
         memberEmbed.addFields({
-          name: t('userinfo.roles', { lng, showing: roles.length, total: displayRoles.length }),
+          name: t('userinfo.roles', {
+            lng,
+            showing: roles.length,
+            total: displayRoles.length,
+          }),
           value: displayRoles.join(''),
         });
 

@@ -15,7 +15,7 @@ import { infractionModel } from 'models/infraction';
 
 import { chunk, pagination } from 'utils/pagination';
 
-const commandType = ApplicationCommandType.User
+const commandType = ApplicationCommandType.User;
 
 export default new Command<typeof commandType>({
   module: ModuleType.Moderation,
@@ -40,7 +40,7 @@ export default new Command<typeof commandType>({
     if (!targetInfractions.length) return interaction.editReply(t('infractions.history.none', { lng }));
     const chunkedInfractions = chunk(
       targetInfractions.sort((a, b) => b.createdAt - a.createdAt),
-      3
+      3,
     );
 
     const infractionTypes = {
@@ -58,21 +58,42 @@ export default new Command<typeof commandType>({
       embeds: chunkedInfractions.map((chunk, index) =>
         new EmbedBuilder()
           .setColor(Colors.Orange)
-          .setTitle(t('infractions.history.title', { lng, page: index + 1, pages: chunkedInfractions.length }))
+          .setTitle(
+            t('infractions.history.title', {
+              lng,
+              page: index + 1,
+              pages: chunkedInfractions.length,
+            }),
+          )
           .setDescription(
             chunk
               .map((infraction) =>
                 [
                   t('infractions.history.id', { lng, id: infraction._id }),
-                  t('infractions.history.type', { lng, type: infractionTypes[infraction.action as keyof typeof infractionTypes] }),
-                  t('infractions.history.staff', { lng, staff: `<@${infraction.staffId}>` }),
-                  t('infractions.history.reason', { lng, reason: infraction.reason ?? '/' }),
-                  t('infractions.history.date', { lng, date: `<t:${Math.floor(infraction.createdAt / 1000)}:f>` }),
-                  t('infractions.history.ends_at', { lng, date: infraction.endsAt ? `<t:${Math.floor(infraction.endsAt / 1000)}:f>` : '/' }),
-                ].join('\n')
+                  t('infractions.history.type', {
+                    lng,
+                    type: infractionTypes[infraction.action as keyof typeof infractionTypes],
+                  }),
+                  t('infractions.history.staff', {
+                    lng,
+                    staff: `<@${infraction.staffId}>`,
+                  }),
+                  t('infractions.history.reason', {
+                    lng,
+                    reason: infraction.reason ?? '/',
+                  }),
+                  t('infractions.history.date', {
+                    lng,
+                    date: `<t:${Math.floor(infraction.createdAt / 1000)}:f>`,
+                  }),
+                  t('infractions.history.ends_at', {
+                    lng,
+                    date: infraction.endsAt ? `<t:${Math.floor(infraction.endsAt / 1000)}:f>` : '/',
+                  }),
+                ].join('\n'),
               )
-              .join('\n\n')
-          )
+              .join('\n\n'),
+          ),
       ),
     });
   },

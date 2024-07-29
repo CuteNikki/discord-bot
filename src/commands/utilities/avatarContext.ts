@@ -33,14 +33,14 @@ export default new Command<ApplicationCommandType.User>({
         new EmbedBuilder()
           .setColor(Colors.Aqua)
           .setTitle(t('avatar.user_banner', { lng }))
-          .setImage(user.bannerURL({ size: 4096 })!)
+          .setImage(user.bannerURL({ size: 4096 })!),
       );
     if (member && member.avatar)
       embeds.push(
         new EmbedBuilder()
           .setColor(Colors.Aqua)
           .setTitle(t('avatar.member_avatar', { lng }))
-          .setImage(member.displayAvatarURL({ size: 4096 }))
+          .setImage(member.displayAvatarURL({ size: 4096 })),
       );
 
     interaction.editReply({ embeds });

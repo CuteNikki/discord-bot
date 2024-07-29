@@ -13,7 +13,7 @@ export class FastType {
     public options: {
       interaction: ChatInputCommandInteraction;
       client: DiscordClient;
-    }
+    },
   ) {
     this.sentence = this.getRandomSentence();
 
@@ -33,7 +33,10 @@ export class FastType {
         embeds: [
           new EmbedBuilder()
             .setColor(Colors.Yellow)
-            .setAuthor({ name: user.displayName, iconURL: user.displayAvatarURL() })
+            .setAuthor({
+              name: user.displayName,
+              iconURL: user.displayAvatarURL(),
+            })
             .setTitle(t('games.typing.title', { lng }))
             .addFields(
               {
@@ -46,7 +49,7 @@ export class FastType {
                   .split(' ')
                   .map((word) => `\`${word}\``)
                   .join('⠀'), // <- invisible character to stop people from copying the sentence and pasting it
-              }
+              },
             ),
         ],
         components: [],
@@ -57,7 +60,10 @@ export class FastType {
 
     const startTime = Date.now();
 
-    const collector = interaction.channel?.createMessageCollector({ time: 60 * 1000, filter: (msg) => msg.author.id === user.id });
+    const collector = interaction.channel?.createMessageCollector({
+      time: 60 * 1000,
+      filter: (msg) => msg.author.id === user.id,
+    });
     if (!collector) return;
 
     collector.on('collect', async (msg) => {
@@ -86,7 +92,10 @@ export class FastType {
       embeds: [
         new EmbedBuilder()
           .setColor(isSentenceCorrect ? Colors.Green : Colors.Yellow)
-          .setAuthor({ name: user.displayName, iconURL: user.displayAvatarURL() })
+          .setAuthor({
+            name: user.displayName,
+            iconURL: user.displayAvatarURL(),
+          })
           .setTitle(t('games.typing.title', { lng }))
           .addFields(
             {
@@ -101,8 +110,14 @@ export class FastType {
               name: t('games.typing.similarity', { lng }),
               value: isSentenceCorrect ? '100%' : `${Math.floor(this.stringSimilarity(this.sentence, userSentence, 2, true) * 100)}%`,
             },
-            { name: t('games.typing.wpm', { lng }), value: `${this.wordsPerMinute}` },
-            { name: t('games.typing.time', { lng }), value: `${Math.floor(this.timeTaken / 1000)}s` }
+            {
+              name: t('games.typing.wpm', { lng }),
+              value: `${this.wordsPerMinute}`,
+            },
+            {
+              name: t('games.typing.time', { lng }),
+              value: `${Math.floor(this.timeTaken / 1000)}s`,
+            },
           ),
       ],
       components: [],

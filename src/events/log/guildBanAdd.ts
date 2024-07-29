@@ -27,8 +27,14 @@ export default new Event({
           .setColor(Colors.Red)
           .setTitle(t('log.guildBanAdd.title', { lng }))
           .addFields(
-            { name: t('log.guildBanAdd.user', { lng }), value: `${user.toString()} (\`${user.username}\` | ${user.id})` },
-            { name: t('log.guildBanAdd.reason', { lng }), value: reason || '/' }
+            {
+              name: t('log.guildBanAdd.user', { lng }),
+              value: `${user.toString()} (\`${user.username}\` | ${user.id})`,
+            },
+            {
+              name: t('log.guildBanAdd.reason', { lng }),
+              value: reason || '/',
+            },
           )
           .setTimestamp(),
       ],

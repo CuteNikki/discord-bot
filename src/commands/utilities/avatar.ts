@@ -21,7 +21,9 @@ export default new Command({
     const lng = await client.getUserLanguage(interaction.user.id);
 
     const user = await client.users
-      .fetch(interaction.options.getUser('user', false) ?? interaction.user, { force: true })
+      .fetch(interaction.options.getUser('user', false) ?? interaction.user, {
+        force: true,
+      })
       .catch((error) => logger.debug({ error }, 'Could not fetch user'));
     if (!user || !user.displayAvatarURL()) return interaction.editReply({ content: t('avatar.user', { lng }) });
 
@@ -39,14 +41,14 @@ export default new Command({
         new EmbedBuilder()
           .setColor(Colors.Aqua)
           .setTitle(t('avatar.user_banner', { lng }))
-          .setImage(user.bannerURL({ size: 4096 })!)
+          .setImage(user.bannerURL({ size: 4096 })!),
       );
     if (member && member.avatar)
       embeds.push(
         new EmbedBuilder()
           .setColor(Colors.Aqua)
           .setTitle(t('avatar.member_avatar', { lng }))
-          .setImage(member.displayAvatarURL({ size: 4096 }))
+          .setImage(member.displayAvatarURL({ size: 4096 })),
       );
 
     await interaction.editReply({ embeds });

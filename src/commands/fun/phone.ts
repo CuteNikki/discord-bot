@@ -29,7 +29,9 @@ export default new Command({
         {
           // Check if this channel is already in a connection
           const existingConnection = await connectionModel
-            .findOne({ $or: [{ channelIdOne: channelId }, { channelIdTwo: channelId }] })
+            .findOne({
+              $or: [{ channelIdOne: channelId }, { channelIdTwo: channelId }],
+            })
             .lean()
             .exec();
           if (existingConnection) return interaction.editReply(t('phone.connect.already', { lng }));
@@ -51,7 +53,12 @@ export default new Command({
             // Remove target channel from pool
             await availableChannelModel.deleteOne({ channelId: randomTarget.channelId }).lean().exec();
             // Save the connection
-            await connectionModel.create({ channelIdOne: channelId, userIdOne: user.id, channelIdTwo: randomTarget.channelId, userIdTwo: randomTarget.userId });
+            await connectionModel.create({
+              channelIdOne: channelId,
+              userIdOne: user.id,
+              channelIdTwo: randomTarget.channelId,
+              userIdTwo: randomTarget.userId,
+            });
 
             // Inform channel
             interaction.editReply(t('phone.connect.connected', { lng }));

@@ -32,7 +32,7 @@ export default new Command({
           Object.entries(process.memoryUsage()).map((d) => {
             d[1] = Math.floor((d[1] / 1024 / 1024) * 100) / 100; // format to MB
             return d;
-          })
+          }),
         ),
         allGuildsData: c.guilds.cache.map((guild) => {
           return {
@@ -69,17 +69,23 @@ export default new Command({
           .setTitle(t('clusters.title', { lng, id: cluster.clusterId }))
           .setDescription(
             [
-              t('clusters.uptime', { lng, uptime: ms(cluster.uptime ?? 0, { long: true }) }),
+              t('clusters.uptime', {
+                lng,
+                uptime: ms(cluster.uptime ?? 0, { long: true }),
+              }),
               t('clusters.ping', { lng, ping: cluster.ping }),
               t('clusters.memory', { lng, memory: cluster.memoryUsage.rss }),
               t('clusters.guilds', { lng, guilds: cluster.totalGuilds }),
               t('clusters.members', { lng, members: cluster.totalMembers }),
-            ].join('\n')
+            ].join('\n'),
           )
           .addFields(
             cluster.perShardData.map((shard) => {
               return {
-                name: t('clusters.shards.title', { lng, id: `${shard.shardId} ${interaction.guild?.shardId === shard.shardId ? '📍' : ''}` }),
+                name: t('clusters.shards.title', {
+                  lng,
+                  id: `${shard.shardId} ${interaction.guild?.shardId === shard.shardId ? '📍' : ''}`,
+                }),
                 value: [
                   t('clusters.shards.status', { lng, status: shard.status }),
                   t('clusters.shards.ping', { lng, ping: shard.ping }),
@@ -88,12 +94,23 @@ export default new Command({
                 ].join('\n'),
                 inline: true,
               };
-            })
+            }),
           )
-          .setFooter({ text: t('clusters.page', { lng, page: cluster.clusterId + 1, pages: clusterData.length }) })
+          .setFooter({
+            text: t('clusters.page', {
+              lng,
+              page: cluster.clusterId + 1,
+              pages: clusterData.length,
+            }),
+          }),
       );
     }
 
-    await pagination({ client, interaction, embeds, content: t('clusters.pin', { lng }) });
+    await pagination({
+      client,
+      interaction,
+      embeds,
+      content: t('clusters.pin', { lng }),
+    });
   },
 });

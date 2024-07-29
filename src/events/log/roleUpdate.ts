@@ -22,40 +22,83 @@ export default new Event({
       .setColor(Colors.Yellow)
       .setTitle(t('log.roleUpdate.title', { lng }))
       .setThumbnail(newRole.iconURL({ size: 1024 }))
-      .addFields({ name: t('log.roleUpdate.role', { lng }), value: `${newRole.toString()} (\`${newRole.name}\` | ${newRole.id})` })
+      .addFields({
+        name: t('log.roleUpdate.role', { lng }),
+        value: `${newRole.toString()} (\`${newRole.name}\` | ${newRole.id})`,
+      })
       .setTimestamp();
 
     const emptyField = { name: '\u200b', value: '\u200b', inline: true };
 
     if (newRole.name !== oldRole.name)
       embed.addFields(
-        { name: t('log.roleUpdate.old_name', { lng }), value: oldRole.name, inline: true },
-        { name: t('log.roleUpdate.new_name', { lng }), value: newRole.name, inline: true },
-        emptyField
+        {
+          name: t('log.roleUpdate.old_name', { lng }),
+          value: oldRole.name,
+          inline: true,
+        },
+        {
+          name: t('log.roleUpdate.new_name', { lng }),
+          value: newRole.name,
+          inline: true,
+        },
+        emptyField,
       );
     if (newRole.hexColor !== oldRole.hexColor)
       embed.addFields(
-        { name: t('log.roleUpdate.old_color', { lng }), value: oldRole.hexColor, inline: true },
-        { name: t('log.roleUpdate.new_color', { lng }), value: newRole.hexColor, inline: true },
-        emptyField
+        {
+          name: t('log.roleUpdate.old_color', { lng }),
+          value: oldRole.hexColor,
+          inline: true,
+        },
+        {
+          name: t('log.roleUpdate.new_color', { lng }),
+          value: newRole.hexColor,
+          inline: true,
+        },
+        emptyField,
       );
     if (newRole.hoist !== oldRole.hoist)
       embed.addFields(
-        { name: t('log.roleUpdate.old_displayed_separately', { lng }), value: `${oldRole.hoist}`, inline: true },
-        { name: t('log.roleUpdate.new_displayed_separately', { lng }), value: `${newRole.hoist}`, inline: true },
-        emptyField
+        {
+          name: t('log.roleUpdate.old_displayed_separately', { lng }),
+          value: `${oldRole.hoist}`,
+          inline: true,
+        },
+        {
+          name: t('log.roleUpdate.new_displayed_separately', { lng }),
+          value: `${newRole.hoist}`,
+          inline: true,
+        },
+        emptyField,
       );
     if (newRole.mentionable !== oldRole.mentionable)
       embed.addFields(
-        { name: t('log.roleUpdate.old_mentionable', { lng }), value: `${oldRole.mentionable}`, inline: true },
-        { name: t('log.roleUpdate.new_mentionable', { lng }), value: `${newRole.mentionable}`, inline: true },
-        emptyField
+        {
+          name: t('log.roleUpdate.old_mentionable', { lng }),
+          value: `${oldRole.mentionable}`,
+          inline: true,
+        },
+        {
+          name: t('log.roleUpdate.new_mentionable', { lng }),
+          value: `${newRole.mentionable}`,
+          inline: true,
+        },
+        emptyField,
       );
     if (newRole.unicodeEmoji !== oldRole.unicodeEmoji)
       embed.addFields(
-        { name: t('log.roleUpdate.old_emoji', { lng }), value: `${oldRole.unicodeEmoji}`, inline: true },
-        { name: t('log.roleUpdate.new_emoji', { lng }), value: `${newRole.unicodeEmoji}`, inline: true },
-        emptyField
+        {
+          name: t('log.roleUpdate.old_emoji', { lng }),
+          value: `${oldRole.unicodeEmoji}`,
+          inline: true,
+        },
+        {
+          name: t('log.roleUpdate.new_emoji', { lng }),
+          value: `${newRole.unicodeEmoji}`,
+          inline: true,
+        },
+        emptyField,
       );
     if (newRole.permissions.bitfield !== oldRole.permissions.bitfield) {
       const removedPerms = newRole.permissions.toArray().filter((perm) => !oldRole.permissions.toArray().includes(perm));
@@ -77,7 +120,7 @@ export default new Event({
               .join(', ')
               .slice(0, 1000) || '/',
         },
-        emptyField
+        emptyField,
       );
     }
 

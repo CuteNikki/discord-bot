@@ -21,8 +21,8 @@ import { loadSelections } from 'loaders/selection';
 import { initDatabase } from 'utils/database';
 import { listenToErrors } from 'utils/error';
 import { keys } from 'utils/keys';
+import { initTranslation, supportedLanguages } from 'utils/language';
 import type { Level, LevelIdentifier } from 'utils/level';
-import { supportedLanguages, initTranslation } from 'utils/language';
 
 export class DiscordClient extends Client {
   // Cluster used for sharding

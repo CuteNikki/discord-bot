@@ -29,8 +29,18 @@ export default new Event({
           .setColor(Colors.Yellow)
           .setTitle(t('log.applicationCommandPermissionsUpdate.title', { lng }))
           .addFields(
-            { name: t('log.applicationCommandPermissionsUpdate.application', { lng }), value: `<@${applicationId}>` },
-            { name: t('log.applicationCommandPermissionsUpdate.command_id', { lng }), value: `${id}` },
+            {
+              name: t('log.applicationCommandPermissionsUpdate.application', {
+                lng,
+              }),
+              value: `<@${applicationId}>`,
+            },
+            {
+              name: t('log.applicationCommandPermissionsUpdate.command_id', {
+                lng,
+              }),
+              value: `${id}`,
+            },
             {
               name: t('log.applicationCommandPermissionsUpdate.updated_permissions', { lng }),
               value:
@@ -39,10 +49,10 @@ export default new Event({
                     (permission) =>
                       `${permission.type === 1 ? `<@&${permission.id}>` : permission.type === 2 ? `<@${permission.id}>` : `<#${permission.id}>`} (${
                         ApplicationCommandPermissionType[permission.type]
-                      }): ${permission.permission}`
+                      }): ${permission.permission}`,
                   )
                   .join('\n') || '/',
-            }
+            },
           )
           .setTimestamp(),
       ],

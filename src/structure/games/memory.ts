@@ -32,7 +32,7 @@ export class Memory {
     public options: {
       interaction: ChatInputCommandInteraction;
       client: DiscordClient;
-    }
+    },
   ) {
     this.emojis = this.shuffleArray(this.availableEmojis).slice(0, 12);
     this.emojis.push(...this.emojis, '🃏');
@@ -55,7 +55,10 @@ export class Memory {
         embeds: [
           new EmbedBuilder()
             .setColor(Colors.Yellow)
-            .setAuthor({ name: user.displayName, iconURL: user.displayAvatarURL() })
+            .setAuthor({
+              name: user.displayName,
+              iconURL: user.displayAvatarURL(),
+            })
             .setTitle(t('games.memory.title', { lng }))
             .setDescription(t('games.memory.description', { lng })),
         ],
@@ -64,7 +67,9 @@ export class Memory {
       .catch((error) => logger.debug({ error }, 'Could not send message'));
     if (!message) return;
 
-    const collector = message.createMessageComponentCollector({ idle: 60 * 1000 });
+    const collector = message.createMessageComponentCollector({
+      idle: 60 * 1000,
+    });
 
     collector.on('collect', async (buttonInteraction) => {
       await buttonInteraction.deferUpdate().catch((error) => logger.debug({ error }, 'Could not defer update'));
@@ -72,7 +77,9 @@ export class Memory {
       if (buttonInteraction.user.id !== user.id)
         return buttonInteraction
           .followUp({
-            content: t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
+            content: t('interactions.author_only', {
+              lng: await client.getUserLanguage(buttonInteraction.user.id),
+            }),
             ephemeral: true,
           })
           .catch((error) => logger.debug({ error }, 'Could not follow up'));
@@ -151,7 +158,10 @@ export class Memory {
         embeds: [
           new EmbedBuilder()
             .setColor(isDone ? Colors.Green : Colors.Red)
-            .setAuthor({ name: user.displayName, iconURL: user.displayAvatarURL() })
+            .setAuthor({
+              name: user.displayName,
+              iconURL: user.displayAvatarURL(),
+            })
             .setTitle(t('games.memory.title', { lng }))
             .setDescription(t('games.memory.finished', { lng, tiles: this.tilesTurned })),
         ],

@@ -25,14 +25,32 @@ export default new Event({
           .setTitle(t('log.roleDelete.title', { lng }))
           .setThumbnail(role.iconURL({ size: 1024 }))
           .addFields(
-            { name: t('log.roleDelete.role', { lng }), value: `\`${name}\` (${id})` },
-            { name: t('log.roleDelete.created_at', { lng }), value: `<t:${Math.floor(createdTimestamp / 1000)}:f>` },
+            {
+              name: t('log.roleDelete.role', { lng }),
+              value: `\`${name}\` (${id})`,
+            },
+            {
+              name: t('log.roleDelete.created_at', { lng }),
+              value: `<t:${Math.floor(createdTimestamp / 1000)}:f>`,
+            },
             { name: t('log.roleDelete.color', { lng }), value: `${hexColor}` },
-            { name: t('log.roleDelete.position', { lng }), value: `${position}` },
-            { name: t('log.roleDelete.displayed_separately', { lng }), value: `${hoist}` },
-            { name: t('log.roleDelete.mentionable', { lng }), value: `${mentionable}` },
+            {
+              name: t('log.roleDelete.position', { lng }),
+              value: `${position}`,
+            },
+            {
+              name: t('log.roleDelete.displayed_separately', { lng }),
+              value: `${hoist}`,
+            },
+            {
+              name: t('log.roleDelete.mentionable', { lng }),
+              value: `${mentionable}`,
+            },
             { name: t('log.roleDelete.managed', { lng }), value: `${managed}` },
-            { name: t('log.roleDelete.emoji', { lng }), value: unicodeEmoji || '/' },
+            {
+              name: t('log.roleDelete.emoji', { lng }),
+              value: unicodeEmoji || '/',
+            },
             {
               name: t('log.roleDelete.permissions', { lng }),
               value:
@@ -41,8 +59,9 @@ export default new Event({
                   .map((perm) => `\`${perm}\``)
                   .join(', ')
                   .slice(0, 1000) || '/',
-            }
-          ).setTimestamp(),
+            },
+          )
+          .setTimestamp(),
       ],
     });
   },

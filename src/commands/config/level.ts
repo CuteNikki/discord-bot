@@ -27,14 +27,14 @@ export default new Command({
         .addSubcommand((subcommand) => subcommand.setName('rewards').setDescription('Shows the level rewards'))
         .addSubcommand((subcommand) => subcommand.setName('ignored-roles').setDescription('Shows the ignored roles'))
         .addSubcommand((subcommand) => subcommand.setName('ignored-channels').setDescription('Shows the ignored channels'))
-        .addSubcommand((subcommand) => subcommand.setName('enabled-channels').setDescription('Shows the enabled channels'))
+        .addSubcommand((subcommand) => subcommand.setName('enabled-channels').setDescription('Shows the enabled channels')),
     )
     .addSubcommandGroup((group) =>
       group
         .setName('toggle')
         .setDescription('Toggle the level module')
         .addSubcommand((subcommand) => subcommand.setName('on').setDescription('Turns the level module on'))
-        .addSubcommand((subcommand) => subcommand.setName('off').setDescription('Turns the level module off'))
+        .addSubcommand((subcommand) => subcommand.setName('off').setDescription('Turns the level module off')),
     )
     .addSubcommandGroup((group) =>
       group
@@ -46,11 +46,11 @@ export default new Command({
             .setName('other-channel')
             .setDescription('Announces in a specified channel')
             .addChannelOption((option) =>
-              option.setName('channel').setDescription('The channel to send levelup announcements in').setRequired(true).addChannelTypes(ChannelType.GuildText)
-            )
+              option.setName('channel').setDescription('The channel to send levelup announcements in').setRequired(true).addChannelTypes(ChannelType.GuildText),
+            ),
         )
         .addSubcommand((subcommand) => subcommand.setName('private-message').setDescription('Sends a direct message to the user'))
-        .addSubcommand((subcommand) => subcommand.setName('none').setDescription('Level ups will not be announced'))
+        .addSubcommand((subcommand) => subcommand.setName('none').setDescription('Level ups will not be announced')),
     )
     .addSubcommandGroup((group) =>
       group
@@ -61,14 +61,14 @@ export default new Command({
             .setName('add')
             .setDescription('Adds a level up reward')
             .addRoleOption((option) => option.setName('role').setDescription('The role to give').setRequired(true))
-            .addIntegerOption((option) => option.setName('level').setDescription('The level required to get role').setRequired(true))
+            .addIntegerOption((option) => option.setName('level').setDescription('The level required to get role').setRequired(true)),
         )
         .addSubcommand((subcommand) =>
           subcommand
             .setName('remove')
             .setDescription('Removes a level up reward')
-            .addStringOption((option) => option.setName('role-id').setDescription('The id of role to remove').setRequired(true))
-        )
+            .addStringOption((option) => option.setName('role-id').setDescription('The id of role to remove').setRequired(true)),
+        ),
     )
     .addSubcommandGroup((group) =>
       group
@@ -78,14 +78,14 @@ export default new Command({
           subcommand
             .setName('add')
             .setDescription('Adds an ignored role')
-            .addRoleOption((option) => option.setName('role').setDescription('The role to ignore').setRequired(true))
+            .addRoleOption((option) => option.setName('role').setDescription('The role to ignore').setRequired(true)),
         )
         .addSubcommand((subcommand) =>
           subcommand
             .setName('remove')
             .setDescription('Removes an ignored role')
-            .addStringOption((option) => option.setName('role-id').setDescription('The id of role to remove').setRequired(true))
-        )
+            .addStringOption((option) => option.setName('role-id').setDescription('The id of role to remove').setRequired(true)),
+        ),
     )
     .addSubcommandGroup((group) =>
       group
@@ -96,15 +96,15 @@ export default new Command({
             .setName('add')
             .setDescription('Adds an ignored channel')
             .addChannelOption((option) =>
-              option.setName('channel').setDescription('The channel to ignore').setRequired(true).addChannelTypes(ChannelType.GuildText)
-            )
+              option.setName('channel').setDescription('The channel to ignore').setRequired(true).addChannelTypes(ChannelType.GuildText),
+            ),
         )
         .addSubcommand((subcommand) =>
           subcommand
             .setName('remove')
             .setDescription('Removes an ignored channel')
-            .addStringOption((option) => option.setName('channel-id').setDescription('The id of channel to remove').setRequired(true))
-        )
+            .addStringOption((option) => option.setName('channel-id').setDescription('The id of channel to remove').setRequired(true)),
+        ),
     )
     .addSubcommandGroup((group) =>
       group
@@ -115,15 +115,15 @@ export default new Command({
             .setName('add')
             .setDescription('Adds an enabled channel')
             .addChannelOption((option) =>
-              option.setName('channel').setDescription('The channel to add').setRequired(true).addChannelTypes(ChannelType.GuildText)
-            )
+              option.setName('channel').setDescription('The channel to add').setRequired(true).addChannelTypes(ChannelType.GuildText),
+            ),
         )
         .addSubcommand((subcommand) =>
           subcommand
             .setName('remove')
             .setDescription('Removes an enabled channel')
-            .addStringOption((option) => option.setName('channel-id').setDescription('The id of channel to remove').setRequired(true))
-        )
+            .addStringOption((option) => option.setName('channel-id').setDescription('The id of channel to remove').setRequired(true)),
+        ),
     )
     .addSubcommandGroup((group) =>
       group
@@ -134,22 +134,22 @@ export default new Command({
             .setName('add')
             .setDescription('Adds XP to a user')
             .addUserOption((option) => option.setName('user').setDescription('The user to add XP to').setRequired(true))
-            .addIntegerOption((option) => option.setName('xp').setDescription('The XP to add to user').setRequired(true).setMaxValue(200000))
+            .addIntegerOption((option) => option.setName('xp').setDescription('The XP to add to user').setRequired(true).setMaxValue(200000)),
         )
         .addSubcommand((subcommand) =>
           subcommand
             .setName('remove')
             .setDescription('Removes XP from a user')
             .addUserOption((option) => option.setName('user').setDescription('The user to remove XP from').setRequired(true))
-            .addIntegerOption((option) => option.setName('xp').setDescription('The XP to remove from user').setRequired(true).setMaxValue(200000))
+            .addIntegerOption((option) => option.setName('xp').setDescription('The XP to remove from user').setRequired(true).setMaxValue(200000)),
         )
         .addSubcommand((subcommand) =>
           subcommand
             .setName('set')
             .setDescription('Sets the XP of a user')
             .addUserOption((option) => option.setName('user').setDescription('The user to set XP of').setRequired(true))
-            .addIntegerOption((option) => option.setName('xp').setDescription('The XP to set the user to').setRequired(true).setMaxValue(200000))
-        )
+            .addIntegerOption((option) => option.setName('xp').setDescription('The XP to set the user to').setRequired(true).setMaxValue(200000)),
+        ),
     )
     .addSubcommandGroup((group) =>
       group
@@ -160,22 +160,22 @@ export default new Command({
             .setName('add')
             .setDescription('Adds level to a user')
             .addUserOption((option) => option.setName('user').setDescription('The user to add level to').setRequired(true))
-            .addIntegerOption((option) => option.setName('level').setDescription('The level to add to user').setRequired(true).setMaxValue(1000))
+            .addIntegerOption((option) => option.setName('level').setDescription('The level to add to user').setRequired(true).setMaxValue(1000)),
         )
         .addSubcommand((subcommand) =>
           subcommand
             .setName('remove')
             .setDescription('Removes level from a user')
             .addUserOption((option) => option.setName('user').setDescription('The user to remove level from').setRequired(true))
-            .addIntegerOption((option) => option.setName('level').setDescription('The level to remove from user').setRequired(true).setMaxValue(1000))
+            .addIntegerOption((option) => option.setName('level').setDescription('The level to remove from user').setRequired(true).setMaxValue(1000)),
         )
         .addSubcommand((subcommand) =>
           subcommand
             .setName('set')
             .setDescription('Sets the level of a user')
             .addUserOption((option) => option.setName('user').setDescription('The user to set level of').setRequired(true))
-            .addIntegerOption((option) => option.setName('level').setDescription('The level to set the user to').setRequired(true).setMaxValue(1000))
-        )
+            .addIntegerOption((option) => option.setName('level').setDescription('The level to set the user to').setRequired(true).setMaxValue(1000)),
+        ),
     ),
   async execute({ interaction, client }) {
     if (!interaction.inCachedGuild()) return;
@@ -205,7 +205,7 @@ export default new Command({
                         config.level.announcement === AnnouncementType.OtherChannel
                           ? `${AnnouncementType[config.level.announcement]}: <#${config.level.channelId}>`
                           : AnnouncementType[config.level.announcement],
-                    }
+                    },
                   );
                 if (config.level.ignoredRoles.length)
                   allConfigEmbed.addFields({
@@ -363,14 +363,18 @@ export default new Command({
             case 'on':
               {
                 if (config.level.enabled) return interaction.editReply(t('level.toggle.already_on', { lng }));
-                await client.updateGuildSettings(guildId, { $set: { ['level.enabled']: true } });
+                await client.updateGuildSettings(guildId, {
+                  $set: { ['level.enabled']: true },
+                });
                 interaction.editReply(t('level.toggle.on', { lng }));
               }
               break;
             case 'off':
               {
                 if (!config.level.enabled) return interaction.editReply(t('level.toggle.already_off', { lng }));
-                await client.updateGuildSettings(guildId, { $set: { ['level.enabled']: false } });
+                await client.updateGuildSettings(guildId, {
+                  $set: { ['level.enabled']: false },
+                });
                 interaction.editReply(t('level.toggle.off', { lng }));
               }
               break;
@@ -386,7 +390,10 @@ export default new Command({
                 if (config.level.channelId === channel.id && config.level.announcement !== AnnouncementType.OtherChannel)
                   return interaction.editReply(t('level.announcement.already_channel', { lng }));
                 await client.updateGuildSettings(guildId, {
-                  $set: { ['level.channelId']: channel.id, ['level.announcement']: AnnouncementType.OtherChannel },
+                  $set: {
+                    ['level.channelId']: channel.id,
+                    ['level.announcement']: AnnouncementType.OtherChannel,
+                  },
                 });
                 interaction.editReply(t('level.announcement.other', { lng }));
               }
@@ -394,7 +401,12 @@ export default new Command({
             case 'user-channel':
               {
                 if (config.level.announcement === AnnouncementType.UserChannel) return interaction.editReply(t('level.announcement.already_user', { lng }));
-                await client.updateGuildSettings(guildId, { $set: { ['level.channelId']: undefined, ['level.announcement']: AnnouncementType.UserChannel } });
+                await client.updateGuildSettings(guildId, {
+                  $set: {
+                    ['level.channelId']: undefined,
+                    ['level.announcement']: AnnouncementType.UserChannel,
+                  },
+                });
                 interaction.editReply(t('level.announcement.user', { lng }));
               }
               break;
@@ -403,7 +415,10 @@ export default new Command({
                 if (config.level.announcement === AnnouncementType.PrivateMessage)
                   return interaction.editReply(t('level.announcement.already_private', { lng }));
                 await client.updateGuildSettings(guildId, {
-                  $set: { ['level.channelId']: undefined, ['level.announcement']: AnnouncementType.PrivateMessage },
+                  $set: {
+                    ['level.channelId']: undefined,
+                    ['level.announcement']: AnnouncementType.PrivateMessage,
+                  },
                 });
                 interaction.editReply(t('level.announcement.private', { lng }));
               }
@@ -411,7 +426,12 @@ export default new Command({
             case 'none':
               {
                 if (config.level.announcement !== AnnouncementType.None) return interaction.editReply(t('level.announcement.already_none', { lng }));
-                await client.updateGuildSettings(guildId, { $set: { ['level.channelId']: undefined, ['level.announcement']: AnnouncementType.None } });
+                await client.updateGuildSettings(guildId, {
+                  $set: {
+                    ['level.channelId']: undefined,
+                    ['level.announcement']: AnnouncementType.None,
+                  },
+                });
                 interaction.editReply(t('level.announcement.none', { lng }));
               }
               break;
@@ -428,8 +448,16 @@ export default new Command({
                 if (config.level.rewards.length >= 25) return interaction.editReply(t('level.rewards.limit', { lng }));
                 const currentRoles = config.level.rewards.map((reward) => reward.roleId);
                 if (currentRoles.includes(role.id)) return interaction.editReply(t('level.rewards.already', { lng }));
-                await client.updateGuildSettings(guildId, { $push: { ['level.rewards']: { level, roleId: role.id } } });
-                interaction.editReply(t('level.rewards.added', { lng, level, role: role.toString() }));
+                await client.updateGuildSettings(guildId, {
+                  $push: { ['level.rewards']: { level, roleId: role.id } },
+                });
+                interaction.editReply(
+                  t('level.rewards.added', {
+                    lng,
+                    level,
+                    role: role.toString(),
+                  }),
+                );
               }
               break;
             case 'remove':
@@ -437,7 +465,9 @@ export default new Command({
                 const roleId = options.getString('role-id', true);
                 const reward = config.level.rewards.find((rw) => rw.roleId === roleId);
                 if (!reward) return interaction.editReply(t('level.rewards.invalid', { lng }));
-                await client.updateGuildSettings(guildId, { $pull: { ['level.rewards']: { _id: reward._id } } });
+                await client.updateGuildSettings(guildId, {
+                  $pull: { ['level.rewards']: { _id: reward._id } },
+                });
                 interaction.editReply(t('level.rewards.removed', { lng }));
               }
               break;
@@ -452,15 +482,24 @@ export default new Command({
                 const role = options.getRole('role', true);
                 if (config.level.ignoredRoles.includes(role.id)) return interaction.editReply(t('level.ignored_roles.already', { lng }));
                 if (config.level.ignoredRoles.length >= 25) return interaction.editReply(t('level.ignored_roles.limit', { lng }));
-                await client.updateGuildSettings(guildId, { $push: { ['level.ignoredRoles']: role.id } });
-                interaction.editReply(t('level.ignored_roles.added', { lng, role: role.toString() }));
+                await client.updateGuildSettings(guildId, {
+                  $push: { ['level.ignoredRoles']: role.id },
+                });
+                interaction.editReply(
+                  t('level.ignored_roles.added', {
+                    lng,
+                    role: role.toString(),
+                  }),
+                );
               }
               break;
             case 'remove':
               {
                 const roleId = options.getString('role-id', true);
                 if (!config.level.ignoredRoles.includes(roleId)) return interaction.editReply(t('level.ignored_roles.invalid', { lng }));
-                await client.updateGuildSettings(guildId, { $pull: { ['level.ignoredRoles']: roleId } });
+                await client.updateGuildSettings(guildId, {
+                  $pull: { ['level.ignoredRoles']: roleId },
+                });
                 interaction.editReply(t('level.ignored_roles.removed', { lng }));
               }
               break;
@@ -475,15 +514,24 @@ export default new Command({
                 const channel = options.getChannel('channel', true, [ChannelType.GuildText]);
                 if (config.level.ignoredChannels.includes(channel.id)) return interaction.editReply(t('level.ignored_channels.already', { lng }));
                 if (config.level.ignoredChannels.length >= 25) return interaction.editReply(t('level.ignored_channels.limit', { lng }));
-                await client.updateGuildSettings(guildId, { $push: { ['level.ignoredChannels']: channel.id } });
-                interaction.editReply(t('level.ignored_channels.added', { lng, channel: channel.toString() }));
+                await client.updateGuildSettings(guildId, {
+                  $push: { ['level.ignoredChannels']: channel.id },
+                });
+                interaction.editReply(
+                  t('level.ignored_channels.added', {
+                    lng,
+                    channel: channel.toString(),
+                  }),
+                );
               }
               break;
             case 'remove':
               {
                 const channelId = options.getString('channel-id', true);
                 if (!config.level.ignoredChannels.includes(channelId)) return interaction.editReply(t('level.ignored_channels.invalid', { lng }));
-                await client.updateGuildSettings(guildId, { $pull: { ['level.ignoredChannels']: channelId } });
+                await client.updateGuildSettings(guildId, {
+                  $pull: { ['level.ignoredChannels']: channelId },
+                });
                 interaction.editReply(t('level.ignored_channels.removed', { lng }));
               }
               break;
@@ -498,15 +546,24 @@ export default new Command({
                 const channel = options.getChannel('channel', true, [ChannelType.GuildText]);
                 if (config.level.enabledChannels.includes(channel.id)) return interaction.editReply(t('level.enabled_channels.already', { lng }));
                 if (config.level.enabledChannels.length >= 25) return interaction.editReply(t('level.enabled_channels.limit', { lng }));
-                await client.updateGuildSettings(guildId, { $push: { ['level.enabledChannels']: channel.id } });
-                interaction.editReply(t('level.enabled_channels.added', { lng, channel: channel.toString() }));
+                await client.updateGuildSettings(guildId, {
+                  $push: { ['level.enabledChannels']: channel.id },
+                });
+                interaction.editReply(
+                  t('level.enabled_channels.added', {
+                    lng,
+                    channel: channel.toString(),
+                  }),
+                );
               }
               break;
             case 'remove':
               {
                 const channelId = options.getString('channel-id', true);
                 if (!config.level.enabledChannels.includes(channelId)) return interaction.editReply(t('level.enabled_channels.invalid', { lng }));
-                await client.updateGuildSettings(guildId, { $pull: { ['level.enabledChannels']: channelId } });
+                await client.updateGuildSettings(guildId, {
+                  $pull: { ['level.enabledChannels']: channelId },
+                });
                 interaction.editReply(t('level.enabled_channels.removed', { lng }));
               }
               break;
@@ -533,7 +590,15 @@ export default new Command({
                     .catch((error) => logger.debug({ error, userId: user.id }, 'Could not add role(s)'));
                 }
 
-                interaction.editReply(t('level.xp.added', { lng, user: user.toString(), xp, new_xp: userLevel.xp, new_level: userLevel.level }));
+                interaction.editReply(
+                  t('level.xp.added', {
+                    lng,
+                    user: user.toString(),
+                    xp,
+                    new_xp: userLevel.xp,
+                    new_level: userLevel.level,
+                  }),
+                );
               }
               break;
             case 'remove':
@@ -558,7 +623,15 @@ export default new Command({
                     .catch((error) => logger.debug({ error, userId: user.id }, 'Could not set role(s)'));
                 }
 
-                interaction.editReply(t('level.xp.removed', { lng, user: user.toString(), xp, new_xp: userLevel.xp, new_level: userLevel.level }));
+                interaction.editReply(
+                  t('level.xp.removed', {
+                    lng,
+                    user: user.toString(),
+                    xp,
+                    new_xp: userLevel.xp,
+                    new_level: userLevel.level,
+                  }),
+                );
               }
               break;
             case 'set':
@@ -578,7 +651,15 @@ export default new Command({
                     .catch((error) => logger.debug({ error, userId: user.id }, 'Could not add role(s)'));
                 }
 
-                interaction.editReply(t('level.xp.set', { lng, user: user.toString(), xp, new_xp: userLevel.xp, new_level: userLevel.level }));
+                interaction.editReply(
+                  t('level.xp.set', {
+                    lng,
+                    user: user.toString(),
+                    xp,
+                    new_xp: userLevel.xp,
+                    new_level: userLevel.level,
+                  }),
+                );
               }
               break;
           }
@@ -604,7 +685,15 @@ export default new Command({
                     .catch((error) => logger.debug({ error, userId: user.id }, 'Could not add role(s)'));
                 }
 
-                interaction.editReply(t('level.level.added', { lng, user: user.toString(), level, new_xp: userLevel.xp, new_level: userLevel.level }));
+                interaction.editReply(
+                  t('level.level.added', {
+                    lng,
+                    user: user.toString(),
+                    level,
+                    new_xp: userLevel.xp,
+                    new_level: userLevel.level,
+                  }),
+                );
               }
               break;
             case 'remove':
@@ -629,7 +718,15 @@ export default new Command({
                     .catch((error) => logger.debug({ error, userId: user.id }, 'Could not set role(s)'));
                 }
 
-                interaction.editReply(t('level.level.removed', { lng, user: user.toString(), level, new_xp: userLevel.xp, new_level: userLevel.level }));
+                interaction.editReply(
+                  t('level.level.removed', {
+                    lng,
+                    user: user.toString(),
+                    level,
+                    new_xp: userLevel.xp,
+                    new_level: userLevel.level,
+                  }),
+                );
               }
               break;
             case 'set':
@@ -649,7 +746,14 @@ export default new Command({
                     .catch((error) => logger.debug({ error, userId: user.id }, 'Could not add role(s)'));
                 }
 
-                interaction.editReply(t('level.level.set', { lng, user: user.toString(), new_xp: userLevel.xp, new_level: userLevel.level }));
+                interaction.editReply(
+                  t('level.level.set', {
+                    lng,
+                    user: user.toString(),
+                    new_xp: userLevel.xp,
+                    new_level: userLevel.level,
+                  }),
+                );
               }
               break;
           }

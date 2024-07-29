@@ -28,10 +28,10 @@ export enum ModuleType {
 type InteractionType<CommandType extends ApplicationCommandType> = CommandType extends ApplicationCommandType.ChatInput
   ? ChatInputCommandInteraction
   : CommandType extends ApplicationCommandType.Message
-  ? MessageContextMenuCommandInteraction
-  : CommandType extends ApplicationCommandType.User
-  ? UserContextMenuCommandInteraction
-  : never;
+    ? MessageContextMenuCommandInteraction
+    : CommandType extends ApplicationCommandType.User
+      ? UserContextMenuCommandInteraction
+      : never;
 
 export class Command<CommandType extends ApplicationCommandType = ApplicationCommandType.ChatInput> {
   constructor(
@@ -50,6 +50,6 @@ export class Command<CommandType extends ApplicationCommandType = ApplicationCom
       botPermissions?: PermissionsString[]; // Array of permissions the bot requires
       autocomplete?({ client, interaction }: { client: DiscordClient; interaction: AutocompleteInteraction }): any;
       execute({ client, interaction }: { client: DiscordClient; interaction: InteractionType<CommandType> }): any;
-    }
+    },
   ) {}
 }

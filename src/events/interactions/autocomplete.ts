@@ -17,7 +17,11 @@ export default new Event({
     } catch (error: any) {
       await interaction.respond([]);
 
-      await sendError({ client, error, location: 'Autocomplete Interaction Error' });
+      await sendError({
+        client,
+        error,
+        location: 'Autocomplete Interaction Error',
+      });
     }
   },
 });

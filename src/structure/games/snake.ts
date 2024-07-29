@@ -33,7 +33,7 @@ export class Snake {
       interaction: ChatInputCommandInteraction;
       client: DiscordClient;
       size: { width: number; height: number };
-    }
+    },
   ) {
     this.height = options.size.height;
     this.width = options.size.width;
@@ -95,17 +95,25 @@ export class Snake {
         embeds: [
           new EmbedBuilder()
             .setColor(Colors.Yellow)
-            .setAuthor({ name: user.displayName, iconURL: user.displayAvatarURL() })
+            .setAuthor({
+              name: user.displayName,
+              iconURL: user.displayAvatarURL(),
+            })
             .setTitle(t('games.snake.title', { lng }))
             .setDescription(this.getBoardContent())
-            .addFields({ name: t('games.snake.score', { lng }), value: `${this.score}` }),
+            .addFields({
+              name: t('games.snake.score', { lng }),
+              value: `${this.score}`,
+            }),
         ],
         components: this.getComponents(),
       })
       .catch((error) => logger.debug({ error }, 'Could not send message'));
     if (!message) return;
 
-    const collector = message.createMessageComponentCollector({ idle: 60 * 1000 });
+    const collector = message.createMessageComponentCollector({
+      idle: 60 * 1000,
+    });
 
     collector.on('collect', async (buttonInteraction) => {
       await buttonInteraction.deferUpdate().catch((error) => logger.debug({ error }, 'Could not defer update'));
@@ -113,7 +121,9 @@ export class Snake {
       if (buttonInteraction.user.id !== user.id)
         return buttonInteraction
           .followUp({
-            content: t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
+            content: t('interactions.author_only', {
+              lng: await client.getUserLanguage(buttonInteraction.user.id),
+            }),
             ephemeral: true,
           })
           .catch((error) => logger.debug({ error }, 'Could not follow up'));
@@ -154,10 +164,16 @@ export class Snake {
           embeds: [
             new EmbedBuilder()
               .setColor(Colors.Yellow)
-              .setAuthor({ name: user.displayName, iconURL: user.displayAvatarURL() })
+              .setAuthor({
+                name: user.displayName,
+                iconURL: user.displayAvatarURL(),
+              })
               .setTitle(t('games.snake.title', { lng }))
               .setDescription(this.getBoardContent())
-              .addFields({ name: t('games.snake.score', { lng }), value: `${this.score}` }),
+              .addFields({
+                name: t('games.snake.score', { lng }),
+                value: `${this.score}`,
+              }),
           ],
         })
         .catch((error) => logger.debug({ error }, 'Could not edit message'));
@@ -178,10 +194,16 @@ export class Snake {
         embeds: [
           new EmbedBuilder()
             .setColor(Colors.Red)
-            .setAuthor({ name: user.displayName, iconURL: user.displayAvatarURL() })
+            .setAuthor({
+              name: user.displayName,
+              iconURL: user.displayAvatarURL(),
+            })
             .setTitle(t('games.snake.title', { lng }))
             .setDescription([t('games.snake.over', { lng }), this.getBoardContent(true)].join('\n\n'))
-            .addFields({ name: t('games.snake.score', { lng }), value: `${this.score}` }),
+            .addFields({
+              name: t('games.snake.score', { lng }),
+              value: `${this.score}`,
+            }),
         ],
         components: this.disableButtons(this.getComponents()),
       })
@@ -196,7 +218,10 @@ export class Snake {
     let foodPosition = { x: 0, y: 0 };
 
     do {
-      foodPosition = { x: parseInt((Math.random() * this.width).toString()), y: parseInt((Math.random() * this.height).toString()) };
+      foodPosition = {
+        x: parseInt((Math.random() * this.width).toString()),
+        y: parseInt((Math.random() * this.height).toString()),
+      };
     } while (this.isSnake(foodPosition));
 
     this.food = foodPosition;

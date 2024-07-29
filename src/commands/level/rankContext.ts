@@ -5,7 +5,7 @@ import { t } from 'i18next';
 import { Command, ModuleType } from 'classes/command';
 import { getDataWithRank, levelToXP } from 'utils/level';
 
-const commandType = ApplicationCommandType.User
+const commandType = ApplicationCommandType.User;
 
 export default new Command<typeof commandType>({
   module: ModuleType.Moderation,
@@ -41,6 +41,8 @@ export default new Command<typeof commandType>({
       .setRequiredXP(levelToXP(rank.level + 1));
     const image = await card.build();
 
-    return interaction.editReply({ files: [new AttachmentBuilder(image, { name: 'rank.png' })] });
+    return interaction.editReply({
+      files: [new AttachmentBuilder(image, { name: 'rank.png' })],
+    });
   },
 });

@@ -80,15 +80,33 @@ export async function registerCommands() {
         cmd.options.map((optionOne, indexOne) => {
           // Translate the option name
           optionOne.name_localizations = {
-            'en-GB': t(`${cmd.name}.options.${indexOne}.name`, { lng: 'en', ns: 'commands' }),
-            'en-US': t(`${cmd.name}.options.${indexOne}.name`, { lng: 'en', ns: 'commands' }),
-            de: t(`${cmd.name}.options.${indexOne}.name`, { lng: 'de', ns: 'commands' }),
+            'en-GB': t(`${cmd.name}.options.${indexOne}.name`, {
+              lng: 'en',
+              ns: 'commands',
+            }),
+            'en-US': t(`${cmd.name}.options.${indexOne}.name`, {
+              lng: 'en',
+              ns: 'commands',
+            }),
+            de: t(`${cmd.name}.options.${indexOne}.name`, {
+              lng: 'de',
+              ns: 'commands',
+            }),
           };
           // Translate the option description
           optionOne.description_localizations = {
-            'en-GB': t(`${cmd.name}.options.${indexOne}.description`, { lng: 'en', ns: 'commands' }),
-            'en-US': t(`${cmd.name}.options.${indexOne}.description`, { lng: 'en', ns: 'commands' }),
-            de: t(`${cmd.name}.options.${indexOne}.description`, { lng: 'de', ns: 'commands' }),
+            'en-GB': t(`${cmd.name}.options.${indexOne}.description`, {
+              lng: 'en',
+              ns: 'commands',
+            }),
+            'en-US': t(`${cmd.name}.options.${indexOne}.description`, {
+              lng: 'en',
+              ns: 'commands',
+            }),
+            de: t(`${cmd.name}.options.${indexOne}.description`, {
+              lng: 'de',
+              ns: 'commands',
+            }),
           };
 
           // Translate the option choices
@@ -97,7 +115,10 @@ export async function registerCommands() {
               choiceOne.name_localizations = {
                 'en-GB': t(`${cmd.name}.options.${indexOne}.choices.${indexTwo}`, { lng: 'en', ns: 'commands' }),
                 'en-US': t(`${cmd.name}.options.${indexOne}.choices.${indexTwo}`, { lng: 'en', ns: 'commands' }),
-                de: t(`${cmd.name}.options.${indexOne}.choices.${indexTwo}`, { lng: 'de', ns: 'commands' }),
+                de: t(`${cmd.name}.options.${indexOne}.choices.${indexTwo}`, {
+                  lng: 'de',
+                  ns: 'commands',
+                }),
               };
               return choiceOne;
             });
@@ -180,10 +201,10 @@ export async function registerCommands() {
 
   // Split the commands into two arrays, for developer only and non-developer only commands
   const commandsArray = translatedCommands.filter(
-    (cmd) => !commands.get(cmd.name)?.options.isDeveloperOnly && commands.get(cmd.name)?.options.module !== ModuleType.Developer
+    (cmd) => !commands.get(cmd.name)?.options.isDeveloperOnly && commands.get(cmd.name)?.options.module !== ModuleType.Developer,
   );
   const devCommandsArray = translatedCommands.filter(
-    (cmd) => commands.get(cmd.name)?.options.isDeveloperOnly || commands.get(cmd.name)?.options.module === ModuleType.Developer
+    (cmd) => commands.get(cmd.name)?.options.isDeveloperOnly || commands.get(cmd.name)?.options.module === ModuleType.Developer,
   );
 
   // Register the commands globally
@@ -201,7 +222,9 @@ export async function registerCommands() {
   for (const guildId of keys.DEVELOPER_GUILD_IDS) {
     const guildCommandsStartTime = performance.now();
     await rest
-      .put(Routes.applicationGuildCommands(DISCORD_BOT_ID, guildId), { body: devCommandsArray })
+      .put(Routes.applicationGuildCommands(DISCORD_BOT_ID, guildId), {
+        body: devCommandsArray,
+      })
       .catch((error) => logger.error({ error }, `Failed to register guild commands for ${guildId}`))
       .then(() => {
         const guildCommandsEndTime = performance.now();

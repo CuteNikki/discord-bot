@@ -24,11 +24,30 @@ export default new Event({
           .setColor(Colors.Orange)
           .setTitle(t('log.autoModerationActionExecution.title', { lng }))
           .addFields(
-            { name: t('log.autoModerationActionExecution.action_type', { lng }), value: AutoModerationActionType[action.type] },
-            { name: t('log.autoModerationActionExecution.rule_trigger_type', { lng }), value: AutoModerationRuleTriggerType[ruleTriggerType] },
-            { name: t('log.autoModerationActionExecution.user', { lng }), value: `<@${userId}>` },
-            { name: t('log.autoModerationActionExecution.channel', { lng }), value: `<@${channelId}>` },
-            { name: t('log.autoModerationActionExecution.matched_content', { lng }), value: matchedContent || '/' }
+            {
+              name: t('log.autoModerationActionExecution.action_type', { lng }),
+              value: AutoModerationActionType[action.type],
+            },
+            {
+              name: t('log.autoModerationActionExecution.rule_trigger_type', {
+                lng,
+              }),
+              value: AutoModerationRuleTriggerType[ruleTriggerType],
+            },
+            {
+              name: t('log.autoModerationActionExecution.user', { lng }),
+              value: `<@${userId}>`,
+            },
+            {
+              name: t('log.autoModerationActionExecution.channel', { lng }),
+              value: `<@${channelId}>`,
+            },
+            {
+              name: t('log.autoModerationActionExecution.matched_content', {
+                lng,
+              }),
+              value: matchedContent || '/',
+            },
           )
           .setTimestamp(),
       ],

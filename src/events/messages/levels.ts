@@ -42,13 +42,27 @@ export default new Event({
 
       const levelUpEmbed = new EmbedBuilder()
         .setColor(Colors.Blurple)
-        .setAuthor({ name: author.displayName, iconURL: author.displayAvatarURL() })
-        .addFields({ name: t('level.up.title', { lng }), value: t('level.up.description', { lng, level: newData.level }) });
+        .setAuthor({
+          name: author.displayName,
+          iconURL: author.displayAvatarURL(),
+        })
+        .addFields({
+          name: t('level.up.title', { lng }),
+          value: t('level.up.description', { lng, level: newData.level }),
+        });
 
       if (rewards?.length) {
         const added = await member.roles.add(rewards.map((r) => r.roleId)).catch((error) => logger.debug({ error }, 'Could not add role(s)'));
-        if (added) levelUpEmbed.addFields({ name: t('level.up.title_roles', { lng }), value: rewards.map((r) => `<@&${r.roleId}>`).join(' ') });
-        else levelUpEmbed.addFields({ name: t('level.up.title_roles_error', { lng }), value: rewards.map((r) => `<@&${r.roleId}>`).join(' ') });
+        if (added)
+          levelUpEmbed.addFields({
+            name: t('level.up.title_roles', { lng }),
+            value: rewards.map((r) => `<@&${r.roleId}>`).join(' '),
+          });
+        else
+          levelUpEmbed.addFields({
+            name: t('level.up.title_roles_error', { lng }),
+            value: rewards.map((r) => `<@&${r.roleId}>`).join(' '),
+          });
       }
 
       const levelUpMessage: MessageCreateOptions = {
@@ -75,8 +89,14 @@ export default new Event({
           break;
         case AnnouncementType.PrivateMessage:
           {
-            levelUpMessage.content = t('level.up.message', { lng, guild: guild.name });
-            levelUpEmbed.setFields({ name: t('level.up.title', { lng }), value: t('level.up.description', { lng }) });
+            levelUpMessage.content = t('level.up.message', {
+              lng,
+              guild: guild.name,
+            });
+            levelUpEmbed.setFields({
+              name: t('level.up.title', { lng }),
+              value: t('level.up.description', { lng }),
+            });
             if (rewards?.length)
               levelUpEmbed.addFields({
                 name: t('level.up.title_roles', { lng, count: rewards.length }),

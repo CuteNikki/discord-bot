@@ -15,7 +15,7 @@ export class TicTacToe extends Opponent {
       interaction: ChatInputCommandInteraction;
       opponent: User;
       client: DiscordClient;
-    }
+    },
   ) {
     super(options);
 
@@ -50,14 +50,16 @@ export class TicTacToe extends Opponent {
             .addFields(
               { name: user.displayName, value: '🔹', inline: true },
               { name: 'vs', value: '⚡', inline: true },
-              { name: opponent.displayName, value: '🔺', inline: true }
+              { name: opponent.displayName, value: '🔺', inline: true },
             ),
         ],
         components: this.getComponents(),
       })
       .catch((error) => logger.debug({ error }, 'Could not send message'));
 
-    const collector = message.createMessageComponentCollector({ idle: 60 * 1000 });
+    const collector = message.createMessageComponentCollector({
+      idle: 60 * 1000,
+    });
 
     collector.on('collect', async (buttonInteraction) => {
       await buttonInteraction.deferUpdate().catch((error) => logger.debug({ error }, 'Could not defer update'));
@@ -65,14 +67,19 @@ export class TicTacToe extends Opponent {
       if (buttonInteraction.user.id !== user.id && buttonInteraction.user.id !== opponent.id)
         return buttonInteraction
           .followUp({
-            content: t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
+            content: t('interactions.author_only', {
+              lng: await client.getUserLanguage(buttonInteraction.user.id),
+            }),
             ephemeral: true,
           })
           .catch((error) => logger.debug({ error }, 'Could not follow up'));
 
       if (this.playerTurn && buttonInteraction.user.id !== user.id)
         return buttonInteraction
-          .followUp({ content: t('games.ttt.turn', { lng: opponentLng }), ephemeral: true })
+          .followUp({
+            content: t('games.ttt.turn', { lng: opponentLng }),
+            ephemeral: true,
+          })
           .catch((error) => logger.debug({ error }, 'Could not follow up'));
 
       if (!this.playerTurn && buttonInteraction.user.id !== opponent.id)
@@ -98,7 +105,7 @@ export class TicTacToe extends Opponent {
               .addFields(
                 { name: user.displayName, value: '🔹', inline: true },
                 { name: 'vs', value: '⚡', inline: true },
-                { name: opponent.displayName, value: '🔺', inline: true }
+                { name: opponent.displayName, value: '🔺', inline: true },
               ),
           ],
           components: this.getComponents(),
@@ -128,7 +135,7 @@ export class TicTacToe extends Opponent {
       .addFields(
         { name: user.displayName, value: '🔹', inline: true },
         { name: 'vs', value: '⚡', inline: true },
-        { name: opponent.displayName, value: '🔺', inline: true }
+        { name: opponent.displayName, value: '🔺', inline: true },
       );
 
     if (result === 'TIMEOUT') embed.setDescription(t('games.ttt.timeout', { lng }));
@@ -137,7 +144,11 @@ export class TicTacToe extends Opponent {
     else embed.setDescription(t('games.ttt.winner', { lng, winner: opponent.toString() }));
 
     return await interaction
-      .editReply({ content: null, embeds: [embed], components: this.disableButtons(this.getComponents()) })
+      .editReply({
+        content: null,
+        embeds: [embed],
+        components: this.disableButtons(this.getComponents()),
+      })
       .catch((error) => logger.debug({ error }, 'Could not edit message'));
   }
 

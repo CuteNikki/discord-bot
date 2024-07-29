@@ -13,6 +13,6 @@ export class Selection {
       permissions?: PermissionsString[]; // Array of permissions required to use the button
       botPermissions?: PermissionsString[]; // Array of permissions the bot requires
       execute({ client, interaction }: { client: DiscordClient; interaction: AnySelectMenuInteraction }): any;
-    }
+    },
   ) {}
 }

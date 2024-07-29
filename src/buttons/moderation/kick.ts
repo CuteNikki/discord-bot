@@ -39,7 +39,11 @@ export default new Button({
       .catch((error) => logger.debug({ error, targetId }, 'Could not send DM to user'));
     await interaction.reply({
       content: [
-        t('kick.confirmed', { lng, user: targetMember.toString(), reason: `\`${reason ?? '/'}\`` }),
+        t('kick.confirmed', {
+          lng,
+          user: targetMember.toString(),
+          reason: `\`${reason ?? '/'}\``,
+        }),
         receivedDM ? t('kick.dm_received', { lng }) : t('kick.dm_not_received', { lng }),
       ].join('\n'),
       components: [],

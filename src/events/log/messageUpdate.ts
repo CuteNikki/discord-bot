@@ -42,13 +42,21 @@ export default new Event({
           value: newMessage.content ? (newMessage.content.length > 950 ? newMessage.content.slice(0, 950) + '...' : newMessage.content) : '/',
           inline: true,
         },
-        emptyField
+        emptyField,
       );
     if ((newMessage.pinned ?? false) !== (oldMessage.pinned ?? false))
       embed.addFields(
-        { name: t('log.messageUpdate.old_pinned', { lng }), value: `${oldMessage.pinned ?? false}`, inline: true },
-        { name: t('log.messageUpdate.new_pinned', { lng }), value: `${newMessage.pinned ?? false}`, inline: true },
-        emptyField
+        {
+          name: t('log.messageUpdate.old_pinned', { lng }),
+          value: `${oldMessage.pinned ?? false}`,
+          inline: true,
+        },
+        {
+          name: t('log.messageUpdate.new_pinned', { lng }),
+          value: `${newMessage.pinned ?? false}`,
+          inline: true,
+        },
+        emptyField,
       );
     if (newMessage.attachments.size !== oldMessage.attachments.size) {
       const oldAttachments = oldMessage.attachments.map((a) => a);

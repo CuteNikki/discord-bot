@@ -25,7 +25,11 @@ export default new Command({
     const lng = await client.getUserLanguage(interaction.user.id);
     const ephemeral = interaction.options.getBoolean('ephemeral', false) ?? true;
 
-    const sent = await interaction.reply({ content: t('ping.pinging', { lng }), fetchReply: true, ephemeral });
+    const sent = await interaction.reply({
+      content: t('ping.pinging', { lng }),
+      fetchReply: true,
+      ephemeral,
+    });
     const websocketHeartbeat = interaction.guild?.shard.ping ?? client.ws.ping;
 
     await interaction.editReply({
@@ -35,13 +39,19 @@ export default new Command({
           .setColor(Colors.Blurple)
           .setTitle(t('ping.title', { lng }))
           .addFields(
-            { name: t('ping.websocket', { lng }), value: `${websocketHeartbeat}ms` },
-            { name: t('ping.roundtrip', { lng }), value: `${sent.createdTimestamp - interaction.createdTimestamp}ms` }
+            {
+              name: t('ping.websocket', { lng }),
+              value: `${websocketHeartbeat}ms`,
+            },
+            {
+              name: t('ping.roundtrip', { lng }),
+              value: `${sent.createdTimestamp - interaction.createdTimestamp}ms`,
+            },
           ),
       ],
       components: [
         new ActionRowBuilder<ButtonBuilder>().setComponents(
-          new ButtonBuilder().setCustomId('button-ping-update').setLabel(t('ping.update', { lng })).setStyle(ButtonStyle.Primary)
+          new ButtonBuilder().setCustomId('button-ping-update').setLabel(t('ping.update', { lng })).setStyle(ButtonStyle.Primary),
         ),
       ],
     });

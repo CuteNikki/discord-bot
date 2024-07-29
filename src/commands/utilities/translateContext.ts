@@ -44,8 +44,14 @@ export default new Command<typeof commandType>({
           .setColor(Colors.Aqua)
           .setTitle(t('translate.title', { lng }))
           .addFields(
-            { name: t('translate.input', { lng }), value: codeBlock(targetMessage.content.substring(0, 4000)) },
-            { name: t('translate.output', { lng }), value: codeBlock(translated.substring(0, 4000)) }
+            {
+              name: t('translate.input', { lng }),
+              value: codeBlock(targetMessage.content.substring(0, 4000)),
+            },
+            {
+              name: t('translate.output', { lng }),
+              value: codeBlock(translated.substring(0, 4000)),
+            },
           ),
       ],
     });

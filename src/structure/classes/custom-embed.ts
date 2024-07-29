@@ -24,7 +24,13 @@ import { logger } from 'utils/logger';
 
 export class CustomEmbedBuilder extends events {
   data: Message;
-  constructor(public options: { interaction: ChatInputCommandInteraction; client: DiscordClient; data?: Message }) {
+  constructor(
+    public options: {
+      interaction: ChatInputCommandInteraction;
+      client: DiscordClient;
+      data?: Message;
+    },
+  ) {
     super();
 
     if (options.data) this.data = options.data;
@@ -82,7 +88,9 @@ export class CustomEmbedBuilder extends events {
         icon_url: replacePlaceholders(embedData.footer?.icon_url ?? '', user, guild),
       },
       image: { url: replacePlaceholders(embedData.image ?? '', user, guild) },
-      thumbnail: { url: replacePlaceholders(embedData.thumbnail ?? '', user, guild) },
+      thumbnail: {
+        url: replacePlaceholders(embedData.thumbnail ?? '', user, guild),
+      },
       url: replacePlaceholders(embedData.url ?? '', user, guild),
     }).setColor(embedData.color as ColorResolvable);
 
@@ -95,12 +103,19 @@ export class CustomEmbedBuilder extends events {
       .catch((error) => logger.debug({ error }, 'Could not edit message'));
     if (!message) return;
 
-    const collector = message.createMessageComponentCollector({ idle: 60 * 10 * 1000, componentType: ComponentType.Button });
+    const collector = message.createMessageComponentCollector({
+      idle: 60 * 10 * 1000,
+      componentType: ComponentType.Button,
+    });
 
     collector.on('end', (_, reason) => {
       if (reason === 'idle')
         interaction
-          .editReply({ content: null, embeds: [embed], components: this.getComponents(lng, true) })
+          .editReply({
+            content: null,
+            embeds: [embed],
+            components: this.getComponents(lng, true),
+          })
           .catch((error) => logger.debug({ error }, 'Could not edit message'));
     });
 
@@ -121,13 +136,16 @@ export class CustomEmbedBuilder extends events {
                         .setStyle(TextInputStyle.Paragraph)
                         .setMaxLength(2000)
                         .setRequired(false)
-                        .setValue(this.data.content ?? '')
-                    )
-                  )
+                        .setValue(this.data.content ?? ''),
+                    ),
+                  ),
               )
               .catch((error) => logger.debug({ error }, 'Could not show modal'));
             const submitted = await buttonInteraction
-              .awaitModalSubmit({ filter: (int) => int.customId === 'CEM_message', time: 60 * 10 * 1000 })
+              .awaitModalSubmit({
+                filter: (int) => int.customId === 'CEM_message',
+                time: 60 * 10 * 1000,
+              })
               .catch((error) => logger.debug({ error }, 'Could not await modal submit'));
             if (!submitted) return;
             if (!submitted.deferred) await submitted.deferUpdate().catch((error) => logger.debug({ error }, 'Could not defer update'));
@@ -151,7 +169,7 @@ export class CustomEmbedBuilder extends events {
                         .setStyle(TextInputStyle.Short)
                         .setMaxLength(256)
                         .setRequired(false)
-                        .setValue(this.data.embed.title ?? '')
+                        .setValue(this.data.embed.title ?? ''),
                     ),
                     new ActionRowBuilder<TextInputBuilder>().addComponents(
                       new TextInputBuilder()
@@ -160,13 +178,16 @@ export class CustomEmbedBuilder extends events {
                         .setStyle(TextInputStyle.Short)
                         .setMaxLength(256)
                         .setRequired(false)
-                        .setValue(this.data.embed.url ?? '')
-                    )
-                  )
+                        .setValue(this.data.embed.url ?? ''),
+                    ),
+                  ),
               )
               .catch((error) => logger.debug({ error }, 'Could not show modal'));
             const submitted = await buttonInteraction
-              .awaitModalSubmit({ filter: (int) => int.customId === 'CEM_title', time: 60 * 10 * 1000 })
+              .awaitModalSubmit({
+                filter: (int) => int.customId === 'CEM_title',
+                time: 60 * 10 * 1000,
+              })
               .catch((error) => logger.debug({ error }, 'Could not await modal submit'));
             if (!submitted) return;
             if (!submitted.deferred) await submitted.deferUpdate().catch((error) => logger.debug({ error }, 'Could not defer update'));
@@ -192,13 +213,16 @@ export class CustomEmbedBuilder extends events {
                         .setStyle(TextInputStyle.Paragraph)
                         .setMaxLength(4000)
                         .setRequired(false)
-                        .setValue(this.data.embed.description ?? '')
-                    )
-                  )
+                        .setValue(this.data.embed.description ?? ''),
+                    ),
+                  ),
               )
               .catch((error) => logger.debug({ error }, 'Could not show modal'));
             const submitted = await buttonInteraction
-              .awaitModalSubmit({ filter: (int) => int.customId === 'CEM_description', time: 60 * 10 * 1000 })
+              .awaitModalSubmit({
+                filter: (int) => int.customId === 'CEM_description',
+                time: 60 * 10 * 1000,
+              })
               .catch((error) => logger.debug({ error }, 'Could not await modal submit'));
             if (!submitted) return;
             if (!submitted.deferred) await submitted.deferUpdate().catch((error) => logger.debug({ error }, 'Could not defer update'));
@@ -222,7 +246,7 @@ export class CustomEmbedBuilder extends events {
                         .setStyle(TextInputStyle.Short)
                         .setMaxLength(256)
                         .setRequired(false)
-                        .setValue(this.data.embed.author?.name ?? '')
+                        .setValue(this.data.embed.author?.name ?? ''),
                     ),
                     new ActionRowBuilder<TextInputBuilder>().addComponents(
                       new TextInputBuilder()
@@ -231,7 +255,7 @@ export class CustomEmbedBuilder extends events {
                         .setStyle(TextInputStyle.Short)
                         .setMaxLength(256)
                         .setRequired(false)
-                        .setValue(this.data.embed.author?.icon_url ?? '')
+                        .setValue(this.data.embed.author?.icon_url ?? ''),
                     ),
                     new ActionRowBuilder<TextInputBuilder>().addComponents(
                       new TextInputBuilder()
@@ -240,13 +264,16 @@ export class CustomEmbedBuilder extends events {
                         .setStyle(TextInputStyle.Short)
                         .setMaxLength(256)
                         .setRequired(false)
-                        .setValue(this.data.embed.author?.url ?? '')
-                    )
-                  )
+                        .setValue(this.data.embed.author?.url ?? ''),
+                    ),
+                  ),
               )
               .catch((error) => logger.debug({ error }, 'Could not show modal'));
             const submitted = await buttonInteraction
-              .awaitModalSubmit({ filter: (int) => int.customId === 'CEM_author', time: 60 * 10 * 1000 })
+              .awaitModalSubmit({
+                filter: (int) => int.customId === 'CEM_author',
+                time: 60 * 10 * 1000,
+              })
               .catch((error) => logger.debug({ error }, 'Could not await modal submit'));
             if (!submitted) return;
             if (!submitted.deferred) await submitted.deferUpdate().catch((error) => logger.debug({ error }, 'Could not defer update'));
@@ -272,7 +299,7 @@ export class CustomEmbedBuilder extends events {
                         .setStyle(TextInputStyle.Short)
                         .setMaxLength(256)
                         .setRequired(false)
-                        .setValue(this.data.embed.footer?.text ?? '')
+                        .setValue(this.data.embed.footer?.text ?? ''),
                     ),
                     new ActionRowBuilder<TextInputBuilder>().addComponents(
                       new TextInputBuilder()
@@ -281,13 +308,16 @@ export class CustomEmbedBuilder extends events {
                         .setStyle(TextInputStyle.Short)
                         .setMaxLength(256)
                         .setRequired(false)
-                        .setValue(this.data.embed.footer?.icon_url ?? '')
-                    )
-                  )
+                        .setValue(this.data.embed.footer?.icon_url ?? ''),
+                    ),
+                  ),
               )
               .catch((error) => logger.debug({ error }, 'Could not show modal'));
             const submitted = await buttonInteraction
-              .awaitModalSubmit({ filter: (int) => int.customId === 'CEM_footer', time: 60 * 10 * 1000 })
+              .awaitModalSubmit({
+                filter: (int) => int.customId === 'CEM_footer',
+                time: 60 * 10 * 1000,
+              })
               .catch((error) => logger.debug({ error }, 'Could not await modal submit'));
             if (!submitted) return;
             if (!submitted.deferred) await submitted.deferUpdate().catch((error) => logger.debug({ error }, 'Could not defer update'));
@@ -312,13 +342,16 @@ export class CustomEmbedBuilder extends events {
                         .setStyle(TextInputStyle.Short)
                         .setMaxLength(256)
                         .setRequired(false)
-                        .setValue(this.data.embed.thumbnail ?? '')
-                    )
-                  )
+                        .setValue(this.data.embed.thumbnail ?? ''),
+                    ),
+                  ),
               )
               .catch((error) => logger.debug({ error }, 'Could not show modal'));
             const submitted = await buttonInteraction
-              .awaitModalSubmit({ filter: (int) => int.customId === 'CEM_thumbnail', time: 60 * 10 * 1000 })
+              .awaitModalSubmit({
+                filter: (int) => int.customId === 'CEM_thumbnail',
+                time: 60 * 10 * 1000,
+              })
               .catch((error) => logger.debug({ error }, 'Could not await modal submit'));
             if (!submitted) return;
             if (!submitted.deferred) await submitted.deferUpdate().catch((error) => logger.debug({ error }, 'Could not defer update'));
@@ -342,13 +375,16 @@ export class CustomEmbedBuilder extends events {
                         .setStyle(TextInputStyle.Short)
                         .setMaxLength(256)
                         .setRequired(false)
-                        .setValue(this.data.embed.image ?? '')
-                    )
-                  )
+                        .setValue(this.data.embed.image ?? ''),
+                    ),
+                  ),
               )
               .catch((error) => logger.debug({ error }, 'Could not show modal'));
             const submitted = await buttonInteraction
-              .awaitModalSubmit({ filter: (int) => int.customId === 'CEM_image', time: 60 * 10 * 1000 })
+              .awaitModalSubmit({
+                filter: (int) => int.customId === 'CEM_image',
+                time: 60 * 10 * 1000,
+              })
               .catch((error) => logger.debug({ error }, 'Could not await modal submit'));
             if (!submitted) return;
             if (!submitted.deferred) await submitted.deferUpdate().catch((error) => logger.debug({ error }, 'Could not defer update'));
@@ -372,13 +408,16 @@ export class CustomEmbedBuilder extends events {
                         .setStyle(TextInputStyle.Short)
                         .setMaxLength(256)
                         .setRequired(false)
-                        .setValue(this.data.embed.color?.toString() ?? '')
-                    )
-                  )
+                        .setValue(this.data.embed.color?.toString() ?? ''),
+                    ),
+                  ),
               )
               .catch((error) => logger.debug({ error }, 'Could not show modal'));
             const submitted = await buttonInteraction
-              .awaitModalSubmit({ filter: (int) => int.customId === 'CEM_color', time: 60 * 10 * 1000 })
+              .awaitModalSubmit({
+                filter: (int) => int.customId === 'CEM_color',
+                time: 60 * 10 * 1000,
+              })
               .catch((error) => logger.debug({ error }, 'Could not await modal submit'));
             if (!submitted) return;
             if (!submitted.deferred) await submitted.deferUpdate().catch((error) => logger.debug({ error }, 'Could not defer update'));
@@ -403,7 +442,7 @@ export class CustomEmbedBuilder extends events {
                         .setLabel(t('custom_embed.input.field_title', { lng }))
                         .setStyle(TextInputStyle.Short)
                         .setMaxLength(256)
-                        .setRequired(false)
+                        .setRequired(false),
                     ),
                     new ActionRowBuilder<TextInputBuilder>().addComponents(
                       new TextInputBuilder()
@@ -411,7 +450,7 @@ export class CustomEmbedBuilder extends events {
                         .setLabel(t('custom_embed.input.field_text', { lng }))
                         .setStyle(TextInputStyle.Paragraph)
                         .setMaxLength(1024)
-                        .setRequired(false)
+                        .setRequired(false),
                     ),
                     new ActionRowBuilder<TextInputBuilder>().addComponents(
                       new TextInputBuilder()
@@ -421,20 +460,27 @@ export class CustomEmbedBuilder extends events {
                         .setMaxLength(5)
                         .setRequired(true)
                         .setValue('false')
-                        .setPlaceholder('true / false')
-                    )
-                  )
+                        .setPlaceholder('true / false'),
+                    ),
+                  ),
               )
               .catch((error) => logger.debug({ error }, 'Could not show modal'));
             const submitted = await buttonInteraction
-              .awaitModalSubmit({ filter: (int) => int.customId === 'CEM_add-field', time: 60 * 10 * 1000 })
+              .awaitModalSubmit({
+                filter: (int) => int.customId === 'CEM_add-field',
+                time: 60 * 10 * 1000,
+              })
               .catch((error) => logger.debug({ error }, 'Could not await modal submit'));
             if (!submitted) return;
             if (!submitted.deferred) await submitted.deferUpdate().catch((error) => logger.debug({ error }, 'Could not defer update'));
             const name = submitted.fields.getTextInputValue('CEI_title');
             const value = submitted.fields.getTextInputValue('CEI_text');
             const inline = submitted.fields.getTextInputValue('CEI_inline');
-            this.data.embed.fields.push({ name, value, inline: inline.toLowerCase() === 'true' ? true : false });
+            this.data.embed.fields.push({
+              name,
+              value,
+              inline: inline.toLowerCase() === 'true' ? true : false,
+            });
             await submitted.editReply(this.getEmbedData(user, guild)).catch((error) => logger.debug({ error }, 'Could not edit reply'));
           }
           break;
@@ -464,7 +510,12 @@ export class CustomEmbedBuilder extends events {
           {
             if (this.isEmptyEmbed())
               return buttonInteraction
-                .reply({ content: t('custom_embed.empty', { lng }), embeds: [], components: [], ephemeral: true })
+                .reply({
+                  content: t('custom_embed.empty', { lng }),
+                  embeds: [],
+                  components: [],
+                  ephemeral: true,
+                })
                 .catch((error) => logger.debug({ error }, 'Could not reply'));
             this.emit('submit', this.data);
             collector.stop();
@@ -473,7 +524,11 @@ export class CustomEmbedBuilder extends events {
         case 'delete':
           {
             await buttonInteraction
-              .update({ content: t('custom_embed.deleted', { lng }), embeds: [], components: [] })
+              .update({
+                content: t('custom_embed.deleted', { lng }),
+                embeds: [],
+                components: [],
+              })
               .catch((error) => logger.debug({ error }, 'Could not update message'));
             collector.stop();
           }
@@ -504,8 +559,12 @@ export class CustomEmbedBuilder extends events {
             text: replacePlaceholders(embedData.footer?.text ?? '', user, guild),
             icon_url: replacePlaceholders(embedData.footer?.icon_url ?? '', user, guild),
           },
-          image: { url: replacePlaceholders(embedData.image ?? '', user, guild) },
-          thumbnail: { url: replacePlaceholders(embedData.thumbnail ?? '', user, guild) },
+          image: {
+            url: replacePlaceholders(embedData.image ?? '', user, guild),
+          },
+          thumbnail: {
+            url: replacePlaceholders(embedData.thumbnail ?? '', user, guild),
+          },
           url: replacePlaceholders(embedData.url ?? '', user, guild),
         }).setColor(this.data.embed.color as ColorResolvable),
       ],
@@ -540,7 +599,7 @@ export class CustomEmbedBuilder extends events {
           .setStyle(ButtonStyle.Secondary)
           .setDisabled(disabled),
         new ButtonBuilder().setCustomId('CEB_author').setLabel(t('custom_embed.button.author', { lng })).setStyle(ButtonStyle.Secondary).setDisabled(disabled),
-        new ButtonBuilder().setCustomId('CEB_footer').setLabel(t('custom_embed.button.footer', { lng })).setStyle(ButtonStyle.Secondary).setDisabled(disabled)
+        new ButtonBuilder().setCustomId('CEB_footer').setLabel(t('custom_embed.button.footer', { lng })).setStyle(ButtonStyle.Secondary).setDisabled(disabled),
       ),
       new ActionRowBuilder<ButtonBuilder>().setComponents(
         new ButtonBuilder()
@@ -559,12 +618,12 @@ export class CustomEmbedBuilder extends events {
           .setCustomId('CEB_remove-field')
           .setLabel(t('custom_embed.button.remove_field', { lng }))
           .setStyle(ButtonStyle.Secondary)
-          .setDisabled(disabled)
+          .setDisabled(disabled),
       ),
       new ActionRowBuilder<ButtonBuilder>().setComponents(
         new ButtonBuilder().setCustomId('CEB_reset').setLabel(t('custom_embed.button.reset', { lng })).setStyle(ButtonStyle.Primary).setDisabled(disabled),
         new ButtonBuilder().setCustomId('CEB_submit').setLabel(t('custom_embed.button.submit', { lng })).setStyle(ButtonStyle.Success).setDisabled(disabled),
-        new ButtonBuilder().setCustomId('CEB_delete').setLabel(t('custom_embed.button.delete', { lng })).setStyle(ButtonStyle.Danger).setDisabled(disabled)
+        new ButtonBuilder().setCustomId('CEB_delete').setLabel(t('custom_embed.button.delete', { lng })).setStyle(ButtonStyle.Danger).setDisabled(disabled),
       ),
     ];
   }

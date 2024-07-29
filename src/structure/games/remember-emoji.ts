@@ -14,7 +14,12 @@ export class RememberEmoji {
   emojis: string[];
   emoji: string;
   selected?: string;
-  constructor(public options: { interaction: ChatInputCommandInteraction; client: DiscordClient }) {
+  constructor(
+    public options: {
+      interaction: ChatInputCommandInteraction;
+      client: DiscordClient;
+    },
+  ) {
     this.emojis = this.shuffleArray(this.styles[Math.floor(Math.random() * this.styles.length)]);
     this.emoji = this.emojis[Math.floor(Math.random() * this.emojis.length)];
 
@@ -44,9 +49,14 @@ export class RememberEmoji {
 
     setTimeout(async () => {
       embed.setDescription(t('games.remember.started', { lng, emoji: this.emoji }));
-      await interaction.editReply({ embeds: [embed], components: this.getComponents(false) });
+      await interaction.editReply({
+        embeds: [embed],
+        components: this.getComponents(false),
+      });
 
-      const collector = message.createMessageComponentCollector({ idle: 60 * 1000 });
+      const collector = message.createMessageComponentCollector({
+        idle: 60 * 1000,
+      });
 
       collector.on('collect', async (buttonInteraction) => {
         await buttonInteraction.deferUpdate().catch((error) => logger.debug({ error }, 'Could not defer update'));
@@ -54,7 +64,9 @@ export class RememberEmoji {
         if (buttonInteraction.user.id !== user.id)
           return buttonInteraction
             .followUp({
-              content: t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
+              content: t('interactions.author_only', {
+                lng: await client.getUserLanguage(buttonInteraction.user.id),
+              }),
               ephemeral: true,
             })
             .catch((error) => logger.debug({ error }, 'Could not follow up'));
@@ -84,18 +96,24 @@ export class RememberEmoji {
       embeds: [
         new EmbedBuilder()
           .setColor(result === 'WIN' ? Colors.Green : Colors.Red)
-          .setAuthor({ name: user.displayName, iconURL: user.displayAvatarURL() })
+          .setAuthor({
+            name: user.displayName,
+            iconURL: user.displayAvatarURL(),
+          })
           .setTitle(t('games.remember.title', { lng }))
           .setDescription(
             result === 'WIN'
               ? t('games.remember.correct', { lng })
               : result === 'TIMEOUT'
-              ? t('games.remember.timeout', { lng })
-              : t('games.remember.incorrect', { lng })
+                ? t('games.remember.timeout', { lng })
+                : t('games.remember.incorrect', { lng }),
           )
           .addFields(
             { name: t('games.remember.answer', { lng }), value: this.emoji },
-            { name: t('games.remember.input', { lng }), value: this.selected || '/' }
+            {
+              name: t('games.remember.input', { lng }),
+              value: this.selected || '/',
+            },
           ),
       ],
       components: this.disableButtons(this.getComponents(true)),

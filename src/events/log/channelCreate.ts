@@ -22,8 +22,14 @@ export default new Event({
       .setColor(Colors.Green)
       .setTitle(t('log.channelCreate.title', { lng }))
       .addFields(
-        { name: t('log.channelCreate.channel', { lng }), value: `${channel.toString()} (\`${name}\` | ${id})` },
-        { name: t('log.channelCreate.type', { lng }), value: ChannelType[type] },
+        {
+          name: t('log.channelCreate.channel', { lng }),
+          value: `${channel.toString()} (\`${name}\` | ${id})`,
+        },
+        {
+          name: t('log.channelCreate.type', { lng }),
+          value: ChannelType[type],
+        },
         {
           name: t('log.channelCreate.permission_overwrites', { lng }),
           value:
@@ -46,15 +52,19 @@ export default new Event({
                           .map((perm) => `\`${perm}\``)
                           .join(', ')
                       : ''
-                  }`
+                  }`,
               )
               .join('\n')
               .slice(0, 1000) || '/',
-        }
+        },
       )
       .setTimestamp();
 
-    if (parent) embed.addFields({ name: t('log.channelCreate.category', { lng }), value: `\`${parent.name}\` (${parent.id})` });
+    if (parent)
+      embed.addFields({
+        name: t('log.channelCreate.category', { lng }),
+        value: `\`${parent.name}\` (${parent.id})`,
+      });
 
     await logChannel.send({
       embeds: [embed],

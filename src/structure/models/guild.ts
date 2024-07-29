@@ -205,7 +205,10 @@ const guildSchema = new Schema<GuildSettings>({
     type: {
       enabled: { type: Boolean },
       channelId: { type: String },
-      announcement: { type: Number, enum: Object.values(AnnouncementType).filter((value) => typeof value === 'number') },
+      announcement: {
+        type: Number,
+        enum: Object.values(AnnouncementType).filter((value) => typeof value === 'number'),
+      },
       ignoredRoles: [{ type: String }],
       ignoredChannels: [{ type: String }],
       enabledChannels: [{ type: String }],

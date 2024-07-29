@@ -24,9 +24,20 @@ export default new Event({
           .setColor(Colors.Red)
           .setTitle(t('log.autoModerationRuleDelete.title', { lng }))
           .addFields(
-            { name: t('log.autoModerationRuleDelete.created_by', { lng }), value: `<@${creatorId}>` },
-            { name: t('log.autoModerationRuleDelete.rule_name', { lng }), value: name },
-            { name: t('log.autoModerationRuleDelete.rule_trigger_type', { lng }), value: AutoModerationRuleTriggerType[triggerType] },
+            {
+              name: t('log.autoModerationRuleDelete.created_by', { lng }),
+              value: `<@${creatorId}>`,
+            },
+            {
+              name: t('log.autoModerationRuleDelete.rule_name', { lng }),
+              value: name,
+            },
+            {
+              name: t('log.autoModerationRuleDelete.rule_trigger_type', {
+                lng,
+              }),
+              value: AutoModerationRuleTriggerType[triggerType],
+            },
             {
               name: t('log.autoModerationRuleDelete.trigger_metadata', { lng }),
               value: [
@@ -69,7 +80,7 @@ export default new Event({
                   .map((channel) => `<#${channel.id}>`)
                   .join(', ')
                   .slice(0, 1000) || '/',
-            }
+            },
           )
           .setTimestamp(),
       ],

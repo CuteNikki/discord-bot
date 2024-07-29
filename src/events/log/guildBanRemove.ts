@@ -27,8 +27,14 @@ export default new Event({
           .setColor(Colors.Green)
           .setTitle(t('log.guildBanRemove.title', { lng }))
           .addFields(
-            { name: t('log.guildBanRemove.user', { lng }), value: `${user.toString()} (\`${user.username}\` | ${user.id})` },
-            { name: t('log.guildBanRemove.reason', { lng }), value: reason || '/' }
+            {
+              name: t('log.guildBanRemove.user', { lng }),
+              value: `${user.toString()} (\`${user.username}\` | ${user.id})`,
+            },
+            {
+              name: t('log.guildBanRemove.reason', { lng }),
+              value: reason || '/',
+            },
           )
           .setTimestamp(),
       ],

@@ -67,7 +67,10 @@ export default new Command({
     const isTimed = targetMember.isCommunicationDisabled();
     if (isTimed)
       return interaction.editReply(
-        t('timeout.target.timed_out', { lng, date: `<t:${Math.floor(targetMember.communicationDisabledUntilTimestamp / 1000)}:f>` })
+        t('timeout.target.timed_out', {
+          lng,
+          date: `<t:${Math.floor(targetMember.communicationDisabledUntilTimestamp / 1000)}:f>`,
+        }),
       );
 
     const msg = await interaction.editReply({
@@ -75,17 +78,26 @@ export default new Command({
       components: [
         new ActionRowBuilder<ButtonBuilder>().setComponents(
           new ButtonBuilder().setCustomId(CustomIds.Confirm).setEmoji('✔').setStyle(ButtonStyle.Success),
-          new ButtonBuilder().setCustomId(CustomIds.Cancel).setEmoji('✖').setStyle(ButtonStyle.Danger)
+          new ButtonBuilder().setCustomId(CustomIds.Cancel).setEmoji('✖').setStyle(ButtonStyle.Danger),
         ),
       ],
     });
 
-    const collector = await msg.awaitMessageComponent({ filter: (i) => i.user.id === interaction.user.id, componentType: ComponentType.Button, time: 30_000 });
+    const collector = await msg.awaitMessageComponent({
+      filter: (i) => i.user.id === interaction.user.id,
+      componentType: ComponentType.Button,
+      time: 30_000,
+    });
 
     if (collector.customId === CustomIds.Cancel) {
-      await collector.update({ content: t('timeout.cancelled', { lng }), components: [] });
+      await collector.update({
+        content: t('timeout.cancelled', { lng }),
+        components: [],
+      });
     } else if (collector.customId === CustomIds.Confirm) {
-      const timeout = await targetMember.disableCommunicationUntil(Date.now() + duration, reason).catch((error) => logger.debug({ error, userId: target.id }, 'Could not timeout user'));
+      const timeout = await targetMember
+        .disableCommunicationUntil(Date.now() + duration, reason)
+        .catch((error) => logger.debug({ error, userId: target.id }, 'Could not timeout user'));
       if (!timeout) return collector.update(t('timeout.failed', { lng }));
 
       const receivedDM = await client.users
@@ -100,7 +112,11 @@ export default new Command({
         .catch((error) => logger.debug({ error, userId: target.id }, 'Could not send DM'));
       await collector.update({
         content: [
-          t('timeout.confirmed', { lng, user: target.toString(), reason: `\`${reason ?? '/'}\`` }),
+          t('timeout.confirmed', {
+            lng,
+            user: target.toString(),
+            reason: `\`${reason ?? '/'}\``,
+          }),
           receivedDM ? t('timeout.dm_received', { lng }) : t('timeout.dm_not_received', { lng }),
           t('timeout.duration', { lng, duration: durationText }),
         ].join('\n'),

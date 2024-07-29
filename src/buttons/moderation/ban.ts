@@ -55,7 +55,11 @@ export default new Button({
       .catch((error) => logger.debug({ error, targetId }, 'Could not send DM to user'));
     await interaction.reply({
       content: [
-        t('ban.confirmed', { lng, user: target.toString(), reason: `\`${reason ?? '/'}\`` }),
+        t('ban.confirmed', {
+          lng,
+          user: target.toString(),
+          reason: `\`${reason ?? '/'}\``,
+        }),
         t('ban.deleted_history', { lng, deleted: historyOptions[604800] }),
         receivedDM ? t('ban.dm_received', { lng }) : t('ban.dm_not_received', { lng }),
         t('ban.permanent', { lng }),

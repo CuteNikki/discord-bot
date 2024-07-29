@@ -40,8 +40,8 @@ export default new Modal({
                   .replaceAll(interaction.client.token, 'no')
                   .replaceAll(interaction.client.token.split('').reverse().join(''), 'no')
                   .replaceAll('\\n', '\n')
-                  .substring(0, 4000)
-              )
+                  .substring(0, 4000),
+              ),
             ),
         ],
       });
@@ -64,8 +64,8 @@ export default new Modal({
                   .replaceAll(interaction.client.token, 'no')
                   .replaceAll(interaction.client.token.split('').reverse().join(''), 'no')
                   .replaceAll('\\n', '\n')
-                  .substring(0, 4000)
-              )
+                  .substring(0, 4000),
+              ),
             ),
         ],
       });

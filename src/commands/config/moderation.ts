@@ -17,14 +17,14 @@ export default new Command({
         .setName('show')
         .setDescription('Shows the current configuration')
         .addSubcommand((subcommand) => subcommand.setName('all').setDescription('Shows the entire configuration'))
-        .addSubcommand((subcommand) => subcommand.setName('state').setDescription('Shows the moderation module state'))
+        .addSubcommand((subcommand) => subcommand.setName('state').setDescription('Shows the moderation module state')),
     )
     .addSubcommandGroup((group) =>
       group
         .setName('toggle')
         .setDescription('Toggle the moderation module')
         .addSubcommand((subcommand) => subcommand.setName('on').setDescription('Turns the moderation module on'))
-        .addSubcommand((subcommand) => subcommand.setName('off').setDescription('Turns the moderation module off'))
+        .addSubcommand((subcommand) => subcommand.setName('off').setDescription('Turns the moderation module off')),
     ),
   async execute({ client, interaction }) {
     if (!interaction.inCachedGuild()) return;
@@ -74,14 +74,18 @@ export default new Command({
             case 'on':
               {
                 if (config.moderation.enabled) return interaction.editReply(t('moderation.toggle.already_on', { lng }));
-                await client.updateGuildSettings(guildId, { $set: { ['moderation.enabled']: true } });
+                await client.updateGuildSettings(guildId, {
+                  $set: { ['moderation.enabled']: true },
+                });
                 interaction.editReply(t('moderation.toggle.on', { lng }));
               }
               break;
             case 'off':
               {
                 if (!config.moderation.enabled) return interaction.editReply(t('moderation.toggle.already_off', { lng }));
-                await client.updateGuildSettings(guildId, { $set: { ['moderation.enabled']: false } });
+                await client.updateGuildSettings(guildId, {
+                  $set: { ['moderation.enabled']: false },
+                });
                 interaction.editReply(t('moderation.toggle.off', { lng }));
               }
               break;

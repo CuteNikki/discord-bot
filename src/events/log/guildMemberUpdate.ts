@@ -21,28 +21,55 @@ export default new Event({
     const embed = new EmbedBuilder()
       .setColor(Colors.Yellow)
       .setTitle(t('log.guildMemberUpdate.title', { lng }))
-      .addFields({ name: t('log.guildMemberUpdate.member', { lng }), value: `${newMember.toString()} (\`${newMember.user.username}\` | ${newMember.user.id})` })
+      .addFields({
+        name: t('log.guildMemberUpdate.member', { lng }),
+        value: `${newMember.toString()} (\`${newMember.user.username}\` | ${newMember.user.id})`,
+      })
       .setTimestamp();
 
     const emptyField = { name: '\u200b', value: '\u200b', inline: true };
 
     if (newMember.nickname !== oldMember.nickname)
       embed.addFields(
-        { name: t('log.guildMemberUpdate.old_nickname', { lng }), value: oldMember.nickname ?? oldMember.displayName, inline: true },
-        { name: t('log.guildMemberUpdate.new_nickname', { lng }), value: newMember.nickname ?? newMember.displayName, inline: true },
-        emptyField
+        {
+          name: t('log.guildMemberUpdate.old_nickname', { lng }),
+          value: oldMember.nickname ?? oldMember.displayName,
+          inline: true,
+        },
+        {
+          name: t('log.guildMemberUpdate.new_nickname', { lng }),
+          value: newMember.nickname ?? newMember.displayName,
+          inline: true,
+        },
+        emptyField,
       );
     if (newMember.displayAvatarURL() !== oldMember.displayAvatarURL())
       embed.addFields(
-        { name: t('log.guildMemberUpdate.old_avatar', { lng }), value: oldMember.displayAvatarURL(), inline: true },
-        { name: t('log.guildMemberUpdate.new_avatar', { lng }), value: newMember.displayAvatarURL(), inline: true },
-        emptyField
+        {
+          name: t('log.guildMemberUpdate.old_avatar', { lng }),
+          value: oldMember.displayAvatarURL(),
+          inline: true,
+        },
+        {
+          name: t('log.guildMemberUpdate.new_avatar', { lng }),
+          value: newMember.displayAvatarURL(),
+          inline: true,
+        },
+        emptyField,
       );
     if (newMember.pending !== oldMember.pending)
       embed.addFields(
-        { name: t('log.guildMemberUpdate.old_pending', { lng }), value: `${oldMember.pending}`, inline: true },
-        { name: t('log.guildMemberUpdate.new_pending', { lng }), value: `${newMember.pending}`, inline: true },
-        emptyField
+        {
+          name: t('log.guildMemberUpdate.old_pending', { lng }),
+          value: `${oldMember.pending}`,
+          inline: true,
+        },
+        {
+          name: t('log.guildMemberUpdate.new_pending', { lng }),
+          value: `${newMember.pending}`,
+          inline: true,
+        },
+        emptyField,
       );
     if (newMember.communicationDisabledUntilTimestamp !== oldMember.communicationDisabledUntilTimestamp)
       embed.addFields(
@@ -56,7 +83,7 @@ export default new Event({
           value: newMember.communicationDisabledUntilTimestamp ? `<t:${Math.floor(newMember.communicationDisabledUntilTimestamp / 1000)}:f>` : '/',
           inline: true,
         },
-        emptyField
+        emptyField,
       );
     if (JSON.stringify(newMember.roles.cache.toJSON()) !== JSON.stringify(oldMember.roles.cache.toJSON())) {
       const removedRoles = oldMember.roles.cache.map((r) => r).filter((role) => !newMember.roles.cache.map((r) => r.id).includes(role.id));
@@ -81,7 +108,7 @@ export default new Event({
               .slice(0, 1000) || '/',
           inline: true,
         },
-        emptyField
+        emptyField,
       );
     }
     if (newMember.permissions.bitfield !== oldMember.permissions.bitfield) {
@@ -107,7 +134,7 @@ export default new Event({
               .slice(0, 1000) || '/',
           inline: true,
         },
-        emptyField
+        emptyField,
       );
     }
 

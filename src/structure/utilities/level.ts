@@ -167,12 +167,16 @@ export async function computeLeaderboard(leaderboard: Level[], client: DiscordCl
         if (user) return user.username;
         return false;
       },
-      { context: { userId: level.userId } }
+      { context: { userId: level.userId } },
     );
     const username = usernames.find((name) => typeof name === 'string');
     const position = leaderboard.findIndex((lvl) => lvl.userId === level.userId) + 1;
 
-    computedLeaderboard.push({ ...level, position, username: username || `<@${level.userId}>` });
+    computedLeaderboard.push({
+      ...level,
+      position,
+      username: username || `<@${level.userId}>`,
+    });
   }
 
   return computedLeaderboard;

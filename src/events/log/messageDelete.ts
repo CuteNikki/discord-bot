@@ -28,9 +28,7 @@ export default new Event({
           .setColor(Colors.Red)
           .setTitle(t('log.messageDelete.title', { lng }))
           .setDescription(
-            `${t('log.messageDelete.content', { lng })}: ${
-              message.content ? (message.content.length > 3800 ? message.content.slice(0, 3800) + '...' : message.content) : '/'
-            }`
+            `${t('log.messageDelete.content', { lng })}: ${message.content ? (message.content.length > 3800 ? message.content.slice(0, 3800) + '...' : message.content) : '/'}`,
           )
           .addFields(
             {
@@ -52,7 +50,7 @@ export default new Event({
                   .map((attachment) => attachment.url)
                   .join('\n')
                   .slice(0, 1000) || '/',
-            }
+            },
           )
           .setTimestamp(),
       ],

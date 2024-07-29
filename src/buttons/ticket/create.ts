@@ -23,20 +23,33 @@ export default new Button({
     const lng = currentConfig.language;
 
     const system = currentConfig.ticket.systems.find((system) => system._id.toString() === customId.split('_')[1]);
-    if (!system) return interaction.reply({ content: t('tickets.invalid_system', { lng }), ephemeral: true });
+    if (!system)
+      return interaction.reply({
+        content: t('tickets.invalid_system', { lng }),
+        ephemeral: true,
+      });
 
-    let createdTickets = await ticketModel.find({ guildId, createdBy: user.id });
+    let createdTickets = await ticketModel.find({
+      guildId,
+      createdBy: user.id,
+    });
     for (const createdTicket of createdTickets.filter((ticket) => !ticket.closed)) {
       if (!guild.channels.cache.get(createdTicket.channelId)) {
         await ticketModel.deleteOne({ _id: createdTicket._id });
         createdTickets = createdTickets.filter((ticket) => ticket.channelId !== createdTicket.channelId);
       }
     }
-    if (createdTickets.length >= system.maxTickets) return interaction.editReply({ content: t('tickets.limit', { lng, limit: system.maxTickets }) });
+    if (createdTickets.length >= system.maxTickets)
+      return interaction.editReply({
+        content: t('tickets.limit', { lng, limit: system.maxTickets }),
+      });
 
     const choice = system.choices[choiceIndex];
 
-    if (!system.choices.length || !choice) return interaction.editReply({ content: t('tickets.invalid_option', { lng }) });
+    if (!system.choices.length || !choice)
+      return interaction.editReply({
+        content: t('tickets.invalid_option', { lng }),
+      });
 
     const channel: void | TextChannel = await interaction.guild.channels
       .create({
@@ -76,7 +89,12 @@ export default new Button({
       users: [interaction.user.id],
       choice,
     });
-    await interaction.editReply({ content: t('tickets.created_user', { lng, channel: `${channel.toString()}` }) });
+    await interaction.editReply({
+      content: t('tickets.created_user', {
+        lng,
+        channel: `${channel.toString()}`,
+      }),
+    });
     await channel.send({
       content: `${interaction.user} | <@&${system.staffRoleId}>`,
       embeds: [new EmbedBuilder().setDescription(`${t('tickets.created_channel', { lng, created_by: `${interaction.user}` })}`)],
@@ -96,13 +114,13 @@ export default new Button({
             .setCustomId(`button-tickets-lock_${system._id.toString()}`)
             .setLabel(t('tickets.lock', { lng }))
             .setEmoji('🔐')
-            .setStyle(ButtonStyle.Primary)
+            .setStyle(ButtonStyle.Primary),
         ),
         new ActionRowBuilder<UserSelectMenuBuilder>().addComponents(
           new UserSelectMenuBuilder()
             .setCustomId(`selection-tickets-user_${system._id.toString()}`)
             .setPlaceholder(t('tickets.user_select', { lng }))
-            .setMaxValues(1)
+            .setMaxValues(1),
         ),
       ],
     });

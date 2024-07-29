@@ -44,9 +44,17 @@ export default new Event({
 
     // Permissions check
     if (selection.options.permissions?.length) {
-      if (!interaction.member) return interaction.reply({ content: t('interactions.guild_only', { lng }), ephemeral: true });
+      if (!interaction.member)
+        return interaction.reply({
+          content: t('interactions.guild_only', { lng }),
+          ephemeral: true,
+        });
       const permissions = interaction.member.permissions as PermissionsBitField;
-      if (!permissions.has(selection.options.permissions)) return interaction.reply({ content: t('interactions.permissions', { lng }), ephemeral: true });
+      if (!permissions.has(selection.options.permissions))
+        return interaction.reply({
+          content: t('interactions.permissions', { lng }),
+          ephemeral: true,
+        });
     }
 
     // Bot permissions check
@@ -54,7 +62,10 @@ export default new Event({
       const permissions = interaction.guild.members.me.permissions;
       if (!permissions.has(selection.options.botPermissions)) {
         return interaction.reply({
-          content: t('interactions.bot_permissions', { lng, permissions: selection.options.botPermissions.join(', ') }),
+          content: t('interactions.bot_permissions', {
+            lng,
+            permissions: selection.options.botPermissions.join(', '),
+          }),
           ephemeral: true,
         });
       }
@@ -63,7 +74,10 @@ export default new Event({
     // Check if selection is developer only and return if the user's id doesn't match the developer's id
     const developerIds = keys.DEVELOPER_USER_IDS;
     if (selection.options.isDeveloperOnly && !developerIds.includes(interaction.user.id))
-      return interaction.reply({ content: t('interactions.developer_only', { lng }), ephemeral: true });
+      return interaction.reply({
+        content: t('interactions.developer_only', { lng }),
+        ephemeral: true,
+      });
 
     // Check if cooldowns has the current selection and add the selection if it doesn't have the selection
     const cooldowns = client.cooldowns;
@@ -81,7 +95,11 @@ export default new Event({
       if (now < expirationTime) {
         const expiredTimestamp = Math.round(expirationTime / 1_000);
         return interaction.reply({
-          content: t('interactions.cooldown', { lng, action: `\`${selection.options.customId}\``, timestamp: `<t:${expiredTimestamp}:R>` }),
+          content: t('interactions.cooldown', {
+            lng,
+            action: `\`${selection.options.customId}\``,
+            timestamp: `<t:${expiredTimestamp}:R>`,
+          }),
           ephemeral: true,
         });
       }
@@ -95,7 +113,10 @@ export default new Event({
     try {
       selection.options.execute({ client, interaction });
     } catch (error: any) {
-      const message = t('interactions.error', { lng, error: `\`${error.message}\`` });
+      const message = t('interactions.error', {
+        lng,
+        error: `\`${error.message}\``,
+      });
 
       if (interaction.deferred) interaction.editReply({ content: message });
       else interaction.reply({ content: message, ephemeral: true });

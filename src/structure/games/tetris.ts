@@ -46,7 +46,7 @@ export class Tetris {
     public options: {
       interaction: ChatInputCommandInteraction;
       client: DiscordClient;
-    }
+    },
   ) {
     this.board = this.createBoard(18, 10);
     this.pieceQueue = this.shufflePieces();
@@ -91,12 +91,21 @@ export class Tetris {
         embeds: [
           new EmbedBuilder()
             .setColor(Colors.Yellow)
-            .setAuthor({ name: user.displayName, iconURL: user.displayAvatarURL() })
+            .setAuthor({
+              name: user.displayName,
+              iconURL: user.displayAvatarURL(),
+            })
             .setTitle(t('games.tetris.title', { lng }))
             .setDescription(this.getBoardContent())
             .addFields(
-              { name: t('games.tetris.score', { lng }), value: `${this.score}` },
-              { name: t('games.tetris.pieces', { lng }), value: `${this.pieceQueue.join(', ')}` }
+              {
+                name: t('games.tetris.score', { lng }),
+                value: `${this.score}`,
+              },
+              {
+                name: t('games.tetris.pieces', { lng }),
+                value: `${this.pieceQueue.join(', ')}`,
+              },
             ),
         ],
         components: [this.getComponents()],
@@ -105,7 +114,10 @@ export class Tetris {
 
     if (!message) return;
 
-    const collector = message.createMessageComponentCollector({ idle: 60 * 1000, componentType: ComponentType.Button });
+    const collector = message.createMessageComponentCollector({
+      idle: 60 * 1000,
+      componentType: ComponentType.Button,
+    });
 
     collector.on('collect', async (buttonInteraction) => {
       await buttonInteraction.deferUpdate().catch((error) => logger.debug({ error }, 'Could not defer update'));
@@ -113,7 +125,9 @@ export class Tetris {
       if (buttonInteraction.user.id !== user.id)
         return buttonInteraction
           .followUp({
-            content: t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
+            content: t('interactions.author_only', {
+              lng: await client.getUserLanguage(buttonInteraction.user.id),
+            }),
             ephemeral: true,
           })
           .catch((error) => logger.debug({ error }, 'Could not follow up'));
@@ -131,12 +145,21 @@ export class Tetris {
             embeds: [
               new EmbedBuilder()
                 .setColor(Colors.Yellow)
-                .setAuthor({ name: user.displayName, iconURL: user.displayAvatarURL() })
+                .setAuthor({
+                  name: user.displayName,
+                  iconURL: user.displayAvatarURL(),
+                })
                 .setTitle(t('games.tetris.title', { lng }))
                 .setDescription(this.getBoardContent())
                 .addFields(
-                  { name: t('games.tetris.score', { lng }), value: `${this.score}` },
-                  { name: t('games.tetris.pieces', { lng }), value: `${this.pieceQueue.join(', ')}` }
+                  {
+                    name: t('games.tetris.score', { lng }),
+                    value: `${this.score}`,
+                  },
+                  {
+                    name: t('games.tetris.pieces', { lng }),
+                    value: `${this.pieceQueue.join(', ')}`,
+                  },
                 ),
             ],
           })
@@ -161,12 +184,21 @@ export class Tetris {
         embeds: [
           new EmbedBuilder()
             .setColor(Colors.Red)
-            .setAuthor({ name: user.displayName, iconURL: user.displayAvatarURL() })
+            .setAuthor({
+              name: user.displayName,
+              iconURL: user.displayAvatarURL(),
+            })
             .setTitle(t('games.tetris.title', { lng }))
             .setDescription([t('games.tetris.over', { lng }), this.getBoardContent()].join('\n\n'))
             .addFields(
-              { name: t('games.tetris.score', { lng }), value: `${this.score}` },
-              { name: t('games.tetris.pieces', { lng }), value: `${this.pieceQueue.join(', ')}` }
+              {
+                name: t('games.tetris.score', { lng }),
+                value: `${this.score}`,
+              },
+              {
+                name: t('games.tetris.pieces', { lng }),
+                value: `${this.pieceQueue.join(', ')}`,
+              },
             ),
         ],
         components: [this.getComponents(true)],
@@ -179,7 +211,7 @@ export class Tetris {
       new ButtonBuilder().setCustomId('TETRIS_left').setEmoji('⬅️').setStyle(ButtonStyle.Primary).setDisabled(disabled),
       new ButtonBuilder().setCustomId('TETRIS_right').setEmoji('➡️').setStyle(ButtonStyle.Primary).setDisabled(disabled),
       new ButtonBuilder().setCustomId('TETRIS_rotate').setEmoji('🔄').setStyle(ButtonStyle.Primary).setDisabled(disabled),
-      new ButtonBuilder().setCustomId('TETRIS_drop').setEmoji('⬇️').setStyle(ButtonStyle.Success).setDisabled(disabled)
+      new ButtonBuilder().setCustomId('TETRIS_drop').setEmoji('⬇️').setStyle(ButtonStyle.Success).setDisabled(disabled),
     );
   }
 

@@ -22,7 +22,12 @@ export default new Command({
         new EmbedBuilder()
           .setColor(Colors.Blurple)
           .setTitle(t('uptime.title', { lng }))
-          .setDescription(t('uptime.description', { lng, uptime: `<t:${Math.floor(interaction.client.readyTimestamp / 1000)}:R>` })),
+          .setDescription(
+            t('uptime.description', {
+              lng,
+              uptime: `<t:${Math.floor(interaction.client.readyTimestamp / 1000)}:R>`,
+            }),
+          ),
       ],
     });
   },

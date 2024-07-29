@@ -26,7 +26,7 @@ export class RockPaperScissors extends Opponent {
       interaction: ChatInputCommandInteraction;
       opponent: User | null;
       client: DiscordClient;
-    }
+    },
   ) {
     super(options);
 
@@ -91,14 +91,18 @@ export class RockPaperScissors extends Opponent {
       })
       .catch((error) => logger.debug({ error }, 'Could not edit message'));
 
-    const collector = message.createMessageComponentCollector({ idle: 60 * 1000 });
+    const collector = message.createMessageComponentCollector({
+      idle: 60 * 1000,
+    });
 
     collector.on('collect', async (buttonInteraction) => {
       await buttonInteraction.deferUpdate().catch((error) => logger.debug({ error }, 'Could not defer update'));
 
       if (buttonInteraction.user.id !== user.id && buttonInteraction.user.id !== opponent?.id) {
         return buttonInteraction.followUp({
-          content: t('interactions.author_only', { lng: await client.getUserLanguage(buttonInteraction.user.id) }),
+          content: t('interactions.author_only', {
+            lng: await client.getUserLanguage(buttonInteraction.user.id),
+          }),
           ephemeral: true,
         });
       }
@@ -113,7 +117,10 @@ export class RockPaperScissors extends Opponent {
             .catch((error) => logger.debug({ error }, 'Could not follow up'));
         this.playerPick = Picks[buttonInteraction.customId.split('_')[1] as keyof typeof Picks];
         await buttonInteraction
-          .followUp({ content: t('games.rpc.picked', { lng, pick: this.playerPick }), ephemeral: true })
+          .followUp({
+            content: t('games.rpc.picked', { lng, pick: this.playerPick }),
+            ephemeral: true,
+          })
           .catch((error) => logger.debug({ error }, 'Could not follow up'));
       }
 
@@ -127,7 +134,13 @@ export class RockPaperScissors extends Opponent {
             .catch((error) => logger.debug({ error }, 'Could not follow up'));
         this.opponentPick = Picks[buttonInteraction.customId.split('_')[1] as keyof typeof Picks];
         await buttonInteraction
-          .followUp({ content: t('games.rpc.picked', { lng: opponentLng, pick: this.opponentPick }), ephemeral: true })
+          .followUp({
+            content: t('games.rpc.picked', {
+              lng: opponentLng,
+              pick: this.opponentPick,
+            }),
+            ephemeral: true,
+          })
           .catch((error) => logger.debug({ error }, 'Could not follow up'));
       }
 
@@ -164,15 +177,29 @@ export class RockPaperScissors extends Opponent {
       .setTitle(t('games.rpc.title', { lng }))
       .setColor(result === 'TIE' ? Colors.Yellow : result === 'TIMEOUT' ? Colors.Yellow : result === 'OPPONENT' ? Colors.Red : Colors.Green)
       .addFields(
-        { name: user.displayName, value: this.playerPick ?? '❔', inline: true },
+        {
+          name: user.displayName,
+          value: this.playerPick ?? '❔',
+          inline: true,
+        },
         { name: 'vs', value: '⚡', inline: true },
-        { name: opponent?.displayName ?? client.user.displayName, value: this.opponentPick ?? '❔', inline: true }
+        {
+          name: opponent?.displayName ?? client.user.displayName,
+          value: this.opponentPick ?? '❔',
+          inline: true,
+        },
       );
 
     if (result === 'TIMEOUT') embed.setDescription(t('games.rpc.timeout', { lng }));
     else if (result === 'TIE') embed.setDescription(t('games.rpc.tied', { lng }));
     else if (result === 'PLAYER') embed.setDescription(t('games.rpc.winner', { lng, winner: user.toString() }));
-    else embed.setDescription(t('games.rpc.winner', { lng, winner: opponent?.toString() ?? client.user.toString() }));
+    else
+      embed.setDescription(
+        t('games.rpc.winner', {
+          lng,
+          winner: opponent?.toString() ?? client.user.toString(),
+        }),
+      );
 
     return await interaction
       .editReply({

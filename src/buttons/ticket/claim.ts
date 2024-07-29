@@ -16,16 +16,36 @@ export default new Button({
     const lng = currentConfig.language;
 
     const system = currentConfig.ticket.systems.find((system) => system._id.toString() === customId.split('_')[1]);
-    if (!system) return interaction.reply({ content: t('tickets.invalid_system', { lng }), ephemeral: true });
+    if (!system)
+      return interaction.reply({
+        content: t('tickets.invalid_system', { lng }),
+        ephemeral: true,
+      });
 
-    if (!interaction.member.roles.cache.has(system.staffRoleId)) return interaction.reply({ content: t('tickets.staff_only', { lng }), ephemeral: true });
+    if (!interaction.member.roles.cache.has(system.staffRoleId))
+      return interaction.reply({
+        content: t('tickets.staff_only', { lng }),
+        ephemeral: true,
+      });
 
     const ticket = await ticketModel.findOne({ channelId });
-    if (!ticket) return interaction.reply({ content: t('tickets.invalid_ticket', { lng }) });
+    if (!ticket)
+      return interaction.reply({
+        content: t('tickets.invalid_ticket', { lng }),
+      });
 
-    if (ticket.claimedBy) return interaction.reply({ content: t('tickets.already_claimed', { lng, claimed_by: `<@${ticket.claimedBy}>` }), ephemeral: true });
+    if (ticket.claimedBy)
+      return interaction.reply({
+        content: t('tickets.already_claimed', {
+          lng,
+          claimed_by: `<@${ticket.claimedBy}>`,
+        }),
+        ephemeral: true,
+      });
     await ticketModel.findOneAndUpdate({ channelId }, { claimedBy: user.id });
 
-    interaction.reply({ content: t('tickets.claimed', { lng, claimed_by: `${user.toString()}` }) });
+    interaction.reply({
+      content: t('tickets.claimed', { lng, claimed_by: `${user.toString()}` }),
+    });
   },
 });

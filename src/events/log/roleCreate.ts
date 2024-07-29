@@ -25,13 +25,28 @@ export default new Event({
           .setTitle(t('log.roleCreate.title', { lng }))
           .setThumbnail(role.iconURL({ size: 1024 }))
           .addFields(
-            { name: t('log.roleCreate.role', { lng }), value: `${role.toString()} (\`${name}\` | ${id})` },
+            {
+              name: t('log.roleCreate.role', { lng }),
+              value: `${role.toString()} (\`${name}\` | ${id})`,
+            },
             { name: t('log.roleCreate.color', { lng }), value: `${hexColor}` },
-            { name: t('log.roleCreate.position', { lng }), value: `${position}` },
-            { name: t('log.roleCreate.displayed_separately', { lng }), value: `${hoist}` },
-            { name: t('log.roleCreate.mentionable', { lng }), value: `${mentionable}` },
+            {
+              name: t('log.roleCreate.position', { lng }),
+              value: `${position}`,
+            },
+            {
+              name: t('log.roleCreate.displayed_separately', { lng }),
+              value: `${hoist}`,
+            },
+            {
+              name: t('log.roleCreate.mentionable', { lng }),
+              value: `${mentionable}`,
+            },
             { name: t('log.roleCreate.managed', { lng }), value: `${managed}` },
-            { name: t('log.roleCreate.emoji', { lng }), value: unicodeEmoji || '/' },
+            {
+              name: t('log.roleCreate.emoji', { lng }),
+              value: unicodeEmoji || '/',
+            },
             {
               name: t('log.roleCreate.permissions', { lng }),
               value:
@@ -40,7 +55,7 @@ export default new Event({
                   .map((perm) => `\`${perm}\``)
                   .join(', ')
                   .slice(0, 1000) || '/',
-            }
+            },
           )
           .setTimestamp(),
       ],

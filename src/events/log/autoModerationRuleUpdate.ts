@@ -21,22 +21,41 @@ export default new Event({
     const embed = new EmbedBuilder()
       .setColor(Colors.Yellow)
       .setTitle(t('log.autoModerationRuleUpdate.title', { lng }))
-      .addFields({ name: t('log.autoModerationRuleUpdate.rule', { lng }), value: `\`${newAutoModerationRule.name}\` (${newAutoModerationRule.id})` })
+      .addFields({
+        name: t('log.autoModerationRuleUpdate.rule', { lng }),
+        value: `\`${newAutoModerationRule.name}\` (${newAutoModerationRule.id})`,
+      })
       .setTimestamp();
 
     const emptyField = { name: '\u200b', value: '\u200b', inline: true };
 
     if (newAutoModerationRule.name !== oldAutoModerationRule.name)
       embed.addFields(
-        { name: t('log.autoModerationRuleUpdate.old_name', { lng }), value: `\`${oldAutoModerationRule.name}\``, inline: true },
-        { name: t('log.autoModerationRuleUpdate.new_name', { lng }), value: `\`${newAutoModerationRule.name}\``, inline: true },
-        emptyField
+        {
+          name: t('log.autoModerationRuleUpdate.old_name', { lng }),
+          value: `\`${oldAutoModerationRule.name}\``,
+          inline: true,
+        },
+        {
+          name: t('log.autoModerationRuleUpdate.new_name', { lng }),
+          value: `\`${newAutoModerationRule.name}\``,
+          inline: true,
+        },
+        emptyField,
       );
     if (newAutoModerationRule.enabled !== oldAutoModerationRule.enabled)
       embed.addFields(
-        { name: t('log.autoModerationRuleUpdate.old_enabled', { lng }), value: `${oldAutoModerationRule.enabled}`, inline: true },
-        { name: t('log.autoModerationRuleUpdate.new_enabled', { lng }), value: `${newAutoModerationRule.enabled}`, inline: true },
-        emptyField
+        {
+          name: t('log.autoModerationRuleUpdate.old_enabled', { lng }),
+          value: `${oldAutoModerationRule.enabled}`,
+          inline: true,
+        },
+        {
+          name: t('log.autoModerationRuleUpdate.new_enabled', { lng }),
+          value: `${newAutoModerationRule.enabled}`,
+          inline: true,
+        },
+        emptyField,
       );
     if (JSON.stringify(newAutoModerationRule.actions) !== JSON.stringify(oldAutoModerationRule.actions))
       embed.addFields(
@@ -58,7 +77,7 @@ export default new Event({
               .slice(0, 1000) || '/',
           inline: true,
         },
-        emptyField
+        emptyField,
       );
     if (JSON.stringify(newAutoModerationRule.exemptRoles) !== JSON.stringify(oldAutoModerationRule.exemptRoles))
       embed.addFields(
@@ -80,7 +99,7 @@ export default new Event({
               .slice(0, 1000) || '/',
           inline: true,
         },
-        emptyField
+        emptyField,
       );
     if (JSON.stringify(newAutoModerationRule.exemptChannels) !== JSON.stringify(oldAutoModerationRule.exemptChannels))
       embed.addFields(
@@ -102,7 +121,7 @@ export default new Event({
               .slice(0, 1000) || '/',
           inline: true,
         },
-        emptyField
+        emptyField,
       );
     if (JSON.stringify(newAutoModerationRule.triggerMetadata) !== JSON.stringify(oldAutoModerationRule.triggerMetadata))
       embed.addFields(
@@ -146,7 +165,7 @@ export default new Event({
           ].join('\n'),
           inline: true,
         },
-        emptyField
+        emptyField,
       );
 
     await logChannel.send({

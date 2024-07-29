@@ -13,6 +13,6 @@ const reminderSchema = new Schema<Reminder>({
   channelId: { type: String, required: true },
   message: { type: String, required: true },
   remindAt: { type: Number, required: true },
-}); 
+});
 
 export const reminderModel: Model<Reminder> = mongoose.models['reminder'] || model<Reminder>('reminder', reminderSchema);

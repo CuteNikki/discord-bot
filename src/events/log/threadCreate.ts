@@ -28,9 +28,18 @@ export default new Event({
           .setColor(Colors.Green)
           .setTitle(t('log.threadCreate.title', { lng }))
           .addFields(
-            { name: t('log.threadCreate.thread', { lng }), value: `${thread.toString()} (\`${name}\` | ${id})` },
-            { name: t('log.threadCreate.owner', { lng }), value: owner ? `<@${owner.id}> (\`${owner.user?.username}\` | ${ownerId})` : '/' },
-            { name: t('log.threadCreate.applied_tags', { lng }), value: appliedTags.join('\n').slice(0, 1000) || '/' }
+            {
+              name: t('log.threadCreate.thread', { lng }),
+              value: `${thread.toString()} (\`${name}\` | ${id})`,
+            },
+            {
+              name: t('log.threadCreate.owner', { lng }),
+              value: owner ? `<@${owner.id}> (\`${owner.user?.username}\` | ${ownerId})` : '/',
+            },
+            {
+              name: t('log.threadCreate.applied_tags', { lng }),
+              value: appliedTags.join('\n').slice(0, 1000) || '/',
+            },
           )
           .setTimestamp(),
       ],

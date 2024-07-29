@@ -42,18 +42,31 @@ export default new Command({
           .setColor(Colors.Blurple)
           .setTitle(
             weekly
-              ? t('level.leaderboard.weekly', { lng, page: index + 1, pages: chunkedLeaderboard.length })
-              : t('level.leaderboard.title', { lng, page: index + 1, pages: chunkedLeaderboard.length })
+              ? t('level.leaderboard.weekly', {
+                  lng,
+                  page: index + 1,
+                  pages: chunkedLeaderboard.length,
+                })
+              : t('level.leaderboard.title', {
+                  lng,
+                  page: index + 1,
+                  pages: chunkedLeaderboard.length,
+                }),
           )
           .setDescription(
             level
               .map(
                 ({ position, username, xp, level }) =>
-                  t('level.leaderboard.position', { lng, position, username, xp, level }) +
-                  `${position === 1 ? ' 🥇' : position === 2 ? ' 🥈' : position === 3 ? ' 🥉' : ''}`
+                  t('level.leaderboard.position', {
+                    lng,
+                    position,
+                    username,
+                    xp,
+                    level,
+                  }) + `${position === 1 ? ' 🥇' : position === 2 ? ' 🥈' : position === 3 ? ' 🥉' : ''}`,
               )
-              .join('\n')
-          )
+              .join('\n'),
+          ),
       ),
     });
   },

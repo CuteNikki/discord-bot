@@ -27,8 +27,14 @@ export default new Event({
       .setTitle(t('log.emojiUpdate.title', { lng }))
       .setThumbnail(newEmoji.imageURL({ size: 1024 }))
       .addFields(
-        { name: t('log.emojiUpdate.emoji', { lng }), value: `${newEmoji.toString()} (\`${newEmoji.name}\` | ${newEmoji.id})` },
-        { name: t('log.emojiUpdate.author', { lng }), value: author ? `${author.toString()} (\`${author.username}\` | ${author.id})` : '/' }
+        {
+          name: t('log.emojiUpdate.emoji', { lng }),
+          value: `${newEmoji.toString()} (\`${newEmoji.name}\` | ${newEmoji.id})`,
+        },
+        {
+          name: t('log.emojiUpdate.author', { lng }),
+          value: author ? `${author.toString()} (\`${author.username}\` | ${author.id})` : '/',
+        },
       )
       .setTimestamp();
 
@@ -36,9 +42,17 @@ export default new Event({
 
     if (newEmoji.name !== oldEmoji.name)
       embed.addFields(
-        { name: t('log.emojiUpdate.old_name', { lng }), value: `${oldEmoji.name}`, inline: true },
-        { name: t('log.emojiUpdate.new_name', { lng }), value: `${newEmoji.name}`, inline: true },
-        emptyField
+        {
+          name: t('log.emojiUpdate.old_name', { lng }),
+          value: `${oldEmoji.name}`,
+          inline: true,
+        },
+        {
+          name: t('log.emojiUpdate.new_name', { lng }),
+          value: `${newEmoji.name}`,
+          inline: true,
+        },
+        emptyField,
       );
     if (JSON.stringify(newEmoji.roles.cache.toJSON()) !== JSON.stringify(oldEmoji.roles.cache.toJSON())) {
       embed.addFields(
@@ -60,7 +74,7 @@ export default new Event({
               .slice(0, 1000) || '/',
           inline: true,
         },
-        emptyField
+        emptyField,
       );
     }
 

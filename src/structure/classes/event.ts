@@ -8,6 +8,6 @@ export class Event<Name extends keyof ClientEvents = any> {
       name: Name;
       once?: boolean;
       execute(client: DiscordClient, ...args: ClientEvents[Name]): any;
-    }
+    },
   ) {}
 }

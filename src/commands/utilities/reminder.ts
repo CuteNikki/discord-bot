@@ -19,13 +19,13 @@ export default new Command({
         .setName('create')
         .setDescription('Create a reminder')
         .addStringOption((option) => option.setName('message').setDescription('What to remind you about').setRequired(true))
-        .addStringOption((option) => option.setName('time').setDescription('When to remind you (example: 2 hours)').setRequired(true))
+        .addStringOption((option) => option.setName('time').setDescription('When to remind you (example: 2 hours)').setRequired(true)),
     )
     .addSubcommand((subcommand) =>
       subcommand
         .setName('delete')
         .setDescription('Delete a reminder')
-        .addStringOption((option) => option.setName('reminder-id').setDescription('The id of the reminder').setRequired(true))
+        .addStringOption((option) => option.setName('reminder-id').setDescription('The id of the reminder').setRequired(true)),
     )
     .addSubcommand((subcommand) => subcommand.setName('list').setDescription('Lists all your reminders')),
   async execute({ interaction, client }) {
@@ -48,8 +48,20 @@ export default new Command({
           if (!milliseconds || milliseconds > ms('31d')) return interaction.editReply(t('reminder.invalid_time', { lng }));
           const remindAt = Date.now() + milliseconds;
 
-          const reminder = await reminderModel.create({ userId: user.id, channelId: interaction.channel?.id, remindAt, message });
-          await interaction.editReply(t('reminder.created', { lng, time: ms(milliseconds, { long: true }), message, id: reminder._id }));
+          const reminder = await reminderModel.create({
+            userId: user.id,
+            channelId: interaction.channel?.id,
+            remindAt,
+            message,
+          });
+          await interaction.editReply(
+            t('reminder.created', {
+              lng,
+              time: ms(milliseconds, { long: true }),
+              message,
+              id: reminder._id,
+            }),
+          );
         }
         break;
       case 'delete':
@@ -73,7 +85,7 @@ export default new Command({
                   reminders.map((reminder) => ({
                     name: `${reminder._id}`,
                     value: [`<t:${Math.floor(reminder.remindAt / 1000)}:R>`, reminder.message].join('\n'),
-                  }))
+                  })),
                 ),
             ],
           });

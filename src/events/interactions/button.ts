@@ -44,10 +44,20 @@ export default new Event({
 
     // Permissions check
     if (button.options.permissions?.length) {
-      if (!interaction.member) return interaction.reply({ content: t('interactions.guild_only', { lng }), ephemeral: true });
+      if (!interaction.member)
+        return interaction.reply({
+          content: t('interactions.guild_only', { lng }),
+          ephemeral: true,
+        });
       const permissions = interaction.member.permissions as PermissionsBitField;
       if (!permissions.has(button.options.permissions))
-        return interaction.reply({ content: t('interactions.permissions', { lng, permissions: button.options.permissions.join(', ') }), ephemeral: true });
+        return interaction.reply({
+          content: t('interactions.permissions', {
+            lng,
+            permissions: button.options.permissions.join(', '),
+          }),
+          ephemeral: true,
+        });
     }
 
     // Bot permissions check
@@ -55,7 +65,10 @@ export default new Event({
       const permissions = interaction.guild.members.me.permissions;
       if (!permissions.has(button.options.botPermissions)) {
         return interaction.reply({
-          content: t('interactions.bot_permissions', { lng, permissions: button.options.botPermissions.join(', ') }),
+          content: t('interactions.bot_permissions', {
+            lng,
+            permissions: button.options.botPermissions.join(', '),
+          }),
           ephemeral: true,
         });
       }
@@ -64,7 +77,10 @@ export default new Event({
     // Check if button is developer only and return if the user's id doesn't match the developer's id
     const developerIds = keys.DEVELOPER_USER_IDS;
     if (button.options.isDeveloperOnly && !developerIds.includes(interaction.user.id))
-      return interaction.reply({ content: t('interactions.developer_only', { lng }), ephemeral: true });
+      return interaction.reply({
+        content: t('interactions.developer_only', { lng }),
+        ephemeral: true,
+      });
 
     // Check if cooldowns has the current button and add the button if it doesn't have the button
     const cooldowns = client.cooldowns;
@@ -82,7 +98,11 @@ export default new Event({
       if (now < expirationTime) {
         const expiredTimestamp = Math.round(expirationTime / 1_000);
         return interaction.reply({
-          content: t('interactions.cooldown', { lng, action: `\`${button.options.customId}\``, timestamp: `<t:${expiredTimestamp}:R>` }),
+          content: t('interactions.cooldown', {
+            lng,
+            action: `\`${button.options.customId}\``,
+            timestamp: `<t:${expiredTimestamp}:R>`,
+          }),
           ephemeral: true,
         });
       }
@@ -96,15 +116,22 @@ export default new Event({
     try {
       await button.options.execute({ client, interaction });
 
-      await client.updateClientSettings(keys.DISCORD_BOT_ID, { $inc: { ['stats.buttonsExecuted']: 1 } });
+      await client.updateClientSettings(keys.DISCORD_BOT_ID, {
+        $inc: { ['stats.buttonsExecuted']: 1 },
+      });
     } catch (error: any) {
-      const message = t('interactions.error', { lng, error: `\`${error.message}\`` });
+      const message = t('interactions.error', {
+        lng,
+        error: `\`${error.message}\``,
+      });
 
       if (interaction.deferred) interaction.editReply({ content: message });
       else interaction.reply({ content: message, ephemeral: true });
 
       await sendError({ client, error, location: 'Button Interaction Error' });
-      await client.updateClientSettings(keys.DISCORD_BOT_ID, { $inc: { ['stats.buttonsFailed']: 1 } });
+      await client.updateClientSettings(keys.DISCORD_BOT_ID, {
+        $inc: { ['stats.buttonsFailed']: 1 },
+      });
     }
   },
 });

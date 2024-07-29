@@ -32,15 +32,15 @@ export default new Command({
           subcommand
             .setName('add')
             .setDescription('Adds a join role to the list')
-            .addRoleOption((option) => option.setName('role').setDescription('The role to add').setRequired(true))
+            .addRoleOption((option) => option.setName('role').setDescription('The role to add').setRequired(true)),
         )
         .addSubcommand((subcommand) =>
           subcommand
             .setName('remove')
             .setDescription('Removes a join role from the list')
-            .addStringOption((option) => option.setName('role-id').setDescription('The role to remove').setRequired(true))
+            .addStringOption((option) => option.setName('role-id').setDescription('The role to remove').setRequired(true)),
         )
-        .addSubcommand((subcommand) => subcommand.setName('list').setDescription('Shows all the current join roles'))
+        .addSubcommand((subcommand) => subcommand.setName('list').setDescription('Shows all the current join roles')),
     )
     .addSubcommandGroup((group) =>
       group
@@ -51,11 +51,11 @@ export default new Command({
             .setName('set')
             .setDescription('Sets the join channel')
             .addChannelOption((option) =>
-              option.setName('channel').setDescription('The channel to set it to').addChannelTypes(ChannelType.GuildText).setRequired(true)
-            )
+              option.setName('channel').setDescription('The channel to set it to').addChannelTypes(ChannelType.GuildText).setRequired(true),
+            ),
         )
         .addSubcommand((subcommand) => subcommand.setName('remove').setDescription('Removes the join channel'))
-        .addSubcommand((subcommand) => subcommand.setName('show').setDescription('Shows the current join channel'))
+        .addSubcommand((subcommand) => subcommand.setName('show').setDescription('Shows the current join channel')),
     )
     .addSubcommandGroup((group) =>
       group
@@ -65,7 +65,7 @@ export default new Command({
         .addSubcommand((subcommand) => subcommand.setName('remove').setDescription('Removes the join message'))
         .addSubcommand((subcommand) => subcommand.setName('show').setDescription('Shows the current join message'))
         .addSubcommand((subcommand) => subcommand.setName('test').setDescription('Emits the join event to test welcome messages'))
-        .addSubcommand((subcommand) => subcommand.setName('placeholders').setDescription('Shows you all available placeholders'))
+        .addSubcommand((subcommand) => subcommand.setName('placeholders').setDescription('Shows you all available placeholders')),
     ),
   async execute({ client, interaction }) {
     if (!interaction.inCachedGuild()) return;
@@ -84,7 +84,9 @@ export default new Command({
               {
                 const role = options.getRole('role', true);
                 if (settings.welcome.roles.includes(role.id)) return interaction.editReply(t('welcome.roles.already', { lng }));
-                await client.updateGuildSettings(guild.id, { $push: { ['welcome.roles']: role.id } });
+                await client.updateGuildSettings(guild.id, {
+                  $push: { ['welcome.roles']: role.id },
+                });
                 await interaction.editReply(t('welcome.roles.added', { lng }));
               }
               break;
@@ -92,7 +94,9 @@ export default new Command({
               {
                 const roleId = options.getString('role-id', true);
                 if (!settings.welcome.roles.includes(roleId)) return interaction.editReply(t('welcome.roles.invalid', { lng }));
-                await client.updateGuildSettings(guild.id, { $pull: { ['welcome.roles']: roleId } });
+                await client.updateGuildSettings(guild.id, {
+                  $pull: { ['welcome.roles']: roleId },
+                });
                 await interaction.editReply(t('welcome.roles.removed', { lng }));
               }
               break;
@@ -112,21 +116,30 @@ export default new Command({
               {
                 const channel = options.getChannel('channel', true, [ChannelType.GuildText]);
                 if (settings.welcome.channelId === channel.id) return interaction.editReply(t('welcome.channel.already', { lng }));
-                await client.updateGuildSettings(guild.id, { $set: { ['welcome.channelId']: channel.id } });
+                await client.updateGuildSettings(guild.id, {
+                  $set: { ['welcome.channelId']: channel.id },
+                });
                 await interaction.editReply(t('welcome.channel.set', { lng }));
               }
               break;
             case 'remove':
               {
                 if (!settings.welcome.channelId) return interaction.editReply(t('welcome.channel.invalid', { lng }));
-                await client.updateGuildSettings(guild.id, { $set: { ['welcome.channelId']: undefined } });
+                await client.updateGuildSettings(guild.id, {
+                  $set: { ['welcome.channelId']: undefined },
+                });
                 await interaction.editReply(t('welcome.channel.removed', { lng }));
               }
               break;
             case 'show':
               {
                 if (!settings.welcome.channelId) return interaction.editReply(t('welcome.channel.none', { lng }));
-                await interaction.editReply(t('welcome.channel.show', { lng, channel: `<#${settings.welcome.channelId}>` }));
+                await interaction.editReply(
+                  t('welcome.channel.show', {
+                    lng,
+                    channel: `<#${settings.welcome.channelId}>`,
+                  }),
+                );
               }
               break;
           }
@@ -137,11 +150,21 @@ export default new Command({
           switch (options.getSubcommand()) {
             case 'set':
               {
-                const customBuilder = new CustomEmbedBuilder({ client, interaction, data: settings.welcome.message });
+                const customBuilder = new CustomEmbedBuilder({
+                  client,
+                  interaction,
+                  data: settings.welcome.message,
+                });
                 customBuilder.once('submit', async (data: Message) => {
-                  await client.updateGuildSettings(guild.id, { $set: { ['welcome.message']: data } });
+                  await client.updateGuildSettings(guild.id, {
+                    $set: { ['welcome.message']: data },
+                  });
                   interaction
-                    .editReply({ content: t('welcome.message.set', { lng }), embeds: [], components: [] })
+                    .editReply({
+                      content: t('welcome.message.set', { lng }),
+                      embeds: [],
+                      components: [],
+                    })
                     .catch((error) => logger.debug({ error }, 'Could not send reply'));
                 });
               }
@@ -205,7 +228,7 @@ export default new Command({
                     `{server.id} - ${guild.id}`,
                     `{server.member_count} - ${guild.memberCount}`,
                     `{server.icon} - [URL](<${guild.iconURL()}>)`,
-                  ].join('\n')
+                  ].join('\n'),
                 );
               }
               break;

@@ -27,7 +27,10 @@ export default new Event({
           .setColor(Colors.Red)
           .setTitle(t('log.guildMemberRemove.title', { lng }))
           .addFields(
-            { name: t('log.guildMemberRemove.member', { lng }), value: `${user.toString()} (\`${user.username}\` | ${user.id})` },
+            {
+              name: t('log.guildMemberRemove.member', { lng }),
+              value: `${user.toString()} (\`${user.username}\` | ${user.id})`,
+            },
             {
               name: t('log.guildMemberRemove.created_at', { lng }),
               value: `<t:${Math.floor(user.createdTimestamp / 1000)}:f> (<t:${Math.floor(user.createdTimestamp / 1000)}:R>)`,
@@ -35,7 +38,7 @@ export default new Event({
             {
               name: t('log.guildMemberRemove.joined_at', { lng }),
               value: `<t:${Math.floor((joinedTimestamp || 0) / 1000)}:f> (<t:${Math.floor((joinedTimestamp || 0) / 1000)}:R>)`,
-            }
+            },
           )
           .setTimestamp(),
       ],

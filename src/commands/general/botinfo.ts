@@ -47,7 +47,7 @@ export default new Command({
       const guildCount = ((await client.cluster.fetchClientValues('guilds.cache.size')) as number[]).reduce((acc, count) => acc + count, 0);
       const memberCount = ((await client.cluster.broadcastEval((c) => c.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0))) as number[]).reduce(
         (acc, count) => acc + count,
-        0
+        0,
       );
 
       await interaction.editReply({
@@ -64,14 +64,18 @@ export default new Command({
                     lng,
                     owner:
                       application.owner instanceof Team
-                        ? `<@${application.owner.ownerId}> (\`${application.owner.members.get(application.owner.ownerId ?? '')?.user.username}\` | ${
-                            application.owner.ownerId
-                          })`
+                        ? `<@${application.owner.ownerId}> (\`${application.owner.members.get(application.owner.ownerId ?? '')?.user.username}\` | ${application.owner.ownerId})`
                         : `<@${application.owner?.id}> (\`${application.owner?.username}\` | ${application.owner?.id})`,
                   }),
-                  t('botinfo.general.created', { lng, created: `<t:${Math.floor(application.createdTimestamp / 1000)}:D>` }),
+                  t('botinfo.general.created', {
+                    lng,
+                    created: `<t:${Math.floor(application.createdTimestamp / 1000)}:D>`,
+                  }),
                   t('botinfo.general.ping', { lng, ping: client.ws.ping }),
-                  t('botinfo.general.uptime', { lng, uptime: `<t:${Math.floor(interaction.client.readyTimestamp / 1000)}:R>` }),
+                  t('botinfo.general.uptime', {
+                    lng,
+                    uptime: `<t:${Math.floor(interaction.client.readyTimestamp / 1000)}:R>`,
+                  }),
                 ].join('\n'),
               },
               {
@@ -80,7 +84,12 @@ export default new Command({
                   t('botinfo.system.os', { lng, operatingSystem }),
                   t('botinfo.system.cpu_model', { lng, cpuModel }),
                   t('botinfo.system.cpu_usage', { lng, cpuUsage }),
-                  t('botinfo.system.mem_usage', { lng, memoryUsage, memoryUsed, memoryTotal }),
+                  t('botinfo.system.mem_usage', {
+                    lng,
+                    memoryUsage,
+                    memoryUsed,
+                    memoryTotal,
+                  }),
                   t('botinfo.system.node', { lng, version: process.version }),
                   t('botinfo.system.discord', { lng, version }),
                 ].join('\n'),
@@ -88,7 +97,10 @@ export default new Command({
               {
                 name: t('botinfo.database.title', { lng }),
                 value: [
-                  t('botinfo.database.state', { lng, state: dbStates[mongoose.connection.readyState] }),
+                  t('botinfo.database.state', {
+                    lng,
+                    state: dbStates[mongoose.connection.readyState],
+                  }),
                   t('botinfo.database.weekly', {
                     lng,
                     date: database.lastWeeklyClear ? `<t:${Math.floor(database.lastWeeklyClear / 1000)}:F>` : '/',
@@ -100,15 +112,36 @@ export default new Command({
                 value: [
                   t('botinfo.stats.guilds', { lng, guildCount }),
                   t('botinfo.stats.members', { lng, memberCount }),
-                  t('botinfo.stats.commands', { lng, commandCount: commands.size }),
-                  t('botinfo.stats.executed_commands', { lng, executedCommands: stats.commandsExecuted }),
-                  t('botinfo.stats.failed_commands', { lng, failedCommands: stats.commandsFailed }),
-                  t('botinfo.stats.buttons_executed', { lng, buttonsExecuted: stats.buttonsExecuted }),
-                  t('botinfo.stats.buttons_failed', { lng, buttonsFailed: stats.buttonsFailed }),
-                  t('botinfo.stats.guilds_joined', { lng, guildsJoined: stats.guildsJoined }),
-                  t('botinfo.stats.guilds_left', { lng, guildsLeft: stats.guildsLeft }),
+                  t('botinfo.stats.commands', {
+                    lng,
+                    commandCount: commands.size,
+                  }),
+                  t('botinfo.stats.executed_commands', {
+                    lng,
+                    executedCommands: stats.commandsExecuted,
+                  }),
+                  t('botinfo.stats.failed_commands', {
+                    lng,
+                    failedCommands: stats.commandsFailed,
+                  }),
+                  t('botinfo.stats.buttons_executed', {
+                    lng,
+                    buttonsExecuted: stats.buttonsExecuted,
+                  }),
+                  t('botinfo.stats.buttons_failed', {
+                    lng,
+                    buttonsFailed: stats.buttonsFailed,
+                  }),
+                  t('botinfo.stats.guilds_joined', {
+                    lng,
+                    guildsJoined: stats.guildsJoined,
+                  }),
+                  t('botinfo.stats.guilds_left', {
+                    lng,
+                    guildsLeft: stats.guildsLeft,
+                  }),
                 ].join('\n'),
-              }
+              },
             ),
         ],
       });

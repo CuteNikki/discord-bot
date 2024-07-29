@@ -29,8 +29,14 @@ export default new Event({
           .setTitle(t('log.guildScheduledEventUserRemove.title', { lng }))
           .setImage(event.coverImageURL({ size: 1024 }))
           .addFields(
-            { name: t('log.guildScheduledEventUserRemove.event', { lng }), value: `[${event.name}](${event.url})` },
-            { name: t('log.guildScheduledEventUserRemove.user', { lng }), value: `${user.toString()} (\`${user.username}\` | ${user.id})` }
+            {
+              name: t('log.guildScheduledEventUserRemove.event', { lng }),
+              value: `[${event.name}](${event.url})`,
+            },
+            {
+              name: t('log.guildScheduledEventUserRemove.user', { lng }),
+              value: `${user.toString()} (\`${user.username}\` | ${user.id})`,
+            },
           )
           .setTimestamp(),
       ],

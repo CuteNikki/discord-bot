@@ -30,11 +30,23 @@ export default new Event({
           .setTitle(t('log.stickerCreate.title', { lng }))
           .setThumbnail(url)
           .addFields(
-            { name: t('log.stickerCreate.sticker', { lng }), value: `\`${name}\` (${id})` },
-            { name: t('log.stickerCreate.description', { lng }), value: description || '/' },
-            { name: t('log.stickerCreate.format', { lng }), value: StickerFormatType[format] },
+            {
+              name: t('log.stickerCreate.sticker', { lng }),
+              value: `\`${name}\` (${id})`,
+            },
+            {
+              name: t('log.stickerCreate.description', { lng }),
+              value: description || '/',
+            },
+            {
+              name: t('log.stickerCreate.format', { lng }),
+              value: StickerFormatType[format],
+            },
             { name: t('log.stickerCreate.tags', { lng }), value: tags || '/' },
-            { name: t('log.stickerCreate.author', { lng }), value: user ? `${user.toString()} (\`${user.username}\` | ${user.id})` : '/' }
+            {
+              name: t('log.stickerCreate.author', { lng }),
+              value: user ? `${user.toString()} (\`${user.username}\` | ${user.id})` : '/',
+            },
           )
           .setTimestamp(),
       ],

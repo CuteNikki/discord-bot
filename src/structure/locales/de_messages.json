@@ -782,8 +782,8 @@
       "disabled": "deaktiviert"
     },
     "leaderboard": {
-      "title": "Bestenliste (Seite {{page}}/{{pages}})",
-      "weekly": "Wöchentliche Bestenliste (Seite {{page}}/{{pages}})",
+      "title": "Bestenliste",
+      "weekly": "Wöchentliche Bestenliste",
       "position": "{{position}}. {{username}} ({{xp}}XP/LVL{{level}})"
     },
     "announcement": {
@@ -863,7 +863,6 @@
     "guilds": "Server: {{guilds}}",
     "members": "Mitglieder: {{members}}",
     "pin": "Wenn du eine rote Stecknadel siehst, bedeutet das, dass du dich auf diesem Shard befindest.",
-    "page": "Seite {{page}}/{{pages}}",
     "shards": {
       "title": "Shard {{id}}",
       "status": "Status: {{status}}",
@@ -875,7 +874,7 @@
   "infractions": {
     "history": {
       "none": "Der User hat keine Verstöße!",
-      "title": "Verstöße (Seite {{page}}/{{pages}})",
+      "title": "Verstöße",
       "id": "Id: {{id}}",
       "type": "Typ: {{type}}",
       "staff": "Teammitglied: {{staff}}",

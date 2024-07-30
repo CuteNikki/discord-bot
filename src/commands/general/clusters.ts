@@ -95,14 +95,7 @@ export default new Command({
                 inline: true,
               };
             }),
-          )
-          .setFooter({
-            text: t('clusters.page', {
-              lng,
-              page: cluster.clusterId + 1,
-              pages: clusterData.length,
-            }),
-          }),
+          ),
       );
     }
 

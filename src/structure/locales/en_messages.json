@@ -783,8 +783,8 @@
       "disabled": "disabled"
     },
     "leaderboard": {
-      "title": "Leaderboard (Page {{page}}/{{pages}})",
-      "weekly": "Weekly Leaderboard (Page {{page}}/{{pages}})",
+      "title": "Leaderboard",
+      "weekly": "Weekly Leaderboard",
       "position": "{{position}}. {{username}} ({{xp}}XP/LVL{{level}})"
     },
     "announcement": {
@@ -864,7 +864,6 @@
     "guilds": "Guilds: {{guilds}}",
     "members": "Members: {{members}}",
     "pin": "If you spot a red pin it means that you are currently on that shard",
-    "page": "Page {{page}}/{{pages}}",
     "shards": {
       "title": "Shard {{id}}",
       "status": "Status: {{status}}",
@@ -876,7 +875,7 @@
   "infractions": {
     "history": {
       "none": "That user does not have any infractions!",
-      "title": "Infractions (Page {{page}}/{{pages}})",
+      "title": "Infractions",
       "id": "Id: {{id}}",
       "type": "Type: {{type}}",
       "staff": "Staff: {{staff}}",

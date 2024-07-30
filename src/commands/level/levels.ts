@@ -40,19 +40,7 @@ export default new Command({
       embeds: chunkedLeaderboard.map((level, index) =>
         new EmbedBuilder()
           .setColor(Colors.Blurple)
-          .setTitle(
-            weekly
-              ? t('level.leaderboard.weekly', {
-                  lng,
-                  page: index + 1,
-                  pages: chunkedLeaderboard.length,
-                })
-              : t('level.leaderboard.title', {
-                  lng,
-                  page: index + 1,
-                  pages: chunkedLeaderboard.length,
-                }),
-          )
+          .setTitle(weekly ? t('level.leaderboard.weekly', { lng }) : t('level.leaderboard.title', { lng }))
           .setDescription(
             level
               .map(

@@ -61,13 +61,7 @@ export default new Command({
           embeds: chunkedInfractions.map((chunk, index) =>
             new EmbedBuilder()
               .setColor(Colors.Orange)
-              .setTitle(
-                t('infractions.history.title', {
-                  lng,
-                  page: index + 1,
-                  pages: chunkedInfractions.length,
-                }),
-              )
+              .setTitle(t('infractions.history.title', { lng }))
               .setDescription(
                 chunk
                   .map((infraction) =>

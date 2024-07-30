@@ -332,10 +332,10 @@ export default new Command({
                 await pagination({
                   client,
                   interaction,
-                  embeds: chunkedUsers.map((chunk, index) =>
+                  embeds: chunkedUsers.map((chunk) =>
                     new EmbedBuilder()
                       .setColor(Colors.Aqua)
-                      .setTitle(`Banned Users (Page ${index + 1}/${chunkedUsers.length})`)
+                      .setTitle(`Banned Users`)
                       .setDescription(chunk.map((user) => `<@${user.userId}> (${user.userId})`).join('\n\n') || '/'),
                   ),
                 });

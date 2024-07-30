@@ -14,6 +14,7 @@ export function chunk<type>(arr: type[], size: number): type[][] {
 enum CustomIds {
   First = 'PAGINATION_FIRST',
   Previous = 'PAGINATION_PREV',
+  Page = 'PAGINATION_PAGE',
   Next = 'PAGINATION_NEXT',
   Last = 'PAGINATION_LAST',
 }
@@ -47,6 +48,7 @@ export async function pagination({
 
   const buttonFirst = new ButtonBuilder().setCustomId(CustomIds.First).setStyle(ButtonStyle.Secondary).setEmoji('⏪').setDisabled(true);
   const buttonPrev = new ButtonBuilder().setCustomId(CustomIds.Previous).setStyle(ButtonStyle.Secondary).setEmoji('⬅️').setDisabled(true);
+  const buttonPage = new ButtonBuilder().setCustomId(CustomIds.Page).setStyle(ButtonStyle.Secondary).setLabel(`1 / ${embeds.length}`).setDisabled(true);
   const buttonNext = new ButtonBuilder()
     .setCustomId(CustomIds.Next)
     .setStyle(ButtonStyle.Secondary)
@@ -58,17 +60,14 @@ export async function pagination({
     .setEmoji('⏩')
     .setDisabled(embeds.length === 1 ? true : false);
 
-  const components = new ActionRowBuilder<ButtonBuilder>();
-  if (extraButton) components.addComponents(extraButton);
-  components.addComponents(buttonFirst, buttonPrev, buttonNext, buttonLast);
+  const components = [new ActionRowBuilder<ButtonBuilder>().setComponents(buttonFirst, buttonPrev, buttonPage, buttonNext, buttonLast)];
+  if (extraButton) components.push(new ActionRowBuilder<ButtonBuilder>().setComponents(extraButton));
 
   let index = 0;
   const firstPageIndex = 0;
   const lastPageIndex = embeds.length - 1;
 
-  const msg = await interaction
-    .editReply({ content, embeds: [embeds[index]], components: [components] })
-    .catch((error) => logger.debug({ error }, 'Could not edit message'));
+  const msg = await interaction.editReply({ content, embeds: [embeds[index]], components }).catch((error) => logger.debug({ error }, 'Could not edit message'));
   if (!msg) return;
 
   const collector = msg.createMessageComponentCollector({
@@ -107,8 +106,9 @@ export async function pagination({
       buttonNext.setDisabled(false);
       buttonLast.setDisabled(false);
     }
+    buttonPage.setLabel(`${index + 1} / ${embeds.length} `);
 
-    await int.editReply({ embeds: [embeds[index]], components: [components] }).catch((error) => logger.debug({ error }, 'Could not edit message'));
+    await int.editReply({ embeds: [embeds[index]], components }).catch((error) => logger.debug({ error }, 'Could not edit message'));
   });
 
   collector.on('end', async (_, reason) => {
@@ -126,6 +126,6 @@ export async function pagination({
         text: t('pagination', { lng, time: ms(time, { long: true }) }),
       });
 
-    interaction.editReply({ embeds: [embed], components: [components] }).catch((error) => logger.debug({ error }, 'Could not edit message'));
+    interaction.editReply({ embeds: [embed], components }).catch((error) => logger.debug({ error }, 'Could not edit message'));
   });
 }

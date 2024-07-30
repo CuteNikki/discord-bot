@@ -45,8 +45,8 @@ export default new Modal({
             ),
         ],
       });
-    } catch (error: any) {
-      logger.error(error, 'Eval Error');
+    } catch (err: any) {
+      logger.error({ err }, 'Eval Error');
 
       return interaction.editReply({
         embeds: [
@@ -60,7 +60,7 @@ export default new Modal({
             .setDescription(
               codeBlock(
                 'ts',
-                inspect(error, { depth })
+                inspect(err, { depth })
                   .replaceAll(interaction.client.token, 'no')
                   .replaceAll(interaction.client.token.split('').reverse().join(''), 'no')
                   .replaceAll('\\n', '\n')

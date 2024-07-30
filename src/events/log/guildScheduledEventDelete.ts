@@ -11,7 +11,7 @@ export default new Event({
   async execute(client, event) {
     const { guild, name, creator, description, scheduledStartTimestamp, scheduledEndTimestamp, url, createdTimestamp, channel, entityMetadata } = event;
     if (!guild) return;
-    if (event.partial) await event.fetch().catch((error) => logger.debug({ error }, 'Could not fetch guild scheduled event'));
+    if (event.partial) await event.fetch().catch((err) => logger.debug({ err }, 'Could not fetch guild scheduled event'));
 
     const config = await client.getGuildSettings(guild.id);
 

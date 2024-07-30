@@ -108,7 +108,7 @@ export class Snake {
         ],
         components: this.getComponents(),
       })
-      .catch((error) => logger.debug({ error }, 'Could not send message'));
+      .catch((err) => logger.debug({ err }, 'Could not send message'));
     if (!message) return;
 
     const collector = message.createMessageComponentCollector({
@@ -116,7 +116,7 @@ export class Snake {
     });
 
     collector.on('collect', async (buttonInteraction) => {
-      await buttonInteraction.deferUpdate().catch((error) => logger.debug({ error }, 'Could not defer update'));
+      await buttonInteraction.deferUpdate().catch((err) => logger.debug({ err }, 'Could not defer update'));
 
       if (buttonInteraction.user.id !== user.id)
         return buttonInteraction
@@ -126,7 +126,7 @@ export class Snake {
             }),
             ephemeral: true,
           })
-          .catch((error) => logger.debug({ error }, 'Could not follow up'));
+          .catch((err) => logger.debug({ err }, 'Could not follow up'));
 
       const snakeHead = this.snake[0];
       const nextCoordinates = { x: snakeHead.x, y: snakeHead.y };
@@ -176,7 +176,7 @@ export class Snake {
               }),
           ],
         })
-        .catch((error) => logger.debug({ error }, 'Could not edit message'));
+        .catch((err) => logger.debug({ err }, 'Could not edit message'));
     });
 
     collector.on('end', async () => {
@@ -207,7 +207,7 @@ export class Snake {
         ],
         components: this.disableButtons(this.getComponents()),
       })
-      .catch((error) => logger.debug({ error }, 'Could not edit message'));
+      .catch((err) => logger.debug({ err }, 'Could not edit message'));
   }
 
   private isSnake(coordinates: Coordinates) {

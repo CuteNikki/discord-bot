@@ -58,7 +58,7 @@ export default new Command({
     const { options, guild, member, user } = interaction;
 
     const target = options.getUser('user', true);
-    const targetMember = await guild.members.fetch(target.id).catch((error) => logger.debug({ error, userId: target.id }, 'Could not fetch target member'));
+    const targetMember = await guild.members.fetch(target.id).catch((err) => logger.debug({ err, userId: target.id }, 'Could not fetch target member'));
 
     const lng = await client.getUserLanguage(interaction.user.id);
     const targetLng = await client.getUserLanguage(target.id);
@@ -90,7 +90,7 @@ export default new Command({
 
     if (targetMember && !targetMember.bannable) return interaction.editReply(t('ban.target.bannable', { lng }));
 
-    const isBanned = await guild.bans.fetch(target.id).catch((error) => logger.debug({ error, userId: target.id }, 'Could not fetch target ban'));
+    const isBanned = await guild.bans.fetch(target.id).catch((err) => logger.debug({ err, userId: target.id }, 'Could not fetch target ban'));
     if (isBanned) return interaction.editReply(t('ban.target.banned', { lng }));
 
     const msg = await interaction.editReply({
@@ -117,7 +117,7 @@ export default new Command({
     } else if (collector.customId === CustomIds.Confirm) {
       const banned = await guild.bans
         .create(target.id, { reason, deleteMessageSeconds: history })
-        .catch((error) => logger.debug({ error, userId: target.id }, 'Could not ban user'));
+        .catch((err) => logger.debug({ err, userId: target.id }, 'Could not ban user'));
       if (!banned) return collector.update(t('ban.failed', { lng }));
 
       const receivedDM = await client.users
@@ -129,7 +129,7 @@ export default new Command({
             duration: duration ? durationText : 'forever',
           }),
         })
-        .catch((error) => logger.debug({ error, userId: target.id }, 'Could not send DM'));
+        .catch((err) => logger.debug({ err, userId: target.id }, 'Could not send DM'));
       await collector.update({
         content: [
           t('ban.confirmed', {

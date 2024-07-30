@@ -15,7 +15,7 @@ export default new Event({
     const config = await client.getGuildSettings(guild.id);
 
     if (!config.welcome.enabled) return;
-    await newMember.roles.add(config.welcome.roles).catch((error) => logger.debug({ error }, 'Could not add role(s)'));
+    await newMember.roles.add(config.welcome.roles).catch((err) => logger.debug({ err }, 'Could not add role(s)'));
 
     if (!config.welcome.channelId) return;
     const welcomeChannel = await guild.channels.fetch(config.welcome.channelId);
@@ -53,6 +53,6 @@ export default new Event({
           }).setColor(embedData.color as ColorResolvable),
         ],
       })
-      .catch((error) => logger.debug({ error }, 'Could not send welcome message'));
+      .catch((err) => logger.debug({ err }, 'Could not send welcome message'));
   },
 });

@@ -17,10 +17,10 @@ export default new Command<ApplicationCommandType.User>({
     const lng = await client.getUserLanguage(interaction.user.id);
     await interaction.deferReply({ ephemeral: true });
 
-    const user = await client.users.fetch(interaction.targetId, { force: true }).catch((error) => logger.debug({ error }, 'Could not fetch user'));
+    const user = await client.users.fetch(interaction.targetId, { force: true }).catch((err) => logger.debug({ err }, 'Could not fetch user'));
     if (!user || !user.displayAvatarURL()) return interaction.editReply({ content: t('avatar.user', { lng }) });
 
-    const member = await interaction.guild?.members.fetch(user.id).catch((error) => logger.debug({ error, userId: user.id }, 'Could not fetch member'));
+    const member = await interaction.guild?.members.fetch(user.id).catch((err) => logger.debug({ err, userId: user.id }, 'Could not fetch member'));
 
     const embeds: EmbedBuilder[] = [
       new EmbedBuilder()

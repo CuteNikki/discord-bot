@@ -98,14 +98,14 @@ export class Connect4 extends Opponent {
         ],
         components: this.getComponents(),
       })
-      .catch((error) => logger.debug({ error }, 'Could not send message'));
+      .catch((err) => logger.debug({ err }, 'Could not send message'));
 
     const collector = message.createMessageComponentCollector({
       idle: 60 * 1000,
     });
 
     collector.on('collect', async (buttonInteraction) => {
-      await buttonInteraction.deferUpdate().catch((error) => logger.debug({ error }, 'Could not defer update'));
+      await buttonInteraction.deferUpdate().catch((err) => logger.debug({ err }, 'Could not defer update'));
 
       if (buttonInteraction.user.id !== user.id && buttonInteraction.user.id !== opponent.id)
         return buttonInteraction
@@ -115,7 +115,7 @@ export class Connect4 extends Opponent {
             }),
             ephemeral: true,
           })
-          .catch((error) => logger.debug({ error }, 'Could not follow up'));
+          .catch((err) => logger.debug({ err }, 'Could not follow up'));
 
       if (this.playerTurn && buttonInteraction.user.id !== user.id)
         return buttonInteraction
@@ -123,7 +123,7 @@ export class Connect4 extends Opponent {
             content: t('games.connect.turn', { lng: opponentLng }),
             ephemeral: true,
           })
-          .catch((error) => logger.debug({ error }, 'Could not follow up'));
+          .catch((err) => logger.debug({ err }, 'Could not follow up'));
 
       if (!this.playerTurn && buttonInteraction.user.id !== opponent.id)
         return buttonInteraction
@@ -131,7 +131,7 @@ export class Connect4 extends Opponent {
             content: t('games.connect.turn', { lng }),
             ephemeral: true,
           })
-          .catch((error) => logger.debug({ error }, 'Could not follow up'));
+          .catch((err) => logger.debug({ err }, 'Could not follow up'));
 
       const column = parseInt(buttonInteraction.customId.split('_')[1]) - 1;
       const coords = { x: -1, y: -1 };
@@ -173,7 +173,7 @@ export class Connect4 extends Opponent {
           ],
           components: buttonInteraction.message.components,
         })
-        .catch((error) => logger.debug({ error }, 'Could not edit message'));
+        .catch((err) => logger.debug({ err }, 'Could not edit message'));
     });
 
     collector.on('end', async (_, reason) => {
@@ -279,7 +279,7 @@ export class Connect4 extends Opponent {
         embeds: [embed],
         components: this.disableButtons(this.getComponents()),
       })
-      .catch((error) => logger.debug({ error }, 'Could not edit message'));
+      .catch((err) => logger.debug({ err }, 'Could not edit message'));
   }
 
   private getComponents() {

@@ -79,7 +79,7 @@ export default new Button({
           },
         ],
       })
-      .catch((error) => logger.debug({ error }, 'Could not create ticket channel'));
+      .catch((err) => logger.debug({ err }, 'Could not create ticket channel'));
     if (!channel) return interaction.editReply({ content: t('tickets.error', { lng }) });
 
     await ticketModel.create({

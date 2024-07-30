@@ -9,7 +9,7 @@ export default new Event({
   name: Events.GuildScheduledEventUserRemove,
   once: false,
   async execute(client, event, user) {
-    if (event.partial) await event.fetch().catch((error) => logger.debug({ error }, 'Could not fetch guild scheduled event'));
+    if (event.partial) await event.fetch().catch((err) => logger.debug({ err }, 'Could not fetch guild scheduled event'));
     const guild = event.guild;
     if (!guild) return;
 

@@ -64,7 +64,7 @@ export default new Event({
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message: message.content }),
-    }).catch((error) => logger.debug({ error }, 'Could not fetch profanity API'));
+    }).catch((err) => logger.debug({ err }, 'Could not fetch profanity API'));
     if (res) {
       const response: { isProfanity: boolean; score: number } = await res.json();
       // Replace message content if it contains profanity
@@ -88,7 +88,7 @@ export default new Event({
     // Fetch the target channel
     const targetChannel = await client.channels
       .fetch(connectedChannelId)
-      .catch((error) => logger.debug({ error, channelId: connectedChannelId }, 'Could not fetch channel'));
+      .catch((err) => logger.debug({ err, channelId: connectedChannelId }, 'Could not fetch channel'));
     // Ensure the target channel is a text channel
     if (!targetChannel || targetChannel.type !== ChannelType.GuildText) return;
 
@@ -96,11 +96,11 @@ export default new Event({
     if (message.deletable)
       await message
         .delete()
-        .catch((error) => logger.debug({ error, messageId: message.id }, 'Could not delete message'))
+        .catch((err) => logger.debug({ err, messageId: message.id }, 'Could not delete message'))
         .then(async () => {
-          await channel.send({ embeds: [embed] }).catch((error) => logger.debug({ error, channelId: channel.id }, 'Could not send message'));
+          await channel.send({ embeds: [embed] }).catch((err) => logger.debug({ err, channelId: channel.id }, 'Could not send message'));
         });
     // Send the embed to the target channel
-    await targetChannel.send({ embeds: [otherEmbed] }).catch((error) => logger.debug({ error, channelId: targetChannel.id }, 'Could not send message'));
+    await targetChannel.send({ embeds: [otherEmbed] }).catch((err) => logger.debug({ err, channelId: targetChannel.id }, 'Could not send message'));
   },
 });

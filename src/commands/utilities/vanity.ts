@@ -19,7 +19,7 @@ export default new Command({
     const lng = await client.getUserLanguage(interaction.user.id);
 
     const vanity = interaction.options.getString('vanity', true);
-    const invite = await client.fetchInvite(vanity).catch((error) => logger.debug({ error, vanity }, 'Could not fetch invite'));
+    const invite = await client.fetchInvite(vanity).catch((err) => logger.debug({ err, vanity }, 'Could not fetch invite'));
 
     if (!invite || !invite.guild || !invite.guild.vanityURLCode || invite.guild.vanityURLCode !== vanity) {
       return interaction.editReply({ content: t('vanity.not_found', { lng }) });

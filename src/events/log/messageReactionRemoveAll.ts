@@ -11,7 +11,7 @@ export default new Event({
   async execute(client, message, reactions) {
     const guild = message.guild;
     if (!guild || !message.author || message.author.bot) return;
-    if (message.partial) await message.fetch().catch((error) => logger.debug({ error }, 'Could not fetch message'));
+    if (message.partial) await message.fetch().catch((err) => logger.debug({ err }, 'Could not fetch message'));
 
     const config = await client.getGuildSettings(guild.id);
 

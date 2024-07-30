@@ -18,7 +18,7 @@ export default new Event({
     const logChannel = await guild.channels.fetch(config.log.channelId);
     if (!logChannel || logChannel.type !== ChannelType.GuildText) return;
 
-    const owner = await thread.fetchOwner().catch((error) => logger.debug({ error }, 'Could not fetch thread owner'));
+    const owner = await thread.fetchOwner().catch((err) => logger.debug({ err }, 'Could not fetch thread owner'));
 
     const lng = config.language;
 

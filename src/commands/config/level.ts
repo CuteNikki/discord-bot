@@ -587,7 +587,7 @@ export default new Command({
                 if (member && rewards.length) {
                   await member.roles
                     .add(rewards.map((reward) => reward.roleId))
-                    .catch((error) => logger.debug({ error, userId: user.id }, 'Could not add role(s)'));
+                    .catch((err) => logger.debug({ err, userId: user.id }, 'Could not add role(s)'));
                 }
 
                 interaction.editReply(
@@ -620,7 +620,7 @@ export default new Command({
                       ...member.roles.cache.map((role) => role.id).filter((id) => !oldRewards.map((reward) => reward.roleId).includes(id)),
                       ...newRewards.map((reward) => reward.roleId),
                     ])
-                    .catch((error) => logger.debug({ error, userId: user.id }, 'Could not set role(s)'));
+                    .catch((err) => logger.debug({ err, userId: user.id }, 'Could not set role(s)'));
                 }
 
                 interaction.editReply(
@@ -648,7 +648,7 @@ export default new Command({
                 if (member && rewards.length) {
                   await member.roles
                     .add(rewards.map((reward) => reward.roleId))
-                    .catch((error) => logger.debug({ error, userId: user.id }, 'Could not add role(s)'));
+                    .catch((err) => logger.debug({ err, userId: user.id }, 'Could not add role(s)'));
                 }
 
                 interaction.editReply(
@@ -682,7 +682,7 @@ export default new Command({
                 if (member && rewards.length) {
                   await member.roles
                     .add(rewards.map((reward) => reward.roleId))
-                    .catch((error) => logger.debug({ error, userId: user.id }, 'Could not add role(s)'));
+                    .catch((err) => logger.debug({ err, userId: user.id }, 'Could not add role(s)'));
                 }
 
                 interaction.editReply(
@@ -715,7 +715,7 @@ export default new Command({
                       ...member.roles.cache.map((role) => role.id).filter((id) => !oldRewards.map((reward) => reward.roleId).includes(id)),
                       ...newRewards.map((reward) => reward.roleId),
                     ])
-                    .catch((error) => logger.debug({ error, userId: user.id }, 'Could not set role(s)'));
+                    .catch((err) => logger.debug({ err, userId: user.id }, 'Could not set role(s)'));
                 }
 
                 interaction.editReply(
@@ -743,7 +743,7 @@ export default new Command({
                 if (member && rewards.length) {
                   await member.roles
                     .add(rewards.map((reward) => reward.roleId))
-                    .catch((error) => logger.debug({ error, userId: user.id }, 'Could not add role(s)'));
+                    .catch((err) => logger.debug({ err, userId: user.id }, 'Could not add role(s)'));
                 }
 
                 interaction.editReply(

@@ -119,16 +119,16 @@ export default new Event({
       await client.updateClientSettings(keys.DISCORD_BOT_ID, {
         $inc: { ['stats.buttonsExecuted']: 1 },
       });
-    } catch (error: any) {
+    } catch (err: any) {
       const message = t('interactions.error', {
         lng,
-        error: `\`${error.message}\``,
+        error: `\`${err.message}\``,
       });
 
       if (interaction.deferred) interaction.editReply({ content: message });
       else interaction.reply({ content: message, ephemeral: true });
 
-      await sendError({ client, error, location: 'Button Interaction Error' });
+      await sendError({ client, err, location: 'Button Interaction Error' });
       await client.updateClientSettings(keys.DISCORD_BOT_ID, {
         $inc: { ['stats.buttonsFailed']: 1 },
       });

@@ -15,7 +15,7 @@ export default new Event({
 
     if (!config.log.enabled || !config.log.events.applicationCommandPermissionsUpdate || !config.log.channelId) return;
 
-    const guild = await client.guilds.fetch(guildId).catch((error) => logger.debug({ error, guildId }, 'Could not fetch guild'));
+    const guild = await client.guilds.fetch(guildId).catch((err) => logger.debug({ err, guildId }, 'Could not fetch guild'));
     if (!guild) return;
 
     const logChannel = await guild.channels.fetch(config.log.channelId);

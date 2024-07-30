@@ -165,7 +165,7 @@ export default new Command({
                       embeds: [],
                       components: [],
                     })
-                    .catch((error) => logger.debug({ error }, 'Could not send reply'));
+                    .catch((err) => logger.debug({ err }, 'Could not send reply'));
                 });
               }
               break;

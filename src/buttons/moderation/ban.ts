@@ -17,7 +17,7 @@ export default new Button({
     const { guild } = interaction;
 
     const targetId = interaction.customId.split('_')[1];
-    const target = await client.users.fetch(targetId).catch((error) => logger.debug({ error, targetId }, 'Could not fetch user'));
+    const target = await client.users.fetch(targetId).catch((err) => logger.debug({ err, targetId }, 'Could not fetch user'));
 
     const lng = await client.getUserLanguage(interaction.user.id);
 
@@ -28,7 +28,7 @@ export default new Button({
 
     const banned = await guild.bans
       .create(target.id, { reason, deleteMessageSeconds: 604800 })
-      .catch((error) => logger.debug({ error, targetId }, 'Could not ban user'));
+      .catch((err) => logger.debug({ err, targetId }, 'Could not ban user'));
     if (!banned) return interaction.reply(t('ban.failed', { lng }));
 
     const historyOptions = {
@@ -52,7 +52,7 @@ export default new Button({
           duration: 'forever',
         }),
       })
-      .catch((error) => logger.debug({ error, targetId }, 'Could not send DM to user'));
+      .catch((err) => logger.debug({ err, targetId }, 'Could not send DM to user'));
     await interaction.reply({
       content: [
         t('ban.confirmed', {

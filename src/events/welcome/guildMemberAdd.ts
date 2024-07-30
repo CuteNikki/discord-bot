@@ -11,12 +11,12 @@ export default new Event({
   async execute(client, member) {
     const { guild, user, partial, pending } = member;
     if (user.bot || pending) return;
-    if (partial) await member.fetch().catch((error) => logger.debug({ error }, 'Could not fetch member'));
+    if (partial) await member.fetch().catch((err) => logger.debug({ err }, 'Could not fetch member'));
 
     const config = await client.getGuildSettings(guild.id);
 
     if (!config.welcome.enabled) return;
-    await member.roles.add(config.welcome.roles).catch((error) => logger.debug({ error }, 'Could not add role(s)'));
+    await member.roles.add(config.welcome.roles).catch((err) => logger.debug({ err }, 'Could not add role(s)'));
 
     if (!config.welcome.channelId) return;
     const welcomeChannel = await guild.channels.fetch(config.welcome.channelId);
@@ -54,6 +54,6 @@ export default new Event({
           }).setColor(embedData.color as ColorResolvable),
         ],
       })
-      .catch((error) => logger.debug({ error }, 'Could not send welcome message'));
+      .catch((err) => logger.debug({ err }, 'Could not send welcome message'));
   },
 });

@@ -18,7 +18,7 @@ export default new Event({
     const logChannel = await guild.channels.fetch(config.log.channelId);
     if (!logChannel || logChannel.type !== ChannelType.GuildText) return;
 
-    const author = await newEmoji.fetchAuthor().catch((error) => logger.debug({ error }, 'Could not fetch emoji author'));
+    const author = await newEmoji.fetchAuthor().catch((err) => logger.debug({ err }, 'Could not fetch emoji author'));
 
     const lng = config.language;
 

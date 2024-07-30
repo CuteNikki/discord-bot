@@ -67,7 +67,7 @@ export async function pagination({
   const firstPageIndex = 0;
   const lastPageIndex = embeds.length - 1;
 
-  const msg = await interaction.editReply({ content, embeds: [embeds[index]], components }).catch((error) => logger.debug({ error }, 'Could not edit message'));
+  const msg = await interaction.editReply({ content, embeds: [embeds[index]], components }).catch((err) => logger.debug({ err }, 'Could not edit message'));
   if (!msg) return;
 
   const collector = msg.createMessageComponentCollector({
@@ -77,7 +77,7 @@ export async function pagination({
   });
 
   collector.on('collect', async (int) => {
-    await int.deferUpdate().catch((error) => logger.debug({ error }, 'Could not defer update'));
+    await int.deferUpdate().catch((err) => logger.debug({ err }, 'Could not defer update'));
 
     if (int.customId === CustomIds.First) {
       if (index > firstPageIndex) index = firstPageIndex;
@@ -89,7 +89,7 @@ export async function pagination({
       if (index < lastPageIndex) index = lastPageIndex;
     } else if (extraButton && extraButtonFunction) {
       collector.stop('extra');
-      return await extraButtonFunction(int).catch((error) => logger.debug({ error }, 'Could not execute extra button function'));
+      return await extraButtonFunction(int).catch((err) => logger.debug({ err }, 'Could not execute extra button function'));
     }
 
     if (index === firstPageIndex) {
@@ -108,7 +108,7 @@ export async function pagination({
     }
     buttonPage.setLabel(`${index + 1} / ${embeds.length} `);
 
-    await int.editReply({ embeds: [embeds[index]], components }).catch((error) => logger.debug({ error }, 'Could not edit message'));
+    await int.editReply({ embeds: [embeds[index]], components }).catch((err) => logger.debug({ err }, 'Could not edit message'));
   });
 
   collector.on('end', async (_, reason) => {
@@ -126,6 +126,6 @@ export async function pagination({
         text: t('pagination', { lng, time: ms(time, { long: true }) }),
       });
 
-    interaction.editReply({ embeds: [embed], components }).catch((error) => logger.debug({ error }, 'Could not edit message'));
+    interaction.editReply({ embeds: [embed], components }).catch((err) => logger.debug({ err }, 'Could not edit message'));
   });
 }

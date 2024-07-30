@@ -47,7 +47,7 @@ export class Sokoban {
         ],
         components: this.getComponents(),
       })
-      .catch((error) => logger.debug({ error }, 'Could not send message'));
+      .catch((err) => logger.debug({ err }, 'Could not send message'));
     if (!message) return;
 
     const collector = message.createMessageComponentCollector({
@@ -56,7 +56,7 @@ export class Sokoban {
     });
 
     collector.on('collect', async (buttonInteraction) => {
-      await buttonInteraction.deferUpdate().catch((error) => logger.debug({ error }, 'Could not defer update'));
+      await buttonInteraction.deferUpdate().catch((err) => logger.debug({ err }, 'Could not defer update'));
 
       if (buttonInteraction.user.id !== user.id)
         return buttonInteraction
@@ -66,7 +66,7 @@ export class Sokoban {
             }),
             ephemeral: true,
           })
-          .catch((error) => logger.debug({ error }, 'Could not follow up'));
+          .catch((err) => logger.debug({ err }, 'Could not follow up'));
 
       const move = buttonInteraction.customId.split('_')[1];
 
@@ -89,7 +89,7 @@ export class Sokoban {
               .setDescription(this.getBoardContent()),
           ],
         })
-        .catch((error) => logger.debug({ error }, 'Could not edit message'));
+        .catch((err) => logger.debug({ err }, 'Could not edit message'));
 
       if (this.isWon()) collector.stop();
     });
@@ -119,7 +119,7 @@ export class Sokoban {
         ],
         components: this.getComponents(true),
       })
-      .catch((error) => logger.debug({ error }, 'Could not edit message'));
+      .catch((err) => logger.debug({ err }, 'Could not edit message'));
   }
 
   private getComponents(disabled: boolean = false) {

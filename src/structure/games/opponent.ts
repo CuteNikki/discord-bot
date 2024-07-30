@@ -31,7 +31,7 @@ export class Opponent {
     const opponentLng = await client.getUserLanguage(opponent.id);
 
     if (opponent.id === user.id) {
-      await interaction.editReply(t('games.invitation.yourself', { lng })).catch((error) => logger.debug({ error }, 'Could not edit message'));
+      await interaction.editReply(t('games.invitation.yourself', { lng })).catch((err) => logger.debug({ err }, 'Could not edit message'));
       return false;
     }
 
@@ -67,7 +67,7 @@ export class Opponent {
           ],
           components: [row],
         })
-        .catch((error) => logger.debug({ error }, 'Could not edit message'));
+        .catch((err) => logger.debug({ err }, 'Could not edit message'));
       if (!message) return;
 
       const collector = message.createMessageComponentCollector({
@@ -75,7 +75,7 @@ export class Opponent {
       });
 
       collector.on('collect', async (buttonInteraction) => {
-        await buttonInteraction.deferUpdate().catch((error) => logger.debug({ error }, 'Could not defer update'));
+        await buttonInteraction.deferUpdate().catch((err) => logger.debug({ err }, 'Could not defer update'));
 
         if (buttonInteraction.user.id !== opponent.id) {
           return buttonInteraction
@@ -85,7 +85,7 @@ export class Opponent {
               }),
               ephemeral: true,
             })
-            .catch((error) => logger.debug({ error }, 'Could not follow up'));
+            .catch((err) => logger.debug({ err }, 'Could not follow up'));
         }
 
         if (buttonInteraction.customId === CustomIds.Accept) return collector.stop('accept');
@@ -118,7 +118,7 @@ export class Opponent {
             embeds: [embed],
             components: [],
           })
-          .catch((error) => logger.debug({ error }, 'Could not edit message'));
+          .catch((err) => logger.debug({ err }, 'Could not edit message'));
         return resolve(false);
       });
     });

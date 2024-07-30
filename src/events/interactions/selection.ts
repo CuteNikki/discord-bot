@@ -112,16 +112,16 @@ export default new Event({
     // Try to run the selection and send an error message if it couldn't run
     try {
       selection.options.execute({ client, interaction });
-    } catch (error: any) {
+    } catch (err: any) {
       const message = t('interactions.error', {
         lng,
-        error: `\`${error.message}\``,
+        error: `\`${err.message}\``,
       });
 
       if (interaction.deferred) interaction.editReply({ content: message });
       else interaction.reply({ content: message, ephemeral: true });
 
-      sendError({ client, error, location: 'Selection Interaction Error' });
+      sendError({ client, err, location: 'Selection Interaction Error' });
     }
   },
 });

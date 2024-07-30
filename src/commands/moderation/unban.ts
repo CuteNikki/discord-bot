@@ -45,7 +45,7 @@ export default new Command({
 
     const reason = options.getString('reason', false) ?? undefined;
 
-    const isBanned = await guild.bans.fetch(target.id).catch((error) => logger.debug({ error, userId: target.id }, 'Could not fetch target ban'));
+    const isBanned = await guild.bans.fetch(target.id).catch((err) => logger.debug({ err, userId: target.id }, 'Could not fetch target ban'));
     if (!isBanned) return interaction.editReply(t('unban.target_not_banned', { lng }));
 
     const msg = await interaction.editReply({
@@ -70,7 +70,7 @@ export default new Command({
         components: [],
       });
     } else if (collector.customId === CustomIds.Confirm) {
-      const banned = await guild.bans.remove(target.id, reason).catch((error) => logger.debug({ error, userId: target.id }, 'Could not unban user'));
+      const banned = await guild.bans.remove(target.id, reason).catch((err) => logger.debug({ err, userId: target.id }, 'Could not unban user'));
       if (!banned) return collector.update(t('unban.failed', { lng }));
 
       const receivedDM = await client.users

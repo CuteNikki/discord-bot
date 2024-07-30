@@ -45,7 +45,7 @@ export default new Command({
     const lng = await client.getUserLanguage(interaction.user.id);
     const targetLng = await client.getUserLanguage(target.id);
 
-    const targetMember = await guild.members.fetch(target.id).catch((error) => logger.debug({ error, userId: target.id }, 'Could not fetch target member'));
+    const targetMember = await guild.members.fetch(target.id).catch((err) => logger.debug({ err, userId: target.id }, 'Could not fetch target member'));
     if (!targetMember) return interaction.editReply(t('timeout.target.invalid', { lng }));
 
     const userDuration = options.getString('duration', true);
@@ -97,7 +97,7 @@ export default new Command({
     } else if (collector.customId === CustomIds.Confirm) {
       const timeout = await targetMember
         .disableCommunicationUntil(Date.now() + duration, reason)
-        .catch((error) => logger.debug({ error, userId: target.id }, 'Could not timeout user'));
+        .catch((err) => logger.debug({ err, userId: target.id }, 'Could not timeout user'));
       if (!timeout) return collector.update(t('timeout.failed', { lng }));
 
       const receivedDM = await client.users
@@ -109,7 +109,7 @@ export default new Command({
             duration: durationText,
           }),
         })
-        .catch((error) => logger.debug({ error, userId: target.id }, 'Could not send DM'));
+        .catch((err) => logger.debug({ err, userId: target.id }, 'Could not send DM'));
       await collector.update({
         content: [
           t('timeout.confirmed', {

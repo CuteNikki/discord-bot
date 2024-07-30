@@ -1,4 +1,4 @@
-import { Collection, REST, Routes } from 'discord.js';
+import { ApplicationCommandType, Collection, REST, Routes } from 'discord.js';
 import { t } from 'i18next';
 
 import { readdir } from 'node:fs/promises';
@@ -27,8 +27,8 @@ export async function getCommandsCollection() {
       if (!imported?.default?.options?.data?.name) continue;
 
       commands.set(imported.default.options.data.name, imported.default);
-    } catch (error) {
-      logger.error({ error }, `Error while loading command (${file})`);
+    } catch (err) {
+      logger.error({ err }, `Error while loading command (${file})`);
       continue;
     }
   }
@@ -62,6 +62,7 @@ export async function registerCommands() {
     .map((cmd) => {
       // If there is no translation for the command, don't translate anything and return the command data
       if (t(`${cmd.name}.name`, { lng: 'en', ns: 'commands' }) === `${cmd.name}.name`) return cmd;
+      if (cmd.type !== ApplicationCommandType.ChatInput) cmd.name = t(`${cmd.name}.name`, { lng: 'en', ns: 'commands' });
 
       // Translate the command name
       cmd.name_localizations = {
@@ -211,7 +212,7 @@ export async function registerCommands() {
   const commandsStartTime = performance.now();
   await rest
     .put(Routes.applicationCommands(DISCORD_BOT_ID), { body: commandsArray })
-    .catch((error) => logger.error({ error }, 'Failed to register commands'))
+    .catch((err) => logger.error({ err }, 'Failed to register commands'))
     .then(() => {
       const commandsEndTime = performance.now();
 
@@ -225,7 +226,7 @@ export async function registerCommands() {
       .put(Routes.applicationGuildCommands(DISCORD_BOT_ID, guildId), {
         body: devCommandsArray,
       })
-      .catch((error) => logger.error({ error }, `Failed to register guild commands for ${guildId}`))
+      .catch((err) => logger.error({ err }, `Failed to register guild commands for ${guildId}`))
       .then(() => {
         const guildCommandsEndTime = performance.now();
         logger.info(`Registered ${devCommandsArray.length} guild commands for ${guildId} in ${Math.floor(guildCommandsEndTime - guildCommandsStartTime)}ms`);

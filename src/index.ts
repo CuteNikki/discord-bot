@@ -17,7 +17,7 @@ const manager = new ClusterManager(`${process.cwd()}/src/bot.ts`, {
 manager.on('clusterCreate', (cluster) => {
   cluster.on('spawn', (_thread) => logger.info(`[${cluster.id}] CLUSTER SPAWN`));
   cluster.on('death', (cluster, _thread) => logger.fatal(`[${cluster.id}] CLUSTER DEATH`));
-  cluster.on('error', (error) => logger.error(error, `[${cluster.id}] CLUSTER ERROR`));
+  cluster.on('err', (err) => logger.error({ err }, `[${cluster.id}] CLUSTER ERROR`));
   cluster.on('message', (message) => logger.info(message, `[${cluster.id}] CLUSTER MESSAGE`));
 });
 

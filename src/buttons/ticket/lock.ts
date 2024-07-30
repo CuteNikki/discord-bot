@@ -60,7 +60,7 @@ export default new Button({
     for (const userId of ticket.users) {
       const overwrite = await channel.permissionOverwrites
         .edit(userId, { SendMessages: false })
-        .catch((error) => logger.debug({ error, userId }, 'Could not edit channel permissions'));
+        .catch((err) => logger.debug({ err, userId }, 'Could not edit channel permissions'));
       if (!overwrite) {
         interaction.reply({ content: t('tickets.error', { lng }) });
         break;

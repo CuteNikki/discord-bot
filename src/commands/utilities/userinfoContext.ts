@@ -19,7 +19,7 @@ export default new Command<typeof commandType>({
     const lng = await client.getUserLanguage(interaction.user.id);
     await interaction.deferReply({ ephemeral: true });
 
-    const user = await client.users.fetch(interaction.targetId, { force: true }).catch((error) => logger.debug({ error }, 'Could not fetch user'));
+    const user = await client.users.fetch(interaction.targetId, { force: true }).catch((err) => logger.debug({ err }, 'Could not fetch user'));
     if (!user) return interaction.editReply({ content: t('userinfo.user', { lng }) });
 
     const flags = user.flags?.toArray() ?? [];
@@ -54,7 +54,7 @@ export default new Command<typeof commandType>({
 
     embeds.push(userEmbed);
 
-    const member = await interaction.guild?.members.fetch(user.id).catch((error) => logger.debug({ error, userId: user.id }, 'Could not fetch member'));
+    const member = await interaction.guild?.members.fetch(user.id).catch((err) => logger.debug({ err, userId: user.id }, 'Could not fetch member'));
 
     if (member) {
       //   const activities = [

@@ -110,7 +110,7 @@ export class Tetris {
         ],
         components: [this.getComponents()],
       })
-      .catch((error) => logger.debug({ error }, 'Could not send message'));
+      .catch((err) => logger.debug({ err }, 'Could not send message'));
 
     if (!message) return;
 
@@ -120,7 +120,7 @@ export class Tetris {
     });
 
     collector.on('collect', async (buttonInteraction) => {
-      await buttonInteraction.deferUpdate().catch((error) => logger.debug({ error }, 'Could not defer update'));
+      await buttonInteraction.deferUpdate().catch((err) => logger.debug({ err }, 'Could not defer update'));
 
       if (buttonInteraction.user.id !== user.id)
         return buttonInteraction
@@ -130,7 +130,7 @@ export class Tetris {
             }),
             ephemeral: true,
           })
-          .catch((error) => logger.debug({ error }, 'Could not follow up'));
+          .catch((err) => logger.debug({ err }, 'Could not follow up'));
 
       const move = buttonInteraction.customId.split('_')[1];
 
@@ -163,9 +163,9 @@ export class Tetris {
                 ),
             ],
           })
-          .catch((error) => logger.debug({ error }, 'Could not edit message'));
-      } catch (error: any) {
-        logger.debug({ error }, 'Could not move piece');
+          .catch((err) => logger.debug({ err }, 'Could not edit message'));
+      } catch (err: any) {
+        logger.debug({ err }, 'Could not move piece');
         collector.stop();
       }
     });
@@ -203,7 +203,7 @@ export class Tetris {
         ],
         components: [this.getComponents(true)],
       })
-      .catch((error) => logger.debug({ error }, 'Could not edit message'));
+      .catch((err) => logger.debug({ err }, 'Could not edit message'));
   }
 
   private getComponents(disabled: boolean = false) {

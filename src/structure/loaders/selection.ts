@@ -20,8 +20,8 @@ export async function loadSelections(client: DiscordClient) {
       if (!imported?.default?.options?.customId) continue;
 
       client.selections.set(imported.default.options.customId, imported.default);
-    } catch (error) {
-      logger.error({ error }, `Error while loading selection (${file})`);
+    } catch (err) {
+      logger.error({ err }, `Error while loading selection (${file})`);
       continue;
     }
   }

@@ -39,7 +39,7 @@ export default new Command({
     const { options, guild, member, user } = interaction;
 
     const target = options.getUser('user', true);
-    const targetMember = await guild.members.fetch(target.id).catch((error) => logger.debug({ error, userId: target.id }, 'Could not fetch target member'));
+    const targetMember = await guild.members.fetch(target.id).catch((err) => logger.debug({ err, userId: target.id }, 'Could not fetch target member'));
     if (!targetMember)
       return interaction.editReply(
         t('kick.target.invalid', {
@@ -100,7 +100,7 @@ export default new Command({
         components: [],
       });
     } else if (collector.customId === CustomIds.Confirm) {
-      const kicked = await targetMember.kick(reason).catch((error) => logger.debug({ error, userId: target.id }, 'Could not kick user'));
+      const kicked = await targetMember.kick(reason).catch((err) => logger.debug({ err, userId: target.id }, 'Could not kick user'));
       if (!kicked)
         return collector.update(
           t('kick.failed', {
@@ -116,7 +116,7 @@ export default new Command({
             reason: `\`${reason ?? '/'}\``,
           }),
         })
-        .catch((error) => logger.debug({ error, userId: target.id }, 'Could not send DM'));
+        .catch((err) => logger.debug({ err, userId: target.id }, 'Could not send DM'));
       await collector.update({
         content: [
           t('kick.confirmed', {

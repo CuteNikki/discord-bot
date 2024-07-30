@@ -24,7 +24,7 @@ export default new Command({
       .fetch(interaction.options.getUser('user', false) ?? interaction.user, {
         force: true,
       })
-      .catch((error) => logger.debug({ error }, 'Could not fetch user'));
+      .catch((err) => logger.debug({ err }, 'Could not fetch user'));
     if (!user) return interaction.editReply({ content: t('userinfo.user', { lng }) });
 
     const flags = user.flags?.toArray() ?? [];
@@ -59,7 +59,7 @@ export default new Command({
 
     embeds.push(userEmbed);
 
-    const member = await interaction.guild?.members.fetch(user.id).catch((error) => logger.debug({ error, userId: user.id }, 'Could not fetch member'));
+    const member = await interaction.guild?.members.fetch(user.id).catch((err) => logger.debug({ err, userId: user.id }, 'Could not fetch member'));
 
     if (member) {
       //   const activities = [

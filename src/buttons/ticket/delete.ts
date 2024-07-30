@@ -58,7 +58,7 @@ export default new Button({
     });
 
     setTimeout(async () => {
-      const isDeleted = await interaction.channel?.delete().catch((error) => logger.debug({ error, channelId }, 'Could not delete ticket channel'));
+      const isDeleted = await interaction.channel?.delete().catch((err) => logger.debug({ err, channelId }, 'Could not delete ticket channel'));
       if (!isDeleted) return interaction.editReply({ content: t('tickets.error', { lng }) });
       await ticketModel.deleteOne({ _id: ticket._id });
     }, 5000);

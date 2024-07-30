@@ -115,7 +115,7 @@ export default new Command({
                       embeds: [],
                       components: [],
                     })
-                    .catch((error) => logger.debug({ error }, 'Could not edit reply'));
+                    .catch((err) => logger.debug({ err }, 'Could not edit reply'));
                 });
               }
               break;

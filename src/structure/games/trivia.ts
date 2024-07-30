@@ -56,7 +56,7 @@ export class Trivia {
           embeds: [],
           components: [],
         })
-        .catch((error) => logger.debug({ error }, 'Could not edit message'));
+        .catch((err) => logger.debug({ err }, 'Could not edit message'));
 
     const message = await interaction
       .editReply({
@@ -86,7 +86,7 @@ export class Trivia {
         ],
         components: this.getComponents(),
       })
-      .catch((error) => logger.debug({ error }, 'Could not send message'));
+      .catch((err) => logger.debug({ err }, 'Could not send message'));
     if (!message) return;
 
     const collector = message.createMessageComponentCollector({
@@ -94,7 +94,7 @@ export class Trivia {
     });
 
     collector.on('collect', async (buttonInteraction) => {
-      await buttonInteraction.deferUpdate().catch((error) => logger.debug({ error }, 'Could not defer update'));
+      await buttonInteraction.deferUpdate().catch((err) => logger.debug({ err }, 'Could not defer update'));
 
       if (buttonInteraction.user.id !== user.id)
         return buttonInteraction
@@ -104,7 +104,7 @@ export class Trivia {
             }),
             ephemeral: true,
           })
-          .catch((error) => logger.debug({ error }, 'Could not follow up'));
+          .catch((err) => logger.debug({ err }, 'Could not follow up'));
 
       collector.stop();
       this.selected = buttonInteraction.customId.split('_')[1];
@@ -158,7 +158,7 @@ export class Trivia {
         ],
         components: this.disableButtons(this.getComponents()),
       })
-      .catch((error) => logger.debug({ error }, 'Could not edit message'));
+      .catch((err) => logger.debug({ err }, 'Could not edit message'));
   }
 
   private getComponents() {
@@ -200,7 +200,7 @@ export class Trivia {
     )
       .then(async (res) => await res.json())
       .then((res) => res.results[0])
-      .catch((error) => logger.debug({ error }, 'Could not fetch trivia'))) as TriviaQuestion;
+      .catch((err) => logger.debug({ err }, 'Could not fetch trivia'))) as TriviaQuestion;
     if (!response) return false;
 
     response.incorrect_answers = response.incorrect_answers.map((ia) => this.decodeEntities(ia));

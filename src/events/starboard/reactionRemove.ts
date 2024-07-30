@@ -15,7 +15,7 @@ export default new Event({
     const config = await client.getGuildSettings(guild.id);
     if (!config.starboard.enabled || !config.starboard.channelId || !config.starboard.minimumStars) return;
 
-    if (reaction.message.partial) await reaction.message.fetch().catch((error) => logger.debug(error, 'Could not fetch message'));
+    if (reaction.message.partial) await reaction.message.fetch().catch((err) => logger.debug({ err }, 'Could not fetch message'));
 
     const channel = guild.channels.cache.get(config.starboard.channelId);
     if (!channel || channel.type !== ChannelType.GuildText || !channel.permissionsFor(guild.members.me).has(PermissionsBitField.Flags.SendMessages)) return;
@@ -39,10 +39,10 @@ export default new Event({
 
       if (knownMessage.starboardMessageId) {
         if (stars < config.starboard.minimumStars)
-          return await channel.messages.delete(knownMessage.starboardMessageId).catch((error) => logger.debug(error, 'Could not delete starboard message'));
+          return await channel.messages.delete(knownMessage.starboardMessageId).catch((err) => logger.debug({ err }, 'Could not delete starboard message'));
         return await channel.messages
           .edit(knownMessage.starboardMessageId, { content: `${stars} ⭐` })
-          .catch((error) => logger.debug(error, 'Could not edit starboard message'));
+          .catch((err) => logger.debug({ err }, 'Could not edit starboard message'));
       }
     }
     if (knownStarboardMessage) {
@@ -59,9 +59,9 @@ export default new Event({
         });
       }
       if (stars < config.starboard.minimumStars)
-        return await reaction.message.delete().catch((error) => logger.debug(error, 'Could not delete starboard message'));
+        return await reaction.message.delete().catch((err) => logger.debug({ err }, 'Could not delete starboard message'));
       if (reaction.message.editable)
-        return await reaction.message.edit({ content: `${stars} ⭐` }).catch((error) => logger.debug(error, 'Could not edit starboard message'));
+        return await reaction.message.edit({ content: `${stars} ⭐` }).catch((err) => logger.debug({ err }, 'Could not edit starboard message'));
     }
   },
 });

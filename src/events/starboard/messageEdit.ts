@@ -7,7 +7,7 @@ import { logger } from 'utils/logger';
 export default new Event({
   name: Events.MessageUpdate,
   async execute(client, _oldMessage, newMessage) {
-    if (newMessage.partial) await newMessage.fetch().catch((error) => logger.debug(error, 'Could not fetch message'));
+    if (newMessage.partial) await newMessage.fetch().catch((err) => logger.debug({ err }, 'Could not fetch message'));
     if (!newMessage.inGuild() || !newMessage.author || newMessage.author.bot) return;
 
     const config = await client.getGuildSettings(newMessage.guild.id);
@@ -31,6 +31,6 @@ export default new Event({
       embed.setImage(attachment.url);
     if (newMessage.content?.length) embed.setDescription(newMessage.content);
 
-    await channel.messages.edit(knownMessage.starboardMessageId, { embeds: [embed] }).catch((error) => logger.debug(error, 'Could not edit starboard message'));
+    await channel.messages.edit(knownMessage.starboardMessageId, { embeds: [embed] }).catch((err) => logger.debug({ err }, 'Could not edit starboard message'));
   },
 });

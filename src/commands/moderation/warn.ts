@@ -75,7 +75,7 @@ export default new Command({
             reason: `\`${reason ?? '/'}\``,
           }),
         })
-        .catch((error) => logger.debug({ error, userId: target.id }, 'Could not send DM'));
+        .catch((err) => logger.debug({ err, userId: target.id }, 'Could not send DM'));
       await collector.update({
         content: [
           t('warn.confirmed', {

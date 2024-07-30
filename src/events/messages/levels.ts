@@ -52,7 +52,7 @@ export default new Event({
         });
 
       if (rewards?.length) {
-        const added = await member.roles.add(rewards.map((r) => r.roleId)).catch((error) => logger.debug({ error }, 'Could not add role(s)'));
+        const added = await member.roles.add(rewards.map((r) => r.roleId)).catch((err) => logger.debug({ err }, 'Could not add role(s)'));
         if (added)
           levelUpEmbed.addFields({
             name: t('level.up.title_roles', { lng }),
@@ -73,9 +73,9 @@ export default new Event({
       switch (guildSettings.level.announcement) {
         case AnnouncementType.UserChannel:
           {
-            const msg = await channel.send(levelUpMessage).catch((error) => logger.debug({ error }, 'Could not send message'));
+            const msg = await channel.send(levelUpMessage).catch((err) => logger.debug({ err }, 'Could not send message'));
             setTimeout(() => {
-              if (msg && msg.deletable) msg.delete().catch((error) => logger.debug({ error }, 'Could not delete message'));
+              if (msg && msg.deletable) msg.delete().catch((err) => logger.debug({ err }, 'Could not delete message'));
             }, 5000);
           }
           break;
@@ -84,7 +84,7 @@ export default new Event({
             if (!guildSettings.level.channelId) return;
             const channel = guild.channels.cache.get(guildSettings.level.channelId);
             if (!channel || channel.type !== ChannelType.GuildText) return;
-            channel.send(levelUpMessage).catch((error) => logger.debug({ error }, 'Could not send message'));
+            channel.send(levelUpMessage).catch((err) => logger.debug({ err }, 'Could not send message'));
           }
           break;
         case AnnouncementType.PrivateMessage:
@@ -102,7 +102,7 @@ export default new Event({
                 name: t('level.up.title_roles', { lng, count: rewards.length }),
                 value: rewards.map((r) => `<@&${r.roleId}>`).join(' '),
               });
-            client.users.send(author.id, levelUpMessage).catch((error) => logger.debug({ error, userId: author.id }, 'Could not send DM'));
+            client.users.send(author.id, levelUpMessage).catch((err) => logger.debug({ err, userId: author.id }, 'Could not send DM'));
           }
           break;
       }

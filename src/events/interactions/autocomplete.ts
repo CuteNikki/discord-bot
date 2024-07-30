@@ -14,12 +14,12 @@ export default new Event({
 
     try {
       await command.options.autocomplete({ interaction, client });
-    } catch (error: any) {
+    } catch (err: any) {
       await interaction.respond([]);
 
       await sendError({
         client,
-        error,
+        err,
         location: 'Autocomplete Interaction Error',
       });
     }

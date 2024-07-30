@@ -11,7 +11,7 @@ const webhookUrl = keys.DEVELOPER_ERROR_WEBHOOK;
 export async function sendError({
   client,
   location,
-  error,
+  err,
   reason,
   promise,
   url,
@@ -19,26 +19,24 @@ export async function sendError({
   client: DiscordClient;
   location: string;
   reason?: string;
-  error?: Error;
+  err?: Error;
   promise?: Promise<any>;
   url?: string;
 }) {
-  logger.error({ location, error, reason, promise }, `[${client.cluster.id}] An error occurred`);
+  logger.error({ location, err, reason, promise }, `[${client.cluster.id}] An error occurred`);
 
   if (!webhookUrl) return;
   const webhook = new WebhookClient({ url: webhookUrl });
   const embed = new EmbedBuilder().setColor(Colors.Red);
 
-  if (error)
+  if (err)
     embed
       .setTitle('An error occurred')
       .setURL(url ?? null)
-      .setDescription(
-        codeBlock('ts', `Stack: ${error.stack ? (error.stack.length > 3500 ? error.stack.slice(0, 3500) + '...' : error.stack) : 'not available'}`),
-      )
+      .setDescription(codeBlock('ts', `Stack: ${err.stack ? (err.stack.length > 3500 ? err.stack.slice(0, 3500) + '...' : err.stack) : 'not available'}`))
       .addFields(
-        { name: 'Name', value: `\`${error.name}\`` },
-        { name: 'Message', value: `\`${error.message}\`` },
+        { name: 'Name', value: `\`${err.name}\`` },
+        { name: 'Message', value: `\`${err.message}\`` },
         { name: 'Location', value: `\`${location}\`` },
         { name: 'Timestamp', value: `<t:${Math.floor(Date.now() / 1000)}:F>` },
       );
@@ -53,38 +51,38 @@ export async function sendError({
       avatarURL: client.user?.displayAvatarURL(),
       embeds: [embed],
     })
-    .catch((error) => logger.error(error, 'Could not send error to webhook'));
+    .catch((err) => logger.error({ err }, 'Could not send error to webhook'));
 }
 
 export async function listenToErrors(client: DiscordClient) {
-  client.on(Events.Error, (error) =>
+  client.on(Events.Error, (err) =>
     sendError({
       client,
-      error,
+      err,
       location: 'DiscordJS Client Error',
       url: 'https://discordjs.guide/popular-topics/errors.html#api-errors',
     }),
   );
-  client.on(Events.ShardError, (error) =>
+  client.on(Events.ShardError, (err) =>
     sendError({
       client,
-      error,
+      err,
       location: 'DiscordJS Shard Error',
       url: 'https://discordjs.guide/popular-topics/errors.html#api-errors',
     }),
   );
-  process.on('uncaughtException', (error) =>
+  process.on('uncaughtException', (err) =>
     sendError({
       client,
-      error,
+      err,
       location: 'NodeJS Uncaught Exception',
       url: 'https://nodejs.org/api/process.html#event-uncaughtexception',
     }),
   );
-  process.on('uncaughtExceptionMonitor', (error) =>
+  process.on('uncaughtExceptionMonitor', (err) =>
     sendError({
       client,
-      error,
+      err,
       location: 'NodeJS Uncaught Exception Monitor',
       url: 'https://nodejs.org/api/process.html#event-uncaughtexceptionmonitor',
     }),
@@ -98,18 +96,18 @@ export async function listenToErrors(client: DiscordClient) {
       url: 'https://nodejs.org/api/process.html#event-unhandledrejection',
     }),
   );
-  process.on('warning', (error) =>
+  process.on('warning', (err) =>
     sendError({
       client,
-      error,
+      err,
       location: 'NodeJS Warning',
       url: 'https://nodejs.org/api/process.html#event-warning',
     }),
   );
-  mongoose.connection.on('error', (error) =>
+  mongoose.connection.on('error', (err) =>
     sendError({
       client,
-      error,
+      err,
       location: 'Mongoose Connection Error',
       url: 'https://mongoosejs.com/docs/api/error.html',
     }),

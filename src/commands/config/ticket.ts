@@ -448,7 +448,7 @@ export default new Command({
                     ),
                   ],
                 })
-                .catch((error) => logger.debug({ error, userId: interaction.user.id }, 'Could not send ticket message'));
+                .catch((err) => logger.debug({ err, userId: interaction.user.id }, 'Could not send ticket message'));
               if (!msg)
                 return await interaction.editReply({
                   content: t('tickets.send_fail', { lng }),

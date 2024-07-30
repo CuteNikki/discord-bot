@@ -42,7 +42,7 @@ export async function initDatabase(client: DiscordClient) {
         });
       });
     })
-    .catch((error) => sendError({ client, error, location: 'Mongoose Connection Error' }));
+    .catch((err) => sendError({ client, err, location: 'Mongoose Connection Error' }));
 }
 
 async function clearPhones(client: DiscordClient) {
@@ -115,17 +115,15 @@ async function clearReminders(client: DiscordClient) {
       .setDescription(t('reminder.reminding', { lng, message: reminder.message }));
 
     // Notify user in DM if possible
-    const user = await client.users.fetch(reminder.userId).catch((error) => logger.debug({ error, reminder }, 'Could not fetch user'));
+    const user = await client.users.fetch(reminder.userId).catch((err) => logger.debug({ err, reminder }, 'Could not fetch user'));
     if (user) {
-      user.send({ embeds: [embed] }).catch((error) => logger.debug({ error, reminder }, 'Could not send reminder in DM'));
+      user.send({ embeds: [embed] }).catch((err) => logger.debug({ err, reminder }, 'Could not send reminder in DM'));
       continue;
     }
     // Notify in reminder channel if DM fails
-    const channel = await client.channels.fetch(reminder.channelId).catch((error) => logger.debug({ error, reminder }, 'Could not fetch channel'));
+    const channel = await client.channels.fetch(reminder.channelId).catch((err) => logger.debug({ err, reminder }, 'Could not fetch channel'));
     if (channel && channel.isTextBased()) {
-      channel
-        .send({ embeds: [embed], content: `<@${reminder.userId}>` })
-        .catch((error) => logger.debug({ error, reminder }, 'Could not send reminder in channel'));
+      channel.send({ embeds: [embed], content: `<@${reminder.userId}>` }).catch((err) => logger.debug({ err, reminder }, 'Could not send reminder in channel'));
       continue;
     }
   }
@@ -148,13 +146,13 @@ async function clearExpiredInfractions(client: DiscordClient) {
   for (const infraction of expiredInfractions) {
     if (infraction.action === InfractionType.TempBan) {
       // Fetch the infraction's guild to unban the user
-      const guild = await client.guilds.fetch(infraction.guildId).catch((error) => logger.debug({ error, infraction }, 'Could not fetch guild'));
+      const guild = await client.guilds.fetch(infraction.guildId).catch((err) => logger.debug({ err, infraction }, 'Could not fetch guild'));
       // If we can't find the guild, we can't unban so we close the infraction
       if (!guild) return closeInfraction();
       // If we have a guild, we try to unban the user and close the infraction
       await guild.bans
         .remove(infraction.userId, 'Temporary Ban has expired')
-        .catch((error) => logger.debug({ error, infraction }, 'Could not unban member after tempban '));
+        .catch((err) => logger.debug({ err, infraction }, 'Could not unban member after tempban '));
       closeInfraction();
     } else if (infraction.action === InfractionType.Timeout) {
       // Discord handles timeouts for us so we don't need to fetch the guild and remove the timeout

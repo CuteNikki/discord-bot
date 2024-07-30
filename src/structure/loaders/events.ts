@@ -24,8 +24,8 @@ export async function loadEvents(client: DiscordClient) {
       } else {
         client.on(imported.default.options.name, (...args: any[]) => imported.default?.options.execute(client, ...args));
       }
-    } catch (error) {
-      logger.error({ error }, `Error while loading event (${file})`);
+    } catch (err) {
+      logger.error({ err }, `Error while loading event (${file})`);
       continue;
     }
   }

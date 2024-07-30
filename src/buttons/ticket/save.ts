@@ -92,7 +92,7 @@ export default new Button({
         ],
         files: [transcript],
       })
-      .catch((error) => logger.debug({ error }, 'Could not send transcript'));
+      .catch((err) => logger.debug({ err }, 'Could not send transcript'));
 
     if (!msg) return interaction.reply({ content: t('tickets.error', { lng }) });
 

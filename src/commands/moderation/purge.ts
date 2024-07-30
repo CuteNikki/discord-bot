@@ -57,14 +57,12 @@ export default new Command({
       fetchOptions = { limit: amount, after: messageId };
     }
 
-    let fetchedMessages = await channel.messages
-      .fetch(fetchOptions)
-      .catch((error) => logger.debug({ error, channelId: channel.id }, 'Could not fetch messages'));
+    let fetchedMessages = await channel.messages.fetch(fetchOptions).catch((err) => logger.debug({ err, channelId: channel.id }, 'Could not fetch messages'));
     if (!fetchedMessages) return interaction.editReply(t('purge.no_messages', { lng }));
     if (user) fetchedMessages = fetchedMessages.filter((msg) => msg.author.id === user.id);
     const deletedMessages = await channel
       .bulkDelete(fetchedMessages, true)
-      .catch((error) => logger.debug({ error, channelId: channel.id, messages: fetchedMessages }, 'Could not bulk delete messages'));
+      .catch((err) => logger.debug({ err, channelId: channel.id, messages: fetchedMessages }, 'Could not bulk delete messages'));
     if (!deletedMessages) return interaction.editReply(t('purge.none_deleted', { lng }));
 
     interaction.editReply({

@@ -1,7 +1,7 @@
 import { ChannelType, EmbedBuilder, Events, type ColorResolvable } from 'discord.js';
 
-import { Event } from 'classes/event';
 import { replacePlaceholders } from 'classes/custom-embed';
+import { Event } from 'classes/event';
 
 import { logger } from 'utils/logger';
 
@@ -50,6 +50,6 @@ export default new Event({
           }).setColor(embedData.color as ColorResolvable),
         ],
       })
-      .catch((error) => logger.debug({ error }, 'Could not send farewell message'));
+      .catch((err) => logger.debug({ err }, 'Could not send farewell message'));
   },
 });

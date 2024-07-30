@@ -66,7 +66,7 @@ export default new Command({
             // Inform target channel
             const targetChannel = await client.channels
               .fetch(randomTarget.channelId)
-              .catch((error) => logger.debug({ error, targetChannelId: randomTarget.channelId }, 'Could not fetch target channel'));
+              .catch((err) => logger.debug({ err, targetChannelId: randomTarget.channelId }, 'Could not fetch target channel'));
             if (!targetChannel || targetChannel.type !== ChannelType.GuildText) return;
             targetChannel.send(t('phone.connect.connected'));
           } else {
@@ -106,7 +106,7 @@ export default new Command({
           // Inform the other channel
           const targetChannel = await client.channels
             .fetch(connectedChannelId)
-            .catch((error) => logger.debug({ error, targetChannelId: connectedChannelId }, 'Could not fetch target channel'));
+            .catch((err) => logger.debug({ err, targetChannelId: connectedChannelId }, 'Could not fetch target channel'));
           if (!targetChannel || targetChannel.type !== ChannelType.GuildText) return;
           targetChannel.send(t('phone.hangup.disconnected', { lng: otherLng }));
         }

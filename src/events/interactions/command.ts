@@ -101,16 +101,16 @@ export default new Event({
       await client.updateClientSettings(keys.DISCORD_BOT_ID, {
         $inc: { ['stats.commandsExecuted']: 1 },
       });
-    } catch (error: any) {
+    } catch (err: any) {
       const message = t('interactions.error', {
         lng,
-        error: `\`${error.message}\``,
+        error: `\`${err.message}\``,
       });
 
       if (interaction.deferred) interaction.editReply({ content: message });
       else interaction.reply({ content: message, ephemeral: true });
 
-      await sendError({ client, error, location: 'Command Interaction Error' });
+      await sendError({ client, err, location: 'Command Interaction Error' });
       await client.updateClientSettings(keys.DISCORD_BOT_ID, {
         $inc: { ['stats.commandsFailed']: 1 },
       });

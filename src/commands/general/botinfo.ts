@@ -145,8 +145,8 @@ export default new Command({
             ),
         ],
       });
-    } catch (error: any) {
-      logger.debug({ error }, 'Could not send botinfo');
+    } catch (err: any) {
+      logger.debug({ err }, 'Could not send botinfo');
       interaction.editReply(t('botinfo.failed', { lng }));
     }
   },

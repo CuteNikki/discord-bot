@@ -54,7 +54,7 @@ export class FastType {
         ],
         components: [],
       })
-      .catch((error) => logger.debug({ error }, 'Could not send message'));
+      .catch((err) => logger.debug({ err }, 'Could not send message'));
 
     if (!message) return;
 

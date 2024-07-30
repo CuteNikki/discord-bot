@@ -44,7 +44,7 @@ export class RememberEmoji {
         embeds: [embed],
         components: this.getComponents(true),
       })
-      .catch((error) => logger.debug({ error }, 'Could not send message'));
+      .catch((err) => logger.debug({ err }, 'Could not send message'));
     if (!message) return;
 
     setTimeout(async () => {
@@ -59,7 +59,7 @@ export class RememberEmoji {
       });
 
       collector.on('collect', async (buttonInteraction) => {
-        await buttonInteraction.deferUpdate().catch((error) => logger.debug({ error }, 'Could not defer update'));
+        await buttonInteraction.deferUpdate().catch((err) => logger.debug({ err }, 'Could not defer update'));
 
         if (buttonInteraction.user.id !== user.id)
           return buttonInteraction
@@ -69,7 +69,7 @@ export class RememberEmoji {
               }),
               ephemeral: true,
             })
-            .catch((error) => logger.debug({ error }, 'Could not follow up'));
+            .catch((err) => logger.debug({ err }, 'Could not follow up'));
 
         this.selected = this.emojis[parseInt(buttonInteraction.customId.split('_')[1])];
         return collector.stop();

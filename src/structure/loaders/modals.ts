@@ -20,8 +20,8 @@ export async function loadModals(client: DiscordClient) {
       if (!imported?.default?.options?.customId) continue;
 
       client.modals.set(imported.default.options.customId, imported.default);
-    } catch (error) {
-      logger.error({ error }, `Error while loading modal (${file})`);
+    } catch (err) {
+      logger.error({ err }, `Error while loading modal (${file})`);
       continue;
     }
   }

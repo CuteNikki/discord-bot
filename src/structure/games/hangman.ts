@@ -100,7 +100,7 @@ export class Hangman {
         ],
         components: this.getComponents(),
       })
-      .catch((error) => logger.debug({ error }, 'Could not send message'));
+      .catch((err) => logger.debug({ err }, 'Could not send message'));
     if (!message) return;
 
     const collector = message.createMessageComponentCollector({
@@ -108,7 +108,7 @@ export class Hangman {
     });
 
     collector.on('collect', async (buttonInteraction) => {
-      await buttonInteraction.deferUpdate().catch((error) => logger.debug({ error }, 'Could not defer update'));
+      await buttonInteraction.deferUpdate().catch((err) => logger.debug({ err }, 'Could not defer update'));
 
       if (buttonInteraction.user.id !== user.id)
         return buttonInteraction.followUp({
@@ -121,7 +121,7 @@ export class Hangman {
 
       if (guess === 'stop') return collector.stop();
       if (parseInt(guess) === 0 || parseInt(guess) === 1) {
-        return interaction.editReply({ components: this.getComponents(parseInt(guess)) }).catch((error) => logger.debug({ error }, 'Could not edit message'));
+        return interaction.editReply({ components: this.getComponents(parseInt(guess)) }).catch((err) => logger.debug({ err }, 'Could not edit message'));
       }
       if (!this.guesses.includes(guess)) {
         this.guesses.push(guess);
@@ -158,7 +158,7 @@ export class Hangman {
             ],
             components: this.getComponents(this.buttonPage),
           })
-          .catch((error) => logger.debug({ error }, 'Could not edit message'));
+          .catch((err) => logger.debug({ err }, 'Could not edit message'));
 
         if (this.damage > 4 || this.isGuessCorrect()) return collector.stop();
       }
@@ -215,7 +215,7 @@ export class Hangman {
     else if (result === 'LOSE') embed.setDescription([t('games.hangman.lost', { lng, word: this.word }), this.getBoardContent()].join('\n\n'));
     else embed.setDescription([t('games.hangman.won', { lng }), this.getBoardContent()].join('\n\n'));
 
-    return await interaction.editReply({ content: null, embeds: [embed], components: [] }).catch((error) => logger.debug({ error }, 'Could not edit message'));
+    return await interaction.editReply({ content: null, embeds: [embed], components: [] }).catch((err) => logger.debug({ err }, 'Could not edit message'));
   }
 
   private getComponents(page = 0) {

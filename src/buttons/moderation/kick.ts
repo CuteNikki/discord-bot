@@ -17,7 +17,7 @@ export default new Button({
     const { guild } = interaction;
 
     const targetId = interaction.customId.split('_')[1];
-    const targetMember = await guild.members.fetch(targetId).catch((error) => logger.debug({ error, targetId }, 'Could not fetch user'));
+    const targetMember = await guild.members.fetch(targetId).catch((err) => logger.debug({ err, targetId }, 'Could not fetch user'));
 
     const lng = await client.getUserLanguage(interaction.user.id);
 
@@ -25,7 +25,7 @@ export default new Button({
     const targetLng = await client.getUserLanguage(targetId);
     const reason = 'Suspicious Account';
 
-    const kicked = await targetMember.kick(reason).catch((error) => logger.debug({ error, targetId }, 'Could not kick user'));
+    const kicked = await targetMember.kick(reason).catch((err) => logger.debug({ err, targetId }, 'Could not kick user'));
     if (!kicked) return interaction.reply(t('kick.failed', { lng }));
 
     const receivedDM = await client.users
@@ -36,7 +36,7 @@ export default new Button({
           reason: `\`${reason ?? '/'}\``,
         }),
       })
-      .catch((error) => logger.debug({ error, targetId }, 'Could not send DM to user'));
+      .catch((err) => logger.debug({ err, targetId }, 'Could not send DM to user'));
     await interaction.reply({
       content: [
         t('kick.confirmed', {

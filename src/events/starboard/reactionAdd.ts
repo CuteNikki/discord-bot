@@ -7,7 +7,7 @@ import { logger } from 'utils/logger';
 export default new Event({
   name: Events.MessageReactionAdd,
   async execute(client, reaction, user) {
-    if (reaction.partial) await reaction.fetch().catch((error) => logger.debug(error, 'Could not fetch reaction'));
+    if (reaction.partial) await reaction.fetch().catch((err) => logger.debug({ err }, 'Could not fetch reaction'));
     if (reaction.emoji.name !== '⭐' || user.bot) return;
 
     const guild = reaction.message.guild;
@@ -16,7 +16,7 @@ export default new Event({
     const config = await client.getGuildSettings(guild.id);
     if (!config.starboard.enabled || !config.starboard.channelId || !config.starboard.minimumStars) return;
 
-    if (reaction.message.partial) await reaction.message.fetch().catch((error) => logger.debug(error, 'Could not fetch message'));
+    if (reaction.message.partial) await reaction.message.fetch().catch((err) => logger.debug({ err }, 'Could not fetch message'));
 
     const channel = guild.channels.cache.get(config.starboard.channelId);
     if (!channel || channel.type !== ChannelType.GuildText || !channel.permissionsFor(guild.members.me).has(PermissionsBitField.Flags.SendMessages)) return;
@@ -57,7 +57,7 @@ export default new Event({
       if (knownMessage.starboardMessageId) {
         const msg = await channel.messages
           .edit(knownMessage.starboardMessageId, { content: `${stars} ⭐` })
-          .catch((error) => logger.debug(error, 'Could not edit starboard message'));
+          .catch((err) => logger.debug({ err }, 'Could not edit starboard message'));
         if (!msg) {
           const embed = new EmbedBuilder()
             .setAuthor({
@@ -75,7 +75,7 @@ export default new Event({
             content: `${stars} ⭐`,
             embeds: [embed],
           });
-          if (msg) await msg.react('⭐').catch((error) => logger.debug(error, 'Could not react to starboard message'));
+          if (msg) await msg.react('⭐').catch((err) => logger.debug({ err }, 'Could not react to starboard message'));
 
           await client.updateGuildSettings(guild.id, {
             $set: {
@@ -107,8 +107,8 @@ export default new Event({
             content: `${stars} ⭐`,
             embeds: [embed],
           })
-          .catch((error) => logger.debug(error, 'Could not send starboard message'));
-        if (msg) await msg.react('⭐').catch((error) => logger.debug(error, 'Could not react to starboard message'));
+          .catch((err) => logger.debug({ err }, 'Could not send starboard message'));
+        if (msg) await msg.react('⭐').catch((err) => logger.debug({ err }, 'Could not react to starboard message'));
 
         await client.updateGuildSettings(guild.id, {
           $set: {
@@ -142,7 +142,7 @@ export default new Event({
 
       return await channel.messages
         .edit(knownStarboardMessage.starboardMessageId, { content: `${stars} ⭐` })
-        .catch((error) => logger.debug(error, 'Could not edit starboard message'));
+        .catch((err) => logger.debug({ err }, 'Could not edit starboard message'));
     }
   },
 });

@@ -24,6 +24,6 @@ export default new Event({
     const channel = message.guild.channels.cache.get(config.starboard.channelId);
     if (!channel || channel.type !== message.channel.type) return;
 
-    await channel.messages.delete(knownMessage.starboardMessageId).catch((error) => logger.debug(error, 'Could not delete starboard message'));
+    await channel.messages.delete(knownMessage.starboardMessageId).catch((err) => logger.debug({ err }, 'Could not delete starboard message'));
   },
 });

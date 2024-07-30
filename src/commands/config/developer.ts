@@ -257,7 +257,7 @@ export default new Command({
                 });
                 await target
                   .send(`You have received the ${BadgeType[badge]} badge!`)
-                  .catch((error) => logger.debug({ error, targetId: target.id }, 'Could not send user a DM'));
+                  .catch((err) => logger.debug({ err, targetId: target.id }, 'Could not send user a DM'));
                 interaction.editReply(`User has received the ${BadgeType[badge]} badge`);
               }
               break;
@@ -272,7 +272,7 @@ export default new Command({
                 });
                 await target
                   .send(`Your ${BadgeType[badge]} badge has been removed!`)
-                  .catch((error) => logger.debug({ error, targetId: target.id }, 'Could not send user a DM'));
+                  .catch((err) => logger.debug({ err, targetId: target.id }, 'Could not send user a DM'));
                 interaction.editReply(`${BadgeType[badge]} badge has been removed from user`);
               }
               break;
@@ -306,7 +306,7 @@ export default new Command({
                 });
                 await target
                   .send('You have been banned. You can no longer use this bot.')
-                  .catch((error) => logger.debug({ error, targetId: target.id }, 'Could not send user a DM'));
+                  .catch((err) => logger.debug({ err, targetId: target.id }, 'Could not send user a DM'));
                 interaction.editReply('User has been banned');
               }
               break;
@@ -320,7 +320,7 @@ export default new Command({
                 });
                 await target
                   .send('You have been unbanned. You can use this bot again.')
-                  .catch((error) => logger.debug({ error, targetId: target.id }, 'Could not send user a DM'));
+                  .catch((err) => logger.debug({ err, targetId: target.id }, 'Could not send user a DM'));
                 interaction.editReply('User has been unbanned');
               }
               break;

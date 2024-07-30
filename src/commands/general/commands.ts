@@ -16,8 +16,8 @@ import ms from 'ms';
 
 import { Command, ModuleType } from 'classes/command';
 
-import { chunk, pagination } from 'utils/pagination';
 import { logger } from 'utils/logger';
+import { chunk, pagination } from 'utils/pagination';
 
 export default new Command({
   module: ModuleType.General,
@@ -53,7 +53,7 @@ export default new Command({
         embeds: [helpEmbed],
         components: [new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(select)],
       })
-      .catch((error) => logger.debug({ error }, 'Could not send help message'));
+      .catch((err) => logger.debug({ err }, 'Could not send help message'));
     if (!msg) return;
 
     const TIME = 60_000;
@@ -63,7 +63,7 @@ export default new Command({
     });
 
     collector.on('collect', async (selectInteraction) => {
-      await selectInteraction.deferUpdate().catch((error) => logger.debug({ error }, 'Could not defer update'));
+      await selectInteraction.deferUpdate().catch((err) => logger.debug({ err }, 'Could not defer update'));
 
       if (selectInteraction.user.id !== interaction.user.id)
         return await interaction
@@ -73,7 +73,7 @@ export default new Command({
             }),
             ephemeral: true,
           })
-          .catch((error) => logger.debug({ error }, 'Could not send author only message'));
+          .catch((err) => logger.debug({ err }, 'Could not send author only message'));
 
       const categoryId = parseInt(selectInteraction.values[0]);
       const categoryName = ModuleType[categoryId];
@@ -106,7 +106,7 @@ export default new Command({
               embeds: [helpEmbed],
               components: [new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(select)],
             })
-            .catch((error) => logger.debug({ error }, 'Could not edit help message')),
+            .catch((err) => logger.debug({ err }, 'Could not edit help message')),
         embeds: chunkedCmds.map((chunk) =>
           new EmbedBuilder()
             .setColor(Colors.Blurple)
@@ -131,7 +131,7 @@ export default new Command({
           ],
           components: [new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(select.setDisabled(true))],
         })
-        .catch((error) => logger.debug({ error }, 'Could not edit help message'));
+        .catch((err) => logger.debug({ err }, 'Could not edit help message'));
     });
   },
 });

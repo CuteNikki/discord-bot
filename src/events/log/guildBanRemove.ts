@@ -10,7 +10,7 @@ export default new Event({
   once: false,
   async execute(client, ban) {
     const { guild, user, reason, partial } = ban;
-    if (partial) await ban.fetch().catch((error) => logger.debug({ error }, 'Could not fetch ban'));
+    if (partial) await ban.fetch().catch((err) => logger.debug({ err }, 'Could not fetch ban'));
 
     const config = await client.getGuildSettings(guild.id);
 

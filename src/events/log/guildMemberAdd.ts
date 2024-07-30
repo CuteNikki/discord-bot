@@ -10,7 +10,7 @@ export default new Event({
   once: false,
   async execute(client, member) {
     const { guild, user, partial } = member;
-    if (partial) await member.fetch().catch((error) => logger.debug({ error }, 'Could not fetch member'));
+    if (partial) await member.fetch().catch((err) => logger.debug({ err }, 'Could not fetch member'));
 
     const config = await client.getGuildSettings(guild.id);
 

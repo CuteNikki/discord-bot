@@ -1,6 +1,6 @@
 ###### - A WORK IN PROGRESS -
 
-# DiscordJS Bot written in TypeScript
+# DiscordJS V14 Bot written in TypeScript
 
 This discord bot was built with custom classes, <a href="https://www.i18next.com/">i18next</a> for translations, <a href="https://getpino.io/">Pino</a> as logger and <a href="https://www.mongodb.com/">MongoDB</a> as database.</p>
 

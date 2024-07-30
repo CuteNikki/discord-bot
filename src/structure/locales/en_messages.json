@@ -1,4 +1,24 @@
 {
+  "starboard": {
+    "title": "Starboard",
+    "state": "State",
+    "enabled": "The starboard has been enabled",
+    "disabled": "The starboard has been disabled",
+    "already_enabled": "The starboard is already enabled",
+    "already_disabled": "The starboard is already disabled",
+    "channel": "Channel",
+    "minimum_stars": "Minimum stars",
+    "setup": "The starboard has been set up",
+    "edit_nothing": "You did not provide any settings to edit",
+    "invalid_channel": "The channel is invalid",
+    "missing_permissions": "I do not have the permissions to send messages in that channel",
+    "invalid_stars": "The minimum stars are invalid",
+    "deleted": "The starboard has been deleted",
+    "delete_nothing": "The starboard settings are already empty",
+    "edited": "The starboard has been edited",
+    "same_channel": "That channel is already the starboard channel",
+    "same_stars": "The given minimum stars are already the starboard minimum stars"
+  },
   "vanity": {
     "not_found": "Could not find a server with that vanity url!",
     "found": "That vanity url is already used!\nServername: {{guildName}}\nMembers: {{guildMemberCount}}\nVanity-URL: {{vanity}}"

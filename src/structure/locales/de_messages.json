@@ -1,4 +1,24 @@
 {
+  "starboard": {
+    "title": "Starboard",
+    "state": "Status",
+    "enabled": "Das Starboard wurde aktiviert!",
+    "disabled": "Das Starboard wurde deaktiviert!",
+    "already_enabled": "Der Starboard ist bereits aktiviert!",
+    "already_disabled": "Der Starboard ist bereits deaktiviert!",
+    "channel": "Kanal",
+    "minimum_stars": "Minimale Sterne",
+    "setup": "Das starboard wurde eingerichtet",
+    "edit_nothing": "Du hast nichts zu bearbeiten angegeben!",
+    "invalid_channel": "Der Kanal existiert nicht!",
+    "missing_permissions": "Ich habe nicht die Berechtigung diesen Kanal zu verwenden!",
+    "invalid_stars": "Die minimum Sterne sind ungültig!",
+    "deleted": "Der Starboard wurde gelöscht!",
+    "delete_nothing": "Du hast nichts zu löschen angegeben!",
+    "edited": "Der Starboard wurde bearbeitet!",
+    "same_channel": "Das ist bereits der Kanal!",
+    "same_stars": "Das sind bereits die minimum Sterne!"
+  },
   "vanity": {
     "not_found": "Konnte keinen Server mit der Vanity-URL finden!",
     "found": "Die Vanity-URL ist bereits vergeben!\nServername: {{guildName}}\nMitglieder: {{guildMemberCount}}\nVanity-URL: {{vanity}}"

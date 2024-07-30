@@ -101,6 +101,12 @@ export interface GuildSettings {
   moderation: {
     enabled: boolean;
   };
+  starboard: {
+    enabled: boolean;
+    channelId?: string;
+    minimumStars?: number;
+    messages: { messageId: string; starboardMessageId?: string; reactedUsers: string[] }[];
+  };
   level: {
     enabled: boolean;
     channelId?: string;
@@ -180,6 +186,24 @@ const guildSchema = new Schema<GuildSettings>({
     },
     default: {
       enabled: true,
+    },
+  },
+  starboard: {
+    type: {
+      enabled: { type: Boolean, default: false, required: true },
+      channelId: { type: String, required: false },
+      minimumStars: { type: Number, required: false },
+      messages: [
+        {
+          messageId: { type: String, required: true },
+          starboardMessageId: { type: String, required: false },
+          reactedUsers: [{ type: String, required: true, default: [] }],
+        },
+      ],
+    },
+    default: {
+      enabled: false,
+      messages: [],
     },
   },
   ticket: {

@@ -1,38 +1,52 @@
 ###### - A WORK IN PROGRESS -
+
 # DiscordJS Bot written in TypeScript
+
 This discord bot was built with custom classes, <a href="https://www.i18next.com/">i18next</a> for translations, <a href="https://getpino.io/">Pino</a> as logger and <a href="https://www.mongodb.com/">MongoDB</a> as database.</p>
 
-![i18next](https://img.shields.io/badge/translation-i18next-blue?style=for-the-badge) ![Pino](https://img.shields.io/badge/logger-pino-blue?style=for-the-badge) ![MongoDB](https://img.shields.io/badge/database-mongodb-blue?style=for-the-badge) <br /> ![Discord.JS version 14](https://img.shields.io/badge/discord.js-v14-blue?style=for-the-badge) ![Repository Stars](https://img.shields.io/github/stars/CuteNikki/discord-bot?style=for-the-badge) ![Repository Forks](https://img.shields.io/github/forks/CuteNikki/discord-bot?style=for-the-badge) ![MIT License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge) ![Repository Issues](https://img.shields.io/github/issues/CuteNikki/discord-bot?style=for-the-badge)
+[<img src="https://img.shields.io/badge/pino-%23687634.svg?style=for-the-badge&logo=pino&logoColor=white" alt="pino" />](https://getpino.io) [<img src="https://img.shields.io/badge/mongodb-%2347A248.svg?style=for-the-badge&logo=mongodb&logoColor=white" alt="mongodb" />](https://mongodb.com) [<img src="https://img.shields.io/badge/i18next-%2326A69A.svg?style=for-the-badge&logo=i18next&logoColor=white" alt="i18next" />](https://i18next.com) [<img src="https://img.shields.io/badge/discordjs_v14-%235865F2.svg?style=for-the-badge&logo=discord&logoColor=white" alt="discord.js" />](https://discord.js.org)<br /> [<img src="https://img.shields.io/github/stars/CuteNikki/discord-bot?style=for-the-badge&color=%23d4a72a" alt="Repository Stars" />](https://github.com/CuteNikki/discord-bot/stargazers) [<img src="https://img.shields.io/github/issues/CuteNikki/discord-bot?style=for-the-badge&color=%2371d42a" alt="Repository Issues" />](https://github.com/CuteNikki/discord-bot/issues) [<img src="https://img.shields.io/github/forks/CuteNikki/discord-bot?style=for-the-badge&color=%232ad48a" alt="Repository Forks" />](https://github.com/CuteNikki/discord-bot/forks) [<img src="https://img.shields.io/github/license/cutenikki/discord-bot?style=for-the-badge&color=%232a90d4" alt="License" />]()
 
 ###### Made with 💖 by <a href="https://github.com/CuteNikki/">Nikki</a>
 
 ## Run Locally
-All it takes is just 6 simple steps.
 
-1 - Clone the repository
+All it takes is just 6-7 simple steps.
+
+1. Clone the repository
+
 ```bash
 git clone https://github.com/CuteNikki/discord-bot.git
 ```
-2 - Go to the project directory
+
+2. Go to the project directory
+
 ```bash
 cd discord-bot
 ```
-3 - Install dependencies
+
+3. Install dependencies
+
 ```bash
 npm install
 ```
-4 - Setup your config
+
+4. Setup your config
+
 ```bash
 # Copy example.config.json and rename to config.json
 # Fill in all values (more details in the config file)
 ```
-5 - Deploy slash commands
+
+5. Deploy slash commands
+
 ```bash
 npm run deploy
 # You may also use the /register command on discord
 # once the commands have been registered using the above command.
 ```
-6 - Run the bot
+
+6. Run the bot
+
 ```bash
 # Run in development
 npm run dev
@@ -40,20 +54,25 @@ npm run dev
 npm run build
 npm run start
 ```
-7 - Use the config-developer command to configure more settings (optional)
+
+7. (optional) Use the config-developer command to configure more settings
 
 ## Contributing
+
 Contributions, issues and feature requests are welcome.
 Feel free to check <a href="https://github.com/CuteNikki/discord-bot/issues">issues page</a> if you want to contribute.
 
 ## Show your support
+
 Please ⭐️ this repository if this project helped you!
 
 ## License
+
 Copyright © 2024 <a href="https://github.com/CuteNikki">CuteNikki</a>.
 This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICENSE">MIT</a> licensed.
 
 ## TO-DO
+- [ ] Update this list...
 - [x] General module
   - [x] Commands command
   - [x] Language command

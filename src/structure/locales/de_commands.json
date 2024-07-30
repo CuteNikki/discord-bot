@@ -599,6 +599,56 @@
       }
     ]
   },
+  "starboard": {
+    "name": "sternenbrett",
+    "description": "Zeigt Nachrichten in einem Kanal an, basierend auf der Anzahl der Sternen",
+    "options": [
+      {
+        "name": "konfiguration",
+        "description": "Zeigt die Sternenbrett-Konfiguration an"
+      },
+      {
+        "name": "deaktivieren",
+        "description": "Deaktiviert das Sternenbrett"
+      },
+      {
+        "name": "aktivieren",
+        "description": "Aktiviert das Sternenbrett"
+      },
+      {
+        "name": "löschen",
+        "description": "Löscht das Sternenbrett"
+      },
+      {
+        "name": "einrichten",
+        "description": "Richtet das Sternenbrett ein",
+        "options": [
+          {
+            "name": "kanal",
+            "description": "Der Kanal, in den die Sternenbrett-Nachrichten gesendet werden sollen"
+          },
+          {
+            "name": "sterne",
+            "description": "Die minimale Anzahl an Sternen, die eine Nachricht benötigt"
+          }
+        ]
+      },
+      {
+        "name": "bearbeiten",
+        "description": "Bearbeitet die Sternenbrett-Konfiguration",
+        "options": [
+          {
+            "name": "kanal",
+            "description": "Der Kanal, in den die Sternenbrett-Nachrichten gesendet werden sollen"
+          },
+          {
+            "name": "sterne",
+            "description": "Die minimale Anzahl an Sternen, die eine Nachricht benötigt"
+          }
+        ]
+      }
+    ]
+  },
   "config-ticket": {
     "name": "ticket-konfiguration",
     "description": "Konfiguriere das Ticket-Modul",

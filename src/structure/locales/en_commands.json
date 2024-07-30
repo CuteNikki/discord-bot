@@ -599,6 +599,56 @@
       }
     ]
   },
+  "starboard": {
+    "name": "starboard",
+    "description": "Showcases messages in a dedicated channel based on receiving a number of star reactions",
+    "options": [
+      {
+        "name": "config",
+        "description": "Shows the starboard configuration"
+      },
+      {
+        "name": "disable",
+        "description": "Disables the starboard"
+      },
+      {
+        "name": "enable",
+        "description": "Enables the starboard"
+      },
+      {
+        "name": "delete",
+        "description": "Deletes the starboard"
+      },
+      {
+        "name": "setup",
+        "description": "Sets up the starboard",
+        "options": [
+          {
+            "name": "channel",
+            "description": "The channel to send the starboard messages to"
+          },
+          {
+            "name": "stars",
+            "description": "The minimum amount of stars a message needs to be considered for the starboard"
+          }
+        ]
+      },
+      {
+        "name": "edit",
+        "description": "Edits the starboard configuration",
+        "options": [
+          {
+            "name": "channel",
+            "description": "The channel to send the starboard messages to"
+          },
+          {
+            "name": "stars",
+            "description": "The minimum amount of stars a message needs to be considered for the starboard"
+          }
+        ]
+      }
+    ]
+  },
   "config-ticket": {
     "name": "ticket-configuration",
     "description": "Configure the ticket module",

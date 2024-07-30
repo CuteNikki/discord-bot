@@ -1,4 +1,8 @@
 {
+  "mentioned": {
+    "responding": "I'm responding to you because I was mentioned in your message.",
+    "commands": "You can get started by typing `/` or by using `/commands` to see all my commands."
+  },
   "starboard": {
     "title": "Starboard",
     "state": "State",

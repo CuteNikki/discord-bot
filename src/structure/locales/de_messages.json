@@ -1,4 +1,8 @@
 {
+  "mentioned": {
+    "responding": "Ich antworte dir, weil ich in deiner Nachricht erwähnt wurde.",
+    "commands": "Du kannst mit `/` oder mit `/commands` alle meine Befehle sehen."
+  },
   "starboard": {
     "title": "Starboard",
     "state": "Status",

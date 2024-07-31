@@ -420,7 +420,3 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
       - [x] threadDelete
       - [x] threadUpdate
       - [x] voiceStateUpdate
-
-```
-
-```

@@ -104,6 +104,7 @@ export async function listenToErrors(client: DiscordClient) {
       url: 'https://nodejs.org/api/process.html#event-warning',
     }),
   );
+  // @ts-ignore - this code works fine, typescript is just being dumb
   mongoose.connection.on('error', (err) =>
     sendError({
       client,

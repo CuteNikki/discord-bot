@@ -66,7 +66,13 @@ npm run start
 This displays the use of all command properties including autocomplete.
 
 ```ts
-import { Colors, EmbedBuilder, PermissionFlagsBits, SlashCommandBuilder, type ColorResolvable } from 'discord.js';
+import {
+  Colors, // all discord colors
+  EmbedBuilder,
+  PermissionFlagsBits,
+  SlashCommandBuilder,
+  type ColorResolvable,
+} from 'discord.js';
 import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
@@ -137,8 +143,15 @@ export default new Command({
       { name: 'not-quite-black', value: Colors.NotQuiteBlack.toString(16) },
     ];
     if (!input.length) return await interaction.respond(colors.slice(0, 25));
-    await interaction.respond(colors.filter((color) => color.name.toLowerCase().includes(input.toLowerCase())).slice(0, 25));
-    // Making sure we only return 25 results as that is the max amount allowed by discord
+    await interaction.respond(
+      colors
+        .filter(
+          (color) => color.name.toLowerCase().includes(input.toLowerCase()),
+          // Check if the input includes the color name
+        )
+        .slice(0, 25),
+    );
+    // Making sure we only ever return max of 25 results
   },
   async execute({ interaction, client }) {
     // the order of client and interaction does not matter
@@ -150,14 +163,25 @@ export default new Command({
     // get a guilds language
     // const lng = await client.getGuildLanguage(interaction.guildId);
 
-    // Autocomplete allows you to give the user a list to choose from but they will still be able to type in whatever they want!
-    // It's a must to check if they actually provided a valid color.
+    // Autocomplete allows you to give the user a list to choose from
+    // but they will still be able to type in whatever they want!
+    // it's a must to check if they actually provided a valid color.
     try {
-      await interaction.reply({ embeds: [new EmbedBuilder().setColor(color as ColorResolvable).setDescription(t('preview-color.preview', { lng, color }))] });
+      await interaction.reply({
+        embeds: [
+          new EmbedBuilder()
+            .setColor(color as ColorResolvable)
+            // casting the color to a color resolvable
+            .setDescription(t('preview-color.preview', { lng, color })),
+        ],
+      });
     } catch (err) {
       logger.debug({ err }, 'Error while previewing color');
-      if (!interaction.replied) await interaction.reply({ content: t('preview-color.invalid', { lng }) });
-      else await interaction.editReply({ content: t('preview-color.invalid', { lng }) });
+      if (!interaction.replied) {
+        await interaction.reply({ content: t('preview-color.invalid', { lng }) });
+      } else {
+        await interaction.editReply({ content: t('preview-color.invalid', { lng }) });
+      }
     }
   },
 });

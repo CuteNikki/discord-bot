@@ -62,7 +62,6 @@ export async function registerCommands() {
     .map((cmd) => {
       // If there is no translation for the command, don't translate anything and return the command data
       if (t(`${cmd.name}.name`, { lng: 'en', ns: 'commands' }) === `${cmd.name}.name`) return cmd;
-      if (cmd.type !== ApplicationCommandType.ChatInput) cmd.name = t(`${cmd.name}.name`, { lng: 'en', ns: 'commands' });
 
       // Translate the command name
       cmd.name_localizations = {
@@ -194,6 +193,12 @@ export async function registerCommands() {
           return optionOne;
         });
       }
+
+      if (cmd.type !== ApplicationCommandType.ChatInput) {
+        cmd.name = t(`${cmd.name}.name`, { lng: 'en', ns: 'commands' });
+        cmd.description_localizations = {};
+      }
+
       return cmd;
     });
   // Stop timer and log the time it took to translate the commands

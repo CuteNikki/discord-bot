@@ -7,7 +7,7 @@
   },
   "module": "./src/index.ts",
   "dependencies": {
-    "@translate-tools/core": "^1.0.0",
+    "@translate-tools/core": "^2.0.1",
     "canvacord": "^6.0.2",
     "cron": "^3.1.7",
     "dayjs": "^1.11.12",

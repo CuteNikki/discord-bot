@@ -1,4 +1,14 @@
 {
+  "preview-color": {
+    "name": "farb-vorschau",
+    "description": "Sendet eine Einbettung mit einer Farbe zur Vorschau",
+    "options": [
+      {
+        "name": "farbe",
+        "description": "Die Farbe, die zur Vorschau gezeigt werden soll"
+      }
+    ]
+  },
   "config-developer": {
     "name": "developer-konfiguration",
     "description": "Nur für Teammitglieder/Entwickler des Bots",

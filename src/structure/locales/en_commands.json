@@ -1,4 +1,14 @@
 {
+  "preview-color": {
+    "name": "preview-color",
+    "description": "Sends an embed with a color to preview",
+    "options": [
+      {
+        "name": "color",
+        "description": "The color to preview"
+      }
+    ]
+  },
   "config-developer": {
     "name": "developer-configuration",
     "description": "Only for staff/developers of the bot",

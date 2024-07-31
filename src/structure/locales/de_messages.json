@@ -1,4 +1,8 @@
 {
+  "preview-color": {
+    "preview": "Hier ist eine Vorschau der Farbe {{color}}!",
+    "invalid": "Die Farbe, die du angegeben hast, ist ungültig!"
+  },
   "mentioned": {
     "responding": "Ich antworte dir, weil ich in deiner Nachricht erwähnt wurde.",
     "commands": "Du kannst mit `/` oder mit `/commands` alle meine Befehle sehen."

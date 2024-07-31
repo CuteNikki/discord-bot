@@ -96,14 +96,16 @@ export async function listenToErrors(client: DiscordClient) {
       url: 'https://nodejs.org/api/process.html#event-unhandledrejection',
     }),
   );
-  process.on('warning', (err) =>
+  process.on('warning', (err) => {
+    // ignore warnings about deprecated punycode since that's an issue from one of the dependencies
+    if (err.message.includes('punycode') && err.message.includes('deprecated')) return;
     sendError({
       client,
       err,
       location: 'NodeJS Warning',
       url: 'https://nodejs.org/api/process.html#event-warning',
-    }),
-  );
+    });
+  });
   // @ts-ignore - this code works fine, typescript is just being dumb
   mongoose.connection.on('error', (err) =>
     sendError({

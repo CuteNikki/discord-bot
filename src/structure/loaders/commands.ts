@@ -194,10 +194,7 @@ export async function registerCommands() {
         });
       }
 
-      if (cmd.type !== ApplicationCommandType.ChatInput) {
-        cmd.name = t(`${cmd.name}.name`, { lng: 'en', ns: 'commands' });
-        cmd.description_localizations = {};
-      }
+      if (cmd.type !== ApplicationCommandType.ChatInput) cmd.description_localizations = {};
 
       return cmd;
     });

@@ -5,7 +5,7 @@ export const supportedLanguages = ['en', 'de'];
 
 export async function initTranslation() {
   await use(i18nextFsBackend).init({
-    debug: process.argv.includes('--debug') ? true : false,
+    debug: process.argv.includes('--debug-lang') ? true : false,
     defaultNS: 'messages',
     ns: ['commands', 'messages'],
     preload: supportedLanguages,

@@ -1,5 +1,5 @@
 import { ClusterClient, getInfo } from 'discord-hybrid-sharding';
-import { Client, Collection, GatewayIntentBits, Partials } from 'discord.js';
+import { ActivityType, Client, Collection, GatewayIntentBits, Partials, PresenceUpdateStatus } from 'discord.js';
 
 import type { UpdateQuery } from 'mongoose';
 
@@ -25,7 +25,7 @@ import { initTranslation, supportedLanguages } from 'utils/language';
 import type { Level, LevelIdentifier } from 'utils/level';
 
 export class DiscordClient extends Client {
-  // Cluster used for sharding
+  // Cluster used for sharding from discord-hybrid-sharding
   public cluster = new ClusterClient(this);
 
   // Collections for loading and running commands, buttons and modals
@@ -48,8 +48,14 @@ export class DiscordClient extends Client {
 
   constructor() {
     super({
+      // Setting the bot shards from discord-hybrid-sharding
       shards: getInfo().SHARD_LIST,
       shardCount: getInfo().TOTAL_SHARDS,
+      // Setting the bots presence
+      presence: {
+        activities: keys.DISCORD_BOT_STATUS !== 'optional' ? [{ name: keys.DISCORD_BOT_STATUS, type: ActivityType.Custom }] : [],
+        status: PresenceUpdateStatus.Online,
+      },
       // Partials are a way to handle objects that may not have all their data available
       // By enabling partials, your bot can still process events involving these incomplete objects by fetching additional data when needed
       partials: [

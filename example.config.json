@@ -1,28 +1,31 @@
 {
-  "comment_0": "Rename this file from example.config.json to config.json or create another file called config.json",
+  "comment_0": "Rename this file or duplicate this file and call it config.json and then fill in all the values",
   "DISCORD_BOT": {
     "comment_1": "Get your bot's token from https://discord.com/developers/applications",
     "TOKEN": "required",
 
-    "comment_2": "Your bot's application/user id",
-    "ID": "required"
+    "comment_2": "Your bot's application id",
+    "ID": "required",
+
+    "comment_3": "The status that you can see on the bot's profile",
+    "STATUS": "optional"
   },
   "DEVELOPER": {
-    "comment_3": "This is the array of discord user ids that can use developer only commands",
+    "comment_4": "This is the array of discord user ids that can use developer only commands",
     "USER_IDS": [],
 
-    "comment_4": "This is the array of discord server ids that the developer only commands get registered to",
+    "comment_5": "This is the array of discord server ids that the developer only commands get registered to",
     "GUILD_IDS": [],
 
-    "comment_5": "This is the webhook url that will be used for logging errors",
+    "comment_6": "This is the webhook url that will be used for logging errors",
     "ERROR_WEBHOOK": "optional"
   },
   "DATABASE": {
-    "comment_6": "Get your URI from https://www.mongodb.com/",
+    "comment_7": "Get your URI from https://www.mongodb.com/",
     "URI": "required"
   },
   "API_KEYS": {
-    "comment_7": "Get your API key from https://www.weatherapi.com/",
+    "comment_8": "Get your API key from https://www.weatherapi.com/",
     "WEATHER": "required"
   }
 }

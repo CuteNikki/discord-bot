@@ -47,7 +47,7 @@ export async function sendError({
 
   await webhook
     .send({
-      username: `${client.user?.username} | Error` ?? 'Error Notification',
+      username: client.user ? `${client.user.username} | Error` : `${keys.DISCORD_BOT_ID} | Error`,
       avatarURL: client.user?.displayAvatarURL(),
       embeds: [embed],
     })

@@ -27,12 +27,13 @@ export async function sendError({
 
   if (!webhookUrl) return;
   const webhook = new WebhookClient({ url: webhookUrl });
-  const embed = new EmbedBuilder().setColor(Colors.Red);
+  const embed = new EmbedBuilder()
+    .setColor(Colors.Red)
+    .setTitle('An error occurred')
+    .setURL(url ?? null);
 
   if (err)
     embed
-      .setTitle('An error occurred')
-      .setURL(url ?? null)
       .setDescription(codeBlock('ts', `Stack: ${err.stack ? (err.stack.length > 3500 ? err.stack.slice(0, 3500) + '...' : err.stack) : 'not available'}`))
       .addFields(
         { name: 'Name', value: `\`${err.name}\`` },

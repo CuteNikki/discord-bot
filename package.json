@@ -13,7 +13,7 @@
     "dayjs": "^1.11.13",
     "discord-html-transcripts": "^3.2.0",
     "discord-hybrid-sharding": "^2.2.0",
-    "discord.js": "^14.16.0-dev.1724285449-bba0e72e2",
+    "discord.js": "^14.16.1",
     "i18next": "^23.14.0",
     "i18next-fs-backend": "^2.3.2",
     "mediaplex": "^0.0.9",

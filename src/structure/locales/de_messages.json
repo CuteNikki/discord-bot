@@ -1051,7 +1051,7 @@
   },
   "serverinfo": {
     "title": "Server Informationen",
-    "features": "Features",
+    "features": "Features ({{showing}}/{{total}})",
     "user_roles": "Rollen ({{showing}}/{{total}})",
     "managed_roles": "Verwaltete Rollen ({{showing}}/{{total}})",
     "banner": "Banner",

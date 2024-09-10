@@ -1052,7 +1052,7 @@
   },
   "serverinfo": {
     "title": "Server Information",
-    "features": "Features",
+    "features": "Features ({{showing}}/{{total}})",
     "user_roles": "Roles ({{showing}}/{{total}})",
     "managed_roles": "Managed Roles ({{showing}}/{{total}})",
     "banner": "Banner",

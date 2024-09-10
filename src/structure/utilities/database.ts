@@ -1,5 +1,5 @@
 import { CronJob } from 'cron';
-import { Colors, EmbedBuilder } from 'discord.js';
+import { ChannelType, Colors, EmbedBuilder } from 'discord.js';
 import { t } from 'i18next';
 import { connect } from 'mongoose';
 import { performance } from 'perf_hooks';
@@ -122,7 +122,7 @@ async function clearReminders(client: DiscordClient) {
     }
     // Notify in reminder channel if DM fails
     const channel = await client.channels.fetch(reminder.channelId).catch((err) => logger.debug({ err, reminder }, 'Could not fetch channel'));
-    if (channel && channel.isTextBased()) {
+    if (channel?.isTextBased() && channel.type !== ChannelType.GroupDM) {
       channel.send({ embeds: [embed], content: `<@${reminder.userId}>` }).catch((err) => logger.debug({ err, reminder }, 'Could not send reminder in channel'));
       continue;
     }

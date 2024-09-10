@@ -7,7 +7,6 @@ import {
   GuildNSFWLevel,
   GuildVerificationLevel,
   InteractionContextType,
-  // PresenceUpdateStatus,
   Role,
   SlashCommandBuilder,
 } from 'discord.js';
@@ -35,10 +34,12 @@ export default new Command({
 
     const sortedRoles = roles.cache
       .map((r) => r)
-      .slice(1, roles.cache.size)
-      .sort((a, b) => b.position - a.position);
+      .sort((a, b) => b.position - a.position)
+      .slice(0, roles.cache.size - 1);
+
     const userRoles = sortedRoles.filter((role) => !role.managed);
     const managedRoles = sortedRoles.filter((role) => role.managed);
+
     function maxDisplayRoles(roles: Role[]) {
       const results: string[] = [];
       let totalLength = 0;
@@ -49,11 +50,18 @@ export default new Command({
       }
       return results;
     }
+    function maxDisplayFeatures() {
+      const results: string[] = [];
+      let totalLength = 0;
+      for (const feature of guild.features) {
+        const featureString = `${feature.toLowerCase().replace(/_/g, ' ')} `;
+        if (featureString.length + totalLength > 1000) break;
+        results.push(featureString);
+      }
+      return results;
+    }
 
     const totalMembers = memberCount;
-    // const humanMembers = members.cache.filter((mem) => !mem.user.bot).size;
-    // const botMembers = members.cache.filter((mem) => mem.user.bot).size;
-    // const onlineMembers = members.cache.filter((mem) => mem.presence?.status === PresenceUpdateStatus.Online).size;
 
     function getChannelCount(types: ChannelType[]) {
       return channels.cache.filter((channel) => types.includes(channel.type)).size;
@@ -72,20 +80,18 @@ export default new Command({
 
     const serverEmbed = new EmbedBuilder()
       .setColor(Colors.Aqua)
-      .setThumbnail(guild.iconURL({ size: 4096 }))
-      .setTitle(t('serverinfo.title', { lng }))
-      .setImage(guild.bannerURL({ size: 4096 }))
+      .setThumbnail(guild.iconURL({ size: 4096, extension: 'webp' }))
       .addFields(
         {
-          name: t('serverinfo.server.title', { lng }),
+          name: `\` ${t('serverinfo.server.title', { lng })} \``,
           value: [
             t('serverinfo.server.name', {
               lng,
-              name: `${guild.name} (${guild.id})`,
+              name: `${guild.name}\n${guild.id}`,
             }),
             t('serverinfo.server.created', {
               lng,
-              created: `<t:${Math.floor(guild.createdTimestamp / 1000)}:f>`,
+              created: `<t:${Math.floor(guild.createdTimestamp / 1000)}:d> <t:${Math.floor(guild.createdTimestamp / 1000)}:R>`,
             }),
             t('serverinfo.server.owner', { lng, owner: `<@${guild.ownerId}>` }),
             t('serverinfo.server.vanity', {
@@ -96,7 +102,7 @@ export default new Command({
           inline: true,
         },
         {
-          name: t('serverinfo.security.title', { lng }),
+          name: `\` ${t('serverinfo.security.title', { lng })} \``,
           value: [
             t('serverinfo.security.explicit_filter', {
               lng,
@@ -114,7 +120,7 @@ export default new Command({
           inline: true,
         },
         {
-          name: t('serverinfo.boost.title', { lng }),
+          name: `\` ${t('serverinfo.boost.title', { lng })} \``,
           value: [
             t('serverinfo.boost.tier', { lng, tier: guild.premiumTier }),
             t('serverinfo.boost.count', {
@@ -129,17 +135,12 @@ export default new Command({
           inline: true,
         },
         {
-          name: t('serverinfo.members.title', { lng }),
-          value: [
-            t('serverinfo.members.total', { lng, total: totalMembers }),
-            // t('serverinfo.members.humans', { lng, humans: humanMembers }),
-            // t('serverinfo.members.bots', { lng, bots: botMembers }),
-            // t('serverinfo.members.online', { lng, online: onlineMembers }),
-          ].join('\n'),
+          name: `\` ${t('serverinfo.members.title', { lng })} \``,
+          value: [t('serverinfo.members.total', { lng, total: totalMembers })].join('\n'),
           inline: true,
         },
         {
-          name: t('serverinfo.channels.title', { lng }),
+          name: `\` ${t('serverinfo.channels.title', { lng })} \``,
           value: [
             t('serverinfo.channels.total', { lng, total: totalChannels }),
             t('serverinfo.channels.categories', {
@@ -154,10 +155,12 @@ export default new Command({
           inline: true,
         },
       );
-    if (guild.description) serverEmbed.setDescription(guild.description);
-    if (totalEmojis)
+    if (guild.description) {
+      serverEmbed.setDescription(guild.description);
+    }
+    if (totalEmojis) {
       serverEmbed.addFields({
-        name: t('serverinfo.emojis.title'),
+        name: `\` ${t('serverinfo.emojis.title')} \``,
         value: [
           t('serverinfo.emojis.total', { lng, total: totalEmojis }),
           t('serverinfo.emojis.animated', { lng, animated: animatedEmojis }),
@@ -166,37 +169,44 @@ export default new Command({
         ].join('\n'),
         inline: true,
       });
-    if (guild.features.length)
+    }
+    if (userRoles.length) {
+      const displayUserRoles = maxDisplayRoles(userRoles);
       serverEmbed.addFields({
-        name: t('serverinfo.features', { lng }),
-        value: guild.features.map((feature) => `\`${feature.toLowerCase().replace(/_/g, ' ')}\``).join(' '),
-      });
-    const displayUserRoles = maxDisplayRoles(userRoles);
-    if (userRoles.length)
-      serverEmbed.addFields({
-        name: t('serverinfo.user_roles', {
+        name: `\` ${t('serverinfo.user_roles', {
           lng,
           showing: displayUserRoles.length,
           total: userRoles.length,
-        }),
+        })} \``,
         value: displayUserRoles.join(''),
       });
-    const displayManagedRoles = maxDisplayRoles(managedRoles);
-    if (managedRoles.length)
+    }
+    if (managedRoles.length) {
+      const displayManagedRoles = maxDisplayRoles(managedRoles);
       serverEmbed.addFields({
-        name: t('serverinfo.managed_roles', {
+        name: `\` ${t('serverinfo.managed_roles', {
           lng,
           showing: displayManagedRoles.length,
           total: managedRoles.length,
-        }),
+        })} \``,
         value: displayManagedRoles.join(''),
       });
-    if (guild.banner)
+    }
+    if (guild.features.length) {
+      const displayFeatures = maxDisplayFeatures();
       serverEmbed.addFields({
-        name: t('serverinfo.banner', { lng }),
-        value: '** **',
+        name: `\` ${t('serverinfo.features', { lng, showing: displayFeatures.length, total: guild.features.length })} \``,
+        value: displayFeatures.join(''),
       });
-
+    }
+    if (guild.banner) {
+      serverEmbed
+        .addFields({
+          name: `\` ${t('serverinfo.banner', { lng })} \``,
+          value: '** **',
+        })
+        .setImage(guild.bannerURL({ size: 4096, extension: 'webp' }));
+    }
     await interaction.editReply({
       embeds: [serverEmbed],
     });

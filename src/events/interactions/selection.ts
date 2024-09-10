@@ -121,7 +121,7 @@ export default new Event({
       if (interaction.deferred) interaction.editReply({ content: message });
       else interaction.reply({ content: message, ephemeral: true });
 
-      sendError({ client, err, location: 'Selection Interaction Error' });
+      sendError({ client, err, location: `Selection Interaction Error: ${selection.options.customId}` });
     }
   },
 });

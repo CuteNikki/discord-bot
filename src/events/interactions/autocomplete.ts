@@ -20,7 +20,7 @@ export default new Event({
       await sendError({
         client,
         err,
-        location: 'Autocomplete Interaction Error',
+        location: `Autocomplete Interaction Error: ${command.options.data.name}`,
       });
     }
   },

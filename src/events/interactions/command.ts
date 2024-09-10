@@ -110,7 +110,7 @@ export default new Event({
       if (interaction.deferred) interaction.editReply({ content: message });
       else interaction.reply({ content: message, ephemeral: true });
 
-      await sendError({ client, err, location: 'Command Interaction Error' });
+      await sendError({ client, err, location: `Command Interaction Error: ${command.options.data.name}` });
       await client.updateClientSettings(keys.DISCORD_BOT_ID, {
         $inc: { ['stats.commandsFailed']: 1 },
       });

@@ -112,7 +112,7 @@ export default new Event({
       if (interaction.deferred) interaction.editReply({ content: message });
       else interaction.reply({ content: message, ephemeral: true });
 
-      sendError({ client, err, location: 'Modal Interaction Error' });
+      sendError({ client, err, location: `Modal Interaction Error: ${modal.options.customId}` });
     }
   },
 });

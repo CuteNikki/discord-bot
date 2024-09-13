@@ -1,4 +1,4 @@
-import { ChannelType, Colors, EmbedBuilder, Events, StickerFormatType } from 'discord.js';
+import { Colors, EmbedBuilder, Events, StickerFormatType } from 'discord.js';
 import { t } from 'i18next';
 
 import { Event } from 'classes/event';
@@ -15,7 +15,7 @@ export default new Event({
     if (!config.log.enabled || !config.log.events.stickerDelete || !config.log.channelId) return;
 
     const logChannel = await guild.channels.fetch(config.log.channelId);
-    if (!logChannel || logChannel.type !== ChannelType.GuildText) return;
+    if (!logChannel?.isSendable()) return;
 
     const lng = config.language;
 

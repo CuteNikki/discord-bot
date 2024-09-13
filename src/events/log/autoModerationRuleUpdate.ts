@@ -1,4 +1,4 @@
-import { AutoModerationActionType, ChannelType, Colors, EmbedBuilder, Events } from 'discord.js';
+import { AutoModerationActionType, Colors, EmbedBuilder, Events } from 'discord.js';
 import { t } from 'i18next';
 
 import { Event } from 'classes/event';
@@ -14,7 +14,7 @@ export default new Event({
     if (!config.log.enabled || !config.log.events.autoModerationRuleUpdate || !config.log.channelId || !oldAutoModerationRule || !newAutoModerationRule) return;
 
     const logChannel = await guild.channels.fetch(config.log.channelId);
-    if (!logChannel || logChannel.type !== ChannelType.GuildText) return;
+    if (!logChannel?.isSendable()) return;
 
     const lng = config.language;
 

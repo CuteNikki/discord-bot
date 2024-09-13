@@ -1,4 +1,4 @@
-// import { ChannelType, Colors, EmbedBuilder, Events } from 'discord.js';
+// import { Colors, EmbedBuilder, Events } from 'discord.js';
 
 // import { Event } from 'classes/event';
 
@@ -14,7 +14,7 @@
 //     if (!config.log.events.channelPinsUpdate || !config.log.channelId) return;
 
 //     const logChannel = await guild.channels.fetch(config.log.channelId);
-//     if (!logChannel || logChannel.type !== ChannelType.GuildText) return;
+//     if (!logChannel?.isSendable()) return;
 
 //     const pinnedMessages = await channel.messages.fetchPinned().catch(() => {});
 //     if (!pinnedMessages) return;

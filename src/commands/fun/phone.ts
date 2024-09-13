@@ -1,4 +1,4 @@
-import { ApplicationIntegrationType, ChannelType, InteractionContextType, SlashCommandBuilder } from 'discord.js';
+import { ApplicationIntegrationType, InteractionContextType, SlashCommandBuilder } from 'discord.js';
 import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
@@ -67,7 +67,7 @@ export default new Command({
             const targetChannel = await client.channels
               .fetch(randomTarget.channelId)
               .catch((err) => logger.debug({ err, targetChannelId: randomTarget.channelId }, 'Could not fetch target channel'));
-            if (!targetChannel || targetChannel.type !== ChannelType.GuildText) return;
+            if (!targetChannel || !targetChannel.isSendable()) return;
             targetChannel.send(t('phone.connect.connected'));
           } else {
             // No available channels, add this channel to the pool
@@ -107,7 +107,7 @@ export default new Command({
           const targetChannel = await client.channels
             .fetch(connectedChannelId)
             .catch((err) => logger.debug({ err, targetChannelId: connectedChannelId }, 'Could not fetch target channel'));
-          if (!targetChannel || targetChannel.type !== ChannelType.GuildText) return;
+          if (!targetChannel || !targetChannel.isSendable()) return;
           targetChannel.send(t('phone.hangup.disconnected', { lng: otherLng }));
         }
         break;

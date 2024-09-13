@@ -1,4 +1,4 @@
-import { ChannelType, EmbedBuilder, Events, type ColorResolvable } from 'discord.js';
+import { EmbedBuilder, Events, type ColorResolvable } from 'discord.js';
 
 import { replacePlaceholders } from 'classes/custom-embed';
 import { Event } from 'classes/event';
@@ -16,7 +16,7 @@ export default new Event({
 
     if (!config.farewell.enabled || !config.farewell.channelId) return;
     const farewellChannel = await guild.channels.fetch(config.farewell.channelId);
-    if (!farewellChannel || farewellChannel.type !== ChannelType.GuildText) return;
+    if (!farewellChannel?.isSendable()) return;
 
     const embedData = config.farewell.message.embed;
 

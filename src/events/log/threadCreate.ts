@@ -1,4 +1,4 @@
-import { ChannelType, Colors, EmbedBuilder, Events } from 'discord.js';
+import { Colors, EmbedBuilder, Events } from 'discord.js';
 import { t } from 'i18next';
 
 import { Event } from 'classes/event';
@@ -16,7 +16,7 @@ export default new Event({
     if (!config.log.enabled || !config.log.events.threadCreate || !config.log.channelId) return;
 
     const logChannel = await guild.channels.fetch(config.log.channelId);
-    if (!logChannel || logChannel.type !== ChannelType.GuildText) return;
+    if (!logChannel?.isSendable()) return;
 
     const owner = await thread.fetchOwner().catch((err) => logger.debug({ err }, 'Could not fetch thread owner'));
 

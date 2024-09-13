@@ -1,4 +1,4 @@
-import { ChannelType, Colors, EmbedBuilder, Events } from 'discord.js';
+import { Colors, EmbedBuilder, Events } from 'discord.js';
 import { t } from 'i18next';
 
 import { Event } from 'classes/event';
@@ -12,10 +12,10 @@ export default new Event({
 
     const config = await client.getGuildSettings(guild.id);
 
-    if (!config.log.events.messageUpdate || !config.log.channelId) return;
+    if (!config.log.enabled || !config.log.events.messageUpdate || !config.log.channelId) return;
 
     const logChannel = await guild.channels.fetch(config.log.channelId);
-    if (!config.log.enabled || !logChannel || logChannel.type !== ChannelType.GuildText) return;
+    if (!logChannel?.isSendable()) return;
 
     const lng = config.language;
 

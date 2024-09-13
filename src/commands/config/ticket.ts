@@ -413,7 +413,7 @@ export default new Command({
             {
               const id = options.getString('id', true);
               const channel = options.getChannel('channel', true);
-              if (!channel || channel.type !== ChannelType.GuildText)
+              if (!channel?.isSendable())
                 return await interaction.editReply({
                   content: 'The channel is invalid',
                 });

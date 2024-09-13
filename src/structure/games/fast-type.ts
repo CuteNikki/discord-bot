@@ -1,4 +1,4 @@
-import { ChannelType, Colors, EmbedBuilder, type ChatInputCommandInteraction } from 'discord.js';
+import { Colors, EmbedBuilder, type ChatInputCommandInteraction } from 'discord.js';
 import { t } from 'i18next';
 
 import type { DiscordClient } from 'classes/client';
@@ -56,7 +56,7 @@ export class FastType {
       })
       .catch((err) => logger.debug({ err }, 'Could not send message'));
 
-    if (!message || interaction.channel?.type === ChannelType.GroupDM) return;
+    if (!message || !interaction.channel?.isSendable()) return;
 
     const startTime = Date.now();
 

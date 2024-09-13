@@ -15,7 +15,7 @@ export default new Event({
     if (!config.log.enabled || !config.log.events.channelUpdate || !config.log.channelId) return;
 
     const logChannel = await guild.channels.fetch(config.log.channelId);
-    if (!logChannel || logChannel.type !== ChannelType.GuildText) return;
+    if (!logChannel?.isSendable()) return;
 
     const lng = config.language;
 

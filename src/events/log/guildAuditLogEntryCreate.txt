@@ -1,4 +1,4 @@
-// import { AuditLogEvent, ChannelType, Colors, EmbedBuilder, Events, GuildEmoji, Role, User, type GuildTextBasedChannel } from 'discord.js';
+// import { AuditLogEvent, Colors, EmbedBuilder, Events, GuildEmoji, Role, User, type GuildTextBasedChannel } from 'discord.js';
 
 // import { Event } from 'classes/event';
 
@@ -8,10 +8,10 @@
 //   async execute(client, auditLogEntry, guild) {
 //     const config = await client.getGuildSettings(guild.id);
 
-//     if (!config.log.events.guildAuditLogEntryCreate || !config.log.channelId) return;
+//     if (!config.log.enables || !config.log.events.guildAuditLogEntryCreate || !config.log.channelId) return;
 
 //     const logChannel = await guild.channels.fetch(config.log.channelId);
-//     if (!logChannel || logChannel.type !== ChannelType.GuildText) return;
+//     if (!logChannel?.isSendable()) return;
 
 //     const executor = auditLogEntry.executor;
 //     const target = auditLogEntry.target;

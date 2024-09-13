@@ -1,4 +1,4 @@
-import { ChannelType, Colors, EmbedBuilder, Events } from 'discord.js';
+import { Colors, EmbedBuilder, Events } from 'discord.js';
 import { t } from 'i18next';
 
 import { Event } from 'classes/event';
@@ -90,7 +90,7 @@ export default new Event({
       .fetch(connectedChannelId)
       .catch((err) => logger.debug({ err, channelId: connectedChannelId }, 'Could not fetch channel'));
     // Ensure the target channel is a text channel
-    if (!targetChannel || targetChannel.type !== ChannelType.GuildText) return;
+    if (!targetChannel?.isSendable()) return;
 
     // Send the embed to current channel if message can be deleted
     if (message.deletable)

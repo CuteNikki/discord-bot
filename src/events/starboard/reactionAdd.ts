@@ -1,4 +1,4 @@
-import { ChannelType, EmbedBuilder, Events, PermissionsBitField } from 'discord.js';
+import { EmbedBuilder, Events, PermissionsBitField } from 'discord.js';
 
 import { Event } from 'classes/event';
 
@@ -19,7 +19,7 @@ export default new Event({
     if (reaction.message.partial) await reaction.message.fetch().catch((err) => logger.debug({ err }, 'Could not fetch message'));
 
     const channel = guild.channels.cache.get(config.starboard.channelId);
-    if (!channel || channel.type !== ChannelType.GuildText || !channel.permissionsFor(guild.members.me).has(PermissionsBitField.Flags.SendMessages)) return;
+    if (!channel?.isSendable() || !channel.permissionsFor(guild.members.me).has(PermissionsBitField.Flags.SendMessages)) return;
 
     let knownMessage = config.starboard.messages.find((message) => message.messageId === reaction.message.id);
     const knownStarboardMessage = config.starboard.messages.find((message) => message.starboardMessageId === reaction.message.id);

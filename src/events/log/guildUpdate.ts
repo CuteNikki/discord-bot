@@ -1,5 +1,4 @@
 import {
-  ChannelType,
   Colors,
   EmbedBuilder,
   Events,
@@ -22,7 +21,7 @@ export default new Event({
     if (!config.log.enabled || !config.log.events.guildUpdate || !config.log.channelId) return;
 
     const logChannel = await newGuild.channels.fetch(config.log.channelId);
-    if (!logChannel || logChannel.type !== ChannelType.GuildText) return;
+    if (!logChannel?.isSendable()) return;
 
     const lng = config.language;
 

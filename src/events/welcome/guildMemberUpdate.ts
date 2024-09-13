@@ -1,4 +1,4 @@
-import { ChannelType, EmbedBuilder, Events, type ColorResolvable } from 'discord.js';
+import { EmbedBuilder, Events, type ColorResolvable } from 'discord.js';
 
 import { replacePlaceholders } from 'classes/custom-embed';
 import { Event } from 'classes/event';
@@ -19,7 +19,7 @@ export default new Event({
 
     if (!config.welcome.channelId) return;
     const welcomeChannel = await guild.channels.fetch(config.welcome.channelId);
-    if (!welcomeChannel || welcomeChannel.type !== ChannelType.GuildText) return;
+    if (!welcomeChannel?.isSendable()) return;
 
     const embedData = config.welcome.message.embed;
 

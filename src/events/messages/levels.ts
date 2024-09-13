@@ -1,4 +1,4 @@
-import { ChannelType, Colors, EmbedBuilder, Events, type MessageCreateOptions } from 'discord.js';
+import { Colors, EmbedBuilder, Events, type MessageCreateOptions } from 'discord.js';
 import { t } from 'i18next';
 
 import { Event } from 'classes/event';
@@ -83,7 +83,7 @@ export default new Event({
           {
             if (!guildSettings.level.channelId) return;
             const channel = guild.channels.cache.get(guildSettings.level.channelId);
-            if (!channel || channel.type !== ChannelType.GuildText) return;
+            if (!channel?.isSendable()) return;
             channel.send(levelUpMessage).catch((err) => logger.debug({ err }, 'Could not send message'));
           }
           break;

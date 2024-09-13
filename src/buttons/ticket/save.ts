@@ -1,5 +1,5 @@
 import { ExportReturnType, createTranscript } from 'discord-html-transcripts';
-import { ChannelType, EmbedBuilder, type TextBasedChannel } from 'discord.js';
+import { EmbedBuilder, type TextBasedChannel } from 'discord.js';
 import { t } from 'i18next';
 
 import { Button } from 'classes/button';
@@ -48,7 +48,7 @@ export default new Button({
         files: [transcript],
       });
     const channel = interaction.guild.channels.cache.get(system.transcriptChannelId) as TextBasedChannel;
-    if (!channel || channel.type !== ChannelType.GuildText)
+    if (!channel?.isSendable())
       return interaction.reply({
         content: t('tickets.invalid_transcript_channel', { lng }),
         files: [transcript],

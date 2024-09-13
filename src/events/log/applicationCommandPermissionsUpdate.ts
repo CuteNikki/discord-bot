@@ -1,4 +1,4 @@
-import { ApplicationCommandPermissionType, ChannelType, Colors, EmbedBuilder, Events } from 'discord.js';
+import { ApplicationCommandPermissionType, Colors, EmbedBuilder, Events } from 'discord.js';
 import { t } from 'i18next';
 
 import { Event } from 'classes/event';
@@ -19,7 +19,7 @@ export default new Event({
     if (!guild) return;
 
     const logChannel = await guild.channels.fetch(config.log.channelId);
-    if (!logChannel || logChannel.type !== ChannelType.GuildText) return;
+    if (!logChannel || !logChannel.isSendable()) return;
 
     const lng = config.language;
 

@@ -1,4 +1,46 @@
 {
+  "counting": {
+    "name": "counting",
+    "description": "A fun game for your community",
+    "options": [
+      {
+        "name": "setup",
+        "description": "Set up the game",
+        "options": [
+          {
+            "name": "channel",
+            "description": "The channel where members should count in"
+          },
+          {
+            "name": "reset-on-fail",
+            "description": "Reset the game on a wrong number"
+          }
+        ]
+      },
+      {
+        "name": "edit",
+        "description": "Edit your settings for the game",
+        "options": [
+          {
+            "name": "channel",
+            "description": "The channel where members should count in"
+          },
+          {
+            "name": "reset-on-fail",
+            "description": "Reset the game on a wrong number"
+          }
+        ]
+      },
+      {
+        "name": "info",
+        "description": "Shows your settings and other stats for the game"
+      },
+      {
+        "name": "reset",
+        "description": "Resets all data of the game"
+      }
+    ]
+  },
   "preview-color": {
     "name": "preview-color",
     "description": "Sends an embed with a color to preview",

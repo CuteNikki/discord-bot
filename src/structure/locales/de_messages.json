@@ -1,4 +1,28 @@
 {
+  "counting": {
+    "already_setup": "Das Counting-Spiel ist bereits eingerichtet! Verwende stattdessen den edit oder reset Unterbefehl.",
+    "already_channel": "Der Kanal ist bereits der Counting-Kanal!",
+    "setup_done": "Das Counting-Spiel wurde eingerichtet! Fang an mit `{{number}}` in {{channel}}.",
+    "not_setup": "Das Counting-Spiel ist noch nicht eingerichtet.",
+    "channel": "Kanal",
+    "reset_on_fail": "Zurücksetzen",
+    "highest_number": "Höchste Nummer",
+    "current_number": "Aktuelle Nummer",
+    "edit_nothing": "Du musst etwas zum Bearbeiten angeben",
+    "edit_channel": "Der Counting-Kanal wurde auf {{channel}} geändert.",
+    "reset_on_fail_enabled": "Bei falscher Nummer wird zurückgesetzt.",
+    "reset_on_fail_disabled": "Bei falscher Nummer wird nicht zurückgesetzt.",
+    "edit_reset_on_fail_enabled": "Bei falscher Nummer wird nun zurückgesetzt.",
+    "edit_reset_on_fail_disabled": "Bei falscher Nummer wird nun nicht mehr zurückgesetzt.",
+    "edit_no_changes": "Es wurden keine Änderungen vorgenommen.",
+    "reset_done": "Der Kanal und alle Daten wurden zurückgesetzt.",
+    "current_number_by": "{{number}}\ngeschreiben von <@{{by}}>\nam <t:{{at}}:f>",
+    "current_number_no_by": "{{number}}",
+    "highest_number_at": "{{number}}\naufgerichtet am <t:{{at}}:f>",
+    "highest_number_no_at": "{{number}}",
+    "warn_repeat": "{{author}}, du hast bereits die letzte Nummer gesagt! Bitte warte, bis jemand anderes fortfährt.",
+    "warn_incorrect": "{{author}}, das ist nicht die nächste Nummer! Bitte starte mit `1`."
+  },
   "preview-color": {
     "preview": "Hier ist eine Vorschau der Farbe {{color}}!",
     "invalid": "Die Farbe, die du angegeben hast, ist ungültig!"

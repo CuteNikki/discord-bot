@@ -1,4 +1,46 @@
 {
+  "counting": {
+    "name": "zählen",
+    "description": "Ein spaßiges Spiel für deine Community",
+    "options": [
+      {
+        "name": "einrichten",
+        "description": "Richtet das Counting-Spiel ein",
+        "options": [
+          {
+            "name": "kanal",
+            "description": "Der Kanal, in dem Mitglieder die Nummer sagen sollen"
+          },
+          {
+            "name": "zurücksetzen",
+            "description": "Setzt das Spiel bei einer falschen Nummer zurück"
+          }
+        ]
+      },
+      {
+        "name": "bearbeiten",
+        "description": "Bearbeite die Einstellungen für das Spiel",
+        "options": [
+          {
+            "name": "kanal",
+            "description": "Der Kanal, in dem Mitglieder die Nummer sagen sollen"
+          },
+          {
+            "name": "zurücksetzen",
+            "description": "Setzt das Spiel bei einer falschen Nummer zurück"
+          }
+        ]
+      },
+      {
+        "name": "info",
+        "description": "Zeigt deine Einstellungen und andere Statistiken für das Spiel"
+      },
+      {
+        "name": "zurücksetzen",
+        "description": "Setzt alle Daten des Spiels zurück"
+      }
+    ]
+  },
   "preview-color": {
     "name": "farb-vorschau",
     "description": "Sendet eine Einbettung mit einer Farbe zur Vorschau",

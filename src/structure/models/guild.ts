@@ -101,6 +101,15 @@ export interface GuildSettings {
   moderation: {
     enabled: boolean;
   };
+  counting: {
+    channelId: string;
+    resetOnFail: boolean;
+    currentNumberBy: string;
+    currentNumberAt: number;
+    currentNumber: number;
+    highestNumber: number;
+    highestNumberAt: number;
+  };
   starboard: {
     enabled: boolean;
     channelId?: string;
@@ -186,6 +195,20 @@ const guildSchema = new Schema<GuildSettings>({
     },
     default: {
       enabled: true,
+    },
+  },
+  counting: {
+    type: {
+      channelId: { type: String },
+      resetOnFail: { type: Boolean, default: false, required: true },
+      highestNumber: { type: Number, default: 0, required: true },
+      highestNumberAt: { type: Number },
+      currentNumber: { type: Number, default: 0, required: true },
+      currentNumberBy: { type: String },
+      currentNumberAt: { type: Number },
+    },
+    default: {
+      resetOnFail: false,
     },
   },
   starboard: {

@@ -1,4 +1,28 @@
 {
+  "counting": {
+    "already_setup": "The counting game is already set up! Use the edit or reset subcommand instead",
+    "already_channel": "That channel is already the counting channel!",
+    "setup_done": "The counting game has been set up! Go ahead and start with `{{number}}` in {{channel}}",
+    "not_setup": "The counting game is not set up yet",
+    "channel": "Channel",
+    "reset_on_fail": "Reset on fail",
+    "highest_number": "Highest number",
+    "current_number": "Current number",
+    "edit_nothing": "You need to provide something to edit",
+    "edit_channel": "The counting channel has been changed to {{channel}}",
+    "reset_on_fail_enabled": "Reset on fail is enabled",
+    "reset_on_fail_disabled": "Reset on fail is disabled",
+    "edit_reset_on_fail_enabled": "Reset on fail has been enabled",
+    "edit_reset_on_fail_disabled": "Reset on fail has been disabled",
+    "edit_no_changes": "No changes were made",
+    "reset_done": "The channel and all data have been reset",
+    "current_number_by": "{{number}}\nsent by <@{{by}}>\nat <t:{{at}}:f>",
+    "current_number_no_by": "{{number}}",
+    "highest_number_at": "{{number}}\nachieved at <t:{{at}}:f>",
+    "highest_number_no_at": "{{number}}",
+    "warn_repeat": "{{author}}, you already said the last number! Please wait for someone else to continue.",
+    "warn_incorrect": "{{author}}, that is not the next number! Please start over with `1`."
+  },
   "preview-color": {
     "preview": "Heres a preview of the color {{color}}!",
     "invalid": "The color you provided is invalid!"

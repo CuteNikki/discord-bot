@@ -93,12 +93,12 @@ export default new Button({
         ? [
             new ActionRowBuilder<ButtonBuilder>().addComponents(
               new ButtonBuilder()
-                .setCustomId(`tickets-save_${system._id.toString()}`)
+                .setCustomId(`button-tickets-save_${system._id.toString()}`)
                 .setLabel(t('tickets.save', { lng }))
                 .setEmoji('🗂️')
                 .setStyle(ButtonStyle.Success),
               new ButtonBuilder()
-                .setCustomId(`tickets-delete_${system._id.toString()}`)
+                .setCustomId(`button-tickets-delete_${system._id.toString()}`)
                 .setLabel(t('tickets.delete', { lng }))
                 .setEmoji('✖️')
                 .setStyle(ButtonStyle.Danger),

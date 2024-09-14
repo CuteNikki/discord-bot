@@ -33,13 +33,13 @@
 
     // Custom paths
     "paths": {
-      "root/*": ["./*"],
-      "src/*": ["./src/*"],
       "classes/*": ["./src/structure/classes/*"],
       "loaders/*": ["./src/structure/loaders/*"],
       "utils/*": ["./src/structure/utilities/*"],
       "models/*": ["./src/structure/models/*"],
-      "games/*": ["./src/structure/games/*"]
+      "games/*": ["./src/structure/games/*"],
+      "src/*": ["./src/*"],
+      "root/*": ["./*"]
     }
   }
 }

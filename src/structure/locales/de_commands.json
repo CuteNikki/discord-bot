@@ -205,59 +205,27 @@
       }
     ]
   },
-  "config-farewell": {
-    "name": "abschieds-konfiguration",
-    "description": "Konfiguriere das Abschieds-Modul",
+  "farewell": {
+    "name": "verabschieden",
+    "description": "Sende eine Abschieds-Nachricht, wenn ein Mitglied den Server verlässt",
     "options": [
       {
         "name": "kanal",
-        "description": "Konfiguriere den Abschieds-Kanal",
+        "description": "Der Kanal, in dem die Nachricht gesendet werden soll",
         "options": [
           {
-            "name": "setzen",
-            "description": "Setzt den Abschieds-Kanal",
-            "options": [
-              {
-                "name": "kanal",
-                "description": "Der Abschieds-Kanal"
-              }
-            ]
-          },
-          {
-            "name": "entfernen",
-            "description": "Entfernt den Abschieds-Kanal"
-          },
-          {
-            "name": "ansehen",
-            "description": "Zeigt den Abschieds-Kanal"
+            "name": "kanal",
+            "description": "Abschiedskanal (leer lassen, um zu entfernen)"
           }
         ]
       },
       {
         "name": "nachricht",
-        "description": "Konfiguriere die Abschieds-Nachricht",
-        "options": [
-          {
-            "name": "setzen",
-            "description": "Setzt die Abschieds-Nachricht"
-          },
-          {
-            "name": "entfernen",
-            "description": "Entfernt die Abschieds-Nachricht"
-          },
-          {
-            "name": "ansehen",
-            "description": "Zeigt die Abschieds-Nachricht"
-          },
-          {
-            "name": "testen",
-            "description": "Sendet eine Test-Abschieds-Nachricht"
-          },
-          {
-            "name": "platzhalter",
-            "description": "Zeigt dir die verfügbaren Platzhalter"
-          }
-        ]
+        "description": "Konfiguriere die Abschieds-Nachricht"
+      },
+      {
+        "name": "info",
+        "description": "Zeigt dir die aktuellen Einstellungen und verfügbare Platzhalter an"
       }
     ]
   },

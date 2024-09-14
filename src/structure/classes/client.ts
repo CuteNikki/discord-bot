@@ -50,6 +50,7 @@ export class DiscordClient extends Client {
   public colors = {
     error: Colors.Red,
     counting: Colors.Blue,
+    farewell: Colors.Orange,
   };
 
   constructor() {

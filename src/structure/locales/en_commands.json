@@ -205,59 +205,27 @@
       }
     ]
   },
-  "config-farewell": {
-    "name": "farewell-configuration",
-    "description": "Configure the farewell module",
+  "farewell": {
+    "name": "farewell",
+    "description": "Send a farewell message when a member leaves the server",
     "options": [
       {
         "name": "channel",
-        "description": "Configure the farewell channel",
+        "description": "The channel to send the farewell message to",
         "options": [
           {
-            "name": "set",
-            "description": "Sets the farewell channel",
-            "options": [
-              {
-                "name": "channel",
-                "description": "The farewell channel"
-              }
-            ]
-          },
-          {
-            "name": "remove",
-            "description": "Removes the farewell channel"
-          },
-          {
-            "name": "show",
-            "description": "Shows the farewell channel"
+            "name": "channel",
+            "description": "Farewell channel (leave empty to remove)"
           }
         ]
       },
       {
         "name": "message",
-        "description": "Configure the farewell message",
-        "options": [
-          {
-            "name": "set",
-            "description": "Sets the farewell message"
-          },
-          {
-            "name": "remove",
-            "description": "Removes the farewell message"
-          },
-          {
-            "name": "show",
-            "description": "Shows the farewell message"
-          },
-          {
-            "name": "test",
-            "description": "Send a test farewell message"
-          },
-          {
-            "name": "placeholders",
-            "description": "Shows you the available placeholders"
-          }
-        ]
+        "description": "Configure the farewell message"
+      },
+      {
+        "name": "info",
+        "description": "Shows you the current settings and available placeholders"
       }
     ]
   },

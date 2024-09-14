@@ -1,4 +1,18 @@
 {
+  "farewell": {
+    "channel": {
+      "invalid": "Du hast keinen Kanal angegeben und es gibt keinen zum entfernen!",
+      "removed": "Der Abschiedskanal wurde entfernt!",
+      "set": "Der Abschiedskanal wurde zu {{channel}} gesetzt!",
+      "title": "Kanal"
+    },
+    "placeholders": {
+      "title": "Platzhalter"
+    },
+    "message": {
+      "set": "Die Abschiedsnachricht wurde gesetzt!"
+    }
+  },
   "counting": {
     "already_setup": "Das Counting-Spiel ist bereits eingerichtet! Verwende stattdessen den edit oder reset Unterbefehl.",
     "already_channel": "Der Kanal ist bereits der Counting-Kanal!",
@@ -9,7 +23,7 @@
     "highest_number": "Höchste Nummer",
     "current_number": "Aktuelle Nummer",
     "edit_nothing": "Du musst etwas zum Bearbeiten angeben",
-    "edit_channel": "Der Counting-Kanal wurde auf {{channel}} geändert.",
+    "edit_channel": "Der Counting-Kanal wurde zu {{channel}} geändert.",
     "reset_on_fail_enabled": "Bei falscher Nummer wird zurückgesetzt.",
     "reset_on_fail_disabled": "Bei falscher Nummer wird nicht zurückgesetzt.",
     "edit_reset_on_fail_enabled": "Bei falscher Nummer wird nun zurückgesetzt.",
@@ -199,21 +213,6 @@
       "set": "Willkommensnachricht erfolgreich gesetzt.",
       "removed": "Willkommensnachricht erfolgreich entfernt.",
       "test": "Das Beitritts-Event wurde ausgelöst."
-    }
-  },
-  "farewell": {
-    "channel": {
-      "already": "Dieser Kanal ist bereits der Abschiedskanal!",
-      "set": "Abschiedskanal erfolgreich gesetzt.",
-      "invalid": "Es gibt keinen Abschiedskanal zum Entfernen!",
-      "removed": "Abschiedskanal erfolgreich entfernt.",
-      "none": "Es gibt keinen Abschiedskanal!",
-      "show": "Der Abschiedskanal ist derzeit auf {{channel}} gesetzt."
-    },
-    "message": {
-      "set": "Abschiedsmitteilung erfolgreich gesetzt.",
-      "removed": "Abschiedsmitteilung erfolgreich entfernt.",
-      "test": "Das Verlassen-Event wurde ausgelöst."
     }
   },
   "invite": {

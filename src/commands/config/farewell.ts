@@ -1,188 +1,123 @@
-import {
-  ApplicationIntegrationType,
-  ChannelType,
-  EmbedBuilder,
-  InteractionContextType,
-  PermissionFlagsBits,
-  SlashCommandBuilder,
-  type APIEmbed,
-} from 'discord.js';
+import { ApplicationIntegrationType, ChannelType, EmbedBuilder, InteractionContextType, SlashCommandBuilder } from 'discord.js';
 import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
-import { CustomEmbedBuilder } from 'classes/custom-embed';
+import { CustomEmbedBuilder, getEmbed, isEmptyEmbed } from 'classes/custom-embed';
 
-import type { Message } from 'models/guild';
 import { logger } from 'utils/logger';
 
 export default new Command({
   module: ModuleType.Config,
   botPermissions: ['SendMessages'],
   data: new SlashCommandBuilder()
-    .setName('config-farewell')
-    .setDescription('Configure the farewell module')
-    .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
-    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
     .setContexts(InteractionContextType.Guild)
-    .addSubcommandGroup((subcommandGroup) =>
-      subcommandGroup
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .setName('farewell')
+    .setDescription('Leave messages for your server')
+    .addSubcommand((cmd) =>
+      cmd
         .setName('channel')
-        .setDescription('Configure the leave channel')
-        .addSubcommand((subcommand) =>
-          subcommand
-            .setName('set')
-            .setDescription('Sets the leave channel')
-            .addChannelOption((option) =>
-              option.setName('channel').setDescription('The channel to set it to').setRequired(true).addChannelTypes(ChannelType.GuildText),
-            ),
-        )
-        .addSubcommand((subcommand) => subcommand.setName('remove').setDescription('Removes the leave channel'))
-        .addSubcommand((subcommand) => subcommand.setName('show').setDescription('Shows the current leave channel')),
+        .setDescription('The channel to send leave messages to')
+        .addChannelOption((option) =>
+          option.setName('channel').setDescription('Leave messages channel (leave empty to remove)').addChannelTypes(ChannelType.GuildText),
+        ),
     )
-    .addSubcommandGroup((subcommandGroup) =>
-      subcommandGroup
-        .setName('message')
-        .setDescription('Configure the leave message')
-        .addSubcommand((subcommand) => subcommand.setName('set').setDescription('Sets the leave message'))
-        .addSubcommand((subcommand) => subcommand.setName('remove').setDescription('Removes the leave message'))
-        .addSubcommand((subcommand) => subcommand.setName('show').setDescription('Shows the current leave message'))
-        .addSubcommand((subcommand) => subcommand.setName('test').setDescription('Emits the leave event to test farewell messages'))
-        .addSubcommand((subcommand) => subcommand.setName('placeholders').setDescription('Shows you all available placeholders')),
-    ),
+    .addSubcommand((cmd) => cmd.setName('message').setDescription('Configure the message that is sent on leave'))
+    .addSubcommand((cmd) => cmd.setName('info').setDescription('Shows you the current settings and available placeholders')),
   async execute({ client, interaction }) {
     if (!interaction.inCachedGuild()) return;
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply();
 
-    const { options, user, guild } = interaction;
+    const { options, guild, user } = interaction;
+
     const lng = await client.getUserLanguage(user.id);
+    const config = await client.getGuildSettings(guild.id);
 
-    const settings = await client.getGuildSettings(guild.id);
-
-    switch (options.getSubcommandGroup()) {
+    switch (options.getSubcommand()) {
       case 'channel':
         {
-          switch (options.getSubcommand()) {
-            case 'set':
-              {
-                const channel = options.getChannel('channel', true, [ChannelType.GuildText]);
-                if (settings.farewell.channelId === channel.id) return interaction.editReply(t('farewell.channel.already', { lng }));
-                await client.updateGuildSettings(guild.id, {
-                  $set: { ['farewell.channelId']: channel.id },
-                });
-                await interaction.editReply(t('farewell.channel.set', { lng }));
-              }
-              break;
-            case 'remove':
-              {
-                if (!settings.farewell.channelId) return interaction.editReply(t('farewell.channel.invalid', { lng }));
-                await client.updateGuildSettings(guild.id, {
-                  $set: { ['farewell.channelId']: undefined },
-                });
-                await interaction.editReply(t('farewell.channel.removed', { lng }));
-              }
-              break;
-            case 'show':
-              {
-                if (!settings.farewell.channelId) return interaction.editReply(t('farewell.channel.none', { lng }));
-                await interaction.editReply(
-                  t('farewell.channel.show', {
-                    lng,
-                    channel: `<#${settings.farewell.channelId}>`,
-                  }),
-                );
-              }
-              break;
+          const channel = options.getChannel('channel', false, [ChannelType.GuildText]);
+
+          if (!channel) {
+            if (!config.farewell.channelId) {
+              return interaction.editReply({
+                embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('farewell.channel.invalid', { lng }))],
+              });
+            }
+            await client.updateGuildSettings(guild.id, {
+              $set: {
+                ['farewell.channelId']: null,
+              },
+            });
+
+            return interaction.editReply({
+              embeds: [new EmbedBuilder().setColor(client.colors.farewell).setDescription(t('farewell.channel.removed', { lng }))],
+            });
           }
+
+          await client.updateGuildSettings(guild.id, {
+            $set: {
+              ['farewell.channelId']: channel.id,
+            },
+          });
+          interaction.editReply({
+            embeds: [new EmbedBuilder().setColor(client.colors.farewell).setDescription(t('farewell.channel.set', { lng, channel: `<#${channel.id}>` }))],
+          });
         }
         break;
       case 'message':
         {
-          switch (options.getSubcommand()) {
-            case 'set':
+          const customBuilder = new CustomEmbedBuilder({
+            client,
+            interaction,
+            message: config.farewell.message,
+          });
+          customBuilder.once('submit', async (msg) => {
+            interaction
+              .editReply({
+                embeds: [new EmbedBuilder().setColor(client.colors.farewell).setDescription(t('farewell.message.set', { lng }))],
+                components: [],
+              })
+              .catch((err) => logger.debug({ err }, 'Could not edit reply'));
+            await client.updateGuildSettings(guild.id, {
+              $set: {
+                ['farewell.message']: msg,
+              },
+            });
+          });
+        }
+        break;
+      case 'info':
+        {
+          const embeds = [
+            new EmbedBuilder().setColor(client.colors.farewell).addFields(
+              { name: t('farewell.channel.title', { lng }), value: config.farewell.channelId ? `<#${config.farewell.channelId}>` : '/' },
               {
-                const customBuilder = new CustomEmbedBuilder({
-                  client,
-                  interaction,
-                  data: settings.farewell.message,
-                });
-                customBuilder.once('submit', async (data: Message) => {
-                  await client.updateGuildSettings(guild.id, {
-                    $set: { ['farewell.message']: data },
-                  });
-                  interaction
-                    .editReply({
-                      content: t('farewell.message.set', { lng }),
-                      embeds: [],
-                      components: [],
-                    })
-                    .catch((err) => logger.debug({ err }, 'Could not edit reply'));
-                });
-              }
-              break;
-            case 'remove':
-              {
-                await client.updateGuildSettings(guild.id, {
-                  $set: {
-                    ['farewell.message']: {
-                      content: null,
-                      embed: {
-                        color: null,
-                        description: null,
-                        image: undefined,
-                        thumbnail: undefined,
-                        title: null,
-                        url: null,
-                        author: {
-                          name: null,
-                          icon_url: null,
-                          url: null,
-                        },
-                        footer: {
-                          text: null,
-                          icon_url: null,
-                        },
-                        fields: [],
-                      },
-                    },
-                  },
-                });
-                interaction.editReply(t('farewell.message.removed', { lng }));
-              }
-              break;
-            case 'show':
-              {
-                await interaction.editReply({
-                  content: settings.farewell.message.content,
-                  embeds: [EmbedBuilder.from(settings.farewell.message.embed as APIEmbed)],
-                });
-              }
-              break;
-            case 'test':
-              {
-                client.emit('guildMemberRemove', interaction.member);
-                interaction.editReply(t('farewell.message.test', { lng }));
-              }
-              break;
-            case 'placeholders':
-              {
-                interaction.editReply(
-                  [
-                    `{user} - ${user.toString()}`,
-                    `{user.mention} - ${user.toString()}`,
-                    `{user.username} - ${user.username}`,
-                    `{user.id} - ${user.id}`,
-                    `{user.avatar} - [URL](<${user.displayAvatarURL()}>)`,
-                    ``,
-                    `{server} - ${guild.name}`,
-                    `{server.name} - ${guild.name}`,
-                    `{server.id} - ${guild.id}`,
-                    `{server.member_count} - ${guild.memberCount}`,
-                    `{server.icon} - [URL](<${guild.iconURL()}>)`,
-                  ].join('\n'),
-                );
-              }
-              break;
+                name: t('farewell.placeholders.title', { lng }),
+                value: [
+                  `{user} - ${user.toString()}`,
+                  `{user.mention} - ${user.toString()}`,
+                  `{user.username} - ${user.username}`,
+                  `{user.id} - ${user.id}`,
+                  `{user.avatar} - [URL](<${user.displayAvatarURL()}>)`,
+                  '', // New line to separate user and server placeholders
+                  `{server} - ${guild.name}`,
+                  `{server.name} - ${guild.name}`,
+                  `{server.id} - ${guild.id}`,
+                  `{server.member_count} - ${guild.memberCount}`,
+                  `{server.icon} - [URL](<${guild.iconURL()}>)`,
+                ].join('\n'),
+              },
+            ),
+          ];
+
+          if (!isEmptyEmbed(config.farewell.message.embed)) {
+            embeds.push(getEmbed(user, guild, config.farewell.message.embed));
           }
+
+          interaction.editReply({
+            embeds,
+          });
         }
         break;
     }

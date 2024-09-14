@@ -153,7 +153,7 @@ export default new Command({
                 const customBuilder = new CustomEmbedBuilder({
                   client,
                   interaction,
-                  data: settings.welcome.message,
+                  message: settings.welcome.message,
                 });
                 customBuilder.once('submit', async (data: Message) => {
                   await client.updateGuildSettings(guild.id, {

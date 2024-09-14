@@ -63,7 +63,7 @@ export class CustomEmbedBuilder extends events {
     const guild = interaction.guild;
 
     let embed = new EmbedBuilder().setDescription('** **');
-    if (!isEmptyEmbed(this.message.embed)) embed = this.getEmbed(user, guild, this.message.embed);
+    if (!isEmptyEmbed(this.message.embed)) embed = getEmbed(user, guild, this.message.embed);
 
     const message = await interaction
       .editReply({
@@ -526,7 +526,7 @@ export class CustomEmbedBuilder extends events {
 
   private isValidEmbed(embedData: Embed, user: User, guild: Guild) {
     try {
-      const embed = this.getEmbed(user, guild, embedData);
+      const embed = getEmbed(user, guild, embedData);
 
       if (embed) return true;
       else return false;
@@ -534,33 +534,6 @@ export class CustomEmbedBuilder extends events {
       console.log(err);
       return false;
     }
-  }
-
-  private getEmbed(user: User, guild: Guild, embed: Embed): EmbedBuilder {
-    return EmbedBuilder.from({
-      description: replacePlaceholders(embed.description ?? '', user, guild),
-      title: replacePlaceholders(embed.title ?? '', user, guild),
-      author: {
-        name: replacePlaceholders(embed.author?.name ?? '', user, guild),
-        icon_url: replacePlaceholders(embed.author?.icon_url ?? '', user, guild),
-        url: replacePlaceholders(embed.author?.url ?? '', user, guild),
-      },
-      fields: embed.fields?.map((field) => ({
-        name: replacePlaceholders(field.name ?? '', user, guild),
-        value: replacePlaceholders(field.value ?? '', user, guild),
-      })),
-      footer: {
-        text: replacePlaceholders(embed.footer?.text ?? '', user, guild),
-        icon_url: replacePlaceholders(embed.footer?.icon_url ?? '', user, guild),
-      },
-      image: {
-        url: replacePlaceholders(embed.image ?? '', user, guild),
-      },
-      thumbnail: {
-        url: replacePlaceholders(embed.thumbnail ?? '', user, guild),
-      },
-      url: replacePlaceholders(embed.url ?? '', user, guild),
-    }).setColor(embed.color as ColorResolvable);
   }
 
   private getMessage(user: User, guild: Guild): InteractionEditReplyOptions {
@@ -575,7 +548,7 @@ export class CustomEmbedBuilder extends events {
 
     return {
       content: replacePlaceholders(this.message.content ?? '', user, guild),
-      embeds: [this.getEmbed(user, guild, this.message.embed)],
+      embeds: [getEmbed(user, guild, this.message.embed)],
     };
   }
 
@@ -653,4 +626,31 @@ export function isEmptyEmbed(embedData: Embed) {
   )
     return true;
   else return false;
+}
+
+export function getEmbed(user: User, guild: Guild, embed: Embed): EmbedBuilder {
+  return EmbedBuilder.from({
+    description: replacePlaceholders(embed.description ?? '', user, guild),
+    title: replacePlaceholders(embed.title ?? '', user, guild),
+    author: {
+      name: replacePlaceholders(embed.author?.name ?? '', user, guild),
+      icon_url: replacePlaceholders(embed.author?.icon_url ?? '', user, guild),
+      url: replacePlaceholders(embed.author?.url ?? '', user, guild),
+    },
+    fields: embed.fields?.map((field) => ({
+      name: replacePlaceholders(field.name ?? '', user, guild),
+      value: replacePlaceholders(field.value ?? '', user, guild),
+    })),
+    footer: {
+      text: replacePlaceholders(embed.footer?.text ?? '', user, guild),
+      icon_url: replacePlaceholders(embed.footer?.icon_url ?? '', user, guild),
+    },
+    image: {
+      url: replacePlaceholders(embed.image ?? '', user, guild),
+    },
+    thumbnail: {
+      url: replacePlaceholders(embed.thumbnail ?? '', user, guild),
+    },
+    url: replacePlaceholders(embed.url ?? '', user, guild),
+  }).setColor(embed.color as ColorResolvable);
 }

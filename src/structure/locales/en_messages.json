@@ -1,4 +1,18 @@
 {
+  "farewell": {
+    "channel": {
+      "invalid": "You did not provide a channel and there is none to remove!",
+      "removed": "The leave channel has been removed!",
+      "set": "The leave channel has been set to {{channel}}!",
+      "title": "Channel"
+    },
+    "placeholders": {
+      "title": "Placeholders"
+    },
+    "message": {
+      "set": "The leave message has been set!"
+    }
+  },
   "counting": {
     "already_setup": "The counting game is already set up! Use the edit or reset subcommand instead",
     "already_channel": "That channel is already the counting channel!",
@@ -199,21 +213,6 @@
       "set": "Successfully set the welcome message.",
       "removed": "Successfully removed the welcome message.",
       "test": "Emitted the join event."
-    }
-  },
-  "farewell": {
-    "channel": {
-      "already": "That channel is already the farewell channel!",
-      "set": "Successfully set the farewell channel.",
-      "invalid": "There is no farewell channel to remove!",
-      "removed": "Successfully removed the farewell channel.",
-      "none": "There is no farewell channel!",
-      "show": "The farewell channel is currently set to {{channel}}."
-    },
-    "message": {
-      "set": "Successfully set the farewell message.",
-      "removed": "Successfully removed the farewell message.",
-      "test": "Emitted the leave event."
     }
   },
   "invite": {

@@ -1,5 +1,5 @@
 import { ClusterClient, getInfo } from 'discord-hybrid-sharding';
-import { ActivityType, Client, Collection, GatewayIntentBits, Partials, PresenceUpdateStatus } from 'discord.js';
+import { ActivityType, Client, Collection, Colors, GatewayIntentBits, Partials, PresenceUpdateStatus } from 'discord.js';
 
 import type { UpdateQuery } from 'mongoose';
 
@@ -45,6 +45,12 @@ export class DiscordClient extends Client {
   public userLanguages = new Collection<string, string>(); // Collection<userId, language>
   public level = new Collection<LevelIdentifier, Level>(); // Collection<{guildId, userId}, {level, xp}>
   public levelWeekly = new Collection<LevelIdentifier, Level>(); // Collection<{guildId, userId}, {level, xp}>
+
+  // Custom colors
+  public colors = {
+    error: Colors.Red,
+    counting: Colors.Blue,
+  };
 
   constructor() {
     super({

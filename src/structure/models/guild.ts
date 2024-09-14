@@ -51,26 +51,26 @@ export const availableEvents = [
 // !! Embed cannot be empty !!
 // Either a title, description, author-name, footer-text or field is needed
 export interface Embed {
-  color: string | number | null;
-  title: string | null; // max 256 characters
-  url: string | null; // max 256 characters
-  description: string | null; // max 4096 characters
+  color?: string | number | string;
+  title?: string; // max 256 characters
+  url?: string; // max 256 characters
+  description?: string; // max 4096 characters
   thumbnail?: string; // max 256 characters
   image?: string; // max 256 characters
-  author: {
-    name: string | null; // max 256 characters
-    icon_url: string | null; // max 256 characters
-    url: string | null; // max 256 characters
+  author?: {
+    name?: string; // max 256 characters
+    icon_url?: string; // max 256 characters
+    url?: string; // max 256 characters
   };
-  footer: {
-    text: string | null; // max 2048 characters
-    icon_url: string | null; // max 256 characters
+  footer?: {
+    text?: string; // max 2048 characters
+    icon_url?: string; // max 256 characters
   };
   // max 25 fields
-  fields: {
+  fields?: {
     name: string; // max 256 characters
     value: string; // max 1024 characters
-    inline: boolean | null;
+    inline?: boolean;
   }[];
 }
 
@@ -314,21 +314,21 @@ const guildSchema = new Schema<GuildSettings>({
       message: {
         content: null,
         embed: {
-          color: null,
-          description: null,
+          color: undefined,
+          description: undefined,
           image: undefined,
           thumbnail: undefined,
-          title: null,
-          url: null,
+          title: undefined,
+          url: undefined,
           author: {
-            name: null,
-            icon_url: null,
-            url: null,
+            name: undefined,
+            icon_url: undefined,
+            url: undefined,
           },
           fields: [],
           footer: {
-            text: null,
-            icon_url: null,
+            text: undefined,
+            icon_url: undefined,
           },
         },
       },
@@ -372,21 +372,21 @@ const guildSchema = new Schema<GuildSettings>({
       message: {
         content: null,
         embed: {
-          color: null,
-          description: null,
+          color: undefined,
+          description: undefined,
           image: undefined,
           thumbnail: undefined,
-          title: null,
-          url: null,
+          title: undefined,
+          url: undefined,
           author: {
-            name: null,
-            icon_url: null,
-            url: null,
+            name: undefined,
+            icon_url: undefined,
+            url: undefined,
           },
           fields: [],
           footer: {
-            text: null,
-            icon_url: null,
+            text: undefined,
+            icon_url: undefined,
           },
         },
       },

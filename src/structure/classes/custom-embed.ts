@@ -4,107 +4,78 @@ import {
   ButtonStyle,
   ComponentType,
   EmbedBuilder,
-  Guild,
   ModalBuilder,
   TextInputBuilder,
   TextInputStyle,
-  User,
   type ChatInputCommandInteraction,
   type ColorResolvable,
+  type Guild,
   type InteractionEditReplyOptions,
+  type User,
 } from 'discord.js';
 import events from 'events';
 import { t } from 'i18next';
 
 import type { DiscordClient } from 'classes/client';
-
-import type { Message } from 'models/guild';
-
+import type { Embed, Message } from 'models/guild';
 import { logger } from 'utils/logger';
 
 export class CustomEmbedBuilder extends events {
-  data: Message;
+  private message: Message = {
+    content: null,
+    embed: {
+      color: '#1e1f22',
+      description: undefined,
+      image: undefined,
+      thumbnail: undefined,
+      title: undefined,
+      url: undefined,
+      author: {
+        name: undefined,
+        url: undefined,
+        icon_url: undefined,
+      },
+      footer: {
+        text: undefined,
+        icon_url: undefined,
+      },
+      fields: [],
+    },
+  };
+
   constructor(
     public options: {
-      interaction: ChatInputCommandInteraction;
+      interaction: ChatInputCommandInteraction<'cached'>;
       client: DiscordClient;
-      data?: Message;
+      message?: Message;
     },
   ) {
     super();
-
-    if (options.data) this.data = options.data;
-    else
-      this.data = {
-        content: null,
-        embed: {
-          color: null,
-          description: null,
-          image: undefined,
-          thumbnail: undefined,
-          title: null,
-          url: null,
-          author: {
-            name: null,
-            url: null,
-            icon_url: null,
-          },
-          footer: {
-            text: null,
-            icon_url: null,
-          },
-          fields: [],
-        },
-      };
-
-    this.start();
+    if (options.message) this.message = options.message;
+    this.sendEmbedWithButtons();
   }
 
-  private async start() {
+  private async sendEmbedWithButtons() {
     const interaction = this.options.interaction;
-    const user = interaction.user;
-    const guild = interaction.guild;
-    if (!guild) return;
-
     const client = this.options.client;
+    const user = interaction.user;
     const lng = await client.getUserLanguage(user.id);
+    const guild = interaction.guild;
 
-    const embedData = this.data.embed;
-
-    const embed = EmbedBuilder.from({
-      title: replacePlaceholders(embedData.title ?? '', user, guild),
-      author: {
-        name: replacePlaceholders(embedData.author?.name ?? '', user, guild),
-        icon_url: replacePlaceholders(embedData.author?.icon_url ?? '', user, guild),
-        url: replacePlaceholders(embedData.author.url ?? '', user, guild),
-      },
-      description: replacePlaceholders(embedData.description ?? '', user, guild),
-      fields: embedData.fields.map((field) => ({
-        name: replacePlaceholders(field.name, user, guild),
-        value: replacePlaceholders(field.value ?? '', user, guild),
-      })),
-      footer: {
-        text: replacePlaceholders(embedData.footer?.text ?? '', user, guild),
-        icon_url: replacePlaceholders(embedData.footer?.icon_url ?? '', user, guild),
-      },
-      image: { url: replacePlaceholders(embedData.image ?? '', user, guild) },
-      thumbnail: {
-        url: replacePlaceholders(embedData.thumbnail ?? '', user, guild),
-      },
-      url: replacePlaceholders(embedData.url ?? '', user, guild),
-    }).setColor(embedData.color as ColorResolvable);
+    let embed = new EmbedBuilder().setDescription('** **');
+    if (!isEmptyEmbed(this.message.embed)) embed = this.getEmbed(user, guild, this.message.embed);
 
     const message = await interaction
       .editReply({
-        content: replacePlaceholders(this.data.content ?? '', user, guild),
+        content: replacePlaceholders(this.message.content ?? '', user, guild),
         embeds: [embed],
-        components: this.getComponents(lng),
+        components: this.getButtons(lng, false),
       })
       .catch((err) => logger.debug({ err }, 'Could not edit message'));
     if (!message) return;
 
     const collector = message.createMessageComponentCollector({
-      idle: 60 * 10 * 1000,
+      idle: 60 * 10 * 1000, // 10 minutes
       componentType: ComponentType.Button,
     });
 
@@ -114,7 +85,7 @@ export class CustomEmbedBuilder extends events {
           .editReply({
             content: null,
             embeds: [embed],
-            components: this.getComponents(lng, true),
+            components: this.getButtons(lng, true),
           })
           .catch((err) => logger.debug({ err }, 'Could not edit message'));
     });
@@ -136,7 +107,7 @@ export class CustomEmbedBuilder extends events {
                         .setStyle(TextInputStyle.Paragraph)
                         .setMaxLength(2000)
                         .setRequired(false)
-                        .setValue(this.data.content ?? ''),
+                        .setValue(this.message.content ?? ''),
                     ),
                   ),
               )
@@ -148,10 +119,10 @@ export class CustomEmbedBuilder extends events {
               })
               .catch((err) => logger.debug({ err }, 'Could not await modal submit'));
             if (!submitted) return;
-            if (!submitted.deferred) await submitted.deferUpdate().catch((err) => logger.debug({ err }, 'Could not defer update'));
+            await submitted.deferUpdate().catch((err) => logger.debug({ err }, 'Could not defer update'));
             const input = submitted.fields.getTextInputValue('CEI_message');
-            this.data.content = input;
-            await submitted.editReply(this.getEmbedData(user, guild)).catch((err) => logger.debug({ err }, 'Could not edit reply'));
+            this.message.content = input;
+            await submitted.editReply(this.getMessage(user, guild)).catch((err) => logger.debug({ err }, 'Could not edit reply'));
           }
           break;
         case 'title':
@@ -169,7 +140,7 @@ export class CustomEmbedBuilder extends events {
                         .setStyle(TextInputStyle.Short)
                         .setMaxLength(256)
                         .setRequired(false)
-                        .setValue(this.data.embed.title ?? ''),
+                        .setValue(this.message.embed.title ?? ''),
                     ),
                     new ActionRowBuilder<TextInputBuilder>().addComponents(
                       new TextInputBuilder()
@@ -178,7 +149,7 @@ export class CustomEmbedBuilder extends events {
                         .setStyle(TextInputStyle.Short)
                         .setMaxLength(256)
                         .setRequired(false)
-                        .setValue(this.data.embed.url ?? ''),
+                        .setValue(this.message.embed.url ?? ''),
                     ),
                   ),
               )
@@ -190,12 +161,14 @@ export class CustomEmbedBuilder extends events {
               })
               .catch((err) => logger.debug({ err }, 'Could not await modal submit'));
             if (!submitted) return;
-            if (!submitted.deferred) await submitted.deferUpdate().catch((err) => logger.debug({ err }, 'Could not defer update'));
+            await submitted.deferUpdate().catch((err) => logger.debug({ err }, 'Could not defer update'));
             const title = submitted.fields.getTextInputValue('CEI_title');
             const url = submitted.fields.getTextInputValue('CEI_url');
-            this.data.embed.title = title;
-            this.data.embed.url = url;
-            await submitted.editReply(this.getEmbedData(user, guild)).catch((err) => logger.debug({ err }, 'Could not edit reply'));
+            const isValidEmbed = this.isValidEmbed({ ...this.message.embed, title, url }, user, guild);
+            if (!isValidEmbed) return;
+            this.message.embed.title = title;
+            this.message.embed.url = url;
+            await submitted.editReply(this.getMessage(user, guild)).catch((err) => logger.debug({ err }, 'Could not edit reply'));
           }
           break;
         case 'description':
@@ -213,7 +186,7 @@ export class CustomEmbedBuilder extends events {
                         .setStyle(TextInputStyle.Paragraph)
                         .setMaxLength(4000)
                         .setRequired(false)
-                        .setValue(this.data.embed.description ?? ''),
+                        .setValue(this.message.embed.description ?? ''),
                     ),
                   ),
               )
@@ -225,10 +198,12 @@ export class CustomEmbedBuilder extends events {
               })
               .catch((err) => logger.debug({ err }, 'Could not await modal submit'));
             if (!submitted) return;
-            if (!submitted.deferred) await submitted.deferUpdate().catch((err) => logger.debug({ err }, 'Could not defer update'));
+            await submitted.deferUpdate().catch((err) => logger.debug({ err }, 'Could not defer update'));
             const input = submitted.fields.getTextInputValue('CEI_description');
-            this.data.embed.description = input.length ? input : null;
-            await submitted.editReply(this.getEmbedData(user, guild)).catch((err) => logger.debug({ err }, 'Could not edit reply'));
+            const isValidEmbed = this.isValidEmbed({ ...this.message.embed, description: input ?? '** **' }, user, guild);
+            if (!isValidEmbed) return;
+            this.message.embed.description = input ?? '** **';
+            await submitted.editReply(this.getMessage(user, guild)).catch((err) => logger.debug({ err }, 'Could not edit reply'));
           }
           break;
         case 'author':
@@ -246,7 +221,7 @@ export class CustomEmbedBuilder extends events {
                         .setStyle(TextInputStyle.Short)
                         .setMaxLength(256)
                         .setRequired(false)
-                        .setValue(this.data.embed.author?.name ?? ''),
+                        .setValue(this.message.embed.author?.name ?? ''),
                     ),
                     new ActionRowBuilder<TextInputBuilder>().addComponents(
                       new TextInputBuilder()
@@ -255,7 +230,7 @@ export class CustomEmbedBuilder extends events {
                         .setStyle(TextInputStyle.Short)
                         .setMaxLength(256)
                         .setRequired(false)
-                        .setValue(this.data.embed.author?.icon_url ?? ''),
+                        .setValue(this.message.embed.author?.icon_url ?? ''),
                     ),
                     new ActionRowBuilder<TextInputBuilder>().addComponents(
                       new TextInputBuilder()
@@ -264,7 +239,7 @@ export class CustomEmbedBuilder extends events {
                         .setStyle(TextInputStyle.Short)
                         .setMaxLength(256)
                         .setRequired(false)
-                        .setValue(this.data.embed.author?.url ?? ''),
+                        .setValue(this.message.embed.author?.url ?? ''),
                     ),
                   ),
               )
@@ -276,12 +251,14 @@ export class CustomEmbedBuilder extends events {
               })
               .catch((err) => logger.debug({ err }, 'Could not await modal submit'));
             if (!submitted) return;
-            if (!submitted.deferred) await submitted.deferUpdate().catch((err) => logger.debug({ err }, 'Could not defer update'));
+            await submitted.deferUpdate().catch((err) => logger.debug({ err }, 'Could not defer update'));
             const name = submitted.fields.getTextInputValue('CEI_name');
             const icon_url = submitted.fields.getTextInputValue('CEI_icon');
             const url = submitted.fields.getTextInputValue('CEI_url');
-            this.data.embed.author = { name, icon_url, url };
-            await submitted.editReply(this.getEmbedData(user, guild)).catch((err) => logger.debug({ err }, 'Could not edit reply'));
+            const isValidEmbed = this.isValidEmbed({ ...this.message.embed, author: { name, icon_url, url } }, user, guild);
+            if (!isValidEmbed) return;
+            this.message.embed.author = { name, icon_url, url };
+            await submitted.editReply(this.getMessage(user, guild)).catch((err) => logger.debug({ err }, 'Could not edit reply'));
           }
           break;
         case 'footer':
@@ -299,7 +276,7 @@ export class CustomEmbedBuilder extends events {
                         .setStyle(TextInputStyle.Short)
                         .setMaxLength(256)
                         .setRequired(false)
-                        .setValue(this.data.embed.footer?.text ?? ''),
+                        .setValue(this.message.embed.footer?.text ?? ''),
                     ),
                     new ActionRowBuilder<TextInputBuilder>().addComponents(
                       new TextInputBuilder()
@@ -308,7 +285,7 @@ export class CustomEmbedBuilder extends events {
                         .setStyle(TextInputStyle.Short)
                         .setMaxLength(256)
                         .setRequired(false)
-                        .setValue(this.data.embed.footer?.icon_url ?? ''),
+                        .setValue(this.message.embed.footer?.icon_url ?? ''),
                     ),
                   ),
               )
@@ -320,11 +297,13 @@ export class CustomEmbedBuilder extends events {
               })
               .catch((err) => logger.debug({ err }, 'Could not await modal submit'));
             if (!submitted) return;
-            if (!submitted.deferred) await submitted.deferUpdate().catch((err) => logger.debug({ err }, 'Could not defer update'));
+            await submitted.deferUpdate().catch((err) => logger.debug({ err }, 'Could not defer update'));
             const text = submitted.fields.getTextInputValue('CEI_text');
             const icon_url = submitted.fields.getTextInputValue('CEI_icon');
-            this.data.embed.footer = { text, icon_url };
-            await submitted.editReply(this.getEmbedData(user, guild)).catch((err) => logger.debug({ err }, 'Could not edit reply'));
+            const isValidEmbed = this.isValidEmbed({ ...this.message.embed, footer: { text, icon_url } }, user, guild);
+            if (!isValidEmbed) return;
+            this.message.embed.footer = { text, icon_url };
+            await submitted.editReply(this.getMessage(user, guild)).catch((err) => logger.debug({ err }, 'Could not edit reply'));
           }
           break;
         case 'thumbnail':
@@ -342,7 +321,7 @@ export class CustomEmbedBuilder extends events {
                         .setStyle(TextInputStyle.Short)
                         .setMaxLength(256)
                         .setRequired(false)
-                        .setValue(this.data.embed.thumbnail ?? ''),
+                        .setValue(this.message.embed.thumbnail ?? ''),
                     ),
                   ),
               )
@@ -354,10 +333,12 @@ export class CustomEmbedBuilder extends events {
               })
               .catch((err) => logger.debug({ err }, 'Could not await modal submit'));
             if (!submitted) return;
-            if (!submitted.deferred) await submitted.deferUpdate().catch((err) => logger.debug({ err }, 'Could not defer update'));
+            await submitted.deferUpdate().catch((err) => logger.debug({ err }, 'Could not defer update'));
             const input = submitted.fields.getTextInputValue('CEI_thumbnail');
-            this.data.embed.thumbnail = input;
-            await submitted.editReply(this.getEmbedData(user, guild)).catch((err) => logger.debug({ err }, 'Could not edit reply'));
+            const isValidEmbed = this.isValidEmbed({ ...this.message.embed, thumbnail: input }, user, guild);
+            if (!isValidEmbed) return;
+            this.message.embed.thumbnail = input;
+            await submitted.editReply(this.getMessage(user, guild)).catch((err) => logger.debug({ err }, 'Could not edit reply'));
           }
           break;
         case 'image':
@@ -375,7 +356,7 @@ export class CustomEmbedBuilder extends events {
                         .setStyle(TextInputStyle.Short)
                         .setMaxLength(256)
                         .setRequired(false)
-                        .setValue(this.data.embed.image ?? ''),
+                        .setValue(this.message.embed.image ?? ''),
                     ),
                   ),
               )
@@ -387,10 +368,12 @@ export class CustomEmbedBuilder extends events {
               })
               .catch((err) => logger.debug({ err }, 'Could not await modal submit'));
             if (!submitted) return;
-            if (!submitted.deferred) await submitted.deferUpdate().catch((err) => logger.debug({ err }, 'Could not defer update'));
+            await submitted.deferUpdate().catch((err) => logger.debug({ err }, 'Could not defer update'));
             const input = submitted.fields.getTextInputValue('CEI_image');
-            this.data.embed.image = input;
-            await submitted.editReply(this.getEmbedData(user, guild)).catch((err) => logger.debug({ err }, 'Could not edit reply'));
+            const isValidEmbed = this.isValidEmbed({ ...this.message.embed, image: input }, user, guild);
+            if (!isValidEmbed) return;
+            this.message.embed.image = input;
+            await submitted.editReply(this.getMessage(user, guild)).catch((err) => logger.debug({ err }, 'Could not edit reply'));
           }
           break;
         case 'color':
@@ -408,7 +391,7 @@ export class CustomEmbedBuilder extends events {
                         .setStyle(TextInputStyle.Short)
                         .setMaxLength(256)
                         .setRequired(false)
-                        .setValue(this.data.embed.color?.toString() ?? ''),
+                        .setValue(this.message.embed.color?.toString() ?? ''),
                     ),
                   ),
               )
@@ -420,12 +403,12 @@ export class CustomEmbedBuilder extends events {
               })
               .catch((err) => logger.debug({ err }, 'Could not await modal submit'));
             if (!submitted) return;
-            if (!submitted.deferred) await submitted.deferUpdate().catch((err) => logger.debug({ err }, 'Could not defer update'));
+            await submitted.deferUpdate().catch((err) => logger.debug({ err }, 'Could not defer update'));
             const input = submitted.fields.getTextInputValue('CEI_color');
             const hexRegex = /^#(?:[0-9a-fA-F]{3}){2}$/;
-            if (!hexRegex.test(input)) this.data.embed.color = '#1e1f22';
-            else this.data.embed.color = input;
-            await submitted.editReply(this.getEmbedData(user, guild)).catch((err) => logger.debug({ err }, 'Could not edit reply'));
+            if (!hexRegex.test(input)) this.message.embed.color = '#1e1f22';
+            else this.message.embed.color = input;
+            await submitted.editReply(this.getMessage(user, guild)).catch((err) => logger.debug({ err }, 'Could not edit reply'));
           }
           break;
         case 'add-field':
@@ -472,52 +455,56 @@ export class CustomEmbedBuilder extends events {
               })
               .catch((err) => logger.debug({ err }, 'Could not await modal submit'));
             if (!submitted) return;
-            if (!submitted.deferred) await submitted.deferUpdate().catch((err) => logger.debug({ err }, 'Could not defer update'));
+            await submitted.deferUpdate().catch((err) => logger.debug({ err }, 'Could not defer update'));
             const name = submitted.fields.getTextInputValue('CEI_title');
             const value = submitted.fields.getTextInputValue('CEI_text');
             const inline = submitted.fields.getTextInputValue('CEI_inline');
-            this.data.embed.fields.push({
+            const isValidEmbed = this.isValidEmbed(
+              { ...this.message.embed, fields: [{ name, value, inline: inline.toLowerCase() === 'true' ? true : false }] },
+              user,
+              guild,
+            );
+            if (!isValidEmbed) return;
+            this.message.embed.fields?.push({
               name,
               value,
               inline: inline.toLowerCase() === 'true' ? true : false,
             });
-            await submitted.editReply(this.getEmbedData(user, guild)).catch((err) => logger.debug({ err }, 'Could not edit reply'));
+            await submitted.editReply(this.getMessage(user, guild)).catch((err) => logger.debug({ err }, 'Could not edit reply'));
           }
           break;
         case 'remove-field':
           {
-            this.data.embed.fields.pop();
-            await buttonInteraction.update(this.getEmbedData(user, guild)).catch((err) => logger.debug({ err }, 'Could not update message'));
+            this.message.embed.fields?.pop();
+            await buttonInteraction.update(this.getMessage(user, guild)).catch((err) => logger.debug({ err }, 'Could not update message'));
           }
           break;
         case 'reset':
           {
-            this.data.embed = {
-              color: null,
-              description: null,
+            this.message.embed = {
+              color: '#1e1f22',
+              description: undefined,
               image: undefined,
               thumbnail: undefined,
-              title: null,
-              url: null,
-              author: { name: null, icon_url: null, url: null },
-              footer: { text: null, icon_url: null },
+              title: undefined,
+              url: undefined,
+              author: {
+                name: undefined,
+                icon_url: undefined,
+                url: undefined,
+              },
+              footer: {
+                text: undefined,
+                icon_url: undefined,
+              },
               fields: [],
             };
-            await buttonInteraction.update(this.getEmbedData(user, guild)).catch((err) => logger.debug({ err }, 'Could not update message'));
+            await buttonInteraction.update(this.getMessage(user, guild)).catch((err) => logger.debug({ err }, 'Could not update message'));
           }
           break;
         case 'submit':
           {
-            if (this.isEmptyEmbed())
-              return buttonInteraction
-                .reply({
-                  content: t('custom_embed.empty', { lng }),
-                  embeds: [],
-                  components: [],
-                  ephemeral: true,
-                })
-                .catch((err) => logger.debug({ err }, 'Could not reply'));
-            this.emit('submit', this.data);
+            this.emit('submit', this.message);
             collector.stop();
           }
           break;
@@ -537,54 +524,62 @@ export class CustomEmbedBuilder extends events {
     });
   }
 
-  private getEmbedData(user: User, guild: Guild): InteractionEditReplyOptions {
-    const embedData = this.data.embed;
+  private isValidEmbed(embedData: Embed, user: User, guild: Guild) {
+    try {
+      const embed = this.getEmbed(user, guild, embedData);
+
+      if (embed) return true;
+      else return false;
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  }
+
+  private getEmbed(user: User, guild: Guild, embed: Embed): EmbedBuilder {
+    return EmbedBuilder.from({
+      description: replacePlaceholders(embed.description ?? '', user, guild),
+      title: replacePlaceholders(embed.title ?? '', user, guild),
+      author: {
+        name: replacePlaceholders(embed.author?.name ?? '', user, guild),
+        icon_url: replacePlaceholders(embed.author?.icon_url ?? '', user, guild),
+        url: replacePlaceholders(embed.author?.url ?? '', user, guild),
+      },
+      fields: embed.fields?.map((field) => ({
+        name: replacePlaceholders(field.name ?? '', user, guild),
+        value: replacePlaceholders(field.value ?? '', user, guild),
+      })),
+      footer: {
+        text: replacePlaceholders(embed.footer?.text ?? '', user, guild),
+        icon_url: replacePlaceholders(embed.footer?.icon_url ?? '', user, guild),
+      },
+      image: {
+        url: replacePlaceholders(embed.image ?? '', user, guild),
+      },
+      thumbnail: {
+        url: replacePlaceholders(embed.thumbnail ?? '', user, guild),
+      },
+      url: replacePlaceholders(embed.url ?? '', user, guild),
+    }).setColor(embed.color as ColorResolvable);
+  }
+
+  private getMessage(user: User, guild: Guild): InteractionEditReplyOptions {
+    const embedData = this.message.embed;
+
+    if (isEmptyEmbed(embedData)) {
+      return {
+        content: replacePlaceholders(this.message.content ?? '', user, guild),
+        embeds: [new EmbedBuilder().setDescription('** **')],
+      };
+    }
 
     return {
-      content: replacePlaceholders(this.data.content ?? '', user, guild),
-      embeds: [
-        EmbedBuilder.from({
-          description: replacePlaceholders(embedData.description ?? '', user, guild),
-          title: replacePlaceholders(embedData.title ?? '', user, guild),
-          author: {
-            name: replacePlaceholders(embedData.author?.name ?? '', user, guild),
-            icon_url: replacePlaceholders(embedData.author?.icon_url ?? '', user, guild),
-            url: replacePlaceholders(embedData.author.url ?? '', user, guild),
-          },
-          fields: embedData.fields.map((field) => ({
-            name: replacePlaceholders(field.name, user, guild),
-            value: replacePlaceholders(field.value ?? '', user, guild),
-          })),
-          footer: {
-            text: replacePlaceholders(embedData.footer?.text ?? '', user, guild),
-            icon_url: replacePlaceholders(embedData.footer?.icon_url ?? '', user, guild),
-          },
-          image: {
-            url: replacePlaceholders(embedData.image ?? '', user, guild),
-          },
-          thumbnail: {
-            url: replacePlaceholders(embedData.thumbnail ?? '', user, guild),
-          },
-          url: replacePlaceholders(embedData.url ?? '', user, guild),
-        }).setColor(this.data.embed.color as ColorResolvable),
-      ],
+      content: replacePlaceholders(this.message.content ?? '', user, guild),
+      embeds: [this.getEmbed(user, guild, this.message.embed)],
     };
   }
 
-  private isEmptyEmbed() {
-    const embedData = this.data.embed;
-    if (
-      !embedData.title?.length &&
-      !embedData.fields.length &&
-      !embedData.description?.length &&
-      !embedData.author?.name?.length &&
-      !embedData.footer?.text?.length
-    )
-      return true;
-    else return false;
-  }
-
-  private getComponents(lng: string, disabled: boolean = false) {
+  private getButtons(lng: string, disabled: boolean = false) {
     return [
       new ActionRowBuilder<ButtonBuilder>().setComponents(
         new ButtonBuilder()
@@ -629,7 +624,7 @@ export class CustomEmbedBuilder extends events {
   }
 }
 
-export function replacePlaceholders(string: string, user: User, guild: Guild) {
+export function replacePlaceholders(string: string = '', user: User, guild: Guild) {
   return string
     .replace(/{user}/g, user.toString())
     .replace(/{user\.mention}/g, user.toString())
@@ -646,4 +641,16 @@ export function replacePlaceholders(string: string, user: User, guild: Guild) {
     .replace(/{guild\.id}/g, guild.id)
     .replace(/{guild\.icon}/g, guild.iconURL() || '')
     .replace(/{guild\.member_count}/g, guild.memberCount.toString());
+}
+
+export function isEmptyEmbed(embedData: Embed) {
+  if (
+    !embedData.title?.length &&
+    !embedData.fields?.length &&
+    !embedData.description?.length &&
+    !embedData.author?.name?.length &&
+    !embedData.footer?.text?.length
+  )
+    return true;
+  else return false;
 }

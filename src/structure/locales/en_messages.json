@@ -1,4 +1,29 @@
 {
+  "welcome": {
+    "roles": {
+      "add-role-modal-title": "Add Welcome Role",
+      "add-role-modal-input": "Role ID",
+      "remove-role-modal-title": "Remove Welcome Role",
+      "remove-role-modal-input": "Role ID",
+      "title": "Roles",
+      "already": "That role ({roleId}) is already in the welcome roles!",
+      "invalid": "That role ({roleId}) does not exist on the server!",
+      "added": "The role {{role}} has been added to the welcome roles!",
+      "removed": "The role of id {{roleId}} has been removed from the welcome roles!",
+      "none": "The role with id {{roleId}} is not in the welcome roles!",
+      "add-role-button": "Add Role",
+      "remove-role-button": "Remove Role"
+    },
+    "channel": {
+      "invalid": "You did not provide a channel and there is none to remove!",
+      "removed": "The welcome channel has been removed!",
+      "set": "The welcome channel has been set to {{channel}}!",
+      "title": "Channel"
+    },
+    "message": {
+      "set": "The welcome message has been set!"
+    }
+  },
   "farewell": {
     "channel": {
       "invalid": "You did not provide a channel and there is none to remove!",
@@ -190,29 +215,6 @@
       "reset": "Reset",
       "submit": "Submit",
       "delete": "Delete"
-    }
-  },
-  "welcome": {
-    "roles": {
-      "already": "That role is already a welcome role!",
-      "added": "Successfully added a new welcome role.",
-      "invalid": "That role is not a welcome role!",
-      "removed": "Successfully removed the welcome role.",
-      "none": "There are no welcome roles!",
-      "list": "List of welcome roles:"
-    },
-    "channel": {
-      "already": "That channel is already the welcome channel!",
-      "set": "Successfully set the welcome channel.",
-      "invalid": "There is no welcome channel to remove!",
-      "removed": "Successfully removed the welcome channel.",
-      "none": "There is no welcome channel!",
-      "show": "The welcome channel is currently set to {{channel}}."
-    },
-    "message": {
-      "set": "Successfully set the welcome message.",
-      "removed": "Successfully removed the welcome message.",
-      "test": "Emitted the join event."
     }
   },
   "invite": {

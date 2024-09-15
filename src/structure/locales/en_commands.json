@@ -41,6 +41,58 @@
       }
     ]
   },
+  "farewell": {
+    "name": "farewell",
+    "description": "Send a farewell message when a member leaves the server",
+    "options": [
+      {
+        "name": "channel",
+        "description": "The channel to send the farewell message to",
+        "options": [
+          {
+            "name": "channel",
+            "description": "Farewell channel (leave empty to remove)"
+          }
+        ]
+      },
+      {
+        "name": "message",
+        "description": "Configure the farewell message"
+      },
+      {
+        "name": "info",
+        "description": "Shows you the current settings and available placeholders"
+      }
+    ]
+  },
+  "welcome": {
+    "name": "welcome",
+    "description": "Send a welcome message when a member joins the server",
+    "options": [
+      {
+        "name": "channel",
+        "description": "The channel to send the welcome message to",
+        "options": [
+          {
+            "name": "channel",
+            "description": "Welcome channel (leave empty to remove)"
+          }
+        ]
+      },
+      {
+        "name": "message",
+        "description": "Configure the welcome message"
+      },
+      {
+        "name": "roles",
+        "description": "Configure the welcome roles"
+      },
+      {
+        "name": "info",
+        "description": "Shows you the current settings and available placeholders"
+      }
+    ]
+  },
   "preview-color": {
     "name": "preview-color",
     "description": "Sends an embed with a color to preview",
@@ -202,30 +254,6 @@
             "description": "Lists all banned users"
           }
         ]
-      }
-    ]
-  },
-  "farewell": {
-    "name": "farewell",
-    "description": "Send a farewell message when a member leaves the server",
-    "options": [
-      {
-        "name": "channel",
-        "description": "The channel to send the farewell message to",
-        "options": [
-          {
-            "name": "channel",
-            "description": "Farewell channel (leave empty to remove)"
-          }
-        ]
-      },
-      {
-        "name": "message",
-        "description": "Configure the farewell message"
-      },
-      {
-        "name": "info",
-        "description": "Shows you the current settings and available placeholders"
       }
     ]
   },
@@ -808,92 +836,6 @@
                 "description": "The channel to send the ticket system into"
               }
             ]
-          }
-        ]
-      }
-    ]
-  },
-  "config-welcome": {
-    "name": "welcome-configuration",
-    "description": "Configure the welcome module",
-    "options": [
-      {
-        "name": "roles",
-        "description": "Configure the welcome roles",
-        "options": [
-          {
-            "name": "add",
-            "description": "Adds a welcome role",
-            "options": [
-              {
-                "name": "role",
-                "description": "The role to add"
-              }
-            ]
-          },
-          {
-            "name": "remove",
-            "description": "Removes a welcome role",
-            "options": [
-              {
-                "name": "role-id",
-                "description": "The id of role to remove"
-              }
-            ]
-          },
-          {
-            "name": "list",
-            "description": "Lists all welcome roles"
-          }
-        ]
-      },
-      {
-        "name": "channel",
-        "description": "Configure the welcome channel",
-        "options": [
-          {
-            "name": "set",
-            "description": "Sets the welcome channel",
-            "options": [
-              {
-                "name": "channel",
-                "description": "The welcome channel"
-              }
-            ]
-          },
-          {
-            "name": "remove",
-            "description": "Removes the welcome channel"
-          },
-          {
-            "name": "show",
-            "description": "Shows the welcome channel"
-          }
-        ]
-      },
-      {
-        "name": "message",
-        "description": "Configure the welcome message",
-        "options": [
-          {
-            "name": "set",
-            "description": "Sets the welcome message"
-          },
-          {
-            "name": "remove",
-            "description": "Removes the welcome message"
-          },
-          {
-            "name": "show",
-            "description": "Shows the welcome message"
-          },
-          {
-            "name": "test",
-            "description": "Send a test welcome message"
-          },
-          {
-            "name": "placeholders",
-            "description": "Shows you the available placeholders"
           }
         ]
       }

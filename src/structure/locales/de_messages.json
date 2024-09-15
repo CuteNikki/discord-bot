@@ -192,29 +192,6 @@
       "delete": "Löschen"
     }
   },
-  "welcome": {
-    "roles": {
-      "already": "Diese Rolle ist bereits eine Willkommensrolle!",
-      "added": "Erfolgreich eine neue Willkommensrolle hinzugefügt.",
-      "invalid": "Diese Rolle ist keine Willkommensrolle!",
-      "removed": "Willkommensrolle erfolgreich entfernt.",
-      "none": "Es gibt keine Willkommensrollen!",
-      "list": "Liste der Willkommensrollen:"
-    },
-    "channel": {
-      "already": "Dieser Kanal ist bereits der Willkommenskanal!",
-      "set": "Willkommenskanal erfolgreich gesetzt.",
-      "invalid": "Es gibt keinen Willkommenskanal zum Entfernen!",
-      "removed": "Willkommenskanal erfolgreich entfernt.",
-      "none": "Es gibt keinen Willkommenskanal!",
-      "show": "Der Willkommenskanal ist derzeit auf {{channel}} gesetzt."
-    },
-    "message": {
-      "set": "Willkommensnachricht erfolgreich gesetzt.",
-      "removed": "Willkommensnachricht erfolgreich entfernt.",
-      "test": "Das Beitritts-Event wurde ausgelöst."
-    }
-  },
   "invite": {
     "title": "Bot-Einladung"
   },

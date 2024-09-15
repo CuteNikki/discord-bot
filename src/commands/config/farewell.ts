@@ -1,4 +1,4 @@
-import { ApplicationIntegrationType, ChannelType, EmbedBuilder, InteractionContextType, SlashCommandBuilder } from 'discord.js';
+import { ApplicationIntegrationType, ChannelType, EmbedBuilder, InteractionContextType, PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
 import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
@@ -10,6 +10,7 @@ export default new Command({
   module: ModuleType.Config,
   botPermissions: ['SendMessages'],
   data: new SlashCommandBuilder()
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
     .setContexts(InteractionContextType.Guild)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
     .setName('farewell')
@@ -73,17 +74,17 @@ export default new Command({
             message: config.farewell.message,
           });
           customBuilder.once('submit', async (msg) => {
+            await client.updateGuildSettings(guild.id, {
+              $set: {
+                ['farewell.message']: msg,
+              },
+            });
             interaction
               .editReply({
                 embeds: [new EmbedBuilder().setColor(client.colors.farewell).setDescription(t('farewell.message.set', { lng }))],
                 components: [],
               })
               .catch((err) => logger.debug({ err }, 'Could not edit reply'));
-            await client.updateGuildSettings(guild.id, {
-              $set: {
-                ['farewell.message']: msg,
-              },
-            });
           });
         }
         break;

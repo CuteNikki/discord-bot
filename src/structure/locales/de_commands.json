@@ -41,6 +41,58 @@
       }
     ]
   },
+  "farewell": {
+    "name": "verabschieden",
+    "description": "Sende eine Abschieds-Nachricht, wenn ein Mitglied den Server verlässt",
+    "options": [
+      {
+        "name": "kanal",
+        "description": "Der Kanal, in dem die Nachricht gesendet werden soll",
+        "options": [
+          {
+            "name": "kanal",
+            "description": "Abschiedskanal (leer lassen, um zu entfernen)"
+          }
+        ]
+      },
+      {
+        "name": "nachricht",
+        "description": "Konfiguriere die Abschieds-Nachricht"
+      },
+      {
+        "name": "info",
+        "description": "Zeigt dir die aktuellen Einstellungen und verfügbare Platzhalter an"
+      }
+    ]
+  },
+  "welcome": {
+    "name": "willkommen",
+    "description": "Sende eine Willkommens-Nachricht, wenn ein Mitglied den Server betritt",
+    "options": [
+      {
+        "name": "kanal",
+        "description": "Der Kanal, in dem die Nachricht gesendet werden soll",
+        "options": [
+          {
+            "name": "kanal",
+            "description": "Willkommenskanal (leer lassen, um zu entfernen)"
+          }
+        ]
+      },
+      {
+        "name": "nachricht",
+        "description": "Konfiguriere die Willkommens-Nachricht"
+      },
+      {
+        "name": "rollen",
+        "description": "Konfiguriere die Willkommens-Rollen"
+      },
+      {
+        "name": "info",
+        "description": "Zeigt dir die aktuellen Einstellungen und verfügbare Platzhalter an"
+      }
+    ]
+  },
   "preview-color": {
     "name": "farb-vorschau",
     "description": "Sendet eine Einbettung mit einer Farbe zur Vorschau",
@@ -202,30 +254,6 @@
             "description": "Zeigt alle Verbannungen an"
           }
         ]
-      }
-    ]
-  },
-  "farewell": {
-    "name": "verabschieden",
-    "description": "Sende eine Abschieds-Nachricht, wenn ein Mitglied den Server verlässt",
-    "options": [
-      {
-        "name": "kanal",
-        "description": "Der Kanal, in dem die Nachricht gesendet werden soll",
-        "options": [
-          {
-            "name": "kanal",
-            "description": "Abschiedskanal (leer lassen, um zu entfernen)"
-          }
-        ]
-      },
-      {
-        "name": "nachricht",
-        "description": "Konfiguriere die Abschieds-Nachricht"
-      },
-      {
-        "name": "info",
-        "description": "Zeigt dir die aktuellen Einstellungen und verfügbare Platzhalter an"
       }
     ]
   },
@@ -808,92 +836,6 @@
                 "description": "Der Kanal, in den das Ticket-System gesendet werden soll"
               }
             ]
-          }
-        ]
-      }
-    ]
-  },
-  "config-welcome": {
-    "name": "willkommens-konfiguration",
-    "description": "Konfiguriere das Willkommens-Modul",
-    "options": [
-      {
-        "name": "rollen",
-        "description": "Konfiguriere die Willkommens-Rollen",
-        "options": [
-          {
-            "name": "hinzufügen",
-            "description": "Fügt eine Willkommens-Rolle hinzu",
-            "options": [
-              {
-                "name": "rolle",
-                "description": "Die Rolle, die hinzugefügt werden soll"
-              }
-            ]
-          },
-          {
-            "name": "entfernen",
-            "description": "Entfernt eine Willkommens-Rolle",
-            "options": [
-              {
-                "name": "rollen-id",
-                "description": "Die ID der Rolle, die entfernt werden soll"
-              }
-            ]
-          },
-          {
-            "name": "ansehen",
-            "description": "Zeigt alle Willkommens-Rollen an"
-          }
-        ]
-      },
-      {
-        "name": "kanal",
-        "description": "Konfiguriere den Willkommens-Kanal",
-        "options": [
-          {
-            "name": "setzen",
-            "description": "Setzt den Willkommens-Kanal",
-            "options": [
-              {
-                "name": "kanal",
-                "description": "Der Willkommens-Kanal"
-              }
-            ]
-          },
-          {
-            "name": "entfernen",
-            "description": "Entfernt den Willkommens-Kanal"
-          },
-          {
-            "name": "ansehen",
-            "description": "Zeigt den Willkommens-Kanal an"
-          }
-        ]
-      },
-      {
-        "name": "nachricht",
-        "description": "Konfiguriere die Willkommens-Nachricht",
-        "options": [
-          {
-            "name": "setzen",
-            "description": "Setzt die Willkommens-Nachricht"
-          },
-          {
-            "name": "entfernen",
-            "description": "Entfernt die Willkommens-Nachricht"
-          },
-          {
-            "name": "ansehen",
-            "description": "Zeigt die Willkommens-Nachricht an"
-          },
-          {
-            "name": "testen",
-            "description": "Sendet eine Test-Willkommens-Nachricht"
-          },
-          {
-            "name": "platzhalter",
-            "description": "Zeigt dir die verfügbaren Platzhalter an"
           }
         ]
       }

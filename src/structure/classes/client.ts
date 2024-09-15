@@ -49,6 +49,7 @@ export class DiscordClient extends Client {
   // Custom colors
   public colors = {
     error: Colors.Red,
+    warning: Colors.Yellow,
     counting: Colors.Blue,
     farewell: Colors.Orange,
     welcome: Colors.Aqua,

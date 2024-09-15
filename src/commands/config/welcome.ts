@@ -105,14 +105,14 @@ export default new Command({
         break;
       case 'roles':
         {
-          const currentRoles = config.welcome.roles;
+          const rolesEmbed = new EmbedBuilder().setColor(client.colors.welcome).addFields({
+            name: t('welcome.roles.title', { lng }),
+            value: config.welcome.roles.length ? config.welcome.roles.map((r) => `<@&${r}>`).join('\n') : '/',
+          });
+          const warning = new EmbedBuilder().setColor(client.colors.warning).setDescription(':warning: ' + t('welcome.state.warning', { lng }));
 
           interaction.editReply({
-            embeds: [
-              new EmbedBuilder()
-                .setColor(client.colors.welcome)
-                .addFields({ name: t('welcome.roles.title', { lng }), value: currentRoles.length ? currentRoles.map((r) => `<@&${r}>`).join('\n') : '/' }),
-            ],
+            embeds: config.welcome.enabled ? [rolesEmbed] : [warning, rolesEmbed],
             components: [
               new ActionRowBuilder<ButtonBuilder>().addComponents(
                 new ButtonBuilder().setCustomId('button-welcome-add-role').setLabel(t('welcome.roles.add-role-button', { lng })).setStyle(ButtonStyle.Success),

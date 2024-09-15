@@ -28,6 +28,7 @@
       "disabled": "Das Willkommens-Modul wurde deaktiviert!",
       "already_enabled": "Das Willkommens-Modul ist bereits aktiviert!",
       "already_disabled": "Das Willkommens-Modul ist bereits deaktiviert!",
+      "warning": "Rollen werden nicht hinzugefügt, solange das Willkommens-Modul deaktiviert ist!",
       "title": "Status"
     }
   },

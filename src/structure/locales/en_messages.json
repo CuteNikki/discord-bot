@@ -28,6 +28,7 @@
       "disabled": "The welcome module has been disabled!",
       "already_enabled": "The welcome module is already enabled!",
       "already_disabled": "The welcome module is already disabled!",
+      "warning": "Roles will not be added while the welcome module is disabled!",
       "title": "State"
     }
   },

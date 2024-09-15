@@ -129,9 +129,12 @@ export default new Command({
         {
           const embeds = [
             new EmbedBuilder().setColor(client.colors.welcome).addFields(
-              { name: t('welcome.state.title', { lng }), value: config.welcome.enabled ? '✅' : '❌' },
-              { name: t('welcome.channel.title', { lng }), value: config.welcome.channelId ? `<#${config.welcome.channelId}>` : '/' },
-              { name: t('welcome.roles.title', { lng }), value: config.welcome.roles.length ? config.welcome.roles.map((r) => `<@&${r}>`).join('\n') : '/' },
+              { name: t('welcome.state.title', { lng }), value: config.welcome.enabled ? t('enabled', { lng }) : t('disabled', { lng }) },
+              { name: t('welcome.channel.title', { lng }), value: config.welcome.channelId ? `<#${config.welcome.channelId}>` : t('none', { lng }) },
+              {
+                name: t('welcome.roles.title', { lng }),
+                value: config.welcome.roles.length ? config.welcome.roles.map((r) => `<@&${r}>`).join('\n') : t('none', { lng }),
+              },
               {
                 name: t('welcome.placeholders.title', { lng }),
                 value: [

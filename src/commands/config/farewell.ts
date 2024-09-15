@@ -94,8 +94,8 @@ export default new Command({
         {
           const embeds = [
             new EmbedBuilder().setColor(client.colors.farewell).addFields(
-              { name: t('farewell.state.title', { lng }), value: config.farewell.enabled ? '✅' : '❌' },
-              { name: t('farewell.channel.title', { lng }), value: config.farewell.channelId ? `<#${config.farewell.channelId}>` : '/' },
+              { name: t('farewell.state.title', { lng }), value: config.farewell.enabled ? t('enabled', { lng }) : t('disabled', { lng }) },
+              { name: t('farewell.channel.title', { lng }), value: config.farewell.channelId ? `<#${config.farewell.channelId}>` : t('none', { lng }) },
               {
                 name: t('farewell.placeholders.title', { lng }),
                 value: [

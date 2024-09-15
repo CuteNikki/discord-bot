@@ -1266,5 +1266,8 @@
     "error": "Etwas ist schief gelaufen! Fehler: {{error}}",
     "module": "Du kannst diesen Befehl nur verwenden wenn das {{module}} Modul aktiviert ist!"
   },
-  "pagination": "Komponenten wurden für {{time}} nicht benutzt und deaktiviert!"
+  "pagination": "Komponenten wurden für {{time}} nicht benutzt und deaktiviert!",
+  "enabled": "aktiviert",
+  "disabled": "deaktiviert",
+  "none": "nicht gesetzt"
 }

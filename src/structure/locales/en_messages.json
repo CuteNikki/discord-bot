@@ -1267,5 +1267,8 @@
     "error": "Something went wrong! Error: {{error}}",
     "module": "You can only use this command if the {{module}} module is enabled!"
   },
-  "pagination": "Components were not used for {{time}} and have been disabled!"
+  "pagination": "Components were not used for {{time}} and have been disabled!",
+  "enabled": "enabled",
+  "disabled": "disabled",
+  "none": "not set"
 }

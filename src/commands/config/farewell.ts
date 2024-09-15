@@ -24,7 +24,9 @@ export default new Command({
         ),
     )
     .addSubcommand((cmd) => cmd.setName('message').setDescription('Configure the message that is sent on leave'))
-    .addSubcommand((cmd) => cmd.setName('info').setDescription('Shows you the current settings and available placeholders')),
+    .addSubcommand((cmd) => cmd.setName('info').setDescription('Shows you the current settings and available placeholders'))
+    .addSubcommand((cmd) => cmd.setName('enable').setDescription('Enable the farewell module'))
+    .addSubcommand((cmd) => cmd.setName('disable').setDescription('Disable the farewell module')),
   async execute({ client, interaction }) {
     if (!interaction.inCachedGuild()) return;
     await interaction.deferReply();
@@ -121,6 +123,46 @@ export default new Command({
           });
         }
         break;
+      case 'enable':
+        {
+          const config = await client.getGuildSettings(guild.id);
+
+          if (config.farewell.enabled) {
+            return interaction.editReply({
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('farewell.already_enabled', { lng }))],
+            });
+          }
+
+          await client.updateGuildSettings(guild.id, {
+            $set: {
+              ['farewell.enabled']: true,
+            },
+          });
+
+          return interaction.editReply({
+            embeds: [new EmbedBuilder().setColor(client.colors.farewell).setDescription(t('farewell.enabled', { lng }))],
+          });
+        }
+        break;
+      case 'disable': {
+        const config = await client.getGuildSettings(guild.id);
+
+        if (!config.farewell.enabled) {
+          return interaction.editReply({
+            embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('farewell.already_disabled', { lng }))],
+          });
+        }
+
+        await client.updateGuildSettings(guild.id, {
+          $set: {
+            ['farewell.enabled']: false,
+          },
+        });
+
+        return interaction.editReply({
+          embeds: [new EmbedBuilder().setColor(client.colors.farewell).setDescription(t('farewell.disabled', { lng }))],
+        });
+      }
     }
   },
 });

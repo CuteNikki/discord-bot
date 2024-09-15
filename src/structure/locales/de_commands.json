@@ -62,6 +62,14 @@
       {
         "name": "info",
         "description": "Zeigt dir die aktuellen Einstellungen und verfügbare Platzhalter an"
+      },
+      {
+        "name": "aktivieren",
+        "description": "Aktiviert das Abschieds-Modul"
+      },
+      {
+        "name": "deaktivieren",
+        "description": "Deaktiviert das Abschieds-Modul"
       }
     ]
   },
@@ -90,6 +98,14 @@
       {
         "name": "info",
         "description": "Zeigt dir die aktuellen Einstellungen und verfügbare Platzhalter an"
+      },
+      {
+        "name": "aktivieren",
+        "description": "Aktiviert das Willkommens-Modul"
+      },
+      {
+        "name": "deaktivieren",
+        "description": "Deaktiviert das Willkommens-Modul"
       }
     ]
   },

@@ -8,9 +8,9 @@
       "title": "Roles",
       "already": "That role ({roleId}) is already in the welcome roles!",
       "invalid": "That role ({roleId}) does not exist on the server!",
-      "added": "The role {{role}} has been added to the welcome roles!",
-      "removed": "The role of id {{roleId}} has been removed from the welcome roles!",
-      "none": "The role with id {{roleId}} is not in the welcome roles!",
+      "added": "The role ({{role}}) has been added to the welcome roles!",
+      "removed": "The role ({{roleId}}) has been removed from the welcome roles!",
+      "none": "The role ({{roleId}}) is not in the welcome roles!",
       "add-role-button": "Add Role",
       "remove-role-button": "Remove Role"
     },
@@ -22,7 +22,11 @@
     },
     "message": {
       "set": "The welcome message has been set!"
-    }
+    },
+    "enabled": "The welcome module has been enabled!",
+    "disabled": "The welcome module has been disabled!",
+    "already_enabled": "The welcome module is already enabled!",
+    "already_disabled": "The welcome module is already disabled!"
   },
   "farewell": {
     "channel": {
@@ -36,7 +40,11 @@
     },
     "message": {
       "set": "The leave message has been set!"
-    }
+    },
+    "enabled": "The farewell module has been enabled!",
+    "disabled": "The farewell module has been disabled!",
+    "already_enabled": "The farewell module is already enabled!",
+    "already_disabled": "The farewell module is already disabled!"
   },
   "counting": {
     "already_setup": "The counting game is already set up! Use the edit or reset subcommand instead",

@@ -1,4 +1,33 @@
 {
+  "welcome": {
+    "roles": {
+      "add-role-modal-title": "Willkommens-Rolle hinzufügen",
+      "add-role-modal-input": "Rollen-ID",
+      "remove-role-modal-title": "Willkommens-Rolle entfernen",
+      "remove-role-modal-input": "Rollen-ID",
+      "title": "Rollen",
+      "already": "Die Rolle ({roleId}) ist bereits eine Willkommensrolle!",
+      "invalid": "Die Rolle ({roleId}) existiert nicht auf dem Server!",
+      "added": "Die Rolle ({{role}}) wurde zu den Willkommensrollen hinzugefügt!",
+      "removed": "Die Rolle ({{roleId}}) wurde von den Willkommensrollen entfernt!",
+      "none": "Die Rolle ({{roleId}}) ist keine Willkommensrolle!",
+      "add-role-button": "Rolle hinzufügen",
+      "remove-role-button": "Rolle entfernen"
+    },
+    "channel": {
+      "invalid": "Du hast keinen Kanal angegeben und es gibt keinen zum entfernen!",
+      "removed": "Der Willkommenskanal wurde entfernt!",
+      "set": "Der Willkommenskanal wurde zu {{channel}} gesetzt!",
+      "title": "Kanal"
+    },
+    "message": {
+      "set": "Die Willkommensnachricht wurde gesetzt!"
+    },
+    "enabled": "Das Willkommens-Modul wurde aktiviert!",
+    "disabled": "Das Willkommens-Modul wurde deaktiviert!",
+    "already_enabled": "Das Willkommens-Modul ist bereits aktiviert!",
+    "already_disabled": "Das Willkommens-Modul ist bereits deaktiviert!"
+  },
   "farewell": {
     "channel": {
       "invalid": "Du hast keinen Kanal angegeben und es gibt keinen zum entfernen!",
@@ -11,7 +40,11 @@
     },
     "message": {
       "set": "Die Abschiedsnachricht wurde gesetzt!"
-    }
+    },
+    "enabled": "Das Abschieds-Modul wurde aktiviert!",
+    "disabled": "Das Abschieds-Modul wurde deaktiviert!",
+    "already_enabled": "Das Abschieds-Modul ist bereits aktiviert!",
+    "already_disabled": "Das Abschieds-Modul ist bereits deaktiviert!"
   },
   "counting": {
     "already_setup": "Das Counting-Spiel ist bereits eingerichtet! Verwende stattdessen den edit oder reset Unterbefehl.",

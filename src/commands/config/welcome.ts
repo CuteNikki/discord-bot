@@ -35,7 +35,10 @@ export default new Command({
     )
     .addSubcommand((cmd) => cmd.setName('message').setDescription('Configure the message that is sent on join'))
     .addSubcommand((cmd) => cmd.setName('roles').setDescription('The roles that are assigned to a member on join'))
-    .addSubcommand((cmd) => cmd.setName('info').setDescription('Shows you the current settings and available placeholders')),
+    .addSubcommand((cmd) => cmd.setName('info').setDescription('Shows you the current settings and available placeholders'))
+    .addSubcommand((cmd) => cmd.setName('enable').setDescription('Enable the welcome module'))
+    .addSubcommand((cmd) => cmd.setName('disable').setDescription('Disable the welcome module')),
+
   async execute({ client, interaction }) {
     if (!interaction.inCachedGuild()) return;
     await interaction.deferReply();
@@ -153,6 +156,48 @@ export default new Command({
 
           interaction.editReply({
             embeds,
+          });
+        }
+        break;
+      case 'enable':
+        {
+          const config = await client.getGuildSettings(guild.id);
+
+          if (config.welcome.enabled) {
+            return interaction.editReply({
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('welcome.already_enabled', { lng }))],
+            });
+          }
+
+          await client.updateGuildSettings(guild.id, {
+            $set: {
+              ['welcome.enabled']: true,
+            },
+          });
+
+          interaction.editReply({
+            embeds: [new EmbedBuilder().setColor(client.colors.welcome).setDescription(t('welcome.enabled', { lng }))],
+          });
+        }
+        break;
+      case 'disable':
+        {
+          const config = await client.getGuildSettings(guild.id);
+
+          if (!config.welcome.enabled) {
+            return interaction.editReply({
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('welcome.already_disabled', { lng }))],
+            });
+          }
+
+          await client.updateGuildSettings(guild.id, {
+            $set: {
+              ['welcome.enabled']: false,
+            },
+          });
+
+          interaction.editReply({
+            embeds: [new EmbedBuilder().setColor(client.colors.welcome).setDescription(t('welcome.disabled', { lng }))],
           });
         }
         break;

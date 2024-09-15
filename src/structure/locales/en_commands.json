@@ -62,6 +62,14 @@
       {
         "name": "info",
         "description": "Shows you the current settings and available placeholders"
+      },
+      {
+        "name": "enable",
+        "description": "Enable the farewell module"
+      },
+      {
+        "name": "disable",
+        "description": "Disable the farewell module"
       }
     ]
   },
@@ -90,6 +98,14 @@
       {
         "name": "info",
         "description": "Shows you the current settings and available placeholders"
+      },
+      {
+        "name": "enable",
+        "description": "Enable the welcome module"
+      },
+      {
+        "name": "disable",
+        "description": "Disable the welcome module"
       }
     ]
   },

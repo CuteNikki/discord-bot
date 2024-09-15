@@ -23,10 +23,13 @@
     "message": {
       "set": "The welcome message has been set!"
     },
-    "enabled": "The welcome module has been enabled!",
-    "disabled": "The welcome module has been disabled!",
-    "already_enabled": "The welcome module is already enabled!",
-    "already_disabled": "The welcome module is already disabled!"
+    "state": {
+      "enabled": "The welcome module has been enabled!",
+      "disabled": "The welcome module has been disabled!",
+      "already_enabled": "The welcome module is already enabled!",
+      "already_disabled": "The welcome module is already disabled!",
+      "title": "State"
+    }
   },
   "farewell": {
     "channel": {
@@ -41,10 +44,13 @@
     "message": {
       "set": "The leave message has been set!"
     },
-    "enabled": "The farewell module has been enabled!",
-    "disabled": "The farewell module has been disabled!",
-    "already_enabled": "The farewell module is already enabled!",
-    "already_disabled": "The farewell module is already disabled!"
+    "state": {
+      "enabled": "The farewell module has been enabled!",
+      "disabled": "The farewell module has been disabled!",
+      "already_enabled": "The farewell module is already enabled!",
+      "already_disabled": "The farewell module is already disabled!",
+      "title": "State"
+    }
   },
   "counting": {
     "already_setup": "The counting game is already set up! Use the edit or reset subcommand instead",

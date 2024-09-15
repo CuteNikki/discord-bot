@@ -129,6 +129,7 @@ export default new Command({
         {
           const embeds = [
             new EmbedBuilder().setColor(client.colors.welcome).addFields(
+              { name: t('welcome.state.title', { lng }), value: config.welcome.enabled ? '✅' : '❌' },
               { name: t('welcome.channel.title', { lng }), value: config.welcome.channelId ? `<#${config.welcome.channelId}>` : '/' },
               { name: t('welcome.roles.title', { lng }), value: config.welcome.roles.length ? config.welcome.roles.map((r) => `<@&${r}>`).join('\n') : '/' },
               {
@@ -165,7 +166,7 @@ export default new Command({
 
           if (config.welcome.enabled) {
             return interaction.editReply({
-              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('welcome.already_enabled', { lng }))],
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('welcome.state.already_enabled', { lng }))],
             });
           }
 
@@ -176,7 +177,7 @@ export default new Command({
           });
 
           interaction.editReply({
-            embeds: [new EmbedBuilder().setColor(client.colors.welcome).setDescription(t('welcome.enabled', { lng }))],
+            embeds: [new EmbedBuilder().setColor(client.colors.welcome).setDescription(t('welcome.state.enabled', { lng }))],
           });
         }
         break;
@@ -186,7 +187,7 @@ export default new Command({
 
           if (!config.welcome.enabled) {
             return interaction.editReply({
-              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('welcome.already_disabled', { lng }))],
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('welcome.state.already_disabled', { lng }))],
             });
           }
 
@@ -197,7 +198,7 @@ export default new Command({
           });
 
           interaction.editReply({
-            embeds: [new EmbedBuilder().setColor(client.colors.welcome).setDescription(t('welcome.disabled', { lng }))],
+            embeds: [new EmbedBuilder().setColor(client.colors.welcome).setDescription(t('welcome.state.disabled', { lng }))],
           });
         }
         break;

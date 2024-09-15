@@ -23,10 +23,13 @@
     "message": {
       "set": "Die Willkommensnachricht wurde gesetzt!"
     },
-    "enabled": "Das Willkommens-Modul wurde aktiviert!",
-    "disabled": "Das Willkommens-Modul wurde deaktiviert!",
-    "already_enabled": "Das Willkommens-Modul ist bereits aktiviert!",
-    "already_disabled": "Das Willkommens-Modul ist bereits deaktiviert!"
+    "state": {
+      "enabled": "Das Willkommens-Modul wurde aktiviert!",
+      "disabled": "Das Willkommens-Modul wurde deaktiviert!",
+      "already_enabled": "Das Willkommens-Modul ist bereits aktiviert!",
+      "already_disabled": "Das Willkommens-Modul ist bereits deaktiviert!",
+      "title": "Status"
+    }
   },
   "farewell": {
     "channel": {
@@ -41,10 +44,13 @@
     "message": {
       "set": "Die Abschiedsnachricht wurde gesetzt!"
     },
-    "enabled": "Das Abschieds-Modul wurde aktiviert!",
-    "disabled": "Das Abschieds-Modul wurde deaktiviert!",
-    "already_enabled": "Das Abschieds-Modul ist bereits aktiviert!",
-    "already_disabled": "Das Abschieds-Modul ist bereits deaktiviert!"
+    "state": {
+      "enabled": "Das Abschieds-Modul wurde aktiviert!",
+      "disabled": "Das Abschieds-Modul wurde deaktiviert!",
+      "already_enabled": "Das Abschieds-Modul ist bereits aktiviert!",
+      "already_disabled": "Das Abschieds-Modul ist bereits deaktiviert!",
+      "title": "Status"
+    }
   },
   "counting": {
     "already_setup": "Das Counting-Spiel ist bereits eingerichtet! Verwende stattdessen den edit oder reset Unterbefehl.",

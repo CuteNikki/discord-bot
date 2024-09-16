@@ -1,4 +1,4 @@
-import { ApplicationIntegrationType, Colors, EmbedBuilder, InteractionContextType, Role, SlashCommandBuilder } from 'discord.js';
+import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, Role, SlashCommandBuilder } from 'discord.js';
 import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
@@ -58,29 +58,27 @@ export default new Command({
     };
 
     const userEmbed = new EmbedBuilder()
-      .setColor(user.accentColor ?? Colors.Aqua)
+      .setColor(user.accentColor ?? client.colors.utilities)
       .setThumbnail(user.displayAvatarURL({ size: 4096, extension: 'webp' }))
       .addFields(
         {
-          name: `\` ${t('userinfo.user_title', { lng })} \``,
-          value: [`${user} | \` @${user.username} \``, `\` ${user.id} \``].join('\n'),
+          name: t('userinfo.user_title', { lng }),
+          value: [`${user} | @${user.username}`, user.id].join('\n'),
         },
         {
-          name: `\` ${t('userinfo.created_at', { lng })} \``,
+          name: t('userinfo.created_at', { lng }),
           value: `<t:${Math.floor(user.createdTimestamp / 1000)}:d> | <t:${Math.floor(user.createdTimestamp / 1000)}:R>`,
         },
       );
     if (badges.length || user.bot) {
       userEmbed.addFields({
-        name: `\` ${t('userinfo.badges', { lng })} \``,
+        name: t('userinfo.badges', { lng }),
         value:
           !badges.includes('VerifiedBot') && user.bot ? [badgeMap.App, ...badges.map((v) => badgeMap[v])].join(' ') : badges.map((v) => badgeMap[v]).join(' '),
       });
     }
     if (user.banner) {
-      userEmbed
-        .addFields({ name: `\` ${t('userinfo.banner', { lng })} \``, value: '** **' })
-        .setImage(user.bannerURL({ size: 4096, extension: 'webp' }) ?? null);
+      userEmbed.addFields({ name: t('userinfo.banner', { lng }), value: '** **' }).setImage(user.bannerURL({ size: 4096, extension: 'webp' }) ?? null);
     }
 
     if (!member) return interaction.editReply({ embeds: [userEmbed] });
@@ -102,26 +100,26 @@ export default new Command({
       .slice(0, member.roles.cache.size - 1);
 
     const memberEmbed = new EmbedBuilder()
-      .setColor(member.displayColor ?? Colors.Aqua)
+      .setColor(member.displayColor ?? client.colors.utilities)
       .setThumbnail(member.avatarURL({ size: 4096, extension: 'webp' }))
       .addFields({
-        name: `\` ${t('userinfo.joined_at', { lng })} \``,
+        name: t('userinfo.joined_at', { lng }),
         value: `<t:${Math.floor((member.joinedTimestamp ?? 0) / 1000)}:d> | <t:${Math.floor((member.joinedTimestamp ?? 0) / 1000)}:R>`,
       });
     if (member.premiumSinceTimestamp) {
       memberEmbed.addFields({
-        name: `\` ${t('userinfo.boosting', { lng })} \``,
+        name: t('userinfo.boosting', { lng }),
         value: `<t:${Math.floor(member.premiumSinceTimestamp / 1000)}:d> | <t:${Math.floor(member.premiumSinceTimestamp / 1000)}:R>`,
       });
     }
     if (roles.length) {
       const displayRoles = maxDisplayRoles(roles);
       memberEmbed.addFields({
-        name: `\` ${t('userinfo.roles', {
+        name: t('userinfo.roles', {
           lng,
           showing: roles.length,
           total: displayRoles.length,
-        })} \``,
+        }),
         value: displayRoles.join(''),
       });
     }

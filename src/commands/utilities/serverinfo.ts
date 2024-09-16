@@ -1,7 +1,6 @@
 import {
   ApplicationIntegrationType,
   ChannelType,
-  Colors,
   EmbedBuilder,
   GuildExplicitContentFilter,
   GuildNSFWLevel,
@@ -79,11 +78,11 @@ export default new Command({
     const totalStickers = stickers.cache.size;
 
     const serverEmbed = new EmbedBuilder()
-      .setColor(Colors.Aqua)
+      .setColor(client.colors.utilities)
       .setThumbnail(guild.iconURL({ size: 4096, extension: 'webp' }))
       .addFields(
         {
-          name: `\` ${t('serverinfo.server.title', { lng })} \``,
+          name: t('serverinfo.server.title', { lng }),
           value: [
             t('serverinfo.server.name', {
               lng,
@@ -93,7 +92,7 @@ export default new Command({
               lng,
               created: `<t:${Math.floor(guild.createdTimestamp / 1000)}:d> <t:${Math.floor(guild.createdTimestamp / 1000)}:R>`,
             }),
-            t('serverinfo.server.owner', { lng, owner: `<@${guild.ownerId}>` }),
+            t('serverinfo.server.owner', { lng, owner: `<@${guild.ownerId}> ${client.customEmojis.server_owner}` }),
             t('serverinfo.server.vanity', {
               lng,
               vanity: guild.vanityURLCode ?? '/',
@@ -102,7 +101,7 @@ export default new Command({
           inline: true,
         },
         {
-          name: `\` ${t('serverinfo.security.title', { lng })} \``,
+          name: t('serverinfo.security.title', { lng }),
           value: [
             t('serverinfo.security.explicit_filter', {
               lng,
@@ -120,7 +119,7 @@ export default new Command({
           inline: true,
         },
         {
-          name: `\` ${t('serverinfo.boost.title', { lng })} \``,
+          name: t('serverinfo.boost.title', { lng }),
           value: [
             t('serverinfo.boost.tier', { lng, tier: guild.premiumTier }),
             t('serverinfo.boost.count', {
@@ -135,7 +134,7 @@ export default new Command({
           inline: true,
         },
         {
-          name: `\` ${t('serverinfo.members.title', { lng })} \``,
+          name: t('serverinfo.members.title', { lng }),
           value: [t('serverinfo.members.total', { lng, total: totalMembers })].join('\n'),
           inline: true,
         },
@@ -160,7 +159,7 @@ export default new Command({
     }
     if (totalEmojis) {
       serverEmbed.addFields({
-        name: `\` ${t('serverinfo.emojis.title')} \``,
+        name: t('serverinfo.emojis.title'),
         value: [
           t('serverinfo.emojis.total', { lng, total: totalEmojis }),
           t('serverinfo.emojis.animated', { lng, animated: animatedEmojis }),
@@ -173,36 +172,36 @@ export default new Command({
     if (userRoles.length) {
       const displayUserRoles = maxDisplayRoles(userRoles);
       serverEmbed.addFields({
-        name: `\` ${t('serverinfo.user_roles', {
+        name: t('serverinfo.user_roles', {
           lng,
           showing: displayUserRoles.length,
           total: userRoles.length,
-        })} \``,
+        }),
         value: displayUserRoles.join(''),
       });
     }
     if (managedRoles.length) {
       const displayManagedRoles = maxDisplayRoles(managedRoles);
       serverEmbed.addFields({
-        name: `\` ${t('serverinfo.managed_roles', {
+        name: t('serverinfo.managed_roles', {
           lng,
           showing: displayManagedRoles.length,
           total: managedRoles.length,
-        })} \``,
+        }),
         value: displayManagedRoles.join(''),
       });
     }
     if (guild.features.length) {
       const displayFeatures = maxDisplayFeatures();
       serverEmbed.addFields({
-        name: `\` ${t('serverinfo.features', { lng, showing: displayFeatures.length, total: guild.features.length })} \``,
+        name: t('serverinfo.features', { lng, showing: displayFeatures.length, total: guild.features.length }),
         value: displayFeatures.join(''),
       });
     }
     if (guild.banner) {
       serverEmbed
         .addFields({
-          name: `\` ${t('serverinfo.banner', { lng })} \``,
+          name: t('serverinfo.banner', { lng }),
           value: '** **',
         })
         .setImage(guild.bannerURL({ size: 4096, extension: 'webp' }));

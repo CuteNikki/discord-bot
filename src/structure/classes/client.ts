@@ -50,9 +50,11 @@ export class DiscordClient extends Client {
   public colors = {
     error: Colors.Red,
     warning: Colors.Yellow,
+    success: Colors.Green,
     counting: Colors.Blue,
     farewell: Colors.Orange,
-    welcome: Colors.Aqua,
+    welcome: Colors.DarkAqua,
+    utilities: Colors.Aqua,
   };
 
   // Custom emojis

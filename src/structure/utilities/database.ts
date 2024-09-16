@@ -8,7 +8,6 @@ import { DiscordClient } from 'classes/client';
 
 import { guildModel } from 'models/guild';
 import { infractionModel, InfractionType } from 'models/infraction';
-import { availableChannelModel, connectionModel } from 'models/phone';
 import { reminderModel } from 'models/reminder';
 import { userModel } from 'models/user';
 import { weeklyLevelModel } from 'models/weeklyLevels';
@@ -28,7 +27,6 @@ export async function initDatabase(client: DiscordClient) {
       client.once('ready', () => {
         collectUserLanguages(client); // Set clients user language collection
         collectGuildSettings(client); // Set clients guild settings collection
-        clearPhones(client); // Clear all connections and available channels made before start/restart
 
         CronJob.from({
           cronTime: '*/20 * * * * *', // every 20 seconds
@@ -36,6 +34,7 @@ export async function initDatabase(client: DiscordClient) {
             clearExpiredInfractions(client); // Handle expired infractions
             clearWeekly(client); // Handle weekly clear
             clearReminders(client); // Handle reminders
+            clearCustomVoiceChannels(client); // Clear all custom voice channels made before start/restart
           },
           runOnInit: true,
           start: true,
@@ -45,12 +44,30 @@ export async function initDatabase(client: DiscordClient) {
     .catch((err) => sendError({ client, err, location: 'Mongoose Connection Error' }));
 }
 
-async function clearPhones(client: DiscordClient) {
-  const connections = await connectionModel.deleteMany({}).lean().exec();
-  const availableChannels = await availableChannelModel.deleteMany({}).lean().exec();
-  // Notify about deleted connections and available channels
-  logger.debug(`[${client.cluster.id}] Deleted ${connections.deletedCount} connections`);
-  logger.debug(`[${client.cluster.id}] Deleted ${availableChannels.deletedCount} available channels`);
+async function clearCustomVoiceChannels(client: DiscordClient) {
+  const customVoiceChannels = await client.getCustomVoiceChannels();
+  logger.debug(`[${client.cluster.id}] Found ${customVoiceChannels.length} custom voice channels`);
+
+  // Iterate through each custom voice channel in the database
+  for (const customVoiceChannel of customVoiceChannels) {
+    // Fetch the channel to check if it still exists
+    const channel = await client.channels
+      .fetch(customVoiceChannel.channelId)
+      .catch((err) => logger.debug({ err, customVoiceChannel }, 'Could not fetch channel'));
+
+    logger.debug(`[${client.cluster.id}] ${channel ? 'Checking' : 'Deleting'} custom voice channel: ${customVoiceChannel.channelId}`);
+
+    // If we can't find the channel, delete it from the database
+    if (!channel) {
+      return await client.deleteCustomVoiceChannel(customVoiceChannel.channelId);
+    }
+
+    // If the channel is empty, delete it
+    if (channel.isVoiceBased() && !channel.members.size) {
+      await client.deleteCustomVoiceChannel(customVoiceChannel.channelId);
+      return await channel.delete().catch((err) => logger.debug({ err, customVoiceChannel }, 'Could not delete custom voice channel'));
+    }
+  }
 }
 
 async function collectUserLanguages(client: DiscordClient) {

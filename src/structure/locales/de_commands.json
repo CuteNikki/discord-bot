@@ -1,4 +1,68 @@
 {
+  "customize-voice-channel": {
+    "name": "bearbeite-sprachkanal",
+    "description": "Bearbeite deinen benutzerdefinierten Sprachkanal",
+    "options": [
+      {
+        "name": "öffentlich",
+        "description": "Macht den Kanal für jeden zugänglich"
+      },
+      {
+        "name": "privat",
+        "description": "Macht den Kanal nur für dich oder diejenigen, die du einlädst, zugänglich"
+      },
+      {
+        "name": "einladen",
+        "description": "Lade jemanden ein, deinen Kanal beizutreten",
+        "options": [
+          {
+            "name": "benutzer",
+            "description": "Der Benutzer, den du einladen möchtest"
+          }
+        ]
+      },
+      {
+        "name": "entfernen",
+        "description": "Entfernt die Rechte von jemandem, dem Kanal beizutreten",
+        "options": [
+          {
+            "name": "benutzer",
+            "description": "Der Benutzer, von dem die Rechte entfernt möchtest"
+          }
+        ]
+      }
+    ]
+  },
+  "custom-voice-channel": {
+    "name": "benutzerdefinierten-sprachkanal",
+    "description": "Erlaubt Mitgliedern, ihren eigenen Sprachkanal zu erstellen",
+    "options": [
+      {
+        "name": "kanal",
+        "description": "Der Kanal, den du beitreten musst, um einen benutzerdefinierten Sprachkanal zu erstellen",
+        "options": [
+          {
+            "name": "kanal",
+            "description": "(Leer lassen zum entfernen, benutze info um den aktuellen Kanal zu sehen)"
+          }
+        ]
+      },
+      {
+        "name": "kategorie",
+        "description": "Die Kategorie, in der die Sprachkanäle erstellt werden sollen",
+        "options": [
+          {
+            "name": "kategorie",
+            "description": "(Leer lassen zum entfernen, standardmäßig ist die Kategorie des Erstellungskanals)"
+          }
+        ]
+      },
+      {
+        "name": "info",
+        "description": "Zeigt die aktuellen Einstellungen für benutzerdefinierte Sprachkanäle an"
+      }
+    ]
+  },
   "counting": {
     "name": "zählen",
     "description": "Ein spaßiges Spiel für deine Community",

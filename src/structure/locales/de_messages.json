@@ -1,4 +1,46 @@
 {
+  "custom_vc": {
+    "channel": {
+      "not_set": "Du hast keinen Kanal angegeben und es gibt keinen zum Entfernen!",
+      "removed": "Der benutzerdefinierte Sprachkanal wurde entfernt!",
+      "already": "Der Kanal ist bereits der Kanal zum Erstellen benutzerdefinierter Sprachkanäle!",
+      "success": "Der benutzerdefinierte Sprachkanal wurde auf {{channel}} gesetzt!",
+      "title": "Kanal"
+    },
+    "parent": {
+      "not_set": "Du hast keinen Kanal angegeben und es gibt keinen zum Entfernen!",
+      "removed": "Die Kategorie wurde entfernt!",
+      "already": "Der Kanal ist bereits die Kategorie!",
+      "success": "Die Kategorie wurde auf {{channel}} gesetzt!",
+      "title": "Kategorie"
+    },
+    "public": {
+      "already": "Der Kanal ist bereits öffentlich zugänglich!",
+      "success": "Der Kanal ist jetzt öffentlich zugänglich!",
+      "error": "Berechtigungen konnten nicht aktualisiert werden!"
+    },
+    "private": {
+      "already": "Der Kanal ist bereits privat!",
+      "success": "Der Kanal ist jetzt privat!",
+      "error": "Berechtigungen konnten nicht entfernt werden!"
+    },
+    "invite": {
+      "already": "{{user}} hat bereits Berechtigungen, um dem Kanal beizutreten!",
+      "success": "{{user}} wurde Berechtigungen zum Beitreten des Kanals gegeben!",
+      "error": "Berechtigungen konnten {{user}} nicht gegeben werden!"
+    },
+    "remove": {
+      "already": "{{user}} hat bereits keine Berechtigungen, um dem Kanal beizutreten!",
+      "disconnected": "{{user}} wurde vom Sprachkanal getrennt.",
+      "not_disconnected": "{{user}} konnte nicht vom Sprachkanal getrennt werden!",
+      "success": "Rechte von {{user}} wurden für den Kanal entfernt.",
+      "not_removed": "Rechte von {{user}} konnten nicht entfernt werden!",
+      "error": "Es konnten keine Aktionen ausgeführt werden!"
+    },
+    "not_in_vc": "Du bist nicht in einem Sprachkanal!",
+    "not_in_custom_vc": "Du bist nicht in einem benutzerdefinierten Sprachkanal!",
+    "not_owner": "Du bist nicht der Besitzer des benutzerdefinierten Sprachkanals, in dem du dich befindest!"
+  },
   "welcome": {
     "roles": {
       "add-role-modal-title": "Willkommens-Rolle hinzufügen",

@@ -98,6 +98,10 @@ export interface GuildSettings {
   _id: Types.ObjectId;
   guildId: string;
   language?: string;
+  customVC: {
+    channelId: string;
+    parentId: string;
+  };
   moderation: {
     enabled: boolean;
   };
@@ -189,6 +193,13 @@ export interface GuildSettings {
 const guildSchema = new Schema<GuildSettings>({
   guildId: { type: String, required: true },
   language: { type: String, required: false },
+  customVC: {
+    type: {
+      channelId: { type: String },
+      parentId: { type: String },
+    },
+    default: {},
+  },
   moderation: {
     type: {
       enabled: { type: Boolean },

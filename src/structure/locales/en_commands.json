@@ -1,4 +1,68 @@
 {
+  "customize-voice-channel": {
+    "name": "customize-voice-channel",
+    "description": "Manage your own custom voice channel",
+    "options": [
+      {
+        "name": "public",
+        "description": "Makes the channel accessible to everyone"
+      },
+      {
+        "name": "private",
+        "description": "Makes the channel only accessible to you or people you invite"
+      },
+      {
+        "name": "invite",
+        "description": "Invite someone to join your channel",
+        "options": [
+          {
+            "name": "user",
+            "description": "The user to invite"
+          }
+        ]
+      },
+      {
+        "name": "remove",
+        "description": "Remove permissions from someone to join your channel",
+        "options": [
+          {
+            "name": "user",
+            "description": "The user to remove permissions of"
+          }
+        ]
+      }
+    ]
+  },
+  "custom-voice-channel": {
+    "name": "custom-voice-channel",
+    "description": "Give members the option to create their own voice channel",
+    "options": [
+      {
+        "name": "channel",
+        "description": "The channel you need to join to create a custom voice channel",
+        "options": [
+          {
+            "name": "channel",
+            "description": "(leave empty to remove, use info to see current channel)"
+          }
+        ]
+      },
+      {
+        "name": "category",
+        "description": "The category to create the custom voice channels in",
+        "options": [
+          {
+            "name": "category",
+            "description": "(leave empty to remove, defaults to the creation channel's parent)"
+          }
+        ]
+      },
+      {
+        "name": "info",
+        "description": "Shows the current custom voice channel settings"
+      }
+    ]
+  },
   "counting": {
     "name": "counting",
     "description": "A fun game for your community",

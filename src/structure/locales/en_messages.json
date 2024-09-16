@@ -1,4 +1,46 @@
 {
+  "custom_vc": {
+    "channel": {
+      "not_set": "You did not provide a channel and there is none to remove!",
+      "removed": "The custom voice channel has been removed!",
+      "already": "That channel is already the channel to create custom voice channels!",
+      "success": "The custom voice channel has been set to {{channel}}!",
+      "title": "Channel"
+    },
+    "parent": {
+      "not_set": "You did not provide a channel and there is none to remove!",
+      "removed": "The parent channel has been removed!",
+      "already": "That channel is already the parent!",
+      "success": "The parent channel has been set to {{channel}}!",
+      "title": "Parent"
+    },
+    "public": {
+      "already": "The channel is already publicly accessible!",
+      "success": "The channel is now publicly accessible!",
+      "error": "Could not update permissions!"
+    },
+    "private": {
+      "already": "The channel is already private!",
+      "success": "The channel is now private!",
+      "error": "Could not remove permissions!"
+    },
+    "invite": {
+      "already": "{{user}} already has permissions to join the channel!",
+      "success": "{{user}} has been given permissions to join the channel!",
+      "error": "Could not give permissions to {{user}}!"
+    },
+    "remove": {
+      "already": "{{user}} already doesn't have permissions to join the channel!",
+      "disconnected": "Disconnected {{user}} from the channel.",
+      "not_disconnected": "Could not disconnect {{user}} from the channel!",
+      "success": "Removed permissions of {{user}} from the channel.",
+      "not_removed": "Could not remove permissions from {{user}}!",
+      "error": "Could not perform any actions!"
+    },
+    "not_in_vc": "You are not in a voice channel!",
+    "not_in_custom_vc": "You are not in a custom voice channel!",
+    "not_owner": "You are not the owner of the custom voice channel you are in!"
+  },
   "welcome": {
     "roles": {
       "add-role-modal-title": "Add Welcome Role",

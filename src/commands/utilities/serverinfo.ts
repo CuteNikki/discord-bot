@@ -139,7 +139,7 @@ export default new Command({
           inline: true,
         },
         {
-          name: `\` ${t('serverinfo.channels.title', { lng })} \``,
+          name: t('serverinfo.channels.title', { lng }),
           value: [
             t('serverinfo.channels.total', { lng, total: totalChannels }),
             t('serverinfo.channels.categories', {

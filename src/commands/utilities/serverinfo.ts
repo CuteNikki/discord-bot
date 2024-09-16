@@ -52,8 +52,9 @@ export default new Command({
     function maxDisplayFeatures() {
       const results: string[] = [];
       let totalLength = 0;
-      for (const feature of guild.features) {
-        const featureString = `${feature.toLowerCase().replace(/_/g, ' ')} `;
+      const features = guild.features.map((feature) => feature.toLowerCase().replace(/_/g, ' ')).sort((a, b) => b.localeCompare(a));
+      for (const feature of features) {
+        const featureString = `\`${feature.toLowerCase().replace(/_/g, ' ')}\` `;
         if (featureString.length + totalLength > 1000) break;
         results.push(featureString);
       }
@@ -61,6 +62,8 @@ export default new Command({
     }
 
     const totalMembers = memberCount;
+    const botMembers = members.cache.filter((member) => member.user.bot).size;
+    const humanMembers = members.cache.filter((member) => !member.user.bot).size;
 
     function getChannelCount(types: ChannelType[]) {
       return channels.cache.filter((channel) => types.includes(channel.type)).size;
@@ -95,26 +98,31 @@ export default new Command({
             t('serverinfo.server.owner', { lng, owner: `<@${guild.ownerId}> ${client.customEmojis.server_owner}` }),
             t('serverinfo.server.vanity', {
               lng,
-              vanity: guild.vanityURLCode ?? '/',
+              vanity: guild.vanityURLCode ?? t('none', { lng }),
             }),
+          ].join('\n'),
+        },
+        {
+          name: t('serverinfo.channels.title', { lng }),
+          value: [
+            t('serverinfo.channels.total', { lng, total: totalChannels }),
+            t('serverinfo.channels.categories', {
+              lng,
+              categories: categoryChannels,
+            }),
+            t('serverinfo.channels.text', { lng, text: textChannels }),
+            t('serverinfo.channels.voice', { lng, voice: voiceChannels }),
+            t('serverinfo.channels.threads', { lng, threads: threadChannels }),
+            t('serverinfo.channels.other', { lng, other: otherChannels }),
           ].join('\n'),
           inline: true,
         },
         {
-          name: t('serverinfo.security.title', { lng }),
+          name: t('serverinfo.members.title', { lng }),
           value: [
-            t('serverinfo.security.explicit_filter', {
-              lng,
-              filter: GuildExplicitContentFilter[guild.explicitContentFilter],
-            }),
-            t('serverinfo.security.nsfw_level', {
-              lng,
-              level: GuildNSFWLevel[guild.nsfwLevel],
-            }),
-            t('serverinfo.security.verification_level', {
-              lng,
-              level: GuildVerificationLevel[guild.verificationLevel],
-            }),
+            t('serverinfo.members.total', { lng, total: totalMembers }),
+            t('serverinfo.members.bots', { lng, bots: botMembers }),
+            t('serverinfo.members.humans', { lng, humans: humanMembers }),
           ].join('\n'),
           inline: true,
         },
@@ -134,22 +142,20 @@ export default new Command({
           inline: true,
         },
         {
-          name: t('serverinfo.members.title', { lng }),
-          value: [t('serverinfo.members.total', { lng, total: totalMembers })].join('\n'),
-          inline: true,
-        },
-        {
-          name: t('serverinfo.channels.title', { lng }),
+          name: t('serverinfo.security.title', { lng }),
           value: [
-            t('serverinfo.channels.total', { lng, total: totalChannels }),
-            t('serverinfo.channels.categories', {
+            t('serverinfo.security.explicit_filter', {
               lng,
-              categories: categoryChannels,
+              filter: GuildExplicitContentFilter[guild.explicitContentFilter],
             }),
-            t('serverinfo.channels.text', { lng, text: textChannels }),
-            t('serverinfo.channels.voice', { lng, voice: voiceChannels }),
-            t('serverinfo.channels.threads', { lng, threads: threadChannels }),
-            t('serverinfo.channels.other', { lng, other: otherChannels }),
+            t('serverinfo.security.nsfw_level', {
+              lng,
+              level: GuildNSFWLevel[guild.nsfwLevel],
+            }),
+            t('serverinfo.security.verification_level', {
+              lng,
+              level: GuildVerificationLevel[guild.verificationLevel],
+            }),
           ].join('\n'),
           inline: true,
         },

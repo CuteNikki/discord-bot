@@ -36,9 +36,6 @@
   "description": "DiscordJS Bot written in TypeScript",
   "homepage": "https://github.com/CuteNikki/discord-bot",
   "license": "MIT",
-  "overrides": {
-    "@discordjs/builders": "dev"
-  },
   "scripts": {
     "dev": "npx tsx ./src/index.ts",
     "deploy": "npx tsx ./src/structure/utilities/register.ts",

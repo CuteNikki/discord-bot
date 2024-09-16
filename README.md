@@ -280,10 +280,22 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
 
 ## TO-DO
 
+Might look into making more advanced setup commands that walk you through the entire process instead of using multiple commands to configure everything
+This could be very interesting for tickets
+
 - [ ] refactor config commands
+  - [x] counting (new)
+  - [x] custom voice channels (new)
+  - [x] starboard (new)
+  - [x] welcome
+  - [x] farewell
+  - [ ] level
+  - [ ] log
+  - [ ] ticket
 - [ ] miscellaneous
   - [x] fully translated all messages sent by the bot
   - [x] added locales to all registered slash commands
+  - [ ] replace any null/undefined, true/false and so on with proper translations
 - [x] moderation module
   - [x] infractions command
     - [x] slash and user context menu commands
@@ -324,6 +336,8 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
   - [x] register commands
 - [ ] fun module
   - [x] phone command
+    - [ ] add property for last sent message (if no message sent within 5 minutes, automatically end the call)
+    - [ ] could add a button to enter the queue again if phone was hung up
   - [x] game command
     - [x] Rock-Paper-Scissors
     - [x] Tic-Tac-Toe
@@ -337,19 +351,20 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
     - [x] Tetris
     - [x] Sokoban
 - [ ] config commands
-  - [ ] custom voice channels
-  - [ ] economy
+  - [x] custom voice channels
+  - [x] counting game
   - [ ] giveaway
-  - [ ] suggestions
+  - [ ] economy
   - [ ] confession
+  - [ ] suggestions
   - [x] starboard
     - [x] enable/disable module
     - [x] starboard messages can be deleted or edited by the author
     - [x] users can only star a message once and can also remove their star
   - [x] moderation config
     - [x] enable/disable module
-    - [ ] staff role
-    - [ ] reasons required/optional
+    - [ ] staff role (?)
+    - [ ] option to make reasons required (optional by default)
   - [x] level config
     - [x] disable/enable module
     - [x] modify users level/xp
@@ -358,11 +373,11 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
     - [x] ignored roles and channels
     - [x] enabled channels
   - [x] welcome config
-    - [ ] disable/enable module
+    - [x] disable/enable module
     - [x] fully customizable welcome messages
     - [x] add roles on join
   - [x] farewell config
-    - [ ] disable/enable module
+    - [x] disable/enable module
     - [x] fully customizable farewell messages
   - [x] ticket config
     - [x] disable/enable module

@@ -31,26 +31,26 @@ export default new Command({
 
     const badges = user.flags?.toArray() ?? [];
     const badgeMap = {
-      Staff: '<:discord_employee:1282608559598731355>', // Discord Employee
-      Partner: '<:discord_partner:1282605934740373576>', // Partnered Server Owner
-      Hypesquad: '<:hypesquad:1282605969414557736>', // HypeSquad Events Member
-      BugHunterLevel1: '<:bughunter:1282605916427915317>', // Bug Hunter Level 1
+      Staff: client.customEmojis.discordEmployee, // Discord Employee
+      Partner: client.customEmojis.discordPartner, // Partnered Server Owner
+      Hypesquad: client.customEmojis.hypesquad, // HypeSquad Events Member
+      BugHunterLevel1: client.customEmojis.bugHunterLevelOne, // Bug Hunter Level 1
       MFASMS: 'MFASMS', // @unstable This user flag is currently not documented by Discord but has a known value
       PremiumPromoDismissed: 'PremiumPromoDismissed', // @unstable This user flag is currently not documented by Discord but has a known value
-      HypeSquadOnlineHouse1: '<:bravery:1282606035181375508>', // House Bravery Member
-      HypeSquadOnlineHouse2: '<:brilliance:1282606020060778497>', // House Brilliance Member
-      HypeSquadOnlineHouse3: '<:balance:1282605951366729768>', // House Balance Member
-      PremiumEarlySupporter: '<:early_supporter:1282605986179190846>', // Early Nitro Supporter
+      HypeSquadOnlineHouse1: client.customEmojis.bravery, // House Bravery Member
+      HypeSquadOnlineHouse2: client.customEmojis.brilliance, // House Brilliance Member
+      HypeSquadOnlineHouse3: client.customEmojis.balance, // House Balance Member
+      PremiumEarlySupporter: client.customEmojis.earlySupporter, // Early Nitro Supporter
       TeamPseudoUser: 'TeamPseudoUser', // User is a [team](https://discord.com/developers/docs/topics/teams)
       HasUnreadUrgentMessages: 'HasUnreadUrgentMessages', // @unstable This user flag is currently not documented by Discord but has a known value
-      BugHunterLevel2: '<:bughunter_two:1282605894789632012>', // Bug Hunter Level 2
-      VerifiedBot: '<:verified_app_one:1282613412488024084><:verified_app_two:1282613389612421151><:verified_app_three:1282613434843791421>', // Verified Bot
-      VerifiedDeveloper: '<:verified_bot_developer:1282608164432248944>', // Early Verified Bot Developer
-      CertifiedModerator: '<:alumni:1282609017213943871>', // Moderator Programs Alumni
-      BotHTTPInteractions: '<:bot_http_interactions:1282630582228090910>', // Bot uses only [HTTP interactions](https://discord.com/developers/docs/interactions/receiving-and-responding#receiving-an-interaction) and is shown in the online member list
+      BugHunterLevel2: client.customEmojis.bugHunterLevelTwo, // Bug Hunter Level 2
+      VerifiedBot: client.customEmojis.verifiedApp, // Verified Bot
+      VerifiedDeveloper: client.customEmojis.verifiedBotDeveloper, // Early Verified Bot Developer
+      CertifiedModerator: client.customEmojis.alumni, // Moderator Programs Alumni
+      BotHTTPInteractions: client.customEmojis.botHttpInteractions, // Bot uses only [HTTP interactions](https://discord.com/developers/docs/interactions/receiving-and-responding#receiving-an-interaction) and is shown in the online member list
       Spammer: 'Spammer', // User has been identified as spammer @unstable This user flag is currently not documented by Discord but has a known value
       DisablePremium: 'DisablePremium', // @unstable This user flag is currently not documented by Discord but has a known value
-      ActiveDeveloper: '<:active_developer:1282608484667621399>', // User is an [Active Developer](https://support-dev.discord.com/hc/articles/10113997751447)
+      ActiveDeveloper: client.customEmojis.activeDeveloper, // User is an [Active Developer](https://support-dev.discord.com/hc/articles/10113997751447)
       Quarantined: 'Quarantined', // User's account has been [quarantined](https://support.discord.com/hc/articles/6461420677527) based on recent activity @unstable This user flag is currently not documented by Discord but has a known value. This value would be 1 << 44, but bit shifting above 1 << 30 requires bigints
       Collaborator: 'Collaborator', // @unstable This user flag is currently not documented by Discord but has a known value. This value would be 1 << 50, but bit shifting above 1 << 30 requires bigints
       RestrictedCollaborator: 'RestrictedCollaborator', // @unstable This user flag is currently not documented by Discord but has a known value. This value would be 1 << 51, but bit shifting above 1 << 30 requires bigints

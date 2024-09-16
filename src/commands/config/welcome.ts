@@ -109,7 +109,9 @@ export default new Command({
             name: t('welcome.roles.title', { lng }),
             value: config.welcome.roles.length ? config.welcome.roles.map((r) => `<@&${r}>`).join('\n') : '/',
           });
-          const warning = new EmbedBuilder().setColor(client.colors.warning).setDescription(':warning: ' + t('welcome.state.warning', { lng }));
+          const warning = new EmbedBuilder()
+            .setColor(client.colors.warning)
+            .setDescription(`client.customEmojis.warning ${t('welcome.state.warning', { lng })}`);
 
           interaction.editReply({
             embeds: config.welcome.enabled ? [rolesEmbed] : [warning, rolesEmbed],

@@ -55,6 +55,39 @@ export class DiscordClient extends Client {
     welcome: Colors.Aqua,
   };
 
+  // Custom emojis
+  public customEmojis = {
+    error: '<:error:1285119876150726717>',
+    warning: '<:warning:1285119417033822270>',
+    botHttpInteractions: '<:bot_http_interactions:1282630582228090910>',
+    appOne: '<:app_one:1282613522647351307>',
+    appTwo: '<:app_two:1282613494864154624>',
+    app: '<:app_one:1282613522647351307><:app_two:1282613494864154624>',
+    verifiedAppOne: '<:verified_app_one:1282613412488024084>',
+    verifiedAppTwo: '<:verified_app_two:1282613389612421151>',
+    verifiedAppThree: '<:verified_app_three:1282613434843791421>',
+    verifiedApp: '<:verified_app_one:1282613412488024084><:verified_app_two:1282613389612421151><:verified_app_three:1282613434843791421>',
+    alumni: '<:alumni:1282609017213943871>',
+    newServerMember: '<:new_server_member:1282608652821332022>',
+    discordEmployee: '<:discord_employee:1282608559598731355>',
+    activeDeveloper: '<:active_developer:1282608484667621399>',
+    legacy: '<:legacy:1282608329457270818>',
+    nitro: '<:nitro:1282608265007595540>',
+    verifiedBotDeveloper: '<:verified_bot_developer:1282608164432248944>',
+    quest: '<:quest:1282608059109347391>',
+    serverOwner: '<:server_owner:1282607937277268000>',
+    autoMod: '<:automod:1282607837943693313>',
+    bravery: '<:bravery:1282606035181375508>',
+    brilliance: '<:brilliance:1282606020060778497>',
+    balance: '<:balance:1282605951366729768>',
+    booster: '<a:booster:1282606005011611658>',
+    earlySupporter: '<:early_supporter:1282605986179190846>',
+    hypesquad: '<:hypesquad:1282605969414557736>',
+    discordPartner: '<:discord_partner:1282605934740373576>',
+    bugHunterLevelOne: '<:bughunter:1282605916427915317>',
+    bugHunterLevelTwo: '<:bughunter_two:1282605894789632012>',
+  };
+
   constructor() {
     super({
       // Setting the bot shards from discord-hybrid-sharding

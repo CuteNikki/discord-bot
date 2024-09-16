@@ -111,7 +111,7 @@ export default new Command({
           });
           const warning = new EmbedBuilder()
             .setColor(client.colors.warning)
-            .setDescription(`client.customEmojis.warning ${t('welcome.state.warning', { lng })}`);
+            .setDescription(`${client.customEmojis.warning} ${t('welcome.state.warning', { lng })}`);
 
           interaction.editReply({
             embeds: config.welcome.enabled ? [rolesEmbed] : [warning, rolesEmbed],

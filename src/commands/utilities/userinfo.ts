@@ -31,29 +31,30 @@ export default new Command({
 
     const badges = user.flags?.toArray() ?? [];
     const badgeMap = {
-      Staff: client.customEmojis.discordEmployee, // Discord Employee
-      Partner: client.customEmojis.discordPartner, // Partnered Server Owner
+      Staff: client.customEmojis.discord_employee, // Discord Employee
+      Partner: client.customEmojis.discord_partner, // Partnered Server Owner
       Hypesquad: client.customEmojis.hypesquad, // HypeSquad Events Member
-      BugHunterLevel1: client.customEmojis.bugHunterLevelOne, // Bug Hunter Level 1
+      BugHunterLevel1: client.customEmojis.bughunter, // Bug Hunter Level 1
       MFASMS: 'MFASMS', // @unstable This user flag is currently not documented by Discord but has a known value
       PremiumPromoDismissed: 'PremiumPromoDismissed', // @unstable This user flag is currently not documented by Discord but has a known value
       HypeSquadOnlineHouse1: client.customEmojis.bravery, // House Bravery Member
       HypeSquadOnlineHouse2: client.customEmojis.brilliance, // House Brilliance Member
       HypeSquadOnlineHouse3: client.customEmojis.balance, // House Balance Member
-      PremiumEarlySupporter: client.customEmojis.earlySupporter, // Early Nitro Supporter
+      PremiumEarlySupporter: client.customEmojis.early_supporter, // Early Nitro Supporter
       TeamPseudoUser: 'TeamPseudoUser', // User is a [team](https://discord.com/developers/docs/topics/teams)
       HasUnreadUrgentMessages: 'HasUnreadUrgentMessages', // @unstable This user flag is currently not documented by Discord but has a known value
-      BugHunterLevel2: client.customEmojis.bugHunterLevelTwo, // Bug Hunter Level 2
-      VerifiedBot: client.customEmojis.verifiedApp, // Verified Bot
-      VerifiedDeveloper: client.customEmojis.verifiedBotDeveloper, // Early Verified Bot Developer
+      BugHunterLevel2: client.customEmojis.bughunter_two, // Bug Hunter Level 2
+      VerifiedBot: `${client.customEmojis.verified_app_one}${client.customEmojis.verified_app_two}${client.customEmojis.verified_app_three}`, // Verified Bot
+      VerifiedDeveloper: client.customEmojis.verified_bot_developer, // Early Verified Bot Developer
       CertifiedModerator: client.customEmojis.alumni, // Moderator Programs Alumni
-      BotHTTPInteractions: client.customEmojis.botHttpInteractions, // Bot uses only [HTTP interactions](https://discord.com/developers/docs/interactions/receiving-and-responding#receiving-an-interaction) and is shown in the online member list
+      BotHTTPInteractions: client.customEmojis.bot_http_interactions, // Bot uses only [HTTP interactions](https://discord.com/developers/docs/interactions/receiving-and-responding#receiving-an-interaction) and is shown in the online member list
       Spammer: 'Spammer', // User has been identified as spammer @unstable This user flag is currently not documented by Discord but has a known value
       DisablePremium: 'DisablePremium', // @unstable This user flag is currently not documented by Discord but has a known value
-      ActiveDeveloper: client.customEmojis.activeDeveloper, // User is an [Active Developer](https://support-dev.discord.com/hc/articles/10113997751447)
+      ActiveDeveloper: client.customEmojis.active_developer, // User is an [Active Developer](https://support-dev.discord.com/hc/articles/10113997751447)
       Quarantined: 'Quarantined', // User's account has been [quarantined](https://support.discord.com/hc/articles/6461420677527) based on recent activity @unstable This user flag is currently not documented by Discord but has a known value. This value would be 1 << 44, but bit shifting above 1 << 30 requires bigints
       Collaborator: 'Collaborator', // @unstable This user flag is currently not documented by Discord but has a known value. This value would be 1 << 50, but bit shifting above 1 << 30 requires bigints
       RestrictedCollaborator: 'RestrictedCollaborator', // @unstable This user flag is currently not documented by Discord but has a known value. This value would be 1 << 51, but bit shifting above 1 << 30 requires bigints
+      App: `${client.customEmojis.app_one}${client.customEmojis.app_two}`,
     };
 
     const userEmbed = new EmbedBuilder()
@@ -73,9 +74,7 @@ export default new Command({
       userEmbed.addFields({
         name: `\` ${t('userinfo.badges', { lng })} \``,
         value:
-          !badges.includes('VerifiedBot') && user.bot
-            ? ['<:app_one:1282613522647351307><:app_two:1282613494864154624>', ...badges.map((v) => badgeMap[v])].join(' ')
-            : badges.map((v) => badgeMap[v]).join(' '),
+          !badges.includes('VerifiedBot') && user.bot ? [badgeMap.App, ...badges.map((v) => badgeMap[v])].join(' ') : badges.map((v) => badgeMap[v]).join(' '),
       });
     }
     if (user.banner) {

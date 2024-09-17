@@ -3,6 +3,9 @@ import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
+import { getUserLanguage, updateUserLanguage } from 'db/user';
+import { getGuildLanguage, updateGuildLanguage } from 'db/guild';
+
 import { supportedLanguages } from 'utils/language';
 
 export default new Command({
@@ -36,8 +39,8 @@ export default new Command({
     await interaction.deferReply({ ephemeral: true });
     const { user, options } = interaction;
 
-    const lng = await client.getUserLanguage(user.id);
-    const guildLng = await client.getGuildLanguage(interaction.guildId);
+    const lng = await getUserLanguage(user.id);
+    const guildLng = await getGuildLanguage(interaction.guildId);
 
     switch (options.getSubcommand()) {
       case 'user':
@@ -59,7 +62,7 @@ export default new Command({
                   }),
                 ].join('\n'),
               });
-            await client.updateUserLanguage(user.id, language);
+            await updateUserLanguage(user.id, language);
             return interaction.editReply({
               content: t('language.success', { lng, language }),
             });
@@ -96,7 +99,7 @@ export default new Command({
                 ].join('\n'),
               });
 
-            await client.updateGuildLanguage(interaction.guildId, language);
+            await updateGuildLanguage(interaction.guildId, language);
             return interaction.editReply({
               content: t('language.success', { lng, language }),
             });

@@ -1,6 +1,7 @@
 import { Events } from 'discord.js';
 
 import { Event } from 'classes/event';
+
 import { sendError } from 'utils/error';
 
 export default new Event({

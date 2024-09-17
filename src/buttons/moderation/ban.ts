@@ -3,6 +3,7 @@ import { t } from 'i18next';
 import { Button } from 'classes/button';
 
 import { infractionModel, InfractionType } from 'models/infraction';
+import { getUserLanguage } from 'db/user';
 
 import { logger } from 'utils/logger';
 
@@ -19,11 +20,11 @@ export default new Button({
     const targetId = interaction.customId.split('_')[1];
     const target = await client.users.fetch(targetId).catch((err) => logger.debug({ err, targetId }, 'Could not fetch user'));
 
-    const lng = await client.getUserLanguage(interaction.user.id);
+    const lng = await getUserLanguage(interaction.user.id);
 
     if (!target) return interaction.reply(t('ban.failed', { lng }));
 
-    const targetLng = await client.getUserLanguage(targetId);
+    const targetLng = await getUserLanguage(targetId);
     const reason = 'Suspicious Account';
 
     const banned = await guild.bans

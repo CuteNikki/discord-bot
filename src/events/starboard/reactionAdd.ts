@@ -2,6 +2,8 @@ import { EmbedBuilder, Events, PermissionsBitField } from 'discord.js';
 
 import { Event } from 'classes/event';
 
+import { getGuildSettings, updateGuildSettings } from 'db/guild';
+
 import { logger } from 'utils/logger';
 
 export default new Event({
@@ -13,7 +15,7 @@ export default new Event({
     const guild = reaction.message.guild;
     if (!guild || !guild.members.me) return;
 
-    const config = await client.getGuildSettings(guild.id);
+    const config = await getGuildSettings(guild.id);
     if (!config.starboard.enabled || !config.starboard.channelId || !config.starboard.minimumStars) return;
 
     if (reaction.message.partial) await reaction.message.fetch().catch((err) => logger.debug({ err }, 'Could not fetch message'));
@@ -25,7 +27,7 @@ export default new Event({
     const knownStarboardMessage = config.starboard.messages.find((message) => message.starboardMessageId === reaction.message.id);
 
     if (!knownMessage && !knownStarboardMessage) {
-      await client.updateGuildSettings(guild.id, {
+      await updateGuildSettings(guild.id, {
         $push: {
           ['starboard.messages']: {
             messageId: reaction.message.id,
@@ -40,7 +42,7 @@ export default new Event({
       let stars = knownMessage.reactedUsers.length;
       if (!knownMessage.reactedUsers.includes(user.id)) {
         stars += 1;
-        await client.updateGuildSettings(guild.id, {
+        await updateGuildSettings(guild.id, {
           $set: {
             ['starboard.messages']: [
               ...config.starboard.messages.filter((msg) => msg.messageId !== knownMessage?.messageId),
@@ -77,7 +79,7 @@ export default new Event({
           });
           if (msg) await msg.react('⭐').catch((err) => logger.debug({ err }, 'Could not react to starboard message'));
 
-          await client.updateGuildSettings(guild.id, {
+          await updateGuildSettings(guild.id, {
             $set: {
               ['starboard.messages']: [
                 ...config.starboard.messages.filter((msg) => msg.messageId !== reaction.message.id),
@@ -110,7 +112,7 @@ export default new Event({
           .catch((err) => logger.debug({ err }, 'Could not send starboard message'));
         if (msg) await msg.react('⭐').catch((err) => logger.debug({ err }, 'Could not react to starboard message'));
 
-        await client.updateGuildSettings(guild.id, {
+        await updateGuildSettings(guild.id, {
           $set: {
             ['starboard.messages']: [
               ...config.starboard.messages.filter((msg) => msg.messageId !== reaction.message.id),
@@ -127,7 +129,7 @@ export default new Event({
       let stars = knownStarboardMessage.reactedUsers.length;
       if (!knownStarboardMessage.reactedUsers.includes(user.id)) {
         stars += 1;
-        await client.updateGuildSettings(guild.id, {
+        await updateGuildSettings(guild.id, {
           $set: {
             ['starboard.messages']: [
               ...config.starboard.messages.filter((msg) => msg.messageId !== knownStarboardMessage.messageId),

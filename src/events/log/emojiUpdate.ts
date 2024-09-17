@@ -3,15 +3,17 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
+import { getGuildSettings } from 'db/guild';
+
 import { logger } from 'utils/logger';
 
 export default new Event({
   name: Events.GuildEmojiUpdate,
   once: false,
-  async execute(client, oldEmoji, newEmoji) {
+  async execute(_client, oldEmoji, newEmoji) {
     const guild = newEmoji.guild;
 
-    const config = await client.getGuildSettings(guild.id);
+    const config = await getGuildSettings(guild.id);
 
     if (!config.log.enabled || !config.log.events.emojiUpdate || !config.log.channelId) return;
 

@@ -4,6 +4,8 @@ import ms from 'ms';
 
 import type { DiscordClient } from 'classes/client';
 
+import { getUserLanguage } from 'db/user';
+
 import { logger } from 'utils/logger';
 
 // Slices an array into chunks of a given size and returns chunks
@@ -44,7 +46,7 @@ export async function pagination({
 }) {
   if (!interaction.deferred) await interaction.deferReply({ ephemeral });
   const { user } = interaction;
-  const lng = await client.getUserLanguage(user.id);
+  const lng = await getUserLanguage(user.id);
 
   const buttonFirst = new ButtonBuilder().setCustomId(CustomIds.First).setStyle(ButtonStyle.Secondary).setEmoji('⏪').setDisabled(true);
   const buttonPrev = new ButtonBuilder().setCustomId(CustomIds.Previous).setStyle(ButtonStyle.Secondary).setEmoji('⬅️').setDisabled(true);

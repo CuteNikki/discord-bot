@@ -1,21 +1,25 @@
 import { ChannelType, Events, PermissionFlagsBits } from 'discord.js';
 
 import { Event } from 'classes/event';
+
+import { getGuildSettings } from 'db/guild';
+import { getCustomVoiceChannelByOwner, createCustomVoiceChannel } from 'db/voice';
+
 import { logger } from 'utils/logger';
 
 export default new Event({
   name: Events.VoiceStateUpdate,
   once: false,
-  async execute(client, oldState, newState) {
+  async execute(_client, oldState, newState) {
     // If not connecting to a channel or we can't get the member, return
     if (!newState.channelId || !newState.member) return;
 
     // if there is no creation channel, return
-    const config = await client.getGuildSettings(newState.guild.id);
+    const config = await getGuildSettings(newState.guild.id);
     if (!config.customVC.channelId) return;
 
     // If user tries creating a new channel and they still have a channel, move them to that channel
-    const existingCustomChannel = await client.getCustomVoiceChannelByOwner(newState.member.id);
+    const existingCustomChannel = await getCustomVoiceChannelByOwner(newState.member.id);
     if (
       existingCustomChannel &&
       (!oldState.channelId || oldState.channelId !== existingCustomChannel.channelId) &&
@@ -50,6 +54,6 @@ export default new Event({
     // Now we need to move the user to the new voice channel
     await newState.member.voice.setChannel(newChannel).catch((err) => logger.error(err, 'Could not move user to custom voice channel'));
     // Create a database entry for the custom vc for customization
-    await client.createCustomVoiceChannel(newChannel.id, newState.guild.id, newState.member.id);
+    await createCustomVoiceChannel(newChannel.id, newState.guild.id, newState.member.id);
   },
 });

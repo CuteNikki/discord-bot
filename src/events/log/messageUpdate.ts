@@ -3,14 +3,16 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
+import { getGuildSettings } from 'db/guild';
+
 export default new Event({
   name: Events.MessageUpdate,
   once: false,
-  async execute(client, oldMessage, newMessage) {
+  async execute(_client, oldMessage, newMessage) {
     const guild = newMessage.guild;
     if (!guild || !newMessage.author || newMessage.author.bot) return;
 
-    const config = await client.getGuildSettings(guild.id);
+    const config = await getGuildSettings(guild.id);
 
     if (!config.log.enabled || !config.log.events.messageUpdate || !config.log.channelId) return;
 

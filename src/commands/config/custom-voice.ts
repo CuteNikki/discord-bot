@@ -2,6 +2,10 @@ import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, Permi
 import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
+
+import { getUserLanguage } from 'db/user';
+import { getCustomVoiceChannel } from 'db/voice';
+
 import { logger } from 'utils/logger';
 
 export default new Command({
@@ -29,14 +33,14 @@ export default new Command({
   async execute({ client, interaction }) {
     if (!interaction.inCachedGuild()) return;
 
-    const lng = await client.getUserLanguage(interaction.user.id);
+    const lng = await getUserLanguage(interaction.user.id);
 
     const voiceChannel = interaction.member.voice.channel;
     if (!voiceChannel) {
       return interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.not_in_vc', { lng }))] });
     }
 
-    const customVoiceChannel = await client.getCustomVoiceChannel(voiceChannel.id);
+    const customVoiceChannel = await getCustomVoiceChannel(voiceChannel.id);
 
     if (!customVoiceChannel) {
       return interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.not_in_custom_vc', { lng }))] });
@@ -104,7 +108,9 @@ export default new Command({
           const user = interaction.options.getUser('user', true);
 
           if (voiceChannel.permissionOverwrites.cache.get(user.id)?.deny.has(PermissionFlagsBits.Connect)) {
-            return interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.remove.already', { lng, user }))] });
+            return interaction.reply({
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.remove.already', { lng, user }))],
+            });
           }
 
           let response = '';

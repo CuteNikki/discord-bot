@@ -3,6 +3,9 @@ import { ApplicationCommandType, ApplicationIntegrationType, AttachmentBuilder, 
 import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
+
+import { getUserLanguage } from 'db/user';
+
 import { getDataWithRank, levelToXP } from 'utils/level';
 
 const commandType = ApplicationCommandType.User;
@@ -21,7 +24,7 @@ export default new Command<typeof commandType>({
 
     const { options, user, guild, guildId } = interaction;
 
-    const lng = await client.getUserLanguage(user.id);
+    const lng = await getUserLanguage(user.id);
 
     const target = options.getUser('user', true);
     const member = guild.members.cache.get(target.id);

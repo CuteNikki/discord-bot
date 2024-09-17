@@ -3,6 +3,10 @@ import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
+import { getUserLanguage } from 'db/user';
+import { getGuildSettings, updateGuildSettings } from 'db/guild';
+import { getCustomVoiceChannelsByGuild } from 'db/voice';
+
 export default new Command({
   module: ModuleType.Config,
   botPermissions: ['ManageChannels', 'MoveMembers'],
@@ -35,8 +39,8 @@ export default new Command({
   async execute({ client, interaction }) {
     if (!interaction.inCachedGuild()) return;
 
-    const lng = await client.getUserLanguage(interaction.user.id);
-    const config = await client.getGuildSettings(interaction.guildId);
+    const lng = await getUserLanguage(interaction.user.id);
+    const config = await getGuildSettings(interaction.guildId);
 
     switch (interaction.options.getSubcommand()) {
       case 'channel':
@@ -48,7 +52,7 @@ export default new Command({
           }
 
           if (!channel) {
-            await client.updateGuildSettings(interaction.guild.id, { $unset: { ['customVC.channelId']: 1 } });
+            await updateGuildSettings(interaction.guild.id, { $unset: { ['customVC.channelId']: 1 } });
             return interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.customVC).setDescription(t('custom_vc.channel.removed', { lng }))] });
           }
 
@@ -56,7 +60,7 @@ export default new Command({
             return interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.channel.already', { lng }))] });
           }
 
-          await client.updateGuildSettings(interaction.guild.id, { $set: { ['customVC.channelId']: channel.id } });
+          await updateGuildSettings(interaction.guild.id, { $set: { ['customVC.channelId']: channel.id } });
           interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.customVC).setDescription(t('custom_vc.channel.success', { lng, channel }))] });
         }
         break;
@@ -69,7 +73,7 @@ export default new Command({
           }
 
           if (!channel) {
-            await client.updateGuildSettings(interaction.guild.id, { $unset: { ['customVC.parentId']: 1 } });
+            await updateGuildSettings(interaction.guild.id, { $unset: { ['customVC.parentId']: 1 } });
             return interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.customVC).setDescription(t('custom_vc.parent.removed', { lng }))] });
           }
 
@@ -77,13 +81,13 @@ export default new Command({
             return interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.parent.already', { lng }))] });
           }
 
-          await client.updateGuildSettings(interaction.guild.id, { $set: { ['customVC.parentId']: channel.id } });
+          await updateGuildSettings(interaction.guild.id, { $set: { ['customVC.parentId']: channel.id } });
           interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.customVC).setDescription(t('custom_vc.parent.success', { lng }))] });
         }
         break;
       case 'info':
         {
-          const channels = await client.getCustomVoiceChannelsByGuild(interaction.guild.id);
+          const channels = await getCustomVoiceChannelsByGuild(interaction.guild.id);
 
           interaction.reply({
             embeds: [

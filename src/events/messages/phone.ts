@@ -3,9 +3,10 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
-import { logger } from 'utils/logger';
-
+import { getUserLanguage } from 'db/user';
 import { connectionModel } from 'models/phone';
+
+import { logger } from 'utils/logger';
 import { handlePhoneMessageTimeout } from 'utils/phone';
 
 export default new Event({
@@ -26,8 +27,8 @@ export default new Event({
       .exec();
     if (!existingConnection) return;
 
-    const lng = await client.getUserLanguage(author.id);
-    const otherLng = await client.getUserLanguage(existingConnection.userIdOne === author.id ? existingConnection.userIdTwo : existingConnection.userIdOne);
+    const lng = await getUserLanguage(author.id);
+    const otherLng = await getUserLanguage(existingConnection.userIdOne === author.id ? existingConnection.userIdTwo : existingConnection.userIdOne);
 
     // Check if the message is too long and shorten it
     if (message.content.length > 4000) message.content = message.content.slice(0, 4000) + '...';

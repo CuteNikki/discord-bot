@@ -14,6 +14,9 @@ import { t } from 'i18next';
 import { Command, ModuleType } from 'classes/command';
 import { CustomEmbedBuilder, getEmbed, isEmptyEmbed } from 'classes/custom-embed';
 
+import { getGuildSettings, updateGuildSettings } from 'db/guild';
+import { getUserLanguage } from 'db/user';
+
 import { logger } from 'utils/logger';
 
 export default new Command({
@@ -45,8 +48,8 @@ export default new Command({
 
     const { options, guild, user } = interaction;
 
-    const lng = await client.getUserLanguage(user.id);
-    const config = await client.getGuildSettings(guild.id);
+    const lng = await getUserLanguage(user.id);
+    const config = await getGuildSettings(guild.id);
 
     switch (options.getSubcommand()) {
       case 'channel':
@@ -59,7 +62,7 @@ export default new Command({
                 embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('welcome.channel.invalid', { lng }))],
               });
             }
-            await client.updateGuildSettings(guild.id, {
+            await updateGuildSettings(guild.id, {
               $set: {
                 ['welcome.channelId']: null,
               },
@@ -70,7 +73,7 @@ export default new Command({
             });
           }
 
-          await client.updateGuildSettings(guild.id, {
+          await updateGuildSettings(guild.id, {
             $set: {
               ['welcome.channelId']: channel.id,
             },
@@ -88,7 +91,7 @@ export default new Command({
             message: config.welcome.message,
           });
           customBuilder.once('submit', async (msg) => {
-            await client.updateGuildSettings(guild.id, {
+            await updateGuildSettings(guild.id, {
               $set: {
                 ['welcome.message']: msg,
               },
@@ -167,15 +170,13 @@ export default new Command({
         break;
       case 'enable':
         {
-          const config = await client.getGuildSettings(guild.id);
-
           if (config.welcome.enabled) {
             return interaction.editReply({
               embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('welcome.state.already_enabled', { lng }))],
             });
           }
 
-          await client.updateGuildSettings(guild.id, {
+          await updateGuildSettings(guild.id, {
             $set: {
               ['welcome.enabled']: true,
             },
@@ -188,15 +189,13 @@ export default new Command({
         break;
       case 'disable':
         {
-          const config = await client.getGuildSettings(guild.id);
-
           if (!config.welcome.enabled) {
             return interaction.editReply({
               embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('welcome.state.already_disabled', { lng }))],
             });
           }
 
-          await client.updateGuildSettings(guild.id, {
+          await updateGuildSettings(guild.id, {
             $set: {
               ['welcome.enabled']: false,
             },

@@ -12,6 +12,7 @@ import { t } from 'i18next';
 import { availableChannelModel, connectionModel, type Connection } from 'models/phone';
 
 import type { DiscordClient } from 'classes/client';
+import { getUserLanguage } from 'db/user';
 import { logger } from 'utils/logger';
 
 /**
@@ -48,7 +49,7 @@ export async function handlePhoneConnection({ client, interaction }: { client: D
   await interaction.deferReply();
 
   const { user, channelId } = interaction;
-  const lng = await client.getUserLanguage(user.id);
+  const lng = await getUserLanguage(user.id);
 
   if (await isAlreadyConnected(channelId)) {
     return interaction.editReply({
@@ -104,7 +105,7 @@ export async function handlePhoneConnection({ client, interaction }: { client: D
     userIdTwo: random.userId,
   });
 
-  const otherLng = await client.getUserLanguage(random.userId);
+  const otherLng = await getUserLanguage(random.userId);
 
   try {
     const targetChannel = await client.channels
@@ -152,7 +153,7 @@ export async function handlePhoneDisconnect({ client, interaction }: { client: D
   await interaction.deferReply();
 
   const { user, channelId } = interaction;
-  const lng = await client.getUserLanguage(user.id);
+  const lng = await getUserLanguage(user.id);
 
   const availableChannel = await availableChannelModel.findOne({ channelId }).lean().exec();
   if (availableChannel) {
@@ -179,7 +180,7 @@ export async function handlePhoneDisconnect({ client, interaction }: { client: D
 
   // Find the connected channel and user ids
   const connectedChannelId = existingConnection.channelIdOne === channelId ? existingConnection.channelIdTwo : existingConnection.channelIdOne;
-  const otherLng = await client.getUserLanguage(existingConnection.userIdOne === user.id ? existingConnection.userIdTwo : existingConnection.userIdOne);
+  const otherLng = await getUserLanguage(existingConnection.userIdOne === user.id ? existingConnection.userIdTwo : existingConnection.userIdOne);
 
   // Remove the connection
   await connectionModel.deleteOne({ _id: existingConnection._id });

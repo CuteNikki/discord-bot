@@ -14,6 +14,7 @@ import ms from 'ms';
 import { Command, ModuleType } from 'classes/command';
 
 import { InfractionType, infractionModel } from 'models/infraction';
+import { getUserLanguage } from 'db/user';
 
 import { logger } from 'utils/logger';
 
@@ -42,8 +43,8 @@ export default new Command({
 
     const target = options.getUser('user', true);
 
-    const lng = await client.getUserLanguage(interaction.user.id);
-    const targetLng = await client.getUserLanguage(target.id);
+    const lng = await getUserLanguage(interaction.user.id);
+    const targetLng = await getUserLanguage(target.id);
 
     const targetMember = await guild.members.fetch(target.id).catch((err) => logger.debug({ err, userId: target.id }, 'Could not fetch target member'));
     if (!targetMember) return interaction.editReply(t('timeout.target.invalid', { lng }));

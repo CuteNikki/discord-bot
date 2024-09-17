@@ -4,6 +4,8 @@ import { t } from 'i18next';
 import { Command, ModuleType } from 'classes/command';
 
 import { AnnouncementType } from 'models/guild';
+import { getUserLanguage } from 'db/user';
+import { getGuildSettings, updateGuildSettings } from 'db/guild';
 
 import { addLevel, addXP, getDataOrCreate, getLevelRewards, setLevel, setXP } from 'utils/level';
 import { logger } from 'utils/logger';
@@ -181,9 +183,9 @@ export default new Command({
     if (!interaction.inCachedGuild()) return;
     const { options, guildId, guild } = interaction;
     await interaction.deferReply({ ephemeral: true });
-    const lng = await client.getUserLanguage(interaction.user.id);
+    const lng = await getUserLanguage(interaction.user.id);
 
-    const config = await client.getGuildSettings(guildId);
+    const config = await getGuildSettings(guildId);
 
     switch (options.getSubcommandGroup()) {
       case 'show':
@@ -363,7 +365,7 @@ export default new Command({
             case 'on':
               {
                 if (config.level.enabled) return interaction.editReply(t('level.toggle.already_on', { lng }));
-                await client.updateGuildSettings(guildId, {
+                await updateGuildSettings(guildId, {
                   $set: { ['level.enabled']: true },
                 });
                 interaction.editReply(t('level.toggle.on', { lng }));
@@ -372,7 +374,7 @@ export default new Command({
             case 'off':
               {
                 if (!config.level.enabled) return interaction.editReply(t('level.toggle.already_off', { lng }));
-                await client.updateGuildSettings(guildId, {
+                await updateGuildSettings(guildId, {
                   $set: { ['level.enabled']: false },
                 });
                 interaction.editReply(t('level.toggle.off', { lng }));
@@ -389,7 +391,7 @@ export default new Command({
                 const channel = options.getChannel('channel', true, [ChannelType.GuildText]);
                 if (config.level.channelId === channel.id && config.level.announcement !== AnnouncementType.OtherChannel)
                   return interaction.editReply(t('level.announcement.already_channel', { lng }));
-                await client.updateGuildSettings(guildId, {
+                await updateGuildSettings(guildId, {
                   $set: {
                     ['level.channelId']: channel.id,
                     ['level.announcement']: AnnouncementType.OtherChannel,
@@ -401,7 +403,7 @@ export default new Command({
             case 'user-channel':
               {
                 if (config.level.announcement === AnnouncementType.UserChannel) return interaction.editReply(t('level.announcement.already_user', { lng }));
-                await client.updateGuildSettings(guildId, {
+                await updateGuildSettings(guildId, {
                   $set: {
                     ['level.channelId']: undefined,
                     ['level.announcement']: AnnouncementType.UserChannel,
@@ -414,7 +416,7 @@ export default new Command({
               {
                 if (config.level.announcement === AnnouncementType.PrivateMessage)
                   return interaction.editReply(t('level.announcement.already_private', { lng }));
-                await client.updateGuildSettings(guildId, {
+                await updateGuildSettings(guildId, {
                   $set: {
                     ['level.channelId']: undefined,
                     ['level.announcement']: AnnouncementType.PrivateMessage,
@@ -426,7 +428,7 @@ export default new Command({
             case 'none':
               {
                 if (config.level.announcement !== AnnouncementType.None) return interaction.editReply(t('level.announcement.already_none', { lng }));
-                await client.updateGuildSettings(guildId, {
+                await updateGuildSettings(guildId, {
                   $set: {
                     ['level.channelId']: undefined,
                     ['level.announcement']: AnnouncementType.None,
@@ -448,7 +450,7 @@ export default new Command({
                 if (config.level.rewards.length >= 25) return interaction.editReply(t('level.rewards.limit', { lng }));
                 const currentRoles = config.level.rewards.map((reward) => reward.roleId);
                 if (currentRoles.includes(role.id)) return interaction.editReply(t('level.rewards.already', { lng }));
-                await client.updateGuildSettings(guildId, {
+                await updateGuildSettings(guildId, {
                   $push: { ['level.rewards']: { level, roleId: role.id } },
                 });
                 interaction.editReply(
@@ -465,7 +467,7 @@ export default new Command({
                 const roleId = options.getString('role-id', true);
                 const reward = config.level.rewards.find((rw) => rw.roleId === roleId);
                 if (!reward) return interaction.editReply(t('level.rewards.invalid', { lng }));
-                await client.updateGuildSettings(guildId, {
+                await updateGuildSettings(guildId, {
                   $pull: { ['level.rewards']: { _id: reward._id } },
                 });
                 interaction.editReply(t('level.rewards.removed', { lng }));
@@ -482,7 +484,7 @@ export default new Command({
                 const role = options.getRole('role', true);
                 if (config.level.ignoredRoles.includes(role.id)) return interaction.editReply(t('level.ignored_roles.already', { lng }));
                 if (config.level.ignoredRoles.length >= 25) return interaction.editReply(t('level.ignored_roles.limit', { lng }));
-                await client.updateGuildSettings(guildId, {
+                await updateGuildSettings(guildId, {
                   $push: { ['level.ignoredRoles']: role.id },
                 });
                 interaction.editReply(
@@ -497,7 +499,7 @@ export default new Command({
               {
                 const roleId = options.getString('role-id', true);
                 if (!config.level.ignoredRoles.includes(roleId)) return interaction.editReply(t('level.ignored_roles.invalid', { lng }));
-                await client.updateGuildSettings(guildId, {
+                await updateGuildSettings(guildId, {
                   $pull: { ['level.ignoredRoles']: roleId },
                 });
                 interaction.editReply(t('level.ignored_roles.removed', { lng }));
@@ -514,7 +516,7 @@ export default new Command({
                 const channel = options.getChannel('channel', true, [ChannelType.GuildText]);
                 if (config.level.ignoredChannels.includes(channel.id)) return interaction.editReply(t('level.ignored_channels.already', { lng }));
                 if (config.level.ignoredChannels.length >= 25) return interaction.editReply(t('level.ignored_channels.limit', { lng }));
-                await client.updateGuildSettings(guildId, {
+                await updateGuildSettings(guildId, {
                   $push: { ['level.ignoredChannels']: channel.id },
                 });
                 interaction.editReply(
@@ -529,7 +531,7 @@ export default new Command({
               {
                 const channelId = options.getString('channel-id', true);
                 if (!config.level.ignoredChannels.includes(channelId)) return interaction.editReply(t('level.ignored_channels.invalid', { lng }));
-                await client.updateGuildSettings(guildId, {
+                await updateGuildSettings(guildId, {
                   $pull: { ['level.ignoredChannels']: channelId },
                 });
                 interaction.editReply(t('level.ignored_channels.removed', { lng }));
@@ -546,7 +548,7 @@ export default new Command({
                 const channel = options.getChannel('channel', true, [ChannelType.GuildText]);
                 if (config.level.enabledChannels.includes(channel.id)) return interaction.editReply(t('level.enabled_channels.already', { lng }));
                 if (config.level.enabledChannels.length >= 25) return interaction.editReply(t('level.enabled_channels.limit', { lng }));
-                await client.updateGuildSettings(guildId, {
+                await updateGuildSettings(guildId, {
                   $push: { ['level.enabledChannels']: channel.id },
                 });
                 interaction.editReply(
@@ -561,7 +563,7 @@ export default new Command({
               {
                 const channelId = options.getString('channel-id', true);
                 if (!config.level.enabledChannels.includes(channelId)) return interaction.editReply(t('level.enabled_channels.invalid', { lng }));
-                await client.updateGuildSettings(guildId, {
+                await updateGuildSettings(guildId, {
                   $pull: { ['level.enabledChannels']: channelId },
                 });
                 interaction.editReply(t('level.enabled_channels.removed', { lng }));

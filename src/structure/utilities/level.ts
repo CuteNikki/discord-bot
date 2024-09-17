@@ -2,6 +2,7 @@ import type { Types } from 'mongoose';
 
 import type { DiscordClient } from 'classes/client';
 
+import { getGuildSettings } from 'db/guild';
 import { levelModel } from 'models/level';
 import { weeklyLevelModel } from 'models/weeklyLevels';
 
@@ -123,7 +124,7 @@ export async function addLevel(identifier: LevelIdentifier, client: DiscordClien
 }
 
 export async function getLevelRewards(client: DiscordClient, level: Level | PositionLevel): Promise<LevelReward[]> {
-  const guildSettings = await client.getGuildSettings(level.guildId);
+  const guildSettings = await getGuildSettings(level.guildId);
   if (!guildSettings) return [];
   const rewards = guildSettings.level.rewards.filter((rw) => rw.level <= level.level);
   return rewards;

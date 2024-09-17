@@ -3,14 +3,16 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
+import { getGuildSettings } from 'db/guild';
+
 export default new Event({
   name: Events.GuildScheduledEventCreate,
   once: false,
-  async execute(client, event) {
+  async execute(_client, event) {
     const { guild, name, status, creator, description, scheduledStartTimestamp, scheduledEndTimestamp, url, privacyLevel, channel, entityMetadata } = event;
     if (!guild) return;
 
-    const config = await client.getGuildSettings(guild.id);
+    const config = await getGuildSettings(guild.id);
 
     if (!config.log.enabled || !config.log.events.guildScheduledEventCreate || !config.log.channelId) return;
 

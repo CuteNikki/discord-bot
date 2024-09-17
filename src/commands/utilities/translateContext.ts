@@ -10,6 +10,8 @@ import {
 } from 'discord.js';
 import { t } from 'i18next';
 
+import { getUserLanguage } from 'db/user';
+
 import { Command, ModuleType } from 'classes/command';
 
 const commandType = ApplicationCommandType.Message;
@@ -22,11 +24,11 @@ export default new Command<typeof commandType>({
     .setType(commandType)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
     .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel),
-  async execute({ interaction, client }) {
+  async execute({ interaction }) {
     const { user, targetMessage } = interaction;
     await interaction.deferReply({ ephemeral: true });
 
-    const lng = await client.getUserLanguage(user.id);
+    const lng = await getUserLanguage(user.id);
 
     const translator = new GoogleTranslator({
       headers: {

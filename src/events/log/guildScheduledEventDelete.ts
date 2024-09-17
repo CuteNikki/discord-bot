@@ -3,17 +3,19 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
+import { getGuildSettings } from 'db/guild';
+
 import { logger } from 'utils/logger';
 
 export default new Event({
   name: Events.GuildScheduledEventDelete,
   once: false,
-  async execute(client, event) {
+  async execute(_client, event) {
     const { guild, name, creator, description, scheduledStartTimestamp, scheduledEndTimestamp, url, createdTimestamp, channel, entityMetadata } = event;
     if (!guild) return;
     if (event.partial) await event.fetch().catch((err) => logger.debug({ err }, 'Could not fetch guild scheduled event'));
 
-    const config = await client.getGuildSettings(guild.id);
+    const config = await getGuildSettings(guild.id);
 
     if (!config.log.enabled || !config.log.events.guildScheduledEventDelete || !config.log.channelId) return;
 

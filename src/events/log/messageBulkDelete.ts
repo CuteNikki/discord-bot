@@ -3,17 +3,19 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
+import { getGuildSettings } from 'db/guild';
+
 export default new Event({
   name: Events.MessageBulkDelete,
   once: false,
-  async execute(client, messages) {
+  async execute(_client, messages) {
     const firstMessage = messages.first();
     if (!firstMessage) return;
 
     const guild = firstMessage.guild;
     if (!guild) return;
 
-    const config = await client.getGuildSettings(guild.id);
+    const config = await getGuildSettings(guild.id);
 
     if (!config.log.enabled || !config.log.events.messageBulkDelete || !config.log.channelId) return;
 

@@ -3,15 +3,17 @@ import { Events } from 'discord.js';
 import { getEmbed, replacePlaceholders } from 'classes/custom-embed';
 import { Event } from 'classes/event';
 
+import { getGuildSettings } from 'db/guild';
+
 import { logger } from 'utils/logger';
 
 export default new Event({
   name: Events.GuildMemberRemove,
   once: false,
-  async execute(client, member) {
+  async execute(_client, member) {
     if (member.user.bot) return;
 
-    const config = await client.getGuildSettings(member.guild.id);
+    const config = await getGuildSettings(member.guild.id);
 
     if (!config.farewell.enabled || !config.farewell.channelId) return;
     const farewellChannel = await member.guild.channels.fetch(config.farewell.channelId);

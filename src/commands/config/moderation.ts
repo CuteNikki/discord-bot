@@ -3,6 +3,9 @@ import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
+import { getUserLanguage } from 'db/user';
+import { getGuildSettings, updateGuildSettings } from 'db/guild';
+
 export default new Command({
   module: ModuleType.Config,
   botPermissions: ['SendMessages'],
@@ -26,13 +29,13 @@ export default new Command({
         .addSubcommand((subcommand) => subcommand.setName('on').setDescription('Turns the moderation module on'))
         .addSubcommand((subcommand) => subcommand.setName('off').setDescription('Turns the moderation module off')),
     ),
-  async execute({ client, interaction }) {
+  async execute({ interaction }) {
     if (!interaction.inCachedGuild()) return;
     const { options, guildId } = interaction;
     await interaction.deferReply({ ephemeral: true });
-    const lng = await client.getUserLanguage(interaction.user.id);
+    const lng = await getUserLanguage(interaction.user.id);
 
-    const config = await client.getGuildSettings(guildId);
+    const config = await getGuildSettings(guildId);
 
     switch (options.getSubcommandGroup()) {
       case 'show':
@@ -74,7 +77,7 @@ export default new Command({
             case 'on':
               {
                 if (config.moderation.enabled) return interaction.editReply(t('moderation.toggle.already_on', { lng }));
-                await client.updateGuildSettings(guildId, {
+                await updateGuildSettings(guildId, {
                   $set: { ['moderation.enabled']: true },
                 });
                 interaction.editReply(t('moderation.toggle.on', { lng }));
@@ -83,7 +86,7 @@ export default new Command({
             case 'off':
               {
                 if (!config.moderation.enabled) return interaction.editReply(t('moderation.toggle.already_off', { lng }));
-                await client.updateGuildSettings(guildId, {
+                await updateGuildSettings(guildId, {
                   $set: { ['moderation.enabled']: false },
                 });
                 interaction.editReply(t('moderation.toggle.off', { lng }));

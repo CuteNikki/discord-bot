@@ -11,6 +11,9 @@ import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
+import { getUserLanguage } from 'db/user';
+import { getGuildSettings, updateGuildSettings } from 'db/guild';
+
 export default new Command({
   module: ModuleType.Config,
   botPermissions: ['SendMessages'],
@@ -56,14 +59,14 @@ export default new Command({
             .setMaxValue(100),
         ),
     ),
-  async execute({ client, interaction }) {
+  async execute({ interaction }) {
     if (!interaction.inCachedGuild() || !interaction.guild.members.me) return;
     const { options, guild, user } = interaction;
 
     await interaction.deferReply({ ephemeral: true });
 
-    const lng = await client.getUserLanguage(user.id);
-    const config = await client.getGuildSettings(guild.id);
+    const lng = await getUserLanguage(user.id);
+    const config = await getGuildSettings(guild.id);
 
     switch (options.getSubcommand()) {
       case 'config':
@@ -92,7 +95,7 @@ export default new Command({
         {
           if (!config.starboard.enabled) return await interaction.editReply({ content: t('starboard.already_disabled', { lng }) });
 
-          await client.updateGuildSettings(guild.id, { $set: { ['starboard.enabled']: false } });
+          await updateGuildSettings(guild.id, { $set: { ['starboard.enabled']: false } });
           await interaction.editReply({ content: t('starboard.disabled', { lng }) });
         }
         break;
@@ -100,7 +103,7 @@ export default new Command({
         {
           if (config.starboard.enabled) return await interaction.editReply({ content: t('starboard.already_enabled', { lng }) });
 
-          await client.updateGuildSettings(guild.id, { $set: { ['starboard.enabled']: true } });
+          await updateGuildSettings(guild.id, { $set: { ['starboard.enabled']: true } });
           await interaction.editReply({ content: t('starboard.enabled', { lng }) });
         }
         break;
@@ -114,7 +117,7 @@ export default new Command({
             return await interaction.editReply({ content: t('starboard.missing_permissions', { lng }) });
           if (minimumStars < 1 || minimumStars > 100) return await interaction.editReply({ content: t('starboard.invalid_stars', { lng }) });
 
-          await client.updateGuildSettings(guild.id, {
+          await updateGuildSettings(guild.id, {
             $set: { ['starboard.channelId']: channel.id, ['starboard.minimumStars']: minimumStars, ['starboard.enabled']: true },
           });
           await interaction.editReply({ content: t('starboard.setup', { lng }) });
@@ -139,7 +142,7 @@ export default new Command({
             if (minimumStars === config.starboard.minimumStars) return await interaction.editReply({ content: t('starboard.same_stars', { lng }) });
           }
 
-          await client.updateGuildSettings(guild.id, {
+          await updateGuildSettings(guild.id, {
             $set: {
               ['starboard.channelId']: channel?.id ?? config.starboard.channelId,
               ['starboard.minimumStars']: minimumStars ?? config.starboard.minimumStars,
@@ -154,7 +157,7 @@ export default new Command({
           if (!config.starboard.channelId && !config.starboard.minimumStars)
             return await interaction.editReply({ content: t('starboard.delete_nothing', { lng }) });
 
-          await client.updateGuildSettings(guild.id, { $unset: { ['starboard.channelId']: '', ['starboard.minimumStars']: '' } });
+          await updateGuildSettings(guild.id, { $unset: { ['starboard.channelId']: '', ['starboard.minimumStars']: '' } });
           await interaction.editReply({ content: t('starboard.deleted', { lng }) });
         }
         break;

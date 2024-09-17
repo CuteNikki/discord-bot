@@ -3,16 +3,18 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
+import { getGuildSettings } from 'db/guild';
+
 import { logger } from 'utils/logger';
 
 export default new Event({
   name: Events.GuildBanRemove,
   once: false,
-  async execute(client, ban) {
+  async execute(_client, ban) {
     const { guild, user, reason, partial } = ban;
     if (partial) await ban.fetch().catch((err) => logger.debug({ err }, 'Could not fetch ban'));
 
-    const config = await client.getGuildSettings(guild.id);
+    const config = await getGuildSettings(guild.id);
 
     if (!config.log.enabled || !config.log.events.guildBanRemove || !config.log.channelId) return;
 

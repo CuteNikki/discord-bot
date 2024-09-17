@@ -3,6 +3,9 @@ import { ApplicationIntegrationType, Colors, EmbedBuilder, InteractionContextTyp
 import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
+
+import { getUserLanguage } from 'db/user';
+
 import { compass, defraIndex, epaIndex, getCurrentWeather, getHistoricWeather, getWeatherForecast, uvIndex } from 'utils/weather';
 
 export default new Command({
@@ -46,11 +49,11 @@ export default new Command({
         .addStringOption((option) => option.setName('date').setDescription('The date to get weather information for').setRequired(true))
         .addBooleanOption((option) => option.setName('ephemeral').setDescription('When set to true it will only shows the message to you').setRequired(false)),
     ),
-  async execute({ interaction, client }) {
+  async execute({ interaction }) {
     const { options, user } = interaction;
     const ephemeral = options.getBoolean('ephemeral', false) ?? true;
     await interaction.deferReply({ ephemeral });
-    const lng = await client.getUserLanguage(user.id);
+    const lng = await getUserLanguage(user.id);
 
     const userLocation = options.getString('location', true);
     const days = options.getString('days', false) ?? '1';

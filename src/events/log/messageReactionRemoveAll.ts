@@ -3,17 +3,19 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
+import { getGuildSettings } from 'db/guild';
+
 import { logger } from 'utils/logger';
 
 export default new Event({
   name: Events.MessageReactionRemoveAll,
   once: false,
-  async execute(client, message, reactions) {
+  async execute(_client, message, reactions) {
     const guild = message.guild;
     if (!guild || !message.author || message.author.bot) return;
     if (message.partial) await message.fetch().catch((err) => logger.debug({ err }, 'Could not fetch message'));
 
-    const config = await client.getGuildSettings(guild.id);
+    const config = await getGuildSettings(guild.id);
 
     if (!config.log.enabled || !config.log.events.messageReactionRemoveAll || !config.log.channelId) return;
 

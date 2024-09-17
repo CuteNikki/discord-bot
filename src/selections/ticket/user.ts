@@ -2,6 +2,8 @@ import { EmbedBuilder, type TextChannel } from 'discord.js';
 import { t } from 'i18next';
 
 import { Selection } from 'classes/selection';
+
+import { getGuildSettings } from 'db/guild';
 import { ticketModel } from 'models/ticket';
 
 export default new Selection({
@@ -9,7 +11,7 @@ export default new Selection({
   isCustomIdIncluded: true,
   permissions: [],
   botPermissions: ['ManageChannels', 'SendMessages'],
-  async execute({ interaction, client }) {
+  async execute({ interaction }) {
     if (!interaction.inCachedGuild() || !interaction.isUserSelectMenu()) return;
     const {
       user,
@@ -20,7 +22,7 @@ export default new Selection({
     } = interaction;
     const targetMember = interaction.guild.members.cache.get(targetId);
 
-    const currentConfig = await client.getGuildSettings(guildId);
+    const currentConfig = await getGuildSettings(guildId);
     const lng = currentConfig.language;
 
     const system = currentConfig.ticket.systems.find((system) => system._id.toString() === customId.split('_')[1]);

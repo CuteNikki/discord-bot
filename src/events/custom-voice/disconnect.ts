@@ -1,15 +1,18 @@
 import { Events } from 'discord.js';
 
 import { Event } from 'classes/event';
+
+import { getCustomVoiceChannel, deleteCustomVoiceChannel } from 'db/voice';
+
 import { logger } from 'utils/logger';
 
 export default new Event({
   name: Events.VoiceStateUpdate,
   once: false,
-  async execute(client, oldState, newState) {
+  async execute(_client, oldState, newState) {
     if (!oldState.channel || !newState.member) return;
 
-    const config = await client.getCustomVoiceChannel(oldState.channel.id);
+    const config = await getCustomVoiceChannel(oldState.channel.id);
 
     // If the channel is not a custom voice channel, we don't need to do anything
     if (!config || oldState.channel.id !== config.channelId) return;
@@ -18,7 +21,7 @@ export default new Event({
     if (config.ownerId !== newState.member.id || oldState.channel?.members.size) return;
 
     // Delete the custom voice channel
-    await client.deleteCustomVoiceChannel(oldState.channel.id);
+    await deleteCustomVoiceChannel(oldState.channel.id);
     await oldState.channel.delete().catch((err) => logger.error(err, 'Could not delete custom voice channel'));
   },
 });

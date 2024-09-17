@@ -3,13 +3,15 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
+import { getGuildSettings } from 'db/guild';
+
 export default new Event({
   name: Events.AutoModerationActionExecution,
   once: false,
-  async execute(client, autoModerationActionExecution) {
+  async execute(_client, autoModerationActionExecution) {
     const { guild, action, ruleTriggerType, userId, channelId, matchedContent } = autoModerationActionExecution;
 
-    const config = await client.getGuildSettings(guild.id);
+    const config = await getGuildSettings(guild.id);
 
     if (!config.log.enabled || !config.log.events.autoModerationActionExecution || !config.log.channelId) return;
 

@@ -3,14 +3,16 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
+import { getGuildSettings } from 'db/guild';
+
 export default new Event({
   name: Events.ChannelUpdate,
   once: false,
-  async execute(client, oldChannel, newChannel) {
+  async execute(_client, oldChannel, newChannel) {
     if (oldChannel.isDMBased() || newChannel.isDMBased()) return;
     const guild = newChannel.guild;
 
-    const config = await client.getGuildSettings(guild.id);
+    const config = await getGuildSettings(guild.id);
 
     if (!config.log.enabled || !config.log.events.channelUpdate || !config.log.channelId) return;
 

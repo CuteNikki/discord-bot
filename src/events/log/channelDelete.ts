@@ -3,14 +3,16 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
+import { getGuildSettings } from 'db/guild';
+
 export default new Event({
   name: Events.ChannelDelete,
   once: false,
-  async execute(client, channel) {
+  async execute(_client, channel) {
     if (channel.isDMBased()) return;
     const { guild, name, id, type, parent, createdTimestamp, permissionOverwrites } = channel;
 
-    const config = await client.getGuildSettings(guild.id);
+    const config = await getGuildSettings(guild.id);
 
     if (!config.log.enabled || !config.log.events.channelCreate || !config.log.channelId) return;
 

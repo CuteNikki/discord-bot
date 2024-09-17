@@ -3,13 +3,15 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
+import { getGuildSettings } from 'db/guild';
+
 export default new Event({
   name: Events.AutoModerationRuleDelete,
   once: false,
-  async execute(client, autoModerationRule) {
+  async execute(_client, autoModerationRule) {
     const { guild, creatorId, triggerType, triggerMetadata, name, exemptRoles, exemptChannels, actions } = autoModerationRule;
 
-    const config = await client.getGuildSettings(guild.id);
+    const config = await getGuildSettings(guild.id);
 
     if (!config.log.enabled || !config.log.events.autoModerationRuleDelete || !config.log.channelId) return;
 

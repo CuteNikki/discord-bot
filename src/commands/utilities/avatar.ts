@@ -3,6 +3,8 @@ import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
+import { getUserLanguage } from 'db/user';
+
 import { logger } from 'utils/logger';
 
 export default new Command({
@@ -18,7 +20,7 @@ export default new Command({
   async execute({ interaction, client }) {
     const ephemeral = interaction.options.getBoolean('ephemeral', false) ?? true;
     await interaction.deferReply({ ephemeral });
-    const lng = await client.getUserLanguage(interaction.user.id);
+    const lng = await getUserLanguage(interaction.user.id);
 
     const user = await client.users
       .fetch(interaction.options.getUser('user', false) ?? interaction.user, {

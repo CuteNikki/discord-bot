@@ -3,6 +3,9 @@ import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
+import { getUserLanguage } from 'db/user';
+import { getGuildSettings, updateGuildSettings } from 'db/guild';
+
 export default new Command({
   module: ModuleType.Config,
   data: new SlashCommandBuilder()
@@ -36,8 +39,8 @@ export default new Command({
     await interaction.deferReply();
     const { options, guildId } = interaction;
 
-    const lng = await client.getUserLanguage(interaction.user.id);
-    const config = await client.getGuildSettings(guildId);
+    const lng = await getUserLanguage(interaction.user.id);
+    const config = await getGuildSettings(guildId);
 
     switch (options.getSubcommand()) {
       case 'setup':
@@ -56,7 +59,7 @@ export default new Command({
             });
           }
 
-          await client.updateGuildSettings(guildId, {
+          await updateGuildSettings(guildId, {
             $set: {
               counting: {
                 channelId: channel.id,
@@ -117,7 +120,7 @@ export default new Command({
           let response = '';
 
           if (channel && channel.id !== config.counting.channelId) {
-            await client.updateGuildSettings(guildId, {
+            await updateGuildSettings(guildId, {
               $set: {
                 ['counting.channelId']: channel.id,
               },
@@ -125,7 +128,7 @@ export default new Command({
             response += t('counting.edit_channel', { lng, channel: `<#${channel.id}>` });
           }
           if (resetOnFail !== null && resetOnFail !== config.counting.resetOnFail) {
-            await client.updateGuildSettings(guildId, {
+            await updateGuildSettings(guildId, {
               $set: {
                 ['counting.resetOnFail']: resetOnFail,
               },
@@ -152,7 +155,7 @@ export default new Command({
             });
           }
 
-          await client.updateGuildSettings(guildId, {
+          await updateGuildSettings(guildId, {
             $set: {
               ['counting.channelId']: null,
               ['counting.resetOnFail']: false,

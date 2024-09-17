@@ -2,6 +2,9 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, typ
 import { t } from 'i18next';
 
 import type { DiscordClient } from 'classes/client';
+
+import { getUserLanguage } from 'db/user';
+
 import { logger } from 'utils/logger';
 
 export enum TriviaMode {
@@ -45,8 +48,7 @@ export class Trivia {
   private async start() {
     const interaction = this.options.interaction;
     const user = interaction.user;
-    const client = this.options.client;
-    const lng = await client.getUserLanguage(user.id);
+    const lng = await getUserLanguage(user.id);
 
     const trivia = await this.getTrivia();
     if (!trivia)
@@ -100,7 +102,7 @@ export class Trivia {
         return buttonInteraction
           .followUp({
             content: t('interactions.author_only', {
-              lng: await client.getUserLanguage(buttonInteraction.user.id),
+              lng: await getUserLanguage(buttonInteraction.user.id),
             }),
             ephemeral: true,
           })

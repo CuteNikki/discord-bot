@@ -3,13 +3,15 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
+import { getGuildSettings } from 'db/guild';
+
 export default new Event({
   name: Events.GuildEmojiDelete,
   once: false,
-  async execute(client, emoji) {
+  async execute(_client, emoji) {
     const { guild, name, id, animated, managed, roles, createdTimestamp, identifier, author } = emoji;
 
-    const config = await client.getGuildSettings(guild.id);
+    const config = await getGuildSettings(guild.id);
 
     if (!config.log.enabled || !config.log.events.emojiDelete || !config.log.channelId) return;
 

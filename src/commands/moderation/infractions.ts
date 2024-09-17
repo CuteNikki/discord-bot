@@ -4,6 +4,7 @@ import { t } from 'i18next';
 import { Command, ModuleType } from 'classes/command';
 
 import { infractionModel } from 'models/infraction';
+import { getUserLanguage } from 'db/user';
 
 import { chunk, pagination } from 'utils/pagination';
 
@@ -32,7 +33,7 @@ export default new Command({
     if (!interaction.inCachedGuild()) return;
     const { options, user, guildId } = interaction;
 
-    const lng = await client.getUserLanguage(user.id);
+    const lng = await getUserLanguage(user.id);
 
     switch (options.getSubcommand()) {
       case 'history':

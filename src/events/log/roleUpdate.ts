@@ -3,13 +3,15 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
+import { getGuildSettings } from 'db/guild';
+
 export default new Event({
   name: Events.GuildRoleUpdate,
   once: false,
-  async execute(client, oldRole, newRole) {
+  async execute(_client, oldRole, newRole) {
     const guild = newRole.guild;
 
-    const config = await client.getGuildSettings(guild.id);
+    const config = await getGuildSettings(guild.id);
 
     if (!config.log.enabled || !config.log.events.roleUpdate || !config.log.channelId) return;
 

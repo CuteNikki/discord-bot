@@ -5,6 +5,9 @@ import osu from 'node-os-utils';
 
 import { Command, ModuleType } from 'classes/command';
 
+import { getUserLanguage } from 'db/user';
+import { getClientSettings } from 'db/client';
+
 import { keys } from 'utils/keys';
 import { logger } from 'utils/logger';
 
@@ -18,7 +21,7 @@ export default new Command({
     .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel)
     .addBooleanOption((option) => option.setName('ephemeral').setDescription('When set to false will show the message to everyone')),
   async execute({ interaction, client }) {
-    const lng = await client.getUserLanguage(interaction.user.id);
+    const lng = await getUserLanguage(interaction.user.id);
     const ephemeral = interaction.options.getBoolean('ephemeral', false) ?? true;
     await interaction.deferReply({ ephemeral });
 
@@ -34,7 +37,7 @@ export default new Command({
       const memoryUsed = (memoryInfo.usedMemMb / 1024).toFixed(2);
       const memoryTotal = Math.round(memoryInfo.totalMemMb / 1024);
 
-      const { database, stats } = await client.getClientSettings(keys.DISCORD_BOT_ID);
+      const { database, stats } = await getClientSettings(keys.DISCORD_BOT_ID);
 
       const dbStates = {
         0: t('botinfo.database.disconnected', { lng }),

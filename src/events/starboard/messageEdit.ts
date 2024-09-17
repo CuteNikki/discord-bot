@@ -2,6 +2,8 @@ import { EmbedBuilder, Events } from 'discord.js';
 
 import { Event } from 'classes/event';
 
+import { getGuildSettings } from 'db/guild';
+
 import { logger } from 'utils/logger';
 
 export default new Event({
@@ -10,7 +12,7 @@ export default new Event({
     if (newMessage.partial) await newMessage.fetch().catch((err) => logger.debug({ err }, 'Could not fetch message'));
     if (!newMessage.inGuild() || !newMessage.author || newMessage.author.bot) return;
 
-    const config = await client.getGuildSettings(newMessage.guild.id);
+    const config = await getGuildSettings(newMessage.guild.id);
     if (!config.starboard.enabled || !config.starboard.channelId || !config.starboard.minimumStars) return;
 
     const knownMessage = config.starboard.messages.find((msg) => msg.messageId === newMessage.id);

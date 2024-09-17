@@ -1,18 +1,20 @@
 import { t } from 'i18next';
 
 import { Button } from 'classes/button';
+
 import { ticketModel } from 'models/ticket';
+import { getGuildSettings } from 'db/guild';
 
 export default new Button({
   customId: 'button-tickets-claim',
   isCustomIdIncluded: true,
   permissions: [],
   botPermissions: ['SendMessages'],
-  async execute({ client, interaction }) {
+  async execute({ interaction }) {
     if (!interaction.inCachedGuild() || !interaction.channelId) return;
     const { user, guildId, channelId, customId } = interaction;
 
-    const currentConfig = await client.getGuildSettings(guildId);
+    const currentConfig = await getGuildSettings(guildId);
     const lng = currentConfig.language;
 
     const system = currentConfig.ticket.systems.find((system) => system._id.toString() === customId.split('_')[1]);

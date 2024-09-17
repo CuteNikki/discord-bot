@@ -3,6 +3,8 @@ import { Events } from 'discord.js';
 import { getEmbed, replacePlaceholders } from 'classes/custom-embed';
 import { Event } from 'classes/event';
 
+import { getGuildSettings } from 'db/guild';
+
 import { logger } from 'utils/logger';
 
 export default new Event({
@@ -13,7 +15,7 @@ export default new Event({
 
     if (member.partial) await member.fetch().catch((err) => logger.debug({ err, member: member.id }, 'Could not fetch member'));
 
-    const config = await client.getGuildSettings(member.guild.id);
+    const config = await getGuildSettings(member.guild.id);
 
     if (!config.welcome.enabled) return;
     await member.roles.add(config.welcome.roles).catch((err) => logger.debug({ err }, 'Could not add role(s)'));

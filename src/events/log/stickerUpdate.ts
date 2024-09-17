@@ -3,14 +3,16 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
+import { getGuildSettings } from 'db/guild';
+
 export default new Event({
   name: Events.GuildStickerUpdate,
   once: false,
-  async execute(client, oldSticker, newSticker) {
+  async execute(_client, oldSticker, newSticker) {
     const guild = newSticker.guild;
     if (!guild) return;
 
-    const config = await client.getGuildSettings(guild.id);
+    const config = await getGuildSettings(guild.id);
 
     if (!config.log.enabled || !config.log.events.stickerUpdate || !config.log.channelId) return;
 

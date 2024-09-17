@@ -3,6 +3,8 @@ import { t } from 'i18next';
 
 import type { DiscordClient } from 'classes/client';
 
+import { getUserLanguage } from 'db/user';
+
 import { logger } from 'utils/logger';
 
 export class FastType {
@@ -23,9 +25,8 @@ export class FastType {
   private async start() {
     const interaction = this.options.interaction;
     const user = interaction.user;
-    const client = this.options.client;
 
-    const lng = await client.getUserLanguage(user.id);
+    const lng = await getUserLanguage(user.id);
 
     const message = await interaction
       .editReply({

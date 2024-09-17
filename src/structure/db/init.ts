@@ -10,6 +10,9 @@ import { infractionModel, InfractionType } from 'models/infraction';
 import { reminderModel } from 'models/reminder';
 import { weeklyLevelModel } from 'models/weeklyLevels';
 
+import { getClientSettings, updateClientSettings } from 'db/client';
+import { getUserLanguage } from 'db/user';
+import { deleteCustomVoiceChannel, getCustomVoiceChannels } from 'db/voice';
 import { sendError } from 'utils/error';
 import { keys } from 'utils/keys';
 import { logger } from 'utils/logger';
@@ -39,7 +42,7 @@ export async function initDatabase(client: DiscordClient) {
 }
 
 async function clearCustomVoiceChannels(client: DiscordClient) {
-  const customVoiceChannels = await client.getCustomVoiceChannels();
+  const customVoiceChannels = await getCustomVoiceChannels();
   logger.debug(`[${client.cluster.id}] Found ${customVoiceChannels.length} custom voice channels`);
 
   // Iterate through each custom voice channel in the database
@@ -53,12 +56,12 @@ async function clearCustomVoiceChannels(client: DiscordClient) {
 
     // If we can't find the channel, delete it from the database
     if (!channel) {
-      return await client.deleteCustomVoiceChannel(customVoiceChannel.channelId);
+      return await deleteCustomVoiceChannel(customVoiceChannel.channelId);
     }
 
     // If the channel is empty, delete it
     if (channel.isVoiceBased() && !channel.members.size) {
-      await client.deleteCustomVoiceChannel(customVoiceChannel.channelId);
+      await deleteCustomVoiceChannel(customVoiceChannel.channelId);
       return await channel.delete().catch((err) => logger.debug({ err, customVoiceChannel }, 'Could not delete custom voice channel'));
     }
   }
@@ -68,7 +71,7 @@ async function clearWeekly(client: DiscordClient) {
   const WEEK = 604800000;
   const NOW = Date.now();
 
-  const { database } = await client.getClientSettings(keys.DISCORD_BOT_ID);
+  const { database } = await getClientSettings(keys.DISCORD_BOT_ID);
 
   // If now is bigger than last weekly clear plus a week
   if (NOW > database.lastWeeklyClear + WEEK) {
@@ -85,7 +88,7 @@ async function clearWeeklyLevel(client: DiscordClient, applicationId: string) {
   logger.debug(`[${client.cluster.id}] Cleared ${clearedLevel.deletedCount} weekly level`);
 
   // Update last weekly level clear with current date
-  await client.updateClientSettings(applicationId, {
+  await updateClientSettings(applicationId, {
     $set: { ['database.lastWeeklyClear']: Date.now() },
   });
 }
@@ -97,7 +100,7 @@ async function clearReminders(client: DiscordClient) {
   const dueReminders = await reminderModel.find({ remindAt: { $lte: NOW } });
 
   for (const reminder of dueReminders) {
-    const lng = await client.getUserLanguage(reminder.userId);
+    const lng = await getUserLanguage(reminder.userId);
     const embed = new EmbedBuilder()
       .setColor(Colors.Aqua)
       .setTitle(t('reminder.title', { lng }))

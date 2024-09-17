@@ -3,6 +3,8 @@ import { t } from 'i18next';
 
 import type { DiscordClient } from 'classes/client';
 
+import { getUserLanguage } from 'db/user';
+
 import { logger } from 'utils/logger';
 import { words } from 'utils/words';
 
@@ -69,8 +71,7 @@ export class Hangman {
   private async start() {
     const interaction = this.options.interaction;
     const user = interaction.user;
-    const client = this.options.client;
-    const lng = await client.getUserLanguage(user.id);
+    const lng = await getUserLanguage(user.id);
 
     const message = await interaction
       .editReply({
@@ -113,7 +114,7 @@ export class Hangman {
       if (buttonInteraction.user.id !== user.id)
         return buttonInteraction.followUp({
           content: t('interactions.author_only', {
-            lng: await client.getUserLanguage(buttonInteraction.user.id),
+            lng: await getUserLanguage(buttonInteraction.user.id),
           }),
           ephemeral: true,
         });

@@ -5,6 +5,7 @@ import { t } from 'i18next';
 import { Button } from 'classes/button';
 
 import { ticketModel } from 'models/ticket';
+import { getGuildSettings } from 'db/guild';
 
 import { logger } from 'utils/logger';
 
@@ -13,11 +14,11 @@ export default new Button({
   isCustomIdIncluded: true,
   permissions: [],
   botPermissions: ['SendMessages'],
-  async execute({ interaction, client }) {
+  async execute({ interaction }) {
     if (!interaction.inCachedGuild()) return;
     const { guildId, customId } = interaction;
 
-    const currentConfig = await client.getGuildSettings(guildId);
+    const currentConfig = await getGuildSettings(guildId);
     const lng = currentConfig.language;
 
     const system = currentConfig.ticket.systems.find((system) => system._id.toString() === customId.split('_')[1]);

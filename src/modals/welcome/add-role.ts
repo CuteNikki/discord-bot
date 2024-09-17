@@ -3,16 +3,19 @@ import { t } from 'i18next';
 
 import { Modal } from 'classes/modal';
 
+import { getGuildSettings, updateGuildSettings } from 'db/guild';
+import { getUserLanguage } from 'db/user';
+
 export default new Modal({
   customId: 'modal-welcome-add-role',
   permissions: ['ManageGuild'],
   async execute({ client, interaction }) {
     if (!interaction.inCachedGuild()) return;
     await interaction.deferReply();
-    const lng = await client.getUserLanguage(interaction.user.id);
+    const lng = await getUserLanguage(interaction.user.id);
 
     const roleId = interaction.fields.getTextInputValue('role-id');
-    const config = await client.getGuildSettings(interaction.guild.id);
+    const config = await getGuildSettings(interaction.guild.id);
 
     if (config.welcome.roles.includes(roleId)) {
       return interaction.editReply({
@@ -25,7 +28,7 @@ export default new Modal({
       });
     }
 
-    await client.updateGuildSettings(interaction.guild.id, {
+    await updateGuildSettings(interaction.guild.id, {
       $push: { ['welcome.roles']: roleId },
     });
 

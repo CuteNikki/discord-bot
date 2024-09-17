@@ -17,7 +17,10 @@ import events from 'events';
 import { t } from 'i18next';
 
 import type { DiscordClient } from 'classes/client';
+
 import type { Embed, Message } from 'models/guild';
+import { getUserLanguage } from 'db/user';
+
 import { logger } from 'utils/logger';
 
 export class CustomEmbedBuilder extends events {
@@ -57,9 +60,8 @@ export class CustomEmbedBuilder extends events {
 
   private async sendEmbedWithButtons() {
     const interaction = this.options.interaction;
-    const client = this.options.client;
     const user = interaction.user;
-    const lng = await client.getUserLanguage(user.id);
+    const lng = await getUserLanguage(user.id);
     const guild = interaction.guild;
 
     let embed = new EmbedBuilder().setDescription('** **');

@@ -3,6 +3,8 @@ import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
+import { getUserLanguage } from 'db/user';
+
 import { computeLeaderboard, getLeaderboard, getWeeklyLeaderboard } from 'utils/level';
 import { chunk, pagination } from 'utils/pagination';
 
@@ -19,7 +21,7 @@ export default new Command({
   async execute({ interaction, client }) {
     if (!interaction.inCachedGuild()) return;
     const { options, guildId } = interaction;
-    const lng = await client.getUserLanguage(interaction.user.id);
+    const lng = await getUserLanguage(interaction.user.id);
 
     const ephemeral = options.getBoolean('ephemeral', false) ?? true;
     await interaction.deferReply({ ephemeral });

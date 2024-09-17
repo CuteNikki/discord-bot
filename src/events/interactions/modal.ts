@@ -4,6 +4,8 @@ import { t } from 'i18next';
 import { Event } from 'classes/event';
 import type { Modal } from 'classes/modal';
 
+import { getUserData } from 'db/user';
+
 import { sendError } from 'utils/error';
 import { keys } from 'utils/keys';
 
@@ -13,7 +15,8 @@ export default new Event({
     // Since we only want the button interactions we return early if the interaction is not a button
     if (!interaction.isModalSubmit()) return;
 
-    const lng = await client.getUserLanguage(interaction.user.id);
+    const { banned, language: lng } = await getUserData(interaction.user.id);
+    if (banned) return;
 
     // Get the button with the interactions custom id and return if it wasn't found
     let modal: Modal | undefined;
@@ -29,9 +32,6 @@ export default new Event({
       }
     }
     if (!modal) return;
-
-    const user = await client.getUserData(interaction.user.id);
-    if (user.banned) return;
 
     // Permissions check
     if (modal.options.permissions?.length) {

@@ -2,6 +2,8 @@ import { ApplicationIntegrationType, InteractionContextType, SlashCommandBuilder
 
 import { Command, ModuleType } from 'classes/command';
 
+import { words } from 'utils/words';
+
 import { Connect4 } from 'games/connect4';
 import { FastType } from 'games/fast-type';
 import { Hangman } from 'games/hangman';
@@ -13,8 +15,6 @@ import { Sokoban } from 'games/sokoban';
 import { Tetris } from 'games/tetris';
 import { TicTacToe } from 'games/tic-tac-toe';
 import { Trivia, TriviaDifficulty, TriviaMode } from 'games/trivia';
-
-import { words } from 'utils/words';
 
 export default new Command({
   module: ModuleType.Fun,

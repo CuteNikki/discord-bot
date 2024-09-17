@@ -4,6 +4,8 @@ import { t } from 'i18next';
 import { Event } from 'classes/event';
 import type { Selection } from 'classes/selection';
 
+import { getUserData } from 'db/user';
+
 import { sendError } from 'utils/error';
 import { keys } from 'utils/keys';
 
@@ -13,7 +15,8 @@ export default new Event({
     // Since we only want the selection interactions we return early if the interaction is not a selection
     if (!interaction.isAnySelectMenu()) return;
 
-    const lng = await client.getUserLanguage(interaction.user.id);
+    const { banned, language: lng } = await getUserData(interaction.user.id);
+    if (banned) return;
 
     // Get the selection with the interactions custom id and return if it wasn't found
     let selection: Selection | undefined;
@@ -29,9 +32,6 @@ export default new Event({
       }
     }
     if (!selection) return;
-
-    const user = await client.getUserData(interaction.user.id);
-    if (user.banned) return;
 
     // Check author only
     if (selection.options.isAuthorOnly) {

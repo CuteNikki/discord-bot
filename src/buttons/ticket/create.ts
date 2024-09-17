@@ -4,6 +4,7 @@ import { t } from 'i18next';
 import { Button } from 'classes/button';
 
 import { ticketModel } from 'models/ticket';
+import { getGuildSettings } from 'db/guild';
 
 import { logger } from 'utils/logger';
 
@@ -12,14 +13,14 @@ export default new Button({
   isCustomIdIncluded: true,
   permissions: [],
   botPermissions: ['ManageChannels', 'SendMessages'],
-  async execute({ interaction, client }) {
+  async execute({ interaction }) {
     if (!interaction.inCachedGuild()) return;
     await interaction.deferReply({ ephemeral: true });
     const { user, guildId, customId, guild } = interaction;
 
     const choiceIndex = parseInt(customId.split('_')[2]);
 
-    const currentConfig = await client.getGuildSettings(guildId);
+    const currentConfig = await getGuildSettings(guildId);
     const lng = currentConfig.language;
 
     const system = currentConfig.ticket.systems.find((system) => system._id.toString() === customId.split('_')[1]);

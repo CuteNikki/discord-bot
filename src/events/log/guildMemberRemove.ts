@@ -3,16 +3,18 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
+import { getGuildSettings } from 'db/guild';
+
 import { logger } from 'utils/logger';
 
 export default new Event({
   name: Events.GuildMemberRemove,
   once: false,
-  async execute(client, member) {
+  async execute(_client, member) {
     const { guild, user, partial, joinedTimestamp } = member;
     if (partial) await member.fetch().catch((err) => logger.debug({ err }, 'Could not fetch member'));
 
-    const config = await client.getGuildSettings(guild.id);
+    const config = await getGuildSettings(guild.id);
 
     if (!config.log.enabled || !config.log.events.guildMemberRemove || !config.log.channelId) return;
 

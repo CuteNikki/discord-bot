@@ -1,13 +1,6 @@
 import { ClusterClient, getInfo } from 'discord-hybrid-sharding';
 import { ActivityType, Client, Collection, Colors, GatewayIntentBits, Partials, PresenceUpdateStatus } from 'discord.js';
 
-import type { UpdateQuery } from 'mongoose';
-
-import { clientModel, type ClientSettings } from 'models/client';
-import { customVoiceChannelModel, type CustomVoiceChannel } from 'models/customVoiceChannels';
-import { guildModel, type GuildSettings } from 'models/guild';
-import { userModel, type UserData } from 'models/user';
-
 import type { Button } from 'classes/button';
 import type { Command } from 'classes/command';
 import type { Modal } from 'classes/modal';
@@ -19,10 +12,11 @@ import { loadEvents } from 'loaders/events';
 import { loadModals } from 'loaders/modals';
 import { loadSelections } from 'loaders/selection';
 
-import { initDatabase } from 'utils/database';
+import { initDatabase } from 'db/init';
+
 import { listenToErrors } from 'utils/error';
 import { keys } from 'utils/keys';
-import { initTranslation, supportedLanguages } from 'utils/language';
+import { initTranslation } from 'utils/language';
 
 export class DiscordClient extends Client {
   // Cluster used for sharding from discord-hybrid-sharding
@@ -112,183 +106,5 @@ export class DiscordClient extends Client {
 
   private async loadModules() {
     await Promise.allSettled([loadEvents(this), loadCommands(this), loadButtons(this), loadModals(this), loadSelections(this)]);
-  }
-
-  /**
-   * Gets or creates the guild settings for a given guild ID
-   * @param {string} guildId Guild ID to get the settings for
-   * @returns {Promise<GuildSettings>} Guild settings
-   */
-  public async getGuildSettings(guildId: string): Promise<GuildSettings> {
-    return await guildModel.findOneAndUpdate({ guildId }, {}, { upsert: true, new: true }).lean().exec();
-  }
-
-  /**
-   * Updates the guild settings for a given guild ID
-   * @param {string} guildId Guild ID to update the settings for
-   * @param {UpdateQuery<GuildSettings>} query Query to update the settings with
-   * @returns {Promise<GuildSettings>} Updated guild settings
-   */
-  public async updateGuildSettings(guildId: string, query: UpdateQuery<GuildSettings>): Promise<GuildSettings> {
-    return await guildModel.findOneAndUpdate({ guildId }, query, { upsert: true, new: true }).lean().exec();
-  }
-
-  /**
-   * Gets the language for a given guild ID
-   * @param {string} guildId Guild ID to get the language for
-   * @returns {Promise<string>} Language
-   */
-  public async getGuildLanguage(guildId: string | null | undefined): Promise<string> {
-    // Return default language if no valid guildId is provided
-    if (!guildId) return supportedLanguages[0];
-
-    // Fetch guild from db and return language
-    const guild = await guildModel.findOne({ guildId }, {}, { upsert: false }).lean().exec();
-    return guild?.language ?? supportedLanguages[0];
-  }
-
-  /**
-   * Updates the language for a given guild ID
-   * @param {string} guildId Guild ID to update the language for
-   * @param {string} language Language to update the guild with
-   * @returns {Promise<GuildSettings>} Updated guild
-   */
-  public async updateGuildLanguage(guildId: string, language: string): Promise<GuildSettings> {
-    // If language is not supported, use the default language
-    if (!supportedLanguages.includes(language)) language = supportedLanguages[0];
-
-    // Update the guild in db
-    return await this.updateGuildSettings(guildId, { $set: { language } });
-  }
-
-  /**
-   * Gets the language for a given user ID
-   * @param {string} userId User ID to get the language for
-   * @returns {Promise<string>} Language
-   */
-  public async getUserLanguage(userId: string | null | undefined): Promise<string> {
-    // Return default language if no valid userId is provided
-    if (!userId) return supportedLanguages[0];
-
-    // Return language from user db
-    const userData = await userModel.findOne({ userId }, {}, { upsert: false }).lean().exec();
-    return userData?.language ?? supportedLanguages[0];
-  }
-
-  /**
-   * Updates the language for a given user ID
-   * @param {string} userId User ID to update the language for
-   * @param {string} language Language to update the user with
-   * @returns {Promise<UserData>} Updated user
-   */
-  public async updateUserLanguage(userId: string, language: string): Promise<UserData> {
-    // If language is not supported, use the default language
-    if (!supportedLanguages.includes(language)) language = supportedLanguages[0];
-
-    // Update the user in db
-    return await this.updateUserData(userId, { $set: { language } });
-  }
-
-  /**
-   * Gets the user data for a given user ID
-   * @param {string} userId User ID to get the user data for
-   * @returns {Promise<UserData>} User data
-   */
-  public async getUserData(userId: string): Promise<UserData> {
-    return await userModel.findOneAndUpdate({ userId }, {}, { upsert: true, new: true });
-  }
-
-  /**
-   * Updates the user data for a given user ID
-   * @param {string} userId User ID to update the user data for
-   * @param {UpdateQuery<UserData>} query Query to update the user data with
-   * @returns {Promise<UserData>} Updated user data
-   */
-  public async updateUserData(userId: string, query: UpdateQuery<UserData>): Promise<UserData> {
-    return await userModel.findOneAndUpdate({ userId }, query, { upsert: true, new: true });
-  }
-
-  /**
-   * Gets the client settings for a given application ID
-   * @param {string} applicationId Application ID to get the client settings for
-   * @returns {Promise<ClientSettings>} Client settings
-   */
-  public async getClientSettings(applicationId: string): Promise<ClientSettings> {
-    return await clientModel.findOneAndUpdate({ applicationId }, {}, { upsert: true, new: true }).lean().exec();
-  }
-
-  /**
-   * Updates the client settings for a given application ID
-   * @param {string} applicationId Application ID to update the client settings for
-   * @param {UpdateQuery<ClientSettings>} query Query to update the client settings with
-   * @returns {Promise<ClientSettings>} Updated client settings
-   */
-  public async updateClientSettings(applicationId: string, query: UpdateQuery<ClientSettings>): Promise<ClientSettings> {
-    return await clientModel.findOneAndUpdate({ applicationId }, query, { upsert: true, new: true }).lean().exec();
-  }
-
-  /**
-   * Gets the custom voice channel data for a given channel ID
-   * @param {string} channelId Channel ID to get the custom voice channel data for
-   * @returns {Promise<CustomVoiceChannel | null>} CustomVoiceChannel data or null if not found
-   */
-  public async getCustomVoiceChannel(channelId: string): Promise<CustomVoiceChannel | null> {
-    return await customVoiceChannelModel.findOne({ channelId }, {}, { upsert: false }).lean().exec();
-  }
-
-  /**
-   * Gets the custom voice channel data for a given owner ID
-   * @param {string} ownerId Owner ID to get the custom voice channel data for
-   * @returns {Promise<CustomVoiceChannel | null>} CustomVoiceChannel or null if not found
-   */
-  public async getCustomVoiceChannelByOwner(ownerId: string): Promise<CustomVoiceChannel | null> {
-    return await customVoiceChannelModel.findOne({ ownerId }, {}, { upsert: false }).lean().exec();
-  }
-
-  /**
-   * Gets all custom voice channels
-   * @returns {Promise<CustomVoiceChannel[]>} An array of CustomVoiceChannel data
-   */
-  public async getCustomVoiceChannels(): Promise<CustomVoiceChannel[]> {
-    return await customVoiceChannelModel.find().lean().exec();
-  }
-
-  /**
-   * Gets all custom voice channels that belong to a given guild
-   * @param {string} guildId Guild ID to get the custom voice channels for
-   * @returns {Promise<CustomVoiceChannel[]>} An array of CustomVoiceChannel data
-   */
-  public async getCustomVoiceChannelsByGuild(guildId: string): Promise<CustomVoiceChannel[]> {
-    return await customVoiceChannelModel.find({ guildId }).lean().exec();
-  }
-
-  /**
-   * Updates a custom voice channel
-   * @param {string} channelId Channel ID to update
-   * @param {UpdateQuery<CustomVoiceChannel>} query Query to update the custom voice channel with
-   * @returns {Promise<CustomVoiceChannel>} updated CustomVoiceChannel
-   */
-  public async updateCustomVoiceChannel(channelId: string, query: UpdateQuery<CustomVoiceChannel>): Promise<CustomVoiceChannel> {
-    return await customVoiceChannelModel.findOneAndUpdate({ channelId }, query, { upsert: true, new: true }).lean().exec();
-  }
-
-  /**
-   * Deletes a custom voice channel
-   * @param {string} channelId Channel ID to delete
-   * @returns {Promise<CustomVoiceChannel | null>} Deleted CustomVoiceChannel or null if not found
-   */
-  public async deleteCustomVoiceChannel(channelId: string): Promise<CustomVoiceChannel | null> {
-    return await customVoiceChannelModel.findOneAndDelete({ channelId }, { upsert: false }).lean().exec();
-  }
-
-  /**
-   * Create a new custom voice channel
-   * @param {string} channelId Channel ID to create the custom voice channel for
-   * @param {string} guildId Guild ID to create the custom voice channel for
-   * @param {string} ownerId Owner ID to create the custom voice channel for
-   * @returns {Promise<CustomVoiceChannel>} Created CustomVoiceChannel
-   */
-  public async createCustomVoiceChannel(channelId: string, guildId: string, ownerId: string): Promise<CustomVoiceChannel> {
-    return await customVoiceChannelModel.findOneAndUpdate({ channelId }, { $set: { ownerId, guildId } }, { upsert: true, new: true }).lean().exec();
   }
 }

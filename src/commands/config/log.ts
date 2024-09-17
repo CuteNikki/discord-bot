@@ -4,6 +4,8 @@ import { t } from 'i18next';
 import { Command, ModuleType } from 'classes/command';
 
 import { availableEvents } from 'models/guild';
+import { getUserLanguage } from 'db/user';
+import { getGuildSettings, updateGuildSettings } from 'db/guild';
 
 export default new Command({
   module: ModuleType.Config,
@@ -71,13 +73,13 @@ export default new Command({
         .slice(0, 25),
     );
   },
-  async execute({ client, interaction }) {
+  async execute({ interaction }) {
     if (!interaction.inCachedGuild()) return;
     const { options, guildId } = interaction;
     await interaction.deferReply({ ephemeral: true });
-    const lng = await client.getUserLanguage(interaction.user.id);
+    const lng = await getUserLanguage(interaction.user.id);
 
-    const config = await client.getGuildSettings(guildId);
+    const config = await getGuildSettings(guildId);
     const events = availableEvents
       .map((eventName) => ({
         name: eventName,
@@ -141,7 +143,7 @@ export default new Command({
                 const event = events.find((e) => e.name.toLowerCase() === eventName.toLowerCase());
 
                 if (eventName.toLowerCase() === 'recommended') {
-                  await client.updateGuildSettings(guildId, {
+                  await updateGuildSettings(guildId, {
                     $set: {
                       ['log.events']: {
                         applicationCommandPermissionsUpdate: config.log.events.applicationCommandPermissionsUpdate,
@@ -188,7 +190,7 @@ export default new Command({
                   return interaction.editReply(t('log.events.enabled', { lng }));
                 }
                 if (eventName.toLowerCase() === 'all') {
-                  await client.updateGuildSettings(guildId, {
+                  await updateGuildSettings(guildId, {
                     $set: {
                       ['log.events']: {
                         applicationCommandPermissionsUpdate: true,
@@ -238,7 +240,7 @@ export default new Command({
                 if (!event) return interaction.editReply(t('log.events.invalid', { lng }));
                 if (event.enabled) return interaction.editReply(t('log.events.already_enabled', { lng }));
 
-                await client.updateGuildSettings(guildId, {
+                await updateGuildSettings(guildId, {
                   $set: { [`log.events.${event.name}`]: true },
                 });
                 interaction.editReply(t('log.events.enabled', { lng }));
@@ -250,7 +252,7 @@ export default new Command({
                 const event = events.find((e) => e.name.toLowerCase() === eventName.toLowerCase());
 
                 if (eventName.toLowerCase() === 'recommended') {
-                  await client.updateGuildSettings(guildId, {
+                  await updateGuildSettings(guildId, {
                     $set: {
                       ['log.events']: {
                         applicationCommandPermissionsUpdate: false,
@@ -297,7 +299,7 @@ export default new Command({
                   return interaction.editReply(t('log.events.disabled', { lng }));
                 }
                 if (eventName.toLowerCase() === 'all') {
-                  await client.updateGuildSettings(guildId, {
+                  await updateGuildSettings(guildId, {
                     $set: {
                       ['log.events']: {
                         applicationCommandPermissionsUpdate: false,
@@ -347,7 +349,7 @@ export default new Command({
                 if (!event) return interaction.editReply(t('log.events.invalid', { lng }));
                 if (!event.enabled) return interaction.editReply(t('log.events.already_disabled', { lng }));
 
-                await client.updateGuildSettings(guildId, {
+                await updateGuildSettings(guildId, {
                   $set: { [`log.events.${event.name}`]: false },
                 });
                 interaction.editReply(t('log.events.disabled', { lng }));
@@ -362,7 +364,7 @@ export default new Command({
             case 'set':
               {
                 const channel = options.getChannel('channel', true, [ChannelType.GuildText]);
-                await client.updateGuildSettings(guildId, {
+                await updateGuildSettings(guildId, {
                   $set: { ['log.channelId']: channel.id },
                 });
                 interaction.editReply(t('log.channel.set', { lng }));
@@ -371,7 +373,7 @@ export default new Command({
             case 'remove':
               {
                 if (!config.log.channelId) return interaction.editReply(t('log.channel.none', { lng }));
-                await client.updateGuildSettings(guildId, {
+                await updateGuildSettings(guildId, {
                   $set: { ['log.channelId']: undefined },
                 });
                 interaction.editReply(t('log.channel.removed', { lng }));

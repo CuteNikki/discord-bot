@@ -4,6 +4,10 @@ import { t } from 'i18next';
 import { ModuleType } from 'classes/command';
 import { Event } from 'classes/event';
 
+import { getGuildSettings } from 'db/guild';
+import { getUserData } from 'db/user';
+import { updateClientSettings } from 'db/client';
+
 import { sendError } from 'utils/error';
 import { keys } from 'utils/keys';
 
@@ -13,18 +17,17 @@ export default new Event({
     // Since we only want the command interactions we return early if the interaction is not a command
     if (!interaction.isCommand()) return;
 
-    const lng = await client.getUserLanguage(interaction.user.id);
+    const { banned, language: lng }= await getUserData(interaction.user.id);
+    if (banned) return;
 
     // Get the command with the interactions command name and return if it wasn't found
     const command = client.commands.get(interaction.commandName);
     if (!command) return;
 
-    const user = await client.getUserData(interaction.user.id);
-    if (user.banned) return;
 
     // Only allowing commands if their module is enabled
     if (interaction.guild) {
-      const guildSettings = await client.getGuildSettings(interaction.guild.id);
+      const guildSettings = await getGuildSettings(interaction.guild.id);
       const message: InteractionReplyOptions = {
         content: t('interactions.module', {
           lng,
@@ -98,7 +101,7 @@ export default new Event({
     try {
       await command.options.execute({ client, interaction });
 
-      await client.updateClientSettings(keys.DISCORD_BOT_ID, {
+      await updateClientSettings(keys.DISCORD_BOT_ID, {
         $inc: { ['stats.commandsExecuted']: 1 },
       });
     } catch (err: any) {
@@ -111,7 +114,7 @@ export default new Event({
       else interaction.reply({ content: message, ephemeral: true });
 
       await sendError({ client, err, location: `Command Interaction Error: ${command.options.data.name}` });
-      await client.updateClientSettings(keys.DISCORD_BOT_ID, {
+      await updateClientSettings(keys.DISCORD_BOT_ID, {
         $inc: { ['stats.commandsFailed']: 1 },
       });
     }

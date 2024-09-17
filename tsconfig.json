@@ -38,6 +38,7 @@
       "utils/*": ["./src/structure/utilities/*"],
       "models/*": ["./src/structure/models/*"],
       "games/*": ["./src/structure/games/*"],
+      "db/*": ["./src/structure/db/*"],
       "src/*": ["./src/*"],
       "root/*": ["./*"]
     }

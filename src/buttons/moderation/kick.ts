@@ -3,6 +3,7 @@ import { t } from 'i18next';
 import { Button } from 'classes/button';
 
 import { infractionModel, InfractionType } from 'models/infraction';
+import { getUserLanguage } from 'db/user';
 
 import { logger } from 'utils/logger';
 
@@ -19,10 +20,10 @@ export default new Button({
     const targetId = interaction.customId.split('_')[1];
     const targetMember = await guild.members.fetch(targetId).catch((err) => logger.debug({ err, targetId }, 'Could not fetch user'));
 
-    const lng = await client.getUserLanguage(interaction.user.id);
+    const lng = await getUserLanguage(interaction.user.id);
 
     if (!targetMember) return interaction.reply(t('kick.target.invalid', { lng }));
-    const targetLng = await client.getUserLanguage(targetId);
+    const targetLng = await getUserLanguage(targetId);
     const reason = 'Suspicious Account';
 
     const kicked = await targetMember.kick(reason).catch((err) => logger.debug({ err, targetId }, 'Could not kick user'));

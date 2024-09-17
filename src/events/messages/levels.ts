@@ -3,6 +3,8 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
+import { getGuildLanguage, getGuildSettings } from 'db/guild';
+import { getUserLanguage } from 'db/user';
 import { AnnouncementType } from 'models/guild';
 
 import { appendXP, getDataOrCreate, getLevelRewards, randomXP } from 'utils/level';
@@ -17,7 +19,7 @@ export default new Event({
     const { guildId, channelId, author, guild, member, channel } = message;
     if (author.bot || cooldowns.has(author.id) || !member || !guild || !guildId) return;
 
-    const guildSettings = await client.getGuildSettings(guildId);
+    const guildSettings = await getGuildSettings(guildId);
 
     if (
       !guildSettings ||
@@ -37,8 +39,7 @@ export default new Event({
 
     if (currentData.level < newData.level) {
       const rewards = await getLevelRewards(client, newData);
-      const lng =
-        guildSettings.level.announcement === AnnouncementType.OtherChannel ? await client.getGuildLanguage(guild.id) : await client.getUserLanguage(author.id);
+      const lng = guildSettings.level.announcement === AnnouncementType.OtherChannel ? await getGuildLanguage(guild.id) : await getUserLanguage(author.id);
 
       const levelUpEmbed = new EmbedBuilder()
         .setColor(Colors.Blurple)

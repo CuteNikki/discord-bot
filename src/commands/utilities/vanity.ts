@@ -3,6 +3,8 @@ import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
+import { getUserLanguage } from 'db/user';
+
 import { logger } from 'utils/logger';
 
 export default new Command({
@@ -16,7 +18,7 @@ export default new Command({
     .addStringOption((option) => option.setName('vanity').setDescription('The vanity to check').setRequired(true)),
   async execute({ interaction, client }) {
     await interaction.deferReply({ ephemeral: true });
-    const lng = await client.getUserLanguage(interaction.user.id);
+    const lng = await getUserLanguage(interaction.user.id);
 
     const vanity = interaction.options.getString('vanity', true);
     const invite = await client.fetchInvite(vanity).catch((err) => logger.debug({ err, vanity }, 'Could not fetch invite'));

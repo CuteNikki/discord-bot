@@ -2,6 +2,10 @@ import { Events, Message } from 'discord.js';
 import { t } from 'i18next';
 
 import { Event } from 'classes/event';
+
+import { getGuildSettings, updateGuildSettings } from 'db/guild';
+import { getUserLanguage } from 'db/user';
+
 import { logger } from 'utils/logger';
 
 export default new Event({
@@ -12,8 +16,8 @@ export default new Event({
     if (!message.inGuild() || message.author.bot) return;
     const { guildId, channel, author } = message;
 
-    const lng = await client.getUserLanguage(author.id);
-    const config = await client.getGuildSettings(guildId);
+    const lng = await getUserLanguage(author.id);
+    const config = await getGuildSettings(guildId);
 
     // Return early if not in counting channel
     if (!config.counting.channelId || channel.id !== config.counting.channelId) return;
@@ -51,7 +55,7 @@ export default new Event({
 
       if (!config.counting.resetOnFail) return;
 
-      await client.updateGuildSettings(guildId, {
+      await updateGuildSettings(guildId, {
         $set: {
           'counting.currentNumber': 0,
           'counting.currentNumberBy': null,
@@ -67,7 +71,7 @@ export default new Event({
     // Correct number, proceed with updating and reacting
     await handleReaction(message, '✅');
 
-    await client.updateGuildSettings(guildId, {
+    await updateGuildSettings(guildId, {
       $set: {
         'counting.highestNumber': Math.max(config.counting.highestNumber, nextNumber),
         'counting.highestNumberAt': nextNumber >= config.counting.highestNumber ? Date.now() : config.counting.highestNumberAt,

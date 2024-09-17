@@ -3,14 +3,16 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
+import { getGuildSettings } from 'db/guild';
+
 export default new Event({
   name: Events.GuildStickerDelete,
   once: false,
-  async execute(client, sticker) {
+  async execute(_client, sticker) {
     const { guild, name, id, url, description, format, tags, createdTimestamp } = sticker;
     if (!guild) return;
 
-    const config = await client.getGuildSettings(guild.id);
+    const config = await getGuildSettings(guild.id);
 
     if (!config.log.enabled || !config.log.events.stickerDelete || !config.log.channelId) return;
 

@@ -13,6 +13,8 @@ import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
+import { getUserLanguage } from 'db/user';
+
 export default new Command({
   module: ModuleType.Utilities,
   botPermissions: ['SendMessages'],
@@ -24,7 +26,7 @@ export default new Command({
     .addBooleanOption((option) => option.setName('ephemeral').setDescription('When set to false will show the message to everyone')),
   async execute({ interaction, client }) {
     if (!interaction.isChatInputCommand() || !interaction.inCachedGuild()) return;
-    const lng = await client.getUserLanguage(interaction.user.id);
+    const lng = await getUserLanguage(interaction.user.id);
     const ephemeral = interaction.options.getBoolean('ephemeral', false) ?? true;
     await interaction.deferReply({ ephemeral });
 

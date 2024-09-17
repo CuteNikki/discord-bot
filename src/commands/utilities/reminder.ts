@@ -4,6 +4,7 @@ import ms from 'ms';
 
 import { Command, ModuleType } from 'classes/command';
 
+import { getUserLanguage } from 'db/user';
 import { reminderModel } from 'models/reminder';
 
 export default new Command({
@@ -28,11 +29,11 @@ export default new Command({
         .addStringOption((option) => option.setName('reminder-id').setDescription('The id of the reminder').setRequired(true)),
     )
     .addSubcommand((subcommand) => subcommand.setName('list').setDescription('Lists all your reminders')),
-  async execute({ interaction, client }) {
+  async execute({ interaction }) {
     await interaction.deferReply({ ephemeral: true });
     const { user, options } = interaction;
 
-    const lng = await client.getUserLanguage(user.id);
+    const lng = await getUserLanguage(user.id);
 
     const reminders = await reminderModel.find({ userId: user.id }).lean().exec();
 

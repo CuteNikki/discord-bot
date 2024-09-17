@@ -13,6 +13,9 @@ import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
+import { getUserLanguage } from 'db/user';
+import { getGuildSettings, updateGuildSettings } from 'db/guild';
+
 import { logger } from 'utils/logger';
 
 export default new Command({
@@ -120,14 +123,14 @@ export default new Command({
             .addChannelOption((option) => option.setName('channel').setDescription('The channel to send the ticket system to').setRequired(true)),
         ),
     ),
-  async execute({ client, interaction }) {
+  async execute({ interaction }) {
     if (!interaction.inCachedGuild()) return;
     await interaction.deferReply({ ephemeral: true });
 
     const { options, guild, user } = interaction;
-    const lng = await client.getUserLanguage(user.id);
+    const lng = await getUserLanguage(user.id);
 
-    const currentConfig = await client.getGuildSettings(guild.id);
+    const currentConfig = await getGuildSettings(guild.id);
 
     switch (options.getSubcommandGroup()) {
       case 'show':
@@ -229,7 +232,7 @@ export default new Command({
                   return await interaction.editReply({
                     content: 'The ticket module is already enabled',
                   });
-                await client.updateGuildSettings(guild.id, {
+                await updateGuildSettings(guild.id, {
                   $set: { ['ticket.enabled']: true },
                 });
                 await interaction.editReply({
@@ -243,7 +246,7 @@ export default new Command({
                   return await interaction.editReply({
                     content: 'The ticket module is already disabled',
                   });
-                await client.updateGuildSettings(guild.id, {
+                await updateGuildSettings(guild.id, {
                   $set: { ['ticket.enabled']: false },
                 });
                 await interaction.editReply({
@@ -268,7 +271,7 @@ export default new Command({
               const category = options.getChannel('category', false);
               const maxTickets = options.getInteger('max-tickets', false);
 
-              const config = await client.updateGuildSettings(guild.id, {
+              const config = await updateGuildSettings(guild.id, {
                 $push: {
                   ['ticket.systems']: {
                     staffRoleId: staffRole.id,
@@ -301,7 +304,7 @@ export default new Command({
                   content: 'The ticket system does not exist',
                 });
 
-              await client.updateGuildSettings(guild.id, {
+              await updateGuildSettings(guild.id, {
                 $set: {
                   ['ticket.systems']: currentConfig.ticket.systems.map((system) => {
                     if (system._id.toString() === id) {
@@ -325,7 +328,7 @@ export default new Command({
             break;
           case 'delete':
             {
-              await client.updateGuildSettings(guild.id, {
+              await updateGuildSettings(guild.id, {
                 $pull: {
                   ['ticket.systems']: {
                     _id: options.getString('id', true),
@@ -356,7 +359,7 @@ export default new Command({
                   content: t('tickets.choice_limit', { lng }),
                 });
 
-              await client.updateGuildSettings(guild.id, {
+              await updateGuildSettings(guild.id, {
                 $set: {
                   ['ticket.systems']: currentConfig.ticket.systems.map((system) => {
                     if (system._id.toString() === id) {
@@ -390,7 +393,7 @@ export default new Command({
                   content: t('tickets.choice_invalid', { lng }),
                 });
 
-              await client.updateGuildSettings(guild.id, {
+              await updateGuildSettings(guild.id, {
                 $set: {
                   ['ticket.systems']: currentConfig.ticket.systems.map((system) => {
                     if (system._id.toString() === id) {

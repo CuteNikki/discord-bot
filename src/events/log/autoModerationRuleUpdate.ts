@@ -3,13 +3,15 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
+import { getGuildSettings } from 'db/guild';
+
 export default new Event({
   name: Events.AutoModerationRuleUpdate,
   once: false,
-  async execute(client, oldAutoModerationRule, newAutoModerationRule) {
+  async execute(_client, oldAutoModerationRule, newAutoModerationRule) {
     const guild = newAutoModerationRule.guild;
 
-    const config = await client.getGuildSettings(guild.id);
+    const config = await getGuildSettings(guild.id);
 
     if (!config.log.enabled || !config.log.events.autoModerationRuleUpdate || !config.log.channelId || !oldAutoModerationRule || !newAutoModerationRule) return;
 

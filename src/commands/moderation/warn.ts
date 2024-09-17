@@ -13,6 +13,7 @@ import { t } from 'i18next';
 import { Command, ModuleType } from 'classes/command';
 
 import { InfractionType, infractionModel } from 'models/infraction';
+import { getUserLanguage } from 'db/user';
 
 import { logger } from 'utils/logger';
 
@@ -40,8 +41,8 @@ export default new Command({
 
     const target = options.getUser('user', true);
 
-    const lng = await client.getUserLanguage(interaction.user.id);
-    const targetLng = await client.getUserLanguage(target.id);
+    const lng = await getUserLanguage(interaction.user.id);
+    const targetLng = await getUserLanguage(target.id);
 
     const reason = options.getString('reason', false) ?? undefined;
 

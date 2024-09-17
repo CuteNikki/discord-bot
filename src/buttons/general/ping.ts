@@ -3,6 +3,8 @@ import { t } from 'i18next';
 
 import { Button } from 'classes/button';
 
+import { getUserLanguage } from 'db/user';
+
 export default new Button({
   customId: 'button-ping-update',
   isAuthorOnly: false,
@@ -10,7 +12,7 @@ export default new Button({
   permissions: [],
   botPermissions: ['SendMessages'],
   async execute({ interaction, client }) {
-    const lng = await client.getUserLanguage(interaction.user.id);
+    const lng = await getUserLanguage(interaction.user.id);
 
     const sent = await interaction.update({
       content: t('ping.pinging', { lng }),

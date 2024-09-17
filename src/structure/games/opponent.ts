@@ -1,7 +1,9 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, Message, type ChatInputCommandInteraction, type User } from 'discord.js';
+import { t } from 'i18next';
 
 import type { DiscordClient } from 'classes/client';
-import { t } from 'i18next';
+
+import { getUserLanguage } from 'db/user';
 
 import { logger } from 'utils/logger';
 
@@ -23,12 +25,11 @@ export class Opponent {
     const user = this.options.interaction.user;
     const opponent = this.options.opponent;
     const interaction = this.options.interaction;
-    const client = this.options.client;
 
     if (!opponent) return false;
 
-    const lng = await client.getUserLanguage(user.id);
-    const opponentLng = await client.getUserLanguage(opponent.id);
+    const lng = await getUserLanguage(user.id);
+    const opponentLng = await getUserLanguage(opponent.id);
 
     if (opponent.id === user.id) {
       await interaction.editReply(t('games.invitation.yourself', { lng })).catch((err) => logger.debug({ err }, 'Could not edit message'));
@@ -81,7 +82,7 @@ export class Opponent {
           return buttonInteraction
             .followUp({
               content: t('interactions.author_only', {
-                lng: await client.getUserLanguage(buttonInteraction.user.id),
+                lng: await getUserLanguage(buttonInteraction.user.id),
               }),
               ephemeral: true,
             })

@@ -2,6 +2,8 @@ import { Events } from 'discord.js';
 
 import { Event } from 'classes/event';
 
+import { getGuildSettings, updateGuildSettings } from 'db/guild';
+
 import { logger } from 'utils/logger';
 
 export default new Event({
@@ -9,13 +11,13 @@ export default new Event({
   async execute(client, message) {
     if (!message.inGuild() || !message.author || message.author.bot) return;
 
-    const config = await client.getGuildSettings(message.guild.id);
+    const config = await getGuildSettings(message.guild.id);
     if (!config.starboard.enabled || !config.starboard.channelId || !config.starboard.minimumStars) return;
 
     const knownMessage = config.starboard.messages.find((msg) => msg.messageId === message.id);
     if (!knownMessage || !knownMessage.starboardMessageId) return;
 
-    await client.updateGuildSettings(message.guild.id, {
+    await updateGuildSettings(message.guild.id, {
       $pull: {
         ['starboard.messages']: knownMessage,
       },

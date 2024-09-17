@@ -15,6 +15,8 @@ import { Opponent } from 'games/opponent';
 
 import type { DiscordClient } from 'classes/client';
 
+import { getUserLanguage } from 'db/user';
+
 import { logger } from 'utils/logger';
 
 export class Connect4 extends Opponent {
@@ -74,10 +76,9 @@ export class Connect4 extends Opponent {
     const interaction = this.options.interaction;
     const user = interaction.user;
     const opponent = this.options.opponent;
-    const client = this.options.client;
 
-    const lng = await client.getUserLanguage(user.id);
-    const opponentLng = await client.getUserLanguage(opponent.id);
+    const lng = await getUserLanguage(user.id);
+    const opponentLng = await getUserLanguage(opponent.id);
 
     const message = await this.isApprovedByOpponent();
     if (!message) return;
@@ -111,7 +112,7 @@ export class Connect4 extends Opponent {
         return buttonInteraction
           .followUp({
             content: t('interactions.author_only', {
-              lng: await client.getUserLanguage(buttonInteraction.user.id),
+              lng: await getUserLanguage(buttonInteraction.user.id),
             }),
             ephemeral: true,
           })

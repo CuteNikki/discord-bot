@@ -3,13 +3,15 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
+import { getGuildSettings } from 'db/guild';
+
 export default new Event({
   name: Events.ThreadUpdate,
   once: false,
-  async execute(client, oldThread, newThread) {
+  async execute(_client, oldThread, newThread) {
     const guild = newThread.guild;
 
-    const config = await client.getGuildSettings(guild.id);
+    const config = await getGuildSettings(guild.id);
 
     if (!config.log.enabled || !config.log.events.threadUpdate || !config.log.channelId) return;
 

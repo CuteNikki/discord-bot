@@ -2,6 +2,8 @@ import { ApplicationIntegrationType, Colors, EmbedBuilder, InteractionContextTyp
 
 import { Command, ModuleType } from 'classes/command';
 
+import { getClientSettings, updateClientSettings } from 'db/client';
+import { getUserData, updateUserData } from 'db/user';
 import { BadgeType, userModel } from 'models/user';
 
 import { keys } from 'utils/keys';
@@ -127,7 +129,7 @@ export default new Command({
     await interaction.deferReply();
     const { options, user } = interaction;
 
-    const userData = await client.getUserData(user.id);
+    const userData = await getUserData(user.id);
     const badges = userData.badges.map((badge) => badge.id);
 
     switch (options.getSubcommandGroup()) {
@@ -137,14 +139,14 @@ export default new Command({
             if (!badges.includes(BadgeType.Developer)) return interaction.editReply('You are not a developer of this bot!');
           }
 
-          const settings = await client.getClientSettings(keys.DISCORD_BOT_ID);
+          const settings = await getClientSettings(keys.DISCORD_BOT_ID);
 
           switch (options.getSubcommand()) {
             case 'set':
               {
                 const guildId = options.getString('guild-id', true);
                 if (settings.support.guildId === guildId) return interaction.editReply('That is already the guild id');
-                await client.updateClientSettings(keys.DISCORD_BOT_ID, {
+                await updateClientSettings(keys.DISCORD_BOT_ID, {
                   $set: { ['support.guildId']: guildId },
                 });
                 interaction.editReply('Guild id has been set');
@@ -153,7 +155,7 @@ export default new Command({
             case 'remove':
               {
                 if (settings.support.guildId === 'unavailable') return interaction.editReply('There is no guild id to remove');
-                await client.updateClientSettings(keys.DISCORD_BOT_ID, {
+                await updateClientSettings(keys.DISCORD_BOT_ID, {
                   $set: { ['support.guildId']: 'unavailable' },
                 });
                 interaction.editReply('Guild id has been removed');
@@ -173,14 +175,14 @@ export default new Command({
             if (!badges.includes(BadgeType.Developer)) return interaction.editReply('You are not a developer of this bot!');
           }
 
-          const settings = await client.getClientSettings(keys.DISCORD_BOT_ID);
+          const settings = await getClientSettings(keys.DISCORD_BOT_ID);
 
           switch (options.getSubcommand()) {
             case 'set':
               {
                 const inviteUrl = options.getString('invite-url', true);
                 if (settings.support.inviteUrl === inviteUrl) return interaction.editReply('That is already the invite url');
-                await client.updateClientSettings(keys.DISCORD_BOT_ID, {
+                await updateClientSettings(keys.DISCORD_BOT_ID, {
                   $set: { ['support.inviteUrl']: inviteUrl },
                 });
                 interaction.editReply('Invite url has been set');
@@ -189,7 +191,7 @@ export default new Command({
             case 'remove':
               {
                 if (settings.support.inviteUrl === 'unavailable') return interaction.editReply('There is no invite url to remove');
-                await client.updateClientSettings(keys.DISCORD_BOT_ID, {
+                await updateClientSettings(keys.DISCORD_BOT_ID, {
                   $set: { ['support.inviteUrl']: 'unavailable' },
                 });
                 interaction.editReply('Invite url has been removed');
@@ -209,14 +211,14 @@ export default new Command({
             if (!badges.includes(BadgeType.Developer)) return interaction.editReply('You are not a developer of this bot!');
           }
 
-          const settings = await client.getClientSettings(keys.DISCORD_BOT_ID);
+          const settings = await getClientSettings(keys.DISCORD_BOT_ID);
 
           switch (options.getSubcommand()) {
             case 'set':
               {
                 const inviteUrl = options.getString('invite-url', true);
                 if (settings.inviteUrl === inviteUrl) return interaction.editReply('That is already the invite url');
-                await client.updateClientSettings(keys.DISCORD_BOT_ID, {
+                await updateClientSettings(keys.DISCORD_BOT_ID, {
                   $set: { inviteUrl: inviteUrl },
                 });
                 interaction.editReply('Invite url has been set');
@@ -225,7 +227,7 @@ export default new Command({
             case 'remove':
               {
                 if (settings.inviteUrl === 'unavailable') return interaction.editReply('There is no invite url to remove');
-                await client.updateClientSettings(keys.DISCORD_BOT_ID, {
+                await updateClientSettings(keys.DISCORD_BOT_ID, {
                   $set: { inviteUrl: 'unavailable' },
                 });
                 interaction.editReply('Invite url has been removed');
@@ -250,9 +252,9 @@ export default new Command({
               {
                 const target = options.getUser('user', true);
                 const badge = options.getInteger('badge', true);
-                const targetData = await client.getUserData(target.id);
+                const targetData = await getUserData(target.id);
                 if (targetData.badges.map((badge) => badge.id).includes(badge)) return interaction.editReply('User already has that badge!');
-                await client.updateUserData(target.id, {
+                await updateUserData(target.id, {
                   $push: { badges: { id: badge, receivedAt: Date.now() } },
                 });
                 await target
@@ -265,9 +267,9 @@ export default new Command({
               {
                 const target = options.getUser('user', true);
                 const badge = options.getInteger('badge', true);
-                const targetData = await client.getUserData(target.id);
+                const targetData = await getUserData(target.id);
                 if (!targetData.badges.map((badge) => badge.id).includes(badge)) return interaction.editReply('User does not have that badge!');
-                await client.updateUserData(target.id, {
+                await updateUserData(target.id, {
                   $pull: { badges: { id: badge } },
                 });
                 await target
@@ -279,7 +281,7 @@ export default new Command({
             case 'list':
               {
                 const target = options.getUser('user', true);
-                const targetData = await client.getUserData(target.id);
+                const targetData = await getUserData(target.id);
                 interaction.editReply(
                   `Badges:\n${targetData.badges.map((badge) => `${BadgeType[badge.id]}: <t:${Math.floor(badge.receivedAt / 1000)}:f>`).join('\n')}`,
                 );
@@ -299,9 +301,9 @@ export default new Command({
             case 'add':
               {
                 const target = options.getUser('user', true);
-                const targetSettings = await client.getUserData(target.id);
+                const targetSettings = await getUserData(target.id);
                 if (targetSettings.banned) return interaction.editReply('User is already banned!');
-                await client.updateUserData(target.id, {
+                await updateUserData(target.id, {
                   $set: { banned: true },
                 });
                 await target
@@ -313,9 +315,9 @@ export default new Command({
             case 'remove':
               {
                 const target = options.getUser('user', true);
-                const targetSettings = await client.getUserData(target.id);
+                const targetSettings = await getUserData(target.id);
                 if (!targetSettings.banned) return interaction.editReply('User is not banned!');
-                await client.updateUserData(target.id, {
+                await updateUserData(target.id, {
                   $set: { banned: false },
                 });
                 await target

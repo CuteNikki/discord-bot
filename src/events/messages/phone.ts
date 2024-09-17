@@ -11,10 +11,10 @@ export default new Event({
   name: Events.MessageCreate,
   once: false,
   async execute(client, message) {
+    if (!message.channel || !message.content || !message.author || message.author.bot) return;
+
     // Destructure required properties from the message
-    const { guildId, channelId, channel, author, guild } = message;
-    // Ignore bot messages and messages from invalid channels or guilds
-    if (author.bot || !guild || !guildId || !channelId || !channel || !message.content) return;
+    const { channelId, channel, author } = message;
 
     // Find an existing connection for the current channel
     const existingConnection = await connectionModel
@@ -29,17 +29,23 @@ export default new Event({
     const otherLng = await client.getUserLanguage(existingConnection.userIdOne === author.id ? existingConnection.userIdTwo : existingConnection.userIdOne);
 
     // Check if the message is too long and shorten it
-    if (message.content.length > 2000) message.content = message.content.slice(0, 2000) + '...';
+    if (message.content.length > 4000) message.content = message.content.slice(0, 4000) + '...';
 
     // Create an embed with the message content
     const embed = new EmbedBuilder()
-      .setColor(Colors.Blue)
-      .setAuthor({ name: author.username, iconURL: author.displayAvatarURL() })
+      .setColor(Colors.Aqua)
+      .setAuthor({
+        name: author.globalName ? `${author.globalName} (@${author.username})` : `@${author.username}`,
+        iconURL: author.displayAvatarURL({ extension: 'webp', size: 256 }),
+      })
       .setDescription(message.content)
       .setTimestamp();
     const otherEmbed = new EmbedBuilder()
       .setColor(Colors.Blue)
-      .setAuthor({ name: author.username, iconURL: author.displayAvatarURL() })
+      .setAuthor({
+        name: author.globalName ? `${author.globalName} (@${author.username})` : `@${author.username}`,
+        iconURL: author.displayAvatarURL({ extension: 'webp', size: 256 }),
+      })
       .setDescription(message.content)
       .setTimestamp();
 
@@ -48,12 +54,12 @@ export default new Event({
       /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
     // Replace message content if it contains a link
     if (linkRegex.test(message.content)) {
-      embed.setDescription(`||${message.content.slice(0, 1990)}||`).setFooter({
+      embed.setDescription(`||${message.content}||`).setFooter({
         text: `⚠️ ${t('phone.link', {
           lng,
         })}`,
       });
-      otherEmbed.setDescription(`||${message.content.slice(0, 1990)}||`).setFooter({
+      otherEmbed.setDescription(`||${message.content}||`).setFooter({
         text: `⚠️ ${t('phone.link', {
           otherLng,
         })}`,
@@ -101,7 +107,26 @@ export default new Event({
         .then(async () => {
           await channel.send({ embeds: [embed] }).catch((err) => logger.debug({ err, channelId: channel.id }, 'Could not send message'));
         });
+    else message.react('✅').catch((err) => logger.debug({ err, messageId: message.id }, 'Could not react'));
     // Send the embed to the target channel
     await targetChannel.send({ embeds: [otherEmbed] }).catch((err) => logger.debug({ err, channelId: targetChannel.id }, 'Could not send message'));
+
+    await connectionModel
+      .findOneAndUpdate({ _id: existingConnection._id }, { $set: { lastMessageAt: message.createdAt } })
+      .lean()
+      .exec();
+
+    // Delete connection if it has been inactive
+    const TIMEOUT = 1_000 * 60 * 4; // = 4 minutes
+    setTimeout(async () => {
+      const connection = await connectionModel.findOne({ _id: existingConnection._id }).lean().exec();
+      if (connection?.lastMessageAt && connection.lastMessageAt < Date.now() - TIMEOUT) {
+        await connectionModel.deleteOne({ _id: connection._id });
+        await channel.send({ content: t('phone.lost', { lng }) }).catch((err) => logger.debug({ err, channelId: channel.id }, 'Could not send message'));
+        await targetChannel
+          .send({ content: t('phone.lost', { lng: otherLng }) })
+          .catch((err) => logger.debug({ err, channelId: targetChannel.id }, 'Could not send message'));
+      }
+    }, TIMEOUT);
   },
 });

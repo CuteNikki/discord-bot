@@ -19,7 +19,6 @@ export default new Command({
     .addSubcommand((subcommand) => subcommand.setName('hangup').setDescription('Disconnects you from the call')),
   async execute({ client, interaction }) {
     await interaction.deferReply();
-    if (!interaction.inCachedGuild()) return;
 
     const { user, options, channelId } = interaction;
     const lng = await client.getUserLanguage(user.id);
@@ -41,7 +40,7 @@ export default new Command({
 
           // Check for available channels
           const availablePhones = await availableChannelModel
-            .find({ channelId: { $ne: channelId } })
+            .find({ channelId: { $ne: channelId }, userId: { $ne: user.id } })
             .lean()
             .exec();
 

@@ -1,6 +1,6 @@
 import mongoose, { Model, model, Schema, Types } from 'mongoose';
 
-interface AvailableChannel {
+export interface AvailableChannel {
   _id: Types.ObjectId;
   channelId: string;
   userId: string;
@@ -20,6 +20,7 @@ interface Connection {
   userIdOne: string;
   channelIdTwo: string;
   userIdTwo: string;
+  lastMessageAt?: number;
 }
 
 const connectionSchema = new Schema<Connection>({
@@ -27,6 +28,7 @@ const connectionSchema = new Schema<Connection>({
   userIdOne: { type: String, required: true },
   channelIdTwo: { type: String, required: true },
   userIdTwo: { type: String, required: true },
+  lastMessageAt: { type: Number },
 });
 
 export const connectionModel: Model<Connection> = mongoose.models['connection'] || model<Connection>('connection', connectionSchema);

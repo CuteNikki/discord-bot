@@ -90,6 +90,7 @@ export class DiscordClient extends Client {
         // !! Needed for guilds, channels, roles and messages !!
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.DirectMessages, // !! Needed for phone to work in DMs !!
 
         // !! Needed for guild log !!
         GatewayIntentBits.GuildVoiceStates,

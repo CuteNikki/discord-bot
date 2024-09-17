@@ -226,13 +226,14 @@
   "phone": {
     "link": "This message contains a link so it has been hidden.",
     "profanity": "This message may be inappropriate so it has been hidden.",
+    "lost": "Phone connection has been lost!",
     "connect": {
-      "already": "You are already connected to the phone!",
+      "already": "This channel is already connected to a phone!",
       "connected": "A phone connection has been made!",
       "waiting": "Calling on the phone..."
     },
     "hangup": {
-      "none": "You are not in a call!",
+      "none": "You are not connected to a phone!",
       "disconnecting": "Hanging up the phone...",
       "disconnected": "The other party has hung up the phone!"
     }

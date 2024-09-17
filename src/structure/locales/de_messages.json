@@ -226,13 +226,14 @@
   "phone": {
     "link": "Diese Nachricht enthält einen Link, deshalb wurde sie versteckt.",
     "profanity": "Diese Nachricht ist möglicherweise unangemessen, deshalb wurde sie versteckt.",
+    "lost": "Die Telefonverbindung wurde verloren!",
     "connect": {
-      "already": "Du bist bereits mit dem Telefon verbunden!",
+      "already": "Der Kanal ist bereits mit einem Telefon verbunden!",
       "connected": "Eine Telefonverbindung wurde hergestellt!",
-      "waiting": "Es wird angerufen..."
+      "waiting": "Es wird eine Telefonverbindung gesucht..."
     },
     "hangup": {
-      "none": "Du bist nicht in einem Anruf!",
+      "none": "Du bist bist nicht mit einem Telefon verbunden!",
       "disconnecting": "Es wird aufgelegt...",
       "disconnected": "Der Gesprächspartner hat aufgelegt!"
     }

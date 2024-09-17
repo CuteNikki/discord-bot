@@ -45,32 +45,19 @@ export function randomXP(): number {
 }
 
 export function getData(identifier: LevelIdentifier, client: DiscordClient) {
-  const data = client.level.get(identifier);
-  if (data) return data;
+  return levelModel.findOne({ userId: identifier.userId, guildId: identifier.guildId }, {}, { upsert: false }).lean().exec();
 }
 
 export async function getDataOrCreate(identifier: LevelIdentifier, client: DiscordClient): Promise<Level> {
-  const data = client.level.get(identifier);
-  if (data) return data;
-  const newData = await levelModel.findOneAndUpdate({ userId: identifier.userId, guildId: identifier.guildId }, {}, { new: true, upsert: true }).lean().exec();
-  client.level.set(identifier, newData);
-  return newData;
+  return await levelModel.findOneAndUpdate({ userId: identifier.userId, guildId: identifier.guildId }, {}, { new: true, upsert: true }).lean().exec();
 }
 
 export function getWeeklyData(identifier: LevelIdentifier, client: DiscordClient) {
-  const data = client.levelWeekly.get(identifier);
-  if (data) return data;
+  return weeklyLevelModel.findOne({ userId: identifier.userId, guildId: identifier.guildId }, {}, { upsert: false }).lean().exec();
 }
 
 export async function getWeeklyDataOrCreate(identifier: LevelIdentifier, client: DiscordClient): Promise<Level> {
-  const data = client.levelWeekly.get(identifier);
-  if (data) return data;
-  const newData = await weeklyLevelModel
-    .findOneAndUpdate({ userId: identifier.userId, guildId: identifier.guildId }, {}, { new: true, upsert: true })
-    .lean()
-    .exec();
-  client.levelWeekly.set(identifier, newData);
-  return newData;
+  return await weeklyLevelModel.findOneAndUpdate({ userId: identifier.userId, guildId: identifier.guildId }, {}, { new: true, upsert: true }).lean().exec();
 }
 
 export async function appendXP(identifier: LevelIdentifier, client: DiscordClient, xp: number, current?: Level): Promise<Level> {
@@ -82,12 +69,10 @@ export async function appendXP(identifier: LevelIdentifier, client: DiscordClien
     .findOneAndUpdate({ userId: identifier.userId, guildId: identifier.guildId }, { $inc: { xp }, $set: { level: weeklyLevel } }, { upsert: true, new: true })
     .lean()
     .exec();
-  client.levelWeekly.set(identifier, newWeeklyLevel);
   const newLevel = await levelModel
     .findOneAndUpdate({ userId: identifier.userId, guildId: identifier.guildId }, { $inc: { xp }, $set: { level: level } }, { upsert: true, new: true })
     .lean()
     .exec();
-  client.level.set(identifier, newLevel);
   return newLevel;
 }
 
@@ -99,7 +84,6 @@ export async function setXP(identifier: LevelIdentifier, client: DiscordClient, 
     .findOneAndUpdate({ userId: identifier.userId, guildId: identifier.guildId }, { $set: { level, xp } }, { upsert: true, new: true })
     .lean()
     .exec();
-  client.level.set(identifier, newLevel);
   return newLevel;
 }
 
@@ -112,7 +96,6 @@ export async function addXP(identifier: LevelIdentifier, client: DiscordClient, 
     .findOneAndUpdate({ userId: identifier.userId, guildId: identifier.guildId }, { $inc: { xp }, $set: { level } }, { upsert: true, new: true })
     .lean()
     .exec();
-  client.level.set(identifier, newLevel);
   return newLevel;
 }
 
@@ -124,7 +107,6 @@ export async function setLevel(identifier: LevelIdentifier, client: DiscordClien
     .findOneAndUpdate({ userId: identifier.userId, guildId: identifier.guildId }, { $set: { level, xp } }, { upsert: true, new: true })
     .lean()
     .exec();
-  client.level.set(identifier, newLevel);
   return newLevel;
 }
 
@@ -137,7 +119,6 @@ export async function addLevel(identifier: LevelIdentifier, client: DiscordClien
     .findOneAndUpdate({ userId: identifier.userId, guildId: identifier.guildId }, { $set: { level, xp } }, { upsert: true, new: true })
     .lean()
     .exec();
-  client.level.set(identifier, newLevel);
   return newLevel;
 }
 

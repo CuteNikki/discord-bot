@@ -6,15 +6,12 @@ import { performance } from 'perf_hooks';
 
 import { DiscordClient } from 'classes/client';
 
-import { guildModel } from 'models/guild';
 import { infractionModel, InfractionType } from 'models/infraction';
 import { reminderModel } from 'models/reminder';
-import { userModel } from 'models/user';
 import { weeklyLevelModel } from 'models/weeklyLevels';
 
 import { sendError } from 'utils/error';
 import { keys } from 'utils/keys';
-import { supportedLanguages } from 'utils/language';
 import { logger } from 'utils/logger';
 
 export async function initDatabase(client: DiscordClient) {
@@ -25,9 +22,6 @@ export async function initDatabase(client: DiscordClient) {
       logger.info(`[${client.cluster.id}] Connected to database in ${Math.floor(endTime - startTime)}ms`);
 
       client.once('ready', () => {
-        collectUserLanguages(client); // Set clients user language collection
-        collectGuildSettings(client); // Set clients guild settings collection
-
         CronJob.from({
           cronTime: '*/20 * * * * *', // every 20 seconds
           onTick: () => {
@@ -70,27 +64,6 @@ async function clearCustomVoiceChannels(client: DiscordClient) {
   }
 }
 
-async function collectUserLanguages(client: DiscordClient) {
-  // Loop through each collected user and set language
-  for (const user of client.users.cache.values()) {
-    const userData = await userModel.findOne({ userId: user.id, banned: false }, {}, { upsert: false }).lean().exec();
-    if (userData && !user.bot) client.userLanguages.set(user.id, userData.language ?? supportedLanguages[0]);
-  }
-  // Notify about collected languages
-  logger.debug(`[${client.cluster.id}] Collected ${client.userLanguages.size} user languages`);
-}
-
-async function collectGuildSettings(client: DiscordClient) {
-  // Loop through each collected guild and set settings if found
-  for (const guild of client.guilds.cache.values()) {
-    const guildSettings = await guildModel.findOne({ guildId: guild.id }, {}, { upsert: false }).lean().exec();
-    if (guildSettings) client.guildSettings.set(guild.id, guildSettings);
-    if (guildSettings) client.guildLanguages.set(guild.id, guildSettings.language ?? supportedLanguages[0]);
-  }
-  // Notify about collected guild settings
-  logger.debug(`[${client.cluster.id}] Collected ${client.guildSettings.size} guild settings`);
-}
-
 async function clearWeekly(client: DiscordClient) {
   const WEEK = 604800000;
   const NOW = Date.now();
@@ -107,7 +80,6 @@ async function clearWeekly(client: DiscordClient) {
 async function clearWeeklyLevel(client: DiscordClient, applicationId: string) {
   // Clear weekly level model and collection
   const clearedLevel = await weeklyLevelModel.deleteMany({});
-  client.levelWeekly.clear();
 
   // Notify that weekly level have been cleared
   logger.debug(`[${client.cluster.id}] Cleared ${clearedLevel.deletedCount} weekly level`);

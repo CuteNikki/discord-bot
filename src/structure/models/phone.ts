@@ -14,10 +14,10 @@ const availableChannelSchema = new Schema<AvailableChannel>({
 export const availableChannelModel: Model<AvailableChannel> =
   mongoose.models['available_channel'] || model<AvailableChannel>('available_channel', availableChannelSchema);
 
-interface Connection {
+export interface Connection {
   _id: Types.ObjectId;
   channelIdOne: string;
-  userIdOne: string;
+  userIdOne: string; // We store user ids for translation purposes
   channelIdTwo: string;
   userIdTwo: string;
   lastMessageAt?: number;

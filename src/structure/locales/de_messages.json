@@ -227,15 +227,19 @@
     "link": "Diese Nachricht enthält einen Link, deshalb wurde sie versteckt.",
     "profanity": "Diese Nachricht ist möglicherweise unangemessen, deshalb wurde sie versteckt.",
     "lost": "Die Telefonverbindung wurde verloren!",
+    "reconnect": "Verbinde mit einem Telefon",
+    "disconnect": "Verbindung trennen",
     "connect": {
       "already": "Der Kanal ist bereits mit einem Telefon verbunden!",
       "connected": "Eine Telefonverbindung wurde hergestellt!",
-      "waiting": "Es wird eine Telefonverbindung gesucht..."
+      "waiting": "Es wird eine Telefonverbindung gesucht...",
+      "error": "Der Gesprächspartner konnte nicht erreicht werden, aber die Telefonverbindung ist noch aktiv!"
     },
     "hangup": {
       "none": "Du bist bist nicht mit einem Telefon verbunden!",
-      "disconnecting": "Es wird aufgelegt...",
-      "disconnected": "Der Gesprächspartner hat aufgelegt!"
+      "disconnecting": "Du hast die Telefonverbindung getrennt!",
+      "disconnected": "Der Gesprächspartner hat aufgelegt!",
+      "error": "Der Gesprächspartner konnte nicht erreicht werden, aber das Telefon wurde aufgelegt!"
     }
   },
   "custom_embed": {

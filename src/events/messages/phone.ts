@@ -6,6 +6,7 @@ import { Event } from 'classes/event';
 import { logger } from 'utils/logger';
 
 import { connectionModel } from 'models/phone';
+import { handlePhoneMessageTimeout } from 'utils/phone';
 
 export default new Event({
   name: Events.MessageCreate,
@@ -118,15 +119,6 @@ export default new Event({
 
     // Delete connection if it has been inactive
     const TIMEOUT = 1_000 * 60 * 4; // = 4 minutes
-    setTimeout(async () => {
-      const connection = await connectionModel.findOne({ _id: existingConnection._id }).lean().exec();
-      if (connection?.lastMessageAt && connection.lastMessageAt < Date.now() - TIMEOUT) {
-        await connectionModel.deleteOne({ _id: connection._id });
-        await channel.send({ content: t('phone.lost', { lng }) }).catch((err) => logger.debug({ err, channelId: channel.id }, 'Could not send message'));
-        await targetChannel
-          .send({ content: t('phone.lost', { lng: otherLng }) })
-          .catch((err) => logger.debug({ err, channelId: targetChannel.id }, 'Could not send message'));
-      }
-    }, TIMEOUT);
+    setTimeout(async () => handlePhoneMessageTimeout({ channel, existingConnection, lng, otherLng, targetChannel, timeout: TIMEOUT }), TIMEOUT);
   },
 });

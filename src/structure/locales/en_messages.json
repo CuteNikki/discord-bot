@@ -227,15 +227,19 @@
     "link": "This message contains a link so it has been hidden.",
     "profanity": "This message may be inappropriate so it has been hidden.",
     "lost": "Phone connection has been lost!",
+    "reconnect": "Connect to another phone",
+    "disconnect": "Disconnect from phone",
     "connect": {
       "already": "This channel is already connected to a phone!",
       "connected": "A phone connection has been made!",
-      "waiting": "Calling on the phone..."
+      "waiting": "Calling on the phone...",
+      "error": "The other party could not be reached but the phone connection is still active!"
     },
     "hangup": {
       "none": "You are not connected to a phone!",
-      "disconnecting": "Hanging up the phone...",
-      "disconnected": "The other party has hung up the phone!"
+      "disconnecting": "You hung up the phone!",
+      "disconnected": "The other party has hung up the phone!",
+      "error": "The other party could not be reached but the phone call was hung up!"
     }
   },
   "custom_embed": {

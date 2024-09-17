@@ -57,6 +57,7 @@ export class DiscordClient extends Client {
     welcome: Colors.DarkAqua,
     utilities: Colors.Aqua,
     customVC: Colors.Purple,
+    phone: Colors.Gold,
   };
 
   // Custom emojis

@@ -336,8 +336,8 @@ This could be very interesting for tickets
   - [x] register commands
 - [ ] fun module
   - [x] phone command
-    - [ ] add property for last sent message (if no message sent within 5 minutes, automatically end the call)
-    - [ ] could add a button to enter the queue again if phone was hung up
+    - [x] add property for last sent message (if no message sent within 4 minutes, automatically end the call)
+    - [x] could add a button to enter the queue again if phone was hung up
   - [x] game command
     - [x] Rock-Paper-Scissors
     - [x] Tic-Tac-Toe

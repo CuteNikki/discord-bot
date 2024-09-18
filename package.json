@@ -17,7 +17,7 @@
     "i18next": "^23.15.1",
     "i18next-fs-backend": "^2.3.2",
     "mediaplex": "^0.0.9",
-    "mongoose": "^8.6.2",
+    "mongoose": "^8.6.3",
     "ms": "^2.1.3",
     "node-os-utils": "^1.3.7",
     "pino": "^9.4.0",

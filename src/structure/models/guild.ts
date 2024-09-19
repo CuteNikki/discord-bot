@@ -92,6 +92,7 @@ export interface TicketSystem {
   parentChannelId: string;
   staffRoleId: string;
   choices: string[];
+  channelId: string;
 }
 
 export interface GuildSettings {

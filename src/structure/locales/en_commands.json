@@ -1,4 +1,36 @@
 {
+  "ticket": {
+    "name": "ticket",
+    "description": "Configure the ticket module",
+    "options": [
+      {
+        "name": "enable",
+        "description": "Enable the ticket module"
+      },
+      {
+        "name": "disable",
+        "description": "Disable the ticket module"
+      },
+      {
+        "name": "setup",
+        "description": "Set up the ticket module"
+      },
+      {
+        "name": "info",
+        "description": "Shows the ticket module information"
+      },
+      {
+        "name": "delete",
+        "description": "Delete a ticket system",
+        "options": [
+          {
+            "name": "system-id",
+            "description": "The id of the ticket system to delete"
+          }
+        ]
+      }
+    ]
+  },
   "customize-voice-channel": {
     "name": "customize-voice-channel",
     "description": "Manage your own custom voice channel",
@@ -772,150 +804,6 @@
           {
             "name": "stars",
             "description": "The minimum amount of stars a message needs to be considered for the starboard"
-          }
-        ]
-      }
-    ]
-  },
-  "config-ticket": {
-    "name": "ticket-configuration",
-    "description": "Configure the ticket module",
-    "options": [
-      {
-        "name": "show",
-        "description": "Shows the current configuration",
-        "options": [
-          {
-            "name": "all",
-            "description": "Shows the entire configuration"
-          },
-          {
-            "name": "state",
-            "description": "Shows the state of the ticket module"
-          },
-          {
-            "name": "systems",
-            "description": "Shows the configured ticket systems"
-          }
-        ]
-      },
-      {
-        "name": "toggle",
-        "description": "Toggles the ticket module",
-        "options": [
-          {
-            "name": "on",
-            "description": "Turns the ticket module on"
-          },
-          {
-            "name": "off",
-            "description": "Turns the ticket module off"
-          }
-        ]
-      },
-      {
-        "name": "systems",
-        "description": "Configure the ticket systems",
-        "options": [
-          {
-            "name": "create",
-            "description": "Creates a new ticket system",
-            "options": [
-              {
-                "name": "staff-role",
-                "description": "Users with this role can claim, close or i.e. manage tickets"
-              },
-              {
-                "name": "transcript-channel",
-                "description": "The channel to send the transcript to"
-              },
-              {
-                "name": "category",
-                "description": "The category to create the tickets in"
-              },
-              {
-                "name": "max-tickets",
-                "description": "The maximum amount of tickets a user can have open at the same time"
-              }
-            ]
-          },
-          {
-            "name": "edit",
-            "description": "Edits a ticket system",
-            "options": [
-              {
-                "name": "system-id",
-                "description": "The id of the ticket system to edit"
-              },
-              {
-                "name": "staff-role",
-                "description": "Users with this role can claim, close or i.e. manage tickets"
-              },
-              {
-                "name": "transcript-channel",
-                "description": "The channel to send the transcript to"
-              },
-              {
-                "name": "category",
-                "description": "The category to create the tickets in"
-              },
-              {
-                "name": "max-tickets",
-                "description": "The maximum amount of tickets a user can have open at the same time"
-              }
-            ]
-          },
-          {
-            "name": "delete",
-            "description": "Deletes a ticket system",
-            "options": [
-              {
-                "name": "system-id",
-                "description": "The id of the ticket system to delete"
-              }
-            ]
-          },
-          {
-            "name": "add-choice",
-            "description": "Adds a choice to a ticket system",
-            "options": [
-              {
-                "name": "system-id",
-                "description": "The id of the ticket system to add a choice to"
-              },
-              {
-                "name": "choice",
-                "description": "The choice to add"
-              }
-            ]
-          },
-          {
-            "name": "remove-choice",
-            "description": "Removes a choice from a ticket system",
-            "options": [
-              {
-                "name": "system-id",
-                "description": "The id of the ticket system to remove a choice from"
-              },
-              {
-                "name": "choice",
-                "description": "The choice to remove"
-              }
-            ]
-          },
-          {
-            "name": "send",
-            "description": "Sends a ticket system into a channel so users can open tickets",
-            "options": [
-              {
-                "name": "system-id",
-                "description": "The id of the ticket system to send"
-              },
-              {
-                "name": "channel",
-                "description": "The channel to send the ticket system into"
-              }
-            ]
           }
         ]
       }

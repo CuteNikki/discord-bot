@@ -31,14 +31,14 @@ export default new Command({
   module: ModuleType.Config,
   data: new SlashCommandBuilder()
     .setName('ticket')
-    .setDescription('Configure the ticket setup')
+    .setDescription('Configure the ticket module')
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels)
     .setContexts(InteractionContextType.Guild)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
-    .addSubcommand((cmd) => cmd.setName('setup').setDescription('Start the setup process for a ticket system'))
-    .addSubcommand((cmd) => cmd.setName('info').setDescription('Show information about the ticket systems'))
     .addSubcommand((cmd) => cmd.setName('enable').setDescription('Enable the ticket module'))
     .addSubcommand((cmd) => cmd.setName('disable').setDescription('Disable the ticket module'))
+    .addSubcommand((cmd) => cmd.setName('setup').setDescription('Start the setup process for a ticket system'))
+    .addSubcommand((cmd) => cmd.setName('info').setDescription('Show information about the ticket systems'))
     .addSubcommand((cmd) =>
       cmd
         .setName('delete')
@@ -54,7 +54,6 @@ export default new Command({
     const config = await getGuildSettings(guild.id);
 
     // Subcommand handling
-
     switch (options.getSubcommand()) {
       case 'setup':
         await handleSetup();

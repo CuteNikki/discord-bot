@@ -2,52 +2,58 @@ import { t } from 'i18next';
 
 import { Button } from 'classes/button';
 
-import { ticketModel } from 'models/ticket';
 import { getGuildSettings } from 'db/guild';
+import { EmbedBuilder, PermissionFlagsBits } from 'discord.js';
+import { ticketModel } from 'models/ticket';
 
 export default new Button({
   customId: 'button-tickets-claim',
   isCustomIdIncluded: true,
   permissions: [],
   botPermissions: ['SendMessages'],
-  async execute({ interaction }) {
-    if (!interaction.inCachedGuild() || !interaction.channelId) return;
-    const { user, guildId, channelId, customId } = interaction;
+  async execute({ interaction, client }) {
+    if (!interaction.inCachedGuild()) return;
+    const { user, guildId, channelId, customId, member } = interaction;
 
     const currentConfig = await getGuildSettings(guildId);
     const lng = currentConfig.language;
 
     const system = currentConfig.ticket.systems.find((system) => system._id.toString() === customId.split('_')[1]);
-    if (!system)
-      return interaction.reply({
-        content: t('tickets.invalid_system', { lng }),
-        ephemeral: true,
-      });
 
-    if (!interaction.member.roles.cache.has(system.staffRoleId))
-      return interaction.reply({
-        content: t('tickets.staff_only', { lng }),
+    if (!system) {
+      await interaction.reply({
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_system', { lng }))],
         ephemeral: true,
       });
+      return;
+    }
+
+    if (!member.permissions.has(PermissionFlagsBits.Administrator)) {
+      if (!member.roles.cache.has(system.staffRoleId)) {
+        await interaction.reply({
+          embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.staff_only', { lng }))],
+          ephemeral: true,
+        });
+        return;
+      }
+    }
 
     const ticket = await ticketModel.findOne({ channelId });
     if (!ticket)
       return interaction.reply({
-        content: t('tickets.invalid_ticket', { lng }),
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_ticket', { lng }))],
+        ephemeral: true,
       });
 
     if (ticket.claimedBy)
       return interaction.reply({
-        content: t('tickets.already_claimed', {
-          lng,
-          claimed_by: `<@${ticket.claimedBy}>`,
-        }),
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.already_claimed', { lng, claimed_by: `<@${ticket.claimedBy}>` }))],
         ephemeral: true,
       });
     await ticketModel.findOneAndUpdate({ channelId }, { claimedBy: user.id });
 
     interaction.reply({
-      content: t('tickets.claimed', { lng, claimed_by: `${user.toString()}` }),
+      embeds: [new EmbedBuilder().setColor(client.colors.ticket).setDescription(t('ticket.claimed', { lng, claimed_by: user.toString() }))],
     });
   },
 });

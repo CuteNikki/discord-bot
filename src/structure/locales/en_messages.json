@@ -151,33 +151,99 @@
     "not_found": "Could not find a server with that vanity url!",
     "found": "That vanity url is already used!\nServername: {{guildName}}\nMembers: {{guildMemberCount}}\nVanity-URL: {{vanity}}"
   },
-  "tickets": {
-    "create_title": "Create Ticket",
-    "title": "Ticket Module",
-    "state": "State",
-    "id": "System Id",
-    "staff_role": "Staff Role",
-    "transcript_channel": "Transcript Channel",
-    "category": "Category Channel",
-    "max_tickets": "Max open Tickets at once per user",
-    "enabled": "Ticket Module was enabled.",
-    "disabled": "Ticket Module was disabled.",
-    "created": "Ticket System created with the id {{id}}.",
-    "edited": "Ticket System was edited.",
-    "deleted": "Ticket System was deleted.",
-    "invalid": "The specified ticket system does not exist!",
-    "choice_already": "That choice already exists!",
-    "choice_limit": "The choice limit has been reached!",
-    "choice_added": "The choice has been added!",
-    "choice_invalid": "That choice does not exist!",
-    "choice_removed": "The choice has been removed!",
-    "create_description": "Create a ticket by clicking a button below!",
-    "send_fail": "The ticket system could not be sent!",
-    "send_success": "The ticket system has been sent!",
-    "no_choices": "The ticket system has no choices!",
-    "error": "Something went wrong!",
-    "invalid_system": "Invalid ticket system!",
-    "invalid_ticket": "Invalid ticket!",
+  "ticket": {
+    "enable": {
+      "already": "The ticket module is already enabled!",
+      "success": "The ticket module has been enabled."
+    },
+    "disable": {
+      "already": "The ticket module is already disabled!",
+      "success": "The ticket module has been disabled."
+    },
+    "remove": {
+      "invalid": "The specified ticket system does not exist!",
+      "success": "The ticket system has been deleted."
+    },
+    "info": {
+      "state": "State",
+      "none": "There are none to show...",
+      "displayed": "Displayed in the embeds below.",
+      "systems": "Ticket Systems",
+      "id": "ID: {{id}}",
+      "staff": "Staff role: {{role}}",
+      "max": "Max tickets: {{max}}",
+      "transcript": "Transcript channel: {{channel}}",
+      "channel": "Creation channel: {{channel}}",
+      "choices": "Choices: {{choices}}",
+      "category": "Category: {{channel}}"
+    },
+    "setup": {
+      "limit": "You cannot have more than 5 ticket systems!",
+      "required": "This option is required.",
+      "optional": "This option is optional.",
+      "continue": "Continue",
+      "timeout": "You did not continue in time!"
+    },
+    "modal": {
+      "no-submit": "You did not submit any input in time!"
+    },
+    "staff": {
+      "placeholder": "Select a role",
+      "description": "Select a role to be the staff role for the ticket system.\nThe staff role is the role that can claim tickets and close them.",
+      "none": "You must select a role before continuing!",
+      "selected": "You selected the role {{role}}",
+      "continue": "Press continue to proceed with selected role."
+    },
+    "max": {
+      "description": "Set the maximum amount of tickets a user can have open at the same time.",
+      "default": "The default for this is {{default}} tickets at a time\nYou may press continue to proceed with the default.",
+      "label": "Write a number",
+      "invalid": "You must write a valid number!",
+      "selected": "You chose a max of {{max}} tickets.",
+      "continue": "Press continue to proceed with chosen number.",
+      "change": "Change"
+    },
+    "transcript": {
+      "description": "Select a channel to send the transcript to.",
+      "none": "If no channel is selected then no transcript will be saved.\nYou may press continue to proceed without a channel.",
+      "placeholder": "Select a channel",
+      "remove": "Remove channel",
+      "selected": "You selected the channel {{channel}}.",
+      "continue": "Press continue to proceed with selected channel."
+    },
+    "choices": {
+      "description": "Select the choices for the ticket system.\nEach choice will be a button on the create message in the channel you will select next.",
+      "none": "You must have between 1 and {{max}} choices before continuing!",
+      "limit": "You cannot have more than {{max}} choices!",
+      "length": "There are no choices to remove!",
+      "continue": "Press continue to proceed with choices.",
+      "add": "Add choice",
+      "remove": "Remove choice",
+      "duplicate": "You cannot have the same choice twice!",
+      "invalid": "There is no choice that matches the input!",
+      "label": "Write a choice",
+      "selected": "Current choices: {{choices}}"
+    },
+    "category": {
+      "description": "Select a category to create the tickets in.\nThis is useful as it can be collapsed to hide tickets.",
+      "none": "If no channel is selected then no category will be used.\nYou may press continue to proceed without a category.",
+      "placeholder": "Select a category",
+      "selected": "You selected the category {{channel}}.",
+      "continue": "Press continue to proceed with selected category."
+    },
+    "channel": {
+      "description": "Select a channel to send the 'create a ticket' message to.",
+      "placeholder": "Select a channel",
+      "none": "You must select a channel before continuing!",
+      "selected": "You selected the channel {{channel}}.",
+      "continue": "Press continue to proceed with selected channel.",
+      "error": "Could not send message to channel!",
+      "permissions": "The bot does not have permissions to send messages in that channel!"
+    },
+    "message": {
+      "title": "Open a Ticket",
+      "description": "Click on the buttons below to open a ticket!"
+    },
     "staff_only": "You are not a staff member!",
     "not_claimed": "This ticket has not been claimed yet!",
     "already_claimed": "This ticket has already been claimed by {{claimed_by}}!",
@@ -207,10 +273,10 @@
     "user_unavailable": "This ticket has been closed or locked! Cannot add or remove a user.",
     "user_invalid": "Could not find that user!",
     "user_creator": "Cannot remove the ticket creator!",
-    "user_staff": "Cannot add or remove a staff member",
-    "user_removed": "{{target_user}} was removed from the ticket by {{removed_by}}",
-    "user_added": "{{target_user}} was added to the ticket by {{added_by}}",
-    "user_permissions": "Only the ticket creator or a staff member can add or remove users",
+    "user_staff": "Cannot add or remove a staff member.",
+    "user_removed": "{{target_user}} was removed from the ticket by {{removed_by}}.",
+    "user_added": "{{target_user}} was added to the ticket by {{added_by}}.",
+    "user_permissions": "Only the ticket creator or a staff member can add or remove users.",
     "save": "Save Transcript",
     "delete": "Delete",
     "claim": "Claim",

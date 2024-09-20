@@ -3,8 +3,8 @@ import { t } from 'i18next';
 
 import { Button } from 'classes/button';
 
-import { ticketModel } from 'models/ticket';
 import { getGuildSettings } from 'db/guild';
+import { ticketModel } from 'models/ticket';
 
 import { logger } from 'utils/logger';
 
@@ -13,53 +13,61 @@ export default new Button({
   isCustomIdIncluded: true,
   permissions: [],
   botPermissions: ['ManageChannels', 'SendMessages'],
-  async execute({ interaction }) {
+  async execute({ interaction, client }) {
     if (!interaction.inCachedGuild()) return;
     await interaction.deferReply({ ephemeral: true });
-    const { user, guildId, customId, guild } = interaction;
 
+    const { user, guildId, customId, guild } = interaction;
     const choiceIndex = parseInt(customId.split('_')[2]);
 
     const currentConfig = await getGuildSettings(guildId);
     const lng = currentConfig.language;
 
     const system = currentConfig.ticket.systems.find((system) => system._id.toString() === customId.split('_')[1]);
-    if (!system)
-      return interaction.reply({
-        content: t('tickets.invalid_system', { lng }),
+    if (!system) {
+      await interaction.reply({
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_system', { lng }))],
         ephemeral: true,
       });
+      return;
+    }
 
-    let createdTickets = await ticketModel.find({
+    let tickets = await ticketModel.find({
       guildId,
       createdBy: user.id,
     });
-    for (const createdTicket of createdTickets.filter((ticket) => !ticket.closed)) {
-      if (!guild.channels.cache.get(createdTicket.channelId)) {
-        await ticketModel.deleteOne({ _id: createdTicket._id });
-        createdTickets = createdTickets.filter((ticket) => ticket.channelId !== createdTicket.channelId);
+
+    for (const ticket of tickets) {
+      if (!guild.channels.cache.get(ticket.channelId)) {
+        await ticketModel.deleteOne({ _id: ticket._id });
+        tickets = tickets.filter((t) => t._id !== ticket._id);
       }
     }
-    if (createdTickets.length >= system.maxTickets)
-      return interaction.editReply({
-        content: t('tickets.limit', { lng, limit: system.maxTickets }),
+
+    if (tickets.length >= system.maxTickets) {
+      await interaction.editReply({
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.limit', { lng, limit: system.maxTickets }))],
       });
+      return;
+    }
 
     const choice = system.choices[choiceIndex];
 
-    if (!system.choices.length || !choice)
-      return interaction.editReply({
-        content: t('tickets.invalid_option', { lng }),
+    if (!system.choices.length || !choice) {
+      await interaction.editReply({
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_option', { lng }))],
       });
+      return;
+    }
 
-    const channel: void | TextChannel = await interaction.guild.channels
+    const channel: void | TextChannel = await guild.channels
       .create({
         name: `${user.username}-${choice}`,
         type: ChannelType.GuildText,
         parent: system.parentChannelId,
         permissionOverwrites: [
           {
-            id: interaction.guildId,
+            id: guildId,
             type: 0,
             deny: [PermissionFlagsBits.ViewChannel],
           },
@@ -69,7 +77,7 @@ export default new Button({
             allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages, PermissionFlagsBits.EmbedLinks, PermissionFlagsBits.AttachFiles],
           },
           {
-            id: interaction.user.id,
+            id: user.id,
             type: 1,
             allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages, PermissionFlagsBits.EmbedLinks, PermissionFlagsBits.AttachFiles],
           },
@@ -81,46 +89,47 @@ export default new Button({
         ],
       })
       .catch((err) => logger.debug({ err }, 'Could not create ticket channel'));
-    if (!channel) return interaction.editReply({ content: t('tickets.error', { lng }) });
+    if (!channel) {
+      await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.error', { lng }))] });
+      return;
+    }
 
     await ticketModel.create({
       channelId: channel.id,
-      guildId: interaction.guildId,
-      createdBy: interaction.user.id,
-      users: [interaction.user.id],
+      createdBy: user.id,
+      users: [user.id],
+      guildId,
       choice,
     });
+
     await interaction.editReply({
-      content: t('tickets.created_user', {
-        lng,
-        channel: `${channel.toString()}`,
-      }),
+      embeds: [new EmbedBuilder().setColor(client.colors.ticket).setDescription(t('ticket.created_user', { lng, channel: channel.toString() }))],
     });
     await channel.send({
       content: `${interaction.user} | <@&${system.staffRoleId}>`,
-      embeds: [new EmbedBuilder().setDescription(`${t('tickets.created_channel', { lng, created_by: `${interaction.user}` })}`)],
+      embeds: [new EmbedBuilder().setColor(client.colors.ticket).setDescription(`${t('ticket.created_channel', { lng, created_by: user.toString() })}`)],
       components: [
         new ActionRowBuilder<ButtonBuilder>().addComponents(
           new ButtonBuilder()
             .setCustomId(`button-tickets-claim_${system._id.toString()}`)
-            .setLabel(t('tickets.claim', { lng }))
+            .setLabel(t('ticket.claim', { lng }))
             .setEmoji('✋')
             .setStyle(ButtonStyle.Success),
           new ButtonBuilder()
             .setCustomId(`button-tickets-close_${system._id.toString()}`)
-            .setLabel(t('tickets.close', { lng }))
+            .setLabel(t('ticket.close', { lng }))
             .setEmoji('🛑')
             .setStyle(ButtonStyle.Danger),
           new ButtonBuilder()
             .setCustomId(`button-tickets-lock_${system._id.toString()}`)
-            .setLabel(t('tickets.lock', { lng }))
+            .setLabel(t('ticket.lock', { lng }))
             .setEmoji('🔐')
             .setStyle(ButtonStyle.Primary),
         ),
         new ActionRowBuilder<UserSelectMenuBuilder>().addComponents(
           new UserSelectMenuBuilder()
             .setCustomId(`selection-tickets-user_${system._id.toString()}`)
-            .setPlaceholder(t('tickets.user_select', { lng }))
+            .setPlaceholder(t('ticket.user_select', { lng }))
             .setMaxValues(1),
         ),
       ],

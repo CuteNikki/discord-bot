@@ -29,7 +29,7 @@ export default new Selection({
 
     if (!system)
       return interaction.reply({
-        content: t('tickets.invalid_system', { lng }),
+        content: t('ticket.invalid_system', { lng }),
         ephemeral: true,
       });
 
@@ -38,31 +38,31 @@ export default new Selection({
     });
     if (!ticket)
       return interaction.reply({
-        content: t('tickets.invalid_ticket', { lng }),
+        content: t('ticket.invalid_ticket', { lng }),
         ephemeral: true,
       });
 
     if (ticket.closed || ticket.locked)
       return interaction.reply({
-        content: t('tickets.user_unavailable', { lng }),
+        content: t('ticket.user_unavailable', { lng }),
         ephemeral: true,
       });
 
-    if (user.id !== ticket.createdBy || !member.roles.cache.has(system.staffRoleId)) return interaction.reply({ content: t('tickets.user_permissions') });
+    if (user.id !== ticket.createdBy || !member.roles.cache.has(system.staffRoleId)) return interaction.reply({ content: t('ticket.user_permissions') });
 
     if (!targetMember)
       return interaction.reply({
-        content: t('tickets.user_invalid', { lng }),
+        content: t('ticket.user_invalid', { lng }),
         ephemeral: true,
       });
     if (targetMember.roles.cache.has(system.staffRoleId))
       return interaction.reply({
-        content: t('tickets.user_staff', { lng }),
+        content: t('ticket.user_staff', { lng }),
         ephemeral: true,
       });
     if (targetId === ticket.createdBy)
       return interaction.reply({
-        content: t('tickets.user_creator', { lng }),
+        content: t('ticket.user_creator', { lng }),
         ephemeral: true,
       });
 
@@ -79,7 +79,7 @@ export default new Selection({
       return interaction.reply({
         embeds: [
           new EmbedBuilder().setDescription(
-            t('tickets.user_removed', {
+            t('ticket.user_removed', {
               lng,
               target_user: `<@${targetId}>`,
               removed_by: `${user.toString}`,
@@ -100,7 +100,7 @@ export default new Selection({
       return interaction.reply({
         embeds: [
           new EmbedBuilder().setDescription(
-            t('tickets.user_added', {
+            t('ticket.user_added', {
               lng,
               target_user: `<@${targetId}>`,
               added_by: `${user.toString()}`,

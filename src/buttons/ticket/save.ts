@@ -1,11 +1,11 @@
 import { ExportReturnType, createTranscript } from 'discord-html-transcripts';
-import { EmbedBuilder, type TextBasedChannel } from 'discord.js';
+import { EmbedBuilder, PermissionFlagsBits, type TextBasedChannel } from 'discord.js';
 import { t } from 'i18next';
 
 import { Button } from 'classes/button';
 
-import { ticketModel } from 'models/ticket';
 import { getGuildSettings } from 'db/guild';
+import { ticketModel } from 'models/ticket';
 
 import { logger } from 'utils/logger';
 
@@ -14,25 +14,31 @@ export default new Button({
   isCustomIdIncluded: true,
   permissions: [],
   botPermissions: ['SendMessages'],
-  async execute({ interaction }) {
+  async execute({ interaction, client }) {
     if (!interaction.inCachedGuild()) return;
-    const { guildId, customId } = interaction;
+    const { guildId, customId, member } = interaction;
 
     const currentConfig = await getGuildSettings(guildId);
     const lng = currentConfig.language;
 
     const system = currentConfig.ticket.systems.find((system) => system._id.toString() === customId.split('_')[1]);
-    if (!system)
-      return interaction.reply({
-        content: t('tickets.invalid_system', { lng }),
+    if (!system) {
+      await interaction.reply({
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_system', { lng }))],
         ephemeral: true,
       });
+      return;
+    }
 
-    if (!interaction.member.roles.cache.has(system.staffRoleId))
-      return interaction.reply({
-        content: t('tickets.staff_only', { lng }),
-        ephemeral: true,
-      });
+    if (!member.permissions.has(PermissionFlagsBits.Administrator)) {
+      if (!member.roles.cache.has(system.staffRoleId)) {
+        await interaction.reply({
+          embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.staff_only', { lng }))],
+          ephemeral: true,
+        });
+        return;
+      }
+    }
 
     const transcript = await createTranscript(interaction.channel as TextBasedChannel, {
       limit: -1,
@@ -43,50 +49,58 @@ export default new Button({
       poweredBy: false,
     });
 
-    if (!system.transcriptChannelId)
-      return interaction.reply({
-        content: t('tickets.invalid_transcript_channel', { lng }),
+    if (!system.transcriptChannelId) {
+      await interaction.reply({
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_transcript_channel', { lng }))],
         files: [transcript],
       });
+      return;
+    }
+
     const channel = interaction.guild.channels.cache.get(system.transcriptChannelId) as TextBasedChannel;
-    if (!channel?.isSendable())
-      return interaction.reply({
-        content: t('tickets.invalid_transcript_channel', { lng }),
+    if (!channel?.isSendable()) {
+      await interaction.reply({
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_transcript_channel', { lng }))],
         files: [transcript],
       });
+      return;
+    }
 
     const ticket = await ticketModel.findOne({
       channelId: interaction.channel?.id,
     });
-    if (!ticket)
-      return interaction.reply({
-        content: t('tickets.invalid_ticket', { lng }),
+
+    if (!ticket) {
+      await interaction.reply({
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_ticket', { lng }))],
         ephemeral: true,
       });
+      return;
+    }
 
     const msg = await channel
       .send({
         embeds: [
-          new EmbedBuilder().setTitle(t('tickets.transcript_title', { lng })).addFields(
+          new EmbedBuilder().setTitle(t('ticket.transcript_title', { lng })).addFields(
             {
-              name: t('tickets.claimed_by', { lng }),
+              name: t('ticket.claimed_by', { lng }),
               value: `<@${ticket.claimedBy}>`,
             },
             {
-              name: t('tickets.users', { lng }),
+              name: t('ticket.users', { lng }),
               value: `${ticket.users
                 .map((userId) => {
-                  if (userId === ticket.createdBy) return `<@${userId}> (${t('tickets.creator', { lng })})`;
+                  if (userId === ticket.createdBy) return `<@${userId}> (${t('ticket.creator', { lng })})`;
                   else return `<@${userId}>`;
                 })
                 .join(', ')}`,
             },
             {
-              name: t('tickets.created_for', { lng }),
+              name: t('ticket.created_for', { lng }),
               value: `${ticket.choice}`,
             },
             {
-              name: t('tickets.created_at', { lng }),
+              name: t('ticket.created_at', { lng }),
               value: `<t:${Math.floor(ticket.createdAt / 1000)}:R>`,
             },
           ),
@@ -95,10 +109,14 @@ export default new Button({
       })
       .catch((err) => logger.debug({ err }, 'Could not send transcript'));
 
-    if (!msg) return interaction.reply({ content: t('tickets.error', { lng }) });
+    if (!msg) {
+      await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.error', { lng }))], ephemeral: true });
+      return;
+    }
 
     await interaction.reply({
-      content: t('tickets.saved_transcript', { lng }),
+      embeds: [new EmbedBuilder().setColor(client.colors.ticket).setDescription(t('ticket.saved_transcript', { lng }))],
+      ephemeral: true,
     });
   },
 });

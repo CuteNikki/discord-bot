@@ -1,10 +1,10 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
 import { t } from 'i18next';
 
 import { Button } from 'classes/button';
 
-import { ticketModel } from 'models/ticket';
 import { getGuildSettings } from 'db/guild';
+import { ticketModel } from 'models/ticket';
 
 import { logger } from 'utils/logger';
 
@@ -13,44 +13,61 @@ export default new Button({
   isCustomIdIncluded: true,
   permissions: [],
   botPermissions: ['ManageChannels', 'SendMessages'],
-  async execute({ interaction }) {
+  async execute({ interaction, client }) {
     if (!interaction.inCachedGuild()) return;
-    const { guildId, channelId, customId } = interaction;
+    const { guildId, channelId, customId, user, member } = interaction;
 
     const currentConfig = await getGuildSettings(guildId);
     const lng = currentConfig.language;
 
     const system = currentConfig.ticket.systems.find((system) => system._id.toString() === customId.split('_')[1]);
-    if (!system)
-      return interaction.reply({
-        content: t('tickets.invalid_system', { lng }),
+    if (!system) {
+      await interaction.reply({
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_system', { lng }))],
         ephemeral: true,
       });
+      return;
+    }
 
-    if (!interaction.member.roles.cache.has(system.staffRoleId))
-      return interaction.reply({
-        content: t('tickets.staff_only', { lng }),
-        ephemeral: true,
-      });
+    if (!member.permissions.has(PermissionFlagsBits.Administrator)) {
+      if (!member.roles.cache.has(system.staffRoleId)) {
+        await interaction.reply({
+          embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.staff_only', { lng }))],
+          ephemeral: true,
+        });
+        return;
+      }
+    }
 
     const ticket = await ticketModel.findOne({ channelId });
-    if (!ticket)
-      return interaction.reply({
-        content: `${t('tickets.invalid_ticket', { lng })}`,
+    if (!ticket) {
+      await interaction.reply({
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_ticket', { lng }))],
+        ephemeral: true,
       });
+      return;
+    }
 
     const hasTranscriptChannel = system.transcriptChannelId ? true : false;
 
     await interaction.reply({
-      content: `${t('tickets.ticket_deleted', { lng, deleted_by: `${interaction.user}` })}\n${t('tickets.delete_time', { lng })}\n${
-        hasTranscriptChannel ? t('tickets.delete_reminder', { lng }) : ''
-      }`,
+      embeds: [
+        new EmbedBuilder()
+          .setColor(client.colors.ticket)
+          .setDescription(
+            [
+              t('ticket.ticket_deleted', { lng, deleted_by: user.toString() }),
+              t('ticket.delete_time', { lng }),
+              hasTranscriptChannel ? t('ticket.delete_reminder', { lng }) : '',
+            ].join('\n'),
+          ),
+      ],
       components: hasTranscriptChannel
         ? [
             new ActionRowBuilder<ButtonBuilder>().addComponents(
               new ButtonBuilder()
                 .setCustomId(`button-tickets-save_${system._id.toString()}`)
-                .setLabel(t('tickets.save', { lng }))
+                .setLabel(t('ticket.save', { lng }))
                 .setEmoji('🗂️')
                 .setStyle(ButtonStyle.Success),
             ),
@@ -60,7 +77,10 @@ export default new Button({
 
     setTimeout(async () => {
       const isDeleted = await interaction.channel?.delete().catch((err) => logger.debug({ err, channelId }, 'Could not delete ticket channel'));
-      if (!isDeleted) return interaction.editReply({ content: t('tickets.error', { lng }) });
+      if (!isDeleted)
+        return interaction
+          .editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.error', { lng }))] })
+          .catch((err) => logger.debug({ err }, 'Could not edit reply'));
       await ticketModel.deleteOne({ _id: ticket._id });
     }, 5000);
   },

@@ -1,6 +1,6 @@
 {
   "ticket": {
-    "name": "ticket",
+    "name": "ticket-systems",
     "description": "Configure the ticket module",
     "options": [
       {

@@ -37,47 +37,52 @@ export default new Command({
 
     const voiceChannel = interaction.member.voice.channel;
     if (!voiceChannel) {
-      return interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.not_in_vc', { lng }))] });
+      await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.not_in_vc', { lng }))] });
+      return;
     }
 
     const customVoiceChannel = await getCustomVoiceChannel(voiceChannel.id);
 
     if (!customVoiceChannel) {
-      return interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.not_in_custom_vc', { lng }))] });
+      await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.not_in_custom_vc', { lng }))] });
+      return;
     }
 
     if (interaction.user.id !== customVoiceChannel.ownerId) {
-      return interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.not_owner', { lng }))] });
+      await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.not_owner', { lng }))] });
+      return;
     }
 
     switch (interaction.options.getSubcommand()) {
       case 'public':
         {
           if (voiceChannel.permissionOverwrites.cache.get(interaction.guildId)?.allow.has(PermissionFlagsBits.Connect)) {
-            return interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.public.already', { lng }))] });
+            await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.public.already', { lng }))] });
+            return;
           }
 
           try {
             await voiceChannel.permissionOverwrites.edit(interaction.guildId, { Connect: true, Speak: true, ViewChannel: true, SendMessages: true });
-            interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.customVC).setDescription(t('custom_vc.public.success', { lng }))] });
+            await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.customVC).setDescription(t('custom_vc.public.success', { lng }))] });
           } catch (err) {
             logger.debug(err, 'Could not give permissions');
-            interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.public.error', { lng }))] });
+            await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.public.error', { lng }))] });
           }
         }
         break;
       case 'private':
         {
           if (!voiceChannel.permissionOverwrites.cache.get(interaction.guildId)?.allow.has(PermissionFlagsBits.Connect)) {
-            return interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.private.already', { lng }))] });
+            await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.private.already', { lng }))] });
+            return;
           }
 
           try {
             await voiceChannel.permissionOverwrites.edit(interaction.guildId, { Connect: false, Speak: false, ViewChannel: false, SendMessages: false });
-            interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.customVC).setDescription(t('custom_vc.private.success', { lng }))] });
+            await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.customVC).setDescription(t('custom_vc.private.success', { lng }))] });
           } catch (err) {
             logger.debug(err, 'Could not remove permissions');
-            interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.private.error', { lng }))] });
+            await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.private.error', { lng }))] });
           }
         }
         break;
@@ -89,17 +94,22 @@ export default new Command({
             voiceChannel.permissionOverwrites.cache.get(user.id)?.allow.has(PermissionFlagsBits.Connect) &&
             !voiceChannel.permissionOverwrites.cache.get(user.id)?.deny.has(PermissionFlagsBits.Connect)
           ) {
-            return interaction.reply({
-              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.invite.already', { lng, user }))],
+            await interaction.reply({
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.invite.already', { lng, user: user.toString() }))],
             });
+            return;
           }
 
           try {
             await voiceChannel.permissionOverwrites.edit(user.id, { Connect: true, Speak: true, ViewChannel: true, SendMessages: true });
-            interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.customVC).setDescription(t('custom_vc.invite.success', { lng, user }))] });
+            await interaction.reply({
+              embeds: [new EmbedBuilder().setColor(client.colors.customVC).setDescription(t('custom_vc.invite.success', { lng, user: user.toString() }))],
+            });
           } catch (err) {
             logger.debug(err, 'Could not give permissions to user');
-            interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.invite.error', { lng, user }))] });
+            await interaction.reply({
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.invite.error', { lng, user: user.toString() }))],
+            });
           }
         }
         break;
@@ -108,36 +118,40 @@ export default new Command({
           const user = interaction.options.getUser('user', true);
 
           if (voiceChannel.permissionOverwrites.cache.get(user.id)?.deny.has(PermissionFlagsBits.Connect)) {
-            return interaction.reply({
-              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.remove.already', { lng, user }))],
+            await interaction.reply({
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.remove.already', { lng, user: user.toString() }))],
             });
+            return;
           }
 
           let response = '';
+
           try {
             const member = interaction.guild.members.cache.get(user.id);
+
             if (member && member.voice.channelId === customVoiceChannel.channelId) {
-              member.voice.disconnect();
-              response += t('custom_vc.remove.disconnected', { lng, user });
+              await member.voice.disconnect();
+              response += t('custom_vc.remove.disconnected', { lng, user: user.toString() });
             }
           } catch (err) {
             logger.debug(err, 'Could not disconnect user from custom vc');
-            response += t('custom_vc.remove.not_disconnected', { lng, user });
+            response += t('custom_vc.remove.not_disconnected', { lng, user: user.toString() });
           }
 
           try {
             await voiceChannel.permissionOverwrites.edit(user.id, { Connect: false, Speak: false, ViewChannel: false, SendMessages: false });
-            response += t('custom_vc.remove.success', { lng, user });
+            response += t('custom_vc.remove.success', { lng, user: user.toString() });
           } catch (err) {
             logger.debug(err, 'Could not remove permissions from user');
-            response += t('custom_vc.remove.not_removed', { lng, user });
+            response += t('custom_vc.remove.not_removed', { lng, user: user.toString() });
           }
 
           if (response === '') {
-            return interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.remove.error', { lng }))] });
+            await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.remove.error', { lng }))] });
+            return;
           }
 
-          interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.customVC).setDescription(response)] });
+          await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.customVC).setDescription(response)] });
         }
         break;
     }

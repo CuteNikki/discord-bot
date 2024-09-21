@@ -24,6 +24,7 @@ export default new Button({
     const lng = currentConfig.language;
 
     const system = currentConfig.ticket.systems.find((system) => system._id.toString() === customId.split('_')[1]);
+
     if (!system) {
       await interaction.reply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_system', { lng }))],
@@ -46,7 +47,7 @@ export default new Button({
 
     if (tickets.length >= system.maxTickets) {
       await interaction.editReply({
-        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.limit', { lng, limit: system.maxTickets }))],
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.limit', { lng, limit: system.maxTickets.toString() }))],
       });
       return;
     }
@@ -105,6 +106,7 @@ export default new Button({
     await interaction.editReply({
       embeds: [new EmbedBuilder().setColor(client.colors.ticket).setDescription(t('ticket.created_user', { lng, channel: channel.toString() }))],
     });
+
     await channel.send({
       content: `${interaction.user} | <@&${system.staffRoleId}>`,
       embeds: [new EmbedBuilder().setColor(client.colors.ticket).setDescription(`${t('ticket.created_channel', { lng, created_by: user.toString() })}`)],

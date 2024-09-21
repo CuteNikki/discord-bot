@@ -15,6 +15,7 @@ export default new Button({
   botPermissions: ['ManageChannels', 'SendMessages'],
   async execute({ interaction, client }) {
     if (!interaction.inCachedGuild()) return;
+
     const { guildId, customId, user, member } = interaction;
 
     const currentConfig = await getGuildSettings(guildId);
@@ -30,16 +31,6 @@ export default new Button({
       return;
     }
 
-    if (!member.permissions.has(PermissionFlagsBits.Administrator)) {
-      if (!member.roles.cache.has(system.staffRoleId)) {
-        await interaction.reply({
-          embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.staff_only', { lng }))],
-          ephemeral: true,
-        });
-        return;
-      }
-    }
-
     const ticket = await ticketModel.findOne({
       channelId: interaction.channel?.id,
     });
@@ -52,12 +43,22 @@ export default new Button({
       return;
     }
 
-    if (!ticket.claimedBy) {
-      await interaction.reply({
-        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.not_claimed', { lng }))],
-        ephemeral: true,
-      });
-      return;
+    if (!member.permissions.has(PermissionFlagsBits.Administrator)) {
+      if (!member.roles.cache.has(system.staffRoleId)) {
+        await interaction.reply({
+          embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.staff_only', { lng }))],
+          ephemeral: true,
+        });
+        return;
+      }
+
+      if (!ticket.claimedBy) {
+        await interaction.reply({
+          embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.not_claimed', { lng }))],
+          ephemeral: true,
+        });
+        return;
+      }
     }
 
     if (ticket.closed) {
@@ -84,12 +85,12 @@ export default new Button({
         .catch((err) => logger.debug({ err, userId }, 'Could not edit channel permissions'));
 
       if (!overwrite) {
-        interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.error', { lng }))], ephemeral: true });
-        break;
+        continue;
       }
     }
 
     await ticketModel.findOneAndUpdate({ channelId: interaction.channel?.id }, { locked: false });
+
     await interaction.reply({
       embeds: [new EmbedBuilder().setColor(client.colors.ticket).setDescription(t('ticket.unlocked', { lng, unlocked_by: user.toString() }))],
       components: [

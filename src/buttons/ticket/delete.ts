@@ -29,6 +29,16 @@ export default new Button({
       return;
     }
 
+    const ticket = await ticketModel.findOne({ channelId });
+
+    if (!ticket) {
+      await interaction.reply({
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_ticket', { lng }))],
+        ephemeral: true,
+      });
+      return;
+    }
+
     if (!member.permissions.has(PermissionFlagsBits.Administrator)) {
       if (!member.roles.cache.has(system.staffRoleId)) {
         await interaction.reply({
@@ -37,15 +47,6 @@ export default new Button({
         });
         return;
       }
-    }
-
-    const ticket = await ticketModel.findOne({ channelId });
-    if (!ticket) {
-      await interaction.reply({
-        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_ticket', { lng }))],
-        ephemeral: true,
-      });
-      return;
     }
 
     const hasTranscriptChannel = system.transcriptChannelId ? true : false;
@@ -77,10 +78,14 @@ export default new Button({
 
     setTimeout(async () => {
       const isDeleted = await interaction.channel?.delete().catch((err) => logger.debug({ err, channelId }, 'Could not delete ticket channel'));
-      if (!isDeleted)
-        return interaction
+
+      if (!isDeleted) {
+        await interaction
           .editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.error', { lng }))] })
           .catch((err) => logger.debug({ err }, 'Could not edit reply'));
+        return;
+      }
+
       await ticketModel.deleteOne({ _id: ticket._id });
     }, 5000);
   },

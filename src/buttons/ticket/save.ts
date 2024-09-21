@@ -16,12 +16,14 @@ export default new Button({
   botPermissions: ['SendMessages'],
   async execute({ interaction, client }) {
     if (!interaction.inCachedGuild()) return;
+
     const { guildId, customId, member } = interaction;
 
     const currentConfig = await getGuildSettings(guildId);
     const lng = currentConfig.language;
 
     const system = currentConfig.ticket.systems.find((system) => system._id.toString() === customId.split('_')[1]);
+
     if (!system) {
       await interaction.reply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_system', { lng }))],
@@ -58,6 +60,7 @@ export default new Button({
     }
 
     const channel = interaction.guild.channels.cache.get(system.transcriptChannelId) as TextBasedChannel;
+
     if (!channel?.isSendable()) {
       await interaction.reply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_transcript_channel', { lng }))],

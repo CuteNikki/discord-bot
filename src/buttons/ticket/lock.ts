@@ -30,16 +30,6 @@ export default new Button({
       return;
     }
 
-    if (!member.permissions.has(PermissionFlagsBits.Administrator)) {
-      if (!member.roles.cache.has(system.staffRoleId)) {
-        await interaction.reply({
-          embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.staff_only', { lng }))],
-          ephemeral: true,
-        });
-        return;
-      }
-    }
-
     const ticket = await ticketModel.findOne({ channelId });
 
     if (!ticket) {
@@ -50,12 +40,22 @@ export default new Button({
       return;
     }
 
-    if (!ticket.claimedBy) {
-      await interaction.reply({
-        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.not_claimed', { lng }))],
-        ephemeral: true,
-      });
-      return;
+    if (!member.permissions.has(PermissionFlagsBits.Administrator)) {
+      if (!member.roles.cache.has(system.staffRoleId)) {
+        await interaction.reply({
+          embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.staff_only', { lng }))],
+          ephemeral: true,
+        });
+        return;
+      }
+
+      if (!ticket.claimedBy) {
+        await interaction.reply({
+          embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.not_claimed', { lng }))],
+          ephemeral: true,
+        });
+        return;
+      }
     }
 
     if (ticket.closed) {
@@ -75,6 +75,7 @@ export default new Button({
     }
 
     const channel = interaction.channel as TextChannel;
+
     for (const userId of ticket.users) {
       const overwrite = await channel.permissionOverwrites
         .edit(userId, { SendMessages: false })
@@ -86,7 +87,7 @@ export default new Button({
     }
     await ticketModel.findOneAndUpdate({ channelId }, { locked: true });
 
-    interaction.reply({
+    await interaction.reply({
       embeds: [new EmbedBuilder().setColor(client.colors.ticket).setDescription(t('ticket.locked', { lng, locked_by: user.toString() }))],
       components: [
         new ActionRowBuilder<ButtonBuilder>().addComponents(

@@ -28,6 +28,16 @@ export default new Button({
       return;
     }
 
+    const ticket = await ticketModel.findOne({ channelId });
+
+    if (!ticket) {
+      await interaction.reply({
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_ticket', { lng }))],
+        ephemeral: true,
+      });
+      return;
+    }
+
     if (!member.permissions.has(PermissionFlagsBits.Administrator)) {
       if (!member.roles.cache.has(system.staffRoleId)) {
         await interaction.reply({
@@ -38,21 +48,17 @@ export default new Button({
       }
     }
 
-    const ticket = await ticketModel.findOne({ channelId });
-    if (!ticket)
-      return interaction.reply({
-        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_ticket', { lng }))],
-        ephemeral: true,
-      });
-
-    if (ticket.claimedBy)
-      return interaction.reply({
+    if (ticket.claimedBy) {
+      await interaction.reply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.already_claimed', { lng, claimed_by: `<@${ticket.claimedBy}>` }))],
         ephemeral: true,
       });
+      return;
+    }
+
     await ticketModel.findOneAndUpdate({ channelId }, { claimedBy: user.id });
 
-    interaction.reply({
+    await interaction.reply({
       embeds: [new EmbedBuilder().setColor(client.colors.ticket).setDescription(t('ticket.claimed', { lng, claimed_by: user.toString() }))],
     });
   },

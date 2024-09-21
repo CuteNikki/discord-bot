@@ -29,17 +29,8 @@ export default new Button({
       return;
     }
 
-    if (!member.permissions.has(PermissionFlagsBits.Administrator)) {
-      if (!member.roles.cache.has(system.staffRoleId)) {
-        await interaction.reply({
-          embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.staff_only', { lng }))],
-          ephemeral: true,
-        });
-        return;
-      }
-    }
-
     const ticket = await ticketModel.findOne({ channelId });
+
     if (!ticket) {
       await interaction.reply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_ticket', { lng }))],
@@ -48,12 +39,22 @@ export default new Button({
       return;
     }
 
-    if (!ticket.claimedBy) {
-      await interaction.reply({
-        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.not_claimed', { lng }))],
-        ephemeral: true,
-      });
-      return;
+    if (!member.permissions.has(PermissionFlagsBits.Administrator)) {
+      if (!member.roles.cache.has(system.staffRoleId)) {
+        await interaction.reply({
+          embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.staff_only', { lng }))],
+          ephemeral: true,
+        });
+        return;
+      }
+
+      if (!ticket.claimedBy) {
+        await interaction.reply({
+          embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.not_claimed', { lng }))],
+          ephemeral: true,
+        });
+        return;
+      }
     }
 
     const hasTranscriptChannel = system.transcriptChannelId ? true : false;
@@ -90,17 +91,19 @@ export default new Button({
     }
 
     const channel = interaction.channel as TextChannel;
+
     for (const userId of ticket.users) {
       const overwrite = await channel.permissionOverwrites
         .edit(userId, { ViewChannel: false, SendMessages: false })
         .catch((err) => logger.debug({ err, userId }, 'Could not edit channel permissions'));
+
       if (!overwrite) {
-        await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.error', { lng }))], ephemeral: true });
-        break;
+        continue;
       }
     }
 
     await ticketModel.findOneAndUpdate({ channelId }, { closed: true });
+
     await interaction.reply({
       embeds: [new EmbedBuilder().setColor(client.colors.ticket).setDescription(t('ticket.closed', { lng, closed_by: `${user.toString()}` }))],
       components: hasTranscriptChannel

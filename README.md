@@ -287,6 +287,7 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
   - [x] welcome
   - [x] farewell
   - [x] ticket
+    - [x] added back the button style and emoji
   - [ ] level
     - [x] db/level functions
     - [x] refactored the code of all level related files

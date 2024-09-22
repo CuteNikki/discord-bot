@@ -280,18 +280,15 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
 
 ## TO-DO
 
-Might look into making more advanced setup commands that walk you through the entire process instead of using multiple commands to configure everything
-This could be very interesting for tickets
-
 - [ ] refactor config commands
   - [x] counting (new)
   - [x] custom voice channels (new)
   - [x] starboard (new)
   - [x] welcome
   - [x] farewell
+  - [x] ticket
   - [ ] level
   - [ ] log
-  - [ ] ticket
 - [ ] miscellaneous
   - [x] fully translated all messages sent by the bot
   - [x] added locales to all registered slash commands

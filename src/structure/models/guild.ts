@@ -1,3 +1,4 @@
+import { ButtonStyle } from 'discord.js';
 import mongoose, { Model, model, Schema, Types } from 'mongoose';
 
 export enum AnnouncementType {
@@ -85,13 +86,19 @@ export interface LevelReward {
   _id: Types.ObjectId;
 }
 
+export type TicketChoice = {
+  label: string;
+  style: ButtonStyle;
+  emoji?: string;
+};
+
 export interface TicketSystem {
   _id: Types.ObjectId;
   maxTickets: number;
   transcriptChannelId: string;
   parentChannelId: string;
   staffRoleId: string;
-  choices: string[];
+  choices: TicketChoice[];
   channelId: string;
 }
 
@@ -251,7 +258,13 @@ const guildSchema = new Schema<GuildSettings>({
           transcriptChannelId: { type: String, required: true },
           parentChannelId: { type: String, required: true },
           staffRoleId: { type: String, required: true },
-          choices: [{ type: String, required: true }],
+          choices: [
+            {
+              label: { type: String, required: true },
+              style: { type: String, required: true },
+              emoji: { type: String, required: false },
+            },
+          ],
         },
       ],
     },

@@ -219,9 +219,14 @@
       "continue": "Press continue to proceed with choices.",
       "add": "Add choice",
       "remove": "Remove choice",
-      "duplicate": "You cannot have the same choice twice!",
       "invalid": "There is no choice that matches the input!",
-      "label": "Write a choice",
+      "duplicate": "You cannot have the same choice twice!",
+      "invalid_style": "The style is invalid!",
+      "invalid_emoji": "The emoji is invalid!",
+      "label": "Label",
+      "style": "Style",
+      "style_placeholder": "danger (red), primary (blue), success (green) or secondary (gray)",
+      "emoji": "Emoji",
       "selected": "Current choices: {{choices}}"
     },
     "category": {

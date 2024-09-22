@@ -25,6 +25,7 @@ import { Command, ModuleType } from 'classes/command';
 
 import { getGuildSettings, updateGuildSettings } from 'db/guild';
 import { getUserLanguage } from 'db/user';
+import type { TicketChoice } from 'models/guild';
 import { logger } from 'utils/logger';
 
 const TIMEOUT_DURATION = 60_000; // Constant for the timeout duration
@@ -149,7 +150,12 @@ export default new Command({
               t('ticket.info.channel', { lng, channel: `<#${channelId}>` }),
               t('ticket.info.transcript', { lng, channel: transcriptChannelId ? `<#${transcriptChannelId}>` : t('none', { lng }) }),
               t('ticket.info.category', { lng, channel: parentChannelId ? `<#${parentChannelId}>` : t('none', { lng }) }),
-              t('ticket.info.choices', { lng, choices: choices.length ? choices.join(', ') : t('none', { lng }) }),
+              t('ticket.info.choices', {
+                lng,
+                choices: choices.length
+                  ? choices.map((c) => `${c.emoji ? c.emoji + ' ' : ''}${c.label} (${ButtonStyle[c.style]})`).join(', ')
+                  : t('none', { lng }),
+              }),
             ].join('\n'),
           );
       });
@@ -477,7 +483,7 @@ export default new Command({
         });
       } // End of handleTranscriptChannel
 
-      let choices: string[] = [];
+      let choices: TicketChoice[] = [];
       async function handleChoices() {
         const choicesMessage = await interaction
           .editReply({
@@ -539,15 +545,32 @@ export default new Command({
               .showModal(
                 new ModalBuilder()
                   .setCustomId('modal-ticket-choices-add')
-                  .setTitle(t('ticket.choices.label', { lng }))
+                  .setTitle(t('ticket.choices.add', { lng }))
                   .addComponents(
                     new ActionRowBuilder<TextInputBuilder>().addComponents(
                       new TextInputBuilder()
-                        .setCustomId('input-ticket-choices-add')
+                        .setCustomId('input-ticket-choices-label')
                         .setLabel(t('ticket.choices.label', { lng }))
                         .setStyle(TextInputStyle.Short)
                         .setMaxLength(32)
                         .setRequired(true),
+                    ),
+                    new ActionRowBuilder<TextInputBuilder>().addComponents(
+                      new TextInputBuilder()
+                        .setCustomId('input-ticket-choices-emoji')
+                        .setLabel(t('ticket.choices.emoji', { lng }))
+                        .setStyle(TextInputStyle.Short)
+                        .setMaxLength(32)
+                        .setRequired(false),
+                    ),
+                    new ActionRowBuilder<TextInputBuilder>().addComponents(
+                      new TextInputBuilder()
+                        .setCustomId('input-ticket-choices-style')
+                        .setLabel(t('ticket.choices.style', { lng }))
+                        .setPlaceholder(t('ticket.choices.style_placeholder', { lng }))
+                        .setStyle(TextInputStyle.Short)
+                        .setMaxLength(5)
+                        .setRequired(false),
                     ),
                   ),
               )
@@ -571,9 +594,10 @@ export default new Command({
             if (!choicesModalInteraction) return;
 
             try {
-              const choice = choicesModalInteraction.fields.getTextInputValue('input-ticket-choices-add');
+              const label = choicesModalInteraction.fields.getTextInputValue('input-ticket-choices-label');
+              const hasChoice = choices.find((c) => c.label === label);
 
-              if (choices.includes(choice)) {
+              if (hasChoice) {
                 await choicesModalInteraction
                   .reply({
                     embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.choices.duplicate', { lng }))],
@@ -583,7 +607,46 @@ export default new Command({
                 return;
               }
 
-              choices.push(choice);
+              const style = choicesModalInteraction.fields.getTextInputValue('input-ticket-choices-style');
+              const isColor = ['primary', 'blue', 'danger', 'red', 'success', 'green', 'secondary', 'gray', 'grey'].includes(style.toLowerCase());
+              const colorMap = {
+                primary: ButtonStyle.Primary,
+                blue: ButtonStyle.Primary,
+                danger: ButtonStyle.Danger,
+                red: ButtonStyle.Danger,
+                success: ButtonStyle.Success,
+                green: ButtonStyle.Success,
+                secondary: ButtonStyle.Secondary,
+                grey: ButtonStyle.Secondary,
+                gray: ButtonStyle.Secondary,
+              };
+
+              if (style && !isColor) {
+                await choicesModalInteraction
+                  .reply({
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.choices.invalid_style', { lng }))],
+                    ephemeral: true,
+                  })
+                  .catch((err) => logger.debug(err, 'Could not reply'));
+                return;
+              }
+
+              const emoji = choicesModalInteraction.fields.getTextInputValue('input-ticket-choices-emoji');
+              const emojiRegex =
+                /(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff]|[\u0023-\u0039]\ufe0f?\u20e3|\u3299|\u3297|\u303d|\u3030|\u24c2|\ud83c[\udd70-\udd71]|\ud83c[\udd7e-\udd7f]|\ud83c\udd8e|\ud83c[\udd91-\udd9a]|\ud83c[\udde6-\uddff]|\ud83c[\ude01-\ude02]|\ud83c\ude1a|\ud83c\ude2f|\ud83c[\ude32-\ude3a]|\ud83c[\ude50-\ude51]|\u203c|\u2049|[\u25aa-\u25ab]|\u25b6|\u25c0|[\u25fb-\u25fe]|\u00a9|\u00ae|\u2122|\u2139|\ud83c\udc04|[\u2600-\u26FF]|\u2b05|\u2b06|\u2b07|\u2b1b|\u2b1c|\u2b50|\u2b55|\u231a|\u231b|\u2328|\u23cf|[\u23e9-\u23f3]|[\u23f8-\u23fa]|\ud83c\udccf|\u2934|\u2935|[\u2190-\u21ff])/g;
+
+              if (emoji && !emojiRegex.test(emoji)) {
+                await choicesModalInteraction
+                  .reply({
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.choices.invalid_emoji', { lng }))],
+                    ephemeral: true,
+                  })
+                  .catch((err) => logger.debug(err, 'Could not reply'));
+                return;
+              }
+
+              choices.push({ label, emoji, style: isColor ? colorMap[style.toLowerCase() as keyof typeof colorMap] : ButtonStyle.Primary });
+
               await choicesModalInteraction.deferUpdate().catch((err) => logger.debug(err, 'Could not defer update'));
               await choicesModalInteraction
                 .editReply({
@@ -591,7 +654,7 @@ export default new Command({
                     new EmbedBuilder()
                       .setColor(client.colors.ticket)
                       .setDescription(
-                        `${t('ticket.choices.description', { lng })}\n\n${t('ticket.choices.selected', { lng, choices: choices.length ? choices.join(', ') : t('ticket.choices.none', { lng, max: MAX_CHOICES.toString() }) })}\n${t('ticket.choices.continue', { lng })}`,
+                        `${t('ticket.choices.description', { lng })}\n\n${t('ticket.choices.selected', { lng, choices: choices.length ? choices.map((c) => `${c.emoji ? c.emoji + ' ' : ''}${c.label} (${ButtonStyle[c.style]})`).join(', ') : t('ticket.choices.none', { lng, max: MAX_CHOICES.toString() }) })}\n${t('ticket.choices.continue', { lng })}`,
                       )
                       .setFooter({ text: t('ticket.setup.required', { lng }) }),
                   ],
@@ -619,7 +682,7 @@ export default new Command({
               .showModal(
                 new ModalBuilder()
                   .setCustomId('modal-ticket-choices-remove')
-                  .setTitle(t('ticket.choices.label', { lng }))
+                  .setTitle(t('ticket.choices.remove', { lng }))
                   .addComponents(
                     new ActionRowBuilder<TextInputBuilder>().addComponents(
                       new TextInputBuilder()
@@ -650,9 +713,10 @@ export default new Command({
               });
             if (!choicesModalInteraction) return;
 
-            const choice = choicesModalInteraction.fields.getTextInputValue('input-ticket-choices-remove');
+            const label = choicesModalInteraction.fields.getTextInputValue('input-ticket-choices-remove');
+            const hasChoice = choices.find((c) => c.label === label);
 
-            if (!choices.includes(choice)) {
+            if (!hasChoice) {
               await choicesModalInteraction
                 .reply({
                   embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.choices.invalid', { lng }))],
@@ -662,7 +726,7 @@ export default new Command({
               return;
             }
 
-            choices.splice(choices.indexOf(choice), 1);
+            choices = choices.filter((c) => c.label !== label);
 
             await choicesModalInteraction.deferUpdate().catch((err) => logger.debug(err, 'Could not defer update'));
             await choicesModalInteraction
@@ -671,7 +735,7 @@ export default new Command({
                   new EmbedBuilder()
                     .setColor(client.colors.ticket)
                     .setDescription(
-                      `${t('ticket.choices.description', { lng })}\n\n${t('ticket.choices.selected', { lng, choices: choices.length ? choices.join(', ') : t('ticket.choices.none', { lng, max: MAX_CHOICES.toString() }) })}\n${t('ticket.choices.continue', { lng })}`,
+                      `${t('ticket.choices.description', { lng })}\n\n${t('ticket.choices.selected', { lng, choices: choices.length ? choices.map((c) => `${c.emoji ? c.emoji + ' ' : ''}${c.label} (${ButtonStyle[c.style]})`).join(', ') : t('ticket.choices.none', { lng, max: MAX_CHOICES.toString() }) })}\n${t('ticket.choices.continue', { lng })}`,
                     )
                     .setFooter({ text: t('ticket.setup.required', { lng }) }),
                 ],
@@ -824,6 +888,14 @@ export default new Command({
         channelCollector.on('collect', async (channelInteraction) => {
           // If continue is pressed
           if (channelInteraction.customId === 'button-ticket-channel-continue') {
+            if (!channel) {
+              await channelInteraction.reply({
+                embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.channel.none', { lng }))],
+                ephemeral: true,
+              });
+              return;
+            }
+
             await channelInteraction.deferUpdate();
             channelCollector.stop('continue');
             return;
@@ -898,9 +970,14 @@ export default new Command({
             ],
             components: [
               new ActionRowBuilder<ButtonBuilder>().addComponents(
-                choices.map((choice, index) =>
-                  new ButtonBuilder().setCustomId(`button-tickets-create_${system?._id?.toString()}_${index}`).setLabel(choice).setStyle(ButtonStyle.Primary),
-                ),
+                choices.map((choice, index) => {
+                  const button = new ButtonBuilder()
+                    .setCustomId(`button-tickets-create_${system?._id?.toString()}_${index}`)
+                    .setLabel(choice.label)
+                    .setStyle(choice.style);
+                  if (choice.emoji) button.setEmoji(choice.emoji);
+                  return button;
+                }),
               ),
             ],
           })
@@ -933,7 +1010,12 @@ export default new Command({
                     t('ticket.info.channel', { lng, channel: `<#${channel?.id}>` }),
                     t('ticket.info.category', { lng, channel: category ? category.toString() : t('none', { lng }) }),
                     t('ticket.info.transcript', { lng, channel: transcriptChannel ? transcriptChannel.toString() : t('none', { lng }) }),
-                    t('ticket.info.choices', { lng, choices: choices.length ? choices.join(', ') : t('none', { lng }) }),
+                    t('ticket.info.choices', {
+                      lng,
+                      choices: choices.length
+                        ? choices.map((c) => `${c.emoji ? c.emoji + ' ' : ''}${c.label} (${ButtonStyle[c.style]})`).join(', ')
+                        : t('none', { lng }),
+                    }),
                   ].join('\n'),
                 ),
             ],

@@ -63,7 +63,7 @@ export default new Button({
 
     const channel: void | TextChannel = await guild.channels
       .create({
-        name: `${user.username}-${choice}`,
+        name: `${user.username}-${choice.label}`,
         type: ChannelType.GuildText,
         parent: system.parentChannelId,
         permissionOverwrites: [
@@ -96,11 +96,11 @@ export default new Button({
     }
 
     await ticketModel.create({
+      guildId,
       channelId: channel.id,
       createdBy: user.id,
       users: [user.id],
-      guildId,
-      choice,
+      choice: choice.label,
     });
 
     await interaction.editReply({

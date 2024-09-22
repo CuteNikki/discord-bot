@@ -219,9 +219,14 @@
       "continue": "Drücke auf Weiter, um mit den Auswahlmöglichkeiten fortzufahren.",
       "add": "Auswahl hinzufügen",
       "remove": "Auswahl entfernen",
-      "duplicate": "Du kannst die selbe Auswahl nicht mehrfach haben!",
       "invalid": "Es gibt keine Auswahl, die mit der Eingabe übereinstimmt!",
-      "label": "Schreibe eine Auswahl",
+      "duplicate": "Du kannst die selbe Auswahl nicht mehrfach haben!",
+      "invalid_style": "Der Stil ist ungültig!",
+      "invalid_emoji": "Der Emoji ist ungültig!",
+      "label": "Name",
+      "style": "Stil",
+      "style_placeholder": "danger (rot), primary (blau), success (grün) oder secondary (grau)",
+      "emoji": "Emoji",
       "selected": "Aktuelle Auswahl: {{choices}}"
     },
     "category": {

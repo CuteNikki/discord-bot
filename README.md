@@ -288,6 +288,9 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
   - [x] farewell
   - [x] ticket
   - [ ] level
+    - [x] db/level functions
+    - [x] refactored the code of all level related files
+    - [ ] refactor the /config-level command
   - [ ] log
 - [ ] miscellaneous
   - [x] fully translated all messages sent by the bot

@@ -1,12 +1,12 @@
 import mongoose, { Model, model, Schema, Types } from 'mongoose';
 
-export interface WeeklyLevel {
+export type WeeklyLevel = {
   _id: Types.ObjectId;
   userId: string;
   guildId: string;
   level: number;
   xp: number;
-}
+};
 
 const weeklyLevelSchema = new Schema<WeeklyLevel>({
   userId: { type: String, required: true },

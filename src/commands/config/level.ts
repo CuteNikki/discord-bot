@@ -1,13 +1,13 @@
-import { ApplicationIntegrationType, ChannelType, Colors, EmbedBuilder, InteractionContextType, PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
+import { ApplicationIntegrationType, ChannelType, EmbedBuilder, InteractionContextType, PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
 import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
-import { AnnouncementType } from 'models/guild';
-import { getUserLanguage } from 'db/user';
 import { getGuildSettings, updateGuildSettings } from 'db/guild';
+import { addLevel, addXP, getLevelForce, getRewardsForLevel, setLevel, setXP } from 'db/level';
+import { getUserLanguage } from 'db/user';
+import { AnnouncementType } from 'models/guild';
 
-import { addLevel, addXP, getDataOrCreate, getLevelRewards, setLevel, setXP } from 'utils/level';
 import { logger } from 'utils/logger';
 
 export default new Command({
@@ -181,11 +181,13 @@ export default new Command({
     ),
   async execute({ interaction, client }) {
     if (!interaction.inCachedGuild()) return;
-    const { options, guildId, guild } = interaction;
     await interaction.deferReply({ ephemeral: true });
-    const lng = await getUserLanguage(interaction.user.id);
 
-    const config = await getGuildSettings(guildId);
+    const { options, guild } = interaction;
+
+    const lng = await getUserLanguage(interaction.user.id);
+    const { level } = await getGuildSettings(guild.id);
+    const { ignoredRoles, ignoredChannels, enabledChannels, enabled, announcement, rewards, channelId } = level;
 
     switch (options.getSubcommandGroup()) {
       case 'show':
@@ -193,77 +195,75 @@ export default new Command({
           switch (options.getSubcommand()) {
             case 'all':
               {
-                const allConfigEmbed = new EmbedBuilder()
-                  .setColor(Colors.Blurple)
-                  .setTitle(t('level.title', { lng }))
-                  .addFields(
-                    {
-                      name: t('level.state.title', { lng }),
-                      value: config.level.enabled ? t('level.state.enabled', { lng }) : t('level.state.disabled', { lng }),
-                    },
-                    {
-                      name: t('level.announcement.title', { lng }),
-                      value:
-                        config.level.announcement === AnnouncementType.OtherChannel
-                          ? `${AnnouncementType[config.level.announcement]}: <#${config.level.channelId}>`
-                          : AnnouncementType[config.level.announcement],
-                    },
-                  );
-                if (config.level.ignoredRoles.length)
-                  allConfigEmbed.addFields({
-                    name: t('level.ignored_roles.title', { lng }),
-                    value: config.level.ignoredRoles
-                      .map((id) => {
-                        if (guild.roles.cache.get(id)) return `<@&${id}>`;
-                        else return id;
-                      })
-                      .join(', '),
-                  });
-                if (config.level.ignoredChannels.length)
-                  allConfigEmbed.addFields({
-                    name: t('level.ignored_channels.title', { lng }),
-                    value: config.level.ignoredChannels
-                      .map((id) => {
-                        if (guild.channels.cache.get(id)) return `<#${id}>`;
-                        else return id;
-                      })
-                      .join(', '),
-                  });
-                if (config.level.enabledChannels.length)
-                  allConfigEmbed.addFields({
-                    name: t('level.enabled_channels.title', { lng }),
-                    value: config.level.enabledChannels
-                      .map((id) => {
-                        if (guild.channels.cache.get(id)) return `<#${id}>`;
-                        else return id;
-                      })
-                      .join(', '),
-                  });
-                if (config.level.rewards.length)
-                  allConfigEmbed.addFields({
-                    name: t('level.rewards.title', { lng }),
-                    value: config.level.rewards
-                      .map(({ level, roleId }) => {
-                        if (guild.roles.cache.get(roleId)) return `${level}: <@&${roleId}>`;
-                        else return `${level}: ${roleId}`;
-                      })
-                      .join('\n'),
-                  });
-                interaction.editReply({
-                  embeds: [allConfigEmbed],
+                await interaction.editReply({
+                  embeds: [
+                    new EmbedBuilder()
+                      .setColor(client.colors.level)
+                      .setTitle(t('level.title', { lng }))
+                      .addFields(
+                        {
+                          name: t('level.state.title', { lng }),
+                          value: enabled ? t('enabled', { lng }) : t('disabled', { lng }),
+                        },
+                        {
+                          name: t('level.announcement.title', { lng }),
+                          value:
+                            announcement === AnnouncementType.OtherChannel
+                              ? `${AnnouncementType[announcement]}: <#${channelId}>`
+                              : AnnouncementType[announcement],
+                        },
+                        {
+                          name: t('level.ignored_roles.title', { lng }),
+                          value: ignoredRoles.length
+                            ? ignoredRoles
+                                .map((id) => {
+                                  if (guild.roles.cache.get(id)) return `<@&${id}>`;
+                                  else return id;
+                                })
+                                .join(', ')
+                            : t('level.none', { lng }),
+                        },
+                        {
+                          name: t('level.ignored_channels.title', { lng }),
+                          value: ignoredChannels.length
+                            ? ignoredChannels
+                                .map((id) => {
+                                  if (guild.channels.cache.get(id)) return `<#${id}>`;
+                                  else return id;
+                                })
+                                .join(', ')
+                            : t('level.none', { lng }),
+                        },
+                        {
+                          name: t('level.enabled_channels.title', { lng }),
+                          value: enabledChannels.length
+                            ? enabledChannels
+                                .map((id) => {
+                                  if (guild.channels.cache.get(id)) return `<#${id}>`;
+                                  else return id;
+                                })
+                                .join(', ')
+                            : t('level.none', { lng }),
+                        },
+                        {
+                          name: t('level.rewards.title', { lng }),
+                          value: rewards.length ? rewards.map(({ level, roleId }) => `${level}: <@&${roleId}>`).join('\n') : t('level.none', { lng }),
+                        },
+                      ),
+                  ],
                 });
               }
               break;
             case 'state':
               {
-                interaction.editReply({
+                await interaction.editReply({
                   embeds: [
                     new EmbedBuilder()
-                      .setColor(Colors.Blurple)
+                      .setColor(client.colors.level)
                       .setTitle(t('level.title', { lng }))
                       .addFields({
                         name: t('level.state.title', { lng }),
-                        value: config.level.enabled ? t('level.state.enabled', { lng }) : t('level.state.disabled', { lng }),
+                        value: enabled ? t('enabled', { lng }) : t('disabled', { lng }),
                       }),
                   ],
                 });
@@ -271,87 +271,106 @@ export default new Command({
               break;
             case 'announcement':
               {
-                interaction.editReply({
+                await interaction.editReply({
                   embeds: [
-                    new EmbedBuilder().addFields({
-                      name: t('level.announcement.title', { lng }),
-                      value:
-                        config.level.announcement === AnnouncementType.OtherChannel
-                          ? `${AnnouncementType[config.level.announcement]}: <#${config.level.channelId}>`
-                          : AnnouncementType[config.level.announcement],
-                    }),
+                    new EmbedBuilder()
+                      .setTitle(t('level.title', { lng }))
+                      .setColor(client.colors.level)
+                      .addFields({
+                        name: t('level.announcement.title', { lng }),
+                        value:
+                          announcement === AnnouncementType.OtherChannel
+                            ? `${AnnouncementType[announcement]}: <#${channelId}>`
+                            : AnnouncementType[announcement],
+                      }),
                   ],
                 });
               }
               break;
             case 'rewards':
               {
-                if (!config.level.rewards.length) return interaction.editReply(t('level.none', { lng }));
-                interaction.editReply({
+                await interaction.editReply({
                   embeds: [
-                    new EmbedBuilder().addFields({
-                      name: t('level.rewards.title', { lng }),
-                      value: config.level.rewards
-                        .map(({ level, roleId }) => {
-                          if (guild.roles.cache.get(roleId)) return `${level}: <@&${roleId}>`;
-                          else return `${level}: ${roleId}`;
-                        })
-                        .join('\n'),
-                    }),
+                    new EmbedBuilder()
+                      .setColor(client.colors.level)
+                      .setTitle(t('level.title', { lng }))
+                      .addFields({
+                        name: t('level.rewards.title', { lng }),
+                        value: rewards.length
+                          ? rewards
+                              .map(({ level, roleId }) => {
+                                if (guild.roles.cache.get(roleId)) return `${level}: <@&${roleId}>`;
+                                else return `${level}: ${roleId}`;
+                              })
+                              .join('\n')
+                          : t('level.none', { lng }),
+                      }),
                   ],
                 });
               }
               break;
             case 'ignored-roles':
               {
-                if (!config.level.ignoredRoles.length) return interaction.editReply(t('level.none', { lng }));
-                interaction.editReply({
+                await interaction.editReply({
                   embeds: [
-                    new EmbedBuilder().addFields({
-                      name: t('level.ignored_roles.title', { lng }),
-                      value: config.level.ignoredRoles
-                        .map((id) => {
-                          if (guild.roles.cache.get(id)) return `<@&${id}>`;
-                          else return id;
-                        })
-                        .join(', '),
-                    }),
+                    new EmbedBuilder()
+                      .setColor(client.colors.level)
+                      .setTitle(t('level.title', { lng }))
+                      .addFields({
+                        name: t('level.ignored_roles.title', { lng }),
+                        value: ignoredRoles.length
+                          ? ignoredRoles
+                              .map((id) => {
+                                if (guild.roles.cache.get(id)) return `<@&${id}>`;
+                                else return id;
+                              })
+                              .join(', ')
+                          : t('level.none', { lng }),
+                      }),
                   ],
                 });
               }
               break;
             case 'ignored-channels':
               {
-                if (!config.level.ignoredChannels.length) return interaction.editReply(t('level.none', { lng }));
-                interaction.editReply({
+                await interaction.editReply({
                   embeds: [
-                    new EmbedBuilder().addFields({
-                      name: t('level.ignored_channels.title', { lng }),
-                      value: config.level.ignoredChannels
-                        .map((id) => {
-                          if (guild.channels.cache.get(id)) return `<#${id}>`;
-                          else return id;
-                        })
-                        .join(', '),
-                    }),
+                    new EmbedBuilder()
+                      .setColor(client.colors.level)
+                      .setTitle(t('level.title', { lng }))
+                      .addFields({
+                        name: t('level.ignored_channels.title', { lng }),
+                        value: ignoredChannels
+                          ? ignoredChannels
+                              .map((id) => {
+                                if (guild.channels.cache.get(id)) return `<#${id}>`;
+                                else return id;
+                              })
+                              .join(', ')
+                          : t('level.none', { lng }),
+                      }),
                   ],
                 });
               }
               break;
             case 'enabled-channels':
               {
-                if (!config.level.enabledChannels.length) return interaction.editReply(t('level.none', { lng }));
-                interaction.editReply({
+                await interaction.editReply({
                   embeds: [
-                    new EmbedBuilder().addFields({
-                      name: t('level.enabled_channels.title', { lng }),
-                      value: config.level.enabledChannels
-                        .map((id) => {
-                          if (guild.channels.cache.get(id)) return `<#${id}>`;
-                          else return id;
-                        })
-                        .join(', '),
-                    }),
+                    new EmbedBuilder()
+                      .setColor(client.colors.level)
+                      .setTitle(t('level.title', { lng }))
+                      .addFields({
+                        name: t('level.enabled_channels.title', { lng }),
+                        value: enabledChannels
+                          ? enabledChannels
+                              .map((id) => {
+                                if (guild.channels.cache.get(id)) return `<#${id}>`;
+                                else return id;
+                              })
+                              .join(', ')
+                          : t('level.none', { lng }),
+                      }),
                   ],
                 });
               }
@@ -364,20 +383,34 @@ export default new Command({
           switch (options.getSubcommand()) {
             case 'on':
               {
-                if (config.level.enabled) return interaction.editReply(t('level.toggle.already_on', { lng }));
-                await updateGuildSettings(guildId, {
-                  $set: { ['level.enabled']: true },
+                if (enabled) {
+                  await interaction.editReply({
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.toggle.already_on', { lng }))],
+                  });
+                  return;
+                }
+
+                await updateGuildSettings(guild.id, { $set: { ['level.enabled']: true } });
+
+                await interaction.editReply({
+                  embeds: [new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.toggle.on', { lng }))],
                 });
-                interaction.editReply(t('level.toggle.on', { lng }));
               }
               break;
             case 'off':
               {
-                if (!config.level.enabled) return interaction.editReply(t('level.toggle.already_off', { lng }));
-                await updateGuildSettings(guildId, {
-                  $set: { ['level.enabled']: false },
+                if (!enabled) {
+                  await interaction.editReply({
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.toggle.already_off', { lng }))],
+                  });
+                  return;
+                }
+
+                await updateGuildSettings(guild.id, { $set: { ['level.enabled']: false } });
+
+                await interaction.editReply({
+                  embeds: [new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.toggle.off', { lng }))],
                 });
-                interaction.editReply(t('level.toggle.off', { lng }));
               }
               break;
           }
@@ -389,52 +422,87 @@ export default new Command({
             case 'other-channel':
               {
                 const channel = options.getChannel('channel', true, [ChannelType.GuildText]);
-                if (config.level.channelId === channel.id && config.level.announcement !== AnnouncementType.OtherChannel)
-                  return interaction.editReply(t('level.announcement.already_channel', { lng }));
-                await updateGuildSettings(guildId, {
+
+                if (channelId === channel.id && announcement !== AnnouncementType.OtherChannel) {
+                  await interaction.editReply({
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.announcement.already_channel', { lng }))],
+                  });
+                  return;
+                }
+
+                await updateGuildSettings(guild.id, {
                   $set: {
                     ['level.channelId']: channel.id,
                     ['level.announcement']: AnnouncementType.OtherChannel,
                   },
                 });
-                interaction.editReply(t('level.announcement.other', { lng }));
+
+                await interaction.editReply({
+                  embeds: [new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.announcement.other', { lng }))],
+                });
               }
               break;
             case 'user-channel':
               {
-                if (config.level.announcement === AnnouncementType.UserChannel) return interaction.editReply(t('level.announcement.already_user', { lng }));
-                await updateGuildSettings(guildId, {
+                if (announcement === AnnouncementType.UserChannel) {
+                  await interaction.editReply({
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.announcement.already_user', { lng }))],
+                  });
+                  return;
+                }
+
+                await updateGuildSettings(guild.id, {
                   $set: {
                     ['level.channelId']: undefined,
                     ['level.announcement']: AnnouncementType.UserChannel,
                   },
                 });
-                interaction.editReply(t('level.announcement.user', { lng }));
+
+                await interaction.editReply({
+                  embeds: [new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.announcement.user', { lng }))],
+                });
               }
               break;
             case 'private-message':
               {
-                if (config.level.announcement === AnnouncementType.PrivateMessage)
-                  return interaction.editReply(t('level.announcement.already_private', { lng }));
-                await updateGuildSettings(guildId, {
+                if (announcement === AnnouncementType.PrivateMessage) {
+                  await interaction.editReply({
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.announcement.already_private', { lng }))],
+                  });
+                  return;
+                }
+
+                await updateGuildSettings(guild.id, {
                   $set: {
                     ['level.channelId']: undefined,
                     ['level.announcement']: AnnouncementType.PrivateMessage,
                   },
                 });
-                interaction.editReply(t('level.announcement.private', { lng }));
+
+                await interaction.editReply({
+                  embeds: [new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.announcement.private', { lng }))],
+                });
               }
               break;
             case 'none':
               {
-                if (config.level.announcement !== AnnouncementType.None) return interaction.editReply(t('level.announcement.already_none', { lng }));
-                await updateGuildSettings(guildId, {
+                if (announcement !== AnnouncementType.None) {
+                  await interaction.editReply({
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.announcement.already_none', { lng }))],
+                  });
+                  return;
+                }
+
+                await updateGuildSettings(guild.id, {
                   $set: {
                     ['level.channelId']: undefined,
                     ['level.announcement']: AnnouncementType.None,
                   },
                 });
-                interaction.editReply(t('level.announcement.none', { lng }));
+
+                await interaction.editReply({
+                  embeds: [new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.announcement.none', { lng }))],
+                });
               }
               break;
           }
@@ -447,30 +515,47 @@ export default new Command({
               {
                 const role = options.getRole('role', true);
                 const level = options.getInteger('level', true);
-                if (config.level.rewards.length >= 25) return interaction.editReply(t('level.rewards.limit', { lng }));
-                const currentRoles = config.level.rewards.map((reward) => reward.roleId);
-                if (currentRoles.includes(role.id)) return interaction.editReply(t('level.rewards.already', { lng }));
-                await updateGuildSettings(guildId, {
-                  $push: { ['level.rewards']: { level, roleId: role.id } },
+
+                if (rewards.length >= 25) {
+                  await interaction.editReply({
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.rewards.limit', { lng }))],
+                  });
+                  return;
+                }
+
+                const currentRoles = rewards.map((reward) => reward.roleId);
+
+                if (currentRoles.includes(role.id)) {
+                  await interaction.editReply({
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.rewards.already', { lng }))],
+                  });
+                  return;
+                }
+
+                await updateGuildSettings(guild.id, { $push: { ['level.rewards']: { level, roleId: role.id } } });
+
+                await interaction.editReply({
+                  embeds: [new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.rewards.added', { lng, level, role: role.toString() }))],
                 });
-                interaction.editReply(
-                  t('level.rewards.added', {
-                    lng,
-                    level,
-                    role: role.toString(),
-                  }),
-                );
               }
               break;
             case 'remove':
               {
                 const roleId = options.getString('role-id', true);
-                const reward = config.level.rewards.find((rw) => rw.roleId === roleId);
-                if (!reward) return interaction.editReply(t('level.rewards.invalid', { lng }));
-                await updateGuildSettings(guildId, {
-                  $pull: { ['level.rewards']: { _id: reward._id } },
+                const reward = rewards.find((rw) => rw.roleId === roleId);
+
+                if (!reward) {
+                  await interaction.editReply({
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.rewards.invalid', { lng }))],
+                  });
+                  return;
+                }
+
+                await updateGuildSettings(guild.id, { $pull: { ['level.rewards']: { _id: reward._id } } });
+
+                await interaction.editReply({
+                  embeds: [new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.rewards.removed', { lng }))],
                 });
-                interaction.editReply(t('level.rewards.removed', { lng }));
               }
               break;
           }
@@ -482,27 +567,44 @@ export default new Command({
             case 'add':
               {
                 const role = options.getRole('role', true);
-                if (config.level.ignoredRoles.includes(role.id)) return interaction.editReply(t('level.ignored_roles.already', { lng }));
-                if (config.level.ignoredRoles.length >= 25) return interaction.editReply(t('level.ignored_roles.limit', { lng }));
-                await updateGuildSettings(guildId, {
-                  $push: { ['level.ignoredRoles']: role.id },
+
+                if (ignoredRoles.includes(role.id)) {
+                  await interaction.editReply({
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.ignored_roles.already', { lng }))],
+                  });
+                  return;
+                }
+
+                if (ignoredRoles.length >= 25) {
+                  await interaction.editReply({
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.ignored_roles.limit', { lng }))],
+                  });
+                  return;
+                }
+
+                await updateGuildSettings(guild.id, { $push: { ['level.ignoredRoles']: role.id } });
+
+                await interaction.editReply({
+                  embeds: [new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.ignored_roles.added', { lng, role: role.toString() }))],
                 });
-                interaction.editReply(
-                  t('level.ignored_roles.added', {
-                    lng,
-                    role: role.toString(),
-                  }),
-                );
               }
               break;
             case 'remove':
               {
                 const roleId = options.getString('role-id', true);
-                if (!config.level.ignoredRoles.includes(roleId)) return interaction.editReply(t('level.ignored_roles.invalid', { lng }));
-                await updateGuildSettings(guildId, {
-                  $pull: { ['level.ignoredRoles']: roleId },
+
+                if (!ignoredRoles.includes(roleId)) {
+                  await interaction.editReply({
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.ignored_roles.invalid', { lng }))],
+                  });
+                  return;
+                }
+
+                await updateGuildSettings(guild.id, { $pull: { ['level.ignoredRoles']: roleId } });
+
+                await interaction.editReply({
+                  embeds: [new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.ignored_roles.removed', { lng }))],
                 });
-                interaction.editReply(t('level.ignored_roles.removed', { lng }));
               }
               break;
           }
@@ -514,27 +616,46 @@ export default new Command({
             case 'add':
               {
                 const channel = options.getChannel('channel', true, [ChannelType.GuildText]);
-                if (config.level.ignoredChannels.includes(channel.id)) return interaction.editReply(t('level.ignored_channels.already', { lng }));
-                if (config.level.ignoredChannels.length >= 25) return interaction.editReply(t('level.ignored_channels.limit', { lng }));
-                await updateGuildSettings(guildId, {
-                  $push: { ['level.ignoredChannels']: channel.id },
+
+                if (ignoredChannels.includes(channel.id)) {
+                  await interaction.editReply({
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.ignored_channels.already', { lng }))],
+                  });
+                  return;
+                }
+
+                if (ignoredChannels.length >= 25) {
+                  await interaction.editReply({
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.ignored_channels.limit', { lng }))],
+                  });
+                  return;
+                }
+
+                await updateGuildSettings(guild.id, { $push: { ['level.ignoredChannels']: channel.id } });
+
+                await interaction.editReply({
+                  embeds: [
+                    new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.ignored_channels.added', { lng, channel: channel.toString() })),
+                  ],
                 });
-                interaction.editReply(
-                  t('level.ignored_channels.added', {
-                    lng,
-                    channel: channel.toString(),
-                  }),
-                );
               }
               break;
             case 'remove':
               {
                 const channelId = options.getString('channel-id', true);
-                if (!config.level.ignoredChannels.includes(channelId)) return interaction.editReply(t('level.ignored_channels.invalid', { lng }));
-                await updateGuildSettings(guildId, {
-                  $pull: { ['level.ignoredChannels']: channelId },
+
+                if (!ignoredChannels.includes(channelId)) {
+                  await interaction.editReply({
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.ignored_channels.invalid', { lng }))],
+                  });
+                  return;
+                }
+
+                await updateGuildSettings(guild.id, { $pull: { ['level.ignoredChannels']: channelId } });
+
+                await interaction.editReply({
+                  embeds: [new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.ignored_channels.removed', { lng }))],
                 });
-                interaction.editReply(t('level.ignored_channels.removed', { lng }));
               }
               break;
           }
@@ -546,27 +667,46 @@ export default new Command({
             case 'add':
               {
                 const channel = options.getChannel('channel', true, [ChannelType.GuildText]);
-                if (config.level.enabledChannels.includes(channel.id)) return interaction.editReply(t('level.enabled_channels.already', { lng }));
-                if (config.level.enabledChannels.length >= 25) return interaction.editReply(t('level.enabled_channels.limit', { lng }));
-                await updateGuildSettings(guildId, {
-                  $push: { ['level.enabledChannels']: channel.id },
+
+                if (enabledChannels.includes(channel.id)) {
+                  await interaction.editReply({
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.enabled_channels.already', { lng }))],
+                  });
+                  return;
+                }
+
+                if (enabledChannels.length >= 25) {
+                  await interaction.editReply({
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.enabled_channels.limit', { lng }))],
+                  });
+                  return;
+                }
+
+                await updateGuildSettings(guild.id, { $push: { ['level.enabledChannels']: channel.id } });
+
+                await interaction.editReply({
+                  embeds: [
+                    new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.enabled_channels.added', { lng, channel: channel.toString() })),
+                  ],
                 });
-                interaction.editReply(
-                  t('level.enabled_channels.added', {
-                    lng,
-                    channel: channel.toString(),
-                  }),
-                );
               }
               break;
             case 'remove':
               {
                 const channelId = options.getString('channel-id', true);
-                if (!config.level.enabledChannels.includes(channelId)) return interaction.editReply(t('level.enabled_channels.invalid', { lng }));
-                await updateGuildSettings(guildId, {
-                  $pull: { ['level.enabledChannels']: channelId },
+
+                if (!enabledChannels.includes(channelId)) {
+                  await interaction.editReply({
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.enabled_channels.invalid', { lng }))],
+                  });
+                  return;
+                }
+
+                await updateGuildSettings(guild.id, { $pull: { ['level.enabledChannels']: channelId } });
+
+                await interaction.editReply({
+                  embeds: [new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.enabled_channels.removed', { lng }))],
                 });
-                interaction.editReply(t('level.enabled_channels.removed', { lng }));
               }
               break;
           }
@@ -577,14 +717,18 @@ export default new Command({
           switch (options.getSubcommand()) {
             case 'add':
               {
+                const xp = options.getInteger('xp', true);
                 const user = options.getUser('user', true);
+
+                if (user.bot) {
+                  await interaction.editReply(t('level.bot', { lng }));
+                  return;
+                }
+
                 const member = guild.members.cache.get(user.id);
 
-                if (user.bot) return interaction.editReply(t('level.bot', { lng }));
-
-                const xp = options.getInteger('xp', true);
-                const userLevel = await addXP({ userId: user.id, guildId }, client, xp);
-                const rewards = await getLevelRewards(client, userLevel);
+                const userLevel = await addXP(user.id, guild.id, xp);
+                const rewards = await getRewardsForLevel(userLevel);
 
                 if (member && rewards.length) {
                   await member.roles
@@ -592,29 +736,32 @@ export default new Command({
                     .catch((err) => logger.debug({ err, userId: user.id }, 'Could not add role(s)'));
                 }
 
-                interaction.editReply(
-                  t('level.xp.added', {
-                    lng,
-                    user: user.toString(),
-                    xp,
-                    new_xp: userLevel.xp,
-                    new_level: userLevel.level,
-                  }),
-                );
+                await interaction.editReply({
+                  embeds: [
+                    new EmbedBuilder()
+                      .setColor(client.colors.level)
+                      .setDescription(t('level.xp.added', { lng, xp, user: user.toString(), new_xp: userLevel.xp, new_level: userLevel.level })),
+                  ],
+                });
               }
               break;
             case 'remove':
               {
+                const xp = options.getInteger('xp', true);
                 const user = options.getUser('user', true);
+
+                if (user.bot) {
+                  await interaction.editReply(t('level.bot', { lng }));
+                  return;
+                }
+
                 const member = guild.members.cache.get(user.id);
 
-                if (user.bot) return interaction.editReply(t('level.bot', { lng }));
+                const currentLevel = await getLevelForce(user.id, guild.id);
+                const updatedLevel = await addXP(user.id, guild.id, -xp);
 
-                const xp = options.getInteger('xp', true);
-                const currentLevel = await getDataOrCreate({ userId: user.id, guildId }, client);
-                const userLevel = await addXP({ userId: user.id, guildId }, client, -xp);
-                const oldRewards = await getLevelRewards(client, currentLevel);
-                const newRewards = await getLevelRewards(client, userLevel);
+                const oldRewards = await getRewardsForLevel(currentLevel);
+                const newRewards = await getRewardsForLevel(updatedLevel);
 
                 if (member && (oldRewards.length || newRewards.length)) {
                   await member.roles
@@ -625,27 +772,29 @@ export default new Command({
                     .catch((err) => logger.debug({ err, userId: user.id }, 'Could not set role(s)'));
                 }
 
-                interaction.editReply(
-                  t('level.xp.removed', {
-                    lng,
-                    user: user.toString(),
-                    xp,
-                    new_xp: userLevel.xp,
-                    new_level: userLevel.level,
-                  }),
-                );
+                await interaction.editReply({
+                  embeds: [
+                    new EmbedBuilder()
+                      .setColor(client.colors.level)
+                      .setDescription(t('level.xp.removed', { lng, xp, user: user.toString(), new_xp: updatedLevel.xp, new_level: updatedLevel.level })),
+                  ],
+                });
               }
               break;
             case 'set':
               {
                 const user = options.getUser('user', true);
+                const xp = options.getInteger('xp', true);
+
+                if (user.bot) {
+                  await interaction.editReply(t('level.bot', { lng }));
+                  return;
+                }
+
                 const member = guild.members.cache.get(user.id);
 
-                if (user.bot) return interaction.editReply(t('level.bot', { lng }));
-
-                const xp = options.getInteger('xp', true);
-                const userLevel = await setXP({ userId: user.id, guildId }, client, xp);
-                const rewards = await getLevelRewards(client, userLevel);
+                const userLevel = await setXP(user.id, guild.id, xp);
+                const rewards = await getRewardsForLevel(userLevel);
 
                 if (member && rewards.length) {
                   await member.roles
@@ -653,15 +802,13 @@ export default new Command({
                     .catch((err) => logger.debug({ err, userId: user.id }, 'Could not add role(s)'));
                 }
 
-                interaction.editReply(
-                  t('level.xp.set', {
-                    lng,
-                    user: user.toString(),
-                    xp,
-                    new_xp: userLevel.xp,
-                    new_level: userLevel.level,
-                  }),
-                );
+                await interaction.editReply({
+                  embeds: [
+                    new EmbedBuilder()
+                      .setColor(client.colors.level)
+                      .setDescription(t('level.xp.set', { lng, xp, user: user.toString(), new_xp: userLevel.xp, new_level: userLevel.level })),
+                  ],
+                });
               }
               break;
           }
@@ -673,13 +820,17 @@ export default new Command({
             case 'add':
               {
                 const user = options.getUser('user', true);
+                const level = options.getInteger('level', true);
+
+                if (user.bot) {
+                  await interaction.editReply(t('level.bot', { lng }));
+                  return;
+                }
+
                 const member = guild.members.cache.get(user.id);
 
-                if (user.bot) return interaction.editReply(t('level.bot', { lng }));
-
-                const level = options.getInteger('level', true);
-                const userLevel = await addLevel({ userId: user.id, guildId }, client, level);
-                const rewards = await getLevelRewards(client, userLevel);
+                const userLevel = await addLevel(user.id, guild.id, level);
+                const rewards = await getRewardsForLevel(userLevel);
 
                 if (member && rewards.length) {
                   await member.roles
@@ -687,29 +838,32 @@ export default new Command({
                     .catch((err) => logger.debug({ err, userId: user.id }, 'Could not add role(s)'));
                 }
 
-                interaction.editReply(
-                  t('level.level.added', {
-                    lng,
-                    user: user.toString(),
-                    level,
-                    new_xp: userLevel.xp,
-                    new_level: userLevel.level,
-                  }),
-                );
+                await interaction.editReply({
+                  embeds: [
+                    new EmbedBuilder()
+                      .setColor(client.colors.level)
+                      .setDescription(t('level.level.added', { lng, level, user: user.toString(), new_xp: userLevel.xp, new_level: userLevel.level })),
+                  ],
+                });
               }
               break;
             case 'remove':
               {
                 const user = options.getUser('user', true);
+                const level = options.getInteger('level', true);
+
+                if (user.bot) {
+                  await interaction.editReply(t('level.bot', { lng }));
+                  return;
+                }
+
                 const member = guild.members.cache.get(user.id);
 
-                if (user.bot) return interaction.editReply(t('level.bot', { lng }));
+                const currentLevel = await getLevelForce(user.id, guild.id);
+                const updatedLevel = await addLevel(user.id, guild.id, -level);
 
-                const level = options.getInteger('level', true);
-                const currentLevel = await getDataOrCreate({ userId: user.id, guildId }, client);
-                const userLevel = await addLevel({ userId: user.id, guildId }, client, -level);
-                const oldRewards = await getLevelRewards(client, currentLevel);
-                const newRewards = await getLevelRewards(client, userLevel);
+                const oldRewards = await getRewardsForLevel(currentLevel);
+                const newRewards = await getRewardsForLevel(updatedLevel);
 
                 if (member && (oldRewards.length || newRewards.length)) {
                   await member.roles
@@ -720,27 +874,29 @@ export default new Command({
                     .catch((err) => logger.debug({ err, userId: user.id }, 'Could not set role(s)'));
                 }
 
-                interaction.editReply(
-                  t('level.level.removed', {
-                    lng,
-                    user: user.toString(),
-                    level,
-                    new_xp: userLevel.xp,
-                    new_level: userLevel.level,
-                  }),
-                );
+                await interaction.editReply({
+                  embeds: [
+                    new EmbedBuilder()
+                      .setColor(client.colors.level)
+                      .setDescription(t('level.level.removed', { lng, level, user: user.toString(), new_xp: updatedLevel.xp, new_level: updatedLevel.level })),
+                  ],
+                });
               }
               break;
             case 'set':
               {
                 const user = options.getUser('user', true);
+                const level = options.getInteger('level', true);
+
+                if (user.bot) {
+                  await interaction.editReply(t('level.bot', { lng }));
+                  return;
+                }
+
                 const member = guild.members.cache.get(user.id);
 
-                if (user.bot) return interaction.editReply(t('level.bot', { lng }));
-
-                const level = options.getInteger('level', true);
-                const userLevel = await setLevel({ userId: user.id, guildId }, client, level);
-                const rewards = await getLevelRewards(client, userLevel);
+                const userLevel = await setLevel(user.id, guild.id, level);
+                const rewards = await getRewardsForLevel(userLevel);
 
                 if (member && rewards.length) {
                   await member.roles
@@ -748,14 +904,13 @@ export default new Command({
                     .catch((err) => logger.debug({ err, userId: user.id }, 'Could not add role(s)'));
                 }
 
-                interaction.editReply(
-                  t('level.level.set', {
-                    lng,
-                    user: user.toString(),
-                    new_xp: userLevel.xp,
-                    new_level: userLevel.level,
-                  }),
-                );
+                await interaction.editReply({
+                  embeds: [
+                    new EmbedBuilder()
+                      .setColor(client.colors.level)
+                      .setDescription(t('level.level.set', { lng, level, user: user.toString(), new_xp: userLevel.xp, new_level: userLevel.level })),
+                  ],
+                });
               }
               break;
           }

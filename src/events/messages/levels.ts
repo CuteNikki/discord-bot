@@ -1,13 +1,13 @@
-import { Colors, EmbedBuilder, Events, type MessageCreateOptions } from 'discord.js';
+import { EmbedBuilder, Events, type MessageCreateOptions } from 'discord.js';
 import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
 import { getGuildLanguage, getGuildSettings } from 'db/guild';
+import { appendXP, getLevelForce, getRandomXP, getRewardsForLevel } from 'db/level';
 import { getUserLanguage } from 'db/user';
 import { AnnouncementType } from 'models/guild';
 
-import { appendXP, getDataOrCreate, getLevelRewards, randomXP } from 'utils/level';
 import { logger } from 'utils/logger';
 
 const cooldowns = new Set();
@@ -16,97 +16,113 @@ export default new Event({
   name: Events.MessageCreate,
   once: false,
   async execute(client, message) {
-    const { guildId, channelId, author, guild, member, channel } = message;
-    if (author.bot || cooldowns.has(author.id) || !member || !guild || !guildId) return;
+    if (!message.inGuild() || message.author.bot || cooldowns.has(message.author.id)) {
+      return;
+    }
 
-    const guildSettings = await getGuildSettings(guildId);
+    const { channel, author: user, guild, member } = message;
 
+    // Check if levelling is disabled, or if the channel is ignored and return
+    const guildSettings = await getGuildSettings(guild.id);
     if (
       !guildSettings ||
       !guildSettings.level.enabled ||
-      guildSettings.level.ignoredChannels.includes(channelId) ||
-      (guildSettings.level.enabledChannels.length && !guildSettings.level.enabledChannels.includes(channelId))
-    )
+      guildSettings.level.ignoredChannels.includes(channel.id) ||
+      (guildSettings.level.enabledChannels.length && !guildSettings.level.enabledChannels.includes(channel.id))
+    ) {
       return;
+    }
 
-    const identifier = { userId: author.id, guildId };
+    // Get current level before adding XP
+    const currentLevel = await getLevelForce(user.id, guild.id);
+    // Get updated level after adding XP
+    const updatedLevel = await appendXP(user.id, guild.id, getRandomXP());
 
-    const currentData = await getDataOrCreate(identifier, client);
-    const newData = await appendXP(identifier, client, randomXP(), currentData);
+    // After we added XP, we add the user to a cooldown
+    // We do not want the user to level up by spamming
+    cooldowns.add(user.id);
+    // After 60 seconds, we remove the user from the cooldown
+    setTimeout(() => cooldowns.delete(user.id), 60_000);
 
-    cooldowns.add(author.id);
-    setTimeout(() => cooldowns.delete(author.id), 60000);
+    // If the level is the same, return
+    if (currentLevel.level === updatedLevel.level) {
+      return;
+    }
 
-    if (currentData.level < newData.level) {
-      const rewards = await getLevelRewards(client, newData);
-      const lng = guildSettings.level.announcement === AnnouncementType.OtherChannel ? await getGuildLanguage(guild.id) : await getUserLanguage(author.id);
+    // Now we know the user has levelled up, we can send a message
 
-      const levelUpEmbed = new EmbedBuilder()
-        .setColor(Colors.Blurple)
-        .setAuthor({
-          name: author.displayName,
-          iconURL: author.displayAvatarURL(),
-        })
-        .addFields({
-          name: t('level.up.title', { lng }),
-          value: t('level.up.description', { lng, level: newData.level }),
+    // Get any rewards for the new level
+    const rewards = await getRewardsForLevel(updatedLevel);
+
+    // Get the language of the user or guild depending on if the message is sent in the guild or to the user
+    const lng = guildSettings.level.announcement === AnnouncementType.OtherChannel ? await getGuildLanguage(guild.id) : await getUserLanguage(user.id);
+
+    const levelUpEmbed = new EmbedBuilder()
+      .setColor(client.colors.level)
+      .setAuthor({
+        name: user.displayName,
+        iconURL: user.displayAvatarURL(),
+      })
+      .addFields({
+        name: t('level.up.title', { lng }),
+        value: t('level.up.description', { lng, level: updatedLevel.level }),
+      });
+
+    // If there are rewards, we add the roles to the message and if they could not be added, we let the user know
+    if (rewards?.length && member) {
+      const added = await member.roles.add(rewards.map((r) => r.roleId)).catch((err) => logger.debug({ err }, 'Could not add role(s)'));
+
+      if (added) {
+        levelUpEmbed.addFields({
+          name: t('level.up.title_roles', { lng }),
+          value: rewards.map((r) => `<@&${r.roleId}>`).join(' '),
         });
-
-      if (rewards?.length) {
-        const added = await member.roles.add(rewards.map((r) => r.roleId)).catch((err) => logger.debug({ err }, 'Could not add role(s)'));
-        if (added)
-          levelUpEmbed.addFields({
-            name: t('level.up.title_roles', { lng }),
-            value: rewards.map((r) => `<@&${r.roleId}>`).join(' '),
-          });
-        else
-          levelUpEmbed.addFields({
-            name: t('level.up.title_roles_error', { lng }),
-            value: rewards.map((r) => `<@&${r.roleId}>`).join(' '),
-          });
+      } else {
+        levelUpEmbed.addFields({
+          name: t('level.up.title_roles_error', { lng }),
+          value: rewards.map((r) => `<@&${r.roleId}>`).join(' '),
+        });
       }
+    }
 
-      const levelUpMessage: MessageCreateOptions = {
-        content: author.toString(),
-        embeds: [levelUpEmbed],
-      };
+    const levelUpMessage: MessageCreateOptions = {
+      content: user.toString(),
+      embeds: [levelUpEmbed],
+    };
 
-      switch (guildSettings.level.announcement) {
-        case AnnouncementType.UserChannel:
-          {
-            const msg = await channel.send(levelUpMessage).catch((err) => logger.debug({ err }, 'Could not send message'));
-            setTimeout(() => {
-              if (msg && msg.deletable) msg.delete().catch((err) => logger.debug({ err }, 'Could not delete message'));
-            }, 5000);
-          }
-          break;
-        case AnnouncementType.OtherChannel:
-          {
-            if (!guildSettings.level.channelId) return;
-            const channel = guild.channels.cache.get(guildSettings.level.channelId);
-            if (!channel?.isSendable()) return;
-            channel.send(levelUpMessage).catch((err) => logger.debug({ err }, 'Could not send message'));
-          }
-          break;
-        case AnnouncementType.PrivateMessage:
-          {
-            levelUpMessage.content = t('level.up.message', {
-              lng,
-              guild: guild.name,
-            });
-            levelUpEmbed.setFields({
-              name: t('level.up.title', { lng }),
-              value: t('level.up.description', { lng }),
-            });
-            if (rewards?.length)
-              levelUpEmbed.addFields({
-                name: t('level.up.title_roles', { lng, count: rewards.length }),
-                value: rewards.map((r) => `<@&${r.roleId}>`).join(' '),
-              });
-            client.users.send(author.id, levelUpMessage).catch((err) => logger.debug({ err, userId: author.id }, 'Could not send DM'));
-          }
-          break;
-      }
+    switch (guildSettings.level.announcement) {
+      case AnnouncementType.UserChannel:
+        {
+          // Send the message to the current channel
+          const msg = await channel.send(levelUpMessage).catch((err) => logger.debug({ err }, 'Could not send message'));
+
+          // Delete the message after 5 seconds
+          setTimeout(async () => {
+            if (msg && msg.deletable) await msg.delete().catch((err) => logger.debug({ err }, 'Could not delete message'));
+          }, 5000);
+        }
+        break;
+      case AnnouncementType.OtherChannel:
+        {
+          // Get the guilds announcement channel
+          if (!guildSettings.level.channelId) return;
+          const channel = guild.channels.cache.get(guildSettings.level.channelId);
+          // If the channel is not sendable, return
+          if (!channel?.isSendable()) return;
+
+          // Send the message to the announcement channel
+          await channel.send(levelUpMessage).catch((err) => logger.debug({ err }, 'Could not send message'));
+        }
+        break;
+      case AnnouncementType.PrivateMessage:
+        {
+          // We don't need to keep the message content as the user mention when the message is sent to DMs
+          // Instead we let the user know from what guild the message came from
+          levelUpMessage.content = t('level.up.message', { lng, guild: guild.name });
+          // Send the message to the user
+          await client.users.send(user.id, levelUpMessage).catch((err) => logger.debug({ err, userId: user.id }, 'Could not send DM'));
+        }
+        break;
     }
   },
 });

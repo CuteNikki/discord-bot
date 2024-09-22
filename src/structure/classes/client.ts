@@ -43,6 +43,7 @@ export class DiscordClient extends Client {
     customVC: Colors.Purple,
     phone: Colors.Gold,
     ticket: Colors.LuminousVividPink,
+    level: Colors.Blurple,
   };
 
   // Custom emojis

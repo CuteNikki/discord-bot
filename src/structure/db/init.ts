@@ -8,7 +8,7 @@ import { DiscordClient } from 'classes/client';
 
 import { infractionModel, InfractionType } from 'models/infraction';
 import { reminderModel } from 'models/reminder';
-import { weeklyLevelModel } from 'models/weeklyLevels';
+import { weeklyLevelModel } from 'models/weeklyLevel';
 
 import { getClientSettings, updateClientSettings } from 'db/client';
 import { getUserLanguage } from 'db/user';

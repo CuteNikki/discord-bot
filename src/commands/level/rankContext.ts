@@ -4,9 +4,8 @@ import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
+import { convertLevelToXP, getLevelWithRank } from 'db/level';
 import { getUserLanguage } from 'db/user';
-
-import { getDataWithRank, levelToXP } from 'utils/level';
 
 const commandType = ApplicationCommandType.User;
 
@@ -18,34 +17,39 @@ export default new Command<typeof commandType>({
     .setType(commandType)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
     .setContexts(InteractionContextType.Guild),
-  async execute({ interaction, client }) {
+  async execute({ interaction }) {
     if (!interaction.inCachedGuild()) return;
+
     await interaction.deferReply({ ephemeral: true });
 
-    const { options, user, guild, guildId } = interaction;
+    const { options, user, guild } = interaction;
 
     const lng = await getUserLanguage(user.id);
-
     const target = options.getUser('user', true);
     const member = guild.members.cache.get(target.id);
 
-    const rank = await getDataWithRank({ userId: target.id, guildId }, client);
+    const rank = await getLevelWithRank(target.id, guild.id);
     if (!rank) return interaction.editReply(t('level.none', { lng }));
 
     Font.loadDefault();
+
     const card = new RankCardBuilder()
       .setStatus(member?.presence?.status ?? 'none')
-      .setAvatar(target.displayAvatarURL({ size: 1024, forceStatic: true }))
+      .setAvatar(target.displayAvatarURL({ size: 1024, forceStatic: true, extension: 'png' }))
       .setUsername(target.username)
       .setDisplayName(target.displayName)
       .setRank(rank.position)
       .setLevel(rank.level)
       .setCurrentXP(rank.xp)
-      .setRequiredXP(levelToXP(rank.level + 1));
+      .setRequiredXP(convertLevelToXP(rank.level + 1));
+
     const image = await card.build();
 
-    return interaction.editReply({
-      files: [new AttachmentBuilder(image, { name: 'rank.png' })],
-    });
+    if (image) {
+      await interaction.editReply({
+        files: [new AttachmentBuilder(image, { name: 'rank.png' })],
+      });
+      return;
+    }
   },
 });

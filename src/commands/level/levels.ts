@@ -5,7 +5,7 @@ import { Command, ModuleType } from 'classes/command';
 
 import { getUserLanguage } from 'db/user';
 
-import { computeLeaderboard, getLeaderboard, getWeeklyLeaderboard } from 'utils/level';
+import { computeLeaderboard, getLeaderboard, getWeeklyLeaderboard } from 'db/level';
 import { chunk, pagination } from 'utils/pagination';
 
 export default new Command({
@@ -20,17 +20,24 @@ export default new Command({
     .addBooleanOption((option) => option.setName('ephemeral').setDescription('When set to false will show the message to everyone').setRequired(false)),
   async execute({ interaction, client }) {
     if (!interaction.inCachedGuild()) return;
-    const { options, guildId } = interaction;
-    const lng = await getUserLanguage(interaction.user.id);
+
+    const { options, guild, user } = interaction;
 
     const ephemeral = options.getBoolean('ephemeral', false) ?? true;
     await interaction.deferReply({ ephemeral });
 
+    const lng = await getUserLanguage(user.id);
+
     const weekly = options.getBoolean('weekly', false) ?? false;
 
     let leaderboard;
-    if (weekly) leaderboard = await getWeeklyLeaderboard(guildId);
-    else leaderboard = await getLeaderboard(guildId);
+
+    if (weekly) {
+      leaderboard = await getWeeklyLeaderboard(guild.id);
+    } else {
+      leaderboard = await getLeaderboard(guild.id);
+    }
+
     const computedLeaderboard = await computeLeaderboard(leaderboard, client);
 
     const chunkedLeaderboard = chunk(computedLeaderboard, 10);
@@ -39,18 +46,18 @@ export default new Command({
     await pagination({
       client,
       interaction,
-      embeds: chunkedLeaderboard.map((level, index) =>
+      embeds: chunkedLeaderboard.map((level) =>
         new EmbedBuilder()
           .setColor(Colors.Blurple)
           .setTitle(weekly ? t('level.leaderboard.weekly', { lng }) : t('level.leaderboard.title', { lng }))
           .setDescription(
             level
               .map(
-                ({ position, username, xp, level }) =>
+                ({ position, username, xp, level, userId }) =>
                   t('level.leaderboard.position', {
                     lng,
                     position,
-                    username,
+                    username: username ?? userId,
                     xp,
                     level,
                   }) + `${position === 1 ? ' 🥇' : position === 2 ? ' 🥈' : position === 3 ? ' 🥉' : ''}`,

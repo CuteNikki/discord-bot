@@ -23,7 +23,7 @@ export default new Command({
     .addBooleanOption((option) => option.setName('ephemeral').setDescription('When set to false will show the message to everyone').setRequired(false)),
   async execute({ interaction }) {
     if (!interaction.inCachedGuild()) return;
-    const { options, guildId, user, guild } = interaction;
+    const { options, user, guild } = interaction;
 
     const ephemeral = options.getBoolean('ephemeral', false) ?? true;
     await interaction.deferReply({ ephemeral });

@@ -10,7 +10,7 @@ import { getUserLanguage } from 'db/user';
 const commandType = ApplicationCommandType.User;
 
 export default new Command<typeof commandType>({
-  module: ModuleType.Moderation,
+  module: ModuleType.Level,
   botPermissions: ['SendMessages'],
   data: new ContextMenuCommandBuilder()
     .setName('rank-context')

@@ -95,7 +95,7 @@ export default new Command({
             }),
             t('serverinfo.server.created', {
               lng,
-              created: `<t:${Math.floor(guild.createdTimestamp / 1000)}:d> <t:${Math.floor(guild.createdTimestamp / 1000)}:R>`,
+              created: `<t:${Math.floor(guild.createdTimestamp / 1000)}:d> | <t:${Math.floor(guild.createdTimestamp / 1000)}:R>`,
             }),
             t('serverinfo.server.owner', { lng, owner: `<@${guild.ownerId}> ${client.customEmojis.server_owner}` }),
             t('serverinfo.server.vanity', {

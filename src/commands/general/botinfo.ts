@@ -5,8 +5,8 @@ import osu from 'node-os-utils';
 
 import { Command, ModuleType } from 'classes/command';
 
-import { getUserLanguage } from 'db/user';
 import { getClientSettings } from 'db/client';
+import { getUserLanguage } from 'db/user';
 
 import { keys } from 'utils/keys';
 import { logger } from 'utils/logger';
@@ -67,18 +67,18 @@ export default new Command({
                     lng,
                     owner:
                       application.owner instanceof Team
-                        ? `<@${application.owner.ownerId}> (\`${application.owner.members.get(application.owner.ownerId ?? '')?.user.username}\` | ${application.owner.ownerId})`
+                        ? `<@${application.owner.ownerId}> | ${application.owner.members.get(application.owner.ownerId ?? '')?.user.username}\n${application.owner.ownerId}`
                         : `<@${application.owner?.id}> (\`${application.owner?.username}\` | ${application.owner?.id})`,
                   }),
                   t('botinfo.general.created', {
                     lng,
-                    created: `<t:${Math.floor(application.createdTimestamp / 1000)}:D>`,
+                    created: `<t:${Math.floor(application.createdTimestamp / 1000)}:D> | <t:${Math.floor(interaction.client.readyTimestamp / 1000)}:R>`,
                   }),
-                  t('botinfo.general.ping', { lng, ping: client.ws.ping }),
                   t('botinfo.general.uptime', {
                     lng,
                     uptime: `<t:${Math.floor(interaction.client.readyTimestamp / 1000)}:R>`,
                   }),
+                  t('botinfo.general.ping', { lng, ping: client.ws.ping }),
                 ].join('\n'),
               },
               {

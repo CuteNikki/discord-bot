@@ -65,7 +65,7 @@ export default new Command({
       .addFields(
         {
           name: t('userinfo.user_title', { lng }),
-          value: [`${user} | @${user.username}`, user.id].join('\n'),
+          value: [`${user} | ${user.username}`, user.id].join('\n'),
         },
         {
           name: t('userinfo.created_at', { lng }),
@@ -126,7 +126,7 @@ export default new Command({
       });
     }
 
-    return interaction.editReply({ embeds: [userEmbed, memberEmbed] });
+    return interaction.editReply({ embeds: [userEmbed, memberEmbed] }).catch((err) => logger.debug(err, 'Could not edit reply'));
 
     //   const activities = [
     //     t('userinfo.activity.playing', { lng }),

@@ -18,9 +18,10 @@ export default new Command({
     .addUserOption((option) => option.setName('user').setDescription('User to get the information about').setRequired(false))
     .addBooleanOption((option) => option.setName('ephemeral').setDescription('When set to false will show the message to everyone').setRequired(false)),
   async execute({ interaction, client }) {
-    const lng = await getUserLanguage(interaction.user.id);
     const ephemeral = interaction.options.getBoolean('ephemeral', false) ?? true;
     await interaction.deferReply({ ephemeral });
+
+    const lng = await getUserLanguage(interaction.user.id);
 
     const user = await client.users
       .fetch(interaction.options.getUser('user', false) ?? interaction.user, {

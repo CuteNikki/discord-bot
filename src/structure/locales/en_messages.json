@@ -148,8 +148,10 @@
     "same_stars": "The given minimum stars are already the starboard minimum stars"
   },
   "vanity": {
-    "not_found": "Could not find a server with that vanity url!",
-    "found": "That vanity url is already used!\nServername: {{guildName}}\nMembers: {{guildMemberCount}}\nVanity-URL: {{vanity}}"
+    "not_found": "There is no server with that vanity!",
+    "members": "Members",
+    "created_at": "Created at",
+    "banner": "Banner"
   },
   "ticket": {
     "enable": {

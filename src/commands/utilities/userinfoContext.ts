@@ -17,8 +17,9 @@ export default new Command<typeof commandType>({
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
     .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel),
   async execute({ interaction, client }) {
-    const lng = await getUserLanguage(interaction.user.id);
     await interaction.deferReply({ ephemeral: true });
+
+    const lng = await getUserLanguage(interaction.user.id);
 
     const user = await client.users
       .fetch(interaction.options.getUser('user', false) ?? interaction.user, {

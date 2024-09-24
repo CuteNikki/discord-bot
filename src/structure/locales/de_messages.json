@@ -148,8 +148,10 @@
     "same_stars": "Das sind bereits die minimum Sterne!"
   },
   "vanity": {
-    "not_found": "Konnte keinen Server mit der Vanity-URL finden!",
-    "found": "Die Vanity-URL ist bereits vergeben!\nServername: {{guildName}}\nMitglieder: {{guildMemberCount}}\nVanity-URL: {{vanity}}"
+    "not_found": "Es gibt keinen Server mit dieser Vanity!",
+    "members": "Mitglieder",
+    "created_at": "Erstellt an",
+    "banner": "Banner"
   },
   "ticket": {
     "enable": {

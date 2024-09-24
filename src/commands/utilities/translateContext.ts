@@ -24,26 +24,29 @@ export default new Command<typeof commandType>({
     .setType(commandType)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
     .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel),
-  async execute({ interaction }) {
-    const { user, targetMessage } = interaction;
+  async execute({ interaction, client }) {
     await interaction.deferReply({ ephemeral: true });
 
+    const { user, targetMessage } = interaction;
     const lng = await getUserLanguage(user.id);
 
-    const translator = new GoogleTranslator({
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36',
-      },
-    });
+    const translator = new GoogleTranslator();
 
-    if (!targetMessage.content) return interaction.editReply(t('translate.none', { lng }));
+    if (!targetMessage.content) {
+      await interaction.editReply({ embeds: [new EmbedBuilder().setColor(Colors.Red).setDescription(t('translate.none', { lng }))] });
+      return;
+    }
+
     const translated = await translator.translate(targetMessage.content, 'auto', lng);
-    if (!translated) return interaction.editReply(t('translate.none', { lng }));
+    if (!translated) {
+      await interaction.editReply({ embeds: [new EmbedBuilder().setColor(Colors.Red).setDescription(t('translate.none', { lng }))] });
+      return;
+    }
 
-    interaction.editReply({
+    await interaction.editReply({
       embeds: [
         new EmbedBuilder()
-          .setColor(Colors.Aqua)
+          .setColor(client.colors.utilities)
           .setTitle(t('translate.title', { lng }))
           .addFields(
             {

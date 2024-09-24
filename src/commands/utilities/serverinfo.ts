@@ -25,10 +25,12 @@ export default new Command({
     .setContexts(InteractionContextType.Guild)
     .addBooleanOption((option) => option.setName('ephemeral').setDescription('When set to false will show the message to everyone')),
   async execute({ interaction, client }) {
-    if (!interaction.isChatInputCommand() || !interaction.inCachedGuild()) return;
-    const lng = await getUserLanguage(interaction.user.id);
+    if (!interaction.inCachedGuild()) return;
+
     const ephemeral = interaction.options.getBoolean('ephemeral', false) ?? true;
     await interaction.deferReply({ ephemeral });
+
+    const lng = await getUserLanguage(interaction.user.id);
 
     const guild = await interaction.guild.fetch();
     const { channels, emojis, roles, stickers, members, memberCount } = guild;

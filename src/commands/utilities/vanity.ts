@@ -1,4 +1,4 @@
-import { ApplicationIntegrationType, InteractionContextType, SlashCommandBuilder } from 'discord.js';
+import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, SlashCommandBuilder } from 'discord.js';
 import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
@@ -9,7 +9,6 @@ import { logger } from 'utils/logger';
 
 export default new Command({
   module: ModuleType.Utilities,
-  botPermissions: ['SendMessages'],
   data: new SlashCommandBuilder()
     .setName('vanity-check')
     .setDescription('Check to see if a vanity url is available')
@@ -18,22 +17,36 @@ export default new Command({
     .addStringOption((option) => option.setName('vanity').setDescription('The vanity to check').setRequired(true)),
   async execute({ interaction, client }) {
     await interaction.deferReply({ ephemeral: true });
+
     const lng = await getUserLanguage(interaction.user.id);
 
     const vanity = interaction.options.getString('vanity', true);
     const invite = await client.fetchInvite(vanity).catch((err) => logger.debug({ err, vanity }, 'Could not fetch invite'));
 
     if (!invite || !invite.guild || !invite.guild.vanityURLCode || invite.guild.vanityURLCode !== vanity) {
-      return interaction.editReply({ content: t('vanity.not_found', { lng }) });
-    } else {
-      return interaction.editReply({
-        content: t('vanity.found', {
-          lng,
-          guildName: invite.guild.name,
-          guildMemberCount: invite.memberCount,
-          vanity: `https://discord.gg/${invite.guild.vanityURLCode}`,
-        }),
-      });
+      await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('vanity.not_found', { lng }))] });
+      return;
     }
+
+    const embed = new EmbedBuilder()
+      .setColor(client.colors.utilities)
+      .setThumbnail(invite.guild.iconURL({ size: 2048, extension: 'webp' }))
+      .setTitle(invite.guild.name)
+      .addFields(
+        { name: t('vanity.members', { lng }), value: invite.memberCount.toString() },
+        {
+          name: t('vanity.created_at', { lng }),
+          value: `<t:${Math.floor(invite.guild.createdTimestamp / 1000)}:d> | <t:${Math.floor(invite.guild.createdTimestamp / 1000)}:R>`,
+        },
+      );
+
+    if (invite.guild.banner) {
+      embed.addFields({ name: t('vanity.banner', { lng }), value: '** **' }).setImage(invite.guild.bannerURL({ size: 4096, extension: 'webp' }));
+    }
+
+    await interaction.editReply({
+      content: `https://discord.gg/${invite.guild.vanityURLCode}`,
+      embeds: [embed],
+    });
   },
 });

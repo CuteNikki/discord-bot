@@ -281,9 +281,10 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
 ## TO-DO
 
 - [ ] refactor config commands
-  - [x] counting (new)
-  - [x] custom voice channels (new)
-  - [x] starboard (new)
+  - [x] reaction roles (new)
+  - [x] counting
+  - [x] custom voice channels
+  - [x] starboard
   - [x] welcome
   - [x] farewell
   - [x] ticket
@@ -351,9 +352,12 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
     - [x] Remember-Emoji
     - [x] Tetris
     - [x] Sokoban
+    - [ ] 2048
+    - [ ] Lights Out
 - [ ] config commands
   - [x] custom voice channels
   - [x] counting game
+  - [x] reaction roles
   - [ ] giveaway
   - [ ] economy
   - [ ] confession

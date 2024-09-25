@@ -47,25 +47,25 @@ export default new Command({
           const channel = interaction.options.getChannel('channel', false, [ChannelType.GuildVoice]);
 
           if (!channel && !config.customVC.channelId) {
-            await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.channel.not_set', { lng }))] });
+            await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom-vc.channel.not_set', { lng }))] });
             return;
           }
 
           if (!channel) {
             await updateGuildSettings(interaction.guild.id, { $unset: { ['customVC.channelId']: 1 } });
-            await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.customVC).setDescription(t('custom_vc.channel.removed', { lng }))] });
+            await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.customVC).setDescription(t('custom-vc.channel.removed', { lng }))] });
             return;
           }
 
           if (channel.id === config.customVC.channelId) {
-            await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.channel.already', { lng }))] });
+            await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom-vc.channel.already', { lng }))] });
             return;
           }
 
           await updateGuildSettings(interaction.guild.id, { $set: { ['customVC.channelId']: channel.id } });
 
           await interaction.reply({
-            embeds: [new EmbedBuilder().setColor(client.colors.customVC).setDescription(t('custom_vc.channel.success', { lng, channel: channel.toString() }))],
+            embeds: [new EmbedBuilder().setColor(client.colors.customVC).setDescription(t('custom-vc.channel.success', { lng, channel: channel.toString() }))],
           });
         }
         break;
@@ -74,24 +74,24 @@ export default new Command({
           const channel = interaction.options.getChannel('category', false, [ChannelType.GuildCategory]);
 
           if (!channel && !config.customVC.parentId) {
-            await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.parent.not_set', { lng }))] });
+            await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom-vc.parent.not_set', { lng }))] });
             return;
           }
 
           if (!channel) {
             await updateGuildSettings(interaction.guild.id, { $unset: { ['customVC.parentId']: 1 } });
-            await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.customVC).setDescription(t('custom_vc.parent.removed', { lng }))] });
+            await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.customVC).setDescription(t('custom-vc.parent.removed', { lng }))] });
             return;
           }
 
           if (channel.id === config.customVC.parentId) {
-            await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.parent.already', { lng }))] });
+            await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom-vc.parent.already', { lng }))] });
             return;
           }
 
           await updateGuildSettings(interaction.guild.id, { $set: { ['customVC.parentId']: channel.id } });
 
-          await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.customVC).setDescription(t('custom_vc.parent.success', { lng }))] });
+          await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.customVC).setDescription(t('custom-vc.parent.success', { lng }))] });
         }
         break;
       case 'info':
@@ -101,8 +101,8 @@ export default new Command({
               new EmbedBuilder()
                 .setColor(client.colors.customVC)
                 .addFields(
-                  { name: t('custom_vc.channel.title', { lng }), value: config.customVC.channelId ? `<#${config.customVC.channelId}>` : t('none', { lng }) },
-                  { name: t('custom_vc.parent.title', { lng }), value: config.customVC.parentId ? `<#${config.customVC.parentId}>` : t('none', { lng }) },
+                  { name: t('custom-vc.channel.title', { lng }), value: config.customVC.channelId ? `<#${config.customVC.channelId}>` : t('none', { lng }) },
+                  { name: t('custom-vc.parent.title', { lng }), value: config.customVC.parentId ? `<#${config.customVC.parentId}>` : t('none', { lng }) },
                 ),
             ],
           });

@@ -37,19 +37,19 @@ export default new Command({
 
     const voiceChannel = interaction.member.voice.channel;
     if (!voiceChannel) {
-      await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.not_in_vc', { lng }))] });
+      await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom-vc.not_in_vc', { lng }))] });
       return;
     }
 
     const customVoiceChannel = await getCustomVoiceChannel(voiceChannel.id);
 
     if (!customVoiceChannel) {
-      await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.not_in_custom_vc', { lng }))] });
+      await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom-vc.not_in_custom_vc', { lng }))] });
       return;
     }
 
     if (interaction.user.id !== customVoiceChannel.ownerId) {
-      await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.not_owner', { lng }))] });
+      await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom-vc.not_owner', { lng }))] });
       return;
     }
 
@@ -57,32 +57,32 @@ export default new Command({
       case 'public':
         {
           if (voiceChannel.permissionOverwrites.cache.get(interaction.guildId)?.allow.has(PermissionFlagsBits.Connect)) {
-            await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.public.already', { lng }))] });
+            await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom-vc.public.already', { lng }))] });
             return;
           }
 
           try {
             await voiceChannel.permissionOverwrites.edit(interaction.guildId, { Connect: true, Speak: true, ViewChannel: true, SendMessages: true });
-            await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.customVC).setDescription(t('custom_vc.public.success', { lng }))] });
+            await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.customVC).setDescription(t('custom-vc.public.success', { lng }))] });
           } catch (err) {
             logger.debug(err, 'Could not give permissions');
-            await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.public.error', { lng }))] });
+            await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom-vc.public.error', { lng }))] });
           }
         }
         break;
       case 'private':
         {
           if (!voiceChannel.permissionOverwrites.cache.get(interaction.guildId)?.allow.has(PermissionFlagsBits.Connect)) {
-            await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.private.already', { lng }))] });
+            await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom-vc.private.already', { lng }))] });
             return;
           }
 
           try {
             await voiceChannel.permissionOverwrites.edit(interaction.guildId, { Connect: false, Speak: false, ViewChannel: false, SendMessages: false });
-            await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.customVC).setDescription(t('custom_vc.private.success', { lng }))] });
+            await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.customVC).setDescription(t('custom-vc.private.success', { lng }))] });
           } catch (err) {
             logger.debug(err, 'Could not remove permissions');
-            await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.private.error', { lng }))] });
+            await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom-vc.private.error', { lng }))] });
           }
         }
         break;
@@ -95,7 +95,7 @@ export default new Command({
             !voiceChannel.permissionOverwrites.cache.get(user.id)?.deny.has(PermissionFlagsBits.Connect)
           ) {
             await interaction.reply({
-              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.invite.already', { lng, user: user.toString() }))],
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom-vc.invite.already', { lng, user: user.toString() }))],
             });
             return;
           }
@@ -103,12 +103,12 @@ export default new Command({
           try {
             await voiceChannel.permissionOverwrites.edit(user.id, { Connect: true, Speak: true, ViewChannel: true, SendMessages: true });
             await interaction.reply({
-              embeds: [new EmbedBuilder().setColor(client.colors.customVC).setDescription(t('custom_vc.invite.success', { lng, user: user.toString() }))],
+              embeds: [new EmbedBuilder().setColor(client.colors.customVC).setDescription(t('custom-vc.invite.success', { lng, user: user.toString() }))],
             });
           } catch (err) {
             logger.debug(err, 'Could not give permissions to user');
             await interaction.reply({
-              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.invite.error', { lng, user: user.toString() }))],
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom-vc.invite.error', { lng, user: user.toString() }))],
             });
           }
         }
@@ -119,7 +119,7 @@ export default new Command({
 
           if (voiceChannel.permissionOverwrites.cache.get(user.id)?.deny.has(PermissionFlagsBits.Connect)) {
             await interaction.reply({
-              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.remove.already', { lng, user: user.toString() }))],
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom-vc.remove.already', { lng, user: user.toString() }))],
             });
             return;
           }
@@ -131,23 +131,23 @@ export default new Command({
 
             if (member && member.voice.channelId === customVoiceChannel.channelId) {
               await member.voice.disconnect();
-              response += t('custom_vc.remove.disconnected', { lng, user: user.toString() });
+              response += t('custom-vc.remove.disconnected', { lng, user: user.toString() });
             }
           } catch (err) {
             logger.debug(err, 'Could not disconnect user from custom vc');
-            response += t('custom_vc.remove.not_disconnected', { lng, user: user.toString() });
+            response += t('custom-vc.remove.not_disconnected', { lng, user: user.toString() });
           }
 
           try {
             await voiceChannel.permissionOverwrites.edit(user.id, { Connect: false, Speak: false, ViewChannel: false, SendMessages: false });
-            response += t('custom_vc.remove.success', { lng, user: user.toString() });
+            response += t('custom-vc.remove.success', { lng, user: user.toString() });
           } catch (err) {
             logger.debug(err, 'Could not remove permissions from user');
-            response += t('custom_vc.remove.not_removed', { lng, user: user.toString() });
+            response += t('custom-vc.remove.not_removed', { lng, user: user.toString() });
           }
 
           if (response === '') {
-            await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom_vc.remove.error', { lng }))] });
+            await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom-vc.remove.error', { lng }))] });
             return;
           }
 

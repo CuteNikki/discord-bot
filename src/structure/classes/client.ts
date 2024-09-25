@@ -19,17 +19,15 @@ import { keys } from 'utils/keys';
 import { initTranslation } from 'utils/language';
 
 export class DiscordClient extends Client {
-  // Cluster used for sharding from discord-hybrid-sharding
-  public cluster = new ClusterClient(this);
-
   // Collections for loading and running commands, buttons and modals
   public commands = new Collection<string, Command<any>>(); // Collection<commandName, commandData>
   public buttons = new Collection<string, Button>(); // Collection<customId, buttonData>
   public modals = new Collection<string, Modal>(); // Collection<customId, modalData>
   public selections = new Collection<string, Selection>(); // Collection<customId, selectionData>
 
-  // Collection of cooldowns so commands cannot be spammed
-  public cooldowns = new Collection<string, Collection<string, number>>(); // Collection<identifier, Collection<userId, timestamp>>
+  // Collection of cooldowns so interactions cannot be spammed
+  // !! This should not be used for hourly or daily commands as it resets with each restart !!
+  public cooldowns = new Collection<string, Collection<string, number>>(); // Collection<customId/commandName, Collection<userId, lastUsedTimestamp>>
 
   // Custom colors
   public colors = {
@@ -44,23 +42,31 @@ export class DiscordClient extends Client {
     phone: Colors.Gold,
     ticket: Colors.LuminousVividPink,
     level: Colors.Blurple,
+    reactionRoles: Colors.DarkGreen,
+    blurple: Colors.Blurple,
   };
 
   // Custom emojis
+  // These are fetched in src/events/client/ready.ts
   public customEmojis: {
     [key: string]: string;
   } = {};
 
+  // Cluster used for sharding from discord-hybrid-sharding
+  public cluster = new ClusterClient(this);
+
   constructor() {
     super({
-      // Setting the bot shards from discord-hybrid-sharding
+      // Setting the bot shards using discord-hybrid-sharding
       shards: getInfo().SHARD_LIST,
       shardCount: getInfo().TOTAL_SHARDS,
+
       // Setting the bots presence
       presence: {
         activities: keys.DISCORD_BOT_STATUS !== 'optional' ? [{ name: keys.DISCORD_BOT_STATUS, type: ActivityType.Custom }] : [],
         status: PresenceUpdateStatus.Online,
       },
+
       // Partials are a way to handle objects that may not have all their data available
       // By enabling partials, your bot can still process events involving these incomplete objects by fetching additional data when needed
       partials: [
@@ -72,12 +78,13 @@ export class DiscordClient extends Client {
         Partials.ThreadMember,
         Partials.User,
       ],
+
       // Intents are a way to specify which events your bot should receive from the Discord gateway
       intents: [
         // !! Needed for guilds, channels, roles and messages !!
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.DirectMessages, // !! Needed for phone to work in DMs !!
+        GatewayIntentBits.DirectMessages, // !! Needed for phone and other things to work in DMs !!
 
         // !! Needed for guild log !!
         GatewayIntentBits.GuildVoiceStates,
@@ -100,13 +107,18 @@ export class DiscordClient extends Client {
       ],
     });
 
-    // Loading everything and logging in once everything is loaded
-    Promise.allSettled([this.loadModules(), initTranslation(), initDatabase(this), listenToErrors(this)]).then(() => {
+    // Loading everything and then logging in
+    Promise.allSettled([
+      loadEvents(this),
+      loadCommands(this),
+      loadButtons(this),
+      loadModals(this),
+      loadSelections(this),
+      initTranslation(),
+      initDatabase(this),
+      listenToErrors(this),
+    ]).then(() => {
       this.login(keys.DISCORD_BOT_TOKEN);
     });
-  }
-
-  private async loadModules() {
-    await Promise.allSettled([loadEvents(this), loadCommands(this), loadButtons(this), loadModals(this), loadSelections(this)]);
   }
 }

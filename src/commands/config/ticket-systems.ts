@@ -6,7 +6,6 @@ import {
   CategoryChannel,
   ChannelSelectMenuBuilder,
   ChannelType,
-  Colors,
   EmbedBuilder,
   InteractionContextType,
   ModalBuilder,
@@ -964,7 +963,7 @@ export default new Command({
           ?.send({
             embeds: [
               new EmbedBuilder()
-                .setColor(Colors.Blue)
+                .setColor(client.colors.blurple)
                 .setTitle(t('ticket.message.title', { lng: config.language }))
                 .setDescription(t('ticket.message.description', { lng: config.language })),
             ],

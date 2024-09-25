@@ -1,5 +1,62 @@
 {
-  "custom_vc": {
+  "reaction-roles": {
+    "enable": {
+      "already": "Das Reaktionsrollen-Modul ist bereits aktiviert!",
+      "success": "Das Reaktionsrollen-Modul wurde aktiviert."
+    },
+    "disable": {
+      "already": "Das Reaktionsrollen-Modul ist bereits deaktiviert!",
+      "success": "Das Reaktionsrollen-Modul wurde deaktiviert."
+    },
+    "delete": {
+      "invalid": "Konnte diese Gruppe nicht finden!",
+      "success": "Die Gruppe wurde gelöscht."
+    },
+    "info": {
+      "state": "Status"
+    },
+    "setup": {
+      "limit": "Du kannst nicht mehr als {{max}} Reaktionsrollen-Gruppen haben!",
+      "continue": "Fortfahren",
+      "success_one": "Eine neue Gruppe mit {{count}} Reaktion wurde in {{channel}} erstellt.",
+      "success_other": "Eine neue Gruppe mit {{count}} Reaktionen wurde in {{channel}} erstellt."
+    },
+    "method": {
+      "description": "Bitte wähle zwischen Buttons oder Reaktionen für die Reaktionsrollen-Gruppe aus.",
+      "recommendation": "Wir empfehlen die Verwendung von Buttons, da sie intuitiver sind und besseres Benutzerfeedback bieten.",
+      "buttons": "Buttons",
+      "reactions": "Reaktionen",
+      "none": "Du hast keine Methode ausgewählt!"
+    },
+    "channel": {
+      "description": "Wähle einen Kanal, in den die Nachricht gesendet werden soll.",
+      "info": "Mitglieder können ihre Rollen auf dieser Nachricht auswählen.",
+      "placeholder": "Wähle einen Kanal",
+      "none": "Du hast keinen Kanal ausgewählt!",
+      "selected": "Du hast den Kanal {{channel}} ausgewählt."
+    },
+    "roles": {
+      "description": "Wähle die Rollen aus, die Mitglieder auswählen können.",
+      "info": "Systemrollen wie Booster oder Bot-verwaltete Rollen können nicht verwendet werden.",
+      "placeholder": "Wähle Rollen",
+      "none": "Du hast keine Rollen ausgewählt!",
+      "limit": "Du hast keine oder mehr als {{max}} Rollen ausgewählt!",
+      "selected_one": "Du hast {{count}} Rolle ausgewählt:\n{{roles}}",
+      "selected_other": "Du hast {{count}} Rollen ausgewählt:\n{{roles}}"
+    },
+    "emojis": {
+      "description": "Reagiere mit einem Emoji für die Rolle {{role}}.",
+      "warning": ":warning: Das Emoji muss ein Standard- oder benutzerdefiniertes Emoji sein!",
+      "info": ":warning: Du kannst dasselbe Emoji nicht mehrfach verwenden!",
+      "none": "Du hast nicht innerhalb der Zeit reagiert!",
+      "error": "Beim Warten auf deine Reaktion ist ein Fehler aufgetreten!"
+    },
+    "select": {
+      "removed": "{{role}} wurde von deinen Rollen entfernt!",
+      "added": "{{role}} wurde zu deinen Rollen hinzugefügt!"
+    }
+  },
+  "custom-vc": {
     "channel": {
       "not_set": "Du hast keinen Kanal angegeben und es gibt keinen zum Entfernen!",
       "removed": "Der benutzerdefinierte Sprachkanal wurde entfernt!",
@@ -183,7 +240,7 @@
       "limit": "Du kannst nicht mehr als 5 Ticket-Systeme haben!",
       "required": "Diese Option ist erforderlich.",
       "optional": "Diese Option ist optional.",
-      "continue": "Weiter",
+      "continue": "Fortfahren",
       "timeout": "Du hast nicht in der Zeit fortgefahren!"
     },
     "modal": {

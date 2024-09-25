@@ -1,4 +1,36 @@
 {
+  "reaction-roles": {
+    "name": "reaction-roles",
+    "description": "Lass Mitgliedern ihre eigenen Rollen wählen.",
+    "options": [
+      {
+        "name": "aktivieren",
+        "description": "Aktiviert die Reaktionsrollen"
+      },
+      {
+        "name": "deaktivieren",
+        "description": "Deaktiviert die Reaktionsrollen"
+      },
+      {
+        "name": "setup",
+        "description": "Erstellt eine Reaktionsrollen Gruppe"
+      },
+      {
+        "name": "info",
+        "description": "Zeigt die aktuelle Konfiguration"
+      },
+      {
+        "name": "löschen",
+        "description": "Löscht eine Reaktionsrollen Gruppe",
+        "options": [
+          {
+            "name": "id",
+            "description": "Die ID der Nachricht oder Gruppe zu löschen"
+          }
+        ]
+      }
+    ]
+  },
   "ticket": {
     "name": "ticket-systems",
     "description": "Konfiguriere das Ticket-Modul",

@@ -1,6 +1,8 @@
 import { ButtonStyle } from 'discord.js';
 import mongoose, { Model, model, Schema, Types } from 'mongoose';
 
+import type { ReactionRoleGroup } from 'db/reaction-roles';
+
 export enum AnnouncementType {
   UserChannel,
   OtherChannel,
@@ -106,6 +108,10 @@ export interface GuildSettings {
   _id: Types.ObjectId;
   guildId: string;
   language?: string;
+  reactionRoles: {
+    enabled: boolean;
+    groups: ReactionRoleGroup[];
+  };
   customVC: {
     channelId: string;
     parentId: string;
@@ -201,6 +207,30 @@ export interface GuildSettings {
 const guildSchema = new Schema<GuildSettings>({
   guildId: { type: String, required: true },
   language: { type: String, required: false },
+  reactionRoles: {
+    type: {
+      enabled: { type: Boolean, default: false },
+      groups: [
+        {
+          type: {
+            messageId: { type: String, required: true },
+            channelId: { type: String, required: true },
+            method: { type: String, required: true, enum: ['button', 'reaction'] },
+            reactions: [
+              {
+                emoji: { type: String, required: true },
+                roleId: { type: String, required: true },
+              },
+            ],
+          },
+        },
+      ],
+    },
+    default: {
+      enabled: false,
+      groups: [],
+    },
+  },
   customVC: {
     type: {
       channelId: { type: String },

@@ -1,4 +1,36 @@
 {
+  "reaction-roles": {
+    "name": "reaction-roles",
+    "description": "Let members choose their own roles.",
+    "options": [
+      {
+        "name": "enable",
+        "description": "Enable reaction roles"
+      },
+      {
+        "name": "disable",
+        "description": "Disable reaction roles"
+      },
+      {
+        "name": "setup",
+        "description": "Set up reaction role group"
+      },
+      {
+        "name": "info",
+        "description": "Shows the current configuration"
+      },
+      {
+        "name": "delete",
+        "description": "Delete a reaction role group",
+        "options": [
+          {
+            "name": "id",
+            "description": "The id of the message or group to delete"
+          }
+        ]
+      }
+    ]
+  },
   "ticket": {
     "name": "ticket-systems",
     "description": "Configure the ticket module",

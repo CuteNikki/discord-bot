@@ -1,5 +1,62 @@
 {
-  "custom_vc": {
+  "reaction-roles": {
+    "enable": {
+      "already": "The reaction roles module is already enabled!",
+      "success": "The reaction roles module has been enabled."
+    },
+    "disable": {
+      "already": "The reaction roles module is already disabled!",
+      "success": "The reaction roles module has been disabled."
+    },
+    "delete": {
+      "invalid": "Could not find that group!",
+      "success": "The group has been deleted."
+    },
+    "info": {
+      "state": "State"
+    },
+    "setup": {
+      "limit": "You cannot have more than {{max}} reaction role groups!",
+      "continue": "Continue",
+      "success_one": "A new group with {{count}} reaction has been created in {{channel}}.",
+      "success_other": "A new group with {{count}} reactions has been created in {{channel}}."
+    },
+    "method": {
+      "description": "Please choose between either buttons or reactions for the reaction role group.",
+      "recommendation": "We recommend using buttons as they are more intuitive and provide better user feedback.",
+      "buttons": "Buttons",
+      "reactions": "Reactions",
+      "none": "You did not select a method!"
+    },
+    "channel": {
+      "description": "Select a channel to send the message to.",
+      "info": "Members will be able to choose their roles on that message.",
+      "placeholder": "Select a channel",
+      "none": "You did not select a channel!",
+      "selected": "You selected the channel {{channel}}."
+    },
+    "roles": {
+      "description": "Select the roles you'd like members to be able to choose from.",
+      "info": "System roles like booster or bot managed roles cannot be used.",
+      "placeholder": "Select some roles",
+      "none": "You did not select any roles!",
+      "limit": "You did not select any or more than {{max}} roles!",
+      "selected_one": "You selected {{count}} role:\n{{roles}}",
+      "selected_other": "You selected {{count}} roles:\n{{roles}}"
+    },
+    "emojis": {
+      "description": "Please react to this message with an emoji for the role {{role}}.",
+      "warning": ":warning: The emoji needs to be a default or a custom one from this server!",
+      "info": ":warning: You cannot use the same emoji twice!",
+      "none": "You did not react within the time limit!",
+      "error": "An error occurred while awaiting your reaction!"
+    },
+    "select": {
+      "removed": "{{role}} has been removed from your roles!",
+      "added": "{{role}} has been added to your roles!"
+    }
+  },
+  "custom-vc": {
     "channel": {
       "not_set": "You did not provide a channel and there is none to remove!",
       "removed": "The custom voice channel has been removed!",

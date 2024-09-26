@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 
 import type { DiscordClient } from 'classes/client';
 
-import { keys } from 'utils/keys';
+import { keys } from 'constants/keys';
 import { logger } from 'utils/logger';
 
 const webhookUrl = keys.DEVELOPER_ERROR_WEBHOOK;

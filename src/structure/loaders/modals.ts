@@ -9,7 +9,7 @@ import { logger } from 'utils/logger';
 export async function loadModals(client: DiscordClient) {
   const startTime = performance.now();
 
-  const path = process.cwd() + '/src/modals/';
+  const path = process.cwd() + '/src/interactions/modals/';
   const files = await readdir(path, { recursive: true });
 
   for (const file of files) {

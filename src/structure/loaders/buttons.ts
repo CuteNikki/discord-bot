@@ -9,7 +9,7 @@ import { logger } from 'utils/logger';
 export async function loadButtons(client: DiscordClient) {
   const startTime = performance.now();
 
-  const path = process.cwd() + '/src/buttons/';
+  const path = process.cwd() + '/src/interactions/buttons/';
   const files = await readdir(path, { recursive: true });
 
   for (const file of files) {

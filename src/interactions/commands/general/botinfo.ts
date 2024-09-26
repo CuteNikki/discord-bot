@@ -8,7 +8,7 @@ import { Command, ModuleType } from 'classes/command';
 import { getClientSettings } from 'db/client';
 import { getUserLanguage } from 'db/user';
 
-import { keys } from 'utils/keys';
+import { keys } from 'constants/keys';
 import { logger } from 'utils/logger';
 
 export default new Command({
@@ -72,7 +72,7 @@ export default new Command({
                   }),
                   t('botinfo.general.created', {
                     lng,
-                    created: `<t:${Math.floor(application.createdTimestamp / 1000)}:D> | <t:${Math.floor(interaction.client.readyTimestamp / 1000)}:R>`,
+                    created: `<t:${Math.floor(application.createdTimestamp / 1000)}:D> | <t:${Math.floor(application.createdTimestamp / 1000)}:R>`,
                   }),
                   t('botinfo.general.uptime', {
                     lng,
@@ -106,7 +106,7 @@ export default new Command({
                   }),
                   t('botinfo.database.weekly', {
                     lng,
-                    date: database.lastWeeklyClear ? `<t:${Math.floor(database.lastWeeklyClear / 1000)}:F>` : '/',
+                    date: database.lastWeeklyClear ? `<t:${Math.floor(database.lastWeeklyClear / 1000)}:D>` : '/',
                   }),
                 ].join('\n'),
               },

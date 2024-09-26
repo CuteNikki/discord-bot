@@ -9,36 +9,26 @@ import {
 } from 'discord.js';
 import { t } from 'i18next';
 
-import { availableChannelModel, connectionModel, type Connection } from 'models/phone';
+import {
+  addAvailableChannel,
+  createConnection,
+  deleteConnectionById,
+  findAvailableChannel,
+  findConnection,
+  findConnectionById,
+  getAvailableChannels,
+  isPhoneConnected,
+  isPhoneSearching,
+  removeAvailableChannel,
+  removeAvailableChannelById,
+} from 'db/phone';
+import { getUserLanguage } from 'db/user';
+
+import { type Connection } from 'types/phone';
 
 import type { DiscordClient } from 'classes/client';
-import { getUserLanguage } from 'db/user';
+
 import { logger } from 'utils/logger';
-
-/**
- * Checks if a channel is already connected to a phone
- * @param {string} channelId Channel ID to check
- * @returns {Promise<boolean>} True if the channel is already connected, false otherwise
- */
-async function isAlreadyConnected(channelId: string): Promise<boolean> {
-  const connection = await connectionModel
-    .findOne({ $or: [{ channelIdOne: channelId }, { channelIdTwo: channelId }] })
-    .lean()
-    .exec();
-  if (connection) return true;
-  return false;
-}
-
-/**
- * Checks if a channel is already searching for a connection
- * @param {string} channelId Channel ID to check
- * @returns {Promise<boolean>} True if the channel is already searching, false otherwise
- */
-async function isAlreadySearching(channelId: string): Promise<boolean> {
-  const channel = await availableChannelModel.findOne({ channelId }).lean().exec();
-  if (channel) return true;
-  return false;
-}
 
 /**
  * Handles the connection of a user to a phone
@@ -51,7 +41,7 @@ export async function handlePhoneConnection({ client, interaction }: { client: D
   const { user, channelId } = interaction;
   const lng = await getUserLanguage(user.id);
 
-  if (await isAlreadyConnected(channelId)) {
+  if (await isPhoneConnected(channelId)) {
     return interaction.editReply({
       embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('phone.connect.already', { lng }))],
       components: [
@@ -62,7 +52,7 @@ export async function handlePhoneConnection({ client, interaction }: { client: D
     });
   }
 
-  if (await isAlreadySearching(channelId)) {
+  if (await isPhoneSearching(channelId)) {
     return interaction.editReply({
       embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('phone.connect.already', { lng }))],
       components: [
@@ -73,14 +63,11 @@ export async function handlePhoneConnection({ client, interaction }: { client: D
     });
   }
 
-  const searchingChannels = await availableChannelModel
-    .find({ channelId: { $ne: channelId }, userId: { $ne: user.id } })
-    .lean()
-    .exec();
+  const searchingChannels = await getAvailableChannels(channelId, user.id);
 
   if (!searchingChannels.length) {
     // No available channels, add this channel to the pool
-    await availableChannelModel.create({ channelId, userId: user.id });
+    await addAvailableChannel(channelId, user.id);
     return interaction.editReply({
       embeds: [new EmbedBuilder().setColor(client.colors.phone).setDescription(t('phone.connect.waiting', { lng }))],
       components: [
@@ -95,15 +82,10 @@ export async function handlePhoneConnection({ client, interaction }: { client: D
   const random = searchingChannels[Math.floor(Math.random() * searchingChannels.length)];
 
   // Remove channel from pool
-  await availableChannelModel.deleteOne({ channelId: random.channelId }).lean().exec();
+  await removeAvailableChannel(random.channelId);
 
   // Establish the connection
-  await connectionModel.create({
-    channelIdOne: channelId,
-    userIdOne: user.id,
-    channelIdTwo: random.channelId,
-    userIdTwo: random.userId,
-  });
+  await createConnection(channelId, user.id, random.channelId, random.userId);
 
   const otherLng = await getUserLanguage(random.userId);
 
@@ -155,9 +137,10 @@ export async function handlePhoneDisconnect({ client, interaction }: { client: D
   const { user, channelId } = interaction;
   const lng = await getUserLanguage(user.id);
 
-  const availableChannel = await availableChannelModel.findOne({ channelId }).lean().exec();
+  const availableChannel = await findAvailableChannel(channelId);
   if (availableChannel) {
-    await availableChannelModel.findByIdAndDelete(availableChannel._id);
+    await removeAvailableChannelById(availableChannel._id);
+
     return interaction.editReply({
       embeds: [new EmbedBuilder().setColor(client.colors.phone).setDescription(t('phone.hangup.disconnecting', { lng }))],
       components: [
@@ -168,12 +151,7 @@ export async function handlePhoneDisconnect({ client, interaction }: { client: D
     });
   }
 
-  const existingConnection = await connectionModel
-    .findOne({
-      $or: [{ channelIdOne: channelId }, { channelIdTwo: channelId }],
-    })
-    .lean()
-    .exec();
+  const existingConnection = await findConnection(channelId);
   if (!existingConnection) {
     return interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('phone.hangup.none', { lng }))] });
   }
@@ -183,7 +161,7 @@ export async function handlePhoneDisconnect({ client, interaction }: { client: D
   const otherLng = await getUserLanguage(existingConnection.userIdOne === user.id ? existingConnection.userIdTwo : existingConnection.userIdOne);
 
   // Remove the connection
-  await connectionModel.deleteOne({ _id: existingConnection._id });
+  await deleteConnectionById(existingConnection._id);
 
   // Inform the other channel
   try {
@@ -251,10 +229,11 @@ export async function handlePhoneMessageTimeout({
   lng: string;
   otherLng: string;
 }) {
-  const connection = await connectionModel.findOne({ _id: existingConnection._id }).lean().exec();
+  const connection = await findConnectionById(existingConnection._id);
 
   if (connection?.lastMessageAt && connection.lastMessageAt < Date.now() - timeout) {
-    await connectionModel.deleteOne({ _id: connection._id });
+    await deleteConnectionById(connection._id);
+
     await channel
       .send({
         content: t('phone.lost', { lng }),

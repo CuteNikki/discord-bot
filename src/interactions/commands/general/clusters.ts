@@ -102,7 +102,6 @@ export default new Command({
     }
 
     await pagination({
-      client,
       interaction,
       embeds,
       content: t('clusters.pin', { lng }),

@@ -4,12 +4,12 @@ import { t } from 'i18next';
 import { ModuleType } from 'classes/command';
 import { Event } from 'classes/event';
 
+import { updateClientSettings } from 'db/client';
 import { getGuildSettings } from 'db/guild';
 import { getUserData } from 'db/user';
-import { updateClientSettings } from 'db/client';
 
+import { keys } from 'constants/keys';
 import { sendError } from 'utils/error';
-import { keys } from 'utils/keys';
 
 export default new Event({
   name: Events.InteractionCreate,
@@ -17,13 +17,12 @@ export default new Event({
     // Since we only want the command interactions we return early if the interaction is not a command
     if (!interaction.isCommand()) return;
 
-    const { banned, language: lng }= await getUserData(interaction.user.id);
+    const { banned, language: lng } = await getUserData(interaction.user.id);
     if (banned) return;
 
     // Get the command with the interactions command name and return if it wasn't found
     const command = client.commands.get(interaction.commandName);
     if (!command) return;
-
 
     // Only allowing commands if their module is enabled
     if (interaction.guild) {

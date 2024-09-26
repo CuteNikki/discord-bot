@@ -7,7 +7,7 @@ import { performance } from 'perf_hooks';
 import type { DiscordClient } from 'classes/client';
 import { ModuleType, type Command } from 'classes/command';
 
-import { keys } from 'utils/keys';
+import { keys } from 'constants/keys';
 import { initTranslation } from 'utils/language';
 import { logger } from 'utils/logger';
 
@@ -16,7 +16,7 @@ export async function getCommandsCollection() {
 
   const startTime = performance.now();
 
-  const path = process.cwd() + '/src/commands/';
+  const path = process.cwd() + '/src/interactions/commands/';
   const files = await readdir(path, { recursive: true });
 
   for (const file of files) {

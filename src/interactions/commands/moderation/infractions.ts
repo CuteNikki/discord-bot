@@ -3,10 +3,11 @@ import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
-import { infractionModel } from 'models/infraction';
 import { getUserLanguage } from 'db/user';
+import { infractionModel } from 'models/infraction';
 
-import { chunk, pagination } from 'utils/pagination';
+import { chunk } from 'utils/common';
+import { pagination } from 'utils/pagination';
 
 export default new Command({
   module: ModuleType.Moderation,
@@ -57,7 +58,6 @@ export default new Command({
         };
 
         await pagination({
-          client,
           interaction,
           embeds: chunkedInfractions.map((chunk, index) =>
             new EmbedBuilder()

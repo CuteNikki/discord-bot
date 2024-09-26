@@ -27,7 +27,7 @@ import { addReactionGroup, disableReactionRoles, enableReactionRoles, deleteReac
 import { getUserLanguage } from 'db/user';
 
 import { logger } from 'utils/logger';
-import { chunk } from 'utils/pagination';
+import { chunk } from 'utils/common';
 
 const TIMEOUT_DURATION = 60_000; // Constant for the timeout duration
 const MAX_ROLES = 20; // Constant for the maximum number of roles

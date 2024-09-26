@@ -2,11 +2,11 @@ import { Events } from 'discord.js';
 
 import { Event } from 'classes/event';
 
-import { BadgeType } from 'models/user';
 import { getClientSettings } from 'db/client';
 import { getUserData, updateUserData } from 'db/user';
+import { BadgeType } from 'models/user';
 
-import { keys } from 'utils/keys';
+import { keys } from 'constants/keys';
 import { logger } from 'utils/logger';
 
 export default new Event({

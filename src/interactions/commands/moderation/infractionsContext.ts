@@ -11,10 +11,11 @@ import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
-import { infractionModel } from 'models/infraction';
 import { getUserLanguage } from 'db/user';
+import { infractionModel } from 'models/infraction';
 
-import { chunk, pagination } from 'utils/pagination';
+import { chunk } from 'utils/common';
+import { pagination } from 'utils/pagination';
 
 const commandType = ApplicationCommandType.User;
 
@@ -54,7 +55,6 @@ export default new Command<typeof commandType>({
     };
 
     await pagination({
-      client,
       interaction,
       embeds: chunkedInfractions.map((chunk, index) =>
         new EmbedBuilder()

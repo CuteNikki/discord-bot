@@ -6,8 +6,8 @@ import type { Modal } from 'classes/modal';
 
 import { getUserData } from 'db/user';
 
+import { keys } from 'constants/keys';
 import { sendError } from 'utils/error';
-import { keys } from 'utils/keys';
 
 export default new Event({
   name: Events.InteractionCreate,

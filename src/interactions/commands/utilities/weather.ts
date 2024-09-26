@@ -6,7 +6,8 @@ import { Command, ModuleType } from 'classes/command';
 
 import { getUserLanguage } from 'db/user';
 
-import { compass, defraIndex, epaIndex, getCurrentWeather, getHistoricWeather, getWeatherForecast, uvIndex } from 'utils/weather';
+import { COMPASS, UK_DEFRA_INDEX, US_EPA_INDEX, UV_INDEX } from 'constants/weather';
+import { getCurrentWeather, getHistoricWeather, getWeatherForecast } from 'utils/weather';
 
 export default new Command({
   module: ModuleType.Utilities,
@@ -124,10 +125,10 @@ export default new Command({
                     temp_c: current.feelslike_c,
                     temp_f: current.feelslike_f,
                   }),
-                  t('weather.current.uv_index', { lng, uv: uvIndex[current.uv] }),
+                  t('weather.current.uv_index', { lng, uv: UV_INDEX[current.uv] }),
                   t('weather.current.wind_direction', {
                     lng,
-                    direction: compass[current.wind_dir],
+                    direction: COMPASS[current.wind_dir],
                     degree: current.wind_degree,
                   }),
                   t('weather.current.wind_speed', {
@@ -190,11 +191,11 @@ export default new Command({
                   }),
                   t('weather.quality.epa_index', {
                     lng,
-                    index: epaIndex[current.air_quality['us-epa-index']],
+                    index: US_EPA_INDEX[current.air_quality['us-epa-index']],
                   }),
                   t('weather.quality.defra_index', {
                     lng,
-                    index: defraIndex[current.air_quality['gb-defra-index']],
+                    index: UK_DEFRA_INDEX[current.air_quality['gb-defra-index']],
                   }),
                 ].join('\n'),
               },
@@ -291,7 +292,7 @@ export default new Command({
                     temp_c: day.avgtemp_c,
                     temp_f: day.avgtemp_f,
                   }),
-                  t('weather.forecast.uv_index', { lng, uv: uvIndex[day.uv] }),
+                  t('weather.forecast.uv_index', { lng, uv: UV_INDEX[day.uv] }),
                   t('weather.forecast.max_wind_speed', {
                     lng,
                     speed_kph: day.maxwind_kph,
@@ -441,7 +442,7 @@ export default new Command({
                     temp_c: day.avgtemp_c,
                     temp_f: day.avgtemp_f,
                   }),
-                  t('weather.history.uv_index', { lng, uv: uvIndex[day.uv] }),
+                  t('weather.history.uv_index', { lng, uv: UV_INDEX[day.uv] }),
                   t('weather.history.max_wind_speed', {
                     lng,
                     speed_kph: day.maxwind_kph,

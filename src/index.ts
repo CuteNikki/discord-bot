@@ -1,6 +1,6 @@
 import { ClusterManager, HeartbeatManager } from 'discord-hybrid-sharding';
 
-import { keys } from 'utils/keys';
+import { keys } from 'constants/keys';
 import { logger } from 'utils/logger';
 
 // Create a cluster manager

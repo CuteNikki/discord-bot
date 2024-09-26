@@ -3,20 +3,20 @@ import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
-import { getUserLanguage } from 'db/user';
 import { getClientSettings } from 'db/client';
+import { getUserLanguage } from 'db/user';
 
-import { keys } from 'utils/keys';
+import { keys } from 'constants/keys';
 
 export default new Command({
   module: ModuleType.General,
   botPermissions: ['SendMessages'],
   data: new SlashCommandBuilder()
-    .setName('invite')
-    .setDescription('Gives you an invite link for the bot')
+    .setName('support')
+    .setDescription('Gives you an invite link to the support server')
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
     .setContexts(InteractionContextType.Guild, InteractionContextType.PrivateChannel, InteractionContextType.BotDM)
-    .addBooleanOption((option) => option.setName('ephemeral').setDescription('When set to false will show the message to everyone').setRequired(false)),
+    .addBooleanOption((option) => option.setName('ephemeral').setDescription('Shows the message to everyone when false').setRequired(false)),
   async execute({ interaction }) {
     const lng = await getUserLanguage(interaction.user.id);
     const ephemeral = interaction.options.getBoolean('ephemeral', false) ?? true;
@@ -25,7 +25,7 @@ export default new Command({
     const settings = await getClientSettings(keys.DISCORD_BOT_ID);
 
     await interaction.editReply({
-      embeds: [new EmbedBuilder().setColor(Colors.Blurple).setTitle(t('invite.title', { lng })).setDescription(settings.inviteUrl)],
+      embeds: [new EmbedBuilder().setColor(Colors.Blurple).setTitle(t('support.title', { lng })).setDescription(settings.support.inviteUrl)],
     });
   },
 });

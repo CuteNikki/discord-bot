@@ -6,9 +6,10 @@ import { getClientSettings, updateClientSettings } from 'db/client';
 import { getUserData, updateUserData } from 'db/user';
 import { BadgeType, userModel } from 'models/user';
 
-import { keys } from 'utils/keys';
+import { keys } from 'constants/keys';
+import { chunk } from 'utils/common';
 import { logger } from 'utils/logger';
-import { chunk, pagination } from 'utils/pagination';
+import { pagination } from 'utils/pagination';
 
 export default new Command({
   module: ModuleType.Developer,
@@ -332,7 +333,6 @@ export default new Command({
 
                 const chunkedUsers = chunk(bannedUsers, 10);
                 await pagination({
-                  client,
                   interaction,
                   embeds: chunkedUsers.map((chunk) =>
                     new EmbedBuilder()

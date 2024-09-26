@@ -5,8 +5,8 @@ import type { DiscordClient } from 'classes/client';
 
 import { getUserLanguage } from 'db/user';
 
+import { WORDS } from 'constants/words';
 import { logger } from 'utils/logger';
-import { words } from 'utils/words';
 
 export class Hangman {
   emojiLetters = {
@@ -45,10 +45,10 @@ export class Hangman {
     public options: {
       interaction: ChatInputCommandInteraction;
       client: DiscordClient;
-      theme: keyof typeof words;
+      theme: keyof typeof WORDS;
     },
   ) {
-    const wordsFromTheme = words[this.options.theme];
+    const wordsFromTheme = WORDS[this.options.theme];
     this.word = wordsFromTheme[Math.floor(Math.random() * wordsFromTheme.length)];
 
     this.start();

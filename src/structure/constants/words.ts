@@ -1,4 +1,4 @@
-export const words = {
+export const WORDS = {
   nature: [
     'waterfall',
     'island',

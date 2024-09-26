@@ -3,10 +3,11 @@ import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
+import { computeLeaderboard, getLeaderboard, getWeeklyLeaderboard } from 'db/level';
 import { getUserLanguage } from 'db/user';
 
-import { computeLeaderboard, getLeaderboard, getWeeklyLeaderboard } from 'db/level';
-import { chunk, pagination } from 'utils/pagination';
+import { chunk } from 'utils/common';
+import { pagination } from 'utils/pagination';
 
 export default new Command({
   module: ModuleType.Level,
@@ -44,7 +45,6 @@ export default new Command({
     if (!chunkedLeaderboard.length) return interaction.editReply(t('level.none'));
 
     await pagination({
-      client,
       interaction,
       embeds: chunkedLeaderboard.map((level) =>
         new EmbedBuilder()

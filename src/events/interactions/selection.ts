@@ -6,8 +6,8 @@ import type { Selection } from 'classes/selection';
 
 import { getUserData } from 'db/user';
 
+import { keys } from 'constants/keys';
 import { sendError } from 'utils/error';
-import { keys } from 'utils/keys';
 
 export default new Event({
   name: Events.InteractionCreate,

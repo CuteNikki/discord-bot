@@ -14,8 +14,8 @@ import { loadSelections } from 'loaders/selection';
 
 import { initDatabase } from 'db/init';
 
+import { keys } from 'constants/keys';
 import { listenToErrors } from 'utils/error';
-import { keys } from 'utils/keys';
 import { initTranslation } from 'utils/language';
 
 export class DiscordClient extends Client {

@@ -2,7 +2,7 @@ import { ApplicationIntegrationType, InteractionContextType, SlashCommandBuilder
 
 import { Command, ModuleType } from 'classes/command';
 
-import { words } from 'utils/words';
+import { WORDS } from 'constants/words';
 
 import { Connect4 } from 'games/connect4';
 import { FastType } from 'games/fast-type';
@@ -185,13 +185,13 @@ export default new Command({
       case 'hangman':
         {
           let theme = options.getString('theme', false);
-          const themes = Object.keys(words);
+          const themes = Object.keys(WORDS);
           if (!theme || theme === 'random') theme = themes[Math.floor(Math.random() * themes.length)];
 
           new Hangman({
             interaction,
             client,
-            theme: theme as keyof typeof words,
+            theme: theme as keyof typeof WORDS,
           });
         }
         break;

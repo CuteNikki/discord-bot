@@ -2,27 +2,19 @@ import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, Compon
 import { t } from 'i18next';
 import ms from 'ms';
 
-import type { DiscordClient } from 'classes/client';
-
 import { getUserLanguage } from 'db/user';
 
 import { logger } from 'utils/logger';
 
-// Slices an array into chunks of a given size and returns chunks
-export function chunk<type>(arr: type[], size: number): type[][] {
-  return Array.from({ length: Math.ceil(arr.length / size) }, (_: type, i: number) => arr.slice(i * size, i * size + size));
-}
-
 enum CustomIds {
-  First = 'PAGINATION_FIRST',
-  Previous = 'PAGINATION_PREV',
-  Page = 'PAGINATION_PAGE',
-  Next = 'PAGINATION_NEXT',
-  Last = 'PAGINATION_LAST',
+  First = 'button-pagination-first',
+  Previous = 'button-pagination-prev',
+  Page = 'button-pagination-page',
+  Next = 'button-pagination-next',
+  Last = 'button-pagination-last',
 }
 
 export async function pagination({
-  client,
   interaction,
   embeds,
   content,
@@ -33,7 +25,6 @@ export async function pagination({
   ephemeral = true, // If true, the pagination will only be visible to the user
   footer = true, // If true, will replace the current embeds footer to tell that the buttons have been disabled because the time is over
 }: {
-  client: DiscordClient;
   interaction: CommandInteraction;
   embeds: EmbedBuilder[];
   extraButton?: ButtonBuilder;

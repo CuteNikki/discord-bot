@@ -4,11 +4,11 @@ import { t } from 'i18next';
 import type { Button } from 'classes/button';
 import { Event } from 'classes/event';
 
-import { getUserData } from 'db/user';
 import { updateClientSettings } from 'db/client';
+import { getUserData } from 'db/user';
 
+import { keys } from 'constants/keys';
 import { sendError } from 'utils/error';
-import { keys } from 'utils/keys';
 
 export default new Event({
   name: Events.InteractionCreate,

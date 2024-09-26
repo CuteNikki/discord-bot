@@ -10,11 +10,11 @@ import { infractionModel, InfractionType } from 'models/infraction';
 import { reminderModel } from 'models/reminder';
 import { weeklyLevelModel } from 'models/weeklyLevel';
 
+import { keys } from 'constants/keys';
 import { getClientSettings, updateClientSettings } from 'db/client';
 import { getUserLanguage } from 'db/user';
 import { deleteCustomVoiceChannel, getCustomVoiceChannels } from 'db/voice';
 import { sendError } from 'utils/error';
-import { keys } from 'utils/keys';
 import { logger } from 'utils/logger';
 
 export async function initDatabase(client: DiscordClient) {

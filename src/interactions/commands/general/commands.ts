@@ -18,8 +18,9 @@ import { Command, ModuleType } from 'classes/command';
 
 import { getUserLanguage } from 'db/user';
 
+import { chunk } from 'utils/common';
 import { logger } from 'utils/logger';
-import { chunk, pagination } from 'utils/pagination';
+import { pagination } from 'utils/pagination';
 
 export default new Command({
   module: ModuleType.General,
@@ -97,7 +98,6 @@ export default new Command({
       const applicationCmds = await interaction.client.application.commands.fetch();
 
       await pagination({
-        client,
         interaction,
         ephemeral,
         disableButtons: false,

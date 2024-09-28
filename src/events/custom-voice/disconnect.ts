@@ -2,7 +2,7 @@ import { Events } from 'discord.js';
 
 import { Event } from 'classes/event';
 
-import { getCustomVoiceChannel, deleteCustomVoiceChannel } from 'db/voice';
+import { deleteCustomVoiceChannel, getCustomVoiceChannel } from 'db/custom-voice';
 
 import { logger } from 'utils/logger';
 

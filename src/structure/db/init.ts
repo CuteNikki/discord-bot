@@ -12,8 +12,8 @@ import { weeklyLevelModel } from 'models/weeklyLevel';
 
 import { keys } from 'constants/keys';
 import { getClientSettings, updateLastWeeklyClearAt } from 'db/client';
+import { deleteCustomVoiceChannel, getCustomVoiceChannels } from 'db/custom-voice';
 import { getUserLanguage } from 'db/user';
-import { deleteCustomVoiceChannel, getCustomVoiceChannels } from 'db/voice';
 import { sendError } from 'utils/error';
 import { logger } from 'utils/logger';
 

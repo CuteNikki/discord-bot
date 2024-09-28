@@ -6,7 +6,8 @@ import { Command, ModuleType } from 'classes/command';
 
 import { convertLevelToXP, getLevelWithRank, getWeeklyLevelWithRank } from 'db/level';
 import { getUserLanguage } from 'db/user';
-import type { PositionLevel } from 'models/level';
+
+import type { PositionLevel } from 'types/level';
 
 import { logger } from 'utils/logger';
 

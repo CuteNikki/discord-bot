@@ -9,10 +9,9 @@ import { DiscordClient } from 'classes/client';
 import { getClientSettings, updateLastWeeklyClearAt } from 'db/client';
 import { deleteCustomVoiceChannel, getCustomVoiceChannels } from 'db/custom-voice';
 import { closeInfraction, getUnresolvedInfractions } from 'db/infraction';
+import { deleteWeeklyLevels } from 'db/level';
 import { deleteExpiredReminders, getExpiredReminders } from 'db/reminder';
 import { getUserLanguage } from 'db/user';
-
-import { weeklyLevelModel } from 'models/weeklyLevel';
 
 import { InfractionType } from 'types/infraction';
 
@@ -86,7 +85,7 @@ async function clearWeekly(client: DiscordClient) {
 
 async function clearWeeklyLevel(client: DiscordClient, applicationId: string) {
   // Clear weekly level model and collection
-  const clearedLevel = await weeklyLevelModel.deleteMany({});
+  const clearedLevel = await deleteWeeklyLevels();
 
   // Notify that weekly level have been cleared
   logger.debug(`[${client.cluster.id}] Cleared ${clearedLevel.deletedCount} weekly level`);

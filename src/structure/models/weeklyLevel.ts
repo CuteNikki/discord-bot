@@ -1,18 +1,12 @@
-import mongoose, { Model, model, Schema, Types } from 'mongoose';
+import mongoose, { Model, model, Schema } from 'mongoose';
 
-export type WeeklyLevel = {
-  _id: Types.ObjectId;
-  userId: string;
-  guildId: string;
-  level: number;
-  xp: number;
-};
+import type { WeeklyLevelDocument } from 'types/level';
 
-const weeklyLevelSchema = new Schema<WeeklyLevel>({
+const weeklyLevelSchema = new Schema<WeeklyLevelDocument>({
   userId: { type: String, required: true },
   guildId: { type: String, required: true },
   level: { type: Number, default: 0 },
   xp: { type: Number, default: 0 },
 });
 
-export const weeklyLevelModel: Model<WeeklyLevel> = mongoose.models['weekly_level'] || model<WeeklyLevel>('weekly_level', weeklyLevelSchema);
+export const weeklyLevelModel: Model<WeeklyLevelDocument> = mongoose.models['weekly_level'] || model<WeeklyLevelDocument>('weekly_level', weeklyLevelSchema);

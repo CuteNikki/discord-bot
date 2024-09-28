@@ -4,9 +4,12 @@ import type { DiscordClient } from 'classes/client';
 
 import { getGuildSettings } from 'db/guild';
 import type { LevelReward } from 'models/guild';
-import { levelModel, type Level, type PositionLevel } from 'models/level';
 
-import { weeklyLevelModel, type WeeklyLevel } from 'models/weeklyLevel';
+import { levelModel } from 'models/level';
+import { weeklyLevelModel } from 'models/weeklyLevel';
+
+import type { LevelDocument, PositionLevel, WeeklyLevelDocument } from 'types/level';
+
 import { getRandomNumber } from 'utils/common';
 
 /**
@@ -44,9 +47,9 @@ export function getRandomXP(): number {
  * Gets the level and xp for a user in a guild
  * @param {string} userId
  * @param {string} guildId
- * @returns {Promise<Level | null>} level object or null if not found
+ * @returns {Promise<LevelDocument | null>} level object or null if not found
  */
-export async function getLevel(userId: string, guildId: string): Promise<Level | null> {
+export async function getLevel(userId: string, guildId: string): Promise<LevelDocument | null> {
   return await levelModel.findOne({ userId, guildId }, {}, { upsert: false }).lean().exec();
 }
 
@@ -54,10 +57,10 @@ export async function getLevel(userId: string, guildId: string): Promise<Level |
  * Gets or creates the level and xp for a user in a guild
  * @param {string} userId
  * @param {string} guildId
- * @param {UpdateQuery<Level>} updateQuery
- * @returns {Promise<Level>} level object
+ * @param {UpdateQuery<LevelDocument>} updateQuery
+ * @returns {Promise<LevelDocument>} level object
  */
-export async function getLevelForce(userId: string, guildId: string, updateQuery: UpdateQuery<Level> = {}): Promise<Level> {
+export async function getLevelForce(userId: string, guildId: string, updateQuery: UpdateQuery<LevelDocument> = {}): Promise<LevelDocument> {
   return await levelModel.findOneAndUpdate({ userId, guildId }, updateQuery, { upsert: true, new: true }).lean().exec();
 }
 
@@ -65,9 +68,9 @@ export async function getLevelForce(userId: string, guildId: string, updateQuery
  * Gets the weekly level and xp for a user in a guild
  * @param {string} userId
  * @param {string} guildId
- * @returns {Promise<WeeklyLevel | null>} level object or null if not found
+ * @returns {Promise<WeeklyLevelDocument | null>} level object or null if not found
  */
-export async function getWeeklyLevel(userId: string, guildId: string): Promise<Level | null> {
+export async function getWeeklyLevel(userId: string, guildId: string): Promise<WeeklyLevelDocument | null> {
   return await weeklyLevelModel.findOne({ userId, guildId }, {}, { upsert: false }).lean().exec();
 }
 
@@ -75,10 +78,10 @@ export async function getWeeklyLevel(userId: string, guildId: string): Promise<L
  * Gets or creates the weekly level and xp for a user in a guild
  * @param {string} userId
  * @param {string} guildId
- * @param {UpdateQuery<WeeklyLevel>} updateQuery
- * @returns {Promise<WeeklyLevel>} level object
+ * @param {UpdateQuery<WeeklyLevelDocument>} updateQuery
+ * @returns {Promise<WeeklyLevelDocument>} level object
  */
-export async function getWeeklyLevelForce(userId: string, guildId: string, updateQuery: UpdateQuery<Level> = {}): Promise<Level> {
+export async function getWeeklyLevelForce(userId: string, guildId: string, updateQuery: UpdateQuery<WeeklyLevelDocument> = {}): Promise<WeeklyLevelDocument> {
   return await weeklyLevelModel.findOneAndUpdate({ userId, guildId }, updateQuery, { upsert: true, new: true }).lean().exec();
 }
 
@@ -87,9 +90,9 @@ export async function getWeeklyLevelForce(userId: string, guildId: string, updat
  * @param {string} userId
  * @param {string} guildId
  * @param {number} xp
- * @returns {Promise<Level>} Updated level object
+ * @returns {Promise<LevelDocument>} Updated level object
  */
-export async function appendXP(userId: string, guildId: string, xp: number): Promise<Level> {
+export async function appendXP(userId: string, guildId: string, xp: number): Promise<LevelDocument> {
   // Handle weekly level
   const currentWeekly = await getWeeklyLevelForce(userId, guildId);
   const weeklyLevel = convertXpToLevel(currentWeekly.xp + xp);
@@ -112,9 +115,9 @@ export async function appendXP(userId: string, guildId: string, xp: number): Pro
  * @param {string} userId
  * @param {string} guildId
  * @param {number} xp
- * @returns {Promise<Level>} Updated level object
+ * @returns {Promise<LevelDocument>} Updated level object
  */
-export async function setXP(userId: string, guildId: string, xp: number): Promise<Level> {
+export async function setXP(userId: string, guildId: string, xp: number): Promise<LevelDocument> {
   // Verify that the XP is within the allowed range
   if (xp > 200000) xp = 200000;
   if (xp < 0) xp = 0;
@@ -128,9 +131,9 @@ export async function setXP(userId: string, guildId: string, xp: number): Promis
  * @param {string} userId
  * @param {string} guildId
  * @param {number} xp
- * @returns {Promise<Level>} Updated level object
+ * @returns {Promise<LevelDocument>} Updated level object
  */
-export async function addXP(userId: string, guildId: string, xp: number): Promise<Level> {
+export async function addXP(userId: string, guildId: string, xp: number): Promise<LevelDocument> {
   // Verify that the XP is within the allowed range
   if (xp > 200000) xp = 200000;
   if (xp < 0) xp = 0;
@@ -144,9 +147,9 @@ export async function addXP(userId: string, guildId: string, xp: number): Promis
  * @param {string} userId
  * @param {string} guildId
  * @param {number} level
- * @returns {Promise<Level>} Updated level object
+ * @returns {Promise<LevelDocument>} Updated level object
  */
-export async function setLevel(userId: string, guildId: string, level: number): Promise<Level> {
+export async function setLevel(userId: string, guildId: string, level: number): Promise<LevelDocument> {
   // Verify that the level is within the allowed range
   if (level > 1000) level = 1000;
   if (level < 0) level = 0;
@@ -160,9 +163,9 @@ export async function setLevel(userId: string, guildId: string, level: number): 
  * @param {string} userId
  * @param {string} guildId
  * @param {number} level
- * @returns {Promise<Level>} Updated level object
+ * @returns {Promise<LevelDocument>} Updated level object
  */
-export async function addLevel(userId: string, guildId: string, level: number): Promise<Level> {
+export async function addLevel(userId: string, guildId: string, level: number): Promise<LevelDocument> {
   // Verify that the level is within the allowed range
   if (level > 1000) level = 1000;
   if (level < 0) level = 0;
@@ -173,10 +176,10 @@ export async function addLevel(userId: string, guildId: string, level: number): 
 
 /**
  * Gets the rewards for a level
- * @param {Level | PositionLevel} level
+ * @param {LevelDocument | PositionLevel} level
  * @returns {Promise<LevelReward[]>} Rewards for the level
  */
-export async function getRewardsForLevel(level: Level | PositionLevel): Promise<LevelReward[]> {
+export async function getRewardsForLevel(level: LevelDocument | PositionLevel): Promise<LevelReward[]> {
   const guildSettings = await getGuildSettings(level.guildId);
   if (!guildSettings) return [];
 
@@ -214,9 +217,9 @@ export async function getWeeklyLevelWithRank(userId: string, guildId: string): P
 /**
  * Returns the leaderboard for a guild
  * @param {string} guildId
- * @returns {Promise<Level[]>} Leaderboard
+ * @returns {Promise<LevelDocument[]>} Leaderboard
  */
-export async function getLeaderboard(guildId: string): Promise<Level[]> {
+export async function getLeaderboard(guildId: string): Promise<LevelDocument[]> {
   return await levelModel
     .find({ guildId })
     .sort([['xp', 'descending']])
@@ -227,9 +230,9 @@ export async function getLeaderboard(guildId: string): Promise<Level[]> {
 /**
  * Returns the weekly leaderboard for a guild
  * @param {string} guildId
- * @returns {Promise<WeeklyLevel[]>} Leaderboard
+ * @returns {Promise<WeeklyLevelDocument[]>} Leaderboard
  */
-export async function getWeeklyLeaderboard(guildId: string): Promise<WeeklyLevel[]> {
+export async function getWeeklyLeaderboard(guildId: string): Promise<WeeklyLevelDocument[]> {
   return await weeklyLevelModel
     .find({ guildId })
     .sort([['xp', 'descending']])
@@ -239,10 +242,18 @@ export async function getWeeklyLeaderboard(guildId: string): Promise<WeeklyLevel
 
 /**
  * Adds a username to each level in the leaderboard
- * @param {Level[] | WeeklyLevel[]} leaderboard
+ * @param {LevelDocument[] | WeeklyLevelDocument[]} leaderboard
  * @param {DiscordClient} client
  * @returns {Promise<PositionLevel[]>} Leaderboard with usernames
  */
-export async function computeLeaderboard(leaderboard: Level[] | WeeklyLevel[], client: DiscordClient): Promise<PositionLevel[]> {
+export async function computeLeaderboard(leaderboard: (LevelDocument | WeeklyLevelDocument)[], client: DiscordClient): Promise<PositionLevel[]> {
   return leaderboard.map((level, index) => ({ ...level, position: index + 1, username: client.users.cache.get(level.userId)?.username }));
+}
+
+/**
+ * Deletes all weekly levels
+ * @returns
+ */
+export async function deleteWeeklyLevels() {
+  return await weeklyLevelModel.deleteMany({});
 }

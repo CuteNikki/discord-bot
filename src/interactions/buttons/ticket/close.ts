@@ -4,7 +4,7 @@ import { t } from 'i18next';
 import { Button } from 'classes/button';
 
 import { getGuildSettings } from 'db/guild';
-import { ticketModel } from 'models/ticket';
+import { closeTicket, findTicket } from 'db/ticket';
 
 import { logger } from 'utils/logger';
 
@@ -29,7 +29,7 @@ export default new Button({
       return;
     }
 
-    const ticket = await ticketModel.findOne({ channelId });
+    const ticket = await findTicket(channelId);
 
     if (!ticket) {
       await interaction.reply({
@@ -102,7 +102,7 @@ export default new Button({
       }
     }
 
-    await ticketModel.findOneAndUpdate({ channelId }, { closed: true });
+    await closeTicket(channelId);
 
     await interaction.reply({
       embeds: [new EmbedBuilder().setColor(client.colors.ticket).setDescription(t('ticket.closed', { lng, closed_by: `${user.toString()}` }))],

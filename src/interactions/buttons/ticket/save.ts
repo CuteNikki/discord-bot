@@ -5,7 +5,7 @@ import { t } from 'i18next';
 import { Button } from 'classes/button';
 
 import { getGuildSettings } from 'db/guild';
-import { ticketModel } from 'models/ticket';
+import { findTicket } from 'db/ticket';
 
 import { logger } from 'utils/logger';
 
@@ -17,7 +17,7 @@ export default new Button({
   async execute({ interaction, client }) {
     if (!interaction.inCachedGuild()) return;
 
-    const { guildId, customId, member } = interaction;
+    const { guildId, customId, member, channelId } = interaction;
 
     const currentConfig = await getGuildSettings(guildId);
     const lng = currentConfig.language;
@@ -27,6 +27,16 @@ export default new Button({
     if (!system) {
       await interaction.reply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_system', { lng }))],
+        ephemeral: true,
+      });
+      return;
+    }
+
+    const ticket = await findTicket(channelId);
+
+    if (!ticket) {
+      await interaction.reply({
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_ticket', { lng }))],
         ephemeral: true,
       });
       return;
@@ -65,18 +75,6 @@ export default new Button({
       await interaction.reply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_transcript_channel', { lng }))],
         files: [transcript],
-      });
-      return;
-    }
-
-    const ticket = await ticketModel.findOne({
-      channelId: interaction.channel?.id,
-    });
-
-    if (!ticket) {
-      await interaction.reply({
-        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_ticket', { lng }))],
-        ephemeral: true,
       });
       return;
     }

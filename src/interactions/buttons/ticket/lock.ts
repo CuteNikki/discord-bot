@@ -4,7 +4,7 @@ import { t } from 'i18next';
 import { Button } from 'classes/button';
 
 import { getGuildSettings } from 'db/guild';
-import { ticketModel } from 'models/ticket';
+import { findTicket, lockTicket } from 'db/ticket';
 
 import { logger } from 'utils/logger';
 
@@ -30,7 +30,7 @@ export default new Button({
       return;
     }
 
-    const ticket = await ticketModel.findOne({ channelId });
+    const ticket = await findTicket(channelId);
 
     if (!ticket) {
       await interaction.reply({
@@ -85,7 +85,8 @@ export default new Button({
         break;
       }
     }
-    await ticketModel.findOneAndUpdate({ channelId }, { locked: true });
+
+    await lockTicket(channelId);
 
     await interaction.reply({
       embeds: [new EmbedBuilder().setColor(client.colors.ticket).setDescription(t('ticket.locked', { lng, locked_by: user.toString() }))],

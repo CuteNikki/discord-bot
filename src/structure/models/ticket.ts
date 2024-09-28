@@ -1,19 +1,8 @@
-import mongoose, { Model, model, Schema, Types } from 'mongoose';
+import mongoose, { Model, model, Schema } from 'mongoose';
 
-export interface Ticket {
-  _id: Types.ObjectId;
-  guildId: string;
-  channelId: string;
-  claimedBy: string;
-  createdBy: string;
-  createdAt: number;
-  closed: boolean;
-  locked: boolean;
-  users: string[];
-  choice: string;
-}
+import type { TicketDocument } from 'types/ticket';
 
-const ticketSchema = new Schema<Ticket>({
+const ticketSchema = new Schema<TicketDocument>({
   guildId: { type: String, required: true },
   channelId: { type: String, required: true },
   claimedBy: { type: String, required: false },
@@ -25,4 +14,4 @@ const ticketSchema = new Schema<Ticket>({
   choice: { type: String, required: true },
 });
 
-export const ticketModel: Model<Ticket> = mongoose.models['ticket'] || model<Ticket>('ticket', ticketSchema);
+export const ticketModel: Model<TicketDocument> = mongoose.models['ticket'] || model<TicketDocument>('ticket', ticketSchema);

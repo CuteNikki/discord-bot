@@ -4,7 +4,7 @@ import { t } from 'i18next';
 import { Button } from 'classes/button';
 
 import { getGuildSettings } from 'db/guild';
-import { ticketModel } from 'models/ticket';
+import { createTicket, deleteTicketById, getTicketsByUser } from 'db/ticket';
 
 import { logger } from 'utils/logger';
 
@@ -33,14 +33,12 @@ export default new Button({
       return;
     }
 
-    let tickets = await ticketModel.find({
-      guildId,
-      createdBy: user.id,
-    });
+    let tickets = await getTicketsByUser(guildId, user.id);
 
     for (const ticket of tickets) {
       if (!guild.channels.cache.get(ticket.channelId)) {
-        await ticketModel.deleteOne({ _id: ticket._id });
+        await deleteTicketById(ticket._id);
+
         tickets = tickets.filter((t) => t._id !== ticket._id);
       }
     }
@@ -95,13 +93,7 @@ export default new Button({
       return;
     }
 
-    await ticketModel.create({
-      guildId,
-      channelId: channel.id,
-      createdBy: user.id,
-      users: [user.id],
-      choice: choice.label,
-    });
+    await createTicket(guildId, channel.id, user.id, [user.id], choice.label);
 
     await interaction.editReply({
       embeds: [new EmbedBuilder().setColor(client.colors.ticket).setDescription(t('ticket.created_user', { lng, channel: channel.toString() }))],

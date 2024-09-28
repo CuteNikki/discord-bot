@@ -4,7 +4,7 @@ import { t } from 'i18next';
 import { Button } from 'classes/button';
 
 import { getGuildSettings } from 'db/guild';
-import { ticketModel } from 'models/ticket';
+import { findTicket, unlockTicket } from 'db/ticket';
 
 import { logger } from 'utils/logger';
 
@@ -16,7 +16,7 @@ export default new Button({
   async execute({ interaction, client }) {
     if (!interaction.inCachedGuild()) return;
 
-    const { guildId, customId, user, member } = interaction;
+    const { guildId, customId, user, member, channelId } = interaction;
 
     const currentConfig = await getGuildSettings(guildId);
     const lng = currentConfig.language;
@@ -31,9 +31,7 @@ export default new Button({
       return;
     }
 
-    const ticket = await ticketModel.findOne({
-      channelId: interaction.channel?.id,
-    });
+    const ticket = await findTicket(channelId);
 
     if (!ticket) {
       await interaction.reply({
@@ -89,7 +87,7 @@ export default new Button({
       }
     }
 
-    await ticketModel.findOneAndUpdate({ channelId: interaction.channel?.id }, { locked: false });
+    await unlockTicket(channelId);
 
     await interaction.reply({
       embeds: [new EmbedBuilder().setColor(client.colors.ticket).setDescription(t('ticket.unlocked', { lng, unlocked_by: user.toString() }))],

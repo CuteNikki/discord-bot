@@ -1,10 +1,10 @@
+import { EmbedBuilder, PermissionFlagsBits } from 'discord.js';
 import { t } from 'i18next';
 
 import { Button } from 'classes/button';
 
 import { getGuildSettings } from 'db/guild';
-import { EmbedBuilder, PermissionFlagsBits } from 'discord.js';
-import { ticketModel } from 'models/ticket';
+import { claimTicket, findTicket } from 'db/ticket';
 
 export default new Button({
   customId: 'button-tickets-claim',
@@ -28,7 +28,7 @@ export default new Button({
       return;
     }
 
-    const ticket = await ticketModel.findOne({ channelId });
+    const ticket = await findTicket(channelId);
 
     if (!ticket) {
       await interaction.reply({
@@ -56,7 +56,7 @@ export default new Button({
       return;
     }
 
-    await ticketModel.findOneAndUpdate({ channelId }, { claimedBy: user.id });
+    await claimTicket(channelId, user.id);
 
     await interaction.reply({
       embeds: [new EmbedBuilder().setColor(client.colors.ticket).setDescription(t('ticket.claimed', { lng, claimed_by: user.toString() }))],

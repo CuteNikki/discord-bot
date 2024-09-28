@@ -11,7 +11,7 @@ import { reminderModel } from 'models/reminder';
 import { weeklyLevelModel } from 'models/weeklyLevel';
 
 import { keys } from 'constants/keys';
-import { getClientSettings, updateClientSettings } from 'db/client';
+import { getClientSettings, updateLastWeeklyClearAt } from 'db/client';
 import { getUserLanguage } from 'db/user';
 import { deleteCustomVoiceChannel, getCustomVoiceChannels } from 'db/voice';
 import { sendError } from 'utils/error';
@@ -74,7 +74,7 @@ async function clearWeekly(client: DiscordClient) {
   const { database } = await getClientSettings(keys.DISCORD_BOT_ID);
 
   // If now is bigger than last weekly clear plus a week
-  if (NOW > database.lastWeeklyClear + WEEK) {
+  if (NOW > database.lastWeeklyClearAt + WEEK) {
     // Clear weekly level
     clearWeeklyLevel(client, keys.DISCORD_BOT_ID);
   }
@@ -88,9 +88,7 @@ async function clearWeeklyLevel(client: DiscordClient, applicationId: string) {
   logger.debug(`[${client.cluster.id}] Cleared ${clearedLevel.deletedCount} weekly level`);
 
   // Update last weekly level clear with current date
-  await updateClientSettings(applicationId, {
-    $set: { ['database.lastWeeklyClear']: Date.now() },
-  });
+  await updateLastWeeklyClearAt(applicationId, Date.now());
 }
 
 async function clearReminders(client: DiscordClient) {

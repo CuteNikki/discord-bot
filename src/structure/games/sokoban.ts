@@ -5,7 +5,6 @@ import type { DiscordClient } from 'classes/client';
 
 import { getUserLanguage } from 'db/user';
 
-
 import { logger } from 'utils/logger';
 
 type Cell = 0 | 1 | 2 | 3 | 4 | 5; // 0: empty space, 1: wall, 2: box, 3: storage, 4: player, 5: box on storage

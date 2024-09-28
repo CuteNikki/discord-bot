@@ -1,31 +1,10 @@
-import mongoose, { Model, model, Schema, Types } from 'mongoose';
+import mongoose, { Model, model, Schema } from 'mongoose';
+import { BadgeType, type UserDocument } from 'types/user';
 
-export enum BadgeType {
-  Developer,
-  StaffMember,
-  Translator,
-  Supporter,
-  ExpertBughunter,
-  Bughunter,
-}
-
-export interface Badge {
-  id: BadgeType;
-  receivedAt: number;
-}
-
-export interface UserData {
-  _id: Types.ObjectId;
-  userId: string;
-  language?: string;
-  banned: boolean;
-  badges: Badge[];
-}
-
-const userSchema = new Schema<UserData>({
+const userSchema = new Schema<UserDocument>({
   userId: { type: String, required: true },
+  banned: { type: Boolean, required: true, default: false },
   language: { type: String, required: false },
-  banned: { type: Boolean, default: false },
   badges: [
     {
       id: {
@@ -38,4 +17,4 @@ const userSchema = new Schema<UserData>({
   ],
 });
 
-export const userModel: Model<UserData> = mongoose.models['user'] || model<UserData>('user', userSchema);
+export const userModel: Model<UserDocument> = mongoose.models['user'] || model<UserDocument>('user', userSchema);

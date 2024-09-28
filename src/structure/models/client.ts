@@ -1,41 +1,21 @@
-import mongoose, { Model, model, Schema, Types } from 'mongoose';
+import mongoose, { Model, model, Schema } from 'mongoose';
 
-export interface ClientSettings {
-  _id: Types.ObjectId;
-  applicationId: string;
-  database: {
-    lastWeeklyClear: number;
-  };
-  support: {
-    guildId: string;
-    inviteUrl: string;
-  };
-  inviteUrl: string;
-  stats: {
-    restarts: number;
-    commandsExecuted: number;
-    commandsFailed: number;
-    buttonsExecuted: number;
-    buttonsFailed: number;
-    guildsJoined: number;
-    guildsLeft: number;
-  };
-}
+import type { ClientDocument } from 'types/client';
 
-const clientSchema = new Schema<ClientSettings>({
+const clientSchema = new Schema<ClientDocument>({
   applicationId: { type: String, required: true },
   database: {
-    type: { lastWeeklyClear: { type: Number, required: true, default: 0 } },
-    default: { lastWeeklyClear: 0 },
+    type: { lastWeeklyClearAt: { type: Number, required: true, default: 0 } },
+    default: { lastWeeklyClearAt: 0 },
   },
   support: {
     type: {
-      guildId: { type: String, required: true, default: 'unavailable' },
-      inviteUrl: { type: String, required: true, default: 'unavailable' },
+      guildId: { type: String },
+      guildInvite: { type: String },
+      botInvite: { type: String },
     },
-    default: { guildId: 'unavailable', inviteUrl: 'unavailable' },
+    default: {},
   },
-  inviteUrl: { type: String, required: true, default: 'unavailable' },
   stats: {
     type: {
       commandsExecuted: { type: Number, required: true, default: 0 },
@@ -56,4 +36,4 @@ const clientSchema = new Schema<ClientSettings>({
   },
 });
 
-export const clientModel: Model<ClientSettings> = mongoose.models['client'] || model<ClientSettings>('client', clientSchema);
+export const clientModel: Model<ClientDocument> = mongoose.models['client'] || model<ClientDocument>('client', clientSchema);

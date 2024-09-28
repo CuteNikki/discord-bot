@@ -24,7 +24,7 @@ import {
 } from 'db/phone';
 import { getUserLanguage } from 'db/user';
 
-import { type Connection } from 'types/phone';
+import { type ConnectionDocument } from 'types/phone';
 
 import type { DiscordClient } from 'classes/client';
 
@@ -224,7 +224,7 @@ export async function handlePhoneMessageTimeout({
 }: {
   channel: SendableChannels;
   targetChannel: SendableChannels;
-  existingConnection: Connection;
+  existingConnection: ConnectionDocument;
   timeout: number;
   lng: string;
   otherLng: string;

@@ -1,15 +1,15 @@
 import type { Types } from 'mongoose';
 
 import { availableChannelModel, connectionModel } from 'models/phone';
-import type { AvailableChannel, Connection } from 'types/phone';
+import type { AvailableChannelDocument, ConnectionDocument } from 'types/phone';
 
 /**
  * Gets all available channels
  * @param {string} channelId So we don't connect to our own channel
  * @param {string} userId So we don't connect to ourselves
- * @returns {Promise<AvailableChannel[]>} All available channels excluding the passed channel/user
+ * @returns {Promise<AvailableChannelDocument[]>} All available channels excluding the passed channel/user
  */
-export async function getAvailableChannels(channelId: string, userId: string): Promise<AvailableChannel[]> {
+export async function getAvailableChannels(channelId: string, userId: string): Promise<AvailableChannelDocument[]> {
   return await availableChannelModel
     .find({ channelId: { $ne: channelId }, userId: { $ne: userId } })
     .lean()
@@ -20,9 +20,9 @@ export async function getAvailableChannels(channelId: string, userId: string): P
  * Adds a channel to the available channels
  * @param {string} channelId The current channel
  * @param {string} userId The user that adds the channel
- * @returns {Promise<AvailableChannel>} The db response
+ * @returns {Promise<AvailableChannelDocument>} The db response
  */
-export async function addAvailableChannel(channelId: string, userId: string): Promise<AvailableChannel> {
+export async function addAvailableChannel(channelId: string, userId: string): Promise<AvailableChannelDocument> {
   return await availableChannelModel.create({ channelId, userId });
 }
 
@@ -40,7 +40,7 @@ export async function removeAvailableChannel(channelId: string) {
  * @param {Types.ObjectId} _id The id of the channel object to remove
  * @returns {Promise<AvailableChannel | null>} The deleted channel or null if it was not found
  */
-export async function removeAvailableChannelById(_id: Types.ObjectId): Promise<AvailableChannel | null> {
+export async function removeAvailableChannelById(_id: Types.ObjectId): Promise<AvailableChannelDocument | null> {
   return await availableChannelModel.findByIdAndDelete(_id);
 }
 
@@ -49,7 +49,7 @@ export async function removeAvailableChannelById(_id: Types.ObjectId): Promise<A
  * @param {string} channelId The channel to find
  * @returns {Promise<AvailableChannel | null>} The found channel or null if it was not found
  */
-export async function findAvailableChannel(channelId: string): Promise<AvailableChannel | null> {
+export async function findAvailableChannel(channelId: string): Promise<AvailableChannelDocument | null> {
   return await availableChannelModel.findOne({ channelId });
 }
 
@@ -72,7 +72,7 @@ export async function findConnection(channelId: string) {
  * @param {Types.ObjectId} _id The id of the connection object to find
  * @returns {Promise<Connection | null>} The found connection or null if it was not found
  */
-export async function findConnectionById(_id: Types.ObjectId): Promise<Connection | null> {
+export async function findConnectionById(_id: Types.ObjectId): Promise<ConnectionDocument | null> {
   return await connectionModel.findById(_id);
 }
 
@@ -82,9 +82,9 @@ export async function findConnectionById(_id: Types.ObjectId): Promise<Connectio
  * @param {string} userIdOne
  * @param {string} channelIdTwo
  * @param {string} userIdTwo
- * @returns {Promise<Connection>} The connection object
+ * @returns {Promise<ConnectionDocument>} The connection object
  */
-export async function createConnection(channelIdOne: string, userIdOne: string, channelIdTwo: string, userIdTwo: string): Promise<Connection> {
+export async function createConnection(channelIdOne: string, userIdOne: string, channelIdTwo: string, userIdTwo: string): Promise<ConnectionDocument> {
   return await connectionModel.create({
     channelIdOne,
     userIdOne,
@@ -98,7 +98,7 @@ export async function createConnection(channelIdOne: string, userIdOne: string, 
  * @param {Types.ObjectId} _id The id of the connection object to delete
  * @returns {Promise<Connection | null>} The deleted connection or null if it was not found
  */
-export async function deleteConnectionById(_id: Types.ObjectId): Promise<Connection | null> {
+export async function deleteConnectionById(_id: Types.ObjectId): Promise<ConnectionDocument | null> {
   return await connectionModel.findByIdAndDelete(_id);
 }
 

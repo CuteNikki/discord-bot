@@ -106,7 +106,7 @@ export default new Command({
                   }),
                   t('botinfo.database.weekly', {
                     lng,
-                    date: database.lastWeeklyClear ? `<t:${Math.floor(database.lastWeeklyClear / 1000)}:D>` : '/',
+                    date: database.lastWeeklyClearAt ? `<t:${Math.floor(database.lastWeeklyClearAt / 1000)}:D>` : '/',
                   }),
                 ].join('\n'),
               },

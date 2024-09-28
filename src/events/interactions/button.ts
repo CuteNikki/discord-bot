@@ -4,7 +4,7 @@ import { t } from 'i18next';
 import type { Button } from 'classes/button';
 import { Event } from 'classes/event';
 
-import { updateClientSettings } from 'db/client';
+import { incrementButtonsExecuted, incrementButtonsFailed } from 'db/client';
 import { getUserData } from 'db/user';
 
 import { keys } from 'constants/keys';
@@ -117,9 +117,7 @@ export default new Event({
     try {
       await button.options.execute({ client, interaction });
 
-      await updateClientSettings(keys.DISCORD_BOT_ID, {
-        $inc: { ['stats.buttonsExecuted']: 1 },
-      });
+      await incrementButtonsExecuted(keys.DISCORD_BOT_ID);
     } catch (err: any) {
       const message = t('interactions.error', {
         lng,
@@ -130,9 +128,7 @@ export default new Event({
       else interaction.reply({ content: message, ephemeral: true });
 
       await sendError({ client, err, location: `Button Interaction Error: ${button.options.customId}` });
-      await updateClientSettings(keys.DISCORD_BOT_ID, {
-        $inc: { ['stats.buttonsFailed']: 1 },
-      });
+      await incrementButtonsFailed(keys.DISCORD_BOT_ID);
     }
   },
 });

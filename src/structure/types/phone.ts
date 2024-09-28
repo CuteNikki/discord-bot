@@ -1,6 +1,6 @@
 import type { Types } from 'mongoose';
 
-export type Connection = {
+export type ConnectionDocument = {
   _id: Types.ObjectId;
   channelIdOne: string;
   channelIdTwo: string;
@@ -9,8 +9,8 @@ export type Connection = {
   lastMessageAt?: number; // used for timeout
 };
 
-export type AvailableChannel = {
+export type AvailableChannelDocument = {
   _id: Types.ObjectId;
   channelId: string;
   userId: string;
-}
+};

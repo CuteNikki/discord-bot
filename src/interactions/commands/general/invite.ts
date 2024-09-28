@@ -25,7 +25,7 @@ export default new Command({
     const settings = await getClientSettings(keys.DISCORD_BOT_ID);
 
     await interaction.editReply({
-      embeds: [new EmbedBuilder().setColor(Colors.Blurple).setTitle(t('invite.title', { lng })).setDescription(settings.inviteUrl)],
+      embeds: [new EmbedBuilder().setColor(Colors.Blurple).setTitle(t('invite.title', { lng })).setDescription(settings.support.botInvite)],
     });
   },
 });

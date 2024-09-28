@@ -2,14 +2,14 @@ import { Events } from 'discord.js';
 
 import { Event } from 'classes/event';
 
-import { updateClientSettings } from 'db/client';
+import { keys } from 'constants/keys';
+
+import { incrementGuildsLeft } from 'db/client';
 
 export default new Event({
   name: Events.GuildDelete,
   once: false,
-  async execute(_client, guild) {
-    await updateClientSettings(guild.id, {
-      $inc: { ['stats.guildsLeft']: 1 },
-    });
+  async execute(_client, _guild) {
+    await incrementGuildsLeft(keys.DISCORD_BOT_ID);
   },
 });

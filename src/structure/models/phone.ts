@@ -1,22 +1,22 @@
 import mongoose, { Model, model, Schema } from 'mongoose';
 
-import type { AvailableChannel, Connection } from 'types/phone';
+import type { AvailableChannelDocument, ConnectionDocument } from 'types/phone';
 
-export const availableChannelModel: Model<AvailableChannel> =
+export const availableChannelModel: Model<AvailableChannelDocument> =
   mongoose.models['available_channel'] ||
-  model<AvailableChannel>(
+  model<AvailableChannelDocument>(
     'available_channel',
-    new Schema<AvailableChannel>({
+    new Schema<AvailableChannelDocument>({
       channelId: { type: String, required: true, unique: true },
       userId: { type: String, required: true },
     }),
   );
 
-export const connectionModel: Model<Connection> =
+export const connectionModel: Model<ConnectionDocument> =
   mongoose.models['connection'] ||
-  model<Connection>(
+  model<ConnectionDocument>(
     'connection',
-    new Schema<Connection>({
+    new Schema<ConnectionDocument>({
       channelIdOne: { type: String, required: true },
       userIdOne: { type: String, required: true },
       channelIdTwo: { type: String, required: true },

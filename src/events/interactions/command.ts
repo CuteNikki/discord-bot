@@ -4,7 +4,7 @@ import { t } from 'i18next';
 import { ModuleType } from 'classes/command';
 import { Event } from 'classes/event';
 
-import { updateClientSettings } from 'db/client';
+import { incrementCommandsExecuted, incrementCommandsFailed } from 'db/client';
 import { getGuildSettings } from 'db/guild';
 import { getUserData } from 'db/user';
 
@@ -100,9 +100,7 @@ export default new Event({
     try {
       await command.options.execute({ client, interaction });
 
-      await updateClientSettings(keys.DISCORD_BOT_ID, {
-        $inc: { ['stats.commandsExecuted']: 1 },
-      });
+      await incrementCommandsExecuted(keys.DISCORD_BOT_ID);
     } catch (err: any) {
       const message = t('interactions.error', {
         lng,
@@ -113,9 +111,7 @@ export default new Event({
       else interaction.reply({ content: message, ephemeral: true });
 
       await sendError({ client, err, location: `Command Interaction Error: ${command.options.data.name}` });
-      await updateClientSettings(keys.DISCORD_BOT_ID, {
-        $inc: { ['stats.commandsFailed']: 1 },
-      });
+      await incrementCommandsFailed(keys.DISCORD_BOT_ID);
     }
   },
 });

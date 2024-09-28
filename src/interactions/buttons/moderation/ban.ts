@@ -2,8 +2,10 @@ import { t } from 'i18next';
 
 import { Button } from 'classes/button';
 
-import { infractionModel, InfractionType } from 'models/infraction';
+import { createInfraction } from 'db/infraction';
 import { getUserLanguage } from 'db/user';
+
+import { InfractionType } from 'types/infraction';
 
 import { logger } from 'utils/logger';
 
@@ -15,14 +17,18 @@ export default new Button({
   botPermissions: ['BanMembers', 'SendMessages'],
   async execute({ interaction, client }) {
     if (!interaction.inCachedGuild()) return;
-    const { guild } = interaction;
 
+    const { guild } = interaction;
     const targetId = interaction.customId.split('_')[1];
+
     const target = await client.users.fetch(targetId).catch((err) => logger.debug({ err, targetId }, 'Could not fetch user'));
 
     const lng = await getUserLanguage(interaction.user.id);
 
-    if (!target) return interaction.reply(t('ban.failed', { lng }));
+    if (!target) {
+      await interaction.reply(t('ban.failed', { lng }));
+      return;
+    }
 
     const targetLng = await getUserLanguage(targetId);
     const reason = 'Suspicious Account';
@@ -30,7 +36,11 @@ export default new Button({
     const banned = await guild.bans
       .create(target.id, { reason, deleteMessageSeconds: 604800 })
       .catch((err) => logger.debug({ err, targetId }, 'Could not ban user'));
-    if (!banned) return interaction.reply(t('ban.failed', { lng }));
+
+    if (!banned) {
+      await interaction.reply(t('ban.failed', { lng }));
+      return;
+    }
 
     const historyOptions = {
       0: t('ban.history.none', { lng }), // 'Delete none'
@@ -54,6 +64,7 @@ export default new Button({
         }),
       })
       .catch((err) => logger.debug({ err, targetId }, 'Could not send DM to user'));
+
     await interaction.reply({
       content: [
         t('ban.confirmed', {
@@ -68,16 +79,10 @@ export default new Button({
       components: [],
     });
 
-    if (target.bot) return;
-    await infractionModel.create({
-      guildId: guild.id,
-      userId: target.id,
-      staffId: interaction.user.id,
-      action: InfractionType.Ban,
-      closed: true,
-      endsAt: undefined,
-      createdAt: Date.now(),
-      reason,
-    });
+    if (target.bot) {
+      return;
+    }
+
+    await createInfraction(guild.id, target.id, interaction.user.id, InfractionType.Ban, reason, undefined, Date.now(), true);
   },
 });

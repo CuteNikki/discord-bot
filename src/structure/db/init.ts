@@ -6,14 +6,18 @@ import { performance } from 'perf_hooks';
 
 import { DiscordClient } from 'classes/client';
 
-import { infractionModel, InfractionType } from 'models/infraction';
+import { getClientSettings, updateLastWeeklyClearAt } from 'db/client';
+import { deleteCustomVoiceChannel, getCustomVoiceChannels } from 'db/custom-voice';
+import { closeInfraction, getUnresolvedInfractions } from 'db/infraction';
+import { getUserLanguage } from 'db/user';
+
 import { reminderModel } from 'models/reminder';
 import { weeklyLevelModel } from 'models/weeklyLevel';
 
+import { InfractionType } from 'types/infraction';
+
 import { keys } from 'constants/keys';
-import { getClientSettings, updateLastWeeklyClearAt } from 'db/client';
-import { deleteCustomVoiceChannel, getCustomVoiceChannels } from 'db/custom-voice';
-import { getUserLanguage } from 'db/user';
+
 import { sendError } from 'utils/error';
 import { logger } from 'utils/logger';
 
@@ -126,37 +130,27 @@ async function clearReminders(client: DiscordClient) {
 
 async function clearExpiredInfractions(client: DiscordClient) {
   // Fetch all expired infractions that have not been closed yet
-  const expiredInfractions = await infractionModel
-    .find({ closed: false, endsAt: { $lte: Date.now() } })
-    .lean()
-    .exec();
-
-  const closedInfractions = [];
+  const expiredInfractions = await getUnresolvedInfractions();
 
   for (const infraction of expiredInfractions) {
     if (infraction.action === InfractionType.TempBan) {
       // Fetch the infraction's guild to unban the user
       const guild = await client.guilds.fetch(infraction.guildId).catch((err) => logger.debug({ err, infraction }, 'Could not fetch guild'));
       // If we can't find the guild, we can't unban so we close the infraction
-      if (!guild) return closeInfraction();
+      if (!guild) return closeCurrentInfraction();
       // If we have a guild, we try to unban the user and close the infraction
       await guild.bans
         .remove(infraction.userId, 'Temporary Ban has expired')
         .catch((err) => logger.debug({ err, infraction }, 'Could not unban member after tempban '));
-      closeInfraction();
+      closeCurrentInfraction();
     } else if (infraction.action === InfractionType.Timeout) {
       // Discord handles timeouts for us so we don't need to fetch the guild and remove the timeout
-      closeInfraction();
+      closeCurrentInfraction();
     }
 
-    async function closeInfraction() {
-      await infractionModel.findByIdAndUpdate(infraction._id, {
-        $set: { closed: true },
-      });
-      closedInfractions.push();
+    async function closeCurrentInfraction() {
+      await closeInfraction(infraction._id);
+      logger.debug(`[${client.cluster.id}] Closed infraction ${infraction._id}`);
     }
   }
-
-  // Notify about closed infractions
-  logger.debug(`[${client.cluster.id}] Closed ${closedInfractions.length} infractions`);
 }

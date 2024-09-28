@@ -1,27 +1,7 @@
-import mongoose, { Model, model, Schema, Types } from 'mongoose';
+import mongoose, { Model, model, Schema } from 'mongoose';
+import { InfractionType, type InfractionDocument } from 'types/infraction';
 
-export enum InfractionType {
-  Ban,
-  Unban,
-  TempBan,
-  Kick,
-  Timeout,
-  Warn,
-}
-
-export interface Infraction {
-  _id: Types.ObjectId;
-  userId: string;
-  guildId: string;
-  staffId: string;
-  action: number;
-  createdAt: number;
-  reason?: string;
-  endsAt?: number;
-  closed: boolean;
-}
-
-const infractionSchema = new Schema<Infraction>({
+const infractionSchema = new Schema<InfractionDocument>({
   userId: { type: String, required: true },
   guildId: { type: String, required: true },
   staffId: { type: String, required: true },
@@ -36,4 +16,4 @@ const infractionSchema = new Schema<Infraction>({
   closed: { type: Boolean, default: true },
 });
 
-export const infractionModel: Model<Infraction> = mongoose.models['infraction'] || model<Infraction>('infraction', infractionSchema);
+export const infractionModel: Model<InfractionDocument> = mongoose.models['infraction'] || model<InfractionDocument>('infraction', infractionSchema);

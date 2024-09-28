@@ -2,8 +2,10 @@ import { t } from 'i18next';
 
 import { Button } from 'classes/button';
 
-import { infractionModel, InfractionType } from 'models/infraction';
+import { createInfraction } from 'db/infraction';
 import { getUserLanguage } from 'db/user';
+
+import { InfractionType } from 'types/infraction';
 
 import { logger } from 'utils/logger';
 
@@ -15,6 +17,7 @@ export default new Button({
   botPermissions: ['KickMembers', 'SendMessages'],
   async execute({ interaction, client }) {
     if (!interaction.inCachedGuild()) return;
+
     const { guild } = interaction;
 
     const targetId = interaction.customId.split('_')[1];
@@ -22,12 +25,20 @@ export default new Button({
 
     const lng = await getUserLanguage(interaction.user.id);
 
-    if (!targetMember) return interaction.reply(t('kick.target.invalid', { lng }));
+    if (!targetMember) {
+      await interaction.reply(t('kick.target.invalid', { lng }));
+      return;
+    }
+
     const targetLng = await getUserLanguage(targetId);
     const reason = 'Suspicious Account';
 
     const kicked = await targetMember.kick(reason).catch((err) => logger.debug({ err, targetId }, 'Could not kick user'));
-    if (!kicked) return interaction.reply(t('kick.failed', { lng }));
+
+    if (!kicked) {
+      await interaction.reply(t('kick.failed', { lng }));
+      return;
+    }
 
     const receivedDM = await client.users
       .send(targetMember.user.id, {
@@ -38,6 +49,7 @@ export default new Button({
         }),
       })
       .catch((err) => logger.debug({ err, targetId }, 'Could not send DM to user'));
+
     await interaction.reply({
       content: [
         t('kick.confirmed', {
@@ -50,14 +62,10 @@ export default new Button({
       components: [],
     });
 
-    if (targetMember.user.bot) return;
-    await infractionModel.create({
-      guildId: guild.id,
-      userId: targetMember.id,
-      staffId: interaction.user.id,
-      action: InfractionType.Kick,
-      createdAt: Date.now(),
-      reason,
-    });
+    if (targetMember.user.bot) {
+      return;
+    }
+
+    await createInfraction(guild.id, targetMember.id, interaction.user.id, InfractionType.Kick, reason, undefined, Date.now(), true);
   },
 });

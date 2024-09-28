@@ -1146,7 +1146,11 @@
     "target_dm": "Du wurdest auf {{guild}} für {{reason}} verwarnt!",
     "confirmed": "{{user}} wurde erfolgreich für {{reason}} verwarnt.",
     "dm_received": "Der User hat eine Privatnachricht erhalten.",
-    "dm_not_received": "Der User hat keine Privatnachricht erhalten."
+    "dm_not_received": "Der User hat keine Privatnachricht erhalten.",
+    "target": {
+      "invalid": "Der User wurde nicht gefunden!",
+      "pos_staff": "Der User hat eine höhere oder gleichwertige Rolle als du!"
+    }
   },
   "kick": {
     "confirm": "Bist du sicher, dass du {{user}} kicken möchtest?",

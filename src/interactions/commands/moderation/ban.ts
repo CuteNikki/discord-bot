@@ -13,8 +13,10 @@ import ms from 'ms';
 
 import { Command, ModuleType } from 'classes/command';
 
-import { InfractionType, infractionModel } from 'models/infraction';
+import { createInfraction } from 'db/infraction';
 import { getUserLanguage } from 'db/user';
+
+import { InfractionType } from 'types/infraction';
 
 import { logger } from 'utils/logger';
 
@@ -49,6 +51,7 @@ export default new Command({
     ),
   async execute({ interaction, client }) {
     if (!interaction.inCachedGuild()) return;
+
     await interaction.deferReply({ ephemeral: true });
 
     enum CustomIds {
@@ -86,13 +89,27 @@ export default new Command({
     const staffRolePos = member.roles.highest.position ?? 0;
     const botRolePos = guild.members.me?.roles.highest.position ?? 0;
 
-    if (targetRolePos >= staffRolePos) return interaction.editReply(t('ban.target.pos_staff', { lng }));
-    if (targetRolePos >= botRolePos) return interaction.editReply(t('ban.target.pos_bot', { lng }));
+    if (targetRolePos >= staffRolePos) {
+      await interaction.editReply(t('ban.target.pos_staff', { lng }));
+      return;
+    }
 
-    if (targetMember && !targetMember.bannable) return interaction.editReply(t('ban.target.bannable', { lng }));
+    if (targetRolePos >= botRolePos) {
+      await interaction.editReply(t('ban.target.pos_bot', { lng }));
+      return;
+    }
+
+    if (targetMember && !targetMember.bannable) {
+      await interaction.editReply(t('ban.target.bannable', { lng }));
+      return;
+    }
 
     const isBanned = await guild.bans.fetch(target.id).catch((err) => logger.debug({ err, userId: target.id }, 'Could not fetch target ban'));
-    if (isBanned) return interaction.editReply(t('ban.target.banned', { lng }));
+
+    if (isBanned) {
+      await interaction.editReply(t('ban.target.banned', { lng }));
+      return;
+    }
 
     const msg = await interaction.editReply({
       content: t('ban.confirm', { lng, user: target.toString() }),
@@ -119,7 +136,11 @@ export default new Command({
       const banned = await guild.bans
         .create(target.id, { reason, deleteMessageSeconds: history })
         .catch((err) => logger.debug({ err, userId: target.id }, 'Could not ban user'));
-      if (!banned) return collector.update(t('ban.failed', { lng }));
+
+      if (!banned) {
+        await collector.update(t('ban.failed', { lng }));
+        return;
+      }
 
       const receivedDM = await client.users
         .send(target.id, {
@@ -131,6 +152,7 @@ export default new Command({
           }),
         })
         .catch((err) => logger.debug({ err, userId: target.id }, 'Could not send DM'));
+
       await collector.update({
         content: [
           t('ban.confirmed', {
@@ -148,17 +170,20 @@ export default new Command({
         components: [],
       });
 
-      if (target.bot) return;
-      await infractionModel.create({
-        guildId: guild.id,
-        userId: target.id,
-        staffId: user.id,
-        action: duration ? InfractionType.TempBan : InfractionType.Ban,
-        closed: duration ? false : true,
-        endsAt: duration ? Date.now() + duration : undefined,
-        createdAt: Date.now(),
+      if (target.bot) {
+        return;
+      }
+
+      await createInfraction(
+        guild.id,
+        target.id,
+        user.id,
+        duration ? InfractionType.TempBan : InfractionType.Ban,
         reason,
-      });
+        duration ? Date.now() + duration : undefined,
+        Date.now(),
+        duration ? false : true,
+      );
     }
   },
 });

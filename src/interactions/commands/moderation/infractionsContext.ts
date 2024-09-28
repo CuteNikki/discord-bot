@@ -11,8 +11,8 @@ import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
+import { getInfractions } from 'db/infraction';
 import { getUserLanguage } from 'db/user';
-import { infractionModel } from 'models/infraction';
 
 import { chunk } from 'utils/common';
 import { pagination } from 'utils/pagination';
@@ -28,18 +28,22 @@ export default new Command<typeof commandType>({
     .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
     .setContexts(InteractionContextType.Guild),
-  async execute({ interaction, client }) {
+  async execute({ interaction }) {
     if (!interaction.inCachedGuild()) return;
+
     await interaction.deferReply({ ephemeral: true });
 
     const { user, guildId } = interaction;
-
     const lng = await getUserLanguage(user.id);
 
     const target = interaction.targetUser;
+    const targetInfractions = await getInfractions(guildId, target.id);
 
-    const targetInfractions = await infractionModel.find({ guildId, userId: target.id }).lean().exec();
-    if (!targetInfractions.length) return interaction.editReply(t('infractions.history.none', { lng }));
+    if (!targetInfractions.length) {
+      await interaction.editReply(t('infractions.history.none', { lng }));
+      return;
+    }
+
     const chunkedInfractions = chunk(
       targetInfractions.sort((a, b) => b.createdAt - a.createdAt),
       3,
@@ -56,7 +60,7 @@ export default new Command<typeof commandType>({
 
     await pagination({
       interaction,
-      embeds: chunkedInfractions.map((chunk, index) =>
+      embeds: chunkedInfractions.map((chunk) =>
         new EmbedBuilder()
           .setColor(Colors.Orange)
           .setTitle(t('infractions.history.title', { lng }))

@@ -3,8 +3,8 @@ import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
+import { deleteInfraction, findInfraction, getInfractions } from 'db/infraction';
 import { getUserLanguage } from 'db/user';
-import { infractionModel } from 'models/infraction';
 
 import { chunk } from 'utils/common';
 import { pagination } from 'utils/pagination';
@@ -30,7 +30,7 @@ export default new Command({
         .setDescription('Deletes an infraction')
         .addStringOption((option) => option.setName('infraction').setDescription('The id of the infraction').setRequired(true)),
     ),
-  async execute({ interaction, client }) {
+  async execute({ interaction }) {
     if (!interaction.inCachedGuild()) return;
     const { options, user, guildId } = interaction;
 
@@ -39,10 +39,15 @@ export default new Command({
     switch (options.getSubcommand()) {
       case 'history':
         await interaction.deferReply({ ephemeral: true });
-        const target = options.getUser('user', true);
 
-        const targetInfractions = await infractionModel.find({ guildId, userId: target.id }).lean().exec();
-        if (!targetInfractions.length) return interaction.editReply(t('infractions.history.none', { lng }));
+        const target = options.getUser('user', true);
+        const targetInfractions = await getInfractions(guildId, target.id);
+
+        if (!targetInfractions.length) {
+          await interaction.editReply(t('infractions.history.none', { lng }));
+          return;
+        }
+
         const chunkedInfractions = chunk(
           targetInfractions.sort((a, b) => b.createdAt - a.createdAt),
           3,
@@ -59,7 +64,7 @@ export default new Command({
 
         await pagination({
           interaction,
-          embeds: chunkedInfractions.map((chunk, index) =>
+          embeds: chunkedInfractions.map((chunk) =>
             new EmbedBuilder()
               .setColor(Colors.Orange)
               .setTitle(t('infractions.history.title', { lng }))
@@ -97,10 +102,14 @@ export default new Command({
         break;
       case 'delete':
         const infractionId = options.getString('infraction', true);
-        const infraction = await infractionModel.findById(infractionId).lean().exec();
-        if (!infraction || infraction.guildId !== guildId) return interaction.reply(t('infractions.delete.invalid', { lng }));
+        const infraction = await findInfraction(infractionId);
 
-        await infractionModel.findByIdAndDelete(infractionId).lean().exec();
+        if (!infraction || infraction.guildId !== guildId) {
+          await interaction.reply(t('infractions.delete.invalid', { lng }));
+          return;
+        }
+
+        await deleteInfraction(infractionId);
         interaction.reply(t('infractions.delete.success', { lng }));
         break;
     }

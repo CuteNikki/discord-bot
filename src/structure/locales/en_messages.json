@@ -1147,7 +1147,11 @@
     "target_dm": "You have been warned on {{guild}} because {{reason}}!",
     "confirmed": "Successfully warned {{user}} because {{reason}}.",
     "dm_received": "User received a DM.",
-    "dm_not_received": "User did not receive a DM."
+    "dm_not_received": "User did not receive a DM.",
+    "target": {
+      "invalid": "Could not find that user!",
+      "pos_staff": "User has a higher or equal role than you!"
+    }
   },
   "kick": {
     "confirm": "Are you sure you want to kick {{user}}?",

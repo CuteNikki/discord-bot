@@ -12,8 +12,10 @@ import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
-import { InfractionType, infractionModel } from 'models/infraction';
+import { createInfraction } from 'db/infraction';
 import { getUserLanguage } from 'db/user';
+
+import { InfractionType } from 'types/infraction';
 
 import { logger } from 'utils/logger';
 
@@ -30,6 +32,7 @@ export default new Command({
     .addStringOption((option) => option.setName('reason').setDescription('The reason for the warn').setMaxLength(300).setRequired(false)),
   async execute({ interaction, client }) {
     if (!interaction.inCachedGuild()) return;
+
     await interaction.deferReply({ ephemeral: true });
 
     enum CustomIds {
@@ -40,9 +43,23 @@ export default new Command({
     const { options, guild, user } = interaction;
 
     const target = options.getUser('user', true);
+    const targetMember = await guild.members.fetch(target.id).catch((err) => logger.debug({ err, userId: target.id }, 'Could not fetch target member'));
 
     const lng = await getUserLanguage(interaction.user.id);
     const targetLng = await getUserLanguage(target.id);
+
+    if (!targetMember) {
+      await interaction.editReply(t('warn.target.invalid', { lng }));
+      return;
+    }
+
+    const targetRolePos = targetMember?.roles.highest.position ?? 0;
+    const staffRolePos = interaction.member.roles.highest.position ?? 0;
+
+    if (targetRolePos >= staffRolePos) {
+      await interaction.editReply(t('warn.target.pos_staff', { lng }));
+      return;
+    }
 
     const reason = options.getString('reason', false) ?? undefined;
 
@@ -77,6 +94,7 @@ export default new Command({
           }),
         })
         .catch((err) => logger.debug({ err, userId: target.id }, 'Could not send DM'));
+
       await collector.update({
         content: [
           t('warn.confirmed', {
@@ -89,15 +107,11 @@ export default new Command({
         components: [],
       });
 
-      if (target.bot) return;
-      await infractionModel.create({
-        guildId: guild.id,
-        userId: target.id,
-        staffId: user.id,
-        action: InfractionType.Warn,
-        createdAt: Date.now(),
-        reason,
-      });
+      if (target.bot) {
+        return;
+      }
+
+      await createInfraction(guild.id, target.id, user.id, InfractionType.Warn, reason, undefined, Date.now(), true);
     }
   },
 });

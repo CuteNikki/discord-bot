@@ -12,8 +12,10 @@ import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
+import { createInfraction } from 'db/infraction';
 import { getUserLanguage } from 'db/user';
-import { InfractionType, infractionModel } from 'models/infraction';
+
+import { InfractionType } from 'types/infraction';
 
 import { logger } from 'utils/logger';
 
@@ -30,6 +32,7 @@ export default new Command({
     .addStringOption((option) => option.setName('reason').setDescription('The reason for the kick').setMaxLength(300).setRequired(false)),
   async execute({ interaction, client }) {
     if (!interaction.inCachedGuild()) return;
+
     await interaction.deferReply({ ephemeral: true });
 
     enum CustomIds {
@@ -38,12 +41,15 @@ export default new Command({
     }
 
     const { options, guild, member, user } = interaction;
-
     const lng = await getUserLanguage(interaction.user.id);
 
     const target = options.getUser('user', true);
     const targetMember = await guild.members.fetch(target.id).catch((err) => logger.debug({ err, userId: target.id }, 'Could not fetch target member'));
-    if (!targetMember) return interaction.editReply(t('kick.target.invalid', { lng }));
+
+    if (!targetMember) {
+      await interaction.editReply(t('kick.target.invalid', { lng }));
+      return;
+    }
 
     const reason = options.getString('reason', false) ?? undefined;
 
@@ -51,10 +57,19 @@ export default new Command({
     const staffRolePos = member.roles.highest.position ?? 0;
     const botRolePos = guild.members.me?.roles.highest.position ?? 0;
 
-    if (targetRolePos >= staffRolePos) return interaction.editReply(t('kick.target.pos_staff', { lng }));
-    if (targetRolePos >= botRolePos) return interaction.editReply(t('kick.target.pos_bot', { lng }));
+    if (targetRolePos >= staffRolePos) {
+      await interaction.editReply(t('kick.target.pos_staff', { lng }));
+      return;
+    }
+    if (targetRolePos >= botRolePos) {
+      await interaction.editReply(t('kick.target.pos_bot', { lng }));
+      return;
+    }
 
-    if (!targetMember.kickable) return interaction.editReply(t('kick.target.kickable', { lng }));
+    if (!targetMember.kickable) {
+      await interaction.editReply(t('kick.target.kickable', { lng }));
+      return;
+    }
 
     const msg = await interaction.editReply({
       content: t('kick.confirm', { lng, user: target.toString() }),
@@ -79,7 +94,11 @@ export default new Command({
       });
     } else if (collector.customId === CustomIds.Confirm) {
       const kicked = await targetMember.kick(reason).catch((err) => logger.debug({ err, userId: target.id }, 'Could not kick user'));
-      if (!kicked) return collector.update(t('kick.failed', { lng }));
+
+      if (!kicked) {
+        await collector.update(t('kick.failed', { lng }));
+        return;
+      }
 
       const receivedDM = await client.users
         .send(target.id, {
@@ -90,6 +109,7 @@ export default new Command({
           }),
         })
         .catch((err) => logger.debug({ err, userId: target.id }, 'Could not send DM'));
+
       await collector.update({
         content: [
           t('kick.confirmed', { lng, user: target.toString(), reason: `\`${reason ?? '/'}\`` }),
@@ -98,15 +118,11 @@ export default new Command({
         components: [],
       });
 
-      if (target.bot) return;
-      await infractionModel.create({
-        guildId: guild.id,
-        userId: target.id,
-        staffId: user.id,
-        action: InfractionType.Kick,
-        createdAt: Date.now(),
-        reason,
-      });
+      if (target.bot) {
+        return;
+      }
+
+      await createInfraction(guild.id, target.id, user.id, InfractionType.Kick, reason, undefined, Date.now(), true);
     }
   },
 });

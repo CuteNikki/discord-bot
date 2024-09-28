@@ -12,8 +12,10 @@ import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
-import { InfractionType, infractionModel } from 'models/infraction';
+import { createInfraction } from 'db/infraction';
 import { getUserLanguage } from 'db/user';
+
+import { InfractionType } from 'types/infraction';
 
 import { logger } from 'utils/logger';
 
@@ -30,6 +32,7 @@ export default new Command({
     .addStringOption((option) => option.setName('reason').setDescription('The reason for the unban').setMaxLength(300).setRequired(false)),
   async execute({ interaction, client }) {
     if (!interaction.inCachedGuild()) return;
+
     await interaction.deferReply({ ephemeral: true });
 
     enum CustomIds {
@@ -47,7 +50,11 @@ export default new Command({
     const reason = options.getString('reason', false) ?? undefined;
 
     const isBanned = await guild.bans.fetch(target.id).catch((err) => logger.debug({ err, userId: target.id }, 'Could not fetch target ban'));
-    if (!isBanned) return interaction.editReply(t('unban.target_not_banned', { lng }));
+
+    if (!isBanned) {
+      await interaction.editReply(t('unban.target.not_banned', { lng }));
+      return;
+    }
 
     const msg = await interaction.editReply({
       content: t('unban.confirm', { lng, user: target.toString() }),
@@ -71,8 +78,12 @@ export default new Command({
         components: [],
       });
     } else if (collector.customId === CustomIds.Confirm) {
-      const banned = await guild.bans.remove(target.id, reason).catch((err) => logger.debug({ err, userId: target.id }, 'Could not unban user'));
-      if (!banned) return collector.update(t('unban.failed', { lng }));
+      const unbanned = await guild.bans.remove(target.id, reason).catch((err) => logger.debug({ err, userId: target.id }, 'Could not unban user'));
+
+      if (!unbanned) {
+        await collector.update(t('unban.failed', { lng }));
+        return;
+      }
 
       const receivedDM = await client.users
         .send(target.id, {
@@ -83,6 +94,7 @@ export default new Command({
           }),
         })
         .catch(() => {});
+
       await collector.update({
         content: [
           t('unban.confirmed', {
@@ -95,15 +107,11 @@ export default new Command({
         components: [],
       });
 
-      if (target.bot) return;
-      await infractionModel.create({
-        guildId: guild.id,
-        userId: target.id,
-        staffId: user.id,
-        action: InfractionType.Unban,
-        createdAt: Date.now(),
-        reason,
-      });
+      if (target.bot) {
+        return;
+      }
+
+      await createInfraction(guild.id, target.id, user.id, InfractionType.Unban, reason, undefined, Date.now(), true);
     }
   },
 });

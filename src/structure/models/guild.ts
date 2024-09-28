@@ -1,7 +1,7 @@
 import { ButtonStyle } from 'discord.js';
 import mongoose, { Model, model, Schema, Types } from 'mongoose';
 
-import type { ReactionRoleGroup } from 'db/reaction-roles';
+import type { ReactionRoleGroup } from 'types/reaction-roles';
 
 export enum AnnouncementType {
   UserChannel,

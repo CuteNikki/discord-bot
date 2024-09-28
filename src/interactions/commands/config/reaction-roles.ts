@@ -23,8 +23,10 @@ import type { DiscordClient } from 'classes/client';
 import { Command, ModuleType } from 'classes/command';
 
 import { getGuildSettings } from 'db/guild';
-import { addReactionGroup, disableReactionRoles, enableReactionRoles, deleteReactionGroupById, type Reaction } from 'db/reaction-roles';
+import { addReactionGroup, disableReactionRoles, enableReactionRoles, deleteReactionGroupById } from 'db/reaction-roles';
 import { getUserLanguage } from 'db/user';
+
+import type { Reaction } from 'types/reaction-roles';
 
 import { logger } from 'utils/logger';
 import { chunk } from 'utils/common';

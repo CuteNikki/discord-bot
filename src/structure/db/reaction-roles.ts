@@ -3,25 +3,7 @@ import type { Types } from 'mongoose';
 import { updateGuildSettings } from 'db/guild';
 import type { GuildSettings } from 'models/guild';
 
-//
-//  Types
-//
-
-export type Reaction = {
-  emoji: string;
-  roleId: string;
-};
-
-export type ReactionRoleGroup = {
-  _id: Types.ObjectId;
-  messageId: string;
-  channelId: string;
-  reactions: Reaction[];
-};
-
-//
-//  Functions
-//
+import type { Reaction } from 'types/reaction-roles';
 
 /**
  * Enables reaction roles

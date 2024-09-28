@@ -1,18 +1,11 @@
-import mongoose, { Model, model, Schema, Types } from 'mongoose';
+import mongoose, { Model, model, Schema } from 'mongoose';
+import type { ReminderDocument } from 'types/reminder';
 
-export interface Reminder {
-  _id: Types.ObjectId;
-  userId: string;
-  channelId: string;
-  message: string;
-  remindAt: number;
-}
-
-const reminderSchema = new Schema<Reminder>({
+const reminderSchema = new Schema<ReminderDocument>({
   userId: { type: String, required: true },
   channelId: { type: String, required: true },
   message: { type: String, required: true },
   remindAt: { type: Number, required: true },
 });
 
-export const reminderModel: Model<Reminder> = mongoose.models['reminder'] || model<Reminder>('reminder', reminderSchema);
+export const reminderModel: Model<ReminderDocument> = mongoose.models['reminder'] || model<ReminderDocument>('reminder', reminderSchema);

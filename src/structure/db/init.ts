@@ -9,9 +9,9 @@ import { DiscordClient } from 'classes/client';
 import { getClientSettings, updateLastWeeklyClearAt } from 'db/client';
 import { deleteCustomVoiceChannel, getCustomVoiceChannels } from 'db/custom-voice';
 import { closeInfraction, getUnresolvedInfractions } from 'db/infraction';
+import { deleteExpiredReminders, getExpiredReminders } from 'db/reminder';
 import { getUserLanguage } from 'db/user';
 
-import { reminderModel } from 'models/reminder';
 import { weeklyLevelModel } from 'models/weeklyLevel';
 
 import { InfractionType } from 'types/infraction';
@@ -99,7 +99,7 @@ async function clearReminders(client: DiscordClient) {
   // Store current time to avoid deleting newly expired reminders later
   const NOW = Date.now();
   // Fetch all due reminders
-  const dueReminders = await reminderModel.find({ remindAt: { $lte: NOW } });
+  const dueReminders = await getExpiredReminders(NOW);
 
   for (const reminder of dueReminders) {
     const lng = await getUserLanguage(reminder.userId);
@@ -122,9 +122,7 @@ async function clearReminders(client: DiscordClient) {
     }
   }
   // Deleting due reminders
-  const deletedReminders = await reminderModel.deleteMany({
-    remindAt: { $lte: NOW },
-  });
+  const deletedReminders = await deleteExpiredReminders(NOW);
   logger.debug(`[${client.cluster.id}] Deleted ${deletedReminders.deletedCount} due reminders`);
 }
 

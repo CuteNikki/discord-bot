@@ -1,4 +1,5 @@
 import mongoose, { Model, model, Schema } from 'mongoose';
+
 import { BadgeType, type UserDocument } from 'types/user';
 
 const userSchema = new Schema<UserDocument>({

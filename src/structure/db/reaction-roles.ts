@@ -1,8 +1,8 @@
 import type { Types } from 'mongoose';
 
 import { updateGuildSettings } from 'db/guild';
-import type { GuildSettings } from 'models/guild';
 
+import type { GuildDocument } from 'types/guild';
 import type { Reaction } from 'types/reaction-roles';
 
 /**
@@ -10,7 +10,7 @@ import type { Reaction } from 'types/reaction-roles';
  * @param {string} guildId
  * @returns {Promise<GuildSettings>} Updated guild settings
  */
-export async function enableReactionRoles(guildId: string): Promise<GuildSettings> {
+export async function enableReactionRoles(guildId: string): Promise<GuildDocument> {
   return await updateGuildSettings(guildId, { $set: { reactionRoles: { enabled: true } } });
 }
 
@@ -19,7 +19,7 @@ export async function enableReactionRoles(guildId: string): Promise<GuildSetting
  * @param {string} guildId
  * @returns {Promise<GuildSettings>} Updated guild settings
  */
-export async function disableReactionRoles(guildId: string): Promise<GuildSettings> {
+export async function disableReactionRoles(guildId: string): Promise<GuildDocument> {
   return await updateGuildSettings(guildId, { $set: { reactionRoles: { enabled: false } } });
 }
 
@@ -30,7 +30,7 @@ export async function disableReactionRoles(guildId: string): Promise<GuildSettin
  * @param {Reaction[]} reactions
  * @returns {Promise<GuildSettings>} Updated guild settings
  */
-export async function addReactionGroup(guildId: string, messageId: string, channelId: string, reactions: Reaction[]): Promise<GuildSettings> {
+export async function addReactionGroup(guildId: string, messageId: string, channelId: string, reactions: Reaction[]): Promise<GuildDocument> {
   return await updateGuildSettings(guildId, { $push: { ['reactionRoles.groups']: { messageId, channelId, reactions } } });
 }
 
@@ -40,7 +40,7 @@ export async function addReactionGroup(guildId: string, messageId: string, chann
  * @param {Types.ObjectId} _id
  * @returns {Promise<GuildSettings>} Updated guild settings
  */
-export async function deleteReactionGroupById(guildId: string, _id: string): Promise<GuildSettings> {
+export async function deleteReactionGroupById(guildId: string, _id: string): Promise<GuildDocument> {
   return await updateGuildSettings(guildId, { $pull: { ['reactionRoles.groups']: { _id } } });
 }
 
@@ -50,6 +50,6 @@ export async function deleteReactionGroupById(guildId: string, _id: string): Pro
  * @param {string} messageId
  * @returns {Promise<GuildSettings>} Updated guild settings
  */
-export async function deleteReactionGroupByMessage(guildId: string, messageId: string): Promise<GuildSettings> {
+export async function deleteReactionGroupByMessage(guildId: string, messageId: string): Promise<GuildDocument> {
   return await updateGuildSettings(guildId, { $pull: { ['reactionRoles.groups']: { messageId } } });
 }

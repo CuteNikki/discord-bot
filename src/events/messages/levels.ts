@@ -6,7 +6,8 @@ import { Event } from 'classes/event';
 import { getGuildLanguage, getGuildSettings } from 'db/guild';
 import { appendXP, getLevelForce, getRandomXP, getRewardsForLevel } from 'db/level';
 import { getUserLanguage } from 'db/user';
-import { AnnouncementType } from 'models/guild';
+
+import { AnnouncementType } from 'types/guild';
 
 import { logger } from 'utils/logger';
 

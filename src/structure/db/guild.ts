@@ -1,25 +1,27 @@
 import type { UpdateQuery } from 'mongoose';
 
-import { guildModel, type GuildSettings } from 'models/guild';
+import { guildModel } from 'models/guild';
+
+import type { GuildDocument } from 'types/guild';
 
 import { supportedLanguages } from 'utils/language';
 
 /**
  * Gets or creates the guild settings for a given guild ID
  * @param {string} guildId Guild ID to get the settings for
- * @returns {Promise<GuildSettings>} Guild settings
+ * @returns {Promise<GuildDocument>} Guild settings
  */
-export async function getGuildSettings(guildId: string): Promise<GuildSettings> {
+export async function getGuildSettings(guildId: string): Promise<GuildDocument> {
   return await guildModel.findOneAndUpdate({ guildId }, {}, { upsert: true, new: true }).lean().exec();
 }
 
 /**
  * Updates the guild settings for a given guild ID
  * @param {string} guildId Guild ID to update the settings for
- * @param {UpdateQuery<GuildSettings>} query Query to update the settings with
- * @returns {Promise<GuildSettings>} Updated guild settings
+ * @param {UpdateQuery<GuildDocument>} query Query to update the settings with
+ * @returns {Promise<GuildDocument>} Updated guild settings
  */
-export async function updateGuildSettings(guildId: string, query: UpdateQuery<GuildSettings>): Promise<GuildSettings> {
+export async function updateGuildSettings(guildId: string, query: UpdateQuery<GuildDocument>): Promise<GuildDocument> {
   return await guildModel.findOneAndUpdate({ guildId }, query, { upsert: true, new: true }).lean().exec();
 }
 
@@ -41,9 +43,9 @@ export async function getGuildLanguage(guildId: string | null | undefined): Prom
  * Updates the language for a given guild ID
  * @param {string} guildId Guild ID to update the language for
  * @param {string} language Language to update the guild with
- * @returns {Promise<GuildSettings>} Updated guild
+ * @returns {Promise<GuildDocument>} Updated guild
  */
-export async function updateGuildLanguage(guildId: string, language: string): Promise<GuildSettings> {
+export async function updateGuildLanguage(guildId: string, language: string): Promise<GuildDocument> {
   // If language is not supported, use the default language
   if (!supportedLanguages.includes(language)) language = supportedLanguages[0];
 

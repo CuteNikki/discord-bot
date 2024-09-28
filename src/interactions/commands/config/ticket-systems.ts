@@ -24,7 +24,9 @@ import { Command, ModuleType } from 'classes/command';
 
 import { getGuildSettings, updateGuildSettings } from 'db/guild';
 import { getUserLanguage } from 'db/user';
-import type { TicketChoice } from 'models/guild';
+
+import type { TicketChoice } from 'types/guild';
+
 import { logger } from 'utils/logger';
 
 const TIMEOUT_DURATION = 60_000; // Constant for the timeout duration

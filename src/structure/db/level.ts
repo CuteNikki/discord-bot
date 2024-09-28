@@ -3,11 +3,11 @@ import type { UpdateQuery } from 'mongoose';
 import type { DiscordClient } from 'classes/client';
 
 import { getGuildSettings } from 'db/guild';
-import type { LevelReward } from 'models/guild';
 
 import { levelModel } from 'models/level';
 import { weeklyLevelModel } from 'models/weeklyLevel';
 
+import type { LevelReward } from 'types/guild';
 import type { LevelDocument, PositionLevel, WeeklyLevelDocument } from 'types/level';
 
 import { getRandomNumber } from 'utils/common';

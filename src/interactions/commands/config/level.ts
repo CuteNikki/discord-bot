@@ -6,7 +6,8 @@ import { Command, ModuleType } from 'classes/command';
 import { getGuildSettings, updateGuildSettings } from 'db/guild';
 import { addLevel, addXP, getLevelForce, getRewardsForLevel, setLevel, setXP } from 'db/level';
 import { getUserLanguage } from 'db/user';
-import { AnnouncementType } from 'models/guild';
+
+import { AnnouncementType } from 'types/guild';
 
 import { logger } from 'utils/logger';
 

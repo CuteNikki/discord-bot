@@ -18,8 +18,9 @@ import { t } from 'i18next';
 
 import type { DiscordClient } from 'classes/client';
 
-import type { Embed, Message } from 'models/guild';
 import { getUserLanguage } from 'db/user';
+
+import type { Embed, Message } from 'types/guild';
 
 import { logger } from 'utils/logger';
 

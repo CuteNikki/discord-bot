@@ -3,9 +3,10 @@ import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
-import { availableEvents } from 'models/guild';
 import { getUserLanguage } from 'db/user';
 import { getGuildSettings, updateGuildSettings } from 'db/guild';
+
+import { availableEvents } from 'types/guild';
 
 export default new Command({
   module: ModuleType.Config,

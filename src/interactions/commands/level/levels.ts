@@ -21,7 +21,7 @@ export default new Command({
   async execute({ interaction, client, lng }) {
     if (!interaction.inCachedGuild()) return;
 
-    const { options, guild, user } = interaction;
+    const { options, guild } = interaction;
 
     const ephemeral = options.getBoolean('ephemeral', false) ?? true;
     await interaction.deferReply({ ephemeral });

@@ -21,7 +21,7 @@ export default new Command<typeof commandType>({
 
     await interaction.deferReply({ ephemeral: true });
 
-    const { options, user, guild } = interaction;
+    const { options, guild } = interaction;
 
     const target = options.getUser('user', true);
     const member = guild.members.cache.get(target.id);

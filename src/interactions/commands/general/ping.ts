@@ -3,7 +3,6 @@ import {
   ApplicationIntegrationType,
   ButtonBuilder,
   ButtonStyle,
-  Colors,
   EmbedBuilder,
   InteractionContextType,
   SlashCommandBuilder,
@@ -36,7 +35,7 @@ export default new Command({
       content: '',
       embeds: [
         new EmbedBuilder()
-          .setColor(Colors.Blurple)
+          .setColor(client.colors.general)
           .setTitle(t('ping.title', { lng }))
           .addFields(
             {

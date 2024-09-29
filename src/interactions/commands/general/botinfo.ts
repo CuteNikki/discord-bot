@@ -54,7 +54,7 @@ export default new Command({
       await interaction.editReply({
         embeds: [
           new EmbedBuilder()
-            .setColor(Colors.Blurple)
+            .setColor(client.colors.general)
             .setThumbnail(interaction.client.user.displayAvatarURL({ size: 4096 }))
             .setTitle(t('botinfo.title', { lng }))
             .addFields(

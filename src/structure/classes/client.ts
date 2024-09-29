@@ -41,9 +41,9 @@ export class DiscordClient extends Client {
     customVC: Colors.Purple,
     phone: Colors.Gold,
     ticket: Colors.LuminousVividPink,
-    level: Colors.Blurple,
+    level: Colors.Blue,
     reactionRoles: Colors.DarkGreen,
-    blurple: Colors.Blurple,
+    general: Colors.Blurple,
   };
 
   // Custom emojis

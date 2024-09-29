@@ -963,7 +963,7 @@ export default new Command({
           ?.send({
             embeds: [
               new EmbedBuilder()
-                .setColor(client.colors.blurple)
+                .setColor(client.colors.general)
                 .setTitle(t('ticket.message.title', { lng: config.language }))
                 .setDescription(t('ticket.message.description', { lng: config.language })),
             ],

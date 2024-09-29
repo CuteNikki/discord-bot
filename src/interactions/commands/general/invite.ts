@@ -1,4 +1,4 @@
-import { ApplicationIntegrationType, Colors, EmbedBuilder, InteractionContextType, SlashCommandBuilder } from 'discord.js';
+import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, SlashCommandBuilder } from 'discord.js';
 import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
@@ -16,14 +16,14 @@ export default new Command({
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
     .setContexts(InteractionContextType.Guild, InteractionContextType.PrivateChannel, InteractionContextType.BotDM)
     .addBooleanOption((option) => option.setName('ephemeral').setDescription('When set to false will show the message to everyone').setRequired(false)),
-  async execute({ interaction, lng }) {
+  async execute({ interaction, client, lng }) {
     const ephemeral = interaction.options.getBoolean('ephemeral', false) ?? true;
     await interaction.deferReply({ ephemeral });
 
     const settings = await getClientSettings(keys.DISCORD_BOT_ID);
 
     await interaction.editReply({
-      embeds: [new EmbedBuilder().setColor(Colors.Blurple).setTitle(t('invite.title', { lng })).setDescription(settings.support.botInvite)],
+      embeds: [new EmbedBuilder().setColor(client.colors.general).setTitle(t('invite.title', { lng })).setDescription(settings.support.botInvite)],
     });
   },
 });

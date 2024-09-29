@@ -455,7 +455,7 @@ async function handleRoleReactions(
 
   const msg = await channel
     .send({
-      embeds: [new EmbedBuilder().setColor(client.colors.blurple).setDescription(reactions.map((r) => `${r.emoji}: <@&${r.roleId}>`).join('\n'))],
+      embeds: [new EmbedBuilder().setColor(client.colors.general).setDescription(reactions.map((r) => `${r.emoji}: <@&${r.roleId}>`).join('\n'))],
       components:
         method === 'button'
           ? chunk(

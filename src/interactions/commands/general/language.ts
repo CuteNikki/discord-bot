@@ -1,4 +1,4 @@
-import { ApplicationIntegrationType, InteractionContextType, PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
+import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
 import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
@@ -30,12 +30,19 @@ export default new Command({
     ),
   async autocomplete({ interaction }) {
     const choices = supportedLanguages;
+
     const focused = interaction.options.getFocused();
-    if (!focused.length) return interaction.respond(choices.map((choice) => ({ name: choice, value: choice })).slice(0, 25));
+
+    if (!focused.length) {
+      await interaction.respond(choices.map((choice) => ({ name: choice, value: choice })).slice(0, 25));
+      return;
+    }
+
     const filtered = choices.filter((choice) => choice.toLowerCase().includes(focused.toLowerCase()));
+
     await interaction.respond(filtered.map((choice) => ({ name: choice, value: choice })).slice(0, 25));
   },
-  async execute({ interaction, lng }) {
+  async execute({ interaction, lng, client }) {
     await interaction.deferReply({ ephemeral: true });
     const { user, options } = interaction;
 
@@ -47,62 +54,80 @@ export default new Command({
           const language = options.getString('language', false);
 
           if (!language) {
-            return interaction.editReply({
-              content: t('language.current', { lng, language: lng }),
+            await interaction.editReply({
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('language.current', { lng, language: lng }))],
             });
-          } else if (language) {
-            if (!supportedLanguages.includes(language))
-              return interaction.editReply({
-                content: [
-                  t('language.invalid', { lng, language }),
-                  t('language.supported', {
-                    lng,
-                    languages: supportedLanguages.map((value) => `\`${value}\``).join(', '),
-                  }),
-                ].join('\n'),
-              });
-            await updateUserLanguage(user.id, language);
-            return interaction.editReply({
-              content: t('language.success', { lng, language }),
-            });
+            return;
           }
+
+          if (!supportedLanguages.includes(language)) {
+            await interaction.editReply({
+              embeds: [
+                new EmbedBuilder()
+                  .setColor(client.colors.error)
+                  .setDescription(
+                    [
+                      t('language.invalid', { lng, language }),
+                      t('language.supported', { lng, languages: supportedLanguages.map((value) => `\`${value}\``).join(', ') }),
+                    ].join('\n'),
+                  ),
+              ],
+            });
+            return;
+          }
+
+          await updateUserLanguage(user.id, language);
+          await interaction.editReply({
+            embeds: [new EmbedBuilder().setColor(client.colors.general).setDescription(t('language.success', { lng, language }))],
+          });
         }
         break;
       case 'server':
         {
           const language = options.getString('language', false);
 
-          if (!interaction.inCachedGuild())
-            return interaction.editReply({
-              content: t('language.invalid_guild', { lng }),
+          if (!interaction.inCachedGuild()) {
+            await interaction.editReply({
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('language.invalid_guild', { lng }))],
             });
+            return;
+          }
 
           if (!language) {
-            return interaction.editReply({
-              content: t('language.current', { lng, language: guildLng }),
+            await interaction.editReply({
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('language.current', { lng, language: guildLng }))],
             });
-          } else if (language) {
-            if (!interaction.member.permissions.has(PermissionFlagsBits.ManageGuild))
-              return interaction.editReply({
-                content: t('language.no_permission', { lng }),
-              });
-
-            if (!supportedLanguages.includes(language))
-              return interaction.editReply({
-                content: [
-                  t('language.invalid', { lng, language }),
-                  t('language.supported', {
-                    lng,
-                    languages: supportedLanguages.map((value) => `\`${value}\``).join(', '),
-                  }),
-                ].join('\n'),
-              });
-
-            await updateGuildLanguage(interaction.guildId, language);
-            return interaction.editReply({
-              content: t('language.success', { lng, language }),
-            });
+            return;
           }
+
+          if (!interaction.member.permissions.has(PermissionFlagsBits.ManageGuild)) {
+            await interaction.editReply({
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('language.no_permission', { lng }))],
+            });
+            return;
+          }
+
+          if (!supportedLanguages.includes(language)) {
+            await interaction.editReply({
+              embeds: [
+                new EmbedBuilder().setColor(client.colors.error).setDescription(
+                  [
+                    t('language.invalid', { lng, language }),
+                    t('language.supported', {
+                      lng,
+                      languages: supportedLanguages.map((value) => `\`${value}\``).join(', '),
+                    }),
+                  ].join('\n'),
+                ),
+              ],
+            });
+            return;
+          }
+
+          await updateGuildLanguage(interaction.guildId, language);
+          await interaction.editReply({
+            embeds: [new EmbedBuilder().setColor(client.colors.general).setDescription(t('language.success', { lng, language }))],
+          });
         }
         break;
     }

@@ -4,7 +4,6 @@ import {
   ApplicationIntegrationType,
   ButtonBuilder,
   ButtonStyle,
-  Colors,
   ComponentType,
   EmbedBuilder,
   InteractionContextType,
@@ -21,6 +20,8 @@ import { getUserLanguage } from 'db/user';
 import { chunk } from 'utils/common';
 import { logger } from 'utils/logger';
 import { pagination } from 'utils/pagination';
+
+const TIMEOUT = 60_000;
 
 export default new Command({
   module: ModuleType.General,
@@ -41,34 +42,39 @@ export default new Command({
         label: ModuleType[category as number],
         value: category.toString(),
       }));
+
     const select = new StringSelectMenuBuilder()
       .setCustomId('HELP_SELECT')
       .setMaxValues(1)
       .setPlaceholder(t('commands.placeholder', { lng }))
       .setOptions(...categories);
+
     const helpEmbed = new EmbedBuilder()
-      .setColor(Colors.Blurple)
+      .setColor(client.colors.general)
       .setTitle(t('commands.title', { lng }))
       .setDescription(t('commands.description', { lng, categories: categories.length }));
+
     const msg = await interaction
       .editReply({
         embeds: [helpEmbed],
         components: [new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(select)],
       })
       .catch((err) => logger.debug({ err }, 'Could not send help message'));
-    if (!msg) return;
 
-    const TIME = 60_000;
+    if (!msg) {
+      return;
+    }
+
     const collector = msg.createMessageComponentCollector({
       componentType: ComponentType.StringSelect,
-      idle: TIME,
+      idle: TIMEOUT,
     });
 
     collector.on('collect', async (selectInteraction) => {
       await selectInteraction.deferUpdate().catch((err) => logger.debug({ err }, 'Could not defer update'));
 
-      if (selectInteraction.user.id !== interaction.user.id)
-        return await interaction
+      if (selectInteraction.user.id !== interaction.user.id) {
+        await interaction
           .followUp({
             content: t('interactions.author_only', {
               lng: await getUserLanguage(selectInteraction.user.id),
@@ -76,6 +82,8 @@ export default new Command({
             ephemeral: true,
           })
           .catch((err) => logger.debug({ err }, 'Could not send author only message'));
+        return;
+      }
 
       const categoryId = parseInt(selectInteraction.values[0]);
       const categoryName = ModuleType[categoryId];
@@ -88,10 +96,12 @@ export default new Command({
             cmd.options.data.toJSON().type !== ApplicationCommandType.User &&
             cmd.options.module === categoryId,
         );
+
       const mappedCmds = commands.map((cmd) => ({
         name: cmd.options.data.name,
         description: cmd.options.data.description,
       }));
+
       const chunkedCmds = chunk(mappedCmds, 10);
 
       const applicationCmds = await interaction.client.application.commands.fetch();
@@ -110,7 +120,7 @@ export default new Command({
             .catch((err) => logger.debug({ err }, 'Could not edit help message')),
         embeds: chunkedCmds.map((chunk) =>
           new EmbedBuilder()
-            .setColor(Colors.Blurple)
+            .setColor(client.colors.general)
             .setTitle(categoryName)
             .addFields(
               chunk.map((cmd) => ({
@@ -127,7 +137,7 @@ export default new Command({
         .editReply({
           embeds: [
             helpEmbed.setFooter({
-              text: t('pagination', { lng, time: ms(TIME, { long: true }) }),
+              text: t('pagination', { lng, time: ms(TIMEOUT, { long: true }) }),
             }),
           ],
           components: [new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(select.setDisabled(true))],

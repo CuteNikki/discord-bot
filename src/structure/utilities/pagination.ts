@@ -11,7 +11,7 @@ enum CustomIds {
   Previous = 'button-pagination-prev',
   Page = 'button-pagination-page',
   Next = 'button-pagination-next',
-  Last = 'button-pagination-last',
+  Last = 'button-pagination-last'
 }
 
 export async function pagination({
@@ -23,12 +23,12 @@ export async function pagination({
   disableButtons = true,
   time = 60_000, // The time a user has to use the buttons before disabling them
   ephemeral = true, // If true, the pagination will only be visible to the user
-  footer = true, // If true, will replace the current embeds footer to tell that the buttons have been disabled because the time is over
+  footer = true // If true, will replace the current embeds footer to tell that the buttons have been disabled because the time is over
 }: {
   interaction: CommandInteraction;
   embeds: EmbedBuilder[];
   extraButton?: ButtonBuilder;
-  extraButtonFunction?: (buttonInteraction: ButtonInteraction) => Promise<any>;
+  extraButtonFunction?: (buttonInteraction: ButtonInteraction) => Promise<void>;
   content?: string;
   time?: number;
   ephemeral?: boolean;
@@ -66,7 +66,7 @@ export async function pagination({
   const collector = msg.createMessageComponentCollector({
     filter: (i) => i.user.id === user.id,
     idle: time,
-    componentType: ComponentType.Button,
+    componentType: ComponentType.Button
   });
 
   collector.on('collect', async (int) => {
@@ -116,7 +116,7 @@ export async function pagination({
     const embed = embeds[index];
     if (footer)
       embed.setFooter({
-        text: t('pagination', { lng, time: ms(time, { long: true }) }),
+        text: t('pagination', { lng, time: ms(time, { long: true }) })
       });
 
     interaction.editReply({ embeds: [embed], components }).catch((err) => logger.debug({ err }, 'Could not edit message'));

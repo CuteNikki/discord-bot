@@ -41,9 +41,9 @@ export default new Event({
           {
             id: newState.guild.id,
             deny: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages, PermissionFlagsBits.Connect, PermissionFlagsBits.Speak],
-            allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages, PermissionFlagsBits.Connect, PermissionFlagsBits.Speak],
-          },
-        ],
+            allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages, PermissionFlagsBits.Connect, PermissionFlagsBits.Speak]
+          }
+        ]
       })
       .catch((err) => logger.error(err, 'Could not create custom voice channel'));
 
@@ -55,5 +55,5 @@ export default new Event({
     await newState.member.voice.setChannel(newChannel).catch((err) => logger.error(err, 'Could not move user to custom voice channel'));
     // Create a database entry for the custom vc for customization
     await createCustomVoiceChannel(newChannel.id, newState.guild.id, newState.member.id);
-  },
+  }
 });

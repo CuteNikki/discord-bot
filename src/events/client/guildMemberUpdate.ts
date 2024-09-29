@@ -27,5 +27,5 @@ export default new Event({
       .send('Thank you for boosting the support server. You received the Supporter badge!')
       .catch((err) => logger.debug({ err, userId: newMember.user.id }, 'Could not send DM'));
     await addBadge(newMember.user.id, BadgeType.Supporter);
-  },
+  }
 });

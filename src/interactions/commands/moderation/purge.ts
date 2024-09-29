@@ -7,7 +7,7 @@ import {
   InteractionContextType,
   PermissionFlagsBits,
   SlashCommandBuilder,
-  type FetchMessagesOptions,
+  type FetchMessagesOptions
 } from 'discord.js';
 import { t } from 'i18next';
 
@@ -27,7 +27,7 @@ export default new Command({
     .addIntegerOption((option) => option.setName('amount').setDescription('The amount of messages').setMinValue(1).setMaxValue(50).setRequired(true))
     .addUserOption((option) => option.setName('user').setDescription('The user to delete messages of').setRequired(false))
     .addChannelOption((option) =>
-      option.setName('channel').setDescription('The channel to delete messages in').addChannelTypes(ChannelType.GuildText).setRequired(false),
+      option.setName('channel').setDescription('The channel to delete messages in').addChannelTypes(ChannelType.GuildText).setRequired(false)
     )
     .addStringOption((option) => option.setName('before').setDescription('Only delete sent messages before the given message link').setRequired(false))
     .addStringOption((option) => option.setName('after').setDescription('Only delete sent messages after the given message link').setRequired(false)),
@@ -71,9 +71,9 @@ export default new Command({
             lng,
             deleted: deletedMessages.size,
             amount,
-            channel: channel.toString(),
-          }),
-        ),
+            channel: channel.toString()
+          })
+        )
       ],
       files: [
         new AttachmentBuilder(
@@ -83,16 +83,16 @@ export default new Command({
                 (message) =>
                   `Author: ${message?.author?.username} (${message?.author?.id})\nAttachments: ${message?.attachments
                     .map((attachment) => attachment.url)
-                    .join('\n          ')}\nContent: ${message?.content}`,
+                    .join('\n          ')}\nContent: ${message?.content}`
               )
-              .join('\n\n')}`,
+              .join('\n\n')}`
           ),
           {
             name: 'message-bulk-delete.txt',
-            description: 'List of all deleted messages with their author, content and attachments',
-          },
-        ),
-      ],
+            description: 'List of all deleted messages with their author, content and attachments'
+          }
+        )
+      ]
     });
-  },
+  }
 });

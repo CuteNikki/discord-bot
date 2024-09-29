@@ -6,7 +6,7 @@ import {
   EmbedBuilder,
   type APIButtonComponent,
   type ButtonComponentData,
-  type ChatInputCommandInteraction,
+  type ChatInputCommandInteraction
 } from 'discord.js';
 import { t } from 'i18next';
 
@@ -34,7 +34,7 @@ export class Memory {
     public options: {
       interaction: ChatInputCommandInteraction;
       client: DiscordClient;
-    },
+    }
   ) {
     this.emojis = this.shuffleArray(this.availableEmojis).slice(0, 12);
     this.emojis.push(...this.emojis, '🃏');
@@ -58,18 +58,18 @@ export class Memory {
             .setColor(Colors.Yellow)
             .setAuthor({
               name: user.displayName,
-              iconURL: user.displayAvatarURL(),
+              iconURL: user.displayAvatarURL()
             })
             .setTitle(t('games.memory.title', { lng }))
-            .setDescription(t('games.memory.description', { lng })),
+            .setDescription(t('games.memory.description', { lng }))
         ],
-        components: this.components,
+        components: this.components
       })
       .catch((err) => logger.debug({ err }, 'Could not send message'));
     if (!message) return;
 
     const collector = message.createMessageComponentCollector({
-      idle: 60 * 1000,
+      idle: 60 * 1000
     });
 
     collector.on('collect', async (buttonInteraction) => {
@@ -79,9 +79,9 @@ export class Memory {
         return buttonInteraction
           .followUp({
             content: t('interactions.author_only', {
-              lng: await getUserLanguage(buttonInteraction.user.id),
+              lng: await getUserLanguage(buttonInteraction.user.id)
             }),
-            ephemeral: true,
+            ephemeral: true
           })
           .catch((err) => logger.debug({ err }, 'Could not follow up'));
 
@@ -161,12 +161,12 @@ export class Memory {
             .setColor(isDone ? Colors.Green : Colors.Red)
             .setAuthor({
               name: user.displayName,
-              iconURL: user.displayAvatarURL(),
+              iconURL: user.displayAvatarURL()
             })
             .setTitle(t('games.memory.title', { lng }))
-            .setDescription(t('games.memory.finished', { lng, tiles: this.tilesTurned })),
+            .setDescription(t('games.memory.finished', { lng, tiles: this.tilesTurned }))
         ],
-        components: this.disableButtons(this.components),
+        components: this.disableButtons(this.components)
       })
       .catch((err) => logger.debug({ err }, 'Could not edit message'));
   }
@@ -197,7 +197,7 @@ export class Memory {
     return components;
   }
 
-  private shuffleArray(array: any[]) {
+  private shuffleArray(array: string[]) {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [array[i], array[j]] = [array[j], array[i]];

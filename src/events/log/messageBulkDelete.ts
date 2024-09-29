@@ -33,10 +33,10 @@ export default new Event({
             t('log.messageBulkDelete.description', {
               lng,
               messages: messages.size,
-              channel: messages.first()?.channel.toString(),
-            }),
+              channel: messages.first()?.channel.toString()
+            })
           )
-          .setTimestamp(),
+          .setTimestamp()
       ],
       files: [
         new AttachmentBuilder(
@@ -47,18 +47,18 @@ export default new Event({
                   `${t('log.messageBulkDelete.author', { lng })}: ${message.author?.username} (${message.author?.id})\n${t(
                     'log.messageBulkDelete.attachments',
                     {
-                      lng,
-                    },
-                  )}: ${message.attachments.map((attachment) => attachment.url).join('\n          ')}\n${t('log.messageBulkDelete.content', { lng })}: ${message.content}`,
+                      lng
+                    }
+                  )}: ${message.attachments.map((attachment) => attachment.url).join('\n          ')}\n${t('log.messageBulkDelete.content', { lng })}: ${message.content}`
               )
-              .join('\n\n')}`,
+              .join('\n\n')}`
           ),
           {
             name: 'message-bulk-delete.txt',
-            description: t('log.messageBulkDelete.file_description', { lng }),
-          },
-        ),
-      ],
+            description: t('log.messageBulkDelete.file_description', { lng })
+          }
+        )
+      ]
     });
-  },
+  }
 });

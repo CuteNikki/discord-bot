@@ -15,7 +15,7 @@ import {
   RoleSelectMenuBuilder,
   SlashCommandBuilder,
   TextChannel,
-  User,
+  User
 } from 'discord.js';
 import { t } from 'i18next';
 
@@ -50,7 +50,7 @@ export default new Command({
       cmd
         .setName('delete')
         .setDescription('Delete a reaction role group.')
-        .addStringOption((option) => option.setName('id').setDescription('Either the group ID or the message ID').setRequired(true)),
+        .addStringOption((option) => option.setName('id').setDescription('Either the group ID or the message ID').setRequired(true))
     ),
   async execute({ client, interaction, lng }) {
     if (!interaction.inCachedGuild()) return;
@@ -67,7 +67,7 @@ export default new Command({
           if (config.reactionRoles.enabled) {
             await interaction
               .editReply({
-                embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.enable.already', { lng }))],
+                embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.enable.already', { lng }))]
               })
               .catch((err) => logger.debug(err, 'Could not edit reply'));
             return;
@@ -77,7 +77,7 @@ export default new Command({
 
           await interaction
             .editReply({
-              embeds: [new EmbedBuilder().setColor(client.colors.reactionRoles).setDescription(t('reaction-roles.enable.success', { lng }))],
+              embeds: [new EmbedBuilder().setColor(client.colors.reactionRoles).setDescription(t('reaction-roles.enable.success', { lng }))]
             })
             .catch((err) => logger.debug(err, 'Could not edit reply'));
         }
@@ -87,7 +87,7 @@ export default new Command({
           if (!config.reactionRoles.enabled) {
             await interaction
               .editReply({
-                embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.disable.already', { lng }))],
+                embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.disable.already', { lng }))]
               })
               .catch((err) => logger.debug(err, 'Could not edit reply'));
             return;
@@ -97,7 +97,7 @@ export default new Command({
 
           await interaction
             .editReply({
-              embeds: [new EmbedBuilder().setColor(client.colors.reactionRoles).setDescription(t('reaction-roles.disable.success', { lng }))],
+              embeds: [new EmbedBuilder().setColor(client.colors.reactionRoles).setDescription(t('reaction-roles.disable.success', { lng }))]
             })
             .catch((err) => logger.debug(err, 'Could not edit reply'));
         }
@@ -110,7 +110,7 @@ export default new Command({
           if (!group) {
             await interaction
               .editReply({
-                embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.delete.invalid', { lng }))],
+                embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.delete.invalid', { lng }))]
               })
               .catch((err) => logger.debug(err, 'Could not edit reply'));
             return;
@@ -120,7 +120,7 @@ export default new Command({
 
           await interaction
             .editReply({
-              embeds: [new EmbedBuilder().setColor(client.colors.reactionRoles).setDescription(t('reaction-roles.delete.success', { lng }))],
+              embeds: [new EmbedBuilder().setColor(client.colors.reactionRoles).setDescription(t('reaction-roles.delete.success', { lng }))]
             })
             .catch((err) => logger.debug(err, 'Could not edit reply'));
         }
@@ -132,8 +132,8 @@ export default new Command({
           const embeds = [
             new EmbedBuilder().setColor(client.colors.reactionRoles).addFields({
               name: t('reaction-roles.info.state', { lng }),
-              value: config.reactionRoles.enabled ? t('enabled', { lng }) : t('disabled', { lng }),
-            }),
+              value: config.reactionRoles.enabled ? t('enabled', { lng }) : t('disabled', { lng })
+            })
           ];
           if (groups.length) {
             for (const group of groups) {
@@ -151,9 +151,9 @@ export default new Command({
                   .setDescription(
                     [
                       `https://discord.com/channels/${guild.id}/${group.channelId}/${group.messageId}`,
-                      group.reactions.map((r) => `${r.emoji}: <@&${r.roleId}>`).join('\n'),
-                    ].join('\n'),
-                  ),
+                      group.reactions.map((r) => `${r.emoji}: <@&${r.roleId}>`).join('\n')
+                    ].join('\n')
+                  )
               );
             }
           }
@@ -166,7 +166,7 @@ export default new Command({
           if (config.reactionRoles.groups.length >= MAX_GROUPS) {
             await interaction
               .editReply({
-                embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.setup.limit', { lng, max: MAX_GROUPS }))],
+                embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.setup.limit', { lng, max: MAX_GROUPS }))]
               })
               .catch((err) => logger.debug(err, 'Could not edit reply'));
             return;
@@ -179,7 +179,7 @@ export default new Command({
               embeds: [
                 new EmbedBuilder()
                   .setColor(client.colors.reactionRoles)
-                  .setDescription([t('reaction-roles.method.description', { lng }), t('reaction-roles.method.recommendation', { lng })].join('\n')),
+                  .setDescription([t('reaction-roles.method.description', { lng }), t('reaction-roles.method.recommendation', { lng })].join('\n'))
               ],
               components: [
                 new ActionRowBuilder<ButtonBuilder>().addComponents(
@@ -190,9 +190,9 @@ export default new Command({
                   new ButtonBuilder()
                     .setCustomId('button-reaction-reactions')
                     .setLabel(t('reaction-roles.method.reactions', { lng }))
-                    .setStyle(ButtonStyle.Primary),
-                ),
-              ],
+                    .setStyle(ButtonStyle.Primary)
+                )
+              ]
             })
             .catch((err) => logger.debug(err, 'Could not edit reply'));
           if (!methodMessage) return;
@@ -200,7 +200,7 @@ export default new Command({
           const methodCollector = methodMessage.createMessageComponentCollector({
             idle: TIMEOUT_DURATION,
             componentType: ComponentType.Button,
-            filter: (i) => i.user.id === user.id,
+            filter: (i) => i.user.id === user.id
           });
 
           methodCollector.on('collect', async (methodInteraction) => {
@@ -223,7 +223,7 @@ export default new Command({
               await interaction
                 .editReply({
                   embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.method.none', { lng }))],
-                  components: [],
+                  components: []
                 })
                 .catch((err) => logger.debug(err, 'Could not edit reply'));
               return;
@@ -240,29 +240,29 @@ export default new Command({
                 embeds: [
                   new EmbedBuilder()
                     .setColor(client.colors.reactionRoles)
-                    .setDescription([t('reaction-roles.channel.description', { lng }), t('reaction-roles.channel.info', { lng })].join('\n')),
+                    .setDescription([t('reaction-roles.channel.description', { lng }), t('reaction-roles.channel.info', { lng })].join('\n'))
                 ],
                 components: [
                   new ActionRowBuilder<ChannelSelectMenuBuilder>().addComponents(
                     new ChannelSelectMenuBuilder()
                       .setCustomId('select-reaction-channel')
                       .setPlaceholder(t('reaction-roles.channel.placeholder', { lng }))
-                      .setChannelTypes(ChannelType.GuildText),
+                      .setChannelTypes(ChannelType.GuildText)
                   ),
                   new ActionRowBuilder<ButtonBuilder>().addComponents(
                     new ButtonBuilder()
                       .setCustomId('button-reaction-continue')
                       .setLabel(t('reaction-roles.setup.continue', { lng }))
-                      .setStyle(ButtonStyle.Primary),
-                  ),
-                ],
+                      .setStyle(ButtonStyle.Primary)
+                  )
+                ]
               })
               .catch((err) => logger.debug(err, 'Could not edit reply'));
             if (!channelMessage) return;
 
             const channelCollector = channelMessage.createMessageComponentCollector({
               idle: TIMEOUT_DURATION,
-              filter: (i) => i.user.id === user.id,
+              filter: (i) => i.user.id === user.id
             });
 
             channelCollector.on('collect', async (channelInteraction) => {
@@ -273,7 +273,7 @@ export default new Command({
                   await channelInteraction
                     .reply({
                       embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.channel.none', { lng }))],
-                      ephemeral: true,
+                      ephemeral: true
                     })
                     .catch((err) => logger.debug(err, 'Could not reply'));
                   return;
@@ -292,8 +292,8 @@ export default new Command({
                     embeds: [
                       new EmbedBuilder()
                         .setColor(client.colors.reactionRoles)
-                        .setDescription(t('reaction-roles.channel.selected', { lng, channel: channel.toString() })),
-                    ],
+                        .setDescription(t('reaction-roles.channel.selected', { lng, channel: channel.toString() }))
+                    ]
                   })
                   .catch((err) => logger.debug(err, 'Could not update channel'));
               }
@@ -304,7 +304,7 @@ export default new Command({
                 await interaction
                   .editReply({
                     embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.channel.none', { lng }))],
-                    components: [],
+                    components: []
                   })
                   .catch((err) => logger.debug(err, 'Could not edit reply'));
                 return;
@@ -315,7 +315,7 @@ export default new Command({
           }
 
           let roles: Role[] = [];
-          let reactions: Reaction[] = [];
+          const reactions: Reaction[] = [];
 
           async function handleRoles() {
             const rolesMessage = await interaction
@@ -323,7 +323,7 @@ export default new Command({
                 embeds: [
                   new EmbedBuilder()
                     .setColor(client.colors.reactionRoles)
-                    .setDescription([t('reaction-roles.roles.description', { lng }), t('reaction-roles.roles.info', { lng })].join('\n')),
+                    .setDescription([t('reaction-roles.roles.description', { lng }), t('reaction-roles.roles.info', { lng })].join('\n'))
                 ],
                 components: [
                   new ActionRowBuilder<RoleSelectMenuBuilder>().addComponents(
@@ -331,22 +331,22 @@ export default new Command({
                       .setCustomId('select-reaction-roles')
                       .setMinValues(1)
                       .setMaxValues(MAX_ROLES)
-                      .setPlaceholder(t('reaction-roles.roles.placeholder', { lng })),
+                      .setPlaceholder(t('reaction-roles.roles.placeholder', { lng }))
                   ),
                   new ActionRowBuilder<ButtonBuilder>().addComponents(
                     new ButtonBuilder()
                       .setCustomId('button-reaction-continue')
                       .setLabel(t('reaction-roles.setup.continue', { lng }))
-                      .setStyle(ButtonStyle.Primary),
-                  ),
-                ],
+                      .setStyle(ButtonStyle.Primary)
+                  )
+                ]
               })
               .catch((err) => logger.debug(err, 'Could not edit reply'));
             if (!rolesMessage) return;
 
             const rolesCollector = rolesMessage.createMessageComponentCollector({
               idle: TIMEOUT_DURATION,
-              filter: (i) => i.user.id === user.id,
+              filter: (i) => i.user.id === user.id
             });
 
             rolesCollector.on('collect', async (roleInteraction) => {
@@ -357,7 +357,7 @@ export default new Command({
                   await roleInteraction
                     .reply({
                       embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.roles.none', { lng }))],
-                      ephemeral: true,
+                      ephemeral: true
                     })
                     .catch((err) => logger.debug(err, 'Could not reply'));
                   return;
@@ -378,7 +378,7 @@ export default new Command({
                 if (roles.length <= 0 || roles.length > MAX_ROLES) {
                   await roleInteraction.reply({
                     embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.roles.limit', { lng, max: MAX_ROLES }))],
-                    ephemeral: true,
+                    ephemeral: true
                   });
                   return;
                 }
@@ -391,10 +391,10 @@ export default new Command({
                         .setDescription(
                           [
                             t('reaction-roles.roles.info', { lng }),
-                            t('reaction-roles.roles.selected', { lng, count: roles.length, roles: roles.map((r) => r.toString()).join(', ') }),
-                          ].join('\n'),
-                        ),
-                    ],
+                            t('reaction-roles.roles.selected', { lng, count: roles.length, roles: roles.map((r) => r.toString()).join(', ') })
+                          ].join('\n')
+                        )
+                    ]
                   })
                   .catch((err) => logger.debug(err, 'Could not update message'));
               }
@@ -405,7 +405,7 @@ export default new Command({
                 await interaction
                   .editReply({
                     embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.roles.none', { lng }))],
-                    components: [],
+                    components: []
                   })
                   .catch((err) => logger.debug(err, 'Could not edit reply'));
                 return;
@@ -417,7 +417,7 @@ export default new Command({
         }
         break;
     }
-  },
+  }
 });
 
 async function handleRoleReactions(
@@ -428,7 +428,7 @@ async function handleRoleReactions(
   client: DiscordClient,
   reactions: Reaction[],
   method: 'button' | 'reaction',
-  channel: TextChannel,
+  channel: TextChannel
 ) {
   for (const role of roles) {
     try {
@@ -444,7 +444,7 @@ async function handleRoleReactions(
       if (!reactions.map((r) => r.emoji).includes(reaction.emoji.toString())) {
         reactions.push({
           emoji: reaction.emoji.toString(),
-          roleId: role.id,
+          roleId: role.id
         });
       }
     } catch (error) {
@@ -460,18 +460,18 @@ async function handleRoleReactions(
         method === 'button'
           ? chunk(
               reactions.map((r) => r.emoji),
-              5,
+              5
             ).map((chunk, chunkIndex) =>
               new ActionRowBuilder<ButtonBuilder>().addComponents(
                 chunk.map((emoji, emojiIndex) =>
                   new ButtonBuilder()
                     .setCustomId(`button-reaction-select_${chunkIndex * 5 + emojiIndex}`)
                     .setEmoji(emoji)
-                    .setStyle(ButtonStyle.Secondary),
-                ),
-              ),
+                    .setStyle(ButtonStyle.Secondary)
+                )
+              )
             )
-          : [],
+          : []
     })
     .catch((err) => logger.debug(err, 'Could not send message'));
   if (!msg) return;
@@ -490,10 +490,10 @@ async function handleRoleReactions(
           t('reaction-roles.setup.success', {
             lng,
             count: reactions.length,
-            channel: channel.toString(),
-          }),
-        ),
-      ],
+            channel: channel.toString()
+          })
+        )
+      ]
     })
     .catch((err) => logger.debug(err, 'Could not edit reply'));
 }
@@ -509,11 +509,11 @@ async function sendReactionMessage(interaction: ChatInputCommandInteraction, rol
             [
               t('reaction-roles.emojis.description', { lng, role: role.toString() }),
               t('reaction-roles.emojis.warning', { lng }),
-              t('reaction-roles.emojis.info', { lng }),
-            ].join('\n'),
-          ),
+              t('reaction-roles.emojis.info', { lng })
+            ].join('\n')
+          )
       ],
-      components: [],
+      components: []
     })
     .catch((err) => logger.debug(err, 'Could not edit reply'));
 }
@@ -525,14 +525,14 @@ async function awaitUserReaction(reactionMessage: Message, user: User, interacti
       .awaitReactions({
         max: 1,
         time: TIMEOUT_DURATION,
-        filter: (_reaction, u) => u.id === user.id,
+        filter: (_reaction, u) => u.id === user.id
       })
       .catch((err) => logger.debug(err, 'Could not await reactions'));
 
     if (!userReactions || !userReactions.first()) {
       await interaction.editReply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.emojis.none', { lng }))],
-        components: [],
+        components: []
       });
       return null; // Exit if no reaction within time
     }
@@ -543,7 +543,7 @@ async function awaitUserReaction(reactionMessage: Message, user: User, interacti
 
     await interaction.editReply({
       embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.emojis.error', { lng }))],
-      components: [],
+      components: []
     });
     return null;
   }

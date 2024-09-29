@@ -53,16 +53,16 @@ export default new Event({
       if (!interaction.member)
         return interaction.reply({
           content: t('interactions.guild_only', { lng }),
-          ephemeral: true,
+          ephemeral: true
         });
       const permissions = interaction.member.permissions as PermissionsBitField;
       if (!permissions.has(button.options.permissions))
         return interaction.reply({
           content: t('interactions.permissions', {
             lng,
-            permissions: button.options.permissions.join(', '),
+            permissions: button.options.permissions.join(', ')
           }),
-          ephemeral: true,
+          ephemeral: true
         });
     }
 
@@ -73,9 +73,9 @@ export default new Event({
         return interaction.reply({
           content: t('interactions.bot_permissions', {
             lng,
-            permissions: button.options.botPermissions.join(', '),
+            permissions: button.options.botPermissions.join(', ')
           }),
-          ephemeral: true,
+          ephemeral: true
         });
       }
     }
@@ -85,7 +85,7 @@ export default new Event({
     if (button.options.isDeveloperOnly && !developerIds.includes(interaction.user.id))
       return interaction.reply({
         content: t('interactions.developer_only', { lng }),
-        ephemeral: true,
+        ephemeral: true
       });
 
     // Check if cooldowns has the current button and add the button if it doesn't have the button
@@ -107,9 +107,9 @@ export default new Event({
           content: t('interactions.cooldown', {
             lng,
             action: `\`${button.options.customId}\``,
-            timestamp: `<t:${expiredTimestamp}:R>`,
+            timestamp: `<t:${expiredTimestamp}:R>`
           }),
-          ephemeral: true,
+          ephemeral: true
         });
       }
     }
@@ -123,10 +123,11 @@ export default new Event({
       await button.options.execute({ client, interaction, lng });
 
       await incrementButtonsExecuted(keys.DISCORD_BOT_ID);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       const message = t('interactions.error', {
         lng,
-        error: `\`${err.message}\``,
+        error: `\`${err.message}\``
       });
 
       if (interaction.deferred) interaction.editReply({ content: message });
@@ -135,5 +136,5 @@ export default new Event({
       await sendError({ client, err, location: `Button Interaction Error: ${button.options.customId}` });
       await incrementButtonsFailed(keys.DISCORD_BOT_ID);
     }
-  },
+  }
 });

@@ -31,15 +31,15 @@ export default new Event({
           .addFields(
             {
               name: t('log.guildBanAdd.user', { lng }),
-              value: `${user.toString()} (\`${user.username}\` | ${user.id})`,
+              value: `${user.toString()} (\`${user.username}\` | ${user.id})`
             },
             {
               name: t('log.guildBanAdd.reason', { lng }),
-              value: reason || '/',
-            },
+              value: reason || '/'
+            }
           )
-          .setTimestamp(),
-      ],
+          .setTimestamp()
+      ]
     });
-  },
+  }
 });

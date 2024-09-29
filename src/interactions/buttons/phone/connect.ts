@@ -6,5 +6,5 @@ export default new Button({
   customId: 'button-phone-connect',
   async execute({ client, interaction }) {
     handlePhoneConnection({ client, interaction });
-  },
+  }
 });

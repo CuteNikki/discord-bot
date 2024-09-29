@@ -24,14 +24,15 @@ export default new Event({
 
     try {
       await command.options.autocomplete({ interaction, client, lng });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       await interaction.respond([]);
 
       await sendError({
         client,
         err,
-        location: `Autocomplete Interaction Error: ${command.options.data.name}`,
+        location: `Autocomplete Interaction Error: ${command.options.data.name}`
       });
     }
-  },
+  }
 });

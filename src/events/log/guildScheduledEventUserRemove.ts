@@ -33,15 +33,15 @@ export default new Event({
           .addFields(
             {
               name: t('log.guildScheduledEventUserRemove.event', { lng }),
-              value: `[${event.name}](${event.url})`,
+              value: `[${event.name}](${event.url})`
             },
             {
               name: t('log.guildScheduledEventUserRemove.user', { lng }),
-              value: `${user.toString()} (\`${user.username}\` | ${user.id})`,
-            },
+              value: `${user.toString()} (\`${user.username}\` | ${user.id})`
+            }
           )
-          .setTimestamp(),
-      ],
+          .setTimestamp()
+      ]
     });
-  },
+  }
 });

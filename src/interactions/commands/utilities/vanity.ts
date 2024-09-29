@@ -32,8 +32,8 @@ export default new Command({
         { name: t('vanity.members', { lng }), value: invite.memberCount.toString() },
         {
           name: t('vanity.created_at', { lng }),
-          value: `<t:${Math.floor(invite.guild.createdTimestamp / 1000)}:d> | <t:${Math.floor(invite.guild.createdTimestamp / 1000)}:R>`,
-        },
+          value: `<t:${Math.floor(invite.guild.createdTimestamp / 1000)}:d> | <t:${Math.floor(invite.guild.createdTimestamp / 1000)}:R>`
+        }
       );
 
     if (invite.guild.banner) {
@@ -42,7 +42,7 @@ export default new Command({
 
     await interaction.editReply({
       content: `https://discord.gg/${invite.guild.vanityURLCode}`,
-      embeds: [embed],
+      embeds: [embed]
     });
-  },
+  }
 });

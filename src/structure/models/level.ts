@@ -10,8 +10,8 @@ export const levelModel: Model<LevelDocument> =
       userId: { type: String, required: true },
       guildId: { type: String, required: true },
       level: { type: Number, default: 0 },
-      xp: { type: Number, default: 0 },
-    }),
+      xp: { type: Number, default: 0 }
+    })
   );
 
 export const weeklyLevelModel: Model<WeeklyLevelDocument> =
@@ -22,6 +22,6 @@ export const weeklyLevelModel: Model<WeeklyLevelDocument> =
       userId: { type: String, required: true },
       guildId: { type: String, required: true },
       level: { type: Number, default: 0 },
-      xp: { type: Number, default: 0 },
-    }),
+      xp: { type: Number, default: 0 }
+    })
   );

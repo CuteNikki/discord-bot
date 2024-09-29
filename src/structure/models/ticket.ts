@@ -15,6 +15,6 @@ export const ticketModel: Model<TicketDocument> =
       closed: { type: Boolean, default: false },
       locked: { type: Boolean, default: false },
       users: { type: [{ type: String, required: true }], required: true },
-      choice: { type: String, required: true },
-    }),
+      choice: { type: String, required: true }
+    })
   );

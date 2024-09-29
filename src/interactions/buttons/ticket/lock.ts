@@ -25,7 +25,7 @@ export default new Button({
     if (!system) {
       await interaction.reply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_system', { lng }))],
-        ephemeral: true,
+        ephemeral: true
       });
       return;
     }
@@ -35,7 +35,7 @@ export default new Button({
     if (!ticket) {
       await interaction.reply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_ticket', { lng }))],
-        ephemeral: true,
+        ephemeral: true
       });
       return;
     }
@@ -44,7 +44,7 @@ export default new Button({
       if (!member.roles.cache.has(system.staffRoleId)) {
         await interaction.reply({
           embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.staff_only', { lng }))],
-          ephemeral: true,
+          ephemeral: true
         });
         return;
       }
@@ -52,7 +52,7 @@ export default new Button({
       if (!ticket.claimedBy) {
         await interaction.reply({
           embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.not_claimed', { lng }))],
-          ephemeral: true,
+          ephemeral: true
         });
         return;
       }
@@ -61,7 +61,7 @@ export default new Button({
     if (ticket.closed) {
       await interaction.reply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.already_closed', { lng }))],
-        ephemeral: true,
+        ephemeral: true
       });
       return;
     }
@@ -69,7 +69,7 @@ export default new Button({
     if (ticket.locked) {
       await interaction.reply({
         content: t('ticket.already_locked', { lng }),
-        ephemeral: true,
+        ephemeral: true
       });
       return;
     }
@@ -101,9 +101,9 @@ export default new Button({
             .setCustomId(`button-tickets-close_${system._id.toString()}`)
             .setLabel(t('ticket.close', { lng }))
             .setEmoji('🛑')
-            .setStyle(ButtonStyle.Danger),
-        ),
-      ],
+            .setStyle(ButtonStyle.Danger)
+        )
+      ]
     });
-  },
+  }
 });

@@ -22,8 +22,8 @@ export default new Event({
     await farewellChannel
       .send({
         content: replacePlaceholders(config.farewell.message.content ?? '', member.user, member.guild),
-        embeds: [getEmbed(member.user, member.guild, config.farewell.message.embed)],
+        embeds: [getEmbed(member.user, member.guild, config.farewell.message.embed)]
       })
       .catch((err) => logger.debug({ err }, 'Could not send farewell message'));
-  },
+  }
 });

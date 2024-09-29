@@ -15,10 +15,10 @@ export const userModel: Model<UserDocument> =
           id: {
             type: Number,
             enum: Object.values(BadgeType).filter((value) => typeof value === 'number'),
-            required: true,
+            required: true
           },
-          receivedAt: { type: Number, required: true },
-        },
-      ],
-    }),
+          receivedAt: { type: Number, required: true }
+        }
+      ]
+    })
   );

@@ -15,7 +15,7 @@ export const WORDS = {
     'forest',
     'rain',
     'tree',
-    'cliff',
+    'cliff'
   ],
   color: [
     'brown',
@@ -34,7 +34,7 @@ export const WORDS = {
     'silver',
     'gray',
     'black',
-    'white',
+    'white'
   ],
   sport: [
     'hockey',
@@ -57,7 +57,7 @@ export const WORDS = {
     'skiing',
     'frisbee',
     'baseball',
-    'hiking',
+    'hiking'
   ],
   camping: [
     'campfire',
@@ -74,7 +74,7 @@ export const WORDS = {
     'matches',
     'rope',
     'lantern',
-    'binoculars',
+    'binoculars'
   ],
   fruit: [
     'apple',
@@ -97,7 +97,7 @@ export const WORDS = {
     'peach',
     'pineapple',
     'raspberry',
-    'strawberry',
+    'strawberry'
   ],
   discord: [
     'nitro',
@@ -119,7 +119,7 @@ export const WORDS = {
     'tableflip',
     'profile',
     'message',
-    'roles',
+    'roles'
   ],
   winter: [
     'blankets',
@@ -147,7 +147,7 @@ export const WORDS = {
     'holidays',
     'christmas',
     'snowman',
-    'gloves',
+    'gloves'
   ],
   pokemon: [
     'bulbasaur',
@@ -300,7 +300,7 @@ export const WORDS = {
     'dragonair',
     'dragonite',
     'mewtwo',
-    'mew',
+    'mew'
   ],
   wordle: [
     'aback',
@@ -2611,6 +2611,6 @@ export const WORDS = {
     'youth',
     'zebra',
     'zesty',
-    'zonal',
-  ],
+    'zonal'
+  ]
 };

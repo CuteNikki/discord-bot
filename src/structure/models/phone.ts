@@ -8,8 +8,8 @@ export const availableChannelModel: Model<AvailableChannelDocument> =
     'available_channel',
     new Schema<AvailableChannelDocument>({
       channelId: { type: String, required: true, unique: true },
-      userId: { type: String, required: true },
-    }),
+      userId: { type: String, required: true }
+    })
   );
 
 export const connectionModel: Model<ConnectionDocument> =
@@ -21,6 +21,6 @@ export const connectionModel: Model<ConnectionDocument> =
       userIdOne: { type: String, required: true },
       channelIdTwo: { type: String, required: true },
       userIdTwo: { type: String, required: true },
-      lastMessageAt: { type: Number },
-    }),
+      lastMessageAt: { type: Number }
+    })
   );

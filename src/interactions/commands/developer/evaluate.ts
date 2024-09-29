@@ -6,7 +6,7 @@ import {
   PermissionFlagsBits,
   SlashCommandBuilder,
   TextInputBuilder,
-  TextInputStyle,
+  TextInputStyle
 } from 'discord.js';
 
 import { Command, ModuleType } from 'classes/command';
@@ -34,7 +34,7 @@ export default new Command({
               .setPlaceholder('console.log("hello world!");')
               .setMaxLength(4000)
               .setRequired(true)
-              .setStyle(TextInputStyle.Paragraph),
+              .setStyle(TextInputStyle.Paragraph)
           ),
           new ActionRowBuilder<TextInputBuilder>().setComponents(
             new TextInputBuilder()
@@ -43,9 +43,9 @@ export default new Command({
               .setValue('0')
               .setMaxLength(1)
               .setRequired(true)
-              .setStyle(TextInputStyle.Short),
-          ),
-        ),
+              .setStyle(TextInputStyle.Short)
+          )
+        )
     );
-  },
+  }
 });

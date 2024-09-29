@@ -28,7 +28,7 @@ export async function createTicket(guildId: string, channelId: string, createdBy
     channelId,
     createdBy,
     users,
-    choice,
+    choice
   });
 }
 

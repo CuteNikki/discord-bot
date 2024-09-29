@@ -16,7 +16,7 @@ const keys = {
   DEVELOPER_GUILD_IDS: config.DEVELOPER.GUILD_IDS ?? [],
   DEVELOPER_ERROR_WEBHOOK: config.DEVELOPER.ERROR_WEBHOOK ?? 'optional',
   DATABASE_URI: config.DATABASE.URI ?? 'required',
-  WEATHER_API_KEY: config.API_KEYS.WEATHER ?? 'required',
+  WEATHER_API_KEY: config.API_KEYS.WEATHER ?? 'required'
 };
 
 // Check if config variables are set

@@ -24,7 +24,7 @@ export default new Button({
     if (!system) {
       await interaction.reply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_system', { lng }))],
-        ephemeral: true,
+        ephemeral: true
       });
       return;
     }
@@ -34,7 +34,7 @@ export default new Button({
     if (!ticket) {
       await interaction.reply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_ticket', { lng }))],
-        ephemeral: true,
+        ephemeral: true
       });
       return;
     }
@@ -43,7 +43,7 @@ export default new Button({
       if (!member.roles.cache.has(system.staffRoleId)) {
         await interaction.reply({
           embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.staff_only', { lng }))],
-          ephemeral: true,
+          ephemeral: true
         });
         return;
       }
@@ -59,9 +59,9 @@ export default new Button({
             [
               t('ticket.ticket_deleted', { lng, deleted_by: user.toString() }),
               t('ticket.delete_time', { lng }),
-              hasTranscriptChannel ? t('ticket.delete_reminder', { lng }) : '',
-            ].join('\n'),
-          ),
+              hasTranscriptChannel ? t('ticket.delete_reminder', { lng }) : ''
+            ].join('\n')
+          )
       ],
       components: hasTranscriptChannel
         ? [
@@ -70,10 +70,10 @@ export default new Button({
                 .setCustomId(`button-tickets-save_${system._id.toString()}`)
                 .setLabel(t('ticket.save', { lng }))
                 .setEmoji('🗂️')
-                .setStyle(ButtonStyle.Success),
-            ),
+                .setStyle(ButtonStyle.Success)
+            )
           ]
-        : [],
+        : []
     });
 
     setTimeout(async () => {
@@ -88,5 +88,5 @@ export default new Button({
 
       await deleteTicketById(ticket._id);
     }, 5000);
-  },
+  }
 });

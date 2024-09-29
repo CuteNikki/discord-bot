@@ -61,7 +61,7 @@ export async function findAvailableChannel(channelId: string): Promise<Available
 export async function findConnection(channelId: string) {
   return await connectionModel
     .findOne({
-      $or: [{ channelIdOne: channelId }, { channelIdTwo: channelId }],
+      $or: [{ channelIdOne: channelId }, { channelIdTwo: channelId }]
     })
     .lean()
     .exec();
@@ -89,7 +89,7 @@ export async function createConnection(channelIdOne: string, userIdOne: string, 
     channelIdOne,
     userIdOne,
     channelIdTwo,
-    userIdTwo,
+    userIdTwo
   });
 }
 

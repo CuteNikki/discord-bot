@@ -19,8 +19,8 @@ export default new Command({
         .setName('channel')
         .setDescription('If members join this channel, a new customizable channel will be created for them')
         .addChannelOption((option) =>
-          option.setName('channel').setDescription('(leave empty to remove, use info to see current channel)').addChannelTypes(ChannelType.GuildVoice),
-        ),
+          option.setName('channel').setDescription('(leave empty to remove, use info to see current channel)').addChannelTypes(ChannelType.GuildVoice)
+        )
     )
     .addSubcommand((cmd) =>
       cmd
@@ -30,8 +30,8 @@ export default new Command({
           option
             .setName('channel')
             .setDescription("(leave empty to remove, defaults to the creation channel's parent)")
-            .addChannelTypes(ChannelType.GuildCategory),
-        ),
+            .addChannelTypes(ChannelType.GuildCategory)
+        )
     )
     .addSubcommand((cmd) => cmd.setName('info').setDescription('Shows the current custom voice channel settings')),
   async execute({ client, interaction, lng }) {
@@ -63,7 +63,7 @@ export default new Command({
           await updateGuildSettings(interaction.guild.id, { $set: { ['customVC.channelId']: channel.id } });
 
           await interaction.reply({
-            embeds: [new EmbedBuilder().setColor(client.colors.customVC).setDescription(t('custom-vc.channel.success', { lng, channel: channel.toString() }))],
+            embeds: [new EmbedBuilder().setColor(client.colors.customVC).setDescription(t('custom-vc.channel.success', { lng, channel: channel.toString() }))]
           });
         }
         break;
@@ -100,12 +100,12 @@ export default new Command({
                 .setColor(client.colors.customVC)
                 .addFields(
                   { name: t('custom-vc.channel.title', { lng }), value: config.customVC.channelId ? `<#${config.customVC.channelId}>` : t('none', { lng }) },
-                  { name: t('custom-vc.parent.title', { lng }), value: config.customVC.parentId ? `<#${config.customVC.parentId}>` : t('none', { lng }) },
-                ),
-            ],
+                  { name: t('custom-vc.parent.title', { lng }), value: config.customVC.parentId ? `<#${config.customVC.parentId}>` : t('none', { lng }) }
+                )
+            ]
           });
         }
         break;
     }
-  },
+  }
 });

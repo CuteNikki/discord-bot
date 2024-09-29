@@ -7,7 +7,7 @@ export enum AnnouncementType {
   UserChannel,
   OtherChannel,
   PrivateMessage,
-  None,
+  None
 }
 
 export const availableEvents = [
@@ -48,7 +48,7 @@ export const availableEvents = [
   'threadCreate',
   'threadDelete',
   'threadUpdate',
-  'voiceStateUpdate',
+  'voiceStateUpdate'
 ];
 
 // !! Embed cannot be empty !!

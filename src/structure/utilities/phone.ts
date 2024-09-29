@@ -5,7 +5,7 @@ import {
   EmbedBuilder,
   type ButtonInteraction,
   type ChatInputCommandInteraction,
-  type SendableChannels,
+  type SendableChannels
 } from 'discord.js';
 import { t } from 'i18next';
 
@@ -20,7 +20,7 @@ import {
   isPhoneConnected,
   isPhoneSearching,
   removeAvailableChannel,
-  removeAvailableChannelById,
+  removeAvailableChannelById
 } from 'db/phone';
 import { getUserLanguage } from 'db/user';
 
@@ -46,9 +46,9 @@ export async function handlePhoneConnection({ client, interaction }: { client: D
       embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('phone.connect.already', { lng }))],
       components: [
         new ActionRowBuilder<ButtonBuilder>().addComponents(
-          new ButtonBuilder().setCustomId('button-phone-disconnect').setStyle(ButtonStyle.Danger).setLabel(t('phone.disconnect', { lng })),
-        ),
-      ],
+          new ButtonBuilder().setCustomId('button-phone-disconnect').setStyle(ButtonStyle.Danger).setLabel(t('phone.disconnect', { lng }))
+        )
+      ]
     });
   }
 
@@ -57,9 +57,9 @@ export async function handlePhoneConnection({ client, interaction }: { client: D
       embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('phone.connect.already', { lng }))],
       components: [
         new ActionRowBuilder<ButtonBuilder>().addComponents(
-          new ButtonBuilder().setCustomId('button-phone-disconnect').setStyle(ButtonStyle.Danger).setLabel(t('phone.disconnect', { lng })),
-        ),
-      ],
+          new ButtonBuilder().setCustomId('button-phone-disconnect').setStyle(ButtonStyle.Danger).setLabel(t('phone.disconnect', { lng }))
+        )
+      ]
     });
   }
 
@@ -72,9 +72,9 @@ export async function handlePhoneConnection({ client, interaction }: { client: D
       embeds: [new EmbedBuilder().setColor(client.colors.phone).setDescription(t('phone.connect.waiting', { lng }))],
       components: [
         new ActionRowBuilder<ButtonBuilder>().addComponents(
-          new ButtonBuilder().setCustomId('button-phone-disconnect').setStyle(ButtonStyle.Danger).setLabel(t('phone.disconnect', { lng })),
-        ),
-      ],
+          new ButtonBuilder().setCustomId('button-phone-disconnect').setStyle(ButtonStyle.Danger).setLabel(t('phone.disconnect', { lng }))
+        )
+      ]
     });
   }
 
@@ -101,27 +101,29 @@ export async function handlePhoneConnection({ client, interaction }: { client: D
             new ButtonBuilder()
               .setCustomId('button-phone-disconnect')
               .setStyle(ButtonStyle.Danger)
-              .setLabel(t('phone.disconnect', { lng: otherLng })),
-          ),
-        ],
+              .setLabel(t('phone.disconnect', { lng: otherLng }))
+          )
+        ]
       });
     }
     return interaction.editReply({
       embeds: [new EmbedBuilder().setColor(client.colors.phone).setDescription(t('phone.connect.connected', { lng }))],
       components: [
         new ActionRowBuilder<ButtonBuilder>().addComponents(
-          new ButtonBuilder().setCustomId('button-phone-disconnect').setStyle(ButtonStyle.Danger).setLabel(t('phone.disconnect', { lng })),
-        ),
-      ],
+          new ButtonBuilder().setCustomId('button-phone-disconnect').setStyle(ButtonStyle.Danger).setLabel(t('phone.disconnect', { lng }))
+        )
+      ]
     });
   } catch (err) {
+    logger.debug(err, 'Could not connect to channel');
+
     return interaction.editReply({
       embeds: [new EmbedBuilder().setColor(client.colors.warning).setDescription(t('phone.connect.error', { lng }))],
       components: [
         new ActionRowBuilder<ButtonBuilder>().addComponents(
-          new ButtonBuilder().setCustomId('button-phone-disconnect').setStyle(ButtonStyle.Danger).setLabel(t('phone.disconnect', { lng })),
-        ),
-      ],
+          new ButtonBuilder().setCustomId('button-phone-disconnect').setStyle(ButtonStyle.Danger).setLabel(t('phone.disconnect', { lng }))
+        )
+      ]
     });
   }
 }
@@ -145,9 +147,9 @@ export async function handlePhoneDisconnect({ client, interaction }: { client: D
       embeds: [new EmbedBuilder().setColor(client.colors.phone).setDescription(t('phone.hangup.disconnecting', { lng }))],
       components: [
         new ActionRowBuilder<ButtonBuilder>().addComponents(
-          new ButtonBuilder().setCustomId('button-phone-connect').setStyle(ButtonStyle.Success).setLabel(t('phone.reconnect', { lng })),
-        ),
-      ],
+          new ButtonBuilder().setCustomId('button-phone-connect').setStyle(ButtonStyle.Success).setLabel(t('phone.reconnect', { lng }))
+        )
+      ]
     });
   }
 
@@ -176,27 +178,29 @@ export async function handlePhoneDisconnect({ client, interaction }: { client: D
             new ButtonBuilder()
               .setCustomId('button-phone-connect')
               .setStyle(ButtonStyle.Success)
-              .setLabel(t('phone.reconnect', { lng: otherLng })),
-          ),
-        ],
+              .setLabel(t('phone.reconnect', { lng: otherLng }))
+          )
+        ]
       });
     }
     return interaction.editReply({
       embeds: [new EmbedBuilder().setColor(client.colors.phone).setDescription(t('phone.hangup.disconnecting', { lng }))],
       components: [
         new ActionRowBuilder<ButtonBuilder>().addComponents(
-          new ButtonBuilder().setCustomId('button-phone-connect').setStyle(ButtonStyle.Success).setLabel(t('phone.reconnect', { lng })),
-        ),
-      ],
+          new ButtonBuilder().setCustomId('button-phone-connect').setStyle(ButtonStyle.Success).setLabel(t('phone.reconnect', { lng }))
+        )
+      ]
     });
   } catch (err) {
+    logger.debug(err, 'Could not disconnect from channel');
+
     return interaction.editReply({
       embeds: [new EmbedBuilder().setColor(client.colors.warning).setDescription(t('phone.hangup.error', { lng }))],
       components: [
         new ActionRowBuilder<ButtonBuilder>().addComponents(
-          new ButtonBuilder().setCustomId('button-phone-connect').setStyle(ButtonStyle.Success).setLabel(t('phone.reconnect', { lng })),
-        ),
-      ],
+          new ButtonBuilder().setCustomId('button-phone-connect').setStyle(ButtonStyle.Success).setLabel(t('phone.reconnect', { lng }))
+        )
+      ]
     });
   }
 }
@@ -220,7 +224,7 @@ export async function handlePhoneMessageTimeout({
   existingConnection,
   timeout,
   lng,
-  otherLng,
+  otherLng
 }: {
   channel: SendableChannels;
   targetChannel: SendableChannels;
@@ -239,9 +243,9 @@ export async function handlePhoneMessageTimeout({
         content: t('phone.lost', { lng }),
         components: [
           new ActionRowBuilder<ButtonBuilder>().addComponents(
-            new ButtonBuilder().setCustomId('button-phone-connect').setStyle(ButtonStyle.Success).setLabel(t('phone.reconnect', { lng })),
-          ),
-        ],
+            new ButtonBuilder().setCustomId('button-phone-connect').setStyle(ButtonStyle.Success).setLabel(t('phone.reconnect', { lng }))
+          )
+        ]
       })
       .catch((err) => logger.debug({ err, channelId: channel.id }, 'Could not send message'));
     await targetChannel
@@ -252,9 +256,9 @@ export async function handlePhoneMessageTimeout({
             new ButtonBuilder()
               .setCustomId('button-phone-connect')
               .setStyle(ButtonStyle.Success)
-              .setLabel(t('phone.reconnect', { lng: otherLng })),
-          ),
-        ],
+              .setLabel(t('phone.reconnect', { lng: otherLng }))
+          )
+        ]
       })
       .catch((err) => logger.debug({ err, channelId: targetChannel.id }, 'Could not send message'));
   }

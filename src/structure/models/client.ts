@@ -10,15 +10,15 @@ export const clientModel: Model<ClientDocument> =
       applicationId: { type: String, required: true },
       database: {
         type: { lastWeeklyClearAt: { type: Number, required: true, default: 0 } },
-        default: { lastWeeklyClearAt: 0 },
+        default: { lastWeeklyClearAt: 0 }
       },
       support: {
         type: {
           guildId: { type: String },
           guildInvite: { type: String },
-          botInvite: { type: String },
+          botInvite: { type: String }
         },
-        default: {},
+        default: {}
       },
       stats: {
         type: {
@@ -27,7 +27,7 @@ export const clientModel: Model<ClientDocument> =
           buttonsExecuted: { type: Number, required: true, default: 0 },
           buttonsFailed: { type: Number, required: true, default: 0 },
           guildsJoined: { type: Number, required: true, default: 0 },
-          guildsLeft: { type: Number, required: true, default: 0 },
+          guildsLeft: { type: Number, required: true, default: 0 }
         },
         default: {
           commandsExecuted: 0,
@@ -35,8 +35,8 @@ export const clientModel: Model<ClientDocument> =
           buttonsExecuted: 0,
           buttonsFailed: 0,
           guildsJoined: 0,
-          guildsLeft: 0,
-        },
-      },
-    }),
+          guildsLeft: 0
+        }
+      }
+    })
   );

@@ -17,7 +17,7 @@ export class TicTacToe extends Opponent {
       interaction: ChatInputCommandInteraction;
       opponent: User;
       client: DiscordClient;
-    },
+    }
   ) {
     super(options);
 
@@ -51,15 +51,15 @@ export class TicTacToe extends Opponent {
             .addFields(
               { name: user.displayName, value: '🔹', inline: true },
               { name: 'vs', value: '⚡', inline: true },
-              { name: opponent.displayName, value: '🔺', inline: true },
-            ),
+              { name: opponent.displayName, value: '🔺', inline: true }
+            )
         ],
-        components: this.getComponents(),
+        components: this.getComponents()
       })
       .catch((err) => logger.debug({ err }, 'Could not send message'));
 
     const collector = message.createMessageComponentCollector({
-      idle: 60 * 1000,
+      idle: 60 * 1000
     });
 
     collector.on('collect', async (buttonInteraction) => {
@@ -69,9 +69,9 @@ export class TicTacToe extends Opponent {
         return buttonInteraction
           .followUp({
             content: t('interactions.author_only', {
-              lng: await getUserLanguage(buttonInteraction.user.id),
+              lng: await getUserLanguage(buttonInteraction.user.id)
             }),
-            ephemeral: true,
+            ephemeral: true
           })
           .catch((err) => logger.debug({ err }, 'Could not follow up'));
 
@@ -79,7 +79,7 @@ export class TicTacToe extends Opponent {
         return buttonInteraction
           .followUp({
             content: t('games.ttt.turn', { lng: opponentLng }),
-            ephemeral: true,
+            ephemeral: true
           })
           .catch((err) => logger.debug({ err }, 'Could not follow up'));
 
@@ -106,10 +106,10 @@ export class TicTacToe extends Opponent {
               .addFields(
                 { name: user.displayName, value: '🔹', inline: true },
                 { name: 'vs', value: '⚡', inline: true },
-                { name: opponent.displayName, value: '🔺', inline: true },
-              ),
+                { name: opponent.displayName, value: '🔺', inline: true }
+              )
           ],
-          components: this.getComponents(),
+          components: this.getComponents()
         })
         .catch((err) => logger.debug({ err }, 'Could not edit message'));
     });
@@ -136,7 +136,7 @@ export class TicTacToe extends Opponent {
       .addFields(
         { name: user.displayName, value: '🔹', inline: true },
         { name: 'vs', value: '⚡', inline: true },
-        { name: opponent.displayName, value: '🔺', inline: true },
+        { name: opponent.displayName, value: '🔺', inline: true }
       );
 
     if (result === 'TIMEOUT') embed.setDescription(t('games.ttt.timeout', { lng }));
@@ -148,7 +148,7 @@ export class TicTacToe extends Opponent {
       .editReply({
         content: null,
         embeds: [embed],
-        components: this.disableButtons(this.getComponents()),
+        components: this.disableButtons(this.getComponents())
       })
       .catch((err) => logger.debug({ err }, 'Could not edit message'));
   }

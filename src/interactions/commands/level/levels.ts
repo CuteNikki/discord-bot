@@ -56,12 +56,12 @@ export default new Command({
                     position,
                     username: username ?? userId,
                     xp,
-                    level,
-                  }) + `${position === 1 ? ' 🥇' : position === 2 ? ' 🥈' : position === 3 ? ' 🥉' : ''}`,
+                    level
+                  }) + `${position === 1 ? ' 🥇' : position === 2 ? ' 🥈' : position === 3 ? ' 🥉' : ''}`
               )
-              .join('\n'),
-          ),
-      ),
+              .join('\n')
+          )
+      )
     });
-  },
+  }
 });

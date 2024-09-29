@@ -27,5 +27,5 @@ export default new Command({
         }
         break;
     }
-  },
+  }
 });

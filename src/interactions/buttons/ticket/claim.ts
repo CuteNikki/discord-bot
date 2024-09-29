@@ -23,7 +23,7 @@ export default new Button({
     if (!system) {
       await interaction.reply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_system', { lng }))],
-        ephemeral: true,
+        ephemeral: true
       });
       return;
     }
@@ -33,7 +33,7 @@ export default new Button({
     if (!ticket) {
       await interaction.reply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_ticket', { lng }))],
-        ephemeral: true,
+        ephemeral: true
       });
       return;
     }
@@ -42,7 +42,7 @@ export default new Button({
       if (!member.roles.cache.has(system.staffRoleId)) {
         await interaction.reply({
           embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.staff_only', { lng }))],
-          ephemeral: true,
+          ephemeral: true
         });
         return;
       }
@@ -51,7 +51,7 @@ export default new Button({
     if (ticket.claimedBy) {
       await interaction.reply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.already_claimed', { lng, claimed_by: `<@${ticket.claimedBy}>` }))],
-        ephemeral: true,
+        ephemeral: true
       });
       return;
     }
@@ -59,7 +59,7 @@ export default new Button({
     await claimTicket(channelId, user.id);
 
     await interaction.reply({
-      embeds: [new EmbedBuilder().setColor(client.colors.ticket).setDescription(t('ticket.claimed', { lng, claimed_by: user.toString() }))],
+      embeds: [new EmbedBuilder().setColor(client.colors.ticket).setDescription(t('ticket.claimed', { lng, claimed_by: user.toString() }))]
     });
-  },
+  }
 });

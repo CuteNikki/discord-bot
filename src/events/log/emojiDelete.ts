@@ -29,27 +29,27 @@ export default new Event({
           .addFields(
             {
               name: t('log.emojiDelete.emoji', { lng }),
-              value: `\`${name}\` (${id})`,
+              value: `\`${name}\` (${id})`
             },
             {
               name: t('log.emojiDelete.author', { lng }),
-              value: author ? `${author.toString()} (\`${author.username}\` | ${author.id})` : '/',
+              value: author ? `${author.toString()} (\`${author.username}\` | ${author.id})` : '/'
             },
             {
               name: t('log.emojiDelete.created_at', { lng }),
-              value: `<t:${Math.floor(createdTimestamp / 1000)}:f>`,
+              value: `<t:${Math.floor(createdTimestamp / 1000)}:f>`
             },
             {
               name: t('log.emojiDelete.identifier', { lng }),
-              value: `\`${identifier}\``,
+              value: `\`${identifier}\``
             },
             {
               name: t('log.emojiDelete.animated', { lng }),
-              value: `${animated ?? '/'}`,
+              value: `${animated ?? '/'}`
             },
             {
               name: t('log.emojiDelete.managed', { lng }),
-              value: `${managed ?? '/'}`,
+              value: `${managed ?? '/'}`
             },
             {
               name: t('log.emojiDelete.roles', { lng }),
@@ -57,11 +57,11 @@ export default new Event({
                 roles.cache
                   .map((role) => role.toString())
                   .join(', ')
-                  .slice(0, 1000) || '/',
-            },
+                  .slice(0, 1000) || '/'
+            }
           )
-          .setTimestamp(),
-      ],
+          .setTimestamp()
+      ]
     });
-  },
+  }
 });

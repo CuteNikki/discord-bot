@@ -19,13 +19,13 @@ export default new Event({
 
     await updateGuildSettings(message.guild.id, {
       $pull: {
-        ['starboard.messages']: knownMessage,
-      },
+        ['starboard.messages']: knownMessage
+      }
     });
 
     const channel = message.guild.channels.cache.get(config.starboard.channelId);
     if (!channel || channel.type !== message.channel.type) return;
 
     await channel.messages.delete(knownMessage.starboardMessageId).catch((err) => logger.debug({ err }, 'Could not delete starboard message'));
-  },
+  }
 });

@@ -6,5 +6,5 @@ export default new Button({
   customId: 'button-phone-disconnect',
   async execute({ client, interaction }) {
     handlePhoneDisconnect({ client, interaction });
-  },
+  }
 });

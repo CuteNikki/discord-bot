@@ -23,5 +23,5 @@ export default new Event({
     // Delete the custom voice channel
     await deleteCustomVoiceChannel(oldState.channel.id);
     await oldState.channel.delete().catch((err) => logger.error(err, 'Could not delete custom voice channel'));
-  },
+  }
 });

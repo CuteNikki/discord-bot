@@ -32,7 +32,7 @@ export default new Command<ApplicationCommandType.User>({
       new EmbedBuilder()
         .setColor(client.colors.utilities)
         .setTitle(t('avatar.user_avatar', { lng }))
-        .setImage(user.displayAvatarURL({ size: 4096 })),
+        .setImage(user.displayAvatarURL({ size: 4096 }))
     ];
 
     if (user.banner) {
@@ -40,7 +40,7 @@ export default new Command<ApplicationCommandType.User>({
         new EmbedBuilder()
           .setColor(client.colors.utilities)
           .setTitle(t('avatar.user_banner', { lng }))
-          .setImage(user.bannerURL({ size: 4096 })!),
+          .setImage(user.bannerURL({ size: 4096 })!)
       );
     }
 
@@ -49,10 +49,10 @@ export default new Command<ApplicationCommandType.User>({
         new EmbedBuilder()
           .setColor(client.colors.utilities)
           .setTitle(t('avatar.member_avatar', { lng }))
-          .setImage(member.displayAvatarURL({ size: 4096 })),
+          .setImage(member.displayAvatarURL({ size: 4096 }))
       );
     }
 
     await interaction.editReply({ embeds });
-  },
+  }
 });

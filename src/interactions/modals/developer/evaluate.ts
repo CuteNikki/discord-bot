@@ -12,7 +12,7 @@ export default new Modal({
   permissions: ['Administrator'],
   botPermissions: ['SendMessages'],
   cooldown: 0,
-  async execute({ interaction, client }) {
+  async execute({ interaction }) {
     await interaction.deferReply();
     const { fields } = interaction;
 
@@ -40,12 +40,12 @@ export default new Modal({
                   .replaceAll(interaction.client.token, 'no')
                   .replaceAll(interaction.client.token.split('').reverse().join(''), 'no')
                   .replaceAll('\\n', '\n')
-                  .substring(0, 4000),
-              ),
-            ),
-        ],
+                  .substring(0, 4000)
+              )
+            )
+        ]
       });
-    } catch (err: any) {
+    } catch (err: unknown) {
       logger.error({ err }, 'Eval Error');
 
       return interaction.editReply({
@@ -64,11 +64,11 @@ export default new Modal({
                   .replaceAll(interaction.client.token, 'no')
                   .replaceAll(interaction.client.token.split('').reverse().join(''), 'no')
                   .replaceAll('\\n', '\n')
-                  .substring(0, 4000),
-              ),
-            ),
-        ],
+                  .substring(0, 4000)
+              )
+            )
+        ]
       });
     }
-  },
+  }
 });

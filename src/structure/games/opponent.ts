@@ -9,7 +9,7 @@ import { logger } from 'utils/logger';
 
 enum CustomIds {
   Accept = 'OPPONENT_ACCEPT',
-  Reject = 'OPPONENT_REJECT',
+  Reject = 'OPPONENT_REJECT'
 }
 
 export class Opponent {
@@ -18,7 +18,7 @@ export class Opponent {
       interaction: ChatInputCommandInteraction;
       opponent: User | null;
       client: DiscordClient;
-    },
+    }
   ) {}
 
   public async isApprovedByOpponent(): Promise<Message | false> {
@@ -41,6 +41,7 @@ export class Opponent {
       return false;
     }
 
+    // eslint-disable-next-line no-async-promise-executor
     return new Promise(async (resolve) => {
       const acceptButton = new ButtonBuilder()
         .setLabel(t('games.invitation.accept', { lng: opponentLng }))
@@ -62,17 +63,17 @@ export class Opponent {
               .setDescription(
                 t('games.invitation.description', {
                   lng: opponentLng,
-                  user: user.toString(),
-                }),
-              ),
+                  user: user.toString()
+                })
+              )
           ],
-          components: [row],
+          components: [row]
         })
         .catch((err) => logger.debug({ err }, 'Could not edit message'));
       if (!message) return;
 
       const collector = message.createMessageComponentCollector({
-        time: 30 * 1000,
+        time: 30 * 1000
       });
 
       collector.on('collect', async (buttonInteraction) => {
@@ -82,9 +83,9 @@ export class Opponent {
           return buttonInteraction
             .followUp({
               content: t('interactions.author_only', {
-                lng: await getUserLanguage(buttonInteraction.user.id),
+                lng: await getUserLanguage(buttonInteraction.user.id)
               }),
-              ephemeral: true,
+              ephemeral: true
             })
             .catch((err) => logger.debug({ err }, 'Could not follow up'));
         }
@@ -102,22 +103,22 @@ export class Opponent {
           embed.setDescription(
             t('games.invitation.rejected', {
               lng,
-              opponent: opponent.toString(),
-            }),
+              opponent: opponent.toString()
+            })
           );
         if (reason === 'time')
           embed.setDescription(
             t('games.invitation.timeout', {
               lng,
-              opponent: opponent.toString(),
-            }),
+              opponent: opponent.toString()
+            })
           );
 
         interaction
           .editReply({
             content: user.toString(),
             embeds: [embed],
-            components: [],
+            components: []
           })
           .catch((err) => logger.debug({ err }, 'Could not edit message'));
         return resolve(false);

@@ -9,6 +9,6 @@ export const customVoiceModel: Model<CustomVoiceDocument> =
     new Schema<CustomVoiceDocument>({
       channelId: { type: String, required: true },
       guildId: { type: String, required: true },
-      ownerId: { type: String, required: true },
-    }),
+      ownerId: { type: String, required: true }
+    })
   );

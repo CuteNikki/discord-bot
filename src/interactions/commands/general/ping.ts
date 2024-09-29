@@ -5,7 +5,7 @@ import {
   ButtonStyle,
   EmbedBuilder,
   InteractionContextType,
-  SlashCommandBuilder,
+  SlashCommandBuilder
 } from 'discord.js';
 import { t } from 'i18next';
 
@@ -26,7 +26,7 @@ export default new Command({
     const sent = await interaction.reply({
       content: t('ping.pinging', { lng }),
       fetchReply: true,
-      ephemeral,
+      ephemeral
     });
 
     const websocketHeartbeat = interaction.guild?.shard.ping ?? client.ws.ping;
@@ -40,19 +40,19 @@ export default new Command({
           .addFields(
             {
               name: t('ping.websocket', { lng }),
-              value: `${websocketHeartbeat}ms`,
+              value: `${websocketHeartbeat}ms`
             },
             {
               name: t('ping.roundtrip', { lng }),
-              value: `${sent.createdTimestamp - interaction.createdTimestamp}ms`,
-            },
-          ),
+              value: `${sent.createdTimestamp - interaction.createdTimestamp}ms`
+            }
+          )
       ],
       components: [
         new ActionRowBuilder<ButtonBuilder>().setComponents(
-          new ButtonBuilder().setCustomId('button-ping-update').setLabel(t('ping.update', { lng })).setStyle(ButtonStyle.Primary),
-        ),
-      ],
+          new ButtonBuilder().setCustomId('button-ping-update').setLabel(t('ping.update', { lng })).setStyle(ButtonStyle.Primary)
+        )
+      ]
     });
-  },
+  }
 });

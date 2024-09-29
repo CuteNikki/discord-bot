@@ -9,7 +9,7 @@ import {
   removeSupportGuildInvite,
   updateSupportBotInvite,
   updateSupportGuildId,
-  updateSupportGuildInvite,
+  updateSupportGuildInvite
 } from 'db/client';
 import { addBadge, banUser, getBannedUsers, getUserData, removeBadge, unbanUser } from 'db/user';
 
@@ -38,10 +38,10 @@ export default new Command({
           subcommand
             .setName('set')
             .setDescription('Sets the support guild id')
-            .addStringOption((option) => option.setName('guild-id').setDescription('The guild id').setRequired(true)),
+            .addStringOption((option) => option.setName('guild-id').setDescription('The guild id').setRequired(true))
         )
         .addSubcommand((subcommand) => subcommand.setName('remove').setDescription('Removes the support guild id'))
-        .addSubcommand((subcommand) => subcommand.setName('show').setDescription('Shows the support guild id')),
+        .addSubcommand((subcommand) => subcommand.setName('show').setDescription('Shows the support guild id'))
     )
     .addSubcommandGroup((subcommandGroup) =>
       subcommandGroup
@@ -51,10 +51,10 @@ export default new Command({
           subcommand
             .setName('set')
             .setDescription('Sets the support invite url')
-            .addStringOption((option) => option.setName('invite-url').setDescription('The invite url').setRequired(true)),
+            .addStringOption((option) => option.setName('invite-url').setDescription('The invite url').setRequired(true))
         )
         .addSubcommand((subcommand) => subcommand.setName('remove').setDescription('Removes the support invite url'))
-        .addSubcommand((subcommand) => subcommand.setName('show').setDescription('Shows the support invite url')),
+        .addSubcommand((subcommand) => subcommand.setName('show').setDescription('Shows the support invite url'))
     )
     .addSubcommandGroup((subcommandGroup) =>
       subcommandGroup
@@ -64,10 +64,10 @@ export default new Command({
           subcommand
             .setName('set')
             .setDescription('Sets the bot invite url')
-            .addStringOption((option) => option.setName('invite-url').setDescription('The invite url').setRequired(true)),
+            .addStringOption((option) => option.setName('invite-url').setDescription('The invite url').setRequired(true))
         )
         .addSubcommand((subcommand) => subcommand.setName('remove').setDescription('Removes the bot invite url'))
-        .addSubcommand((subcommand) => subcommand.setName('show').setDescription('Shows the bot invite url')),
+        .addSubcommand((subcommand) => subcommand.setName('show').setDescription('Shows the bot invite url'))
     )
     .addSubcommandGroup((subcommandGroup) =>
       subcommandGroup
@@ -84,13 +84,13 @@ export default new Command({
                 { name: 'bughunter', value: BadgeType.Bughunter },
                 {
                   name: 'expert bughunter',
-                  value: BadgeType.ExpertBughunter,
+                  value: BadgeType.ExpertBughunter
                 },
                 { name: 'supporter', value: BadgeType.Supporter },
                 { name: 'staff member', value: BadgeType.StaffMember },
-                { name: 'developer', value: BadgeType.Developer },
-              ),
-            ),
+                { name: 'developer', value: BadgeType.Developer }
+              )
+            )
         )
         .addSubcommand((subcommand) =>
           subcommand
@@ -103,20 +103,20 @@ export default new Command({
                 { name: 'bughunter', value: BadgeType.Bughunter },
                 {
                   name: 'expert bughunter',
-                  value: BadgeType.ExpertBughunter,
+                  value: BadgeType.ExpertBughunter
                 },
                 { name: 'supporter', value: BadgeType.Supporter },
                 { name: 'staff member', value: BadgeType.StaffMember },
-                { name: 'developer', value: BadgeType.Developer },
-              ),
-            ),
+                { name: 'developer', value: BadgeType.Developer }
+              )
+            )
         )
         .addSubcommand((subcommand) =>
           subcommand
             .setName('list')
             .setDescription('Lists all badges of a user')
-            .addUserOption((option) => option.setName('user').setDescription('The user to view badges of').setRequired(true)),
-        ),
+            .addUserOption((option) => option.setName('user').setDescription('The user to view badges of').setRequired(true))
+        )
     )
     .addSubcommandGroup((subcommandGroup) =>
       subcommandGroup
@@ -126,17 +126,17 @@ export default new Command({
           subcommand
             .setName('add')
             .setDescription('Bans a user')
-            .addUserOption((option) => option.setName('user').setDescription('The user to ban').setRequired(true)),
+            .addUserOption((option) => option.setName('user').setDescription('The user to ban').setRequired(true))
         )
         .addSubcommand((subcommand) =>
           subcommand
             .setName('remove')
             .setDescription('Unban a user')
-            .addUserOption((option) => option.setName('user').setDescription('The user to unban').setRequired(true)),
+            .addUserOption((option) => option.setName('user').setDescription('The user to unban').setRequired(true))
         )
-        .addSubcommand((subcommand) => subcommand.setName('list').setDescription('Lists all banned users')),
+        .addSubcommand((subcommand) => subcommand.setName('list').setDescription('Lists all banned users'))
     ),
-  async execute({ client, interaction }) {
+  async execute({ interaction }) {
     await interaction.deferReply();
     const { options, user } = interaction;
 
@@ -327,7 +327,7 @@ export default new Command({
                 const targetData = await getUserData(target.id);
 
                 await interaction.editReply(
-                  `Badges:\n${targetData.badges.map((badge) => `${BadgeType[badge.id]}: <t:${Math.floor(badge.receivedAt / 1000)}:f>`).join('\n')}`,
+                  `Badges:\n${targetData.badges.map((badge) => `${BadgeType[badge.id]}: <t:${Math.floor(badge.receivedAt / 1000)}:f>`).join('\n')}`
                 );
               }
               break;
@@ -393,8 +393,8 @@ export default new Command({
                     new EmbedBuilder()
                       .setColor(Colors.Aqua)
                       .setTitle(`Banned Users`)
-                      .setDescription(chunk.map((user) => `<@${user.userId}> (${user.userId})`).join('\n\n') || '/'),
-                  ),
+                      .setDescription(chunk.map((user) => `<@${user.userId}> (${user.userId})`).join('\n\n') || '/')
+                  )
                 });
               }
               break;
@@ -402,5 +402,5 @@ export default new Command({
         }
         break;
     }
-  },
+  }
 });

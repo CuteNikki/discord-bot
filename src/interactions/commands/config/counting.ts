@@ -17,22 +17,22 @@ export default new Command({
         .setName('setup')
         .setDescription('Set up the counting game')
         .addChannelOption((option) =>
-          option.setName('channel').setDescription('The channel where members should count in').addChannelTypes(ChannelType.GuildText).setRequired(true),
+          option.setName('channel').setDescription('The channel where members should count in').addChannelTypes(ChannelType.GuildText).setRequired(true)
         )
-        .addBooleanOption((option) => option.setName('reset-on-fail').setDescription('Reset the counting game on a failure').setRequired(false)),
+        .addBooleanOption((option) => option.setName('reset-on-fail').setDescription('Reset the counting game on a failure').setRequired(false))
     )
     .addSubcommand((cmd) =>
       cmd
         .setName('edit')
         .setDescription('Edit your settings for the counting game')
         .addChannelOption((option) =>
-          option.setName('channel').setDescription('The channel where members should count in').addChannelTypes(ChannelType.GuildText).setRequired(false),
+          option.setName('channel').setDescription('The channel where members should count in').addChannelTypes(ChannelType.GuildText).setRequired(false)
         )
-        .addBooleanOption((option) => option.setName('reset-on-fail').setDescription('Reset the counting game on a failure').setRequired(false)),
+        .addBooleanOption((option) => option.setName('reset-on-fail').setDescription('Reset the counting game on a failure').setRequired(false))
     )
     .addSubcommand((cmd) => cmd.setName('info').setDescription('Shows your settings and other stats for the counting game'))
     .addSubcommand((cmd) => cmd.setName('reset').setDescription('Resets all data of the counting game')),
-  async execute({ client, interaction, lng}) {
+  async execute({ client, interaction, lng }) {
     if (!interaction.inCachedGuild()) return;
     await interaction.deferReply();
 
@@ -48,14 +48,14 @@ export default new Command({
 
           if (config.counting.channelId) {
             await interaction.editReply({
-              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('counting.already_setup', { lng }))],
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('counting.already_setup', { lng }))]
             });
             return;
           }
 
           if (config.counting.channelId === channel.id) {
             await interaction.editReply({
-              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('counting.already_channel', { lng }))],
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('counting.already_channel', { lng }))]
             });
             return;
           }
@@ -66,14 +66,14 @@ export default new Command({
               ['counting.resetOnFail']: resetOnFail,
               ['counting.currentNumber']: 0,
               ['counting.currentNumberAt']: null,
-              ['counting.currentNumberBy']: null,
-            },
+              ['counting.currentNumberBy']: null
+            }
           });
 
           await interaction.editReply({
             embeds: [
-              new EmbedBuilder().setColor(client.colors.counting).setDescription(t('counting.setup_done', { lng, channel: channel.toString(), number: '1' })),
-            ],
+              new EmbedBuilder().setColor(client.colors.counting).setDescription(t('counting.setup_done', { lng, channel: channel.toString(), number: '1' }))
+            ]
           });
         }
         break;
@@ -81,7 +81,7 @@ export default new Command({
         {
           if (!config.counting.channelId) {
             await interaction.editReply({
-              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('counting.not_setup', { lng }))],
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('counting.not_setup', { lng }))]
             });
             return;
           }
@@ -92,7 +92,7 @@ export default new Command({
                 { name: t('counting.channel', { lng }), value: `<#${config.counting.channelId}>` },
                 {
                   name: t('counting.reset_on_fail', { lng }),
-                  value: config.counting.resetOnFail ? t('enabled', { lng }) : t('disabled', { lng }),
+                  value: config.counting.resetOnFail ? t('enabled', { lng }) : t('disabled', { lng })
                 },
                 {
                   name: t('counting.highest_number', { lng }),
@@ -100,18 +100,18 @@ export default new Command({
                     ? t('counting.highest_number_at', {
                         lng,
                         number: config.counting.highestNumber.toString(),
-                        at: `<t:${Math.floor(config.counting.highestNumberAt / 1000)}:f>`,
+                        at: `<t:${Math.floor(config.counting.highestNumberAt / 1000)}:f>`
                       })
-                    : t('counting.highest_number_no_at', { lng, number: config.counting.highestNumber.toString() }),
+                    : t('counting.highest_number_no_at', { lng, number: config.counting.highestNumber.toString() })
                 },
                 {
                   name: t('counting.current_number', { lng }),
                   value: config.counting.currentNumberBy
                     ? t('counting.current_number_by', { lng, number: config.counting.currentNumber.toString(), by: `<@${config.counting.currentNumberBy}>` })
-                    : t('counting.current_number_no_by', { lng, number: config.counting.currentNumber.toString() }),
-                },
-              ),
-            ],
+                    : t('counting.current_number_no_by', { lng, number: config.counting.currentNumber.toString() })
+                }
+              )
+            ]
           });
         }
         break;
@@ -122,7 +122,7 @@ export default new Command({
 
           if (!channel && !resetOnFail) {
             await interaction.editReply({
-              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('counting.edit_nothing', { lng }))],
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('counting.edit_nothing', { lng }))]
             });
             return;
           }
@@ -132,8 +132,8 @@ export default new Command({
           if (channel && channel.id !== config.counting.channelId) {
             await updateGuildSettings(guildId, {
               $set: {
-                ['counting.channelId']: channel.id,
-              },
+                ['counting.channelId']: channel.id
+              }
             });
             response += t('counting.edit_channel', { lng, channel: `<#${channel.id}>` });
           }
@@ -141,21 +141,21 @@ export default new Command({
           if (resetOnFail !== null && resetOnFail !== config.counting.resetOnFail) {
             await updateGuildSettings(guildId, {
               $set: {
-                ['counting.resetOnFail']: resetOnFail,
-              },
+                ['counting.resetOnFail']: resetOnFail
+              }
             });
             response += resetOnFail ? t('counting.edit_reset_on_fail_enabled', { lng }) : t('counting.edit_reset_on_fail_disabled', { lng });
           }
 
           if (response === '') {
             await interaction.editReply({
-              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('counting.edit_no_changes', { lng }))],
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('counting.edit_no_changes', { lng }))]
             });
             return;
           }
 
           await interaction.editReply({
-            embeds: [new EmbedBuilder().setColor(client.colors.counting).setDescription(response)],
+            embeds: [new EmbedBuilder().setColor(client.colors.counting).setDescription(response)]
           });
         }
         break;
@@ -163,7 +163,7 @@ export default new Command({
         {
           if (!config.counting.channelId) {
             await interaction.editReply({
-              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('counting.not_setup', { lng }))],
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('counting.not_setup', { lng }))]
             });
             return;
           }
@@ -176,15 +176,15 @@ export default new Command({
               ['counting.highestNumberAt']: null,
               ['counting.currentNumber']: 0,
               ['counting.currentNumberBy']: null,
-              ['counting.currentNumberAt']: null,
-            },
+              ['counting.currentNumberAt']: null
+            }
           });
 
           await interaction.editReply({
-            embeds: [new EmbedBuilder().setColor(client.colors.counting).setDescription(t('counting.reset_done', { lng }))],
+            embeds: [new EmbedBuilder().setColor(client.colors.counting).setDescription(t('counting.reset_done', { lng }))]
           });
         }
         break;
     }
-  },
+  }
 });

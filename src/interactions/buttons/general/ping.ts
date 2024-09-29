@@ -12,7 +12,7 @@ export default new Button({
   async execute({ interaction, client, lng }) {
     const sent = await interaction.update({
       content: t('ping.pinging', { lng }),
-      fetchReply: true,
+      fetchReply: true
     });
 
     const websocketHeartbeat = interaction.guild?.shard.ping ?? client.ws.ping;
@@ -26,23 +26,23 @@ export default new Button({
           .addFields(
             {
               name: t('ping.websocket', { lng }),
-              value: `${websocketHeartbeat}ms`,
+              value: `${websocketHeartbeat}ms`
             },
             {
               name: t('ping.roundtrip', { lng }),
-              value: `${sent.editedTimestamp! - interaction.createdTimestamp}ms`,
+              value: `${sent.editedTimestamp! - interaction.createdTimestamp}ms`
             },
             {
               name: t('ping.last_updated', { lng }),
-              value: `<t:${Math.floor(Date.now() / 1000)}:R>`,
-            },
-          ),
+              value: `<t:${Math.floor(Date.now() / 1000)}:R>`
+            }
+          )
       ],
       components: [
         new ActionRowBuilder<ButtonBuilder>().setComponents(
-          new ButtonBuilder().setCustomId('button-ping-update').setLabel(t('ping.update', { lng })).setStyle(ButtonStyle.Primary),
-        ),
-      ],
+          new ButtonBuilder().setCustomId('button-ping-update').setLabel(t('ping.update', { lng })).setStyle(ButtonStyle.Primary)
+        )
+      ]
     });
-  },
+  }
 });

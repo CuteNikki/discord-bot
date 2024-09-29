@@ -6,7 +6,7 @@ import {
   ComponentType,
   InteractionContextType,
   PermissionFlagsBits,
-  SlashCommandBuilder,
+  SlashCommandBuilder
 } from 'discord.js';
 import { t } from 'i18next';
 import ms from 'ms';
@@ -39,7 +39,7 @@ export default new Command({
 
     enum CustomIds {
       Confirm = 'TIMEOUT_CONFIRM',
-      Cancel = 'TIMEOUT_CANCEL',
+      Cancel = 'TIMEOUT_CANCEL'
     }
 
     const { options, guild, member, user } = interaction;
@@ -92,8 +92,8 @@ export default new Command({
       await interaction.editReply(
         t('timeout.target.timed_out', {
           lng,
-          date: `<t:${Math.floor(targetMember.communicationDisabledUntilTimestamp / 1000)}:f>`,
-        }),
+          date: `<t:${Math.floor(targetMember.communicationDisabledUntilTimestamp / 1000)}:f>`
+        })
       );
       return;
     }
@@ -103,21 +103,21 @@ export default new Command({
       components: [
         new ActionRowBuilder<ButtonBuilder>().setComponents(
           new ButtonBuilder().setCustomId(CustomIds.Confirm).setEmoji('✔').setStyle(ButtonStyle.Success),
-          new ButtonBuilder().setCustomId(CustomIds.Cancel).setEmoji('✖').setStyle(ButtonStyle.Danger),
-        ),
-      ],
+          new ButtonBuilder().setCustomId(CustomIds.Cancel).setEmoji('✖').setStyle(ButtonStyle.Danger)
+        )
+      ]
     });
 
     const collector = await msg.awaitMessageComponent({
       filter: (i) => i.user.id === interaction.user.id,
       componentType: ComponentType.Button,
-      time: 30_000,
+      time: 30_000
     });
 
     if (collector.customId === CustomIds.Cancel) {
       await collector.update({
         content: t('timeout.cancelled', { lng }),
-        components: [],
+        components: []
       });
     } else if (collector.customId === CustomIds.Confirm) {
       const timeout = await targetMember
@@ -135,8 +135,8 @@ export default new Command({
             lng: targetLng,
             guild: `\`${guild.name}\``,
             reason: `\`${reason ?? '/'}\``,
-            duration: durationText,
-          }),
+            duration: durationText
+          })
         })
         .catch((err) => logger.debug({ err, userId: target.id }, 'Could not send DM'));
 
@@ -145,12 +145,12 @@ export default new Command({
           t('timeout.confirmed', {
             lng,
             user: target.toString(),
-            reason: `\`${reason ?? '/'}\``,
+            reason: `\`${reason ?? '/'}\``
           }),
           receivedDM ? t('timeout.dm_received', { lng }) : t('timeout.dm_not_received', { lng }),
-          t('timeout.duration', { lng, duration: durationText }),
+          t('timeout.duration', { lng, duration: durationText })
         ].join('\n'),
-        components: [],
+        components: []
       });
 
       if (target.bot) {
@@ -159,5 +159,5 @@ export default new Command({
 
       await createInfraction(guild.id, target.id, user.id, InfractionType.Timeout, reason, undefined, Date.now(), false);
     }
-  },
+  }
 });

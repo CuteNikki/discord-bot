@@ -30,24 +30,24 @@ export default new Event({
           .addFields(
             {
               name: t('log.stickerDelete.sticker', { lng }),
-              value: `\`${name}\` (${id})`,
+              value: `\`${name}\` (${id})`
             },
             {
               name: t('log.stickerDelete.description', { lng }),
-              value: description || '/',
+              value: description || '/'
             },
             {
               name: t('log.stickerDelete.format', { lng }),
-              value: StickerFormatType[format],
+              value: StickerFormatType[format]
             },
             { name: t('log.stickerDelete.tags', { lng }), value: tags || '/' },
             {
               name: t('log.stickerDelete.created_at', { lng }),
-              value: `<t:${Math.floor(createdTimestamp / 1000)}:f>`,
-            },
+              value: `<t:${Math.floor(createdTimestamp / 1000)}:f>`
+            }
           )
-          .setTimestamp(),
-      ],
+          .setTimestamp()
+      ]
     });
-  },
+  }
 });

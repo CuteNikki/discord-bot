@@ -35,7 +35,7 @@ export class Hangman {
     W: '🇼',
     X: '🇽',
     Y: '🇾',
-    Z: '🇿',
+    Z: '🇿'
   };
   damage: number = 0;
   word: string;
@@ -46,7 +46,7 @@ export class Hangman {
       interaction: ChatInputCommandInteraction;
       client: DiscordClient;
       theme: keyof typeof WORDS;
-    },
+    }
   ) {
     const wordsFromTheme = WORDS[this.options.theme];
     this.word = wordsFromTheme[Math.floor(Math.random() * wordsFromTheme.length)];
@@ -64,7 +64,7 @@ export class Hangman {
       `|      ${this.damage > 3 ? '👖' : ' '}`,
       `|      ${this.damage > 4 ? '👞👞' : ' '}`,
       '|___________',
-      '```',
+      '```'
     ].join('\n');
   }
 
@@ -81,31 +81,31 @@ export class Hangman {
             .setColor(Colors.Yellow)
             .setAuthor({
               name: user.displayName,
-              iconURL: user.displayAvatarURL(),
+              iconURL: user.displayAvatarURL()
             })
             .setTitle(t('games.hangman.title', { lng }))
             .setDescription(this.getBoardContent())
             .addFields(
               {
                 name: t('games.hangman.theme', { lng }),
-                value: this.options.theme,
+                value: this.options.theme
               },
               {
                 name: t('games.hangman.word', {
                   lng,
-                  length: this.word.length,
+                  length: this.word.length
                 }),
-                value: this.getCensoredWord(),
-              },
-            ),
+                value: this.getCensoredWord()
+              }
+            )
         ],
-        components: this.getComponents(),
+        components: this.getComponents()
       })
       .catch((err) => logger.debug({ err }, 'Could not send message'));
     if (!message) return;
 
     const collector = message.createMessageComponentCollector({
-      idle: 60 * 1000,
+      idle: 60 * 1000
     });
 
     collector.on('collect', async (buttonInteraction) => {
@@ -114,9 +114,9 @@ export class Hangman {
       if (buttonInteraction.user.id !== user.id)
         return buttonInteraction.followUp({
           content: t('interactions.author_only', {
-            lng: await getUserLanguage(buttonInteraction.user.id),
+            lng: await getUserLanguage(buttonInteraction.user.id)
           }),
-          ephemeral: true,
+          ephemeral: true
         });
       const guess = buttonInteraction.customId.split('_')[1];
 
@@ -135,29 +135,29 @@ export class Hangman {
                 .setColor(Colors.Yellow)
                 .setAuthor({
                   name: user.displayName,
-                  iconURL: user.displayAvatarURL(),
+                  iconURL: user.displayAvatarURL()
                 })
                 .setTitle(t('games.hangman.title', { lng }))
                 .setDescription(this.getBoardContent())
                 .addFields(
                   {
                     name: t('games.hangman.theme', { lng }),
-                    value: this.options.theme,
+                    value: this.options.theme
                   },
                   {
                     name: t('games.hangman.word', {
                       lng,
-                      length: this.word.length,
+                      length: this.word.length
                     }),
-                    value: this.getCensoredWord(),
+                    value: this.getCensoredWord()
                   },
                   {
                     name: t('games.hangman.guesses', { lng }),
-                    value: this.guesses.map((letter) => `\`${letter}\``).join(', ') || '/',
-                  },
-                ),
+                    value: this.guesses.map((letter) => `\`${letter}\``).join(', ') || '/'
+                  }
+                )
             ],
-            components: this.getComponents(this.buttonPage),
+            components: this.getComponents(this.buttonPage)
           })
           .catch((err) => logger.debug({ err }, 'Could not edit message'));
 
@@ -204,12 +204,12 @@ export class Hangman {
         { name: t('games.hangman.theme', { lng }), value: this.options.theme },
         {
           name: t('games.hangman.word', { lng, length: this.word.length }),
-          value: this.getCensoredWord(),
+          value: this.getCensoredWord()
         },
         {
           name: t('games.hangman.guesses', { lng }),
-          value: this.guesses.map((letter) => `\`${letter}\``).join(', ') || '/',
-        },
+          value: this.guesses.map((letter) => `\`${letter}\``).join(', ') || '/'
+        }
       );
 
     if (result === 'TIMEOUT') embed.setDescription([t('games.hangman.timeout', { lng, word: this.word }), this.getBoardContent()].join('\n\n'));

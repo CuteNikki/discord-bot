@@ -17,11 +17,11 @@ export class Snake {
     dead: '💀',
     head: '🔵',
     body: '🟦',
-    tail: '🔷',
+    tail: '🔷'
   };
   boardEmojis = {
     tile: '⬛',
-    food: '🍎',
+    food: '🍎'
   };
   height: number;
   width: number;
@@ -35,7 +35,7 @@ export class Snake {
       interaction: ChatInputCommandInteraction;
       client: DiscordClient;
       size: { width: number; height: number };
-    },
+    }
   ) {
     this.height = options.size.height;
     this.width = options.size.width;
@@ -98,22 +98,22 @@ export class Snake {
             .setColor(Colors.Yellow)
             .setAuthor({
               name: user.displayName,
-              iconURL: user.displayAvatarURL(),
+              iconURL: user.displayAvatarURL()
             })
             .setTitle(t('games.snake.title', { lng }))
             .setDescription(this.getBoardContent())
             .addFields({
               name: t('games.snake.score', { lng }),
-              value: `${this.score}`,
-            }),
+              value: `${this.score}`
+            })
         ],
-        components: this.getComponents(),
+        components: this.getComponents()
       })
       .catch((err) => logger.debug({ err }, 'Could not send message'));
     if (!message) return;
 
     const collector = message.createMessageComponentCollector({
-      idle: 60 * 1000,
+      idle: 60 * 1000
     });
 
     collector.on('collect', async (buttonInteraction) => {
@@ -123,9 +123,9 @@ export class Snake {
         return buttonInteraction
           .followUp({
             content: t('interactions.author_only', {
-              lng: await getUserLanguage(buttonInteraction.user.id),
+              lng: await getUserLanguage(buttonInteraction.user.id)
             }),
-            ephemeral: true,
+            ephemeral: true
           })
           .catch((err) => logger.debug({ err }, 'Could not follow up'));
 
@@ -167,15 +167,15 @@ export class Snake {
               .setColor(Colors.Yellow)
               .setAuthor({
                 name: user.displayName,
-                iconURL: user.displayAvatarURL(),
+                iconURL: user.displayAvatarURL()
               })
               .setTitle(t('games.snake.title', { lng }))
               .setDescription(this.getBoardContent())
               .addFields({
                 name: t('games.snake.score', { lng }),
-                value: `${this.score}`,
-              }),
-          ],
+                value: `${this.score}`
+              })
+          ]
         })
         .catch((err) => logger.debug({ err }, 'Could not edit message'));
     });
@@ -197,16 +197,16 @@ export class Snake {
             .setColor(Colors.Red)
             .setAuthor({
               name: user.displayName,
-              iconURL: user.displayAvatarURL(),
+              iconURL: user.displayAvatarURL()
             })
             .setTitle(t('games.snake.title', { lng }))
             .setDescription([t('games.snake.over', { lng }), this.getBoardContent(true)].join('\n\n'))
             .addFields({
               name: t('games.snake.score', { lng }),
-              value: `${this.score}`,
-            }),
+              value: `${this.score}`
+            })
         ],
-        components: this.disableButtons(this.getComponents()),
+        components: this.disableButtons(this.getComponents())
       })
       .catch((err) => logger.debug({ err }, 'Could not edit message'));
   }
@@ -221,7 +221,7 @@ export class Snake {
     do {
       foodPosition = {
         x: parseInt((Math.random() * this.width).toString()),
-        y: parseInt((Math.random() * this.height).toString()),
+        y: parseInt((Math.random() * this.height).toString())
       };
     } while (this.isSnake(foodPosition));
 
@@ -239,7 +239,7 @@ export class Snake {
 
     return [
       new ActionRowBuilder<ButtonBuilder>().addComponents(disabledOneButton, upButton, disabledTwoButton, stopButton),
-      new ActionRowBuilder<ButtonBuilder>().addComponents(leftButton, downButton, rightButton),
+      new ActionRowBuilder<ButtonBuilder>().addComponents(leftButton, downButton, rightButton)
     ];
   }
 

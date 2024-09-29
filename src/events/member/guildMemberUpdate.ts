@@ -25,8 +25,8 @@ export default new Event({
     await welcomeChannel
       .send({
         content: replacePlaceholders(config.welcome.message.content ?? '', newMember.user, newMember.guild),
-        embeds: [getEmbed(newMember.user, newMember.guild, config.welcome.message.embed)],
+        embeds: [getEmbed(newMember.user, newMember.guild, config.welcome.message.embed)]
       })
       .catch((err) => logger.debug({ err }, 'Could not send welcome message'));
-  },
+  }
 });

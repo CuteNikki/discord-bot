@@ -6,7 +6,7 @@ import {
   ComponentType,
   InteractionContextType,
   PermissionFlagsBits,
-  SlashCommandBuilder,
+  SlashCommandBuilder
 } from 'discord.js';
 import { t } from 'i18next';
 import ms from 'ms';
@@ -46,8 +46,8 @@ export default new Command({
           { name: 'Previous 12 hours', value: 43200 },
           { name: 'Previous 24 hours', value: 86400 },
           { name: 'Previous 3 days', value: 259200 },
-          { name: 'Previous 7 days', value: 604800 },
-        ),
+          { name: 'Previous 7 days', value: 604800 }
+        )
     ),
   async execute({ interaction, client, lng }) {
     if (!interaction.inCachedGuild()) return;
@@ -56,7 +56,7 @@ export default new Command({
 
     enum CustomIds {
       Confirm = 'BAN_CONFIRM',
-      Cancel = 'BAN_CANCEL',
+      Cancel = 'BAN_CANCEL'
     }
 
     const { options, guild, member, user } = interaction;
@@ -81,7 +81,7 @@ export default new Command({
       43200: t('ban.history.hours_12', { lng }), // 'Previous 12 hours'
       86400: t('ban.history.hours_24', { lng }), // 'Previous 24 hours'
       259200: t('ban.history.days_3', { lng }), // 'Previous 3 days'
-      604800: t('ban.history.days_7', { lng }), // 'Previous 7 days'
+      604800: t('ban.history.days_7', { lng }) // 'Previous 7 days'
     };
 
     const targetRolePos = targetMember?.roles.highest.position ?? 0;
@@ -115,21 +115,21 @@ export default new Command({
       components: [
         new ActionRowBuilder<ButtonBuilder>().setComponents(
           new ButtonBuilder().setCustomId(CustomIds.Confirm).setEmoji('✔').setStyle(ButtonStyle.Success),
-          new ButtonBuilder().setCustomId(CustomIds.Cancel).setEmoji('✖').setStyle(ButtonStyle.Danger),
-        ),
-      ],
+          new ButtonBuilder().setCustomId(CustomIds.Cancel).setEmoji('✖').setStyle(ButtonStyle.Danger)
+        )
+      ]
     });
 
     const collector = await msg.awaitMessageComponent({
       filter: (i) => i.user.id === interaction.user.id,
       componentType: ComponentType.Button,
-      time: 30_000,
+      time: 30_000
     });
 
     if (collector.customId === CustomIds.Cancel) {
       await collector.update({
         content: t('ban.cancelled', { lng }),
-        components: [],
+        components: []
       });
     } else if (collector.customId === CustomIds.Confirm) {
       const banned = await guild.bans
@@ -147,8 +147,8 @@ export default new Command({
             lng: targetLng,
             guild: `\`${guild.name}\``,
             reason: `\`${reason ?? '/'}\``,
-            duration: duration ? durationText : 'forever',
-          }),
+            duration: duration ? durationText : 'forever'
+          })
         })
         .catch((err) => logger.debug({ err, userId: target.id }, 'Could not send DM'));
 
@@ -157,16 +157,16 @@ export default new Command({
           t('ban.confirmed', {
             lng,
             user: target.toString(),
-            reason: `\`${reason ?? '/'}\``,
+            reason: `\`${reason ?? '/'}\``
           }),
           t('ban.deleted_history', {
             lng,
-            deleted: historyOptions[history as keyof typeof historyOptions],
+            deleted: historyOptions[history as keyof typeof historyOptions]
           }),
           receivedDM ? t('ban.dm_received', { lng }) : t('ban.dm_not_received', { lng }),
-          duration ? t('ban.duration', { lng, duration: durationText }) : t('ban.permanent', { lng }),
+          duration ? t('ban.duration', { lng, duration: durationText }) : t('ban.permanent', { lng })
         ].join('\n'),
-        components: [],
+        components: []
       });
 
       if (target.bot) {
@@ -181,8 +181,8 @@ export default new Command({
         reason,
         duration ? Date.now() + duration : undefined,
         Date.now(),
-        duration ? false : true,
+        duration ? false : true
       );
     }
-  },
+  }
 });

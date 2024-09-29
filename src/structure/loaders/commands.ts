@@ -12,6 +12,7 @@ import { initTranslation } from 'utils/language';
 import { logger } from 'utils/logger';
 
 export async function getCommandsCollection() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const commands = new Collection<string, Command<any>>();
 
   const startTime = performance.now();
@@ -67,13 +68,13 @@ export async function registerCommands() {
       cmd.name_localizations = {
         'en-GB': t(`${cmd.name}.name`, { lng: 'en', ns: 'commands' }),
         'en-US': t(`${cmd.name}.name`, { lng: 'en', ns: 'commands' }),
-        de: t(`${cmd.name}.name`, { lng: 'de', ns: 'commands' }),
+        de: t(`${cmd.name}.name`, { lng: 'de', ns: 'commands' })
       };
       // Translate the command description
       cmd.description_localizations = {
         'en-GB': t(`${cmd.name}.description`, { lng: 'en', ns: 'commands' }),
         'en-US': t(`${cmd.name}.description`, { lng: 'en', ns: 'commands' }),
-        de: t(`${cmd.name}.description`, { lng: 'de', ns: 'commands' }),
+        de: t(`${cmd.name}.description`, { lng: 'de', ns: 'commands' })
       };
       // Translate the command options
       if (cmd.options?.length) {
@@ -82,31 +83,31 @@ export async function registerCommands() {
           optionOne.name_localizations = {
             'en-GB': t(`${cmd.name}.options.${indexOne}.name`, {
               lng: 'en',
-              ns: 'commands',
+              ns: 'commands'
             }),
             'en-US': t(`${cmd.name}.options.${indexOne}.name`, {
               lng: 'en',
-              ns: 'commands',
+              ns: 'commands'
             }),
             de: t(`${cmd.name}.options.${indexOne}.name`, {
               lng: 'de',
-              ns: 'commands',
-            }),
+              ns: 'commands'
+            })
           };
           // Translate the option description
           optionOne.description_localizations = {
             'en-GB': t(`${cmd.name}.options.${indexOne}.description`, {
               lng: 'en',
-              ns: 'commands',
+              ns: 'commands'
             }),
             'en-US': t(`${cmd.name}.options.${indexOne}.description`, {
               lng: 'en',
-              ns: 'commands',
+              ns: 'commands'
             }),
             de: t(`${cmd.name}.options.${indexOne}.description`, {
               lng: 'de',
-              ns: 'commands',
-            }),
+              ns: 'commands'
+            })
           };
 
           // Translate the option choices
@@ -117,8 +118,8 @@ export async function registerCommands() {
                 'en-US': t(`${cmd.name}.options.${indexOne}.choices.${indexTwo}`, { lng: 'en', ns: 'commands' }),
                 de: t(`${cmd.name}.options.${indexOne}.choices.${indexTwo}`, {
                   lng: 'de',
-                  ns: 'commands',
-                }),
+                  ns: 'commands'
+                })
               };
               return choiceOne;
             });
@@ -131,13 +132,13 @@ export async function registerCommands() {
               optionTwo.name_localizations = {
                 'en-GB': t(`${cmd.name}.options.${indexOne}.options.${indexTwo}.name`, { lng: 'en', ns: 'commands' }),
                 'en-US': t(`${cmd.name}.options.${indexOne}.options.${indexTwo}.name`, { lng: 'en', ns: 'commands' }),
-                de: t(`${cmd.name}.options.${indexOne}.options.${indexTwo}.name`, { lng: 'de', ns: 'commands' }),
+                de: t(`${cmd.name}.options.${indexOne}.options.${indexTwo}.name`, { lng: 'de', ns: 'commands' })
               };
               // Translate the option option description
               optionTwo.description_localizations = {
                 'en-GB': t(`${cmd.name}.options.${indexOne}.options.${indexTwo}.description`, { lng: 'en', ns: 'commands' }),
                 'en-US': t(`${cmd.name}.options.${indexOne}.options.${indexTwo}.description`, { lng: 'en', ns: 'commands' }),
-                de: t(`${cmd.name}.options.${indexOne}.options.${indexTwo}.description`, { lng: 'de', ns: 'commands' }),
+                de: t(`${cmd.name}.options.${indexOne}.options.${indexTwo}.description`, { lng: 'de', ns: 'commands' })
               };
 
               // Translate the option option choices
@@ -146,7 +147,7 @@ export async function registerCommands() {
                   choiceTwo.name_localizations = {
                     'en-GB': t(`${cmd.name}.options.${indexOne}.options.${indexTwo}.choices.${indexThree}`, { lng: 'en', ns: 'commands' }),
                     'en-US': t(`${cmd.name}.options.${indexOne}.options.${indexTwo}.choices.${indexThree}`, { lng: 'en', ns: 'commands' }),
-                    de: t(`${cmd.name}.options.${indexOne}.options.${indexTwo}.choices.${indexThree}`, { lng: 'de', ns: 'commands' }),
+                    de: t(`${cmd.name}.options.${indexOne}.options.${indexTwo}.choices.${indexThree}`, { lng: 'de', ns: 'commands' })
                   };
                   return choiceTwo;
                 });
@@ -158,13 +159,13 @@ export async function registerCommands() {
                   optionThree.name_localizations = {
                     'en-GB': t(`${cmd.name}.options.${indexOne}.options.${indexTwo}.options.${indexThree}.name`, { lng: 'en', ns: 'commands' }),
                     'en-US': t(`${cmd.name}.options.${indexOne}.options.${indexTwo}.options.${indexThree}.name`, { lng: 'en', ns: 'commands' }),
-                    de: t(`${cmd.name}.options.${indexOne}.options.${indexTwo}.options.${indexThree}.name`, { lng: 'de', ns: 'commands' }),
+                    de: t(`${cmd.name}.options.${indexOne}.options.${indexTwo}.options.${indexThree}.name`, { lng: 'de', ns: 'commands' })
                   };
                   // Translate the option option option description
                   optionThree.description_localizations = {
                     'en-GB': t(`${cmd.name}.options.${indexOne}.options.${indexTwo}.options.${indexThree}.description`, { lng: 'en', ns: 'commands' }),
                     'en-US': t(`${cmd.name}.options.${indexOne}.options.${indexTwo}.options.${indexThree}.description`, { lng: 'en', ns: 'commands' }),
-                    de: t(`${cmd.name}.options.${indexOne}.options.${indexTwo}.options.${indexThree}.description`, { lng: 'de', ns: 'commands' }),
+                    de: t(`${cmd.name}.options.${indexOne}.options.${indexTwo}.options.${indexThree}.description`, { lng: 'de', ns: 'commands' })
                   };
 
                   // Translate the option option option choices
@@ -173,13 +174,13 @@ export async function registerCommands() {
                       choiceThree.name_localizations = {
                         'en-GB': t(`${cmd.name}.options.${indexOne}.options.${indexTwo}.options.${indexThree}.choices.${indexFour}`, {
                           lng: 'en',
-                          ns: 'commands',
+                          ns: 'commands'
                         }),
                         'en-US': t(`${cmd.name}.options.${indexOne}.options.${indexTwo}.options.${indexThree}.choices.${indexFour}`, {
                           lng: 'en',
-                          ns: 'commands',
+                          ns: 'commands'
                         }),
-                        de: t(`${cmd.name}.options.${indexOne}.options.${indexTwo}.options.${indexThree}.choices.${indexFour}`, { lng: 'de', ns: 'commands' }),
+                        de: t(`${cmd.name}.options.${indexOne}.options.${indexTwo}.options.${indexThree}.choices.${indexFour}`, { lng: 'de', ns: 'commands' })
                       };
                       return choiceThree;
                     });
@@ -204,10 +205,10 @@ export async function registerCommands() {
 
   // Split the commands into two arrays, for developer only and non-developer only commands
   const commandsArray = translatedCommands.filter(
-    (cmd) => !commands.get(cmd.name)?.options.isDeveloperOnly && commands.get(cmd.name)?.options.module !== ModuleType.Developer,
+    (cmd) => !commands.get(cmd.name)?.options.isDeveloperOnly && commands.get(cmd.name)?.options.module !== ModuleType.Developer
   );
   const devCommandsArray = translatedCommands.filter(
-    (cmd) => commands.get(cmd.name)?.options.isDeveloperOnly || commands.get(cmd.name)?.options.module === ModuleType.Developer,
+    (cmd) => commands.get(cmd.name)?.options.isDeveloperOnly || commands.get(cmd.name)?.options.module === ModuleType.Developer
   );
 
   // Register the commands globally
@@ -226,7 +227,7 @@ export async function registerCommands() {
     const guildCommandsStartTime = performance.now();
     await rest
       .put(Routes.applicationGuildCommands(DISCORD_BOT_ID, guildId), {
-        body: devCommandsArray,
+        body: devCommandsArray
       })
       .catch((err) => logger.error({ err }, `Failed to register guild commands for ${guildId}`))
       .then(() => {

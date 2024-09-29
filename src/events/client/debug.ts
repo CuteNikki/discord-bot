@@ -9,5 +9,5 @@ export default new Event({
   once: false,
   execute(client, message) {
     logger.debug(`[${client.cluster.id}] ${message}`);
-  },
+  }
 });

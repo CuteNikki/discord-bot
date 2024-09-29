@@ -29,25 +29,25 @@ export default new Event({
           .addFields(
             {
               name: t('log.roleCreate.role', { lng }),
-              value: `${role.toString()} (\`${name}\` | ${id})`,
+              value: `${role.toString()} (\`${name}\` | ${id})`
             },
             { name: t('log.roleCreate.color', { lng }), value: `${hexColor}` },
             {
               name: t('log.roleCreate.position', { lng }),
-              value: `${position}`,
+              value: `${position}`
             },
             {
               name: t('log.roleCreate.displayed_separately', { lng }),
-              value: `${hoist}`,
+              value: `${hoist}`
             },
             {
               name: t('log.roleCreate.mentionable', { lng }),
-              value: `${mentionable}`,
+              value: `${mentionable}`
             },
             { name: t('log.roleCreate.managed', { lng }), value: `${managed}` },
             {
               name: t('log.roleCreate.emoji', { lng }),
-              value: unicodeEmoji || '/',
+              value: unicodeEmoji || '/'
             },
             {
               name: t('log.roleCreate.permissions', { lng }),
@@ -56,11 +56,11 @@ export default new Event({
                   .toArray()
                   .map((perm) => `\`${perm}\``)
                   .join(', ')
-                  .slice(0, 1000) || '/',
-            },
+                  .slice(0, 1000) || '/'
+            }
           )
-          .setTimestamp(),
-      ],
+          .setTimestamp()
+      ]
     });
-  },
+  }
 });

@@ -30,13 +30,13 @@ export default new Button({
     if (interaction.member.roles.cache.has(reaction.roleId)) {
       await interaction.member.roles.remove(role).catch((err) => console.error(err));
       await interaction.editReply({
-        embeds: [new EmbedBuilder().setColor(client.colors.success).setDescription(t('reaction-roles.select.removed', { lng, role: role.toString() }))],
+        embeds: [new EmbedBuilder().setColor(client.colors.success).setDescription(t('reaction-roles.select.removed', { lng, role: role.toString() }))]
       });
     } else {
       await interaction.member.roles.add(role).catch((err) => console.error(err));
       await interaction.editReply({
-        embeds: [new EmbedBuilder().setColor(client.colors.success).setDescription(t('reaction-roles.select.added', { lng, role: role.toString() }))],
+        embeds: [new EmbedBuilder().setColor(client.colors.success).setDescription(t('reaction-roles.select.added', { lng, role: role.toString() }))]
       });
     }
-  },
+  }
 });

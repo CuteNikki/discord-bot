@@ -28,17 +28,17 @@ export default new Event({
           .addFields(
             {
               name: t('log.autoModerationRuleDelete.created_by', { lng }),
-              value: `<@${creatorId}>`,
+              value: `<@${creatorId}>`
             },
             {
               name: t('log.autoModerationRuleDelete.rule_name', { lng }),
-              value: name,
+              value: name
             },
             {
               name: t('log.autoModerationRuleDelete.rule_trigger_type', {
-                lng,
+                lng
               }),
-              value: AutoModerationRuleTriggerType[triggerType],
+              value: AutoModerationRuleTriggerType[triggerType]
             },
             {
               name: t('log.autoModerationRuleDelete.trigger_metadata', { lng }),
@@ -56,8 +56,8 @@ export default new Event({
                     .slice(0, 200) || '/'
                 }`,
                 `${t('log.autoModerationRuleDelete.mention_total_limit', { lng })}: ${triggerMetadata.mentionTotalLimit || '/'}`,
-                `${t('log.autoModerationRuleDelete.mention_raid_protection', { lng })}: ${triggerMetadata.mentionRaidProtectionEnabled}`,
-              ].join('\n'),
+                `${t('log.autoModerationRuleDelete.mention_raid_protection', { lng })}: ${triggerMetadata.mentionRaidProtectionEnabled}`
+              ].join('\n')
             },
             {
               name: t('log.autoModerationRuleDelete.action', { lng }),
@@ -65,7 +65,7 @@ export default new Event({
                 actions
                   .map((action) => `${AutoModerationActionType[action.type]}`)
                   .join('\n')
-                  .slice(0, 1000) || '/',
+                  .slice(0, 1000) || '/'
             },
             {
               name: t('log.autoModerationRuleDelete.exempt_roles', { lng }),
@@ -73,7 +73,7 @@ export default new Event({
                 exemptRoles
                   .map((role) => `<@&${role.id}>`)
                   .join(', ')
-                  .slice(0, 1000) || '/',
+                  .slice(0, 1000) || '/'
             },
             {
               name: t('log.autoModerationRuleDelete.exempt_channels', { lng }),
@@ -81,11 +81,11 @@ export default new Event({
                 exemptChannels
                   .map((channel) => `<#${channel.id}>`)
                   .join(', ')
-                  .slice(0, 1000) || '/',
-            },
+                  .slice(0, 1000) || '/'
+            }
           )
-          .setTimestamp(),
-      ],
+          .setTimestamp()
+      ]
     });
-  },
+  }
 });

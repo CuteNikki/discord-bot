@@ -37,7 +37,7 @@ export async function initDatabase(client: DiscordClient) {
             clearCustomVoiceChannels(client); // Clear all custom voice channels made before start/restart
           },
           runOnInit: true,
-          start: true,
+          start: true
         });
       });
     })

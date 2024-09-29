@@ -25,7 +25,7 @@ export default new Event({
       .setTitle(t('log.autoModerationRuleUpdate.title', { lng }))
       .addFields({
         name: t('log.autoModerationRuleUpdate.rule', { lng }),
-        value: `\`${newAutoModerationRule.name}\` (${newAutoModerationRule.id})`,
+        value: `\`${newAutoModerationRule.name}\` (${newAutoModerationRule.id})`
       })
       .setTimestamp();
 
@@ -36,28 +36,28 @@ export default new Event({
         {
           name: t('log.autoModerationRuleUpdate.old_name', { lng }),
           value: `\`${oldAutoModerationRule.name}\``,
-          inline: true,
+          inline: true
         },
         {
           name: t('log.autoModerationRuleUpdate.new_name', { lng }),
           value: `\`${newAutoModerationRule.name}\``,
-          inline: true,
+          inline: true
         },
-        emptyField,
+        emptyField
       );
     if (newAutoModerationRule.enabled !== oldAutoModerationRule.enabled)
       embed.addFields(
         {
           name: t('log.autoModerationRuleUpdate.old_enabled', { lng }),
           value: `${oldAutoModerationRule.enabled}`,
-          inline: true,
+          inline: true
         },
         {
           name: t('log.autoModerationRuleUpdate.new_enabled', { lng }),
           value: `${newAutoModerationRule.enabled}`,
-          inline: true,
+          inline: true
         },
-        emptyField,
+        emptyField
       );
     if (JSON.stringify(newAutoModerationRule.actions) !== JSON.stringify(oldAutoModerationRule.actions))
       embed.addFields(
@@ -68,7 +68,7 @@ export default new Event({
               .map((action) => `${AutoModerationActionType[action.type]}`)
               .join('\n')
               .slice(0, 1000) || '/',
-          inline: true,
+          inline: true
         },
         {
           name: t('log.autoModerationRuleUpdate.new_actions', { lng }),
@@ -77,9 +77,9 @@ export default new Event({
               .map((action) => `${AutoModerationActionType[action.type]}`)
               .join('\n')
               .slice(0, 1000) || '/',
-          inline: true,
+          inline: true
         },
-        emptyField,
+        emptyField
       );
     if (JSON.stringify(newAutoModerationRule.exemptRoles) !== JSON.stringify(oldAutoModerationRule.exemptRoles))
       embed.addFields(
@@ -90,7 +90,7 @@ export default new Event({
               .map((role) => `<@&${role.id}>`)
               .join(', ')
               .slice(0, 1000) || '/',
-          inline: true,
+          inline: true
         },
         {
           name: t('log.autoModerationRuleUpdate.new_exempt_roles', { lng }),
@@ -99,9 +99,9 @@ export default new Event({
               .map((role) => `<@&${role.id}>`)
               .join(', ')
               .slice(0, 1000) || '/',
-          inline: true,
+          inline: true
         },
-        emptyField,
+        emptyField
       );
     if (JSON.stringify(newAutoModerationRule.exemptChannels) !== JSON.stringify(oldAutoModerationRule.exemptChannels))
       embed.addFields(
@@ -112,7 +112,7 @@ export default new Event({
               .map((role) => `<#${role.id}>`)
               .join(', ')
               .slice(0, 1000) || '/',
-          inline: true,
+          inline: true
         },
         {
           name: t('log.autoModerationRuleUpdate.new_exempt_channels', { lng }),
@@ -121,9 +121,9 @@ export default new Event({
               .map((role) => `<#${role.id}>`)
               .join(', ')
               .slice(0, 1000) || '/',
-          inline: true,
+          inline: true
         },
-        emptyField,
+        emptyField
       );
     if (JSON.stringify(newAutoModerationRule.triggerMetadata) !== JSON.stringify(oldAutoModerationRule.triggerMetadata))
       embed.addFields(
@@ -143,9 +143,9 @@ export default new Event({
                 .slice(0, 200) || '/'
             }`,
             `${t('log.autoModerationRuleUpdate.mention_total_limit', { lng })}: ${oldAutoModerationRule.triggerMetadata.mentionTotalLimit || '/'}`,
-            `${t('log.autoModerationRuleUpdate.mention_raid_protection', { lng })}: ${oldAutoModerationRule.triggerMetadata.mentionRaidProtectionEnabled}`,
+            `${t('log.autoModerationRuleUpdate.mention_raid_protection', { lng })}: ${oldAutoModerationRule.triggerMetadata.mentionRaidProtectionEnabled}`
           ].join('\n'),
-          inline: true,
+          inline: true
         },
         {
           name: t('log.autoModerationRuleUpdate.new_trigger_metadata', { lng }),
@@ -163,15 +163,15 @@ export default new Event({
                 .slice(0, 200) || '/'
             }`,
             `${t('log.autoModerationRuleUpdate.mention_total_limit', { lng })}: ${newAutoModerationRule.triggerMetadata.mentionTotalLimit || '/'}`,
-            `${t('log.autoModerationRuleUpdate.mention_raid_protection', { lng })}: ${newAutoModerationRule.triggerMetadata.mentionRaidProtectionEnabled}`,
+            `${t('log.autoModerationRuleUpdate.mention_raid_protection', { lng })}: ${newAutoModerationRule.triggerMetadata.mentionRaidProtectionEnabled}`
           ].join('\n'),
-          inline: true,
+          inline: true
         },
-        emptyField,
+        emptyField
       );
 
     await logChannel.send({
-      embeds: [embed],
+      embeds: [embed]
     });
-  },
+  }
 });

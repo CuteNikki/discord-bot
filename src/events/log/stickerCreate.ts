@@ -34,24 +34,24 @@ export default new Event({
           .addFields(
             {
               name: t('log.stickerCreate.sticker', { lng }),
-              value: `\`${name}\` (${id})`,
+              value: `\`${name}\` (${id})`
             },
             {
               name: t('log.stickerCreate.description', { lng }),
-              value: description || '/',
+              value: description || '/'
             },
             {
               name: t('log.stickerCreate.format', { lng }),
-              value: StickerFormatType[format],
+              value: StickerFormatType[format]
             },
             { name: t('log.stickerCreate.tags', { lng }), value: tags || '/' },
             {
               name: t('log.stickerCreate.author', { lng }),
-              value: user ? `${user.toString()} (\`${user.username}\` | ${user.id})` : '/',
-            },
+              value: user ? `${user.toString()} (\`${user.username}\` | ${user.id})` : '/'
+            }
           )
-          .setTimestamp(),
-      ],
+          .setTimestamp()
+      ]
     });
-  },
+  }
 });

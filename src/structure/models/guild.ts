@@ -21,32 +21,32 @@ export const guildModel: Model<GuildDocument> =
                 reactions: [
                   {
                     emoji: { type: String, required: true },
-                    roleId: { type: String, required: true },
-                  },
-                ],
-              },
-            },
-          ],
+                    roleId: { type: String, required: true }
+                  }
+                ]
+              }
+            }
+          ]
         },
         default: {
           enabled: false,
-          groups: [],
-        },
+          groups: []
+        }
       },
       customVC: {
         type: {
           channelId: { type: String },
-          parentId: { type: String },
+          parentId: { type: String }
         },
-        default: {},
+        default: {}
       },
       moderation: {
         type: {
-          enabled: { type: Boolean },
+          enabled: { type: Boolean }
         },
         default: {
-          enabled: true,
-        },
+          enabled: true
+        }
       },
       counting: {
         type: {
@@ -56,11 +56,11 @@ export const guildModel: Model<GuildDocument> =
           highestNumberAt: { type: Number },
           currentNumber: { type: Number, default: 0, required: true },
           currentNumberBy: { type: String },
-          currentNumberAt: { type: Number },
+          currentNumberAt: { type: Number }
         },
         default: {
-          resetOnFail: false,
-        },
+          resetOnFail: false
+        }
       },
       starboard: {
         type: {
@@ -71,14 +71,14 @@ export const guildModel: Model<GuildDocument> =
             {
               messageId: { type: String, required: true },
               starboardMessageId: { type: String, required: false },
-              reactedUsers: [{ type: String, required: true, default: [] }],
-            },
-          ],
+              reactedUsers: [{ type: String, required: true, default: [] }]
+            }
+          ]
         },
         default: {
           enabled: false,
-          messages: [],
-        },
+          messages: []
+        }
       },
       ticket: {
         type: {
@@ -94,16 +94,16 @@ export const guildModel: Model<GuildDocument> =
                 {
                   label: { type: String, required: true },
                   style: { type: String, required: true },
-                  emoji: { type: String, required: false },
-                },
-              ],
-            },
-          ],
+                  emoji: { type: String, required: false }
+                }
+              ]
+            }
+          ]
         },
         default: {
           enabled: true,
-          systems: [],
-        },
+          systems: []
+        }
       },
       level: {
         type: {
@@ -111,7 +111,7 @@ export const guildModel: Model<GuildDocument> =
           channelId: { type: String },
           announcement: {
             type: Number,
-            enum: Object.values(AnnouncementType).filter((value) => typeof value === 'number'),
+            enum: Object.values(AnnouncementType).filter((value) => typeof value === 'number')
           },
           ignoredRoles: [{ type: String }],
           ignoredChannels: [{ type: String }],
@@ -119,9 +119,9 @@ export const guildModel: Model<GuildDocument> =
           rewards: [
             {
               level: { type: Number, required: true },
-              roleId: { type: String, required: true },
-            },
-          ],
+              roleId: { type: String, required: true }
+            }
+          ]
         },
         default: {
           enabled: false,
@@ -130,8 +130,8 @@ export const guildModel: Model<GuildDocument> =
           ignoredRoles: [],
           ignoredChannels: [],
           enabledChannels: [],
-          rewards: [],
-        },
+          rewards: []
+        }
       },
       welcome: {
         type: {
@@ -150,21 +150,21 @@ export const guildModel: Model<GuildDocument> =
               author: {
                 name: { type: String },
                 icon_url: { type: String },
-                url: { type: String },
+                url: { type: String }
               },
               footer: {
                 text: { type: String },
-                icon_url: { type: String },
+                icon_url: { type: String }
               },
               fields: [
                 {
                   name: { type: String },
                   value: { type: String },
-                  inline: { type: Boolean },
-                },
-              ],
-            },
-          },
+                  inline: { type: Boolean }
+                }
+              ]
+            }
+          }
         },
         default: {
           enabled: true,
@@ -180,17 +180,17 @@ export const guildModel: Model<GuildDocument> =
               author: {
                 name: undefined,
                 icon_url: undefined,
-                url: undefined,
+                url: undefined
               },
               fields: [],
               footer: {
                 text: undefined,
-                icon_url: undefined,
-              },
-            },
+                icon_url: undefined
+              }
+            }
           },
-          roles: [],
-        },
+          roles: []
+        }
       },
       farewell: {
         type: {
@@ -208,21 +208,21 @@ export const guildModel: Model<GuildDocument> =
               author: {
                 name: { type: String },
                 icon_url: { type: String },
-                url: { type: String },
+                url: { type: String }
               },
               footer: {
                 text: { type: String },
-                icon_url: { type: String },
+                icon_url: { type: String }
               },
               fields: [
                 {
                   name: { type: String },
                   value: { type: String },
-                  inline: { type: Boolean },
-                },
-              ],
-            },
-          },
+                  inline: { type: Boolean }
+                }
+              ]
+            }
+          }
         },
         default: {
           enabled: true,
@@ -238,16 +238,16 @@ export const guildModel: Model<GuildDocument> =
               author: {
                 name: undefined,
                 icon_url: undefined,
-                url: undefined,
+                url: undefined
               },
               fields: [],
               footer: {
                 text: undefined,
-                icon_url: undefined,
-              },
-            },
-          },
-        },
+                icon_url: undefined
+              }
+            }
+          }
+        }
       },
       log: {
         type: {
@@ -291,8 +291,8 @@ export const guildModel: Model<GuildDocument> =
             threadCreate: { type: Boolean },
             threadDelete: { type: Boolean },
             threadUpdate: { type: Boolean },
-            voiceStateUpdate: { type: Boolean },
-          },
+            voiceStateUpdate: { type: Boolean }
+          }
         },
         default: {
           enabled: true,
@@ -335,9 +335,9 @@ export const guildModel: Model<GuildDocument> =
             threadCreate: false,
             threadDelete: false,
             threadUpdate: false,
-            voiceStateUpdate: false,
-          },
-        },
-      },
-    }),
+            voiceStateUpdate: false
+          }
+        }
+      }
+    })
   );

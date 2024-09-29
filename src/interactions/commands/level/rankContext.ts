@@ -45,9 +45,9 @@ export default new Command<typeof commandType>({
 
     if (image) {
       await interaction.editReply({
-        files: [new AttachmentBuilder(image, { name: 'rank.png' })],
+        files: [new AttachmentBuilder(image, { name: 'rank.png' })]
       });
       return;
     }
-  },
+  }
 });

@@ -33,27 +33,27 @@ export default new Event({
           .addFields(
             {
               name: t('log.emojiCreate.emoji', { lng }),
-              value: `${emoji.toString()} (\`${name}\` | ${id})`,
+              value: `${emoji.toString()} (\`${name}\` | ${id})`
             },
             {
               name: t('log.emojiCreate.author', { lng }),
-              value: author ? `${author.toString()} (\`${author.username}\` | ${author.id})` : '/',
+              value: author ? `${author.toString()} (\`${author.username}\` | ${author.id})` : '/'
             },
             {
               name: t('log.emojiCreate.identifier', { lng }),
-              value: `\`${identifier}\``,
+              value: `\`${identifier}\``
             },
             {
               name: t('log.emojiCreate.animated', { lng }),
-              value: `${animated ?? '/'}`,
+              value: `${animated ?? '/'}`
             },
             {
               name: t('log.emojiCreate.managed', { lng }),
-              value: `${managed ?? '/'}`,
-            },
+              value: `${managed ?? '/'}`
+            }
           )
-          .setTimestamp(),
-      ],
+          .setTimestamp()
+      ]
     });
-  },
+  }
 });

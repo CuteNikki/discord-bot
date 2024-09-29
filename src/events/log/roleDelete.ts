@@ -29,29 +29,29 @@ export default new Event({
           .addFields(
             {
               name: t('log.roleDelete.role', { lng }),
-              value: `\`${name}\` (${id})`,
+              value: `\`${name}\` (${id})`
             },
             {
               name: t('log.roleDelete.created_at', { lng }),
-              value: `<t:${Math.floor(createdTimestamp / 1000)}:f>`,
+              value: `<t:${Math.floor(createdTimestamp / 1000)}:f>`
             },
             { name: t('log.roleDelete.color', { lng }), value: `${hexColor}` },
             {
               name: t('log.roleDelete.position', { lng }),
-              value: `${position}`,
+              value: `${position}`
             },
             {
               name: t('log.roleDelete.displayed_separately', { lng }),
-              value: `${hoist}`,
+              value: `${hoist}`
             },
             {
               name: t('log.roleDelete.mentionable', { lng }),
-              value: `${mentionable}`,
+              value: `${mentionable}`
             },
             { name: t('log.roleDelete.managed', { lng }), value: `${managed}` },
             {
               name: t('log.roleDelete.emoji', { lng }),
-              value: unicodeEmoji || '/',
+              value: unicodeEmoji || '/'
             },
             {
               name: t('log.roleDelete.permissions', { lng }),
@@ -60,11 +60,11 @@ export default new Event({
                   .toArray()
                   .map((perm) => `\`${perm}\``)
                   .join(', ')
-                  .slice(0, 1000) || '/',
-            },
+                  .slice(0, 1000) || '/'
+            }
           )
-          .setTimestamp(),
-      ],
+          .setTimestamp()
+      ]
     });
-  },
+  }
 });

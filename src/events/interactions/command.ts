@@ -37,9 +37,9 @@ export default new Event({
       const message: InteractionReplyOptions = {
         content: t('interactions.module', {
           lng,
-          module: ModuleType[command.options.module],
+          module: ModuleType[command.options.module]
         }),
-        ephemeral: true,
+        ephemeral: true
       };
       switch (command.options.module) {
         case ModuleType.Moderation:
@@ -58,9 +58,9 @@ export default new Event({
         return interaction.reply({
           content: t('interactions.bot_permissions', {
             lng,
-            permissions: command.options.botPermissions.join(', '),
+            permissions: command.options.botPermissions.join(', ')
           }),
-          ephemeral: true,
+          ephemeral: true
         });
       }
     }
@@ -70,7 +70,7 @@ export default new Event({
     if (command.options.isDeveloperOnly && !developerIds.includes(interaction.user.id))
       return interaction.reply({
         content: t('interactions.developer_only', { lng }),
-        ephemeral: true,
+        ephemeral: true
       });
 
     // Check if cooldowns has the current command and add the command if it doesn't have the command
@@ -92,9 +92,9 @@ export default new Event({
           content: t('interactions.cooldown', {
             lng,
             action: `\`${command.options.data.name}\``,
-            timestamp: `<t:${expiredTimestamp}:R>`,
+            timestamp: `<t:${expiredTimestamp}:R>`
           }),
-          ephemeral: true,
+          ephemeral: true
         });
       }
     }
@@ -108,10 +108,11 @@ export default new Event({
       await command.options.execute({ client, interaction, lng });
 
       await incrementCommandsExecuted(keys.DISCORD_BOT_ID);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       const message = t('interactions.error', {
         lng,
-        error: `\`${err.message}\``,
+        error: `\`${err.message}\``
       });
 
       if (interaction.deferred) interaction.editReply({ content: message });
@@ -120,5 +121,5 @@ export default new Event({
       await sendError({ client, err, location: `Command Interaction Error: ${command.options.data.name}` });
       await incrementCommandsFailed(keys.DISCORD_BOT_ID);
     }
-  },
+  }
 });

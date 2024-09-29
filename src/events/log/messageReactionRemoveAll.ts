@@ -32,11 +32,11 @@ export default new Event({
           .addFields(
             {
               name: t('log.messageReactionRemoveAll.author', { lng }),
-              value: `${message.author.toString()} (\`${message.author.username}\` | ${message.author.id})`,
+              value: `${message.author.toString()} (\`${message.author.username}\` | ${message.author.id})`
             },
             {
               name: t('log.messageReactionRemoveAll.message', { lng }),
-              value: message.url,
+              value: message.url
             },
             {
               name: t('log.messageReactionRemoveAll.reactions', { lng }),
@@ -44,12 +44,12 @@ export default new Event({
                 reactions
                   .map((reaction) => `${reaction.count}x ${reaction.emoji}`)
                   .join('\n')
-                  .slice(0, 1000) || '/',
-            },
+                  .slice(0, 1000) || '/'
+            }
           )
-          .setTimestamp(),
+          .setTimestamp()
       ],
-      files: message.attachments.map((a) => a),
+      files: message.attachments.map((a) => a)
     });
-  },
+  }
 });

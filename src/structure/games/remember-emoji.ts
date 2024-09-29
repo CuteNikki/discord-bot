@@ -11,7 +11,7 @@ export class RememberEmoji {
   styles: string[][] = [
     ['🍉', '🍇', '🍊', '🍋', '🥭', '🍎', '🍏', '🥝'],
     ['➡️', '⬅️', '⬆️', '⬇️', '↗️', '↘️', '↙️', '↖️'],
-    ['🐘', '🐄', '🐕', '🐖', '🐢', '🐍', '🐐', '🐇', '🐈'],
+    ['🐘', '🐄', '🐕', '🐖', '🐢', '🐍', '🐐', '🐇', '🐈']
   ];
   emojis: string[];
   emoji: string;
@@ -20,7 +20,7 @@ export class RememberEmoji {
     public options: {
       interaction: ChatInputCommandInteraction;
       client: DiscordClient;
-    },
+    }
   ) {
     this.emojis = this.shuffleArray(this.styles[Math.floor(Math.random() * this.styles.length)]);
     this.emoji = this.emojis[Math.floor(Math.random() * this.emojis.length)];
@@ -43,7 +43,7 @@ export class RememberEmoji {
       .editReply({
         content: null,
         embeds: [embed],
-        components: this.getComponents(true),
+        components: this.getComponents(true)
       })
       .catch((err) => logger.debug({ err }, 'Could not send message'));
     if (!message) return;
@@ -52,11 +52,11 @@ export class RememberEmoji {
       embed.setDescription(t('games.remember.started', { lng, emoji: this.emoji }));
       await interaction.editReply({
         embeds: [embed],
-        components: this.getComponents(false),
+        components: this.getComponents(false)
       });
 
       const collector = message.createMessageComponentCollector({
-        idle: 60 * 1000,
+        idle: 60 * 1000
       });
 
       collector.on('collect', async (buttonInteraction) => {
@@ -66,9 +66,9 @@ export class RememberEmoji {
           return buttonInteraction
             .followUp({
               content: t('interactions.author_only', {
-                lng: await getUserLanguage(buttonInteraction.user.id),
+                lng: await getUserLanguage(buttonInteraction.user.id)
               }),
-              ephemeral: true,
+              ephemeral: true
             })
             .catch((err) => logger.debug({ err }, 'Could not follow up'));
 
@@ -99,7 +99,7 @@ export class RememberEmoji {
           .setColor(result === 'WIN' ? Colors.Green : Colors.Red)
           .setAuthor({
             name: user.displayName,
-            iconURL: user.displayAvatarURL(),
+            iconURL: user.displayAvatarURL()
           })
           .setTitle(t('games.remember.title', { lng }))
           .setDescription(
@@ -107,17 +107,17 @@ export class RememberEmoji {
               ? t('games.remember.correct', { lng })
               : result === 'TIMEOUT'
                 ? t('games.remember.timeout', { lng })
-                : t('games.remember.incorrect', { lng }),
+                : t('games.remember.incorrect', { lng })
           )
           .addFields(
             { name: t('games.remember.answer', { lng }), value: this.emoji },
             {
               name: t('games.remember.input', { lng }),
-              value: this.selected || '/',
-            },
-          ),
+              value: this.selected || '/'
+            }
+          )
       ],
-      components: this.disableButtons(this.getComponents(true)),
+      components: this.disableButtons(this.getComponents(true))
     });
   }
 
@@ -152,7 +152,7 @@ export class RememberEmoji {
     return components;
   }
 
-  private shuffleArray(array: any[]) {
+  private shuffleArray(array: string[]) {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [array[i], array[j]] = [array[j], array[i]];

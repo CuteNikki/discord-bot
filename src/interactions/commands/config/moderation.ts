@@ -19,14 +19,14 @@ export default new Command({
         .setName('show')
         .setDescription('Shows the current configuration')
         .addSubcommand((subcommand) => subcommand.setName('all').setDescription('Shows the entire configuration'))
-        .addSubcommand((subcommand) => subcommand.setName('state').setDescription('Shows the moderation module state')),
+        .addSubcommand((subcommand) => subcommand.setName('state').setDescription('Shows the moderation module state'))
     )
     .addSubcommandGroup((group) =>
       group
         .setName('toggle')
         .setDescription('Toggle the moderation module')
         .addSubcommand((subcommand) => subcommand.setName('on').setDescription('Turns the moderation module on'))
-        .addSubcommand((subcommand) => subcommand.setName('off').setDescription('Turns the moderation module off')),
+        .addSubcommand((subcommand) => subcommand.setName('off').setDescription('Turns the moderation module off'))
     ),
   async execute({ interaction, lng }) {
     if (!interaction.inCachedGuild()) return;
@@ -48,7 +48,7 @@ export default new Command({
                   .setTitle(t('moderation.title', { lng }))
                   .addFields({
                     name: t('moderation.state.title', { lng }),
-                    value: config.moderation.enabled ? t('moderation.state.enabled', { lng }) : t('moderation.state.disabled', { lng }),
+                    value: config.moderation.enabled ? t('moderation.state.enabled', { lng }) : t('moderation.state.disabled', { lng })
                   });
                 interaction.editReply({ embeds: [allConfigEmbed] });
               }
@@ -62,9 +62,9 @@ export default new Command({
                       .setTitle(t('moderation.title', { lng }))
                       .addFields({
                         name: t('moderation.state.title', { lng }),
-                        value: config.moderation.enabled ? t('moderation.state.enabled', { lng }) : t('moderation.state.disabled', { lng }),
-                      }),
-                  ],
+                        value: config.moderation.enabled ? t('moderation.state.enabled', { lng }) : t('moderation.state.disabled', { lng })
+                      })
+                  ]
                 });
               }
               break;
@@ -78,7 +78,7 @@ export default new Command({
               {
                 if (config.moderation.enabled) return interaction.editReply(t('moderation.toggle.already_on', { lng }));
                 await updateGuildSettings(guildId, {
-                  $set: { ['moderation.enabled']: true },
+                  $set: { ['moderation.enabled']: true }
                 });
                 interaction.editReply(t('moderation.toggle.on', { lng }));
               }
@@ -87,7 +87,7 @@ export default new Command({
               {
                 if (!config.moderation.enabled) return interaction.editReply(t('moderation.toggle.already_off', { lng }));
                 await updateGuildSettings(guildId, {
-                  $set: { ['moderation.enabled']: false },
+                  $set: { ['moderation.enabled']: false }
                 });
                 interaction.editReply(t('moderation.toggle.off', { lng }));
               }
@@ -96,5 +96,5 @@ export default new Command({
         }
         break;
     }
-  },
+  }
 });

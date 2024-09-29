@@ -28,7 +28,7 @@ export default new Button({
     if (!system) {
       await interaction.reply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_system', { lng }))],
-        ephemeral: true,
+        ephemeral: true
       });
       return;
     }
@@ -45,7 +45,7 @@ export default new Button({
 
     if (tickets.length >= system.maxTickets) {
       await interaction.editReply({
-        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.limit', { lng, limit: system.maxTickets.toString() }))],
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.limit', { lng, limit: system.maxTickets.toString() }))]
       });
       return;
     }
@@ -54,7 +54,7 @@ export default new Button({
 
     if (!system.choices.length || !choice) {
       await interaction.editReply({
-        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_option', { lng }))],
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_option', { lng }))]
       });
       return;
     }
@@ -68,24 +68,24 @@ export default new Button({
           {
             id: guildId,
             type: 0,
-            deny: [PermissionFlagsBits.ViewChannel],
+            deny: [PermissionFlagsBits.ViewChannel]
           },
           {
             id: system.staffRoleId,
             type: 0,
-            allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages, PermissionFlagsBits.EmbedLinks, PermissionFlagsBits.AttachFiles],
+            allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages, PermissionFlagsBits.EmbedLinks, PermissionFlagsBits.AttachFiles]
           },
           {
             id: user.id,
             type: 1,
-            allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages, PermissionFlagsBits.EmbedLinks, PermissionFlagsBits.AttachFiles],
+            allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages, PermissionFlagsBits.EmbedLinks, PermissionFlagsBits.AttachFiles]
           },
           {
             id: interaction.client.user.id,
             type: 1,
-            allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages],
-          },
-        ],
+            allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages]
+          }
+        ]
       })
       .catch((err) => logger.debug({ err }, 'Could not create ticket channel'));
     if (!channel) {
@@ -96,7 +96,7 @@ export default new Button({
     await createTicket(guildId, channel.id, user.id, [user.id], choice.label);
 
     await interaction.editReply({
-      embeds: [new EmbedBuilder().setColor(client.colors.ticket).setDescription(t('ticket.created_user', { lng, channel: channel.toString() }))],
+      embeds: [new EmbedBuilder().setColor(client.colors.ticket).setDescription(t('ticket.created_user', { lng, channel: channel.toString() }))]
     });
 
     await channel.send({
@@ -118,15 +118,15 @@ export default new Button({
             .setCustomId(`button-tickets-lock_${system._id.toString()}`)
             .setLabel(t('ticket.lock', { lng }))
             .setEmoji('🔐')
-            .setStyle(ButtonStyle.Primary),
+            .setStyle(ButtonStyle.Primary)
         ),
         new ActionRowBuilder<UserSelectMenuBuilder>().addComponents(
           new UserSelectMenuBuilder()
             .setCustomId(`selection-tickets-user_${system._id.toString()}`)
             .setPlaceholder(t('ticket.user_select', { lng }))
-            .setMaxValues(1),
-        ),
-      ],
+            .setMaxValues(1)
+        )
+      ]
     });
-  },
+  }
 });

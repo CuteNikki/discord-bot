@@ -20,7 +20,7 @@ export default new Command({
           .setName('color') // option name
           .setDescription('The color to preview') // option description
           .setRequired(true) // makes the option required
-          .setAutocomplete(true), // enables autocompletion
+          .setAutocomplete(true) // enables autocompletion
     ),
   async autocomplete({ interaction }) {
     // This gets us whatever the user has typed in the autocomplete
@@ -54,7 +54,7 @@ export default new Command({
       { name: 'blurple', value: Colors.Blurple.toString(16) },
       { name: 'greyple', value: Colors.Greyple.toString(16) },
       { name: 'dark-but-not-black', value: Colors.DarkButNotBlack.toString(16) },
-      { name: 'not-quite-black', value: Colors.NotQuiteBlack.toString(16) },
+      { name: 'not-quite-black', value: Colors.NotQuiteBlack.toString(16) }
     ];
     // Making sure we only return 25 results as that is the max amount allowed by discord
     if (!input.length) return await interaction.respond(colors.slice(0, 25));
@@ -73,5 +73,5 @@ export default new Command({
       if (!interaction.replied) await interaction.reply({ content: t('preview-color.invalid', { lng }) });
       else await interaction.editReply({ content: t('preview-color.invalid', { lng }) });
     }
-  },
+  }
 });

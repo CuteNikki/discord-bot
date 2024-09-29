@@ -1,5 +1,3 @@
-import type { Types } from 'mongoose';
-
 import { updateGuildSettings } from 'db/guild';
 
 import type { GuildDocument } from 'types/guild';

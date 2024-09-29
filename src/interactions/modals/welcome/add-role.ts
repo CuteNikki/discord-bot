@@ -17,21 +17,21 @@ export default new Modal({
 
     if (config.welcome.roles.includes(roleId)) {
       return interaction.editReply({
-        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('welcome.roles.already', { lng, roleId }))],
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('welcome.roles.already', { lng, roleId }))]
       });
     }
     if (!interaction.guild.roles.cache.has(roleId)) {
       return interaction.editReply({
-        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('welcome.roles.invalid', { lng, roleId }))],
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('welcome.roles.invalid', { lng, roleId }))]
       });
     }
 
     await updateGuildSettings(interaction.guild.id, {
-      $push: { ['welcome.roles']: roleId },
+      $push: { ['welcome.roles']: roleId }
     });
 
     await interaction.editReply({
-      embeds: [new EmbedBuilder().setColor(client.colors.welcome).setDescription(t('welcome.roles.added', { lng, role: `<@&${roleId}>` }))],
+      embeds: [new EmbedBuilder().setColor(client.colors.welcome).setDescription(t('welcome.roles.added', { lng, role: `<@&${roleId}>` }))]
     });
-  },
+  }
 });

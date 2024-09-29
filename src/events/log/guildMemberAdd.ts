@@ -31,31 +31,31 @@ export default new Event({
       .addFields(
         {
           name: t('log.guildMemberAdd.member', { lng }),
-          value: `${user.toString()} (\`${user.username}\` | ${user.id})`,
+          value: `${user.toString()} (\`${user.username}\` | ${user.id})`
         },
         {
           name: t('log.guildMemberAdd.created_at', { lng }),
-          value: `<t:${Math.floor(user.createdTimestamp / 1000)}:f> (<t:${Math.floor(user.createdTimestamp / 1000)}:R>)`,
-        },
+          value: `<t:${Math.floor(user.createdTimestamp / 1000)}:f> (<t:${Math.floor(user.createdTimestamp / 1000)}:R>)`
+        }
       )
       .setTimestamp();
 
     if (Date.now() - user.createdTimestamp < 7 * 24 * 60 * 60 * 1000) {
       embed.addFields({
         name: t('log.guildMemberAdd.potentially_dangerous', { lng }),
-        value: t('log.guildMemberAdd.young_account', { lng }),
+        value: t('log.guildMemberAdd.young_account', { lng })
       });
       components.push(
         new ActionRowBuilder<ButtonBuilder>().addComponents(
           new ButtonBuilder().setCustomId(`button-ban_${user.id}`).setStyle(ButtonStyle.Danger).setLabel(t('log.guildMemberAdd.ban', { lng })),
-          new ButtonBuilder().setCustomId(`button-kick_${user.id}`).setStyle(ButtonStyle.Danger).setLabel(t('log.guildMemberAdd.kick', { lng })),
-        ),
+          new ButtonBuilder().setCustomId(`button-kick_${user.id}`).setStyle(ButtonStyle.Danger).setLabel(t('log.guildMemberAdd.kick', { lng }))
+        )
       );
     }
 
     await logChannel.send({
       embeds: [embed],
-      components,
+      components
     });
-  },
+  }
 });

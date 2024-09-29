@@ -9,6 +9,6 @@ export const reminderModel: Model<ReminderDocument> =
       userId: { type: String, required: true },
       channelId: { type: String, required: true },
       message: { type: String, required: true },
-      remindAt: { type: Number, required: true },
-    }),
+      remindAt: { type: Number, required: true }
+    })
   );

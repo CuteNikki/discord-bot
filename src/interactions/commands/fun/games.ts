@@ -28,13 +28,13 @@ export default new Command({
       subcommand
         .setName('rock-paper-scissors')
         .setDescription('Play a game of rock, paper and scissors!')
-        .addUserOption((option) => option.setName('opponent').setDescription('The user to play against').setRequired(false)),
+        .addUserOption((option) => option.setName('opponent').setDescription('The user to play against').setRequired(false))
     )
     .addSubcommand((subcommand) =>
       subcommand
         .setName('tic-tac-toe')
         .setDescription('Play a game of Tic Tac Toe!')
-        .addUserOption((option) => option.setName('opponent').setDescription('The user to play against').setRequired(true)),
+        .addUserOption((option) => option.setName('opponent').setDescription('The user to play against').setRequired(true))
     )
     .addSubcommand((subcommand) =>
       subcommand
@@ -50,9 +50,9 @@ export default new Command({
               { name: 'Original (7x6)', value: 'original' },
               { name: 'Small (6x5)', value: 'small' },
               { name: 'Medium (8x7)', value: 'medium' },
-              { name: 'Big (10x9)', value: 'big' },
-            ),
-        ),
+              { name: 'Big (10x9)', value: 'big' }
+            )
+        )
     )
     .addSubcommand((subcommand) =>
       subcommand
@@ -73,9 +73,9 @@ export default new Command({
               { name: 'Camping', value: 'camping' },
               { name: 'Winter', value: 'winter' },
               { name: 'Pokemon', value: 'pokemon' },
-              { name: 'Wordle', value: 'wordle' },
-            ),
-        ),
+              { name: 'Wordle', value: 'wordle' }
+            )
+        )
     )
     .addSubcommand((subcommand) =>
       subcommand
@@ -86,7 +86,7 @@ export default new Command({
             .setName('mode')
             .setDescription('Choose between single or multiple choice answers')
             .setRequired(true)
-            .addChoices({ name: 'single choice', value: TriviaMode.Single }, { name: 'multiple choice', value: TriviaMode.Multiple }),
+            .addChoices({ name: 'single choice', value: TriviaMode.Single }, { name: 'multiple choice', value: TriviaMode.Multiple })
         )
         .addStringOption((option) =>
           option
@@ -96,8 +96,8 @@ export default new Command({
             .addChoices(
               { name: 'easy', value: TriviaDifficulty.Easy },
               { name: 'medium', value: TriviaDifficulty.Medium },
-              { name: 'hard', value: TriviaDifficulty.Hard },
-            ),
+              { name: 'hard', value: TriviaDifficulty.Hard }
+            )
         )
         .addIntegerOption((option) =>
           option
@@ -126,9 +126,9 @@ export default new Command({
               { name: 'Vehicles', value: 28 },
               { name: 'Comics', value: 29 },
               { name: 'Japanese Anime & Manga', value: 31 },
-              { name: 'Cartoon & Animation', value: 32 },
-            ),
-        ),
+              { name: 'Cartoon & Animation', value: 32 }
+            )
+        )
     )
     .addSubcommand((subcommand) =>
       subcommand
@@ -145,9 +145,9 @@ export default new Command({
               { name: 'Medium (7x7)', value: 'medium' },
               { name: 'Big (8x8)', value: 'big' },
               { name: 'Very Big (9x9)', value: 'very_big' },
-              { name: 'Huge (10x10)', value: 'huge' },
-            ),
-        ),
+              { name: 'Huge (10x10)', value: 'huge' }
+            )
+        )
     )
     .addSubcommand((subcommand) => subcommand.setName('fast-type').setDescription('Play a game of Fast-Type!'))
     .addSubcommand((subcommand) => subcommand.setName('memory').setDescription('Play a game of Memory!'))
@@ -167,7 +167,7 @@ export default new Command({
           new RockPaperScissors({
             interaction,
             opponent,
-            client,
+            client
           });
         }
         break;
@@ -178,7 +178,7 @@ export default new Command({
           new TicTacToe({
             interaction,
             opponent,
-            client,
+            client
           });
         }
         break;
@@ -191,7 +191,7 @@ export default new Command({
           new Hangman({
             interaction,
             client,
-            theme: theme as keyof typeof WORDS,
+            theme: theme as keyof typeof WORDS
           });
         }
         break;
@@ -209,35 +209,35 @@ export default new Command({
               scale = {
                 width: 10,
                 height: 9,
-                max_buttons: 5,
+                max_buttons: 5
               };
               break;
             case 'medium':
               scale = {
                 width: 8,
                 height: 7,
-                max_buttons: 4,
+                max_buttons: 4
               };
               break;
             case 'small':
               scale = {
                 width: 6,
                 height: 5,
-                max_buttons: 3,
+                max_buttons: 3
               };
               break;
             case 'original':
               scale = {
                 width: 7,
                 height: 6,
-                max_buttons: 4,
+                max_buttons: 4
               };
               break;
             default:
               scale = {
                 width: 7,
                 height: 6,
-                max_buttons: 4,
+                max_buttons: 4
               };
               break;
           }
@@ -246,7 +246,7 @@ export default new Command({
             interaction,
             opponent,
             client,
-            scale,
+            scale
           });
         }
         break;
@@ -261,7 +261,7 @@ export default new Command({
             client,
             category,
             difficulty: difficulty as TriviaDifficulty,
-            mode: mode as TriviaMode,
+            mode: mode as TriviaMode
           });
         }
         break;
@@ -321,5 +321,5 @@ export default new Command({
         }
         break;
     }
-  },
+  }
 });

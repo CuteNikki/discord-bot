@@ -5,7 +5,7 @@ import {
   InteractionContextType,
   PermissionFlagsBits,
   PermissionsBitField,
-  SlashCommandBuilder,
+  SlashCommandBuilder
 } from 'discord.js';
 import { t } from 'i18next';
 
@@ -31,7 +31,7 @@ export default new Command({
         .setName('setup')
         .setDescription('Sets up the starboard')
         .addChannelOption((option) =>
-          option.setName('channel').setDescription('The channel to send the starboard messages to').addChannelTypes(ChannelType.GuildText).setRequired(true),
+          option.setName('channel').setDescription('The channel to send the starboard messages to').addChannelTypes(ChannelType.GuildText).setRequired(true)
         )
         .addIntegerOption((option) =>
           option
@@ -39,15 +39,15 @@ export default new Command({
             .setDescription('The minimum amount of stars a message needs to be considered for the starboard')
             .setRequired(true)
             .setMinValue(1)
-            .setMaxValue(100),
-        ),
+            .setMaxValue(100)
+        )
     )
     .addSubcommand((command) =>
       command
         .setName('edit')
         .setDescription('Edits the starboard configuration')
         .addChannelOption((option) =>
-          option.setName('channel').setDescription('The channel to send the starboard messages to').addChannelTypes(ChannelType.GuildText).setRequired(false),
+          option.setName('channel').setDescription('The channel to send the starboard messages to').addChannelTypes(ChannelType.GuildText).setRequired(false)
         )
         .addIntegerOption((option) =>
           option
@@ -55,12 +55,12 @@ export default new Command({
             .setDescription('The minimum amount of stars a message needs to be considered for the starboard')
             .setRequired(false)
             .setMinValue(1)
-            .setMaxValue(100),
-        ),
+            .setMaxValue(100)
+        )
     ),
   async execute({ interaction, lng }) {
     if (!interaction.inCachedGuild() || !interaction.guild.members.me) return;
-    const { options, guild, user } = interaction;
+    const { options, guild } = interaction;
 
     await interaction.deferReply({ ephemeral: true });
 
@@ -74,18 +74,18 @@ export default new Command({
               new EmbedBuilder().setTitle(t('starboard.title', { lng })).addFields([
                 {
                   name: t('starboard.state', { lng }),
-                  value: `${config.starboard.enabled}`,
+                  value: `${config.starboard.enabled}`
                 },
                 {
                   name: t('starboard.channel', { lng }),
-                  value: config.starboard.channelId ? `<#${config.starboard.channelId}>` : '/',
+                  value: config.starboard.channelId ? `<#${config.starboard.channelId}>` : '/'
                 },
                 {
                   name: t('starboard.minimum_stars', { lng }),
-                  value: config.starboard.minimumStars ? config.starboard.minimumStars.toString() : '/',
-                },
-              ]),
-            ],
+                  value: config.starboard.minimumStars ? config.starboard.minimumStars.toString() : '/'
+                }
+              ])
+            ]
           });
         }
         break;
@@ -116,7 +116,7 @@ export default new Command({
           if (minimumStars < 1 || minimumStars > 100) return await interaction.editReply({ content: t('starboard.invalid_stars', { lng }) });
 
           await updateGuildSettings(guild.id, {
-            $set: { ['starboard.channelId']: channel.id, ['starboard.minimumStars']: minimumStars, ['starboard.enabled']: true },
+            $set: { ['starboard.channelId']: channel.id, ['starboard.minimumStars']: minimumStars, ['starboard.enabled']: true }
           });
           await interaction.editReply({ content: t('starboard.setup', { lng }) });
         }
@@ -143,8 +143,8 @@ export default new Command({
           await updateGuildSettings(guild.id, {
             $set: {
               ['starboard.channelId']: channel?.id ?? config.starboard.channelId,
-              ['starboard.minimumStars']: minimumStars ?? config.starboard.minimumStars,
-            },
+              ['starboard.minimumStars']: minimumStars ?? config.starboard.minimumStars
+            }
           });
 
           await interaction.editReply({ content: t('starboard.edited', { lng }) });
@@ -160,5 +160,5 @@ export default new Command({
         }
         break;
     }
-  },
+  }
 });

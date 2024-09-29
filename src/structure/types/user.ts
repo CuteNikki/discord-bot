@@ -4,7 +4,7 @@ export enum BadgeType {
   Translator,
   Supporter,
   ExpertBughunter,
-  Bughunter,
+  Bughunter
 }
 
 export type Badge = {

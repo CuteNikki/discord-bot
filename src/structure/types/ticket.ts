@@ -1,4 +1,4 @@
-import type { Types } from "mongoose";
+import type { Types } from 'mongoose';
 
 export type TicketDocument = {
   _id: Types.ObjectId;
@@ -11,4 +11,4 @@ export type TicketDocument = {
   locked: boolean;
   users: string[];
   choice: string;
-}
+};

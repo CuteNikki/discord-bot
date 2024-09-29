@@ -6,7 +6,7 @@ import {
   ComponentType,
   InteractionContextType,
   PermissionFlagsBits,
-  SlashCommandBuilder,
+  SlashCommandBuilder
 } from 'discord.js';
 import { t } from 'i18next';
 
@@ -37,7 +37,7 @@ export default new Command({
 
     enum CustomIds {
       Confirm = 'KICK_CONFIRM',
-      Cancel = 'KICK_CANCEL',
+      Cancel = 'KICK_CANCEL'
     }
 
     const { options, guild, member, user } = interaction;
@@ -75,21 +75,21 @@ export default new Command({
       components: [
         new ActionRowBuilder<ButtonBuilder>().setComponents(
           new ButtonBuilder().setCustomId(CustomIds.Confirm).setEmoji('✔').setStyle(ButtonStyle.Success),
-          new ButtonBuilder().setCustomId(CustomIds.Cancel).setEmoji('✖').setStyle(ButtonStyle.Danger),
-        ),
-      ],
+          new ButtonBuilder().setCustomId(CustomIds.Cancel).setEmoji('✖').setStyle(ButtonStyle.Danger)
+        )
+      ]
     });
 
     const collector = await msg.awaitMessageComponent({
       filter: (i) => i.user.id === interaction.user.id,
       componentType: ComponentType.Button,
-      time: 30_000,
+      time: 30_000
     });
 
     if (collector.customId === CustomIds.Cancel) {
       await collector.update({
         content: t('kick.cancelled', { lng }),
-        components: [],
+        components: []
       });
     } else if (collector.customId === CustomIds.Confirm) {
       const kicked = await targetMember.kick(reason).catch((err) => logger.debug({ err, userId: target.id }, 'Could not kick user'));
@@ -104,17 +104,17 @@ export default new Command({
           content: t('kick.target_dm', {
             lng: await getUserLanguage(target.id),
             guild: `\`${guild.name}\``,
-            reason: `\`${reason ?? '/'}\``,
-          }),
+            reason: `\`${reason ?? '/'}\``
+          })
         })
         .catch((err) => logger.debug({ err, userId: target.id }, 'Could not send DM'));
 
       await collector.update({
         content: [
           t('kick.confirmed', { lng, user: target.toString(), reason: `\`${reason ?? '/'}\`` }),
-          receivedDM ? t('kick.dm_received', { lng }) : t('kick.dm_not_received', { lng }),
+          receivedDM ? t('kick.dm_received', { lng }) : t('kick.dm_not_received', { lng })
         ].join('\n'),
-        components: [],
+        components: []
       });
 
       if (target.bot) {
@@ -123,5 +123,5 @@ export default new Command({
 
       await createInfraction(guild.id, target.id, user.id, InfractionType.Kick, reason, undefined, Date.now(), true);
     }
-  },
+  }
 });

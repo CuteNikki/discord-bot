@@ -62,11 +62,11 @@ export default new Event({
       .setColor(client.colors.level)
       .setAuthor({
         name: user.displayName,
-        iconURL: user.displayAvatarURL(),
+        iconURL: user.displayAvatarURL()
       })
       .addFields({
         name: t('level.up.title', { lng }),
-        value: t('level.up.description', { lng, level: updatedLevel.level }),
+        value: t('level.up.description', { lng, level: updatedLevel.level })
       });
 
     // If there are rewards, we add the roles to the message and if they could not be added, we let the user know
@@ -76,19 +76,19 @@ export default new Event({
       if (added) {
         levelUpEmbed.addFields({
           name: t('level.up.title_roles', { lng }),
-          value: rewards.map((r) => `<@&${r.roleId}>`).join(' '),
+          value: rewards.map((r) => `<@&${r.roleId}>`).join(' ')
         });
       } else {
         levelUpEmbed.addFields({
           name: t('level.up.title_roles_error', { lng }),
-          value: rewards.map((r) => `<@&${r.roleId}>`).join(' '),
+          value: rewards.map((r) => `<@&${r.roleId}>`).join(' ')
         });
       }
     }
 
     const levelUpMessage: MessageCreateOptions = {
       content: user.toString(),
-      embeds: [levelUpEmbed],
+      embeds: [levelUpEmbed]
     };
 
     switch (guildSettings.level.announcement) {
@@ -125,5 +125,5 @@ export default new Event({
         }
         break;
     }
-  },
+  }
 });

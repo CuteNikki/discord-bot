@@ -5,7 +5,7 @@ import {
   ContextMenuCommandBuilder,
   EmbedBuilder,
   InteractionContextType,
-  PermissionFlagsBits,
+  PermissionFlagsBits
 } from 'discord.js';
 import { t } from 'i18next';
 
@@ -32,7 +32,7 @@ export default new Command<typeof commandType>({
 
     await interaction.deferReply({ ephemeral: true });
 
-    const { user, guildId } = interaction;
+    const { guildId } = interaction;
 
     const target = interaction.targetUser;
     const targetInfractions = await getInfractions(guildId, target.id);
@@ -44,7 +44,7 @@ export default new Command<typeof commandType>({
 
     const chunkedInfractions = chunk(
       targetInfractions.sort((a, b) => b.createdAt - a.createdAt),
-      3,
+      3
     );
 
     const infractionTypes = {
@@ -53,7 +53,7 @@ export default new Command<typeof commandType>({
       2: t('infractions.types.tempban', { lng }),
       3: t('infractions.types.kick', { lng }),
       4: t('infractions.types.timeout', { lng }),
-      5: t('infractions.types.warn', { lng }),
+      5: t('infractions.types.warn', { lng })
     };
 
     await pagination({
@@ -69,29 +69,29 @@ export default new Command<typeof commandType>({
                   t('infractions.history.id', { lng, id: infraction._id }),
                   t('infractions.history.type', {
                     lng,
-                    type: infractionTypes[infraction.action as keyof typeof infractionTypes],
+                    type: infractionTypes[infraction.action as keyof typeof infractionTypes]
                   }),
                   t('infractions.history.staff', {
                     lng,
-                    staff: `<@${infraction.staffId}>`,
+                    staff: `<@${infraction.staffId}>`
                   }),
                   t('infractions.history.reason', {
                     lng,
-                    reason: infraction.reason ?? '/',
+                    reason: infraction.reason ?? '/'
                   }),
                   t('infractions.history.date', {
                     lng,
-                    date: `<t:${Math.floor(infraction.createdAt / 1000)}:f>`,
+                    date: `<t:${Math.floor(infraction.createdAt / 1000)}:f>`
                   }),
                   t('infractions.history.ends_at', {
                     lng,
-                    date: infraction.endsAt ? `<t:${Math.floor(infraction.endsAt / 1000)}:f>` : '/',
-                  }),
-                ].join('\n'),
+                    date: infraction.endsAt ? `<t:${Math.floor(infraction.endsAt / 1000)}:f>` : '/'
+                  })
+                ].join('\n')
               )
-              .join('\n\n'),
-          ),
-      ),
+              .join('\n\n')
+          )
+      )
     });
-  },
+  }
 });

@@ -32,19 +32,19 @@ export default new Event({
           .addFields(
             {
               name: t('log.threadCreate.thread', { lng }),
-              value: `${thread.toString()} (\`${name}\` | ${id})`,
+              value: `${thread.toString()} (\`${name}\` | ${id})`
             },
             {
               name: t('log.threadCreate.owner', { lng }),
-              value: owner ? `<@${owner.id}> (\`${owner.user?.username}\` | ${ownerId})` : '/',
+              value: owner ? `<@${owner.id}> (\`${owner.user?.username}\` | ${ownerId})` : '/'
             },
             {
               name: t('log.threadCreate.applied_tags', { lng }),
-              value: appliedTags.join('\n').slice(0, 1000) || '/',
-            },
+              value: appliedTags.join('\n').slice(0, 1000) || '/'
+            }
           )
-          .setTimestamp(),
-      ],
+          .setTimestamp()
+      ]
     });
-  },
+  }
 });

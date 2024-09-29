@@ -30,45 +30,43 @@ export default new Event({
           .addFields(
             {
               name: t('log.guildScheduledEventCreate.name', { lng }),
-              value: name,
+              value: name
             },
             {
               name: t('log.guildScheduledEventCreate.description', { lng }),
-              value: description || '/',
+              value: description || '/'
             },
             {
               name: t('log.guildScheduledEventCreate.url', { lng }),
-              value: url,
+              value: url
             },
             {
               name: t('log.guildScheduledEventCreate.location', { lng }),
-              value: channel ? `${channel.toString()} (\`${channel.name}\` | ${channel.id})` : entityMetadata?.location ? `${entityMetadata?.location}` : '/',
+              value: channel ? `${channel.toString()} (\`${channel.name}\` | ${channel.id})` : entityMetadata?.location ? `${entityMetadata?.location}` : '/'
             },
             {
               name: t('log.guildScheduledEventCreate.creator', { lng }),
-              value: creator ? `${creator.toString()} (\`${creator.username}\` | ${creator.id})` : '/',
+              value: creator ? `${creator.toString()} (\`${creator.username}\` | ${creator.id})` : '/'
             },
             {
               name: t('log.guildScheduledEventCreate.status', { lng }),
-              value: GuildScheduledEventStatus[status],
+              value: GuildScheduledEventStatus[status]
             },
             {
               name: t('log.guildScheduledEventCreate.privacy_level', { lng }),
-              value: GuildScheduledEventPrivacyLevel[privacyLevel],
+              value: GuildScheduledEventPrivacyLevel[privacyLevel]
             },
             {
               name: t('log.guildScheduledEventCreate.start', { lng }),
-              value: scheduledStartTimestamp
-                ? `<t:${Math.floor(scheduledStartTimestamp / 1000)}:f> (<t:${Math.floor(scheduledStartTimestamp / 1000)}:R>)`
-                : '/',
+              value: scheduledStartTimestamp ? `<t:${Math.floor(scheduledStartTimestamp / 1000)}:f> (<t:${Math.floor(scheduledStartTimestamp / 1000)}:R>)` : '/'
             },
             {
               name: t('log.guildScheduledEventCreate.end', { lng }),
-              value: scheduledEndTimestamp ? `<t:${Math.floor(scheduledEndTimestamp / 1000)}:f> (<t:${Math.floor(scheduledEndTimestamp / 1000)}:R>)` : '/',
-            },
+              value: scheduledEndTimestamp ? `<t:${Math.floor(scheduledEndTimestamp / 1000)}:f> (<t:${Math.floor(scheduledEndTimestamp / 1000)}:R>)` : '/'
+            }
           )
-          .setTimestamp(),
-      ],
+          .setTimestamp()
+      ]
     });
-  },
+  }
 });

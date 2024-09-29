@@ -8,7 +8,7 @@ import {
   EmbedBuilder,
   InteractionContextType,
   SlashCommandBuilder,
-  StringSelectMenuBuilder,
+  StringSelectMenuBuilder
 } from 'discord.js';
 import { t } from 'i18next';
 import ms from 'ms';
@@ -40,7 +40,7 @@ export default new Command({
       .filter((category) => typeof category !== 'string' && category !== ModuleType.Developer)
       .map((category) => ({
         label: ModuleType[category as number],
-        value: category.toString(),
+        value: category.toString()
       }));
 
     const select = new StringSelectMenuBuilder()
@@ -57,7 +57,7 @@ export default new Command({
     const msg = await interaction
       .editReply({
         embeds: [helpEmbed],
-        components: [new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(select)],
+        components: [new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(select)]
       })
       .catch((err) => logger.debug({ err }, 'Could not send help message'));
 
@@ -67,7 +67,7 @@ export default new Command({
 
     const collector = msg.createMessageComponentCollector({
       componentType: ComponentType.StringSelect,
-      idle: TIMEOUT,
+      idle: TIMEOUT
     });
 
     collector.on('collect', async (selectInteraction) => {
@@ -77,9 +77,9 @@ export default new Command({
         await interaction
           .followUp({
             content: t('interactions.author_only', {
-              lng: await getUserLanguage(selectInteraction.user.id),
+              lng: await getUserLanguage(selectInteraction.user.id)
             }),
-            ephemeral: true,
+            ephemeral: true
           })
           .catch((err) => logger.debug({ err }, 'Could not send author only message'));
         return;
@@ -94,12 +94,12 @@ export default new Command({
           (cmd) =>
             cmd.options.data.toJSON().type !== ApplicationCommandType.Message &&
             cmd.options.data.toJSON().type !== ApplicationCommandType.User &&
-            cmd.options.module === categoryId,
+            cmd.options.module === categoryId
         );
 
       const mappedCmds = commands.map((cmd) => ({
         name: cmd.options.data.name,
-        description: cmd.options.data.description,
+        description: cmd.options.data.description
       }));
 
       const chunkedCmds = chunk(mappedCmds, 10);
@@ -111,13 +111,15 @@ export default new Command({
         ephemeral,
         disableButtons: false,
         extraButton: new ButtonBuilder().setCustomId('HELP_BACK').setEmoji('🔙').setStyle(ButtonStyle.Danger),
-        extraButtonFunction: (int) =>
-          int
+        extraButtonFunction: async (int) => {
+          await int
             .editReply({
               embeds: [helpEmbed],
-              components: [new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(select)],
+              components: [new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(select)]
             })
-            .catch((err) => logger.debug({ err }, 'Could not edit help message')),
+            .catch((err) => logger.debug({ err }, 'Could not edit help message'));
+          return;
+        },
         embeds: chunkedCmds.map((chunk) =>
           new EmbedBuilder()
             .setColor(client.colors.general)
@@ -125,10 +127,10 @@ export default new Command({
             .addFields(
               chunk.map((cmd) => ({
                 name: `</${cmd.name}:${applicationCmds.find((c) => c.name === cmd.name)?.id}>`,
-                value: cmd.description,
-              })),
-            ),
-        ),
+                value: cmd.description
+              }))
+            )
+        )
       });
     });
 
@@ -137,12 +139,12 @@ export default new Command({
         .editReply({
           embeds: [
             helpEmbed.setFooter({
-              text: t('pagination', { lng, time: ms(TIMEOUT, { long: true }) }),
-            }),
+              text: t('pagination', { lng, time: ms(TIMEOUT, { long: true }) })
+            })
           ],
-          components: [new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(select.setDisabled(true))],
+          components: [new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(select.setDisabled(true))]
         })
         .catch((err) => logger.debug({ err }, 'Could not edit help message'));
     });
-  },
+  }
 });

@@ -6,7 +6,7 @@ import {
   ComponentType,
   InteractionContextType,
   PermissionFlagsBits,
-  SlashCommandBuilder,
+  SlashCommandBuilder
 } from 'discord.js';
 import { t } from 'i18next';
 
@@ -37,7 +37,7 @@ export default new Command({
 
     enum CustomIds {
       Confirm = 'UNBAN_CONFIRM',
-      Cancel = 'UNBAN_CANCEL',
+      Cancel = 'UNBAN_CANCEL'
     }
 
     const { options, guild, user } = interaction;
@@ -59,21 +59,21 @@ export default new Command({
       components: [
         new ActionRowBuilder<ButtonBuilder>().setComponents(
           new ButtonBuilder().setCustomId(CustomIds.Confirm).setEmoji('✔').setStyle(ButtonStyle.Success),
-          new ButtonBuilder().setCustomId(CustomIds.Cancel).setEmoji('✖').setStyle(ButtonStyle.Danger),
-        ),
-      ],
+          new ButtonBuilder().setCustomId(CustomIds.Cancel).setEmoji('✖').setStyle(ButtonStyle.Danger)
+        )
+      ]
     });
 
     const collector = await msg.awaitMessageComponent({
       filter: (i) => i.user.id === interaction.user.id,
       componentType: ComponentType.Button,
-      time: 30_000,
+      time: 30_000
     });
 
     if (collector.customId === CustomIds.Cancel) {
       await collector.update({
         content: t('unban.cancelled', { lng }),
-        components: [],
+        components: []
       });
     } else if (collector.customId === CustomIds.Confirm) {
       const unbanned = await guild.bans.remove(target.id, reason).catch((err) => logger.debug({ err, userId: target.id }, 'Could not unban user'));
@@ -88,8 +88,8 @@ export default new Command({
           content: t('unban.target_dm', {
             lng: targetLng,
             guild: `\`${guild.name}\``,
-            reason: `\`${reason ?? '/'}\``,
-          }),
+            reason: `\`${reason ?? '/'}\``
+          })
         })
         .catch(() => {});
 
@@ -98,11 +98,11 @@ export default new Command({
           t('unban.confirmed', {
             lng,
             user: target.toString(),
-            reason: `\`${reason ?? '/'}\``,
+            reason: `\`${reason ?? '/'}\``
           }),
-          receivedDM ? t('unban.dm_received', { lng }) : t('unban.dm_not_received', { lng }),
+          receivedDM ? t('unban.dm_received', { lng }) : t('unban.dm_not_received', { lng })
         ].join('\n'),
-        components: [],
+        components: []
       });
 
       if (target.bot) {
@@ -111,5 +111,5 @@ export default new Command({
 
       await createInfraction(guild.id, target.id, user.id, InfractionType.Unban, reason, undefined, Date.now(), true);
     }
-  },
+  }
 });

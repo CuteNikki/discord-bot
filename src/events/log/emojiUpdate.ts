@@ -31,12 +31,12 @@ export default new Event({
       .addFields(
         {
           name: t('log.emojiUpdate.emoji', { lng }),
-          value: `${newEmoji.toString()} (\`${newEmoji.name}\` | ${newEmoji.id})`,
+          value: `${newEmoji.toString()} (\`${newEmoji.name}\` | ${newEmoji.id})`
         },
         {
           name: t('log.emojiUpdate.author', { lng }),
-          value: author ? `${author.toString()} (\`${author.username}\` | ${author.id})` : '/',
-        },
+          value: author ? `${author.toString()} (\`${author.username}\` | ${author.id})` : '/'
+        }
       )
       .setTimestamp();
 
@@ -47,14 +47,14 @@ export default new Event({
         {
           name: t('log.emojiUpdate.old_name', { lng }),
           value: `${oldEmoji.name}`,
-          inline: true,
+          inline: true
         },
         {
           name: t('log.emojiUpdate.new_name', { lng }),
           value: `${newEmoji.name}`,
-          inline: true,
+          inline: true
         },
-        emptyField,
+        emptyField
       );
     if (JSON.stringify(newEmoji.roles.cache.toJSON()) !== JSON.stringify(oldEmoji.roles.cache.toJSON())) {
       embed.addFields(
@@ -65,7 +65,7 @@ export default new Event({
               .map((role) => role.toString())
               .join(', ')
               .slice(0, 1000) || '/',
-          inline: true,
+          inline: true
         },
         {
           name: t('log.emojiUpdate.new_roles', { lng }),
@@ -74,14 +74,14 @@ export default new Event({
               .map((role) => role.toString())
               .join(', ')
               .slice(0, 1000) || '/',
-          inline: true,
+          inline: true
         },
-        emptyField,
+        emptyField
       );
     }
 
     await logChannel.send({
-      embeds: [embed],
+      embeds: [embed]
     });
-  },
+  }
 });

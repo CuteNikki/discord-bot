@@ -1,4 +1,4 @@
-import type { Types } from "mongoose";
+import type { Types } from 'mongoose';
 
 export type Reaction = {
   emoji: string;

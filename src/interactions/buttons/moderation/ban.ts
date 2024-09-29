@@ -49,7 +49,7 @@ export default new Button({
       43200: t('ban.history.hours_12', { lng }), // 'Previous 12 hours'
       86400: t('ban.history.hours_24', { lng }), // 'Previous 24 hours'
       259200: t('ban.history.days_3', { lng }), // 'Previous 3 days'
-      604800: t('ban.history.days_7', { lng }), // 'Previous 7 days'
+      604800: t('ban.history.days_7', { lng }) // 'Previous 7 days'
     };
 
     const receivedDM = await client.users
@@ -58,8 +58,8 @@ export default new Button({
           lng: targetLng,
           guild: `\`${guild.name}\``,
           reason: `\`${reason ?? '/'}\``,
-          duration: 'forever',
-        }),
+          duration: 'forever'
+        })
       })
       .catch((err) => logger.debug({ err, targetId }, 'Could not send DM to user'));
 
@@ -68,13 +68,13 @@ export default new Button({
         t('ban.confirmed', {
           lng,
           user: target.toString(),
-          reason: `\`${reason ?? '/'}\``,
+          reason: `\`${reason ?? '/'}\``
         }),
         t('ban.deleted_history', { lng, deleted: historyOptions[604800] }),
         receivedDM ? t('ban.dm_received', { lng }) : t('ban.dm_not_received', { lng }),
-        t('ban.permanent', { lng }),
+        t('ban.permanent', { lng })
       ].join('\n'),
-      components: [],
+      components: []
     });
 
     if (target.bot) {
@@ -82,5 +82,5 @@ export default new Button({
     }
 
     await createInfraction(guild.id, target.id, interaction.user.id, InfractionType.Ban, reason, undefined, Date.now(), true);
-  },
+  }
 });

@@ -18,7 +18,7 @@ export default new Selection({
       values: [targetId],
       guildId,
       customId,
-      member,
+      member
     } = interaction;
     const targetMember = interaction.guild.members.cache.get(targetId);
 
@@ -30,22 +30,22 @@ export default new Selection({
     if (!system)
       return interaction.reply({
         content: t('ticket.invalid_system', { lng }),
-        ephemeral: true,
+        ephemeral: true
       });
 
     const ticket = await ticketModel.findOne({
-      channelId: interaction.channel?.id,
+      channelId: interaction.channel?.id
     });
     if (!ticket)
       return interaction.reply({
         content: t('ticket.invalid_ticket', { lng }),
-        ephemeral: true,
+        ephemeral: true
       });
 
     if (ticket.closed || ticket.locked)
       return interaction.reply({
         content: t('ticket.user_unavailable', { lng }),
-        ephemeral: true,
+        ephemeral: true
       });
 
     if (user.id !== ticket.createdBy || !member.roles.cache.has(system.staffRoleId)) return interaction.reply({ content: t('ticket.user_permissions') });
@@ -53,17 +53,17 @@ export default new Selection({
     if (!targetMember)
       return interaction.reply({
         content: t('ticket.user_invalid', { lng }),
-        ephemeral: true,
+        ephemeral: true
       });
     if (targetMember.roles.cache.has(system.staffRoleId))
       return interaction.reply({
         content: t('ticket.user_staff', { lng }),
-        ephemeral: true,
+        ephemeral: true
       });
     if (targetId === ticket.createdBy)
       return interaction.reply({
         content: t('ticket.user_creator', { lng }),
-        ephemeral: true,
+        ephemeral: true
       });
 
     if (ticket.users.includes(targetId)) {
@@ -72,7 +72,7 @@ export default new Selection({
         ViewChannel: false,
         SendMessages: false,
         EmbedLinks: false,
-        AttachFiles: false,
+        AttachFiles: false
       });
       await ticketModel.findOneAndUpdate({ channelId: channel.id }, { $pull: { users: targetId } });
 
@@ -82,10 +82,10 @@ export default new Selection({
             t('ticket.user_removed', {
               lng,
               target_user: `<@${targetId}>`,
-              removed_by: `${user.toString}`,
-            }),
-          ),
-        ],
+              removed_by: `${user.toString}`
+            })
+          )
+        ]
       });
     } else {
       const channel = interaction.channel as TextChannel;
@@ -93,7 +93,7 @@ export default new Selection({
         ViewChannel: true,
         SendMessages: true,
         EmbedLinks: true,
-        AttachFiles: true,
+        AttachFiles: true
       });
       await ticketModel.findOneAndUpdate({ channelId: channel.id }, { $push: { users: targetId } });
 
@@ -103,11 +103,11 @@ export default new Selection({
             t('ticket.user_added', {
               lng,
               target_user: `<@${targetId}>`,
-              added_by: `${user.toString()}`,
-            }),
-          ),
-        ],
+              added_by: `${user.toString()}`
+            })
+          )
+        ]
       });
     }
-  },
+  }
 });

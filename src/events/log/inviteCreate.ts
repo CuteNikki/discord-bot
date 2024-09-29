@@ -30,27 +30,27 @@ export default new Event({
             { name: t('log.inviteCreate.url', { lng }), value: url },
             {
               name: t('log.inviteCreate.expires_at', { lng }),
-              value: expiresTimestamp ? `<t:${Math.floor(expiresTimestamp / 1000)}:f>` : 'never',
+              value: expiresTimestamp ? `<t:${Math.floor(expiresTimestamp / 1000)}:f>` : 'never'
             },
             {
               name: t('log.inviteCreate.max_uses', { lng }),
-              value: `${maxUses || '/'}`,
+              value: `${maxUses || '/'}`
             },
             {
               name: t('log.inviteCreate.temporary_membership', { lng }),
-              value: `${temporary ?? '/'}`,
+              value: `${temporary ?? '/'}`
             },
             {
               name: t('log.inviteCreate.channel', { lng }),
-              value: channel ? `${channel.toString()} (\`${channel.name}\` | ${channel.id})` : '/',
+              value: channel ? `${channel.toString()} (\`${channel.name}\` | ${channel.id})` : '/'
             },
             {
               name: t('log.inviteCreate.created_by', { lng }),
-              value: inviter ? `${inviter.toString()} (\`${inviter.username}\` | ${inviter.id})` : '/',
-            },
+              value: inviter ? `${inviter.toString()} (\`${inviter.username}\` | ${inviter.id})` : '/'
+            }
           )
-          .setTimestamp(),
-      ],
+          .setTimestamp()
+      ]
     });
-  },
+  }
 });

@@ -30,12 +30,12 @@ export default new Event({
           .setColor(Colors.Red)
           .setTitle(t('log.messageDelete.title', { lng }))
           .setDescription(
-            `${t('log.messageDelete.content', { lng })}: ${message.content ? (message.content.length > 3800 ? message.content.slice(0, 3800) + '...' : message.content) : '/'}`,
+            `${t('log.messageDelete.content', { lng })}: ${message.content ? (message.content.length > 3800 ? message.content.slice(0, 3800) + '...' : message.content) : '/'}`
           )
           .addFields(
             {
               name: t('log.messageDelete.author', { lng }),
-              value: `${message.author.toString()} (\`${message.author.username}\` | ${message.author.id})`,
+              value: `${message.author.toString()} (\`${message.author.username}\` | ${message.author.id})`
             },
             {
               name: t('log.messageDelete.reactions', { lng }),
@@ -43,7 +43,7 @@ export default new Event({
                 message.reactions.cache
                   .map((reaction) => `${reaction.count}x ${reaction.emoji}`)
                   .join('\n')
-                  .slice(0, 1000) || '/',
+                  .slice(0, 1000) || '/'
             },
             {
               name: t('log.messageDelete.attachments', { lng }),
@@ -51,12 +51,12 @@ export default new Event({
                 message.attachments
                   .map((attachment) => attachment.url)
                   .join('\n')
-                  .slice(0, 1000) || '/',
-            },
+                  .slice(0, 1000) || '/'
+            }
           )
-          .setTimestamp(),
+          .setTimestamp()
       ],
-      files: message.attachments.map((a) => a),
+      files: message.attachments.map((a) => a)
     });
-  },
+  }
 });

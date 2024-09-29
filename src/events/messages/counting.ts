@@ -59,8 +59,8 @@ export default new Event({
         $set: {
           'counting.currentNumber': 0,
           'counting.currentNumberBy': null,
-          'counting.currentNumberAt': null,
-        },
+          'counting.currentNumberAt': null
+        }
       });
 
       const failMessage = await message.channel.send(t('counting.warn_incorrect', { lng, author }));
@@ -77,8 +77,8 @@ export default new Event({
         'counting.highestNumberAt': nextNumber >= config.counting.highestNumber ? Date.now() : config.counting.highestNumberAt,
         'counting.currentNumber': nextNumber,
         'counting.currentNumberBy': author.id,
-        'counting.currentNumberAt': Date.now(),
-      },
+        'counting.currentNumberAt': Date.now()
+      }
     });
-  },
+  }
 });

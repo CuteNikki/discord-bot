@@ -24,7 +24,7 @@ export default new Button({
     if (!system) {
       await interaction.reply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_system', { lng }))],
-        ephemeral: true,
+        ephemeral: true
       });
       return;
     }
@@ -34,7 +34,7 @@ export default new Button({
     if (!ticket) {
       await interaction.reply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_ticket', { lng }))],
-        ephemeral: true,
+        ephemeral: true
       });
       return;
     }
@@ -43,7 +43,7 @@ export default new Button({
       if (!member.roles.cache.has(system.staffRoleId)) {
         await interaction.reply({
           embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.staff_only', { lng }))],
-          ephemeral: true,
+          ephemeral: true
         });
         return;
       }
@@ -51,7 +51,7 @@ export default new Button({
       if (!ticket.claimedBy) {
         await interaction.reply({
           embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.not_claimed', { lng }))],
-          ephemeral: true,
+          ephemeral: true
         });
         return;
       }
@@ -74,8 +74,8 @@ export default new Button({
                   .setCustomId(`button-tickets-delete_${system._id.toString()}`)
                   .setLabel(t('ticket.delete', { lng }))
                   .setEmoji('🗑️')
-                  .setStyle(ButtonStyle.Danger),
-              ),
+                  .setStyle(ButtonStyle.Danger)
+              )
             ]
           : [
               new ActionRowBuilder<ButtonBuilder>().addComponents(
@@ -83,9 +83,9 @@ export default new Button({
                   .setCustomId(`button-tickets-delete_${system._id.toString()}`)
                   .setLabel(t('ticket.delete', { lng }))
                   .setEmoji('🗑️')
-                  .setStyle(ButtonStyle.Danger),
-              ),
-            ],
+                  .setStyle(ButtonStyle.Danger)
+              )
+            ]
       });
       return;
     }
@@ -118,8 +118,8 @@ export default new Button({
                 .setCustomId(`button-tickets-delete_${system._id.toString()}`)
                 .setLabel(t('ticket.delete', { lng }))
                 .setEmoji('✖️')
-                .setStyle(ButtonStyle.Danger),
-            ),
+                .setStyle(ButtonStyle.Danger)
+            )
           ]
         : [
             new ActionRowBuilder<ButtonBuilder>().addComponents(
@@ -127,9 +127,9 @@ export default new Button({
                 .setCustomId(`button-tickets-delete_${system._id.toString()}`)
                 .setLabel(t('ticket.delete', { lng }))
                 .setEmoji('🗑️')
-                .setStyle(ButtonStyle.Danger),
-            ),
-          ],
+                .setStyle(ButtonStyle.Danger)
+            )
+          ]
     });
-  },
+  }
 });

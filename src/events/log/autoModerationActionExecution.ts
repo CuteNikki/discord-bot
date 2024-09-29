@@ -28,31 +28,31 @@ export default new Event({
           .addFields(
             {
               name: t('log.autoModerationActionExecution.action_type', { lng }),
-              value: AutoModerationActionType[action.type],
+              value: AutoModerationActionType[action.type]
             },
             {
               name: t('log.autoModerationActionExecution.rule_trigger_type', {
-                lng,
+                lng
               }),
-              value: AutoModerationRuleTriggerType[ruleTriggerType],
+              value: AutoModerationRuleTriggerType[ruleTriggerType]
             },
             {
               name: t('log.autoModerationActionExecution.user', { lng }),
-              value: `<@${userId}>`,
+              value: `<@${userId}>`
             },
             {
               name: t('log.autoModerationActionExecution.channel', { lng }),
-              value: `<@${channelId}>`,
+              value: `<@${channelId}>`
             },
             {
               name: t('log.autoModerationActionExecution.matched_content', {
-                lng,
+                lng
               }),
-              value: matchedContent || '/',
-            },
+              value: matchedContent || '/'
+            }
           )
-          .setTimestamp(),
-      ],
+          .setTimestamp()
+      ]
     });
-  },
+  }
 });

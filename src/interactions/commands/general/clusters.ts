@@ -30,7 +30,7 @@ export default new Command({
         Object.entries(process.memoryUsage()).map((d) => {
           d[1] = Math.floor((d[1] / 1024 / 1024) * 100) / 100; // format to MB
           return d;
-        }),
+        })
       ),
       allGuildsData: c.guilds.cache.map((guild) => ({
         shardId: guild.shardId,
@@ -40,7 +40,7 @@ export default new Command({
         memberCount: guild.memberCount,
         channels: guild.channels.cache.map((c) => {
           return { id: c.id, name: c.name };
-        }),
+        })
       })),
       perShardData: [...c.cluster.ids.keys()].map((shardId) => ({
         shardId: shardId,
@@ -50,8 +50,8 @@ export default new Command({
         members: c.guilds.cache
           .filter((x) => x.shardId === shardId)
           .map((g) => g.memberCount)
-          .reduce((a, b) => a + b, 0),
-      })),
+          .reduce((a, b) => a + b, 0)
+      }))
     }));
 
     await pagination({
@@ -64,33 +64,33 @@ export default new Command({
             [
               t('clusters.uptime', {
                 lng,
-                uptime: ms(cluster.uptime ?? 0, { long: true }),
+                uptime: ms(cluster.uptime ?? 0, { long: true })
               }),
               t('clusters.ping', { lng, ping: cluster.ping }),
               t('clusters.memory', { lng, memory: cluster.memoryUsage.rss }),
               t('clusters.guilds', { lng, guilds: cluster.totalGuilds }),
-              t('clusters.members', { lng, members: cluster.totalMembers }),
-            ].join('\n'),
+              t('clusters.members', { lng, members: cluster.totalMembers })
+            ].join('\n')
           )
           .addFields(
             cluster.perShardData.map((shard) => {
               return {
                 name: t('clusters.shards.title', {
                   lng,
-                  id: `${shard.shardId} ${interaction.guild?.shardId === shard.shardId ? '📍' : ''}`,
+                  id: `${shard.shardId} ${interaction.guild?.shardId === shard.shardId ? '📍' : ''}`
                 }),
                 value: [
                   t('clusters.shards.status', { lng, status: shard.status }),
                   t('clusters.shards.ping', { lng, ping: shard.ping }),
                   t('clusters.shards.guilds', { lng, guilds: shard.guilds }),
-                  t('clusters.shards.members', { lng, members: shard.members }),
+                  t('clusters.shards.members', { lng, members: shard.members })
                 ].join('\n'),
-                inline: true,
+                inline: true
               };
-            }),
-          ),
+            })
+          )
       ),
-      content: t('clusters.pin', { lng }),
+      content: t('clusters.pin', { lng })
     });
-  },
+  }
 });

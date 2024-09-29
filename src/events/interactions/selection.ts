@@ -52,13 +52,13 @@ export default new Event({
       if (!interaction.member)
         return interaction.reply({
           content: t('interactions.guild_only', { lng }),
-          ephemeral: true,
+          ephemeral: true
         });
       const permissions = interaction.member.permissions as PermissionsBitField;
       if (!permissions.has(selection.options.permissions))
         return interaction.reply({
           content: t('interactions.permissions', { lng }),
-          ephemeral: true,
+          ephemeral: true
         });
     }
 
@@ -69,9 +69,9 @@ export default new Event({
         return interaction.reply({
           content: t('interactions.bot_permissions', {
             lng,
-            permissions: selection.options.botPermissions.join(', '),
+            permissions: selection.options.botPermissions.join(', ')
           }),
-          ephemeral: true,
+          ephemeral: true
         });
       }
     }
@@ -81,7 +81,7 @@ export default new Event({
     if (selection.options.isDeveloperOnly && !developerIds.includes(interaction.user.id))
       return interaction.reply({
         content: t('interactions.developer_only', { lng }),
-        ephemeral: true,
+        ephemeral: true
       });
 
     // Check if cooldowns has the current selection and add the selection if it doesn't have the selection
@@ -103,9 +103,9 @@ export default new Event({
           content: t('interactions.cooldown', {
             lng,
             action: `\`${selection.options.customId}\``,
-            timestamp: `<t:${expiredTimestamp}:R>`,
+            timestamp: `<t:${expiredTimestamp}:R>`
           }),
-          ephemeral: true,
+          ephemeral: true
         });
       }
     }
@@ -117,10 +117,11 @@ export default new Event({
     // Try to run the selection and send an error message if it couldn't run
     try {
       selection.options.execute({ client, interaction, lng });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       const message = t('interactions.error', {
         lng,
-        error: `\`${err.message}\``,
+        error: `\`${err.message}\``
       });
 
       if (interaction.deferred) interaction.editReply({ content: message });
@@ -128,5 +129,5 @@ export default new Event({
 
       sendError({ client, err, location: `Selection Interaction Error: ${selection.options.customId}` });
     }
-  },
+  }
 });

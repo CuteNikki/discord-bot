@@ -13,11 +13,11 @@ export const infractionModel: Model<InfractionDocument> =
       action: {
         type: Number,
         enum: Object.values(InfractionType).filter((value) => typeof value === 'number'),
-        required: true,
+        required: true
       },
       createdAt: { type: Number, default: Date.now() },
       reason: { type: String, required: false },
       endsAt: { type: Number, required: false },
-      closed: { type: Boolean, default: true },
-    }),
+      closed: { type: Boolean, default: true }
+    })
   );

@@ -20,8 +20,8 @@ export default new Event({
         new EmbedBuilder()
           .setAuthor({ name: author.displayName, iconURL: author.displayAvatarURL() })
           .setDescription([t('mentioned.responding', { lng }), t('mentioned.commands', { lng })].join('\n'))
-          .setFooter({ text: readyClient.user.username, iconURL: readyClient.user.displayAvatarURL() }),
-      ],
+          .setFooter({ text: readyClient.user.username, iconURL: readyClient.user.displayAvatarURL() })
+      ]
     });
-  },
+  }
 });

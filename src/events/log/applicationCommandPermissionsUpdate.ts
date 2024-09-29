@@ -33,15 +33,15 @@ export default new Event({
           .addFields(
             {
               name: t('log.applicationCommandPermissionsUpdate.application', {
-                lng,
+                lng
               }),
-              value: `<@${applicationId}>`,
+              value: `<@${applicationId}>`
             },
             {
               name: t('log.applicationCommandPermissionsUpdate.command_id', {
-                lng,
+                lng
               }),
-              value: `${id}`,
+              value: `${id}`
             },
             {
               name: t('log.applicationCommandPermissionsUpdate.updated_permissions', { lng }),
@@ -51,13 +51,13 @@ export default new Event({
                     (permission) =>
                       `${permission.type === 1 ? `<@&${permission.id}>` : permission.type === 2 ? `<@${permission.id}>` : `<#${permission.id}>`} (${
                         ApplicationCommandPermissionType[permission.type]
-                      }): ${permission.permission}`,
+                      }): ${permission.permission}`
                   )
-                  .join('\n') || '/',
-            },
+                  .join('\n') || '/'
+            }
           )
-          .setTimestamp(),
-      ],
+          .setTimestamp()
+      ]
     });
-  },
+  }
 });

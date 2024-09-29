@@ -33,9 +33,9 @@ export default new Event({
           $set: {
             ['starboard.messages']: [
               ...config.starboard.messages.filter((msg) => msg.messageId !== knownMessage.messageId),
-              { ...knownMessage, reactedUsers: knownMessage.reactedUsers.filter((reactedUser) => reactedUser !== user.id) },
-            ],
-          },
+              { ...knownMessage, reactedUsers: knownMessage.reactedUsers.filter((reactedUser) => reactedUser !== user.id) }
+            ]
+          }
         });
       }
 
@@ -55,9 +55,9 @@ export default new Event({
           $set: {
             ['starboard.messages']: [
               ...config.starboard.messages.filter((msg) => msg.messageId !== knownStarboardMessage.messageId),
-              { ...knownStarboardMessage, reactedUsers: knownStarboardMessage.reactedUsers.filter((reactedUser) => reactedUser !== user.id) },
-            ],
-          },
+              { ...knownStarboardMessage, reactedUsers: knownStarboardMessage.reactedUsers.filter((reactedUser) => reactedUser !== user.id) }
+            ]
+          }
         });
       }
       if (stars < config.starboard.minimumStars)
@@ -65,5 +65,5 @@ export default new Event({
       if (reaction.message.editable)
         return await reaction.message.edit({ content: `${stars} ⭐` }).catch((err) => logger.debug({ err }, 'Could not edit starboard message'));
     }
-  },
+  }
 });

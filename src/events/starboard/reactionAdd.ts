@@ -31,9 +31,9 @@ export default new Event({
         $push: {
           ['starboard.messages']: {
             messageId: reaction.message.id,
-            reactedUsers: [user.id],
-          },
-        },
+            reactedUsers: [user.id]
+          }
+        }
       });
       knownMessage = { messageId: reaction.message.id, reactedUsers: [user.id] };
     }
@@ -48,10 +48,10 @@ export default new Event({
               ...config.starboard.messages.filter((msg) => msg.messageId !== knownMessage?.messageId),
               {
                 ...knownMessage,
-                reactedUsers: [...knownMessage.reactedUsers, user.id],
-              },
-            ],
-          },
+                reactedUsers: [...knownMessage.reactedUsers, user.id]
+              }
+            ]
+          }
         });
         knownMessage = { ...knownMessage, reactedUsers: [...knownMessage.reactedUsers, user.id] };
       }
@@ -65,7 +65,7 @@ export default new Event({
             .setAuthor({
               name: reaction.message.author?.displayName || 'Unknown User',
               iconURL: reaction.message.author?.displayAvatarURL(),
-              url: reaction.message.url,
+              url: reaction.message.url
             })
             .setTimestamp(reaction.message.createdAt);
           const attachment = reaction.message.attachments.first();
@@ -75,7 +75,7 @@ export default new Event({
 
           const msg = await channel.send({
             content: `${stars} ⭐`,
-            embeds: [embed],
+            embeds: [embed]
           });
           if (msg) await msg.react('⭐').catch((err) => logger.debug({ err }, 'Could not react to starboard message'));
 
@@ -85,10 +85,10 @@ export default new Event({
                 ...config.starboard.messages.filter((msg) => msg.messageId !== reaction.message.id),
                 {
                   ...knownMessage,
-                  starboardMessageId: msg?.id,
-                },
-              ],
-            },
+                  starboardMessageId: msg?.id
+                }
+              ]
+            }
           });
         }
       } else {
@@ -96,7 +96,7 @@ export default new Event({
           .setAuthor({
             name: reaction.message.author?.displayName || 'Unknown User',
             iconURL: reaction.message.author?.displayAvatarURL(),
-            url: reaction.message.url,
+            url: reaction.message.url
           })
           .setTimestamp(reaction.message.createdAt);
         const attachment = reaction.message.attachments.first();
@@ -107,7 +107,7 @@ export default new Event({
         const msg = await channel
           .send({
             content: `${stars} ⭐`,
-            embeds: [embed],
+            embeds: [embed]
           })
           .catch((err) => logger.debug({ err }, 'Could not send starboard message'));
         if (msg) await msg.react('⭐').catch((err) => logger.debug({ err }, 'Could not react to starboard message'));
@@ -118,10 +118,10 @@ export default new Event({
               ...config.starboard.messages.filter((msg) => msg.messageId !== reaction.message.id),
               {
                 ...knownMessage,
-                starboardMessageId: msg?.id,
-              },
-            ],
-          },
+                starboardMessageId: msg?.id
+              }
+            ]
+          }
         });
       }
     }
@@ -135,10 +135,10 @@ export default new Event({
               ...config.starboard.messages.filter((msg) => msg.messageId !== knownStarboardMessage.messageId),
               {
                 ...knownStarboardMessage,
-                reactedUsers: [...knownStarboardMessage.reactedUsers, user.id],
-              },
-            ],
-          },
+                reactedUsers: [...knownStarboardMessage.reactedUsers, user.id]
+              }
+            ]
+          }
         });
       }
 
@@ -146,5 +146,5 @@ export default new Event({
         .edit(knownStarboardMessage.starboardMessageId, { content: `${stars} ⭐` })
         .catch((err) => logger.debug({ err }, 'Could not edit starboard message'));
     }
-  },
+  }
 });

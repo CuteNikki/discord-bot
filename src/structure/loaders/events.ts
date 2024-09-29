@@ -20,9 +20,9 @@ export async function loadEvents(client: DiscordClient) {
       if (!imported?.default?.options?.name) continue;
 
       if (imported.default?.options.once) {
-        client.once(imported.default.options.name, (...args: any[]) => imported.default?.options.execute(client, ...args));
+        client.once(imported.default.options.name, (...args: unknown[]) => imported.default?.options.execute(client, ...args));
       } else {
-        client.on(imported.default.options.name, (...args: any[]) => imported.default?.options.execute(client, ...args));
+        client.on(imported.default.options.name, (...args: unknown[]) => imported.default?.options.execute(client, ...args));
       }
     } catch (err) {
       logger.error({ err }, `Error while loading event (${file})`);

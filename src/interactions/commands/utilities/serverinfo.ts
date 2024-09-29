@@ -7,7 +7,7 @@ import {
   GuildVerificationLevel,
   InteractionContextType,
   Role,
-  SlashCommandBuilder,
+  SlashCommandBuilder
 } from 'discord.js';
 import { t } from 'i18next';
 
@@ -46,6 +46,7 @@ export default new Command({
         const roleString = `<@&${role.id}> `;
         if (roleString.length + totalLength > 1000) break;
         results.push(roleString);
+        totalLength += roleString.length;
       }
       return results;
     }
@@ -57,6 +58,7 @@ export default new Command({
         const featureString = `\`${feature.toLowerCase().replace(/_/g, ' ')}\` `;
         if (featureString.length + totalLength > 1000) break;
         results.push(featureString);
+        totalLength += featureString.length;
       }
       return results;
     }
@@ -89,18 +91,18 @@ export default new Command({
           value: [
             t('serverinfo.server.name', {
               lng,
-              name: `${guild.name}\n${guild.id}`,
+              name: `${guild.name}\n${guild.id}`
             }),
             t('serverinfo.server.created', {
               lng,
-              created: `<t:${Math.floor(guild.createdTimestamp / 1000)}:d> | <t:${Math.floor(guild.createdTimestamp / 1000)}:R>`,
+              created: `<t:${Math.floor(guild.createdTimestamp / 1000)}:d> | <t:${Math.floor(guild.createdTimestamp / 1000)}:R>`
             }),
             t('serverinfo.server.owner', { lng, owner: `<@${guild.ownerId}> ${client.customEmojis.server_owner}` }),
             t('serverinfo.server.vanity', {
               lng,
-              vanity: guild.vanityURLCode ?? t('none', { lng }),
-            }),
-          ].join('\n'),
+              vanity: guild.vanityURLCode ?? t('none', { lng })
+            })
+          ].join('\n')
         },
         {
           name: t('serverinfo.channels.title', { lng }),
@@ -108,23 +110,23 @@ export default new Command({
             t('serverinfo.channels.total', { lng, total: totalChannels }),
             t('serverinfo.channels.categories', {
               lng,
-              categories: categoryChannels,
+              categories: categoryChannels
             }),
             t('serverinfo.channels.text', { lng, text: textChannels }),
             t('serverinfo.channels.voice', { lng, voice: voiceChannels }),
             t('serverinfo.channels.threads', { lng, threads: threadChannels }),
-            t('serverinfo.channels.other', { lng, other: otherChannels }),
+            t('serverinfo.channels.other', { lng, other: otherChannels })
           ].join('\n'),
-          inline: true,
+          inline: true
         },
         {
           name: t('serverinfo.members.title', { lng }),
           value: [
             t('serverinfo.members.total', { lng, total: totalMembers }),
             t('serverinfo.members.bots', { lng, bots: botMembers }),
-            t('serverinfo.members.humans', { lng, humans: humanMembers }),
+            t('serverinfo.members.humans', { lng, humans: humanMembers })
           ].join('\n'),
-          inline: true,
+          inline: true
         },
         {
           name: t('serverinfo.boost.title', { lng }),
@@ -132,33 +134,33 @@ export default new Command({
             t('serverinfo.boost.tier', { lng, tier: guild.premiumTier }),
             t('serverinfo.boost.count', {
               lng,
-              boosts: guild.premiumSubscriptionCount,
+              boosts: guild.premiumSubscriptionCount
             }),
             t('serverinfo.boost.users', {
               lng,
-              boosters: members.cache.filter((member) => member.premiumSinceTimestamp).size,
-            }),
+              boosters: members.cache.filter((member) => member.premiumSinceTimestamp).size
+            })
           ].join('\n'),
-          inline: true,
+          inline: true
         },
         {
           name: t('serverinfo.security.title', { lng }),
           value: [
             t('serverinfo.security.explicit_filter', {
               lng,
-              filter: GuildExplicitContentFilter[guild.explicitContentFilter],
+              filter: GuildExplicitContentFilter[guild.explicitContentFilter]
             }),
             t('serverinfo.security.nsfw_level', {
               lng,
-              level: GuildNSFWLevel[guild.nsfwLevel],
+              level: GuildNSFWLevel[guild.nsfwLevel]
             }),
             t('serverinfo.security.verification_level', {
               lng,
-              level: GuildVerificationLevel[guild.verificationLevel],
-            }),
+              level: GuildVerificationLevel[guild.verificationLevel]
+            })
           ].join('\n'),
-          inline: true,
-        },
+          inline: true
+        }
       );
     if (guild.description) {
       serverEmbed.setDescription(guild.description);
@@ -170,9 +172,9 @@ export default new Command({
           t('serverinfo.emojis.total', { lng, total: totalEmojis }),
           t('serverinfo.emojis.animated', { lng, animated: animatedEmojis }),
           t('serverinfo.emojis.static', { lng, static: staticEmojis }),
-          t('serverinfo.emojis.stickers', { lng, total: totalStickers }),
+          t('serverinfo.emojis.stickers', { lng, total: totalStickers })
         ].join('\n'),
-        inline: true,
+        inline: true
       });
     }
     if (userRoles.length) {
@@ -181,9 +183,9 @@ export default new Command({
         name: t('serverinfo.user_roles', {
           lng,
           showing: displayUserRoles.length,
-          total: userRoles.length,
+          total: userRoles.length
         }),
-        value: displayUserRoles.join(''),
+        value: displayUserRoles.join('')
       });
     }
     if (managedRoles.length) {
@@ -192,28 +194,28 @@ export default new Command({
         name: t('serverinfo.managed_roles', {
           lng,
           showing: displayManagedRoles.length,
-          total: managedRoles.length,
+          total: managedRoles.length
         }),
-        value: displayManagedRoles.join(''),
+        value: displayManagedRoles.join('')
       });
     }
     if (guild.features.length) {
       const displayFeatures = maxDisplayFeatures();
       serverEmbed.addFields({
         name: t('serverinfo.features', { lng, showing: displayFeatures.length, total: guild.features.length }),
-        value: displayFeatures.join(''),
+        value: displayFeatures.join('')
       });
     }
     if (guild.banner) {
       serverEmbed
         .addFields({
           name: t('serverinfo.banner', { lng }),
-          value: '** **',
+          value: '** **'
         })
         .setImage(guild.bannerURL({ size: 4096, extension: 'webp' }));
     }
     await interaction.editReply({
-      embeds: [serverEmbed],
+      embeds: [serverEmbed]
     });
-  },
+  }
 });

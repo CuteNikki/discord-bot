@@ -27,7 +27,7 @@ export default new Event({
       .setThumbnail(newSticker.url)
       .addFields({
         name: t('log.stickerUpdate.sticker', { lng }),
-        value: `\`${newSticker.name}\` (${newSticker.id})`,
+        value: `\`${newSticker.name}\` (${newSticker.id})`
       })
       .setTimestamp();
 
@@ -38,44 +38,44 @@ export default new Event({
         {
           name: t('log.stickerUpdate.old_name', { lng }),
           value: oldSticker.name,
-          inline: true,
+          inline: true
         },
         {
           name: t('log.stickerUpdate.new_name', { lng }),
           value: newSticker.name,
-          inline: true,
+          inline: true
         },
-        emptyField,
+        emptyField
       );
     if (newSticker.description !== oldSticker.description)
       embed.addFields(
         {
           name: t('log.stickerUpdate.old_description', { lng }),
           value: oldSticker.description ?? '/',
-          inline: true,
+          inline: true
         },
         {
           name: t('log.stickerUpdate.new_description', { lng }),
           value: newSticker.description ?? '/',
-          inline: true,
+          inline: true
         },
-        emptyField,
+        emptyField
       );
     if (newSticker.tags !== oldSticker.tags)
       embed.addFields(
         {
           name: t('log.stickerUpdate.old_tags', { lng }),
           value: oldSticker.tags ?? '/',
-          inline: true,
+          inline: true
         },
         {
           name: t('log.stickerUpdate.new_tags', { lng }),
           value: newSticker.tags ?? '/',
-          inline: true,
+          inline: true
         },
-        emptyField,
+        emptyField
       );
 
     await logChannel.send({ embeds: [embed] });
-  },
+  }
 });

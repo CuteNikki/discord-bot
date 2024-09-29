@@ -23,7 +23,7 @@ export default new Command({
     const settings = await getClientSettings(keys.DISCORD_BOT_ID);
 
     await interaction.editReply({
-      embeds: [new EmbedBuilder().setColor(client.colors.general).setTitle(t('invite.title', { lng })).setDescription(settings.support.botInvite)],
+      embeds: [new EmbedBuilder().setColor(client.colors.general).setTitle(t('invite.title', { lng })).setDescription(settings.support.botInvite)]
     });
-  },
+  }
 });

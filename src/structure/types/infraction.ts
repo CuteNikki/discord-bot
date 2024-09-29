@@ -1,4 +1,3 @@
-
 import type { Types } from 'mongoose';
 
 export enum InfractionType {
@@ -7,7 +6,7 @@ export enum InfractionType {
   TempBan,
   Kick,
   Timeout,
-  Warn,
+  Warn
 }
 
 export type InfractionDocument = {

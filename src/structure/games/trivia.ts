@@ -9,13 +9,13 @@ import { logger } from 'utils/logger';
 
 export enum TriviaMode {
   Single = 'boolean',
-  Multiple = 'multiple',
+  Multiple = 'multiple'
 }
 
 export enum TriviaDifficulty {
   Easy = 'easy',
   Medium = 'medium',
-  Hard = 'hard',
+  Hard = 'hard'
 }
 
 export type TriviaQuestion = {
@@ -38,7 +38,7 @@ export class Trivia {
       mode: TriviaMode;
       difficulty: TriviaDifficulty;
       category: number;
-    },
+    }
   ) {
     this.trivia = {} as TriviaQuestion;
 
@@ -56,7 +56,7 @@ export class Trivia {
         .editReply({
           content: t('games.trivia.error', { lng }),
           embeds: [],
-          components: [],
+          components: []
         })
         .catch((err) => logger.debug({ err }, 'Could not edit message'));
 
@@ -68,31 +68,31 @@ export class Trivia {
             .setColor(Colors.Yellow)
             .setAuthor({
               name: user.displayName,
-              iconURL: user.displayAvatarURL(),
+              iconURL: user.displayAvatarURL()
             })
             .setTitle(t('games.trivia.title', { lng }))
             .addFields(
               {
                 name: t('games.trivia.category', { lng }),
-                value: this.trivia.category,
+                value: this.trivia.category
               },
               {
                 name: t('games.trivia.difficulty', { lng }),
-                value: this.trivia.difficulty,
+                value: this.trivia.difficulty
               },
               {
                 name: t('games.trivia.question', { lng }),
-                value: this.trivia.question,
-              },
-            ),
+                value: this.trivia.question
+              }
+            )
         ],
-        components: this.getComponents(),
+        components: this.getComponents()
       })
       .catch((err) => logger.debug({ err }, 'Could not send message'));
     if (!message) return;
 
     const collector = message.createMessageComponentCollector({
-      idle: 60 * 1000,
+      idle: 60 * 1000
     });
 
     collector.on('collect', async (buttonInteraction) => {
@@ -102,9 +102,9 @@ export class Trivia {
         return buttonInteraction
           .followUp({
             content: t('interactions.author_only', {
-              lng: await getUserLanguage(buttonInteraction.user.id),
+              lng: await getUserLanguage(buttonInteraction.user.id)
             }),
-            ephemeral: true,
+            ephemeral: true
           })
           .catch((err) => logger.debug({ err }, 'Could not follow up'));
 
@@ -131,34 +131,34 @@ export class Trivia {
             .setColor(result ? Colors.Green : Colors.Red)
             .setAuthor({
               name: user.displayName,
-              iconURL: user.displayAvatarURL(),
+              iconURL: user.displayAvatarURL()
             })
             .setTitle(t('games.trivia.title', { lng }))
             .setDescription(result ? t('games.trivia.correct', { lng }) : t('games.trivia.incorrect', { lng }))
             .addFields(
               {
                 name: t('games.trivia.category', { lng }),
-                value: this.trivia.category,
+                value: this.trivia.category
               },
               {
                 name: t('games.trivia.difficulty', { lng }),
-                value: this.trivia.difficulty,
+                value: this.trivia.difficulty
               },
               {
                 name: t('games.trivia.question', { lng }),
-                value: this.trivia.question,
+                value: this.trivia.question
               },
               {
                 name: t('games.trivia.answer', { lng }),
-                value: this.trivia.correct_answer,
+                value: this.trivia.correct_answer
               },
               {
                 name: t('games.trivia.input', { lng }),
-                value: this.selected || '/',
-              },
-            ),
+                value: this.selected || '/'
+              }
+            )
         ],
-        components: this.disableButtons(this.getComponents()),
+        components: this.disableButtons(this.getComponents())
       })
       .catch((err) => logger.debug({ err }, 'Could not edit message'));
   }
@@ -198,7 +198,7 @@ export class Trivia {
 
   private async getTrivia() {
     const response = (await fetch(
-      `https://opentdb.com/api.php?amount=1&type=${this.options.mode}&difficulty=${this.options.difficulty}&category=${this.options.category}`,
+      `https://opentdb.com/api.php?amount=1&type=${this.options.mode}&difficulty=${this.options.difficulty}&category=${this.options.category}`
     )
       .then(async (res) => await res.json())
       .then((res) => res.results[0])
@@ -213,7 +213,7 @@ export class Trivia {
     return (this.trivia = response);
   }
 
-  private shuffleArray(array: any[]) {
+  private shuffleArray(array: string[]) {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [array[i], array[j]] = [array[j], array[i]];
@@ -238,12 +238,12 @@ export class Trivia {
       amp: '&',
       quot: '"',
       lt: '<',
-      gt: '>',
+      gt: '>'
     };
     return encodedString
       .replace(translateRegex, (_match, entity) => translate[entity as keyof typeof translate])
       .replace(/&#(\d+);/gi, (_match, numStr) => {
-        var num = parseInt(numStr, 10);
+        const num = parseInt(numStr, 10);
         return String.fromCharCode(num);
       });
   }

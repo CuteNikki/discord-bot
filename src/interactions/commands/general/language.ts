@@ -20,13 +20,13 @@ export default new Command({
       subcommand
         .setName('user')
         .setDescription('Your personal language preference')
-        .addStringOption((option) => option.setName('language').setDescription('The new language to set').setAutocomplete(true).setRequired(false)),
+        .addStringOption((option) => option.setName('language').setDescription('The new language to set').setAutocomplete(true).setRequired(false))
     )
     .addSubcommand((subcommand) =>
       subcommand
         .setName('server')
         .setDescription("The server's language preference")
-        .addStringOption((option) => option.setName('language').setDescription('The new language to set').setAutocomplete(true).setRequired(false)),
+        .addStringOption((option) => option.setName('language').setDescription('The new language to set').setAutocomplete(true).setRequired(false))
     ),
   async autocomplete({ interaction }) {
     const choices = supportedLanguages;
@@ -55,7 +55,7 @@ export default new Command({
 
           if (!language) {
             await interaction.editReply({
-              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('language.current', { lng, language: lng }))],
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('language.current', { lng, language: lng }))]
             });
             return;
           }
@@ -68,17 +68,17 @@ export default new Command({
                   .setDescription(
                     [
                       t('language.invalid', { lng, language }),
-                      t('language.supported', { lng, languages: supportedLanguages.map((value) => `\`${value}\``).join(', ') }),
-                    ].join('\n'),
-                  ),
-              ],
+                      t('language.supported', { lng, languages: supportedLanguages.map((value) => `\`${value}\``).join(', ') })
+                    ].join('\n')
+                  )
+              ]
             });
             return;
           }
 
           await updateUserLanguage(user.id, language);
           await interaction.editReply({
-            embeds: [new EmbedBuilder().setColor(client.colors.general).setDescription(t('language.success', { lng, language }))],
+            embeds: [new EmbedBuilder().setColor(client.colors.general).setDescription(t('language.success', { lng, language }))]
           });
         }
         break;
@@ -88,21 +88,21 @@ export default new Command({
 
           if (!interaction.inCachedGuild()) {
             await interaction.editReply({
-              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('language.invalid_guild', { lng }))],
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('language.invalid_guild', { lng }))]
             });
             return;
           }
 
           if (!language) {
             await interaction.editReply({
-              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('language.current', { lng, language: guildLng }))],
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('language.current', { lng, language: guildLng }))]
             });
             return;
           }
 
           if (!interaction.member.permissions.has(PermissionFlagsBits.ManageGuild)) {
             await interaction.editReply({
-              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('language.no_permission', { lng }))],
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('language.no_permission', { lng }))]
             });
             return;
           }
@@ -115,21 +115,21 @@ export default new Command({
                     t('language.invalid', { lng, language }),
                     t('language.supported', {
                       lng,
-                      languages: supportedLanguages.map((value) => `\`${value}\``).join(', '),
-                    }),
-                  ].join('\n'),
-                ),
-              ],
+                      languages: supportedLanguages.map((value) => `\`${value}\``).join(', ')
+                    })
+                  ].join('\n')
+                )
+              ]
             });
             return;
           }
 
           await updateGuildLanguage(interaction.guildId, language);
           await interaction.editReply({
-            embeds: [new EmbedBuilder().setColor(client.colors.general).setDescription(t('language.success', { lng, language }))],
+            embeds: [new EmbedBuilder().setColor(client.colors.general).setDescription(t('language.success', { lng, language }))]
           });
         }
         break;
     }
-  },
+  }
 });

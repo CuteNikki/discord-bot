@@ -1,4 +1,4 @@
-import { ApplicationIntegrationType, Colors, EmbedBuilder, InteractionContextType, SlashCommandBuilder, Team, version } from 'discord.js';
+import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, SlashCommandBuilder, Team, version } from 'discord.js';
 import { t } from 'i18next';
 import mongoose from 'mongoose';
 import osu from 'node-os-utils';
@@ -42,13 +42,13 @@ export default new Command({
         1: t('botinfo.database.connected', { lng }),
         2: t('botinfo.database.connecting', { lng }),
         3: t('botinfo.database.disconnecting', { lng }),
-        99: t('botinfo.database.uninitialized', { lng }),
+        99: t('botinfo.database.uninitialized', { lng })
       };
 
       const guildCount = ((await client.cluster.fetchClientValues('guilds.cache.size')) as number[]).reduce((acc, count) => acc + count, 0);
       const memberCount = ((await client.cluster.broadcastEval((c) => c.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0))) as number[]).reduce(
         (acc, count) => acc + count,
-        0,
+        0
       );
 
       await interaction.editReply({
@@ -66,18 +66,18 @@ export default new Command({
                     owner:
                       application.owner instanceof Team
                         ? `<@${application.owner.ownerId}> | ${application.owner.members.get(application.owner.ownerId ?? '')?.user.username}\n${application.owner.ownerId}`
-                        : `<@${application.owner?.id}> (\`${application.owner?.username}\` | ${application.owner?.id})`,
+                        : `<@${application.owner?.id}> (\`${application.owner?.username}\` | ${application.owner?.id})`
                   }),
                   t('botinfo.general.created', {
                     lng,
-                    created: `<t:${Math.floor(application.createdTimestamp / 1000)}:D> | <t:${Math.floor(application.createdTimestamp / 1000)}:R>`,
+                    created: `<t:${Math.floor(application.createdTimestamp / 1000)}:D> | <t:${Math.floor(application.createdTimestamp / 1000)}:R>`
                   }),
                   t('botinfo.general.uptime', {
                     lng,
-                    uptime: `<t:${Math.floor(interaction.client.readyTimestamp / 1000)}:R>`,
+                    uptime: `<t:${Math.floor(interaction.client.readyTimestamp / 1000)}:R>`
                   }),
-                  t('botinfo.general.ping', { lng, ping: client.ws.ping }),
-                ].join('\n'),
+                  t('botinfo.general.ping', { lng, ping: client.ws.ping })
+                ].join('\n')
               },
               {
                 name: t('botinfo.system.title', { lng }),
@@ -89,24 +89,24 @@ export default new Command({
                     lng,
                     memoryUsage,
                     memoryUsed,
-                    memoryTotal,
+                    memoryTotal
                   }),
                   t('botinfo.system.node', { lng, version: process.version }),
-                  t('botinfo.system.discord', { lng, version }),
-                ].join('\n'),
+                  t('botinfo.system.discord', { lng, version })
+                ].join('\n')
               },
               {
                 name: t('botinfo.database.title', { lng }),
                 value: [
                   t('botinfo.database.state', {
                     lng,
-                    state: dbStates[mongoose.connection.readyState],
+                    state: dbStates[mongoose.connection.readyState]
                   }),
                   t('botinfo.database.weekly', {
                     lng,
-                    date: database.lastWeeklyClearAt ? `<t:${Math.floor(database.lastWeeklyClearAt / 1000)}:D>` : '/',
-                  }),
-                ].join('\n'),
+                    date: database.lastWeeklyClearAt ? `<t:${Math.floor(database.lastWeeklyClearAt / 1000)}:D>` : '/'
+                  })
+                ].join('\n')
               },
               {
                 name: t('botinfo.stats.title', { lng }),
@@ -115,40 +115,40 @@ export default new Command({
                   t('botinfo.stats.members', { lng, memberCount }),
                   t('botinfo.stats.commands', {
                     lng,
-                    commandCount: commands.size,
+                    commandCount: commands.size
                   }),
                   t('botinfo.stats.executed_commands', {
                     lng,
-                    executedCommands: stats.commandsExecuted,
+                    executedCommands: stats.commandsExecuted
                   }),
                   t('botinfo.stats.failed_commands', {
                     lng,
-                    failedCommands: stats.commandsFailed,
+                    failedCommands: stats.commandsFailed
                   }),
                   t('botinfo.stats.buttons_executed', {
                     lng,
-                    buttonsExecuted: stats.buttonsExecuted,
+                    buttonsExecuted: stats.buttonsExecuted
                   }),
                   t('botinfo.stats.buttons_failed', {
                     lng,
-                    buttonsFailed: stats.buttonsFailed,
+                    buttonsFailed: stats.buttonsFailed
                   }),
                   t('botinfo.stats.guilds_joined', {
                     lng,
-                    guildsJoined: stats.guildsJoined,
+                    guildsJoined: stats.guildsJoined
                   }),
                   t('botinfo.stats.guilds_left', {
                     lng,
-                    guildsLeft: stats.guildsLeft,
-                  }),
-                ].join('\n'),
-              },
-            ),
-        ],
+                    guildsLeft: stats.guildsLeft
+                  })
+                ].join('\n')
+              }
+            )
+        ]
       });
-    } catch (err: any) {
+    } catch (err: unknown) {
       logger.debug({ err }, 'Could not send botinfo');
       interaction.editReply(t('botinfo.failed', { lng }));
     }
-  },
+  }
 });

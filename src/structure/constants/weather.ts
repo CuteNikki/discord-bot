@@ -16,7 +16,7 @@ export const COMPASS = {
   SW: 'Southwest',
   WSW: 'West-Southwest',
   W: 'West',
-  WNW: 'West-Northwest',
+  WNW: 'West-Northwest'
 };
 
 /**
@@ -34,7 +34,7 @@ export const US_EPA_INDEX = {
   3: '3 - Unhealthy for sensitive (41-65 PM2.5 µg/m3)',
   4: '4 - Unhealthy (66-150 PM2.5 µg/m3)',
   5: '5 - Very Unhealthy (151-250 PM2.5 µg/m3)',
-  6: '6 - Hazardous (251+ PM2.5 µg/m3)',
+  6: '6 - Hazardous (251+ PM2.5 µg/m3)'
 };
 
 /**
@@ -60,7 +60,7 @@ export const UK_DEFRA_INDEX = {
   7: '7 - High (54-58 PM2.5 µg/m3)',
   8: '8 - High (59-64 PM2.5 µg/m3)',
   9: '9 - High (65-70 PM2.5 µg/m3)',
-  10: '10 - Very High (71+ PM2.5 µg/m3)',
+  10: '10 - Very High (71+ PM2.5 µg/m3)'
 };
 
 export const UV_INDEX = {
@@ -113,5 +113,5 @@ export const UV_INDEX = {
   47: '11+ - Extreme',
   48: '11+ - Extreme',
   49: '11+ - Extreme',
-  50: '11+ - Extreme',
+  50: '11+ - Extreme'
 };

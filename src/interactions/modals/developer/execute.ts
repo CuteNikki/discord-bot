@@ -40,10 +40,10 @@ export default new Modal({
                     .replaceAll(interaction.client.token, 'no')
                     .replaceAll(interaction.client.token.split('').reverse().join(''), 'no')
                     .replaceAll('\\n', '\n')
-                    .substring(0, 4000),
-                ),
-              ),
-          ],
+                    .substring(0, 4000)
+                )
+              )
+          ]
         });
 
       return interaction.editReply({
@@ -62,12 +62,12 @@ export default new Modal({
                   .replaceAll(interaction.client.token, 'no')
                   .replaceAll(interaction.client.token.split('').reverse().join(''), 'no')
                   .replaceAll('\\n', '\n')
-                  .substring(0, 4000),
-              ),
-            ),
-        ],
+                  .substring(0, 4000)
+              )
+            )
+        ]
       });
-    } catch (err: any) {
+    } catch (err: unknown) {
       logger.debug({ err }, 'Execute Error');
 
       return interaction.editReply({
@@ -86,11 +86,11 @@ export default new Modal({
                   .replaceAll(interaction.client.token, 'no')
                   .replaceAll(interaction.client.token.split('').reverse().join(''), 'no')
                   .replaceAll('\\n', '\n')
-                  .substring(0, 4000),
-              ),
-            ),
-        ],
+                  .substring(0, 4000)
+              )
+            )
+        ]
       });
     }
-  },
+  }
 });

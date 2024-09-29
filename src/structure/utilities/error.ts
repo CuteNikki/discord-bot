@@ -14,13 +14,13 @@ export async function sendError({
   err,
   reason,
   promise,
-  url,
+  url
 }: {
   client: DiscordClient;
   location: string;
   reason?: string;
   err?: Error;
-  promise?: Promise<any>;
+  promise?: Promise<unknown>;
   url?: string;
 }) {
   logger.error({ location, err, reason, promise }, `[${client.cluster.id}] An error occurred`);
@@ -39,7 +39,7 @@ export async function sendError({
         { name: 'Name', value: `\`${err.name}\`` },
         { name: 'Message', value: `\`${err.message}\`` },
         { name: 'Location', value: `\`${location}\`` },
-        { name: 'Timestamp', value: `<t:${Math.floor(Date.now() / 1000)}:F>` },
+        { name: 'Timestamp', value: `<t:${Math.floor(Date.now() / 1000)}:F>` }
       );
   if (reason)
     embed
@@ -50,7 +50,7 @@ export async function sendError({
     .send({
       username: client.user ? `${client.user.username} | Error` : `${keys.DISCORD_BOT_ID} | Error`,
       avatarURL: client.user?.displayAvatarURL(),
-      embeds: [embed],
+      embeds: [embed]
     })
     .catch((err) => logger.error({ err }, 'Could not send error to webhook'));
 }
@@ -61,41 +61,41 @@ export async function listenToErrors(client: DiscordClient) {
       client,
       err,
       location: 'DiscordJS Client Error',
-      url: 'https://discordjs.guide/popular-topics/errors.html#api-errors',
-    }),
+      url: 'https://discordjs.guide/popular-topics/errors.html#api-errors'
+    })
   );
   client.on(Events.ShardError, (err) =>
     sendError({
       client,
       err,
       location: 'DiscordJS Shard Error',
-      url: 'https://discordjs.guide/popular-topics/errors.html#api-errors',
-    }),
+      url: 'https://discordjs.guide/popular-topics/errors.html#api-errors'
+    })
   );
   process.on('uncaughtException', (err) =>
     sendError({
       client,
       err,
       location: 'NodeJS Uncaught Exception',
-      url: 'https://nodejs.org/api/process.html#event-uncaughtexception',
-    }),
+      url: 'https://nodejs.org/api/process.html#event-uncaughtexception'
+    })
   );
   process.on('uncaughtExceptionMonitor', (err) =>
     sendError({
       client,
       err,
       location: 'NodeJS Uncaught Exception Monitor',
-      url: 'https://nodejs.org/api/process.html#event-uncaughtexceptionmonitor',
-    }),
+      url: 'https://nodejs.org/api/process.html#event-uncaughtexceptionmonitor'
+    })
   );
-  process.on('unhandledRejection', (reason: any, promise) =>
+  process.on('unhandledRejection', (reason, promise) =>
     sendError({
       client,
-      reason,
+      reason: reason as string,
       promise,
       location: 'NodeJS Unhandled Rejection',
-      url: 'https://nodejs.org/api/process.html#event-unhandledrejection',
-    }),
+      url: 'https://nodejs.org/api/process.html#event-unhandledrejection'
+    })
   );
   process.on('warning', (err) => {
     // ignore warnings about deprecated punycode since that's an issue from one of the dependencies
@@ -104,16 +104,15 @@ export async function listenToErrors(client: DiscordClient) {
       client,
       err,
       location: 'NodeJS Warning',
-      url: 'https://nodejs.org/api/process.html#event-warning',
+      url: 'https://nodejs.org/api/process.html#event-warning'
     });
   });
-  // @ts-ignore - this code works fine, typescript is just being dumb
   mongoose.connection.on('error', (err) =>
     sendError({
       client,
       err,
       location: 'Mongoose Connection Error',
-      url: 'https://mongoosejs.com/docs/api/error.html',
-    }),
+      url: 'https://mongoosejs.com/docs/api/error.html'
+    })
   );
 }

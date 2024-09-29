@@ -43,8 +43,8 @@ export default new Button({
         content: t('kick.target_dm', {
           lng: targetLng,
           guild: `\`${guild.name}\``,
-          reason: `\`${reason ?? '/'}\``,
-        }),
+          reason: `\`${reason ?? '/'}\``
+        })
       })
       .catch((err) => logger.debug({ err, targetId }, 'Could not send DM to user'));
 
@@ -53,11 +53,11 @@ export default new Button({
         t('kick.confirmed', {
           lng,
           user: targetMember.toString(),
-          reason: `\`${reason ?? '/'}\``,
+          reason: `\`${reason ?? '/'}\``
         }),
-        receivedDM ? t('kick.dm_received', { lng }) : t('kick.dm_not_received', { lng }),
+        receivedDM ? t('kick.dm_received', { lng }) : t('kick.dm_not_received', { lng })
       ].join('\n'),
-      components: [],
+      components: []
     });
 
     if (targetMember.user.bot) {
@@ -65,5 +65,5 @@ export default new Button({
     }
 
     await createInfraction(guild.id, targetMember.id, interaction.user.id, InfractionType.Kick, reason, undefined, Date.now(), true);
-  },
+  }
 });

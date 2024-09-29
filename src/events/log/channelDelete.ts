@@ -27,15 +27,15 @@ export default new Event({
       .addFields(
         {
           name: t('log.channelDelete.channel', { lng }),
-          value: `${channel.toString()} (\`${name}\` | ${id})`,
+          value: `${channel.toString()} (\`${name}\` | ${id})`
         },
         {
           name: t('log.channelDelete.type', { lng }),
-          value: ChannelType[type],
+          value: ChannelType[type]
         },
         {
           name: t('log.channelDelete.created_at', { lng }),
-          value: `<t:${Math.floor(createdTimestamp / 1000)}:f>`,
+          value: `<t:${Math.floor(createdTimestamp / 1000)}:f>`
         },
         {
           name: t('log.channelDelete.permission_overwrites', { lng }),
@@ -59,22 +59,22 @@ export default new Event({
                           .map((perm) => `\`${perm}\``)
                           .join(', ')
                       : ''
-                  }`,
+                  }`
               )
               .join('\n')
-              .slice(0, 1000) || '/',
-        },
+              .slice(0, 1000) || '/'
+        }
       )
       .setTimestamp();
 
     if (parent)
       embed.addFields({
         name: t('log.channelDelete.category', { lng }),
-        value: `\`${parent.name}\` (${parent.id})`,
+        value: `\`${parent.name}\` (${parent.id})`
       });
 
     await logChannel.send({
-      embeds: [embed],
+      embeds: [embed]
     });
-  },
+  }
 });

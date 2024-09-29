@@ -21,5 +21,5 @@ export default new Command({
     await registerCommands();
 
     await interaction.editReply('Commands have been registered!');
-  },
+  }
 });

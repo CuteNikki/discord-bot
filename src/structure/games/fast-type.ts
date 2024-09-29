@@ -15,7 +15,7 @@ export class FastType {
     public options: {
       interaction: ChatInputCommandInteraction;
       client: DiscordClient;
-    },
+    }
   ) {
     this.sentence = this.getRandomSentence();
 
@@ -36,24 +36,24 @@ export class FastType {
             .setColor(Colors.Yellow)
             .setAuthor({
               name: user.displayName,
-              iconURL: user.displayAvatarURL(),
+              iconURL: user.displayAvatarURL()
             })
             .setTitle(t('games.typing.title', { lng }))
             .addFields(
               {
                 name: t('games.typing.info', { lng }), // Info
-                value: t('games.typing.timer', { lng }), // You have 60 seconds to type the sentence below
+                value: t('games.typing.timer', { lng }) // You have 60 seconds to type the sentence below
               },
               {
                 name: t('games.typing.sentence', { lng }),
                 value: this.sentence
                   .split(' ')
                   .map((word) => `\`${word}\``)
-                  .join('⠀'), // <- invisible character to stop people from copying the sentence and pasting it
-              },
-            ),
+                  .join('⠀') // <- invisible character to stop people from copying the sentence and pasting it
+              }
+            )
         ],
-        components: [],
+        components: []
       })
       .catch((err) => logger.debug({ err }, 'Could not send message'));
 
@@ -63,7 +63,7 @@ export class FastType {
 
     const collector = interaction.channel?.createMessageCollector({
       time: 60 * 1000,
-      filter: (msg) => msg.author.id === user.id,
+      filter: (msg) => msg.author.id === user.id
     });
     if (!collector) return;
 
@@ -95,33 +95,33 @@ export class FastType {
           .setColor(isSentenceCorrect ? Colors.Green : Colors.Yellow)
           .setAuthor({
             name: user.displayName,
-            iconURL: user.displayAvatarURL(),
+            iconURL: user.displayAvatarURL()
           })
           .setTitle(t('games.typing.title', { lng }))
           .addFields(
             {
               name: t('games.typing.sentence', { lng }),
-              value: this.sentence,
+              value: this.sentence
             },
             {
               name: t('games.typing.input', { lng }),
-              value: userSentence,
+              value: userSentence
             },
             {
               name: t('games.typing.similarity', { lng }),
-              value: isSentenceCorrect ? '100%' : `${Math.floor(this.stringSimilarity(this.sentence, userSentence, 2, true) * 100)}%`,
+              value: isSentenceCorrect ? '100%' : `${Math.floor(this.stringSimilarity(this.sentence, userSentence, 2, true) * 100)}%`
             },
             {
               name: t('games.typing.wpm', { lng }),
-              value: `${this.wordsPerMinute}`,
+              value: `${this.wordsPerMinute}`
             },
             {
               name: t('games.typing.time', { lng }),
-              value: `${Math.floor(this.timeTaken / 1000)}s`,
-            },
-          ),
+              value: `${Math.floor(this.timeTaken / 1000)}s`
+            }
+          )
       ],
-      components: [],
+      components: []
     });
   }
 
@@ -175,7 +175,7 @@ export class FastType {
       'Life is really simple, but we insist on making it complicated.',
       'The greatest pleasure in life is doing what people say you cannot do.',
       'The best way to predict the future is to create it.',
-      'Some really cool sentence to fast type.',
+      'Some really cool sentence to fast type.'
     ];
     return sentences[Math.floor(Math.random() * sentences.length)];
   }

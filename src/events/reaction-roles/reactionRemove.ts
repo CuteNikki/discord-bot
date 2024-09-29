@@ -7,7 +7,7 @@ import { getGuildSettings } from 'db/guild';
 export default new Event({
   name: Events.MessageReactionRemove,
   once: false,
-  async execute(_client, reaction, user, _details) {
+  async execute(_client, reaction, user) {
     if (!reaction.message.inGuild()) return;
 
     const config = await getGuildSettings(reaction.message.guildId);
@@ -28,5 +28,5 @@ export default new Event({
     if (!member.roles.cache.has(role.id)) return;
 
     await member.roles.remove(role).catch((err) => console.error(err));
-  },
+  }
 });

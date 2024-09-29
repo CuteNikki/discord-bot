@@ -24,10 +24,10 @@ export default new Command({
           .setDescription(
             t('uptime.description', {
               lng,
-              uptime: `<t:${Math.floor(interaction.client.readyTimestamp / 1000)}:R>`,
-            }),
-          ),
-      ],
+              uptime: `<t:${Math.floor(interaction.client.readyTimestamp / 1000)}:R>`
+            })
+          )
+      ]
     });
-  },
+  }
 });

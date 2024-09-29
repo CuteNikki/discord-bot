@@ -18,9 +18,9 @@ export default new Button({
               .setCustomId('role-id')
               .setLabel(t('welcome.roles.add-role-modal-input', { lng }))
               .setStyle(TextInputStyle.Short)
-              .setRequired(true),
-          ),
-        ),
+              .setRequired(true)
+          )
+        )
     );
-  },
+  }
 });

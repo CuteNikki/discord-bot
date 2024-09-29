@@ -25,7 +25,7 @@ export default new Event({
       .setAuthor({
         name: newMessage.author.displayName,
         iconURL: newMessage.author.displayAvatarURL(),
-        url: newMessage.url,
+        url: newMessage.url
       })
       .setTimestamp(newMessage.createdAt);
     const attachment = newMessage.attachments.first();
@@ -34,5 +34,5 @@ export default new Event({
     if (newMessage.content?.length) embed.setDescription(newMessage.content);
 
     await channel.messages.edit(knownMessage.starboardMessageId, { embeds: [embed] }).catch((err) => logger.debug({ err }, 'Could not edit starboard message'));
-  },
+  }
 });

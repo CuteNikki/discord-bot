@@ -27,7 +27,7 @@ export default new Button({
     if (!system) {
       await interaction.reply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_system', { lng }))],
-        ephemeral: true,
+        ephemeral: true
       });
       return;
     }
@@ -37,7 +37,7 @@ export default new Button({
     if (!ticket) {
       await interaction.reply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_ticket', { lng }))],
-        ephemeral: true,
+        ephemeral: true
       });
       return;
     }
@@ -46,7 +46,7 @@ export default new Button({
       if (!member.roles.cache.has(system.staffRoleId)) {
         await interaction.reply({
           embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.staff_only', { lng }))],
-          ephemeral: true,
+          ephemeral: true
         });
         return;
       }
@@ -58,13 +58,13 @@ export default new Button({
       filename: 'transcript.html',
       saveImages: true,
       footerText: 'Exported {number} message{s}',
-      poweredBy: false,
+      poweredBy: false
     });
 
     if (!system.transcriptChannelId) {
       await interaction.reply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_transcript_channel', { lng }))],
-        files: [transcript],
+        files: [transcript]
       });
       return;
     }
@@ -74,7 +74,7 @@ export default new Button({
     if (!channel?.isSendable()) {
       await interaction.reply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_transcript_channel', { lng }))],
-        files: [transcript],
+        files: [transcript]
       });
       return;
     }
@@ -85,7 +85,7 @@ export default new Button({
           new EmbedBuilder().setTitle(t('ticket.transcript_title', { lng })).addFields(
             {
               name: t('ticket.claimed_by', { lng }),
-              value: `<@${ticket.claimedBy}>`,
+              value: `<@${ticket.claimedBy}>`
             },
             {
               name: t('ticket.users', { lng }),
@@ -94,19 +94,19 @@ export default new Button({
                   if (userId === ticket.createdBy) return `<@${userId}> (${t('ticket.creator', { lng })})`;
                   else return `<@${userId}>`;
                 })
-                .join(', ')}`,
+                .join(', ')}`
             },
             {
               name: t('ticket.created_for', { lng }),
-              value: `${ticket.choice}`,
+              value: `${ticket.choice}`
             },
             {
               name: t('ticket.created_at', { lng }),
-              value: `<t:${Math.floor(ticket.createdAt / 1000)}:R>`,
-            },
-          ),
+              value: `<t:${Math.floor(ticket.createdAt / 1000)}:R>`
+            }
+          )
         ],
-        files: [transcript],
+        files: [transcript]
       })
       .catch((err) => logger.debug({ err }, 'Could not send transcript'));
 
@@ -117,7 +117,7 @@ export default new Button({
 
     await interaction.reply({
       embeds: [new EmbedBuilder().setColor(client.colors.ticket).setDescription(t('ticket.saved_transcript', { lng }))],
-      ephemeral: true,
+      ephemeral: true
     });
-  },
+  }
 });

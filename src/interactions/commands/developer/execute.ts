@@ -6,7 +6,7 @@ import {
   PermissionFlagsBits,
   SlashCommandBuilder,
   TextInputBuilder,
-  TextInputStyle,
+  TextInputStyle
 } from 'discord.js';
 
 import { Command, ModuleType } from 'classes/command';
@@ -34,9 +34,9 @@ export default new Command({
               .setPlaceholder('cat src/classes/client.ts')
               .setMaxLength(4000)
               .setRequired(true)
-              .setStyle(TextInputStyle.Paragraph),
-          ),
-        ),
+              .setStyle(TextInputStyle.Paragraph)
+          )
+        )
     );
-  },
+  }
 });

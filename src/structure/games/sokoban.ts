@@ -20,7 +20,7 @@ export class Sokoban {
       interaction: ChatInputCommandInteraction;
       rows?: number;
       cols?: number;
-    },
+    }
   ) {
     this.board = this.generateSolvableLevel(options.rows ?? 10, options.cols ?? 10);
     this.initialBoard = this.cloneBoard(this.board);
@@ -41,19 +41,19 @@ export class Sokoban {
             .setColor(Colors.Yellow)
             .setAuthor({
               name: user.displayName,
-              iconURL: user.displayAvatarURL(),
+              iconURL: user.displayAvatarURL()
             })
             .setTitle(t('games.sokoban.title', { lng }))
-            .setDescription(this.getBoardContent()),
+            .setDescription(this.getBoardContent())
         ],
-        components: this.getComponents(),
+        components: this.getComponents()
       })
       .catch((err) => logger.debug({ err }, 'Could not send message'));
     if (!message) return;
 
     const collector = message.createMessageComponentCollector({
       idle: 60 * 1000,
-      componentType: ComponentType.Button,
+      componentType: ComponentType.Button
     });
 
     collector.on('collect', async (buttonInteraction) => {
@@ -63,9 +63,9 @@ export class Sokoban {
         return buttonInteraction
           .followUp({
             content: t('interactions.author_only', {
-              lng: await getUserLanguage(buttonInteraction.user.id),
+              lng: await getUserLanguage(buttonInteraction.user.id)
             }),
-            ephemeral: true,
+            ephemeral: true
           })
           .catch((err) => logger.debug({ err }, 'Could not follow up'));
 
@@ -84,11 +84,11 @@ export class Sokoban {
               .setColor(Colors.Yellow)
               .setAuthor({
                 name: user.displayName,
-                iconURL: user.displayAvatarURL(),
+                iconURL: user.displayAvatarURL()
               })
               .setTitle(t('games.sokoban.title', { lng }))
-              .setDescription(this.getBoardContent()),
-          ],
+              .setDescription(this.getBoardContent())
+          ]
         })
         .catch((err) => logger.debug({ err }, 'Could not edit message'));
 
@@ -113,12 +113,12 @@ export class Sokoban {
             .setColor(isWon ? Colors.Green : Colors.Red)
             .setAuthor({
               name: user.displayName,
-              iconURL: user.displayAvatarURL(),
+              iconURL: user.displayAvatarURL()
             })
             .setTitle(t('games.sokoban.title', { lng }))
-            .setDescription([isWon ? t('games.sokoban.win', { lng }) : t('games.sokoban.lose', { lng }), this.getBoardContent()].join('\n\n')),
+            .setDescription([isWon ? t('games.sokoban.win', { lng }) : t('games.sokoban.lose', { lng }), this.getBoardContent()].join('\n\n'))
         ],
-        components: this.getComponents(true),
+        components: this.getComponents(true)
       })
       .catch((err) => logger.debug({ err }, 'Could not edit message'));
   }
@@ -129,13 +129,13 @@ export class Sokoban {
         new ButtonBuilder().setCustomId('SOKOBAN_disabled_one').setLabel('\u200b').setStyle(ButtonStyle.Secondary).setDisabled(true),
         new ButtonBuilder().setCustomId('SOKOBAN_up').setEmoji('⬆️').setStyle(ButtonStyle.Primary).setDisabled(disabled),
         new ButtonBuilder().setCustomId('SOKOBAN_disabled_two').setLabel('\u200b').setStyle(ButtonStyle.Secondary).setDisabled(true),
-        new ButtonBuilder().setCustomId('SOKOBAN_restart').setEmoji('🔄').setStyle(ButtonStyle.Danger).setDisabled(disabled),
+        new ButtonBuilder().setCustomId('SOKOBAN_restart').setEmoji('🔄').setStyle(ButtonStyle.Danger).setDisabled(disabled)
       ),
       new ActionRowBuilder<ButtonBuilder>().addComponents(
         new ButtonBuilder().setCustomId('SOKOBAN_left').setEmoji('⬅️').setStyle(ButtonStyle.Primary).setDisabled(disabled),
         new ButtonBuilder().setCustomId('SOKOBAN_down').setEmoji('⬇️').setStyle(ButtonStyle.Primary).setDisabled(disabled),
-        new ButtonBuilder().setCustomId('SOKOBAN_right').setEmoji('➡️').setStyle(ButtonStyle.Primary).setDisabled(disabled),
-      ),
+        new ButtonBuilder().setCustomId('SOKOBAN_right').setEmoji('➡️').setStyle(ButtonStyle.Primary).setDisabled(disabled)
+      )
     ];
   }
 
@@ -147,7 +147,6 @@ export class Sokoban {
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
       board = this.createEmptyBoard(rows, cols);
       this.placeWalls(board); // Place walls
-      const { playerX, playerY } = this.placePlayer(board);
       const { boxes, storages } = this.placeBoxesAndStorages(board);
 
       // Check if all boxes are reachable
@@ -249,7 +248,7 @@ export class Sokoban {
       [-1, 0],
       [1, 0],
       [0, -1],
-      [0, 1],
+      [0, 1]
     ]; // Up, Down, Left, Right
 
     // Initialize visited array
@@ -324,7 +323,7 @@ export class Sokoban {
 
         // Check if the cell after the box is empty (0) or another box that can be pushed (2 or 5)
         if (this.isValidMove(bx, by)) {
-          let cellAfterBox = this.board[by][bx];
+          const cellAfterBox = this.board[by][bx];
 
           if (cellAfterBox === 0 || cellAfterBox === 3) {
             // Move the box to the cell after it
@@ -396,7 +395,7 @@ export class Sokoban {
                 return '';
             }
           })
-          .join(''),
+          .join('')
       )
       .join('\n');
   }

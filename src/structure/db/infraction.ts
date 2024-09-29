@@ -24,7 +24,7 @@ export async function createInfraction(
   reason?: string,
   endsAt?: number,
   createdAt?: number,
-  closed?: boolean,
+  closed?: boolean
 ): Promise<InfractionDocument> {
   return await infractionModel.create({
     guildId,
@@ -34,7 +34,7 @@ export async function createInfraction(
     reason,
     endsAt,
     closed,
-    createdAt,
+    createdAt
   });
 }
 

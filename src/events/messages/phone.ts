@@ -21,7 +21,7 @@ export default new Event({
     // Find an existing connection for the current channel
     const existingConnection = await connectionModel
       .findOne({
-        $or: [{ channelIdOne: channelId }, { channelIdTwo: channelId }],
+        $or: [{ channelIdOne: channelId }, { channelIdTwo: channelId }]
       })
       .lean()
       .exec();
@@ -38,7 +38,7 @@ export default new Event({
       .setColor(Colors.Aqua)
       .setAuthor({
         name: author.globalName ? `${author.globalName} (@${author.username})` : `@${author.username}`,
-        iconURL: author.displayAvatarURL({ extension: 'webp', size: 256 }),
+        iconURL: author.displayAvatarURL({ extension: 'webp', size: 256 })
       })
       .setDescription(message.content)
       .setTimestamp();
@@ -46,7 +46,7 @@ export default new Event({
       .setColor(Colors.Blue)
       .setAuthor({
         name: author.globalName ? `${author.globalName} (@${author.username})` : `@${author.username}`,
-        iconURL: author.displayAvatarURL({ extension: 'webp', size: 256 }),
+        iconURL: author.displayAvatarURL({ extension: 'webp', size: 256 })
       })
       .setDescription(message.content)
       .setTimestamp();
@@ -58,13 +58,13 @@ export default new Event({
     if (linkRegex.test(message.content)) {
       embed.setDescription(`||${message.content}||`).setFooter({
         text: `⚠️ ${t('phone.link', {
-          lng,
-        })}`,
+          lng
+        })}`
       });
       otherEmbed.setDescription(`||${message.content}||`).setFooter({
         text: `⚠️ ${t('phone.link', {
-          otherLng,
-        })}`,
+          otherLng
+        })}`
       });
     }
 
@@ -72,7 +72,7 @@ export default new Event({
     const res = await fetch('https://vector.profanity.dev', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: message.content }),
+      body: JSON.stringify({ message: message.content })
     }).catch((err) => logger.debug({ err }, 'Could not fetch profanity API'));
     if (res) {
       const response: { isProfanity: boolean; score: number } = await res.json();
@@ -80,13 +80,13 @@ export default new Event({
       if (response.isProfanity) {
         embed.setDescription(`||${message.content.slice(0, 1990)}||`).setFooter({
           text: `⚠️ ${t('phone.profanity', {
-            lng,
-          })}`,
+            lng
+          })}`
         });
         otherEmbed.setDescription(`||${message.content.slice(0, 1990)}||`).setFooter({
           text: `⚠️ ${t('phone.profanity', {
-            otherLng,
-          })}`,
+            otherLng
+          })}`
         });
       }
     }
@@ -121,5 +121,5 @@ export default new Event({
     // Delete connection if it has been inactive
     const TIMEOUT = 1_000 * 60 * 4; // = 4 minutes
     setTimeout(async () => handlePhoneMessageTimeout({ channel, existingConnection, lng, otherLng, targetChannel, timeout: TIMEOUT }), TIMEOUT);
-  },
+  }
 });

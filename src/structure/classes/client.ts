@@ -20,6 +20,7 @@ import { initTranslation } from 'utils/language';
 
 export class DiscordClient extends Client {
   // Collections for loading and running commands, buttons and modals
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public commands = new Collection<string, Command<any>>(); // Collection<commandName, commandData>
   public buttons = new Collection<string, Button>(); // Collection<customId, buttonData>
   public modals = new Collection<string, Modal>(); // Collection<customId, modalData>
@@ -43,7 +44,7 @@ export class DiscordClient extends Client {
     ticket: Colors.LuminousVividPink,
     level: Colors.Blue,
     reactionRoles: Colors.DarkGreen,
-    general: Colors.Blurple,
+    general: Colors.Blurple
   };
 
   // Custom emojis
@@ -64,7 +65,7 @@ export class DiscordClient extends Client {
       // Setting the bots presence
       presence: {
         activities: keys.DISCORD_BOT_STATUS !== 'optional' ? [{ name: keys.DISCORD_BOT_STATUS, type: ActivityType.Custom }] : [],
-        status: PresenceUpdateStatus.Online,
+        status: PresenceUpdateStatus.Online
       },
 
       // Partials are a way to handle objects that may not have all their data available
@@ -76,7 +77,7 @@ export class DiscordClient extends Client {
         Partials.GuildScheduledEvent,
         Partials.GuildMember,
         Partials.ThreadMember,
-        Partials.User,
+        Partials.User
       ],
 
       // Intents are a way to specify which events your bot should receive from the Discord gateway
@@ -103,8 +104,8 @@ export class DiscordClient extends Client {
         // Some intents are considered "privileged" and require additional permissions or approval from Discord:
         GatewayIntentBits.GuildMembers, // !! Needed for welcome messages and guild log !!
         GatewayIntentBits.MessageContent, // !! Needed for fast-type game !!
-        GatewayIntentBits.GuildPresences,
-      ],
+        GatewayIntentBits.GuildPresences
+      ]
     });
 
     // Loading everything and then logging in
@@ -116,7 +117,7 @@ export class DiscordClient extends Client {
       loadSelections(this),
       initTranslation(),
       initDatabase(this),
-      listenToErrors(this),
+      listenToErrors(this)
     ]).then(() => {
       this.login(keys.DISCORD_BOT_TOKEN);
     });

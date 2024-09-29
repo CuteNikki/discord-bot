@@ -16,7 +16,7 @@ import {
   TextChannel,
   TextInputBuilder,
   TextInputStyle,
-  type APIRole,
+  type APIRole
 } from 'discord.js';
 import { t } from 'i18next';
 
@@ -50,7 +50,7 @@ export default new Command({
       cmd
         .setName('delete')
         .setDescription('Delete a ticket system')
-        .addStringOption((opt) => opt.setName('system-id').setDescription('The id of the ticket system to delete').setRequired(true)),
+        .addStringOption((opt) => opt.setName('system-id').setDescription('The id of the ticket system to delete').setRequired(true))
     ),
   async execute({ interaction, client, lng }) {
     if (!interaction.inCachedGuild()) return;
@@ -153,9 +153,9 @@ export default new Command({
                 lng,
                 choices: choices.length
                   ? choices.map((c) => `${c.emoji ? c.emoji + ' ' : ''}${c.label} (${ButtonStyle[c.style]})`).join(', ')
-                  : t('none', { lng }),
-              }),
-            ].join('\n'),
+                  : t('none', { lng })
+              })
+            ].join('\n')
           );
       });
       await interaction
@@ -164,15 +164,15 @@ export default new Command({
             new EmbedBuilder().setColor(client.colors.ticket).addFields(
               {
                 name: t('ticket.info.state', { lng }),
-                value: config.ticket.enabled ? t('enabled', { lng }) : t('disabled', { lng }),
+                value: config.ticket.enabled ? t('enabled', { lng }) : t('disabled', { lng })
               },
               {
                 name: `${t('ticket.info.systems', { lng })} (${systems.length}/${MAX_SYSTEMS})`,
-                value: systems.length ? t('ticket.info.displayed', { lng }) : t('ticket.info.none', { lng }),
-              },
+                value: systems.length ? t('ticket.info.displayed', { lng }) : t('ticket.info.none', { lng })
+              }
             ),
-            ...embeds,
-          ],
+            ...embeds
+          ]
         })
         .catch((err) => logger.debug(err, 'Could not edit reply'));
     } // End of infoSubcommand
@@ -195,23 +195,23 @@ export default new Command({
               new EmbedBuilder()
                 .setColor(client.colors.ticket)
                 .setDescription(`${t('ticket.staff.description', { lng })}\n\n${t('ticket.staff.none', { lng })}`)
-                .setFooter({ text: t('ticket.setup.required', { lng }) }),
+                .setFooter({ text: t('ticket.setup.required', { lng }) })
             ],
             components: [
               new ActionRowBuilder<RoleSelectMenuBuilder>().addComponents(
-                new RoleSelectMenuBuilder().setCustomId('select-ticket-staff').setPlaceholder(t('ticket.staff.placeholder', { lng })).setMaxValues(1),
+                new RoleSelectMenuBuilder().setCustomId('select-ticket-staff').setPlaceholder(t('ticket.staff.placeholder', { lng })).setMaxValues(1)
               ),
               new ActionRowBuilder<ButtonBuilder>().addComponents(
-                new ButtonBuilder().setCustomId('button-ticket-continue').setLabel(t('ticket.setup.continue', { lng })).setStyle(ButtonStyle.Primary),
-              ),
-            ],
+                new ButtonBuilder().setCustomId('button-ticket-continue').setLabel(t('ticket.setup.continue', { lng })).setStyle(ButtonStyle.Primary)
+              )
+            ]
           })
           .catch((err) => logger.debug(err, 'Could not edit reply'));
         if (!staffMessage) return;
 
         const staffCollector = staffMessage.createMessageComponentCollector({
           idle: TIMEOUT_DURATION,
-          filter: (i) => i.user.id === user.id,
+          filter: (i) => i.user.id === user.id
         });
 
         staffCollector.on('collect', async (staffInteraction) => {
@@ -224,7 +224,7 @@ export default new Command({
               await staffInteraction
                 .followUp({
                   embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.staff.none', { lng }))],
-                  ephemeral: true,
+                  ephemeral: true
                 })
                 .catch((err) => logger.debug(err, 'Could not follow up'));
               return;
@@ -244,10 +244,10 @@ export default new Command({
                   new EmbedBuilder()
                     .setColor(client.colors.ticket)
                     .setDescription(
-                      `${t('ticket.staff.description', { lng })}\n\n${t('ticket.staff.selected', { lng, role: staffRole?.toString() })}\n${t('ticket.staff.continue', { lng })}`,
+                      `${t('ticket.staff.description', { lng })}\n\n${t('ticket.staff.selected', { lng, role: staffRole?.toString() })}\n${t('ticket.staff.continue', { lng })}`
                     )
-                    .setFooter({ text: t('ticket.setup.required', { lng }) }),
-                ],
+                    .setFooter({ text: t('ticket.setup.required', { lng }) })
+                ]
               })
               .catch((err) => logger.debug(err, 'Could not update staff message'));
           }
@@ -260,7 +260,7 @@ export default new Command({
             await interaction
               .editReply({
                 embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.setup.timeout', { lng }))],
-                components: [],
+                components: []
               })
               .catch((err) => logger.debug(err, 'Could not edit reply'));
             return;
@@ -278,21 +278,21 @@ export default new Command({
               new EmbedBuilder()
                 .setColor(client.colors.ticket)
                 .setDescription(`${t('ticket.max.description', { lng })}\n\n${t('ticket.max.default', { lng, default: MAX_TICKETS })}`)
-                .setFooter({ text: t('ticket.setup.optional', { lng }) }),
+                .setFooter({ text: t('ticket.setup.optional', { lng }) })
             ],
             components: [
               new ActionRowBuilder<ButtonBuilder>().addComponents(
                 new ButtonBuilder().setCustomId('button-ticket-max-change').setLabel(t('ticket.max.change', { lng })).setStyle(ButtonStyle.Success),
-                new ButtonBuilder().setCustomId('button-ticket-max-continue').setLabel(t('ticket.setup.continue', { lng })).setStyle(ButtonStyle.Primary),
-              ),
-            ],
+                new ButtonBuilder().setCustomId('button-ticket-max-continue').setLabel(t('ticket.setup.continue', { lng })).setStyle(ButtonStyle.Primary)
+              )
+            ]
           })
           .catch((err) => logger.debug(err, 'Could not edit reply'));
         if (!maxMessage) return;
 
         const maxCollector = maxMessage.createMessageComponentCollector({
           idle: TIMEOUT_DURATION,
-          filter: (i) => i.user.id === user.id,
+          filter: (i) => i.user.id === user.id
         });
 
         maxCollector.on('collect', async (maxInteraction) => {
@@ -317,9 +317,9 @@ export default new Command({
                         .setLabel(t('ticket.max.label', { lng }))
                         .setStyle(TextInputStyle.Short)
                         .setMaxLength(2)
-                        .setRequired(false),
-                    ),
-                  ),
+                        .setRequired(false)
+                    )
+                  )
               )
               .catch((err) => logger.debug(err, 'Could not show modal'));
 
@@ -328,12 +328,12 @@ export default new Command({
               .awaitModalSubmit({
                 idle: TIMEOUT_DURATION,
                 time: TIMEOUT_DURATION * 2,
-                filter: (i) => i.user.id === user.id,
+                filter: (i) => i.user.id === user.id
               })
               .catch(() => {
                 maxInteraction.followUp({
                   embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.modal.no-submit', { lng }))],
-                  ephemeral: true,
+                  ephemeral: true
                 });
                 return;
               });
@@ -354,10 +354,10 @@ export default new Command({
                     new EmbedBuilder()
                       .setColor(client.colors.ticket)
                       .setDescription(
-                        `${t('ticket.max.description', { lng })}\n\n${t('ticket.max.selected', { lng, max: maxTickets })}\n${t('ticket.max.continue', { lng })}`,
+                        `${t('ticket.max.description', { lng })}\n\n${t('ticket.max.selected', { lng, max: maxTickets })}\n${t('ticket.max.continue', { lng })}`
                       )
-                      .setFooter({ text: t('ticket.setup.optional', { lng }) }),
-                  ],
+                      .setFooter({ text: t('ticket.setup.optional', { lng }) })
+                  ]
                 })
                 .catch((err) => logger.debug(err, 'Could not edit reply'));
               return;
@@ -372,7 +372,7 @@ export default new Command({
             await interaction
               .editReply({
                 embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.setup.timeout', { lng }))],
-                components: [],
+                components: []
               })
               .catch((err) => logger.debug(err, 'Could not edit reply'));
             return;
@@ -391,7 +391,7 @@ export default new Command({
               new EmbedBuilder()
                 .setColor(client.colors.ticket)
                 .setDescription(`${t('ticket.transcript.description', { lng })}\n\n${t('ticket.transcript.none', { lng })}`)
-                .setFooter({ text: t('ticket.setup.optional', { lng }) }),
+                .setFooter({ text: t('ticket.setup.optional', { lng }) })
             ],
             components: [
               new ActionRowBuilder<ChannelSelectMenuBuilder>().addComponents(
@@ -399,26 +399,23 @@ export default new Command({
                   .setCustomId('select-ticket-transcript-change')
                   .setPlaceholder(t('ticket.transcript.placeholder', { lng }))
                   .addChannelTypes(ChannelType.GuildText)
-                  .setMaxValues(1),
+                  .setMaxValues(1)
               ),
               new ActionRowBuilder<ButtonBuilder>().addComponents(
                 new ButtonBuilder()
                   .setCustomId('button-ticket-transcript-remove')
                   .setLabel(t('ticket.transcript.remove', { lng }))
                   .setStyle(ButtonStyle.Danger),
-                new ButtonBuilder()
-                  .setCustomId('button-ticket-transcript-continue')
-                  .setLabel(t('ticket.setup.continue', { lng }))
-                  .setStyle(ButtonStyle.Primary),
-              ),
-            ],
+                new ButtonBuilder().setCustomId('button-ticket-transcript-continue').setLabel(t('ticket.setup.continue', { lng })).setStyle(ButtonStyle.Primary)
+              )
+            ]
           })
           .catch((err) => logger.debug(err, 'Could not edit reply'));
         if (!transcriptMessage) return;
 
         const transcriptCollector = transcriptMessage.createMessageComponentCollector({
           idle: TIMEOUT_DURATION,
-          filter: (i) => i.user.id === user.id,
+          filter: (i) => i.user.id === user.id
         });
 
         transcriptCollector.on('collect', async (transcriptInteraction) => {
@@ -438,8 +435,8 @@ export default new Command({
                   new EmbedBuilder()
                     .setColor(client.colors.ticket)
                     .setDescription(`${t('ticket.transcript.description', { lng })}\n\n${t('ticket.transcript.none', { lng })}`)
-                    .setFooter({ text: t('ticket.setup.optional', { lng }) }),
-                ],
+                    .setFooter({ text: t('ticket.setup.optional', { lng }) })
+                ]
               })
               .catch((err) => logger.debug(err, 'Could not update transcript message'));
             return;
@@ -456,10 +453,10 @@ export default new Command({
                   new EmbedBuilder()
                     .setColor(client.colors.ticket)
                     .setDescription(
-                      `${t('ticket.transcript.description', { lng })}\n\n${t('ticket.transcript.selected', { lng, channel: transcriptChannel.toString() })}\n${t('ticket.transcript.continue', { lng })}`,
+                      `${t('ticket.transcript.description', { lng })}\n\n${t('ticket.transcript.selected', { lng, channel: transcriptChannel.toString() })}\n${t('ticket.transcript.continue', { lng })}`
                     )
-                    .setFooter({ text: t('ticket.setup.optional', { lng }) }),
-                ],
+                    .setFooter({ text: t('ticket.setup.optional', { lng }) })
+                ]
               })
               .catch((err) => logger.debug(err, 'Could not update transcript message'));
             return;
@@ -471,7 +468,7 @@ export default new Command({
             await interaction
               .editReply({
                 embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.setup.timeout', { lng }))],
-                components: [],
+                components: []
               })
               .catch((err) => logger.debug(err, 'Could not edit reply'));
             return;
@@ -490,24 +487,24 @@ export default new Command({
               new EmbedBuilder()
                 .setColor(client.colors.ticket)
                 .setDescription(
-                  `${t('ticket.choices.description', { lng })}\n\n${t('ticket.choices.none', { lng, max: MAX_CHOICES.toString() })}\n${t('ticket.choices.continue', { lng })}`,
+                  `${t('ticket.choices.description', { lng })}\n\n${t('ticket.choices.none', { lng, max: MAX_CHOICES.toString() })}\n${t('ticket.choices.continue', { lng })}`
                 )
-                .setFooter({ text: t('ticket.setup.required', { lng }) }),
+                .setFooter({ text: t('ticket.setup.required', { lng }) })
             ],
             components: [
               new ActionRowBuilder<ButtonBuilder>().addComponents(
                 new ButtonBuilder().setCustomId('button-ticket-choices-add').setLabel(t('ticket.choices.add', { lng })).setStyle(ButtonStyle.Success),
                 new ButtonBuilder().setCustomId('button-ticket-choices-remove').setLabel(t('ticket.choices.remove', { lng })).setStyle(ButtonStyle.Danger),
-                new ButtonBuilder().setCustomId('button-ticket-choices-continue').setLabel(t('ticket.setup.continue', { lng })).setStyle(ButtonStyle.Primary),
-              ),
-            ],
+                new ButtonBuilder().setCustomId('button-ticket-choices-continue').setLabel(t('ticket.setup.continue', { lng })).setStyle(ButtonStyle.Primary)
+              )
+            ]
           })
           .catch((err) => logger.debug(err, 'Could not edit reply'));
         if (!choicesMessage) return;
 
         const choicesCollector = choicesMessage.createMessageComponentCollector({
           idle: TIMEOUT_DURATION,
-          filter: (i) => i.user.id === user.id,
+          filter: (i) => i.user.id === user.id
         });
 
         choicesCollector.on('collect', async (choicesInteraction) => {
@@ -517,7 +514,7 @@ export default new Command({
               await choicesInteraction
                 .reply({
                   embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.choices.none', { lng, max: MAX_CHOICES.toString() }))],
-                  ephemeral: true,
+                  ephemeral: true
                 })
                 .catch((err) => logger.debug(err, 'Could not reply'));
               return;
@@ -534,7 +531,7 @@ export default new Command({
               await choicesInteraction
                 .reply({
                   embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.choices.limit', { lng, max: MAX_CHOICES.toString() }))],
-                  ephemeral: true,
+                  ephemeral: true
                 })
                 .catch((err) => logger.debug(err, 'Could not reply'));
               return;
@@ -552,7 +549,7 @@ export default new Command({
                         .setLabel(t('ticket.choices.label', { lng }))
                         .setStyle(TextInputStyle.Short)
                         .setMaxLength(32)
-                        .setRequired(true),
+                        .setRequired(true)
                     ),
                     new ActionRowBuilder<TextInputBuilder>().addComponents(
                       new TextInputBuilder()
@@ -560,7 +557,7 @@ export default new Command({
                         .setLabel(t('ticket.choices.emoji', { lng }))
                         .setStyle(TextInputStyle.Short)
                         .setMaxLength(32)
-                        .setRequired(false),
+                        .setRequired(false)
                     ),
                     new ActionRowBuilder<TextInputBuilder>().addComponents(
                       new TextInputBuilder()
@@ -569,9 +566,9 @@ export default new Command({
                         .setPlaceholder(t('ticket.choices.style_placeholder', { lng }))
                         .setStyle(TextInputStyle.Short)
                         .setMaxLength(5)
-                        .setRequired(false),
-                    ),
-                  ),
+                        .setRequired(false)
+                    )
+                  )
               )
               .catch((err) => logger.debug(err, 'Could not show modal'));
 
@@ -579,13 +576,13 @@ export default new Command({
               .awaitModalSubmit({
                 idle: TIMEOUT_DURATION,
                 time: TIMEOUT_DURATION * 2,
-                filter: (i) => i.user.id === user.id,
+                filter: (i) => i.user.id === user.id
               })
               .catch(async () => {
                 await choicesInteraction
                   .followUp({
                     embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.modal.no-submit', { lng }))],
-                    ephemeral: true,
+                    ephemeral: true
                   })
                   .catch((err) => logger.debug(err, 'Could not follow up'));
                 return;
@@ -600,7 +597,7 @@ export default new Command({
                 await choicesModalInteraction
                   .reply({
                     embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.choices.duplicate', { lng }))],
-                    ephemeral: true,
+                    ephemeral: true
                   })
                   .catch((err) => logger.debug(err, 'Could not reply'));
                 return;
@@ -617,14 +614,14 @@ export default new Command({
                 green: ButtonStyle.Success,
                 secondary: ButtonStyle.Secondary,
                 grey: ButtonStyle.Secondary,
-                gray: ButtonStyle.Secondary,
+                gray: ButtonStyle.Secondary
               };
 
               if (style && !isColor) {
                 await choicesModalInteraction
                   .reply({
                     embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.choices.invalid_style', { lng }))],
-                    ephemeral: true,
+                    ephemeral: true
                   })
                   .catch((err) => logger.debug(err, 'Could not reply'));
                 return;
@@ -638,7 +635,7 @@ export default new Command({
                 await choicesModalInteraction
                   .reply({
                     embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.choices.invalid_emoji', { lng }))],
-                    ephemeral: true,
+                    ephemeral: true
                   })
                   .catch((err) => logger.debug(err, 'Could not reply'));
                 return;
@@ -653,10 +650,10 @@ export default new Command({
                     new EmbedBuilder()
                       .setColor(client.colors.ticket)
                       .setDescription(
-                        `${t('ticket.choices.description', { lng })}\n\n${t('ticket.choices.selected', { lng, choices: choices.length ? choices.map((c) => `${c.emoji ? c.emoji + ' ' : ''}${c.label} (${ButtonStyle[c.style]})`).join(', ') : t('ticket.choices.none', { lng, max: MAX_CHOICES.toString() }) })}\n${t('ticket.choices.continue', { lng })}`,
+                        `${t('ticket.choices.description', { lng })}\n\n${t('ticket.choices.selected', { lng, choices: choices.length ? choices.map((c) => `${c.emoji ? c.emoji + ' ' : ''}${c.label} (${ButtonStyle[c.style]})`).join(', ') : t('ticket.choices.none', { lng, max: MAX_CHOICES.toString() }) })}\n${t('ticket.choices.continue', { lng })}`
                       )
-                      .setFooter({ text: t('ticket.setup.required', { lng }) }),
-                  ],
+                      .setFooter({ text: t('ticket.setup.required', { lng }) })
+                  ]
                 })
                 .catch((err) => logger.debug(err, 'Could not edit reply'));
               return;
@@ -671,7 +668,7 @@ export default new Command({
               await choicesInteraction
                 .reply({
                   embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.choices.length', { lng }))],
-                  ephemeral: true,
+                  ephemeral: true
                 })
                 .catch((err) => logger.debug(err, 'Could not reply'));
               return;
@@ -689,9 +686,9 @@ export default new Command({
                         .setLabel(t('ticket.choices.label', { lng }))
                         .setStyle(TextInputStyle.Short)
                         .setMaxLength(32)
-                        .setRequired(true),
-                    ),
-                  ),
+                        .setRequired(true)
+                    )
+                  )
               )
               .catch((err) => logger.debug(err, 'Could not show modal'));
 
@@ -699,13 +696,13 @@ export default new Command({
               .awaitModalSubmit({
                 idle: TIMEOUT_DURATION,
                 time: TIMEOUT_DURATION * 2,
-                filter: (i) => i.user.id === user.id,
+                filter: (i) => i.user.id === user.id
               })
               .catch(async () => {
                 await choicesInteraction
                   .followUp({
                     embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.modal.no-submit', { lng }))],
-                    ephemeral: true,
+                    ephemeral: true
                   })
                   .catch((err) => logger.debug(err, 'Could not follow up'));
                 return;
@@ -719,7 +716,7 @@ export default new Command({
               await choicesModalInteraction
                 .reply({
                   embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.choices.invalid', { lng }))],
-                  ephemeral: true,
+                  ephemeral: true
                 })
                 .catch((err) => logger.debug(err, 'Could not reply'));
               return;
@@ -734,10 +731,10 @@ export default new Command({
                   new EmbedBuilder()
                     .setColor(client.colors.ticket)
                     .setDescription(
-                      `${t('ticket.choices.description', { lng })}\n\n${t('ticket.choices.selected', { lng, choices: choices.length ? choices.map((c) => `${c.emoji ? c.emoji + ' ' : ''}${c.label} (${ButtonStyle[c.style]})`).join(', ') : t('ticket.choices.none', { lng, max: MAX_CHOICES.toString() }) })}\n${t('ticket.choices.continue', { lng })}`,
+                      `${t('ticket.choices.description', { lng })}\n\n${t('ticket.choices.selected', { lng, choices: choices.length ? choices.map((c) => `${c.emoji ? c.emoji + ' ' : ''}${c.label} (${ButtonStyle[c.style]})`).join(', ') : t('ticket.choices.none', { lng, max: MAX_CHOICES.toString() }) })}\n${t('ticket.choices.continue', { lng })}`
                     )
-                    .setFooter({ text: t('ticket.setup.required', { lng }) }),
-                ],
+                    .setFooter({ text: t('ticket.setup.required', { lng }) })
+                ]
               })
               .catch((err) => logger.debug(err, 'Could not edit reply'));
             return;
@@ -749,7 +746,7 @@ export default new Command({
             await interaction
               .editReply({
                 embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.setup.timeout', { lng }))],
-                components: [],
+                components: []
               })
               .catch((err) => logger.debug(err, 'Could not edit reply'));
             return;
@@ -769,7 +766,7 @@ export default new Command({
               new EmbedBuilder()
                 .setColor(client.colors.ticket)
                 .setDescription(`${t('ticket.category.description', { lng })}\n\n${t('ticket.category.none', { lng })}`)
-                .setFooter({ text: t('ticket.setup.optional', { lng }) }),
+                .setFooter({ text: t('ticket.setup.optional', { lng }) })
             ],
             components: [
               new ActionRowBuilder<ChannelSelectMenuBuilder>().addComponents(
@@ -777,20 +774,20 @@ export default new Command({
                   .setCustomId('select-ticket-category-change')
                   .setPlaceholder(t('ticket.category.placeholder', { lng }))
                   .addChannelTypes(ChannelType.GuildCategory)
-                  .setMaxValues(1),
+                  .setMaxValues(1)
               ),
               new ActionRowBuilder<ButtonBuilder>().addComponents(
                 new ButtonBuilder().setCustomId('button-ticket-category-remove').setLabel(t('ticket.category.remove', { lng })).setStyle(ButtonStyle.Danger),
-                new ButtonBuilder().setCustomId('button-ticket-category-continue').setLabel(t('ticket.setup.continue', { lng })).setStyle(ButtonStyle.Primary),
-              ),
-            ],
+                new ButtonBuilder().setCustomId('button-ticket-category-continue').setLabel(t('ticket.setup.continue', { lng })).setStyle(ButtonStyle.Primary)
+              )
+            ]
           })
           .catch((err) => logger.debug(err, 'Could not edit reply'));
         if (!categoryMessage) return;
 
         const categoryCollector = categoryMessage.createMessageComponentCollector({
           idle: TIMEOUT_DURATION,
-          filter: (i) => i.user.id === user.id,
+          filter: (i) => i.user.id === user.id
         });
 
         categoryCollector.on('collect', async (categoryInteraction) => {
@@ -810,8 +807,8 @@ export default new Command({
                   new EmbedBuilder()
                     .setColor(client.colors.ticket)
                     .setDescription(`${t('ticket.category.description', { lng })}\n\n${t('ticket.category.none', { lng })}`)
-                    .setFooter({ text: t('ticket.setup.optional', { lng }) }),
-                ],
+                    .setFooter({ text: t('ticket.setup.optional', { lng }) })
+                ]
               })
               .catch((err) => logger.debug(err, 'Could not update channel message'));
             return;
@@ -828,10 +825,10 @@ export default new Command({
                   new EmbedBuilder()
                     .setColor(client.colors.ticket)
                     .setDescription(
-                      `${t('ticket.category.description', { lng })}\n\n${t('ticket.category.selected', { lng, channel: category.toString() })}\n${t('ticket.category.continue', { lng })}`,
+                      `${t('ticket.category.description', { lng })}\n\n${t('ticket.category.selected', { lng, channel: category.toString() })}\n${t('ticket.category.continue', { lng })}`
                     )
-                    .setFooter({ text: t('ticket.setup.optional', { lng }) }),
-                ],
+                    .setFooter({ text: t('ticket.setup.optional', { lng }) })
+                ]
               })
               .catch((err) => logger.debug(err, 'Could not update channel message'));
             return;
@@ -843,7 +840,7 @@ export default new Command({
             await interaction
               .editReply({
                 embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.setup.timeout', { lng }))],
-                components: [],
+                components: []
               })
               .catch((err) => logger.debug(err, 'Could not edit reply'));
             return;
@@ -861,7 +858,7 @@ export default new Command({
               new EmbedBuilder()
                 .setColor(client.colors.ticket)
                 .setDescription(`${t('ticket.channel.description', { lng })}\n\n${t('ticket.channel.none', { lng })}\n${t('ticket.channel.continue', { lng })}`)
-                .setFooter({ text: t('ticket.setup.required', { lng }) }),
+                .setFooter({ text: t('ticket.setup.required', { lng }) })
             ],
             components: [
               new ActionRowBuilder<ChannelSelectMenuBuilder>().addComponents(
@@ -869,19 +866,19 @@ export default new Command({
                   .setCustomId('select-ticket-channel-change')
                   .setPlaceholder(t('ticket.channel.placeholder', { lng }))
                   .addChannelTypes(ChannelType.GuildText)
-                  .setMaxValues(1),
+                  .setMaxValues(1)
               ),
               new ActionRowBuilder<ButtonBuilder>().addComponents(
-                new ButtonBuilder().setCustomId('button-ticket-channel-continue').setLabel(t('ticket.setup.continue', { lng })).setStyle(ButtonStyle.Primary),
-              ),
-            ],
+                new ButtonBuilder().setCustomId('button-ticket-channel-continue').setLabel(t('ticket.setup.continue', { lng })).setStyle(ButtonStyle.Primary)
+              )
+            ]
           })
           .catch((err) => logger.debug(err, 'Could not edit reply'));
         if (!channelMessage) return;
 
         const channelCollector = channelMessage.createMessageComponentCollector({
           idle: TIMEOUT_DURATION,
-          filter: (i) => i.user.id === user.id,
+          filter: (i) => i.user.id === user.id
         });
 
         channelCollector.on('collect', async (channelInteraction) => {
@@ -890,7 +887,7 @@ export default new Command({
             if (!channel) {
               await channelInteraction.reply({
                 embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.channel.none', { lng }))],
-                ephemeral: true,
+                ephemeral: true
               });
               return;
             }
@@ -907,7 +904,7 @@ export default new Command({
             if (!channel.permissionsFor(guild.members.me!).has(PermissionFlagsBits.SendMessages)) {
               channelInteraction.reply({
                 embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.channel.permissions', { lng }))],
-                ephemeral: true,
+                ephemeral: true
               });
               return;
             }
@@ -919,10 +916,10 @@ export default new Command({
                   new EmbedBuilder()
                     .setColor(client.colors.ticket)
                     .setDescription(
-                      `${t('ticket.channel.description', { lng })}\n\n${t('ticket.channel.selected', { lng, channel: channel.toString() })}\n${t('ticket.channel.continue', { lng })}`,
+                      `${t('ticket.channel.description', { lng })}\n\n${t('ticket.channel.selected', { lng, channel: channel.toString() })}\n${t('ticket.channel.continue', { lng })}`
                     )
-                    .setFooter({ text: t('ticket.setup.required', { lng }) }),
-                ],
+                    .setFooter({ text: t('ticket.setup.required', { lng }) })
+                ]
               })
               .catch((err) => logger.debug(err, 'Could not update channel message'));
             return;
@@ -934,7 +931,7 @@ export default new Command({
             await interaction
               .editReply({
                 embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.setup.timeout', { lng }))],
-                components: [],
+                components: []
               })
               .catch((err) => logger.debug(err, 'Could not edit reply'));
             return;
@@ -952,9 +949,9 @@ export default new Command({
               channelId: channel?.id,
               parentChannelId: category?.id,
               choices,
-              maxTickets,
-            },
-          },
+              maxTickets
+            }
+          }
         });
 
         const system = updatedConfig.ticket.systems.find((system) => !config.ticket.systems.map((s) => s._id.toString()).includes(system._id.toString()));
@@ -965,7 +962,7 @@ export default new Command({
               new EmbedBuilder()
                 .setColor(client.colors.general)
                 .setTitle(t('ticket.message.title', { lng: config.language }))
-                .setDescription(t('ticket.message.description', { lng: config.language })),
+                .setDescription(t('ticket.message.description', { lng: config.language }))
             ],
             components: [
               new ActionRowBuilder<ButtonBuilder>().addComponents(
@@ -976,16 +973,16 @@ export default new Command({
                     .setStyle(choice.style);
                   if (choice.emoji) button.setEmoji(choice.emoji);
                   return button;
-                }),
-              ),
-            ],
+                })
+              )
+            ]
           })
           .catch((err) => {
             logger.debug(err, 'Could not send message');
 
             interaction.editReply({
               embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.channel.error', { lng }))],
-              components: [],
+              components: []
             });
             return;
           });
@@ -999,8 +996,8 @@ export default new Command({
                 .setTitle(
                   t('ticket.info.id', {
                     lng,
-                    id: system?._id?.toString(),
-                  }),
+                    id: system?._id?.toString()
+                  })
                 )
                 .setDescription(
                   [
@@ -1013,15 +1010,15 @@ export default new Command({
                       lng,
                       choices: choices.length
                         ? choices.map((c) => `${c.emoji ? c.emoji + ' ' : ''}${c.label} (${ButtonStyle[c.style]})`).join(', ')
-                        : t('none', { lng }),
-                    }),
-                  ].join('\n'),
-                ),
+                        : t('none', { lng })
+                    })
+                  ].join('\n')
+                )
             ],
-            components: [],
+            components: []
           })
           .catch((err) => logger.debug(err, 'Could not edit reply'));
       } // End of handleSubmit
     } // End of setupSubcommand
-  },
+  }
 });

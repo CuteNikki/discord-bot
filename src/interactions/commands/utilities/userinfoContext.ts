@@ -19,7 +19,7 @@ export default new Command<typeof commandType>({
 
     const user = await client.users
       .fetch(interaction.options.getUser('user', false) ?? interaction.user, {
-        force: true,
+        force: true
       })
       .catch((err) => logger.debug({ err }, 'Could not fetch user'));
     if (!user) return interaction.editReply({ content: t('userinfo.user', { lng }) });
@@ -51,7 +51,7 @@ export default new Command<typeof commandType>({
       Quarantined: 'Quarantined', // User's account has been [quarantined](https://support.discord.com/hc/articles/6461420677527) based on recent activity @unstable This user flag is currently not documented by Discord but has a known value. This value would be 1 << 44, but bit shifting above 1 << 30 requires bigints
       Collaborator: 'Collaborator', // @unstable This user flag is currently not documented by Discord but has a known value. This value would be 1 << 50, but bit shifting above 1 << 30 requires bigints
       RestrictedCollaborator: 'RestrictedCollaborator', // @unstable This user flag is currently not documented by Discord but has a known value. This value would be 1 << 51, but bit shifting above 1 << 30 requires bigints
-      App: `${client.customEmojis.app_one}${client.customEmojis.app_two}`,
+      App: `${client.customEmojis.app_one}${client.customEmojis.app_two}`
     };
 
     const userEmbed = new EmbedBuilder()
@@ -60,18 +60,18 @@ export default new Command<typeof commandType>({
       .addFields(
         {
           name: t('userinfo.user_title', { lng }),
-          value: [`${user} | ${user.username}`, user.id].join('\n'),
+          value: [`${user} | ${user.username}`, user.id].join('\n')
         },
         {
           name: t('userinfo.created_at', { lng }),
-          value: `<t:${Math.floor(user.createdTimestamp / 1000)}:d> | <t:${Math.floor(user.createdTimestamp / 1000)}:R>`,
-        },
+          value: `<t:${Math.floor(user.createdTimestamp / 1000)}:d> | <t:${Math.floor(user.createdTimestamp / 1000)}:R>`
+        }
       );
     if (badges.length || user.bot) {
       userEmbed.addFields({
         name: t('userinfo.badges', { lng }),
         value:
-          !badges.includes('VerifiedBot') && user.bot ? [badgeMap.App, ...badges.map((v) => badgeMap[v])].join(' ') : badges.map((v) => badgeMap[v]).join(' '),
+          !badges.includes('VerifiedBot') && user.bot ? [badgeMap.App, ...badges.map((v) => badgeMap[v])].join(' ') : badges.map((v) => badgeMap[v]).join(' ')
       });
     }
     if (user.banner) {
@@ -87,6 +87,7 @@ export default new Command<typeof commandType>({
         const roleString = `<@&${role.id}> `;
         if (roleString.length + totalLength > 1000) break;
         results.push(roleString);
+        totalLength += roleString.length;
       }
       return results;
     }
@@ -101,12 +102,12 @@ export default new Command<typeof commandType>({
       .setThumbnail(member.avatarURL({ size: 4096, extension: 'webp' }))
       .addFields({
         name: t('userinfo.joined_at', { lng }),
-        value: `<t:${Math.floor((member.joinedTimestamp ?? 0) / 1000)}:d> | <t:${Math.floor((member.joinedTimestamp ?? 0) / 1000)}:R>`,
+        value: `<t:${Math.floor((member.joinedTimestamp ?? 0) / 1000)}:d> | <t:${Math.floor((member.joinedTimestamp ?? 0) / 1000)}:R>`
       });
     if (member.premiumSinceTimestamp) {
       memberEmbed.addFields({
         name: t('userinfo.boosting', { lng }),
-        value: `<t:${Math.floor(member.premiumSinceTimestamp / 1000)}:d> | <t:${Math.floor(member.premiumSinceTimestamp / 1000)}:R>`,
+        value: `<t:${Math.floor(member.premiumSinceTimestamp / 1000)}:d> | <t:${Math.floor(member.premiumSinceTimestamp / 1000)}:R>`
       });
     }
     if (roles.length) {
@@ -115,9 +116,9 @@ export default new Command<typeof commandType>({
         name: t('userinfo.roles', {
           lng,
           showing: roles.length,
-          total: displayRoles.length,
+          total: displayRoles.length
         }),
-        value: displayRoles.join(''),
+        value: displayRoles.join('')
       });
     }
 
@@ -153,5 +154,5 @@ export default new Command<typeof commandType>({
     //     name: t('userinfo.devices', { lng }),
     //     value: devices?.join(', ') || '/',
     //   }
-  },
+  }
 });

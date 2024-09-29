@@ -26,7 +26,7 @@ export async function createReminder(userId: string, channelId: string, remindAt
     userId,
     channelId,
     remindAt,
-    message,
+    message
   });
 }
 

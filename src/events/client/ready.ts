@@ -15,5 +15,5 @@ export default new Event({
     }
 
     logger.info(`[${client.cluster.id}] Ready as ${readyClient.user.username}#${readyClient.user.discriminator}`);
-  },
+  }
 });

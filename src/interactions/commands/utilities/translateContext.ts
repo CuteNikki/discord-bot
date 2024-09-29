@@ -6,7 +6,7 @@ import {
   ContextMenuCommandBuilder,
   EmbedBuilder,
   InteractionContextType,
-  codeBlock,
+  codeBlock
 } from 'discord.js';
 import { t } from 'i18next';
 
@@ -25,7 +25,7 @@ export default new Command<typeof commandType>({
   async execute({ interaction, client, lng }) {
     await interaction.deferReply({ ephemeral: true });
 
-    const { user, targetMessage } = interaction;
+    const { targetMessage } = interaction;
 
     const translator = new GoogleTranslator();
 
@@ -48,14 +48,14 @@ export default new Command<typeof commandType>({
           .addFields(
             {
               name: t('translate.input', { lng }),
-              value: codeBlock(targetMessage.content.substring(0, 4000)),
+              value: codeBlock(targetMessage.content.substring(0, 4000))
             },
             {
               name: t('translate.output', { lng }),
-              value: codeBlock(translated.substring(0, 4000)),
-            },
-          ),
-      ],
+              value: codeBlock(translated.substring(0, 4000))
+            }
+          )
+      ]
     });
-  },
+  }
 });

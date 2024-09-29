@@ -7,7 +7,7 @@ import {
   type APIButtonComponent,
   type ChatInputCommandInteraction,
   type JSONEncodable,
-  type User,
+  type User
 } from 'discord.js';
 import { t } from 'i18next';
 
@@ -36,7 +36,7 @@ export class Connect4 extends Opponent {
         height: number;
         max_buttons: number;
       };
-    },
+    }
   ) {
     super(options);
 
@@ -94,15 +94,15 @@ export class Connect4 extends Opponent {
             .addFields(
               { name: user.displayName, value: '🔵', inline: true },
               { name: 'vs', value: '⚡', inline: true },
-              { name: opponent.displayName, value: '🔴', inline: true },
-            ),
+              { name: opponent.displayName, value: '🔴', inline: true }
+            )
         ],
-        components: this.getComponents(),
+        components: this.getComponents()
       })
       .catch((err) => logger.debug({ err }, 'Could not send message'));
 
     const collector = message.createMessageComponentCollector({
-      idle: 60 * 1000,
+      idle: 60 * 1000
     });
 
     collector.on('collect', async (buttonInteraction) => {
@@ -112,9 +112,9 @@ export class Connect4 extends Opponent {
         return buttonInteraction
           .followUp({
             content: t('interactions.author_only', {
-              lng: await getUserLanguage(buttonInteraction.user.id),
+              lng: await getUserLanguage(buttonInteraction.user.id)
             }),
-            ephemeral: true,
+            ephemeral: true
           })
           .catch((err) => logger.debug({ err }, 'Could not follow up'));
 
@@ -122,7 +122,7 @@ export class Connect4 extends Opponent {
         return buttonInteraction
           .followUp({
             content: t('games.connect.turn', { lng: opponentLng }),
-            ephemeral: true,
+            ephemeral: true
           })
           .catch((err) => logger.debug({ err }, 'Could not follow up'));
 
@@ -130,7 +130,7 @@ export class Connect4 extends Opponent {
         return buttonInteraction
           .followUp({
             content: t('games.connect.turn', { lng }),
-            ephemeral: true,
+            ephemeral: true
           })
           .catch((err) => logger.debug({ err }, 'Could not follow up'));
 
@@ -169,10 +169,10 @@ export class Connect4 extends Opponent {
               .addFields(
                 { name: user.displayName, value: '🔵', inline: true },
                 { name: 'vs', value: '⚡', inline: true },
-                { name: opponent.displayName, value: '🔴', inline: true },
-              ),
+                { name: opponent.displayName, value: '🔴', inline: true }
+              )
           ],
-          components: buttonInteraction.message.components,
+          components: buttonInteraction.message.components
         })
         .catch((err) => logger.debug({ err }, 'Could not edit message'));
     });
@@ -266,7 +266,7 @@ export class Connect4 extends Opponent {
       .addFields(
         { name: user.displayName, value: '🔵', inline: true },
         { name: 'vs', value: '⚡', inline: true },
-        { name: opponent.displayName, value: '🔴', inline: true },
+        { name: opponent.displayName, value: '🔴', inline: true }
       );
 
     if (result === 'TIMEOUT') embed.setDescription([t('games.connect.timeout', { lng }), this.getBoardContent()].join('\n\n'));
@@ -278,7 +278,7 @@ export class Connect4 extends Opponent {
       .editReply({
         content: null,
         embeds: [embed],
-        components: this.disableButtons(this.getComponents()),
+        components: this.disableButtons(this.getComponents())
       })
       .catch((err) => logger.debug({ err }, 'Could not edit message'));
   }

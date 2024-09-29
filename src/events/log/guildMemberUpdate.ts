@@ -25,7 +25,7 @@ export default new Event({
       .setTitle(t('log.guildMemberUpdate.title', { lng }))
       .addFields({
         name: t('log.guildMemberUpdate.member', { lng }),
-        value: `${newMember.toString()} (\`${newMember.user.username}\` | ${newMember.user.id})`,
+        value: `${newMember.toString()} (\`${newMember.user.username}\` | ${newMember.user.id})`
       })
       .setTimestamp();
 
@@ -36,56 +36,56 @@ export default new Event({
         {
           name: t('log.guildMemberUpdate.old_nickname', { lng }),
           value: oldMember.nickname ?? oldMember.displayName,
-          inline: true,
+          inline: true
         },
         {
           name: t('log.guildMemberUpdate.new_nickname', { lng }),
           value: newMember.nickname ?? newMember.displayName,
-          inline: true,
+          inline: true
         },
-        emptyField,
+        emptyField
       );
     if (newMember.displayAvatarURL() !== oldMember.displayAvatarURL())
       embed.addFields(
         {
           name: t('log.guildMemberUpdate.old_avatar', { lng }),
           value: oldMember.displayAvatarURL(),
-          inline: true,
+          inline: true
         },
         {
           name: t('log.guildMemberUpdate.new_avatar', { lng }),
           value: newMember.displayAvatarURL(),
-          inline: true,
+          inline: true
         },
-        emptyField,
+        emptyField
       );
     if (newMember.pending !== oldMember.pending)
       embed.addFields(
         {
           name: t('log.guildMemberUpdate.old_pending', { lng }),
           value: `${oldMember.pending}`,
-          inline: true,
+          inline: true
         },
         {
           name: t('log.guildMemberUpdate.new_pending', { lng }),
           value: `${newMember.pending}`,
-          inline: true,
+          inline: true
         },
-        emptyField,
+        emptyField
       );
     if (newMember.communicationDisabledUntilTimestamp !== oldMember.communicationDisabledUntilTimestamp)
       embed.addFields(
         {
           name: t('log.guildMemberUpdate.old_timeout', { lng }),
           value: oldMember.communicationDisabledUntilTimestamp ? `<t:${Math.floor(oldMember.communicationDisabledUntilTimestamp / 1000)}:f>` : '/',
-          inline: true,
+          inline: true
         },
         {
           name: t('log.guildMemberUpdate.new_timeout', { lng }),
           value: newMember.communicationDisabledUntilTimestamp ? `<t:${Math.floor(newMember.communicationDisabledUntilTimestamp / 1000)}:f>` : '/',
-          inline: true,
+          inline: true
         },
-        emptyField,
+        emptyField
       );
     if (JSON.stringify(newMember.roles.cache.toJSON()) !== JSON.stringify(oldMember.roles.cache.toJSON())) {
       const removedRoles = oldMember.roles.cache.map((r) => r).filter((role) => !newMember.roles.cache.map((r) => r.id).includes(role.id));
@@ -99,7 +99,7 @@ export default new Event({
               .map((role) => role.toString())
               .join(', ')
               .slice(0, 1000) || '/',
-          inline: true,
+          inline: true
         },
         {
           name: t('log.guildMemberUpdate.added_roles', { lng }),
@@ -108,9 +108,9 @@ export default new Event({
               .map((role) => role.toString())
               .join(', ')
               .slice(0, 1000) || '/',
-          inline: true,
+          inline: true
         },
-        emptyField,
+        emptyField
       );
     }
     if (newMember.permissions.bitfield !== oldMember.permissions.bitfield) {
@@ -125,7 +125,7 @@ export default new Event({
               .map((perm) => `\`${perm}\``)
               .join(', ')
               .slice(0, 1000) || '/',
-          inline: true,
+          inline: true
         },
         {
           name: t('log.guildMemberUpdate.added_permissions', { lng }),
@@ -134,9 +134,9 @@ export default new Event({
               .map((perm) => `\`${perm}\``)
               .join(', ')
               .slice(0, 1000) || '/',
-          inline: true,
+          inline: true
         },
-        emptyField,
+        emptyField
       );
     }
 
@@ -144,7 +144,7 @@ export default new Event({
     if (!embedData.fields?.length || embedData.fields.length > 25 || embedData.fields.length <= 1) return;
 
     await logChannel.send({
-      embeds: [embed],
+      embeds: [embed]
     });
-  },
+  }
 });

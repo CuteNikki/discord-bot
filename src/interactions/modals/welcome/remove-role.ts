@@ -20,11 +20,11 @@ export default new Modal({
     }
 
     await updateGuildSettings(interaction.guild.id, {
-      $pull: { ['welcome.roles']: roleId },
+      $pull: { ['welcome.roles']: roleId }
     });
 
     await interaction.editReply({
-      embeds: [new EmbedBuilder().setColor(client.colors.welcome).setDescription(t('welcome.roles.removed', { lng, roleId }))],
+      embeds: [new EmbedBuilder().setColor(client.colors.welcome).setDescription(t('welcome.roles.removed', { lng, roleId }))]
     });
-  },
+  }
 });

@@ -4,18 +4,16 @@ import { t } from 'i18next';
 import { Button } from 'classes/button';
 
 import { getGuildSettings } from 'db/guild';
-import { getUserLanguage } from 'db/user';
 
 export default new Button({
   customId: 'button-reaction-select',
   isCustomIdIncluded: true,
   botPermissions: ['ManageRoles'],
-  async execute({ client, interaction }) {
+  async execute({ client, interaction, lng }) {
     if (!interaction.inCachedGuild()) return;
 
     await interaction.deferReply({ ephemeral: true });
 
-    const lng = await getUserLanguage(interaction.user.id);
     const config = await getGuildSettings(interaction.guildId);
 
     const group = config.reactionRoles.groups.find((g) => g.messageId === interaction.message.id);

@@ -4,8 +4,6 @@ import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
-import { getUserLanguage } from 'db/user';
-
 import { COMPASS, UK_DEFRA_INDEX, US_EPA_INDEX, UV_INDEX } from 'constants/weather';
 import { getCurrentWeather, getHistoricWeather, getWeatherForecast } from 'utils/weather';
 
@@ -50,12 +48,11 @@ export default new Command({
         .addStringOption((option) => option.setName('date').setDescription('The date to get weather information for').setRequired(true))
         .addBooleanOption((option) => option.setName('ephemeral').setDescription('When set to true it will only shows the message to you').setRequired(false)),
     ),
-  async execute({ interaction, client }) {
+  async execute({ interaction, client, lng }) {
     const ephemeral = interaction.options.getBoolean('ephemeral', false) ?? true;
     await interaction.deferReply({ ephemeral });
 
     const { options, user } = interaction;
-    const lng = await getUserLanguage(user.id);
 
     const userLocation = options.getString('location', true);
     const days = options.getString('days', false) ?? '1';

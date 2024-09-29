@@ -4,15 +4,13 @@ import { t } from 'i18next';
 import { Modal } from 'classes/modal';
 
 import { getGuildSettings, updateGuildSettings } from 'db/guild';
-import { getUserLanguage } from 'db/user';
 
 export default new Modal({
   customId: 'modal-welcome-remove-role',
   permissions: ['ManageGuild'],
-  async execute({ client, interaction }) {
+  async execute({ client, interaction, lng }) {
     if (!interaction.inCachedGuild()) return;
     await interaction.deferReply();
-    const lng = await getUserLanguage(interaction.user.id);
 
     const roleId = interaction.fields.getTextInputValue('role-id');
     const config = await getGuildSettings(interaction.guild.id);

@@ -13,8 +13,6 @@ import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
-import { getUserLanguage } from 'db/user';
-
 import { logger } from 'utils/logger';
 
 export default new Command({
@@ -33,10 +31,9 @@ export default new Command({
     )
     .addStringOption((option) => option.setName('before').setDescription('Only delete sent messages before the given message link').setRequired(false))
     .addStringOption((option) => option.setName('after').setDescription('Only delete sent messages after the given message link').setRequired(false)),
-  async execute({ interaction }) {
+  async execute({ interaction, lng }) {
     if (!interaction.inCachedGuild() || !interaction.channel) return;
     await interaction.deferReply({ ephemeral: true });
-    const lng = await getUserLanguage(interaction.user.id);
 
     const { options } = interaction;
 

@@ -12,7 +12,6 @@ import { t } from 'i18next';
 import { Command, ModuleType } from 'classes/command';
 
 import { getInfractions } from 'db/infraction';
-import { getUserLanguage } from 'db/user';
 
 import { chunk } from 'utils/common';
 import { pagination } from 'utils/pagination';
@@ -28,13 +27,12 @@ export default new Command<typeof commandType>({
     .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
     .setContexts(InteractionContextType.Guild),
-  async execute({ interaction }) {
+  async execute({ interaction, lng }) {
     if (!interaction.inCachedGuild()) return;
 
     await interaction.deferReply({ ephemeral: true });
 
     const { user, guildId } = interaction;
-    const lng = await getUserLanguage(user.id);
 
     const target = interaction.targetUser;
     const targetInfractions = await getInfractions(guildId, target.id);

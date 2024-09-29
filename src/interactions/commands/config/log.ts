@@ -3,7 +3,6 @@ import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
-import { getUserLanguage } from 'db/user';
 import { getGuildSettings, updateGuildSettings } from 'db/guild';
 
 import { availableEvents } from 'types/guild';
@@ -74,11 +73,12 @@ export default new Command({
         .slice(0, 25),
     );
   },
-  async execute({ interaction }) {
+  async execute({ interaction, lng }) {
     if (!interaction.inCachedGuild()) return;
-    const { options, guildId } = interaction;
+
     await interaction.deferReply({ ephemeral: true });
-    const lng = await getUserLanguage(interaction.user.id);
+
+    const { options, guildId } = interaction;
 
     const config = await getGuildSettings(guildId);
     const events = availableEvents

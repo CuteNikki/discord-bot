@@ -30,7 +30,7 @@ export default new Command({
     .setContexts(InteractionContextType.Guild)
     .addUserOption((option) => option.setName('user').setDescription('The user to unban').setRequired(true))
     .addStringOption((option) => option.setName('reason').setDescription('The reason for the unban').setMaxLength(300).setRequired(false)),
-  async execute({ interaction, client }) {
+  async execute({ interaction, client, lng }) {
     if (!interaction.inCachedGuild()) return;
 
     await interaction.deferReply({ ephemeral: true });
@@ -43,8 +43,6 @@ export default new Command({
     const { options, guild, user } = interaction;
 
     const target = options.getUser('user', true);
-
-    const lng = await getUserLanguage(interaction.user.id);
     const targetLng = await getUserLanguage(target.id);
 
     const reason = options.getString('reason', false) ?? undefined;

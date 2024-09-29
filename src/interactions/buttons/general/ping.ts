@@ -3,21 +3,18 @@ import { t } from 'i18next';
 
 import { Button } from 'classes/button';
 
-import { getUserLanguage } from 'db/user';
-
 export default new Button({
   customId: 'button-ping-update',
   isAuthorOnly: false,
   isCustomIdIncluded: false,
   permissions: [],
   botPermissions: ['SendMessages'],
-  async execute({ interaction, client }) {
-    const lng = await getUserLanguage(interaction.user.id);
-
+  async execute({ interaction, client, lng }) {
     const sent = await interaction.update({
       content: t('ping.pinging', { lng }),
       fetchReply: true,
     });
+
     const websocketHeartbeat = interaction.guild?.shard.ping ?? client.ws.ping;
 
     await interaction.editReply({

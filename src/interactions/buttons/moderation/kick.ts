@@ -15,15 +15,13 @@ export default new Button({
   isCustomIdIncluded: true,
   permissions: ['KickMembers'],
   botPermissions: ['KickMembers', 'SendMessages'],
-  async execute({ interaction, client }) {
+  async execute({ interaction, client, lng }) {
     if (!interaction.inCachedGuild()) return;
 
     const { guild } = interaction;
 
     const targetId = interaction.customId.split('_')[1];
     const targetMember = await guild.members.fetch(targetId).catch((err) => logger.debug({ err, targetId }, 'Could not fetch user'));
-
-    const lng = await getUserLanguage(interaction.user.id);
 
     if (!targetMember) {
       await interaction.reply(t('kick.target.invalid', { lng }));

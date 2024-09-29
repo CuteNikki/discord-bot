@@ -32,7 +32,7 @@ export default new Command({
     .addUserOption((option) => option.setName('user').setDescription('The user to timeout').setRequired(true))
     .addStringOption((option) => option.setName('duration').setDescription('The duration of the timeout').setRequired(true))
     .addStringOption((option) => option.setName('reason').setDescription('The reason for the timeout').setMaxLength(300).setRequired(false)),
-  async execute({ interaction, client }) {
+  async execute({ interaction, client, lng }) {
     if (!interaction.inCachedGuild()) return;
 
     await interaction.deferReply({ ephemeral: true });
@@ -46,11 +46,10 @@ export default new Command({
 
     const target = options.getUser('user', true);
 
-    const lng = await getUserLanguage(interaction.user.id);
     const targetLng = await getUserLanguage(target.id);
 
     const targetMember = await guild.members.fetch(target.id).catch((err) => logger.debug({ err, userId: target.id }, 'Could not fetch target member'));
-    
+
     if (!targetMember) {
       await interaction.editReply(t('timeout.target.invalid', { lng }));
       return;

@@ -153,19 +153,23 @@ export default new Command({
     );
     // Making sure we only ever return max of 25 results
   },
-  async execute({ interaction, client }) {
-    // the order of client and interaction does not matter
+  async execute({ interaction, client, lng }) {
+    // the order of interaction, client and lng does not matter
+
+    // get a guilds language
+    // import { getGuildLanguage } from 'db/guild';
+    // const guildLng = await getGuildLanguage(guildId);
+
+    // get a different users language
+    // import { getUserLanguage } from 'db/user';
+    // const otherLng = await getUserLanguage(userId);
 
     const color = interaction.options.getString('color', true);
-
-    // get a users language
-    const lng = await client.getUserLanguage(interaction.user.id);
-    // get a guilds language
-    // const lng = await client.getGuildLanguage(interaction.guildId);
 
     // Autocomplete allows you to give the user a list to choose from
     // but they will still be able to type in whatever they want!
     // it's a must to check if they actually provided a valid color.
+
     try {
       await interaction.reply({
         embeds: [
@@ -178,7 +182,7 @@ export default new Command({
     } catch (err) {
       logger.debug({ err }, 'Error while previewing color');
       if (!interaction.replied) {
-        await interaction.reply({ content: t('preview-color.invalid', { lng }) });
+        await interaction.reply({ content: t('preview-color.invalid', { lng }), ephemeral: true });
       } else {
         await interaction.editReply({ content: t('preview-color.invalid', { lng }) });
       }
@@ -235,7 +239,7 @@ export default new Event({
   // only run this once, won't run again even if another ready event is emitted
   execute(client, readyClient) {
     // it is important to always have client first
-    // the events properties after that
+    // and other events properties after that
 
     logger.info(`Logged in as ${readyClient.user.username}#${readyClient.user.discriminator}`);
   },
@@ -251,15 +255,16 @@ export default new Button({
   customId: 'ping',
   // the custom id of the button
   isAuthorOnly: true,
-  // if the button was sent using a command, only the author can use this button
+  // if the button was received by a command, only the command sender can use this button
   isCustomIdIncluded: false,
-  // if true then a button with the custom id of "ping-two" would still trigger this button
+  // if true then a button with the custom id of "ping-two" would still
+  // trigger this button because the custom id includes "ping"
   permissions: ['SendMessages'],
   // the permissions required to use this button
   botPermissions: ['SendMessages'],
-  // the bot permissions the bot needs to have to use this button
-  async execute({ interaction, client }) {
-    await interaction.reply({ content: 'pong!' });
+  // permissions the bot needs to execute this function
+  async execute({ interaction, client, lng }) {
+    await interaction.channel?.send({ content: 'pong!' });
   },
 });
 ```

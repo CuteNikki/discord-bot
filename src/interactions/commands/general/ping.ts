@@ -12,8 +12,6 @@ import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
-import { getUserLanguage } from 'db/user';
-
 export default new Command({
   module: ModuleType.General,
   botPermissions: ['SendMessages'],
@@ -23,8 +21,7 @@ export default new Command({
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
     .setContexts(InteractionContextType.Guild, InteractionContextType.PrivateChannel, InteractionContextType.BotDM)
     .addBooleanOption((option) => option.setName('ephemeral').setDescription('Shows the message to everyone when false').setRequired(false)),
-  async execute({ interaction, client }) {
-    const lng = await getUserLanguage(interaction.user.id);
+  async execute({ interaction, client, lng }) {
     const ephemeral = interaction.options.getBoolean('ephemeral', false) ?? true;
 
     const sent = await interaction.reply({
@@ -32,6 +29,7 @@ export default new Command({
       fetchReply: true,
       ephemeral,
     });
+
     const websocketHeartbeat = interaction.guild?.shard.ping ?? client.ws.ping;
 
     await interaction.editReply({

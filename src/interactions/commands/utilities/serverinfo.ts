@@ -13,8 +13,6 @@ import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
-import { getUserLanguage } from 'db/user';
-
 export default new Command({
   module: ModuleType.Utilities,
   botPermissions: ['SendMessages'],
@@ -24,13 +22,11 @@ export default new Command({
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
     .setContexts(InteractionContextType.Guild)
     .addBooleanOption((option) => option.setName('ephemeral').setDescription('When set to false will show the message to everyone')),
-  async execute({ interaction, client }) {
+  async execute({ interaction, client, lng }) {
     if (!interaction.inCachedGuild()) return;
 
     const ephemeral = interaction.options.getBoolean('ephemeral', false) ?? true;
     await interaction.deferReply({ ephemeral });
-
-    const lng = await getUserLanguage(interaction.user.id);
 
     const guild = await interaction.guild.fetch();
     const { channels, emojis, roles, stickers, members, memberCount } = guild;

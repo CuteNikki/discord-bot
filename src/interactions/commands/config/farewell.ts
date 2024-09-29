@@ -4,7 +4,6 @@ import { t } from 'i18next';
 import { Command, ModuleType } from 'classes/command';
 import { CustomEmbedBuilder, getEmbed, isEmptyEmbed } from 'classes/custom-embed';
 
-import { getUserLanguage } from 'db/user';
 import { getGuildSettings, updateGuildSettings } from 'db/guild';
 
 import { logger } from 'utils/logger';
@@ -30,13 +29,12 @@ export default new Command({
     .addSubcommand((cmd) => cmd.setName('info').setDescription('Shows you the current settings and available placeholders'))
     .addSubcommand((cmd) => cmd.setName('enable').setDescription('Enable the farewell module'))
     .addSubcommand((cmd) => cmd.setName('disable').setDescription('Disable the farewell module')),
-  async execute({ client, interaction }) {
+  async execute({ client, interaction, lng }) {
     if (!interaction.inCachedGuild()) return;
     await interaction.deferReply();
 
     const { options, guild, user } = interaction;
 
-    const lng = await getUserLanguage(user.id);
     const config = await getGuildSettings(guild.id);
 
     switch (options.getSubcommand()) {

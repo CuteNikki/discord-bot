@@ -5,7 +5,6 @@ import { t } from 'i18next';
 import { Command, ModuleType } from 'classes/command';
 
 import { convertLevelToXP, getLevelWithRank, getWeeklyLevelWithRank } from 'db/level';
-import { getUserLanguage } from 'db/user';
 
 import type { PositionLevel } from 'types/level';
 
@@ -22,14 +21,12 @@ export default new Command({
     .addUserOption((option) => option.setName('user').setDescription('The user to show the rank of').setRequired(false))
     .addBooleanOption((option) => option.setName('weekly').setDescription("When set to true will show the user's weekly rank").setRequired(false))
     .addBooleanOption((option) => option.setName('ephemeral').setDescription('When set to false will show the message to everyone').setRequired(false)),
-  async execute({ interaction }) {
+  async execute({ interaction, lng }) {
     if (!interaction.inCachedGuild()) return;
     const { options, user, guild } = interaction;
 
     const ephemeral = options.getBoolean('ephemeral', false) ?? true;
     await interaction.deferReply({ ephemeral });
-
-    const lng = await getUserLanguage(user.id);
 
     const target = options.getUser('user', false) ?? user;
     const member = guild.members.cache.get(target.id);

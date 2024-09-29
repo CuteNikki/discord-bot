@@ -12,7 +12,7 @@ export class Button {
       isCustomIdIncluded?: boolean; // If true, customId does not need to be an exact match
       permissions?: PermissionsString[]; // Array of permissions required to use the button
       botPermissions?: PermissionsString[]; // Array of permissions the bot requires
-      execute({ client, interaction }: { client: DiscordClient; interaction: ButtonInteraction }): any;
+      execute({ client, interaction, lng }: { client: DiscordClient; interaction: ButtonInteraction; lng: string }): any;
     },
   ) {}
 }

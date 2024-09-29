@@ -11,7 +11,7 @@ export class Modal {
       isCustomIdIncluded?: boolean; // If true, customId does not need to be an exact match
       permissions?: PermissionsString[]; // Array of permissions required to use the modal
       botPermissions?: PermissionsString[]; // Array of permissions the bot requires
-      execute({ interaction, client }: { client: DiscordClient; interaction: ModalSubmitInteraction }): any;
+      execute({ interaction, client, lng }: { client: DiscordClient; interaction: ModalSubmitInteraction, lng: string }): any;
     },
   ) {}
 }

@@ -3,15 +3,11 @@ import { t } from 'i18next';
 
 import { Button } from 'classes/button';
 
-import { getUserLanguage } from 'db/user';
-
 export default new Button({
   customId: 'button-welcome-add-role',
   permissions: ['ManageGuild'],
   isAuthorOnly: true,
-  async execute({ interaction }) {
-    const lng = await getUserLanguage(interaction.user.id);
-
+  async execute({ interaction, lng }) {
     await interaction.showModal(
       new ModalBuilder()
         .setCustomId('modal-welcome-add-role')

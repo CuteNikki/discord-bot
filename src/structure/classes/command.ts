@@ -48,8 +48,8 @@ export class Command<CommandType extends ApplicationCommandType = ApplicationCom
       cooldown?: number; // Cooldown between command executes per user (in milliseconds)
       isDeveloperOnly?: boolean; // If true, can only be used by developers
       botPermissions?: PermissionsString[]; // Array of permissions the bot requires
-      autocomplete?({ client, interaction }: { client: DiscordClient; interaction: AutocompleteInteraction }): any;
-      execute({ client, interaction }: { client: DiscordClient; interaction: InteractionType<CommandType> }): any;
+      autocomplete?({ client, interaction }: { client: DiscordClient; interaction: AutocompleteInteraction; lng: string }): any;
+      execute({ client, interaction, lng }: { client: DiscordClient; interaction: InteractionType<CommandType>; lng: string }): any;
     },
   ) {}
 }

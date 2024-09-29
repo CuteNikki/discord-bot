@@ -3,15 +3,12 @@ import { t } from 'i18next';
 
 import { Button } from 'classes/button';
 
-import { getUserLanguage } from 'db/user';
-
 export default new Button({
   customId: 'button-welcome-remove-role',
   permissions: ['ManageGuild'],
   isAuthorOnly: true,
-  async execute({ interaction }) {
+  async execute({ interaction, lng }) {
     if (!interaction.inCachedGuild()) return;
-    const lng = await getUserLanguage(interaction.user.id);
 
     await interaction.showModal(
       new ModalBuilder()

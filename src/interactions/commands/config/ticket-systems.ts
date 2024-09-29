@@ -23,7 +23,6 @@ import { t } from 'i18next';
 import { Command, ModuleType } from 'classes/command';
 
 import { getGuildSettings, updateGuildSettings } from 'db/guild';
-import { getUserLanguage } from 'db/user';
 
 import type { TicketChoice } from 'types/guild';
 
@@ -53,12 +52,11 @@ export default new Command({
         .setDescription('Delete a ticket system')
         .addStringOption((opt) => opt.setName('system-id').setDescription('The id of the ticket system to delete').setRequired(true)),
     ),
-  async execute({ interaction, client }) {
+  async execute({ interaction, client, lng }) {
     if (!interaction.inCachedGuild()) return;
     await interaction.deferReply();
 
     const { options, user, guild } = interaction;
-    const lng = await getUserLanguage(user.id);
     const config = await getGuildSettings(guild.id);
 
     // Subcommand handling

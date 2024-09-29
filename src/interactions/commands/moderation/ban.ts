@@ -49,7 +49,7 @@ export default new Command({
           { name: 'Previous 7 days', value: 604800 },
         ),
     ),
-  async execute({ interaction, client }) {
+  async execute({ interaction, client, lng }) {
     if (!interaction.inCachedGuild()) return;
 
     await interaction.deferReply({ ephemeral: true });
@@ -64,7 +64,6 @@ export default new Command({
     const target = options.getUser('user', true);
     const targetMember = await guild.members.fetch(target.id).catch((err) => logger.debug({ err, userId: target.id }, 'Could not fetch target member'));
 
-    const lng = await getUserLanguage(interaction.user.id);
     const targetLng = await getUserLanguage(target.id);
 
     const userDuration = options.getString('duration', false);

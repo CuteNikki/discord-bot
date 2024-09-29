@@ -8,7 +8,9 @@ import { incrementButtonsExecuted, incrementButtonsFailed } from 'db/client';
 import { getUserData } from 'db/user';
 
 import { keys } from 'constants/keys';
+
 import { sendError } from 'utils/error';
+import { supportedLanguages } from 'utils/language';
 
 export default new Event({
   name: Events.InteractionCreate,
@@ -16,8 +18,11 @@ export default new Event({
     // Since we only want the button interactions we return early if the interaction is not a button
     if (!interaction.isButton()) return;
 
-    const { banned, language: lng } = await getUserData(interaction.user.id);
+    const { banned, language } = await getUserData(interaction.user.id);
     if (banned) return;
+
+    let lng = language;
+    if (!lng) lng = supportedLanguages[0];
 
     // Get the button with the interactions custom id and return if it wasn't found
     let button: Button | undefined;
@@ -115,7 +120,7 @@ export default new Event({
 
     // Try to run the button and send an error message if it couldn't run
     try {
-      await button.options.execute({ client, interaction });
+      await button.options.execute({ client, interaction, lng });
 
       await incrementButtonsExecuted(keys.DISCORD_BOT_ID);
     } catch (err: any) {

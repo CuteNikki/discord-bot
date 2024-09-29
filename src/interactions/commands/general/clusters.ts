@@ -4,8 +4,6 @@ import ms from 'ms';
 
 import { Command, ModuleType } from 'classes/command';
 
-import { getUserLanguage } from 'db/user';
-
 import { pagination } from 'utils/pagination';
 
 export default new Command({
@@ -17,8 +15,7 @@ export default new Command({
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
     .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel)
     .addBooleanOption((option) => option.setName('ephemeral').setDescription('When set to false will show the message to everyone')),
-  async execute({ interaction, client }) {
-    const lng = await getUserLanguage(interaction.user.id);
+  async execute({ interaction, client, lng }) {
     const ephemeral = interaction.options.getBoolean('ephemeral', false) ?? true;
     await interaction.deferReply({ ephemeral });
 

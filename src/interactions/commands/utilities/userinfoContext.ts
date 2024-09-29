@@ -3,8 +3,6 @@ import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
-import { getUserLanguage } from 'db/user';
-
 import { logger } from 'utils/logger';
 
 const commandType = ApplicationCommandType.User;
@@ -16,10 +14,8 @@ export default new Command<typeof commandType>({
     .setType(commandType)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
     .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel),
-  async execute({ interaction, client }) {
+  async execute({ interaction, client, lng }) {
     await interaction.deferReply({ ephemeral: true });
-
-    const lng = await getUserLanguage(interaction.user.id);
 
     const user = await client.users
       .fetch(interaction.options.getUser('user', false) ?? interaction.user, {

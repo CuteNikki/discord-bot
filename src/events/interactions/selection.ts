@@ -7,7 +7,9 @@ import type { Selection } from 'classes/selection';
 import { getUserData } from 'db/user';
 
 import { keys } from 'constants/keys';
+
 import { sendError } from 'utils/error';
+import { supportedLanguages } from 'utils/language';
 
 export default new Event({
   name: Events.InteractionCreate,
@@ -15,8 +17,11 @@ export default new Event({
     // Since we only want the selection interactions we return early if the interaction is not a selection
     if (!interaction.isAnySelectMenu()) return;
 
-    const { banned, language: lng } = await getUserData(interaction.user.id);
+    const { banned, language } = await getUserData(interaction.user.id);
     if (banned) return;
+
+    let lng = language;
+    if (!lng) lng = supportedLanguages[0];
 
     // Get the selection with the interactions custom id and return if it wasn't found
     let selection: Selection | undefined;
@@ -111,7 +116,7 @@ export default new Event({
 
     // Try to run the selection and send an error message if it couldn't run
     try {
-      selection.options.execute({ client, interaction });
+      selection.options.execute({ client, interaction, lng });
     } catch (err: any) {
       const message = t('interactions.error', {
         lng,

@@ -5,7 +5,6 @@ import { Command, ModuleType } from 'classes/command';
 
 import { getGuildSettings, updateGuildSettings } from 'db/guild';
 import { addLevel, addXP, getLevelForce, getRewardsForLevel, setLevel, setXP } from 'db/level';
-import { getUserLanguage } from 'db/user';
 
 import { AnnouncementType } from 'types/guild';
 
@@ -180,13 +179,12 @@ export default new Command({
             .addIntegerOption((option) => option.setName('level').setDescription('The level to set the user to').setRequired(true).setMaxValue(1000)),
         ),
     ),
-  async execute({ interaction, client }) {
+  async execute({ interaction, client, lng }) {
     if (!interaction.inCachedGuild()) return;
     await interaction.deferReply({ ephemeral: true });
 
     const { options, guild } = interaction;
 
-    const lng = await getUserLanguage(interaction.user.id);
     const { level } = await getGuildSettings(guild.id);
     const { ignoredRoles, ignoredChannels, enabledChannels, enabled, announcement, rewards, channelId } = level;
 

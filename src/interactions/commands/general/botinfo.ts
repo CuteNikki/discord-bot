@@ -6,7 +6,6 @@ import osu from 'node-os-utils';
 import { Command, ModuleType } from 'classes/command';
 
 import { getClientSettings } from 'db/client';
-import { getUserLanguage } from 'db/user';
 
 import { keys } from 'constants/keys';
 import { logger } from 'utils/logger';
@@ -20,8 +19,7 @@ export default new Command({
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
     .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel)
     .addBooleanOption((option) => option.setName('ephemeral').setDescription('When set to false will show the message to everyone')),
-  async execute({ interaction, client }) {
-    const lng = await getUserLanguage(interaction.user.id);
+  async execute({ interaction, client, lng }) {
     const ephemeral = interaction.options.getBoolean('ephemeral', false) ?? true;
     await interaction.deferReply({ ephemeral });
 

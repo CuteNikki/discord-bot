@@ -4,7 +4,6 @@ import { t } from 'i18next';
 import { Command, ModuleType } from 'classes/command';
 
 import { computeLeaderboard, getLeaderboard, getWeeklyLeaderboard } from 'db/level';
-import { getUserLanguage } from 'db/user';
 
 import { chunk } from 'utils/common';
 import { pagination } from 'utils/pagination';
@@ -19,15 +18,13 @@ export default new Command({
     .setContexts(InteractionContextType.Guild)
     .addBooleanOption((option) => option.setName('weekly').setDescription('When set to true will show the weekly leaderboard').setRequired(false))
     .addBooleanOption((option) => option.setName('ephemeral').setDescription('When set to false will show the message to everyone').setRequired(false)),
-  async execute({ interaction, client }) {
+  async execute({ interaction, client, lng }) {
     if (!interaction.inCachedGuild()) return;
 
     const { options, guild, user } = interaction;
 
     const ephemeral = options.getBoolean('ephemeral', false) ?? true;
     await interaction.deferReply({ ephemeral });
-
-    const lng = await getUserLanguage(user.id);
 
     const weekly = options.getBoolean('weekly', false) ?? false;
 

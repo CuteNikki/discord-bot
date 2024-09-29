@@ -3,7 +3,6 @@ import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
-import { getUserLanguage } from 'db/user';
 import { getGuildSettings, updateGuildSettings } from 'db/guild';
 
 export default new Command({
@@ -29,11 +28,12 @@ export default new Command({
         .addSubcommand((subcommand) => subcommand.setName('on').setDescription('Turns the moderation module on'))
         .addSubcommand((subcommand) => subcommand.setName('off').setDescription('Turns the moderation module off')),
     ),
-  async execute({ interaction }) {
+  async execute({ interaction, lng }) {
     if (!interaction.inCachedGuild()) return;
-    const { options, guildId } = interaction;
+
     await interaction.deferReply({ ephemeral: true });
-    const lng = await getUserLanguage(interaction.user.id);
+
+    const { options, guildId } = interaction;
 
     const config = await getGuildSettings(guildId);
 

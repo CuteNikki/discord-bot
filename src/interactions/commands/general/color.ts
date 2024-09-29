@@ -3,8 +3,6 @@ import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
-import { getUserLanguage } from 'db/user';
-
 import { logger } from 'utils/logger';
 
 export default new Command({
@@ -63,10 +61,8 @@ export default new Command({
     await interaction.respond(colors.filter((color) => color.name.toLowerCase().includes(input.toLowerCase())).slice(0, 25));
   },
   // the order of client and interaction does not matter
-  async execute({ interaction }) {
+  async execute({ interaction, lng }) {
     const color = interaction.options.getString('color', true);
-
-    const lng = await getUserLanguage(interaction.user.id);
 
     // Autocomplete allows you to give the user a list to choose from but they will still be able to type in whatever they want!
     // It's a must to check if they actually provided a valid color.

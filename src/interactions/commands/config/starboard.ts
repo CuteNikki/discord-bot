@@ -11,7 +11,6 @@ import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
-import { getUserLanguage } from 'db/user';
 import { getGuildSettings, updateGuildSettings } from 'db/guild';
 
 export default new Command({
@@ -59,13 +58,12 @@ export default new Command({
             .setMaxValue(100),
         ),
     ),
-  async execute({ interaction }) {
+  async execute({ interaction, lng }) {
     if (!interaction.inCachedGuild() || !interaction.guild.members.me) return;
     const { options, guild, user } = interaction;
 
     await interaction.deferReply({ ephemeral: true });
 
-    const lng = await getUserLanguage(user.id);
     const config = await getGuildSettings(guild.id);
 
     switch (options.getSubcommand()) {

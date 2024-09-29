@@ -9,7 +9,9 @@ import { getGuildSettings } from 'db/guild';
 import { getUserData } from 'db/user';
 
 import { keys } from 'constants/keys';
+
 import { sendError } from 'utils/error';
+import { supportedLanguages } from 'utils/language';
 
 export default new Event({
   name: Events.InteractionCreate,
@@ -17,8 +19,13 @@ export default new Event({
     // Since we only want the command interactions we return early if the interaction is not a command
     if (!interaction.isCommand()) return;
 
-    const { banned, language: lng } = await getUserData(interaction.user.id);
+    // If user is banned return early
+    const { banned, language } = await getUserData(interaction.user.id);
     if (banned) return;
+
+    // If no language is set, use the default language
+    let lng = language;
+    if (!lng) lng = supportedLanguages[0];
 
     // Get the command with the interactions command name and return if it wasn't found
     const command = client.commands.get(interaction.commandName);
@@ -98,7 +105,7 @@ export default new Event({
 
     // Try to run the command and send an error message if it couldn't run
     try {
-      await command.options.execute({ client, interaction });
+      await command.options.execute({ client, interaction, lng });
 
       await incrementCommandsExecuted(keys.DISCORD_BOT_ID);
     } catch (err: any) {

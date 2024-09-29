@@ -15,15 +15,13 @@ export default new Button({
   isCustomIdIncluded: true,
   permissions: ['BanMembers'],
   botPermissions: ['BanMembers', 'SendMessages'],
-  async execute({ interaction, client }) {
+  async execute({ interaction, client, lng }) {
     if (!interaction.inCachedGuild()) return;
 
     const { guild } = interaction;
     const targetId = interaction.customId.split('_')[1];
 
     const target = await client.users.fetch(targetId).catch((err) => logger.debug({ err, targetId }, 'Could not fetch user'));
-
-    const lng = await getUserLanguage(interaction.user.id);
 
     if (!target) {
       await interaction.reply(t('ban.failed', { lng }));

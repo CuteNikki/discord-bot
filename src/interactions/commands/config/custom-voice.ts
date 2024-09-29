@@ -4,7 +4,6 @@ import { t } from 'i18next';
 import { Command, ModuleType } from 'classes/command';
 
 import { getCustomVoiceChannel } from 'db/custom-voice';
-import { getUserLanguage } from 'db/user';
 
 import { logger } from 'utils/logger';
 
@@ -30,10 +29,8 @@ export default new Command({
         .setDescription('Remove permissions from someone to join your channel')
         .addUserOption((option) => option.setName('user').setDescription('The user to remove permissions of').setRequired(true)),
     ),
-  async execute({ client, interaction }) {
+  async execute({ client, interaction, lng }) {
     if (!interaction.inCachedGuild()) return;
-
-    const lng = await getUserLanguage(interaction.user.id);
 
     const voiceChannel = interaction.member.voice.channel;
     if (!voiceChannel) {

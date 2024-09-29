@@ -15,7 +15,6 @@ import { Command, ModuleType } from 'classes/command';
 import { CustomEmbedBuilder, getEmbed, isEmptyEmbed } from 'classes/custom-embed';
 
 import { getGuildSettings, updateGuildSettings } from 'db/guild';
-import { getUserLanguage } from 'db/user';
 
 import { logger } from 'utils/logger';
 
@@ -42,13 +41,12 @@ export default new Command({
     .addSubcommand((cmd) => cmd.setName('enable').setDescription('Enable the welcome module'))
     .addSubcommand((cmd) => cmd.setName('disable').setDescription('Disable the welcome module')),
 
-  async execute({ client, interaction }) {
+  async execute({ client, interaction, lng }) {
     if (!interaction.inCachedGuild()) return;
     await interaction.deferReply();
 
     const { options, guild, user } = interaction;
 
-    const lng = await getUserLanguage(user.id);
     const config = await getGuildSettings(guild.id);
 
     switch (options.getSubcommand()) {

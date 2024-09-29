@@ -30,7 +30,7 @@ export default new Command({
     .setContexts(InteractionContextType.Guild)
     .addUserOption((option) => option.setName('user').setDescription('The user to warn').setRequired(true))
     .addStringOption((option) => option.setName('reason').setDescription('The reason for the warn').setMaxLength(300).setRequired(false)),
-  async execute({ interaction, client }) {
+  async execute({ interaction, client, lng }) {
     if (!interaction.inCachedGuild()) return;
 
     await interaction.deferReply({ ephemeral: true });
@@ -44,8 +44,6 @@ export default new Command({
 
     const target = options.getUser('user', true);
     const targetMember = await guild.members.fetch(target.id).catch((err) => logger.debug({ err, userId: target.id }, 'Could not fetch target member'));
-
-    const lng = await getUserLanguage(interaction.user.id);
     const targetLng = await getUserLanguage(target.id);
 
     if (!targetMember) {

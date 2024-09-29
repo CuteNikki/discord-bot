@@ -5,7 +5,6 @@ import { t } from 'i18next';
 import { Command, ModuleType } from 'classes/command';
 
 import { convertLevelToXP, getLevelWithRank } from 'db/level';
-import { getUserLanguage } from 'db/user';
 
 const commandType = ApplicationCommandType.User;
 
@@ -17,14 +16,13 @@ export default new Command<typeof commandType>({
     .setType(commandType)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
     .setContexts(InteractionContextType.Guild),
-  async execute({ interaction }) {
+  async execute({ interaction, lng }) {
     if (!interaction.inCachedGuild()) return;
 
     await interaction.deferReply({ ephemeral: true });
 
     const { options, user, guild } = interaction;
 
-    const lng = await getUserLanguage(user.id);
     const target = options.getUser('user', true);
     const member = guild.members.cache.get(target.id);
 

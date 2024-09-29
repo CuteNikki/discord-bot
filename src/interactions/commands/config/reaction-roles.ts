@@ -23,13 +23,12 @@ import type { DiscordClient } from 'classes/client';
 import { Command, ModuleType } from 'classes/command';
 
 import { getGuildSettings } from 'db/guild';
-import { addReactionGroup, disableReactionRoles, enableReactionRoles, deleteReactionGroupById } from 'db/reaction-roles';
-import { getUserLanguage } from 'db/user';
+import { addReactionGroup, deleteReactionGroupById, disableReactionRoles, enableReactionRoles } from 'db/reaction-roles';
 
 import type { Reaction } from 'types/reaction-roles';
 
-import { logger } from 'utils/logger';
 import { chunk } from 'utils/common';
+import { logger } from 'utils/logger';
 
 const TIMEOUT_DURATION = 60_000; // Constant for the timeout duration
 const MAX_ROLES = 20; // Constant for the maximum number of roles
@@ -53,14 +52,13 @@ export default new Command({
         .setDescription('Delete a reaction role group.')
         .addStringOption((option) => option.setName('id').setDescription('Either the group ID or the message ID').setRequired(true)),
     ),
-  async execute({ client, interaction }) {
+  async execute({ client, interaction, lng }) {
     if (!interaction.inCachedGuild()) return;
 
     await interaction.deferReply();
 
     const { guild, options, user } = interaction;
 
-    const lng = await getUserLanguage(user.id);
     const config = await getGuildSettings(guild.id);
 
     switch (options.getSubcommand()) {

@@ -4,7 +4,6 @@ import { t } from 'i18next';
 import { Command, ModuleType } from 'classes/command';
 
 import { getGuildSettings, updateGuildSettings } from 'db/guild';
-import { getUserLanguage } from 'db/user';
 
 export default new Command({
   module: ModuleType.Config,
@@ -35,10 +34,9 @@ export default new Command({
         ),
     )
     .addSubcommand((cmd) => cmd.setName('info').setDescription('Shows the current custom voice channel settings')),
-  async execute({ client, interaction }) {
+  async execute({ client, interaction, lng }) {
     if (!interaction.inCachedGuild()) return;
 
-    const lng = await getUserLanguage(interaction.user.id);
     const config = await getGuildSettings(interaction.guildId);
 
     switch (interaction.options.getSubcommand()) {

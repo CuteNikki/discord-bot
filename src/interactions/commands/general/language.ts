@@ -3,8 +3,8 @@ import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
-import { getUserLanguage, updateUserLanguage } from 'db/user';
 import { getGuildLanguage, updateGuildLanguage } from 'db/guild';
+import { updateUserLanguage } from 'db/user';
 
 import { supportedLanguages } from 'utils/language';
 
@@ -35,11 +35,10 @@ export default new Command({
     const filtered = choices.filter((choice) => choice.toLowerCase().includes(focused.toLowerCase()));
     await interaction.respond(filtered.map((choice) => ({ name: choice, value: choice })).slice(0, 25));
   },
-  async execute({ interaction, client }) {
+  async execute({ interaction, lng }) {
     await interaction.deferReply({ ephemeral: true });
     const { user, options } = interaction;
 
-    const lng = await getUserLanguage(user.id);
     const guildLng = await getGuildLanguage(interaction.guildId);
 
     switch (options.getSubcommand()) {

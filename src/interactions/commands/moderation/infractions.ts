@@ -4,7 +4,6 @@ import { t } from 'i18next';
 import { Command, ModuleType } from 'classes/command';
 
 import { deleteInfraction, findInfraction, getInfractions } from 'db/infraction';
-import { getUserLanguage } from 'db/user';
 
 import { chunk } from 'utils/common';
 import { pagination } from 'utils/pagination';
@@ -30,11 +29,9 @@ export default new Command({
         .setDescription('Deletes an infraction')
         .addStringOption((option) => option.setName('infraction').setDescription('The id of the infraction').setRequired(true)),
     ),
-  async execute({ interaction }) {
+  async execute({ interaction, lng }) {
     if (!interaction.inCachedGuild()) return;
     const { options, user, guildId } = interaction;
-
-    const lng = await getUserLanguage(user.id);
 
     switch (options.getSubcommand()) {
       case 'history':

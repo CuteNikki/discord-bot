@@ -3,9 +3,7 @@ import type { UpdateQuery } from 'mongoose';
 import type { DiscordClient } from 'classes/client';
 
 import { getGuildSettings } from 'db/guild';
-
-import { levelModel } from 'models/level';
-import { weeklyLevelModel } from 'models/weeklyLevel';
+import { levelModel, weeklyLevelModel } from 'models/level';
 
 import type { LevelReward } from 'types/guild';
 import type { LevelDocument, PositionLevel, WeeklyLevelDocument } from 'types/level';

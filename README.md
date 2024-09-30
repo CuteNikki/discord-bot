@@ -4,7 +4,7 @@
 
 This discord bot was built with custom classes, <a href="https://www.i18next.com/">i18next</a> for translations, <a href="https://getpino.io/">Pino</a> as logger and <a href="https://www.mongodb.com/">MongoDB</a> as database.</p>
 
-[<img src="https://img.shields.io/badge/pino-%23687634.svg?style=for-the-badge&logo=pino&logoColor=white" alt="pino" />](https://getpino.io) [<img src="https://img.shields.io/badge/mongodb-%2347A248.svg?style=for-the-badge&logo=mongodb&logoColor=white" alt="mongodb" />](https://mongodb.com) [<img src="https://img.shields.io/badge/i18next-%2326A69A.svg?style=for-the-badge&logo=i18next&logoColor=white" alt="i18next" />](https://i18next.com) [<img src="https://img.shields.io/badge/discordjs_v14-%235865F2.svg?style=for-the-badge&logo=discord&logoColor=white" alt="discord.js" />](https://discord.js.org)<br /> [<img src="https://img.shields.io/github/stars/CuteNikki/discord-bot?style=for-the-badge&color=%23d4a72a" alt="Repository Stars" />](https://github.com/CuteNikki/discord-bot/stargazers) [<img src="https://img.shields.io/github/issues/CuteNikki/discord-bot?style=for-the-badge&color=%2371d42a" alt="Repository Issues" />](https://github.com/CuteNikki/discord-bot/issues) [<img src="https://img.shields.io/github/forks/CuteNikki/discord-bot?style=for-the-badge&color=%232ad48a" alt="Repository Forks" />](https://github.com/CuteNikki/discord-bot/forks) [<img src="https://img.shields.io/github/license/cutenikki/discord-bot?style=for-the-badge&color=%232a90d4" alt="License" />]()
+[<img src="https://img.shields.io/badge/pino-%23687634.svg?style=for-the-badge&logo=pino&logoColor=white" alt="pino" />](https://getpino.io) [<img src="https://img.shields.io/badge/mongodb-%2347A248.svg?style=for-the-badge&logo=mongodb&logoColor=white" alt="mongodb" />](https://mongodb.com) [<img src="https://img.shields.io/badge/i18next-%2326A69A.svg?style=for-the-badge&logo=i18next&logoColor=white" alt="i18next" />](https://i18next.com) [<img src="https://img.shields.io/badge/discordjs_v14&#46;16&#46;2-%235865F2.svg?style=for-the-badge&logo=discord&logoColor=white" alt="discord.js" />](https://discord.js.org)<br /> [<img src="https://img.shields.io/github/stars/CuteNikki/discord-bot?style=for-the-badge&color=%23d4a72a" alt="Repository Stars" />](https://github.com/CuteNikki/discord-bot/stargazers) [<img src="https://img.shields.io/github/issues/CuteNikki/discord-bot?style=for-the-badge&color=%2371d42a" alt="Repository Issues" />](https://github.com/CuteNikki/discord-bot/issues) [<img src="https://img.shields.io/github/forks/CuteNikki/discord-bot?style=for-the-badge&color=%232ad48a" alt="Repository Forks" />](https://github.com/CuteNikki/discord-bot/forks) [<img src="https://img.shields.io/github/license/cutenikki/discord-bot?style=for-the-badge&color=%232a90d4" alt="License" />]()
 
 ###### Made with 💖 by <a href="https://github.com/CuteNikki/">Nikki</a>
 
@@ -43,7 +43,7 @@ cp example.config.json config.json
 
 ```bash
 bun run deploy
-# you may also use the /register command on discord
+# you may also use the /register-commands slash command on discord
 # once the commands have been registered using the above command.
 ```
 
@@ -55,9 +55,9 @@ bun run dev
 # or compile and run
 bun run build
 bun run start
-
-# you may also use --debug for more detailed logs in case something goes wrong!
 ```
+
+###### You may also use `--debug` for more detailed logs!
 
 7. (optional) Configure more settings using the developer command.
 
@@ -287,31 +287,19 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
 
 ## TO-DO
 
-- [ ] refactor config commands
-  - [x] reaction roles (new)
-  - [x] counting
-  - [x] custom voice channels
-  - [x] starboard
-  - [x] welcome
-  - [x] farewell
-  - [x] ticket
-    - [x] added back the button style and emoji
-  - [ ] level
-    - [x] db/level functions
-    - [x] refactored the code of all level related files
-    - [ ] refactor the /config-level command
-  - [ ] log
 - [ ] miscellaneous
   - [x] fully translated all messages sent by the bot
   - [x] added locales to all registered slash commands
   - [ ] replace any null/undefined, true/false and so on with proper translations
+  - [ ] fix translation props (sometimes the id is displayed because `toString()` was not used)
 - [x] moderation module
   - [x] infractions command
     - [x] slash and user context menu commands
   - [x] purge command
     - [x] filter by specific user, channel and before/after a message
   - [x] ban command
-  - [x] tempban command
+    - [x] temporary bans
+      - [x] automatically unbans users once the ban expires
   - [x] unban command
   - [x] kick command
   - [x] timeout command
@@ -322,10 +310,10 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
     - [x] editable server language (mainly used for the ticket system and the server log)
   - [x] bot information
     - [x] botinfo command
-    - [x] clusters command
+    - [x] clusters/shards command
     - [x] ping command
     - [x] uptime command
-  - [x] list of commands
+  - [x] list of commands (`/commands` command)
   - [x] support command
   - [x] invite command
 - [x] level module
@@ -333,20 +321,21 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
   - [x] rank command (with weekly option)
   - [x] leaderboard command (with weekly option)
   - [x] modify users level/xp with config command
-- [ ] utility module
+- [ ] utility module (not checked because I'd like to add more)
   - [x] avatar/banner slash and user context menu commands
   - [x] userinfo slash and user context menu commands
   - [x] serverinfo command
   - [x] weather command
   - [x] reminder command (weatherapi.com)
-- [ ] developer module
-  - [x] evaluate code
-  - [x] execute console command
-  - [x] register commands
+- [ ] developer module (more features might be added)
+  - [x] evaluate code (`/eval`)
+    - [ ] edit button
+  - [x] execute console command (`/exec`)
+  - [x] register commands command (`/register-commands`)
 - [ ] fun module
   - [x] phone command
-    - [x] add property for last sent message (if no message sent within 4 minutes, automatically end the call)
-    - [x] could add a button to enter the queue again if phone was hung up
+    - [x] if no message sent within 4 minutes, automatically end the call
+    - [x] button to enter the queue again or end the call
   - [x] game command
     - [x] Rock-Paper-Scissors
     - [x] Tic-Tac-Toe
@@ -359,29 +348,39 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
     - [x] Remember-Emoji
     - [x] Tetris
     - [x] Sokoban
-    - [ ] 2048
-    - [ ] Lights Out
+    - [ ] 2048 (maybe?)
+    - [ ] Lights Out (maybe?)
 - [ ] config commands
   - [x] custom voice channels
+    - [x] fully customizable for users
   - [x] counting game
+    - [x] reset on wrong number is optional
   - [x] reaction roles
+    - [x] choose between reactions and buttons (Buttons provide more user feedback)
+    - [ ] fully customizable message
   - [ ] giveaway
+    - [ ] needs todo
   - [ ] economy
+    - [ ] needs todo
   - [ ] confession
+    - [ ] needs todo
   - [ ] suggestions
+    - [ ] needs todo
   - [x] starboard
     - [x] enable/disable module
     - [x] starboard messages can be deleted or edited by the author
     - [x] users can only star a message once and can also remove their star
   - [x] moderation config
     - [x] enable/disable module
-    - [ ] staff role (?)
-    - [ ] option to make reasons required (optional by default)
+    - [ ] staff role (maybe? not sure yet)
+    - [ ] adjustable option to make reasons required (optional by default)
   - [x] level config
+    - [ ] refactor
     - [x] disable/enable module
     - [x] modify users level/xp
     - [x] levelup announcement
-      - [x] sent to current/other channel or dms
+      - [x] can send to current/other channel or dms
+      - [ ] fully customizable message
     - [x] ignored roles and channels
     - [x] enabled channels
   - [x] welcome config
@@ -393,23 +392,28 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
     - [x] fully customizable farewell messages
   - [x] ticket config
     - [x] disable/enable module
-    - [x] fully customizable ticket options
+    - [x] fully customizable ticket options (color of buttons)
   - [x] developer config
-    - [x] update invite url and support settings
+    - [x] update support settings
+      - [x] invite url
+      - [x] support server
     - [x] globally ban users
     - [x] custom badges
-      - [x] supporter badge automatically added on support server boost
-      - [x] List of badges:
-        - developer
-        - staff member
-        - translator
-        - supporter
-        - expert bughunter
-        - bughunter
+      - [x] add/remove badges from users
+      - [x] implement badges:
+        - [x] developer
+        - [x] staff member
+        - [x] translator
+        - [x] expert bughunter
+        - [x] bughunter
+        - [x] supporter
+          - [x] automatically added on support server boost
   - [x] server log config
-    - [x] enable/disable events
-      - [x] applicationCommandPermissionUpdate
+    - [ ] refactor
+    - [x] enable/disable
+    - [x] implement events:
       - [x] autoModerationActionExecution
+      - [x] applicationCommandPermissionUpdate
       - [x] autoModerationRuleCreate
       - [x] autoModerationRuleDelete
       - [x] autoModerationRuleUpdate

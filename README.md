@@ -27,20 +27,22 @@ cd discord-bot
 3. Install all the dependencies.
 
 ```bash
-npm install
+bun install
 ```
 
 4. Set up your config file.
 
 ```bash
 # copy example.config.json and rename to config.json
+# or use this command if you are on Linux
+cp example.config.json config.json
 # fill in all values (more details in the config file)
 ```
 
 5. Deploy the slash commands.
 
 ```bash
-npm run deploy
+bun run deploy
 # you may also use the /register command on discord
 # once the commands have been registered using the above command.
 ```
@@ -49,10 +51,10 @@ npm run deploy
 
 ```bash
 # run in development
-npm run dev
+bun run dev
 # or compile and run
-npm run build
-npm run start
+bun run build
+bun run start
 
 # you may also use --debug for more detailed logs in case something goes wrong!
 ```
@@ -71,7 +73,7 @@ import {
   EmbedBuilder,
   PermissionFlagsBits,
   SlashCommandBuilder,
-  type ColorResolvable,
+  type ColorResolvable
 } from 'discord.js';
 import { t } from 'i18next';
 
@@ -105,7 +107,7 @@ export default new Command({
           // option description
           .setRequired(true)
           // makes the option required
-          .setAutocomplete(true),
+          .setAutocomplete(true)
       // enables autocompletion
     ),
   async autocomplete({ interaction, client }) {
@@ -140,16 +142,16 @@ export default new Command({
       { name: 'blurple', value: Colors.Blurple.toString(16) },
       { name: 'greyple', value: Colors.Greyple.toString(16) },
       { name: 'dark-but-not-black', value: Colors.DarkButNotBlack.toString(16) },
-      { name: 'not-quite-black', value: Colors.NotQuiteBlack.toString(16) },
+      { name: 'not-quite-black', value: Colors.NotQuiteBlack.toString(16) }
     ];
     if (!input.length) return await interaction.respond(colors.slice(0, 25));
     await interaction.respond(
       colors
         .filter(
-          (color) => color.name.toLowerCase().includes(input.toLowerCase()),
+          (color) => color.name.toLowerCase().includes(input.toLowerCase())
           // Check if the input includes the color name
         )
-        .slice(0, 25),
+        .slice(0, 25)
     );
     // Making sure we only ever return max of 25 results
   },
@@ -176,8 +178,8 @@ export default new Command({
           new EmbedBuilder()
             .setColor(color as ColorResolvable)
             // casting the color to a color resolvable
-            .setDescription(t('preview-color.preview', { lng, color })),
-        ],
+            .setDescription(t('preview-color.preview', { lng, color }))
+        ]
       });
     } catch (err) {
       logger.debug({ err }, 'Error while previewing color');
@@ -187,7 +189,7 @@ export default new Command({
         await interaction.editReply({ content: t('preview-color.invalid', { lng }) });
       }
     }
-  },
+  }
 });
 ```
 
@@ -242,7 +244,7 @@ export default new Event({
     // and other events properties after that
 
     logger.info(`Logged in as ${readyClient.user.username}#${readyClient.user.discriminator}`);
-  },
+  }
 });
 ```
 
@@ -265,7 +267,7 @@ export default new Button({
   // permissions the bot needs to execute this function
   async execute({ interaction, client, lng }) {
     await interaction.channel?.send({ content: 'pong!' });
-  },
+  }
 });
 ```
 

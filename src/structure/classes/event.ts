@@ -2,7 +2,8 @@ import type { ClientEvents } from 'discord.js';
 
 import type { DiscordClient } from 'classes/client';
 
-export class Event<Name extends keyof ClientEvents> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export class Event<Name extends keyof ClientEvents = any> {
   constructor(
     public options: {
       name: Name;

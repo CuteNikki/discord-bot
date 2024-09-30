@@ -287,7 +287,7 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
 
 ## TO-DO
 
-- [ ] miscellaneous
+- [x] miscellaneous
   - [x] fully translated all messages sent by the bot
   - [x] added locales to all registered slash commands
   - [x] replace any null/undefined, true/false and so on with proper translations
@@ -313,7 +313,7 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
     - [x] clusters/shards command
     - [x] ping command
     - [x] uptime command
-  - [x] list of commands (`/commands` command)
+  - [x] list of commands (`/commands`)
   - [x] support command
   - [x] invite command
 - [x] level module

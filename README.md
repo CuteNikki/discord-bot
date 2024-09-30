@@ -353,13 +353,18 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
 - [ ] config commands
   - [x] custom voice channels
     - [x] fully customizable for users
-  - [x] counting game
-    - [x] reset on wrong number is optional
   - [x] reaction roles
     - [x] choose between reactions and buttons (Buttons provide more user feedback)
     - [ ] fully customizable message
+  - [x] counting game
+    - [x] reset on wrong number is optional
+  - [ ] word chain game (next word needs to start with the last letter of the previous word)
   - [ ] giveaway
-    - [ ] needs todo
+    - [ ] create giveaway (time, winnercount, prize)
+    - [ ] edit giveaway (time, winnercount, prize)
+    - [ ] delete giveaway (giveaway id)
+    - [ ] reroll giveaway (giveaway id)
+    - [ ] list giveaways
   - [ ] economy
     - [ ] needs todo
   - [ ] confession

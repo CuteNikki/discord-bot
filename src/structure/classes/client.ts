@@ -44,7 +44,8 @@ export class DiscordClient extends Client {
     ticket: Colors.LuminousVividPink,
     level: Colors.Blue,
     reactionRoles: Colors.DarkGreen,
-    general: Colors.Blurple
+    general: Colors.Blurple,
+    giveaway: Colors.Yellow
   };
 
   // Custom emojis

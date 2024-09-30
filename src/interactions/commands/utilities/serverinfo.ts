@@ -4,6 +4,7 @@ import {
   EmbedBuilder,
   GuildExplicitContentFilter,
   GuildNSFWLevel,
+  GuildPremiumTier,
   GuildVerificationLevel,
   InteractionContextType,
   Role,
@@ -107,38 +108,38 @@ export default new Command({
         {
           name: t('serverinfo.channels.title', { lng }),
           value: [
-            t('serverinfo.channels.total', { lng, total: totalChannels }),
+            t('serverinfo.channels.total', { lng, total: totalChannels.toString() }),
             t('serverinfo.channels.categories', {
               lng,
               categories: categoryChannels
             }),
-            t('serverinfo.channels.text', { lng, text: textChannels }),
-            t('serverinfo.channels.voice', { lng, voice: voiceChannels }),
-            t('serverinfo.channels.threads', { lng, threads: threadChannels }),
-            t('serverinfo.channels.other', { lng, other: otherChannels })
+            t('serverinfo.channels.text', { lng, text: textChannels.toString() }),
+            t('serverinfo.channels.voice', { lng, voice: voiceChannels.toString() }),
+            t('serverinfo.channels.threads', { lng, threads: threadChannels.toString() }),
+            t('serverinfo.channels.other', { lng, other: otherChannels.toString() })
           ].join('\n'),
           inline: true
         },
         {
           name: t('serverinfo.members.title', { lng }),
           value: [
-            t('serverinfo.members.total', { lng, total: totalMembers }),
-            t('serverinfo.members.bots', { lng, bots: botMembers }),
-            t('serverinfo.members.humans', { lng, humans: humanMembers })
+            t('serverinfo.members.total', { lng, total: totalMembers.toString() }),
+            t('serverinfo.members.bots', { lng, bots: botMembers.toString() }),
+            t('serverinfo.members.humans', { lng, humans: humanMembers.toString() })
           ].join('\n'),
           inline: true
         },
         {
           name: t('serverinfo.boost.title', { lng }),
           value: [
-            t('serverinfo.boost.tier', { lng, tier: guild.premiumTier }),
+            t('serverinfo.boost.tier', { lng, tier: GuildPremiumTier[guild.premiumTier] }),
             t('serverinfo.boost.count', {
               lng,
               boosts: guild.premiumSubscriptionCount
             }),
             t('serverinfo.boost.users', {
               lng,
-              boosters: members.cache.filter((member) => member.premiumSinceTimestamp).size
+              boosters: members.cache.filter((member) => member.premiumSinceTimestamp).size.toString()
             })
           ].join('\n'),
           inline: true
@@ -169,10 +170,10 @@ export default new Command({
       serverEmbed.addFields({
         name: t('serverinfo.emojis.title'),
         value: [
-          t('serverinfo.emojis.total', { lng, total: totalEmojis }),
-          t('serverinfo.emojis.animated', { lng, animated: animatedEmojis }),
-          t('serverinfo.emojis.static', { lng, static: staticEmojis }),
-          t('serverinfo.emojis.stickers', { lng, total: totalStickers })
+          t('serverinfo.emojis.total', { lng, total: totalEmojis.toString() }),
+          t('serverinfo.emojis.animated', { lng, animated: animatedEmojis.toString() }),
+          t('serverinfo.emojis.static', { lng, static: staticEmojis.toString() }),
+          t('serverinfo.emojis.stickers', { lng, total: totalStickers.toString() })
         ].join('\n'),
         inline: true
       });
@@ -202,7 +203,7 @@ export default new Command({
     if (guild.features.length) {
       const displayFeatures = maxDisplayFeatures();
       serverEmbed.addFields({
-        name: t('serverinfo.features', { lng, showing: displayFeatures.length, total: guild.features.length }),
+        name: t('serverinfo.features', { lng, showing: displayFeatures.length.toString(), total: guild.features.length.toString() }),
         value: displayFeatures.join('')
       });
     }

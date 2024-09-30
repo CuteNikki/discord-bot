@@ -108,7 +108,7 @@ export default new Command({
         {
           const rolesEmbed = new EmbedBuilder().setColor(client.colors.welcome).addFields({
             name: t('welcome.roles.title', { lng }),
-            value: config.welcome.roles.length ? config.welcome.roles.map((r) => `<@&${r}>`).join('\n') : '/'
+            value: config.welcome.roles.length ? config.welcome.roles.map((r) => `<@&${r}>`).join('\n') : t('none', { lng })
           });
           const warning = new EmbedBuilder()
             .setColor(client.colors.warning)

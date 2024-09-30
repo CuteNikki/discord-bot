@@ -43,7 +43,7 @@ export default new Button({
         content: t('kick.target_dm', {
           lng: targetLng,
           guild: `\`${guild.name}\``,
-          reason: `\`${reason ?? '/'}\``
+          reason: `\`${reason ?? t('none', { lng: targetLng })}\``
         })
       })
       .catch((err) => logger.debug({ err, targetId }, 'Could not send DM to user'));
@@ -53,7 +53,7 @@ export default new Button({
         t('kick.confirmed', {
           lng,
           user: targetMember.toString(),
-          reason: `\`${reason ?? '/'}\``
+          reason: `\`${reason ?? t('none', { lng })}\``
         }),
         receivedDM ? t('kick.dm_received', { lng }) : t('kick.dm_not_received', { lng })
       ].join('\n'),

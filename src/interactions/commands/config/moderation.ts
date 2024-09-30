@@ -48,7 +48,7 @@ export default new Command({
                   .setTitle(t('moderation.title', { lng }))
                   .addFields({
                     name: t('moderation.state.title', { lng }),
-                    value: config.moderation.enabled ? t('moderation.state.enabled', { lng }) : t('moderation.state.disabled', { lng })
+                    value: config.moderation.enabled ? t('enabled', { lng }) : t('disabled', { lng })
                   });
                 interaction.editReply({ embeds: [allConfigEmbed] });
               }
@@ -62,7 +62,7 @@ export default new Command({
                       .setTitle(t('moderation.title', { lng }))
                       .addFields({
                         name: t('moderation.state.title', { lng }),
-                        value: config.moderation.enabled ? t('moderation.state.enabled', { lng }) : t('moderation.state.disabled', { lng })
+                        value: config.moderation.enabled ? t('enabled', { lng }) : t('disabled', { lng })
                       })
                   ]
                 });

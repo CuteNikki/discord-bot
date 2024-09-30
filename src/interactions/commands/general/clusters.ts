@@ -24,7 +24,7 @@ export default new Command({
       shardIds: [...c.cluster.ids.keys()],
       totalGuilds: c.guilds.cache.size,
       totalMembers: c.guilds.cache.map((g) => g.memberCount).reduce((a, b) => a + b, 0),
-      ping: c.ws.ping,
+      ping: Math.floor(c.ws.ping),
       uptime: c.uptime,
       memoryUsage: Object.fromEntries(
         Object.entries(process.memoryUsage()).map((d) => {
@@ -77,7 +77,7 @@ export default new Command({
               return {
                 name: t('clusters.shards.title', {
                   lng,
-                  id: `${shard.shardId} ${interaction.guild?.shardId === shard.shardId ? '📍' : ''}`
+                  id: `${shard.shardId} ${interaction.guild ? (interaction.guild.shardId === shard.shardId ? '📍' : '') : shard.shardId === 0 ? '📍' : ''}`
                 }),
                 value: [
                   t('clusters.shards.status', { lng, status: shard.status }),

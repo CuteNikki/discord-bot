@@ -70,7 +70,7 @@ export default new Command({
     const duration = ms(userDuration ?? '0');
     const durationText = ms(duration, { long: true });
 
-    const reason = options.getString('reason', false) ?? undefined;
+    const reason = options.getString('reason', false);
     const history = options.getInteger('history', false) ?? 604800;
     const historyOptions = {
       0: t('ban.history.none', { lng }), // 'Delete none'
@@ -133,7 +133,7 @@ export default new Command({
       });
     } else if (collector.customId === CustomIds.Confirm) {
       const banned = await guild.bans
-        .create(target.id, { reason, deleteMessageSeconds: history })
+        .create(target.id, { reason: reason ?? undefined, deleteMessageSeconds: history })
         .catch((err) => logger.debug({ err, userId: target.id }, 'Could not ban user'));
 
       if (!banned) {
@@ -146,8 +146,8 @@ export default new Command({
           content: t('ban.target_dm', {
             lng: targetLng,
             guild: `\`${guild.name}\``,
-            reason: `\`${reason ?? '/'}\``,
-            duration: duration ? durationText : 'forever'
+            reason: `\`${reason ?? t('none', { lng })}\``,
+            duration: duration ? durationText : t('none', { lng })
           })
         })
         .catch((err) => logger.debug({ err, userId: target.id }, 'Could not send DM'));
@@ -157,7 +157,7 @@ export default new Command({
           t('ban.confirmed', {
             lng,
             user: target.toString(),
-            reason: `\`${reason ?? '/'}\``
+            reason: `\`${reason ?? t('none', { lng })}\``
           }),
           t('ban.deleted_history', {
             lng,
@@ -178,7 +178,7 @@ export default new Command({
         target.id,
         user.id,
         duration ? InfractionType.TempBan : InfractionType.Ban,
-        reason,
+        reason ?? undefined,
         duration ? Date.now() + duration : undefined,
         Date.now(),
         duration ? false : true

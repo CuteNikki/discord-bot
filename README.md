@@ -290,8 +290,8 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
 - [ ] miscellaneous
   - [x] fully translated all messages sent by the bot
   - [x] added locales to all registered slash commands
-  - [ ] replace any null/undefined, true/false and so on with proper translations
-  - [ ] fix translation props (sometimes the id is displayed because `toString()` was not used)
+  - [x] replace any null/undefined, true/false and so on with proper translations
+  - [x] fix translation props (sometimes the id is displayed because `toString()` was not used)
 - [x] moderation module
   - [x] infractions command
     - [x] slash and user context menu commands

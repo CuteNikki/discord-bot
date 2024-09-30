@@ -45,7 +45,7 @@ export default new Command({
     const target = options.getUser('user', true);
     const targetLng = await getUserLanguage(target.id);
 
-    const reason = options.getString('reason', false) ?? undefined;
+    const reason = options.getString('reason', false);
 
     const isBanned = await guild.bans.fetch(target.id).catch((err) => logger.debug({ err, userId: target.id }, 'Could not fetch target ban'));
 
@@ -76,7 +76,7 @@ export default new Command({
         components: []
       });
     } else if (collector.customId === CustomIds.Confirm) {
-      const unbanned = await guild.bans.remove(target.id, reason).catch((err) => logger.debug({ err, userId: target.id }, 'Could not unban user'));
+      const unbanned = await guild.bans.remove(target.id, reason ?? undefined).catch((err) => logger.debug({ err, userId: target.id }, 'Could not unban user'));
 
       if (!unbanned) {
         await collector.update(t('unban.failed', { lng }));
@@ -88,7 +88,7 @@ export default new Command({
           content: t('unban.target_dm', {
             lng: targetLng,
             guild: `\`${guild.name}\``,
-            reason: `\`${reason ?? '/'}\``
+            reason: `\`${reason ?? t('none', { lng })}\``
           })
         })
         .catch(() => {});
@@ -98,7 +98,7 @@ export default new Command({
           t('unban.confirmed', {
             lng,
             user: target.toString(),
-            reason: `\`${reason ?? '/'}\``
+            reason: `\`${reason ?? t('none', { lng })}\``
           }),
           receivedDM ? t('unban.dm_received', { lng }) : t('unban.dm_not_received', { lng })
         ].join('\n'),
@@ -109,7 +109,7 @@ export default new Command({
         return;
       }
 
-      await createInfraction(guild.id, target.id, user.id, InfractionType.Unban, reason, undefined, Date.now(), true);
+      await createInfraction(guild.id, target.id, user.id, InfractionType.Unban, reason ?? undefined, undefined, Date.now(), true);
     }
   }
 });

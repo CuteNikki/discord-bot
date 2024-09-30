@@ -82,29 +82,32 @@ export default new Button({
     const msg = await channel
       .send({
         embeds: [
-          new EmbedBuilder().setTitle(t('ticket.transcript_title', { lng })).addFields(
-            {
-              name: t('ticket.claimed_by', { lng }),
-              value: `<@${ticket.claimedBy}>`
-            },
-            {
-              name: t('ticket.users', { lng }),
-              value: `${ticket.users
-                .map((userId) => {
-                  if (userId === ticket.createdBy) return `<@${userId}> (${t('ticket.creator', { lng })})`;
-                  else return `<@${userId}>`;
-                })
-                .join(', ')}`
-            },
-            {
-              name: t('ticket.created_for', { lng }),
-              value: `${ticket.choice}`
-            },
-            {
-              name: t('ticket.created_at', { lng }),
-              value: `<t:${Math.floor(ticket.createdAt / 1000)}:R>`
-            }
-          )
+          new EmbedBuilder()
+            .setColor(client.colors.ticket)
+            .setTitle(t('ticket.transcript_title', { lng }))
+            .addFields(
+              {
+                name: t('ticket.claimed_by', { lng }),
+                value: `<@${ticket.claimedBy}>`
+              },
+              {
+                name: t('ticket.users', { lng }),
+                value: `${ticket.users
+                  .map((userId) => {
+                    if (userId === ticket.createdBy) return `<@${userId}> (${t('ticket.creator', { lng })})`;
+                    else return `<@${userId}>`;
+                  })
+                  .join(', ')}`
+              },
+              {
+                name: t('ticket.created_for', { lng }),
+                value: `${ticket.choice}`
+              },
+              {
+                name: t('ticket.created_at', { lng }),
+                value: `<t:${Math.floor(ticket.createdAt / 1000)}:R>`
+              }
+            )
         ],
         files: [transcript]
       })

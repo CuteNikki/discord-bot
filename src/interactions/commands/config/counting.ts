@@ -135,7 +135,7 @@ export default new Command({
                 ['counting.channelId']: channel.id
               }
             });
-            response += t('counting.edit_channel', { lng, channel: `<#${channel.id}>` });
+            response += t('counting.edit_channel', { lng, channel: channel.toString() });
           }
 
           if (resetOnFail !== null && resetOnFail !== config.counting.resetOnFail) {

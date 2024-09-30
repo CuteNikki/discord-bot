@@ -78,11 +78,11 @@ export default new Command({
                 },
                 {
                   name: t('starboard.channel', { lng }),
-                  value: config.starboard.channelId ? `<#${config.starboard.channelId}>` : '/'
+                  value: config.starboard.channelId ? `<#${config.starboard.channelId}>` : t('none', { lng })
                 },
                 {
                   name: t('starboard.minimum_stars', { lng }),
-                  value: config.starboard.minimumStars ? config.starboard.minimumStars.toString() : '/'
+                  value: config.starboard.minimumStars ? config.starboard.minimumStars.toString() : t('none', { lng })
                 }
               ])
             ]
@@ -155,7 +155,7 @@ export default new Command({
           if (!config.starboard.channelId && !config.starboard.minimumStars)
             return await interaction.editReply({ content: t('starboard.delete_nothing', { lng }) });
 
-          await updateGuildSettings(guild.id, { $unset: { ['starboard.channelId']: '', ['starboard.minimumStars']: '' } });
+          await updateGuildSettings(guild.id, { $unset: { ['starboard.channelId']: 1, ['starboard.minimumStars']: 1 } });
           await interaction.editReply({ content: t('starboard.deleted', { lng }) });
         }
         break;

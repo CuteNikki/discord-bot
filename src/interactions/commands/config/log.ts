@@ -100,7 +100,7 @@ export default new Command({
                   .setDescription(events.map((e) => `${e.name}: ${e.enabled}`).join('\n'))
                   .addFields({
                     name: t('log.channel.title', { lng }),
-                    value: config.log.channelId ? `<#${config.log.channelId}>` : '/'
+                    value: config.log.channelId ? `<#${config.log.channelId}>` : t('none', { lng })
                   });
                 interaction.editReply({ embeds: [allConfigEmbed] });
               }
@@ -114,7 +114,7 @@ export default new Command({
                       .setTitle(t('log.title', { lng }))
                       .addFields({
                         name: t('log.channel.title', { lng }),
-                        value: config.log.channelId ? `<#${config.log.channelId}>` : '/'
+                        value: config.log.channelId ? `<#${config.log.channelId}>` : t('none', { lng })
                       })
                   ]
                 });

@@ -26,7 +26,7 @@ export default new Command<ApplicationCommandType.User>({
       return;
     }
 
-    const member = await guild?.members.fetch(user.id).catch((err) => logger.debug({ err, userId: user.id }, 'Could not fetch member'));
+    const member = await guild?.members.fetch(user.id).catch((err) => logger.debug({ err, user }, 'Could not fetch member'));
 
     const embeds: EmbedBuilder[] = [
       new EmbedBuilder()

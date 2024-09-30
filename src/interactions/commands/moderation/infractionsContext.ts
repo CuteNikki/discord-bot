@@ -66,7 +66,7 @@ export default new Command<typeof commandType>({
             chunk
               .map((infraction) =>
                 [
-                  t('infractions.history.id', { lng, id: infraction._id }),
+                  t('infractions.history.id', { lng, id: infraction._id.toString() }),
                   t('infractions.history.type', {
                     lng,
                     type: infractionTypes[infraction.action as keyof typeof infractionTypes]
@@ -77,7 +77,7 @@ export default new Command<typeof commandType>({
                   }),
                   t('infractions.history.reason', {
                     lng,
-                    reason: infraction.reason ?? '/'
+                    reason: infraction.reason ?? t('none', { lng })
                   }),
                   t('infractions.history.date', {
                     lng,
@@ -85,7 +85,7 @@ export default new Command<typeof commandType>({
                   }),
                   t('infractions.history.ends_at', {
                     lng,
-                    date: infraction.endsAt ? `<t:${Math.floor(infraction.endsAt / 1000)}:f>` : '/'
+                    date: infraction.endsAt ? `<t:${Math.floor(infraction.endsAt / 1000)}:f>` : t('none', { lng })
                   })
                 ].join('\n')
               )

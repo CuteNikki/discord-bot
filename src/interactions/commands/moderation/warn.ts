@@ -59,7 +59,7 @@ export default new Command({
       return;
     }
 
-    const reason = options.getString('reason', false) ?? undefined;
+    const reason = options.getString('reason', false);
 
     const msg = await interaction.editReply({
       content: t('warn.confirm', { lng, user: target.toString() }),
@@ -88,17 +88,17 @@ export default new Command({
           content: t('warn.target_dm', {
             lng: targetLng,
             guild: `\`${guild.name}\``,
-            reason: `\`${reason ?? '/'}\``
+            reason: `\`${reason ?? t('none', { lng })}\``
           })
         })
-        .catch((err) => logger.debug({ err, userId: target.id }, 'Could not send DM'));
+        .catch((err) => logger.debug({ err, target }, 'Could not send DM'));
 
       await collector.update({
         content: [
           t('warn.confirmed', {
             lng,
             user: target.toString(),
-            reason: `\`${reason ?? '/'}\``
+            reason: `\`${reason ?? t('none', { lng })}\``
           }),
           receivedDM ? t('warn.dm_received', { lng }) : t('warn.dm_not_received', { lng })
         ].join('\n'),
@@ -109,7 +109,7 @@ export default new Command({
         return;
       }
 
-      await createInfraction(guild.id, target.id, user.id, InfractionType.Warn, reason, undefined, Date.now(), true);
+      await createInfraction(guild.id, target.id, user.id, InfractionType.Warn, reason ?? undefined, undefined, Date.now(), true);
     }
   }
 });

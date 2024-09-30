@@ -53,7 +53,7 @@ export const availableEvents = [
 
 // !! Embed cannot be empty !!
 // Either a title, description, author-name, footer-text or field is needed
-export interface Embed {
+export type Embed = {
   color?: string | number | string;
   title?: string; // max 256 characters
   url?: string; // max 256 characters
@@ -77,12 +77,12 @@ export interface Embed {
   }[];
 }
 
-export interface Message {
+export type Message = {
   content: string | null; // max 2000 characters
   embed: Embed; // max 10 embeds but not using array
 }
 
-export interface LevelReward {
+export type LevelReward = {
   roleId: string;
   level: number;
   _id: Types.ObjectId;
@@ -94,7 +94,7 @@ export type TicketChoice = {
   emoji?: string;
 };
 
-export interface TicketSystem {
+export type TicketSystem = {
   _id: Types.ObjectId;
   maxTickets: number;
   transcriptChannelId: string;
@@ -104,7 +104,7 @@ export interface TicketSystem {
   channelId: string;
 }
 
-export interface GuildDocument {
+export type GuildDocument = {
   _id: Types.ObjectId;
   guildId: string;
   language?: string;

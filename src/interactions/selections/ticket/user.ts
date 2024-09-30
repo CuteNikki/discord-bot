@@ -82,7 +82,7 @@ export default new Selection({
             t('ticket.user_removed', {
               lng,
               target_user: `<@${targetId}>`,
-              removed_by: `${user.toString}`
+              removed_by: user.toString()
             })
           )
         ]
@@ -103,7 +103,7 @@ export default new Selection({
             t('ticket.user_added', {
               lng,
               target_user: `<@${targetId}>`,
-              added_by: `${user.toString()}`
+              added_by: user.toString()
             })
           )
         ]

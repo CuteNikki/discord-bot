@@ -1341,6 +1341,13 @@
       "watching": "watching",
       "custom": "custom",
       "competing": "competing in"
+    },
+    "status": {
+      "online": "Online",
+      "idle": "Idle",
+      "dnd": "Do Not Disturb",
+      "offline": "Offline",
+      "invisible": "Invisible"
     }
   },
   "avatar": {
@@ -1451,5 +1458,5 @@
   "pagination": "Components were not used for {{time}} and have been disabled!",
   "enabled": "enabled",
   "disabled": "disabled",
-  "none": "not set"
+  "none": "none"
 }

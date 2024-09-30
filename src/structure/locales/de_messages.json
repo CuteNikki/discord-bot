@@ -1340,6 +1340,13 @@
       "watching": "Schaut",
       "custom": "Custom",
       "competing": "Tritt an in"
+    },
+    "status": {
+      "online": "Online",
+      "idle": "Abwesend",
+      "dnd": "Nicht stören",
+      "offline": "Offline",
+      "invisible": "Unsichtbar"
     }
   },
   "avatar": {
@@ -1450,5 +1457,5 @@
   "pagination": "Komponenten wurden für {{time}} nicht benutzt und deaktiviert!",
   "enabled": "aktiviert",
   "disabled": "deaktiviert",
-  "none": "nicht gesetzt"
+  "none": "/"
 }

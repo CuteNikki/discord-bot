@@ -51,17 +51,13 @@ export default new Button({
 
     const hasTranscriptChannel = system.transcriptChannelId ? true : false;
 
+    const description = [t('ticket.ticket_deleted', { lng, deleted_by: user.toString() }), t('ticket.delete_time', { lng })].join('\n');
+
     await interaction.reply({
       embeds: [
         new EmbedBuilder()
           .setColor(client.colors.ticket)
-          .setDescription(
-            [
-              t('ticket.ticket_deleted', { lng, deleted_by: user.toString() }),
-              t('ticket.delete_time', { lng }),
-              hasTranscriptChannel ? t('ticket.delete_reminder', { lng }) : ''
-            ].join('\n')
-          )
+          .setDescription(hasTranscriptChannel ? description + '\n' + t('ticket.delete_reminder', { lng }) : description)
       ],
       components: hasTranscriptChannel
         ? [

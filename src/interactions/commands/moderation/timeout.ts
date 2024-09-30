@@ -65,7 +65,7 @@ export default new Command({
 
     const durationText = ms(duration, { long: true });
 
-    const reason = options.getString('reason', false) ?? undefined;
+    const reason = options.getString('reason', false);
 
     const targetRolePos = targetMember?.roles.highest.position ?? 0;
     const staffRolePos = member.roles.highest.position ?? 0;
@@ -121,8 +121,8 @@ export default new Command({
       });
     } else if (collector.customId === CustomIds.Confirm) {
       const timeout = await targetMember
-        .disableCommunicationUntil(Date.now() + duration, reason)
-        .catch((err) => logger.debug({ err, userId: target.id }, 'Could not timeout user'));
+        .disableCommunicationUntil(Date.now() + duration, reason ?? undefined)
+        .catch((err) => logger.debug({ err, target }, 'Could not timeout user'));
 
       if (!timeout) {
         await collector.update(t('timeout.failed', { lng }));
@@ -134,7 +134,7 @@ export default new Command({
           content: t('timeout.target_dm', {
             lng: targetLng,
             guild: `\`${guild.name}\``,
-            reason: `\`${reason ?? '/'}\``,
+            reason: `\`${reason ?? t('none', { lng })}\``,
             duration: durationText
           })
         })
@@ -145,7 +145,7 @@ export default new Command({
           t('timeout.confirmed', {
             lng,
             user: target.toString(),
-            reason: `\`${reason ?? '/'}\``
+            reason: `\`${reason ?? t('none', { lng })}\``
           }),
           receivedDM ? t('timeout.dm_received', { lng }) : t('timeout.dm_not_received', { lng }),
           t('timeout.duration', { lng, duration: durationText })
@@ -157,7 +157,7 @@ export default new Command({
         return;
       }
 
-      await createInfraction(guild.id, target.id, user.id, InfractionType.Timeout, reason, undefined, Date.now(), false);
+      await createInfraction(guild.id, target.id, user.id, InfractionType.Timeout, reason ?? undefined, undefined, Date.now(), false);
     }
   }
 });

@@ -111,7 +111,7 @@ export default new Command({
 
       await collector.update({
         content: [
-          t('kick.confirmed', { lng, user: target.toString(), reason: `\`${reason ?? '/'}\`` }),
+          t('kick.confirmed', { lng, user: target.toString(), reason: `\`${reason ?? t('none', { lng })}\`` }),
           receivedDM ? t('kick.dm_received', { lng }) : t('kick.dm_not_received', { lng })
         ].join('\n'),
         components: []

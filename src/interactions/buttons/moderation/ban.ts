@@ -57,7 +57,7 @@ export default new Button({
         content: t('ban.target_dm', {
           lng: targetLng,
           guild: `\`${guild.name}\``,
-          reason: `\`${reason ?? '/'}\``,
+          reason: `\`${reason ?? t('none', { lng: targetLng })}\``,
           duration: 'forever'
         })
       })
@@ -68,7 +68,7 @@ export default new Button({
         t('ban.confirmed', {
           lng,
           user: target.toString(),
-          reason: `\`${reason ?? '/'}\``
+          reason: `\`${reason ?? t('none', { lng: targetLng })}\``
         }),
         t('ban.deleted_history', { lng, deleted: historyOptions[604800] }),
         receivedDM ? t('ban.dm_received', { lng }) : t('ban.dm_not_received', { lng }),

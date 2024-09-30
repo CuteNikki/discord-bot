@@ -1,4 +1,12 @@
-import { ApplicationCommandType, ApplicationIntegrationType, ContextMenuCommandBuilder, EmbedBuilder, InteractionContextType, Role } from 'discord.js';
+import {
+  ActivityType,
+  ApplicationCommandType,
+  ApplicationIntegrationType,
+  ContextMenuCommandBuilder,
+  EmbedBuilder,
+  InteractionContextType,
+  Role
+} from 'discord.js';
 import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
@@ -18,7 +26,7 @@ export default new Command<typeof commandType>({
     await interaction.deferReply({ ephemeral: true });
 
     const user = await client.users
-      .fetch(interaction.options.getUser('user', false) ?? interaction.user, {
+      .fetch(interaction.options.getUser('user', false)?.id ?? interaction.user.id, {
         force: true
       })
       .catch((err) => logger.debug({ err }, 'Could not fetch user'));
@@ -67,6 +75,7 @@ export default new Command<typeof commandType>({
           value: `<t:${Math.floor(user.createdTimestamp / 1000)}:d> | <t:${Math.floor(user.createdTimestamp / 1000)}:R>`
         }
       );
+
     if (badges.length || user.bot) {
       userEmbed.addFields({
         name: t('userinfo.badges', { lng }),
@@ -74,11 +83,37 @@ export default new Command<typeof commandType>({
           !badges.includes('VerifiedBot') && user.bot ? [badgeMap.App, ...badges.map((v) => badgeMap[v])].join(' ') : badges.map((v) => badgeMap[v]).join(' ')
       });
     }
+
     if (user.banner) {
       userEmbed.addFields({ name: t('userinfo.banner', { lng }), value: '** **' }).setImage(user.bannerURL({ size: 4096, extension: 'webp' }) ?? null);
     }
 
     if (!member) return interaction.editReply({ embeds: [userEmbed] });
+
+    const activities = [
+      t('userinfo.activity.playing', { lng }),
+      t('userinfo.activity.streaming', { lng }),
+      t('userinfo.activity.listening', { lng }),
+      t('userinfo.activity.watching', { lng }),
+      t('userinfo.activity.custom', { lng }),
+      t('userinfo.activity.competing', { lng })
+    ];
+    const status = {
+      online: t('userinfo.status.online', { lng }),
+      idle: t('userinfo.status.idle', { lng }),
+      dnd: t('userinfo.status.dnd', { lng }),
+      offline: t('userinfo.status.offline', { lng }),
+      invisible: t('userinfo.status.invisible', { lng })
+    };
+    const statusImage = {
+      idle: 'https://i.ibb.co/tB36GNW/undefined-Imgur.png',
+      dnd: 'https://i.ibb.co/SPqGC4P/undefined-Imgur-1.png',
+      online: 'https://i.ibb.co/pnnTZhK/undefined-Imgur-2.png',
+      offline: 'https://i.ibb.co/bQDDfBw/undefined-Imgur-3.png',
+      invisible: 'https://i.ibb.co/bQDDfBw/undefined-Imgur-3.png'
+    };
+
+    const devices = Object.entries(member.presence?.clientStatus ?? {}).map(([key]) => `${key}`);
 
     function maxDisplayRoles(roles: Role[]) {
       const results: string[] = [];
@@ -99,17 +134,41 @@ export default new Command<typeof commandType>({
 
     const memberEmbed = new EmbedBuilder()
       .setColor(member.displayColor ?? client.colors.utilities)
+      .setAuthor({ name: status[member.presence?.status ?? 'offline'], iconURL: statusImage[member.presence?.status ?? 'offline'] })
       .setThumbnail(member.avatarURL({ size: 4096, extension: 'webp' }))
       .addFields({
         name: t('userinfo.joined_at', { lng }),
         value: `<t:${Math.floor((member.joinedTimestamp ?? 0) / 1000)}:d> | <t:${Math.floor((member.joinedTimestamp ?? 0) / 1000)}:R>`
       });
+
+    if (member.presence?.activities?.length) {
+      memberEmbed.addFields({
+        name: t('userinfo.activities', { lng }),
+        value: member.presence.activities
+          .map((activity) => {
+            if (activity.type === ActivityType.Custom) {
+              return activity.name;
+            }
+            return `${activities[activity.type]} ${activity.name}`;
+          })
+          .join('\n')
+      });
+    }
+
+    if (devices?.length) {
+      memberEmbed.addFields({
+        name: t('userinfo.devices', { lng }),
+        value: devices.join(', ')
+      });
+    }
+
     if (member.premiumSinceTimestamp) {
       memberEmbed.addFields({
         name: t('userinfo.boosting', { lng }),
         value: `<t:${Math.floor(member.premiumSinceTimestamp / 1000)}:d> | <t:${Math.floor(member.premiumSinceTimestamp / 1000)}:R>`
       });
     }
+
     if (roles.length) {
       const displayRoles = maxDisplayRoles(roles);
       memberEmbed.addFields({
@@ -123,36 +182,5 @@ export default new Command<typeof commandType>({
     }
 
     return interaction.editReply({ embeds: [userEmbed, memberEmbed] }).catch((err) => logger.debug(err, 'Could not edit reply'));
-
-    //   const activities = [
-    //     t('userinfo.activity.playing', { lng }),
-    //     t('userinfo.activity.streaming', { lng }),
-    //     t('userinfo.activity.listening', { lng }),
-    //     t('userinfo.activity.watching', { lng }),
-    //     t('userinfo.activity.custom', { lng }),
-    //     t('userinfo.activity.competing', { lng }),
-    //   ];
-    //   const devices = Object.entries(member.presence?.clientStatus ?? {}).map(([key]) => `${key}`);
-    //   const statusImage = {
-    //     idle: 'https://i.ibb.co/tB36GNW/undefined-Imgur.png',
-    //     dnd: 'https://i.ibb.co/SPqGC4P/undefined-Imgur-1.png',
-    //     online: 'https://i.ibb.co/pnnTZhK/undefined-Imgur-2.png',
-    //     offline: 'https://i.ibb.co/bQDDfBw/undefined-Imgur-3.png',
-    //     invisible: 'https://i.ibb.co/bQDDfBw/undefined-Imgur-3.png',
-    //   };
-    //   {
-    //     name: t('userinfo.activities', { lng }),
-    //     value:
-    //       member.presence?.activities
-    //         ?.map((activity) => {
-    //           if (activity.type === ActivityType.Custom) return;
-    //             else return `${activities[activity.type]} ${activity.name}`;
-    //           })
-    //         .join('\n') || '/',
-    //   },
-    //   {
-    //     name: t('userinfo.devices', { lng }),
-    //     value: devices?.join(', ') || '/',
-    //   }
   }
 });

@@ -70,7 +70,7 @@ export default new Command({
           t('purge.success', {
             lng,
             deleted: deletedMessages.size,
-            amount,
+            amount: amount.toString(),
             channel: channel.toString()
           })
         )

@@ -277,7 +277,7 @@ export default new Command({
             embeds: [
               new EmbedBuilder()
                 .setColor(client.colors.ticket)
-                .setDescription(`${t('ticket.max.description', { lng })}\n\n${t('ticket.max.default', { lng, default: MAX_TICKETS })}`)
+                .setDescription(`${t('ticket.max.description', { lng })}\n\n${t('ticket.max.default', { lng, default: MAX_TICKETS.toString() })}`)
                 .setFooter({ text: t('ticket.setup.optional', { lng }) })
             ],
             components: [
@@ -354,7 +354,7 @@ export default new Command({
                     new EmbedBuilder()
                       .setColor(client.colors.ticket)
                       .setDescription(
-                        `${t('ticket.max.description', { lng })}\n\n${t('ticket.max.selected', { lng, max: maxTickets })}\n${t('ticket.max.continue', { lng })}`
+                        `${t('ticket.max.description', { lng })}\n\n${t('ticket.max.selected', { lng, max: maxTickets.toString() })}\n${t('ticket.max.continue', { lng })}`
                       )
                       .setFooter({ text: t('ticket.setup.optional', { lng }) })
                   ]

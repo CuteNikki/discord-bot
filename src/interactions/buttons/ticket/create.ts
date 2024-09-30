@@ -83,7 +83,7 @@ export default new Button({
           {
             id: interaction.client.user.id,
             type: 1,
-            allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages]
+            allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages, PermissionFlagsBits.EmbedLinks, PermissionFlagsBits.AttachFiles]
           }
         ]
       })

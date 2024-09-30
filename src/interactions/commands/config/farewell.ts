@@ -65,7 +65,7 @@ export default new Command({
             }
           });
           interaction.editReply({
-            embeds: [new EmbedBuilder().setColor(client.colors.farewell).setDescription(t('farewell.channel.set', { lng, channel: `<#${channel.id}>` }))]
+            embeds: [new EmbedBuilder().setColor(client.colors.farewell).setDescription(t('farewell.channel.set', { lng, channel: channel.toString() }))]
           });
         }
         break;

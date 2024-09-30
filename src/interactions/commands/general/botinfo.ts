@@ -76,7 +76,7 @@ export default new Command({
                     lng,
                     uptime: `<t:${Math.floor(interaction.client.readyTimestamp / 1000)}:R>`
                   }),
-                  t('botinfo.general.ping', { lng, ping: client.ws.ping })
+                  t('botinfo.general.ping', { lng, ping: client.ws.ping.toString() })
                 ].join('\n')
               },
               {
@@ -84,7 +84,7 @@ export default new Command({
                 value: [
                   t('botinfo.system.os', { lng, operatingSystem }),
                   t('botinfo.system.cpu_model', { lng, cpuModel }),
-                  t('botinfo.system.cpu_usage', { lng, cpuUsage }),
+                  t('botinfo.system.cpu_usage', { lng, cpuUsage: cpuUsage.toString() }),
                   t('botinfo.system.mem_usage', {
                     lng,
                     memoryUsage,
@@ -104,42 +104,42 @@ export default new Command({
                   }),
                   t('botinfo.database.weekly', {
                     lng,
-                    date: database.lastWeeklyClearAt ? `<t:${Math.floor(database.lastWeeklyClearAt / 1000)}:D>` : '/'
+                    date: database.lastWeeklyClearAt ? `<t:${Math.floor(database.lastWeeklyClearAt / 1000)}:D>` : t('none', { lng })
                   })
                 ].join('\n')
               },
               {
                 name: t('botinfo.stats.title', { lng }),
                 value: [
-                  t('botinfo.stats.guilds', { lng, guildCount }),
-                  t('botinfo.stats.members', { lng, memberCount }),
+                  t('botinfo.stats.guilds', { lng, guildCount: guildCount.toString() }),
+                  t('botinfo.stats.members', { lng, memberCount: memberCount.toString() }),
                   t('botinfo.stats.commands', {
                     lng,
-                    commandCount: commands.size
+                    commandCount: commands.size.toString()
                   }),
                   t('botinfo.stats.executed_commands', {
                     lng,
-                    executedCommands: stats.commandsExecuted
+                    executedCommands: stats.commandsExecuted.toString()
                   }),
                   t('botinfo.stats.failed_commands', {
                     lng,
-                    failedCommands: stats.commandsFailed
+                    failedCommands: stats.commandsFailed.toString()
                   }),
                   t('botinfo.stats.buttons_executed', {
                     lng,
-                    buttonsExecuted: stats.buttonsExecuted
+                    buttonsExecuted: stats.buttonsExecuted.toString()
                   }),
                   t('botinfo.stats.buttons_failed', {
                     lng,
-                    buttonsFailed: stats.buttonsFailed
+                    buttonsFailed: stats.buttonsFailed.toString()
                   }),
                   t('botinfo.stats.guilds_joined', {
                     lng,
-                    guildsJoined: stats.guildsJoined
+                    guildsJoined: stats.guildsJoined.toString()
                   }),
                   t('botinfo.stats.guilds_left', {
                     lng,
-                    guildsLeft: stats.guildsLeft
+                    guildsLeft: stats.guildsLeft.toString()
                   })
                 ].join('\n')
               }

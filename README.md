@@ -360,11 +360,14 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
     - [x] reset on wrong number is optional
   - [ ] word chain game (next word needs to start with the last letter of the previous word)
   - [ ] giveaway
-    - [ ] create giveaway (time, winnercount, prize)
-    - [ ] edit giveaway (time, winnercount, prize)
-    - [ ] delete giveaway (giveaway id)
-    - [ ] reroll giveaway (giveaway id)
-    - [ ] list giveaways
+    - [x] create giveaway (time, winnercount, prize)
+    - [x] edit giveaway (time, winnercount, prize)
+    - [x] delete giveaway (giveaway id)
+    - [x] reroll giveaway (giveaway id)
+    - [x] list giveaways
+    - [x] join/leave giveaway (updates participants count on message)
+    - [x] announce winners and delete giveaway on end
+    - [ ] translate giveaway messages/buttons
   - [ ] economy
     - [ ] needs todo
   - [ ] confession

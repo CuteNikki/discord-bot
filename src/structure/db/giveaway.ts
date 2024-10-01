@@ -89,6 +89,14 @@ export async function getGiveaways(guildId: string): Promise<GiveawayDocument[]>
 }
 
 /**
+ * Get all giveaways
+ * @returns {Promise<GiveawayDocument[]>} Giveaways
+ */
+export async function getAllGiveaways(): Promise<GiveawayDocument[]> {
+  return await giveawayModel.find().lean().exec();
+}
+
+/**
  * Add a participant to a giveaway
  * @param {Types.ObjectId | string} giveawayId ID of the giveaway
  * @param {string} userId user ID of the participant to add

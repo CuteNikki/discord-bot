@@ -239,7 +239,13 @@ export default new Command({
 
           await updateGiveaway(id, { $set: { endsAt: Date.now() } });
 
-          await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.giveaway).setDescription('Giveaway ended!')] });
+          await interaction.editReply({
+            embeds: [
+              new EmbedBuilder()
+                .setColor(client.colors.giveaway)
+                .setDescription('Giveaway ended! Please allow up to 10 seconds for the winners to be determined.')
+            ]
+          });
         }
         break;
       case 'delete':

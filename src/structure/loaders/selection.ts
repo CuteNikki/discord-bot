@@ -27,5 +27,5 @@ export async function loadSelections(client: DiscordClient) {
   }
 
   const endTime = performance.now();
-  logger.info(`[${client.cluster.id}] Loaded ${client.selections.size} selections in ${Math.floor(endTime - startTime)}ms`);
+  logger.info(`[${client.cluster.id}] Loaded ${client.selections.size} selections (${Math.floor(endTime - startTime)}ms)`);
 }

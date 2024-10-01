@@ -33,5 +33,5 @@ export async function loadEvents(client: DiscordClient) {
   }
 
   const endTime = performance.now();
-  logger.info(`[${client.cluster.id}] Loaded events in ${Math.floor(endTime - startTime)}ms`);
+  logger.info(`[${client.cluster.id}] Loaded events (${Math.floor(endTime - startTime)}ms)`);
 }

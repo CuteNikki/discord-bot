@@ -42,13 +42,13 @@ export async function loadCommands(client: DiscordClient) {
   const { commands, startTime, endTime } = await getCommandsCollection();
   client.commands = commands;
 
-  logger.info(`[${client.cluster.id}] Loaded ${commands.size} commands in ${Math.floor(endTime - startTime)}ms`);
+  logger.info(`[${client.cluster.id}] Loaded ${commands.size} commands (${Math.floor(endTime - startTime)}ms)`);
 }
 
 export async function registerCommands() {
   // Get the commands collection from helper function
   const { commands, startTime, endTime } = await getCommandsCollection();
-  logger.info(`Loaded ${commands.size} commands in ${Math.floor(endTime - startTime)}ms`);
+  logger.info(`Loaded ${commands.size} commands (${Math.floor(endTime - startTime)}ms)`);
 
   // Get the bot token and bot id from the keys file and create a new REST instance
   const { DISCORD_BOT_ID, DISCORD_BOT_TOKEN } = keys;
@@ -201,7 +201,7 @@ export async function registerCommands() {
     });
   // Stop timer and log the time it took to translate the commands
   const translateStopTime = performance.now();
-  logger.debug(`Translated commands in ${Math.floor(translateStopTime - translateStartTime)}ms`);
+  logger.debug(`Translated commands (${Math.floor(translateStopTime - translateStartTime)}ms)`);
 
   // Split the commands into two arrays, for developer only and non-developer only commands
   const commandsArray = translatedCommands.filter(
@@ -219,7 +219,7 @@ export async function registerCommands() {
     .then(() => {
       const commandsEndTime = performance.now();
 
-      logger.info(`Registered ${commandsArray.length} global application commands in ${Math.floor(commandsEndTime - commandsStartTime)}ms`);
+      logger.info(`Registered ${commandsArray.length} global application commands (${Math.floor(commandsEndTime - commandsStartTime)}ms)`);
     });
 
   // Register the commands for each developer guild
@@ -232,7 +232,7 @@ export async function registerCommands() {
       .catch((err) => logger.error({ err }, `Failed to register guild commands for ${guildId}`))
       .then(() => {
         const guildCommandsEndTime = performance.now();
-        logger.info(`Registered ${devCommandsArray.length} guild commands for ${guildId} in ${Math.floor(guildCommandsEndTime - guildCommandsStartTime)}ms`);
+        logger.info(`Registered ${devCommandsArray.length} guild commands for ${guildId} (${Math.floor(guildCommandsEndTime - guildCommandsStartTime)}ms)`);
       });
   }
 }

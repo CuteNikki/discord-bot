@@ -27,5 +27,5 @@ export async function loadButtons(client: DiscordClient) {
   }
 
   const endTime = performance.now();
-  logger.info(`[${client.cluster.id}] Loaded ${client.buttons.size} buttons in ${Math.floor(endTime - startTime)}ms`);
+  logger.info(`[${client.cluster.id}] Loaded ${client.buttons.size} buttons (${Math.floor(endTime - startTime)}ms)`);
 }

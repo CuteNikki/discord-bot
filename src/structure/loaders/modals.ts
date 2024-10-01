@@ -27,5 +27,5 @@ export async function loadModals(client: DiscordClient) {
   }
 
   const endTime = performance.now();
-  logger.info(`[${client.cluster.id}] Loaded ${client.modals.size} modals in ${Math.floor(endTime - startTime)}ms`);
+  logger.info(`[${client.cluster.id}] Loaded ${client.modals.size} modals (${Math.floor(endTime - startTime)}ms)`);
 }

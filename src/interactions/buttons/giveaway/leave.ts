@@ -1,38 +1,43 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } from 'discord.js';
+import { t } from 'i18next';
 
 import { Button } from 'classes/button';
 
 import { findGiveawayById, removeParticipant } from 'db/giveaway';
+import { getGuildLanguage } from 'db/guild';
+
 import { logger } from 'utils/logger';
 
 export default new Button({
   customId: 'button-giveaway-leave',
   isCustomIdIncluded: true,
-  async execute({ interaction, client }) {
+  async execute({ interaction, client, lng }) {
     if (!interaction.inCachedGuild()) return;
 
     await interaction.deferReply({ ephemeral: true });
 
     const giveaway = await findGiveawayById(interaction.customId.split('_')[1]);
 
+    const guildLng = await getGuildLanguage(interaction.guildId);
+
     if (!giveaway) {
       await interaction.editReply({
-        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('That giveaway could not be found. It might have ended already!')]
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('giveaway.common.invalid_giveaway', { lng }))]
       });
       return;
     }
 
     if (giveaway.endsAt < Date.now()) {
-      await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('That giveaway has ended!')] });
+      await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('giveaway.common.inactive', { lng }))] });
       return;
     }
 
     if (!giveaway.participants.includes(interaction.user.id)) {
       await interaction.editReply({
-        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('You have not joined that giveaway!')],
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('giveaway.leave.not_participant', { lng }))],
         components: [
           new ActionRowBuilder<ButtonBuilder>().addComponents(
-            new ButtonBuilder().setCustomId('button-giveaway-join').setLabel('Join').setEmoji('🎉').setStyle(ButtonStyle.Primary)
+            new ButtonBuilder().setCustomId('button-giveaway-join').setLabel(t('giveaway.join.label', { lng })).setEmoji('🎉').setStyle(ButtonStyle.Primary)
           )
         ]
       });
@@ -40,7 +45,7 @@ export default new Button({
     }
 
     await removeParticipant(giveaway._id, interaction.user.id);
-    await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('You have left the giveaway!')] });
+    await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('giveaway.leave.success', { lng }))] });
 
     const msg = await interaction.channel?.messages.fetch(giveaway.messageId);
 
@@ -51,7 +56,7 @@ export default new Button({
             EmbedBuilder.from(msg.embeds[0]).setFields(
               ...msg.embeds[0].fields.slice(0, 3).map((field) => ({ name: field.name, value: field.value, inline: field.inline ? true : false })),
               {
-                name: 'Participants',
+                name: t('giveaway.message.participant', { lng: guildLng, count: giveaway.participants.length }),
                 value: (giveaway.participants.length - 1).toString()
               }
             )

@@ -66,8 +66,8 @@ export async function findGiveawayById(id: Types.ObjectId | string): Promise<Giv
  * @param {UpdateQuery<GiveawayDocument>} query Update query
  * @returns {Promise<GiveawayDocument | null>} Updated giveaway or null if not found
  */
-export async function updateGiveaway(id: Types.ObjectId | string, query: UpdateQuery<GiveawayDocument>): Promise<GiveawayDocument | null> {
-  return await giveawayModel.findByIdAndUpdate(id, query, { new: true }).lean().exec();
+export async function updateGiveaway(id: Types.ObjectId | string, query: UpdateQuery<GiveawayDocument>): Promise<GiveawayDocument> {
+  return await giveawayModel.findOneAndUpdate({ _id: id }, query, { new: true, upsert: true }).lean().exec();
 }
 
 /**

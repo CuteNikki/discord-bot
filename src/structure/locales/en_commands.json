@@ -1,4 +1,92 @@
 {
+  "giveaway": {
+    "name": "giveaway",
+    "description": "Create and manage giveaways for your community",
+    "options": [
+      {
+        "name": "create",
+        "description": "Create a giveaway",
+        "options": [
+          {
+            "name": "prize",
+            "description": "The prize that the winner obtains"
+          },
+          {
+            "name": "duration",
+            "description": "The duration of the giveaway (e.g. 1h = 1 hour)"
+          },
+          {
+            "name": "winners",
+            "description": "The number of winners (1 by default)"
+          },
+          {
+            "name": "channel",
+            "description": "The channel to send the giveaway to (current by default)"
+          }
+        ]
+      },
+      {
+        "name": "edit",
+        "description": "Edit a giveaway",
+        "options": [
+          {
+            "name": "id",
+            "description": "The id of the giveaway"
+          },
+          {
+            "name": "prize",
+            "description": "The prize that the winner obtains"
+          },
+          {
+            "name": "duration",
+            "description": "The duration of the giveaway"
+          },
+          {
+            "name": "winners",
+            "description": "The number of winners"
+          }
+        ]
+      },
+      {
+        "name": "reroll",
+        "description": "Reroll a giveaway",
+        "options": [
+          {
+            "name": "id",
+            "description": "The id of the giveaway"
+          },
+          {
+            "name": "winners",
+            "description": "The number of new winners"
+          }
+        ]
+      },
+      {
+        "name": "delete",
+        "description": "Delete a giveaway",
+        "options": [
+          {
+            "name": "id",
+            "description": "The ID of the giveaway"
+          }
+        ]
+      },
+      {
+        "name": "end",
+        "description": "End a giveaway early",
+        "options": [
+          {
+            "name": "id",
+            "description": "The ID of the giveaway"
+          }
+        ]
+      },
+      {
+        "name": "list",
+        "description": "Shows all active giveaways"
+      }
+    ]
+  },
   "reaction-roles": {
     "name": "reaction-roles",
     "description": "Let members choose their own roles.",

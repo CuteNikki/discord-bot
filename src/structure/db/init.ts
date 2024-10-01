@@ -9,6 +9,7 @@ import { DiscordClient } from 'classes/client';
 import { getClientSettings, updateLastWeeklyClearAt } from 'db/client';
 import { deleteCustomVoiceChannel, getCustomVoiceChannels } from 'db/custom-voice';
 import { deleteGiveaway, getAllGiveaways, getWinners } from 'db/giveaway';
+import { getGuildLanguage } from 'db/guild';
 import { closeInfraction, getUnresolvedInfractions } from 'db/infraction';
 import { deleteWeeklyLevels } from 'db/level';
 import { deleteExpiredReminders, getExpiredReminders } from 'db/reminder';
@@ -81,6 +82,8 @@ async function clearGiveaways(client: DiscordClient) {
 
     const winners = getWinners(giveaway.participants, giveaway.winnerIds, giveaway.winnerCount);
 
+    const lng = await getGuildLanguage(guild.id);
+
     if (winners.length < giveaway.winnerCount) {
       await channel
         .send({
@@ -88,9 +91,16 @@ async function clearGiveaways(client: DiscordClient) {
           embeds: [
             new EmbedBuilder()
               .setColor(client.colors.giveaway)
-              .setTitle('Giveaway has ended!')
+              .setTitle(t('giveaway.announcement.title', { lng }))
               .setDescription(
-                `There were not enough participants to determine ${giveaway.winnerCount} winner(s) for **${giveaway.prize}**!${winners.length ? `\nDetermined ${winners.length} winner(s): ${winners.map((id) => `<@${id}>`).join(', ')}` : ''}`
+                t('giveaway.announcement.no_participants', {
+                  lng,
+                  count: giveaway.winnerCount,
+                  winnerCount: giveaway.winnerCount.toString(),
+                  prize: giveaway.prize
+                }) + winners.length
+                  ? `\n${t('giveaway.announcement.determined', { lng, count: winners.length, winners: winners.map((id) => `<@${id}>`).join(', ') })}`
+                  : ''
               )
           ]
         })
@@ -107,8 +117,10 @@ async function clearGiveaways(client: DiscordClient) {
         embeds: [
           new EmbedBuilder()
             .setColor(client.colors.giveaway)
-            .setTitle('Giveaway has ended!')
-            .setDescription(`Congratulations to ${winners.map((id) => `<@${id}>`).join(', ')}! You won **${giveaway.prize}**!`)
+            .setTitle(t('giveaway.announcement.title', { lng }))
+            .setDescription(
+              t('giveaway.announcement.description', { lng, winners: winners.map((id) => `<@${id}>`).join(', '), count: winners.length, prize: giveaway.prize })
+            )
         ]
       })
       .then(async () => {

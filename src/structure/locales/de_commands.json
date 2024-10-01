@@ -1,4 +1,92 @@
 {
+  "giveaway": {
+    "name": "verlosung",
+    "description": "Erstelle und verwalte Verlosungen für deine Mitglieder",
+    "options": [
+      {
+        "name": "erstellen",
+        "description": "Veranstalte eine Verlosung",
+        "options": [
+          {
+            "name": "gewinn",
+            "description": "Der Gewinn/Preis der Verlosung"
+          },
+          {
+            "name": "dauer",
+            "description": "Die Dauer der Verlosung (z.B. 1h = 1 Stunde)"
+          },
+          {
+            "name": "gewinner",
+            "description": "Die Anzahl der Gewinner (1 standardmäßig)"
+          },
+          {
+            "name": "kanal",
+            "description": "Der Kanal, in dem die Verlosung stattfinden soll (standardmäßig momentaner Kanal)"
+          }
+        ]
+      },
+      {
+        "name": "bearbeiten",
+        "description": "Bearbeite eine Verlosung",
+        "options": [
+          {
+            "name": "id",
+            "description": "Die ID der Verlosung"
+          },
+          {
+            "name": "gewinn",
+            "description": "Der Gewinn/Preis der Verlosung"
+          },
+          {
+            "name": "dauer",
+            "description": "Die Dauer der Verlosung (z.B. 1h = 1 Stunde)"
+          },
+          {
+            "name": "gewinner",
+            "description": "Die Anzahl der Gewinner (1 standardmäßig)"
+          }
+        ]
+      },
+      {
+        "name": "neuer-gewinner",
+        "description": "Generiert neue Gewinner für eine Verlosung",
+        "options": [
+          {
+            "name": "id",
+            "description": "Die ID der Verlosung"
+          },
+          {
+            "name": "gewinner",
+            "description": "Die Anzahl der neuen Gewinner (1 standardmäßig)"
+          }
+        ]
+      },
+      {
+        "name": "löschen",
+        "description": "Lösche eine Verlosung",
+        "options": [
+          {
+            "name": "id",
+            "description": "Die ID der Verlosung"
+          }
+        ]
+      },
+      {
+        "name": "beenden",
+        "description": "Beendet eine Verlosung frühzeitig",
+        "options": [
+          {
+            "name": "id",
+            "description": "Die ID der Verlosung"
+          }
+        ]
+      },
+      {
+        "name": "liste",
+        "description": "Zeigt alle aktiven Verlosungen an"
+      }
+    ]
+  },
   "reaction-roles": {
     "name": "reaction-roles",
     "description": "Lass Mitgliedern ihre eigenen Rollen wählen.",

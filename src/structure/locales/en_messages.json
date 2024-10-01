@@ -1,4 +1,80 @@
 {
+  "giveaway": {
+    "common": {
+      "invalid_giveaway": "Could not find that giveaway!",
+      "active": "That giveaway is still active!",
+      "inactive": "That giveaway is not active!"
+    },
+    "join": {
+      "label": "Join",
+      "already_participant": "You are already a participant!",
+      "success": "You are now partcipating in that giveaway!"
+    },
+    "leave": {
+      "label": "Leave",
+      "not_participant": "You are not a participant!",
+      "success": "You are no longer participating in that giveaway!"
+    },
+    "message": {
+      "title": "Giveaway",
+      "prize": "Prize",
+      "winner_one": "Winner",
+      "winner_other": "Winners",
+      "ends_at": "Ends at",
+      "participant_one": "Participant",
+      "participant_other": "Participants"
+    },
+    "create": {
+      "max_giveaways": "Maximum giveaways reached!",
+      "invalid_duration": "Invalid duration provided!",
+      "title": "Giveaway created"
+    },
+    "info": {
+      "id": "ID: {{id}}",
+      "duration": "Duration: {{duration}}",
+      "channel": "Channel: {{channel}}",
+      "ends_at": "Ends at: {{ends_at}}",
+      "created_at": "Created at {{created_at}}",
+      "prize": "Prize: {{prize}}",
+      "winner_one": "Winner: {{winners}}",
+      "winner_other": "Winners: {{winners}}",
+      "participant_one": "Participant: {{participants}}",
+      "participant_other": "Participants: {{participants}}"
+    },
+    "edit": {
+      "title": "Giveaway edited",
+      "duration": "Duration updated! The giveaway will end **in {{duration}}**.",
+      "winner_one": "Winners updated! The giveaway will end with **{{winners}} winner**.",
+      "winner_other": "Winners updated! The giveaway will end with **{{winners}} winners**.",
+      "prize_one": "Prize updated! Winner will receive **{{prize}}**.",
+      "prize_other": "Prize updated! Winners will receive **{{prize}}**.",
+      "none": "No changes were provided!"
+    },
+    "reroll": {
+      "no_participants": "There are not enough participants!",
+      "success_one": "The new winner is {{winners}}!",
+      "success_other": "The new winners are {{winners}}!"
+    },
+    "end": {
+      "success": "Giveaway has been ended! Please wait a bit for the winners to be determined."
+    },
+    "delete": {
+      "success": "Giveaway has been deleted!"
+    },
+    "list": {
+      "none": "There are no active giveaways!",
+      "title": "Active Giveaways"
+    },
+    "announcement": {
+      "title": "Giveaway has ended!",
+      "description_one": "Congratulations to {{winners}}, You won **{{prize}}**!",
+      "description_two": "Congratulations to {{winners}}. You won **{{prize}}**!",
+      "no_participants_one": "There were not enough participants to determine {{winnerCount}} winner for **{{prize}}**!",
+      "no_participants_other": "There were not enough participants to determine {{winnerCount}} winners for **{{prize}}**!",
+      "determined_one": "Determined {{winnerCount}} winner: {{winners}}",
+      "determined_other": "Determined {{winnerCount}} winners: {{winners}}"
+    }
+  },
   "reaction-roles": {
     "enable": {
       "already": "The reaction roles module is already enabled!",

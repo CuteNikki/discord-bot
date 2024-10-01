@@ -9,11 +9,13 @@ import {
   PermissionFlagsBits,
   SlashCommandBuilder
 } from 'discord.js';
+import { t } from 'i18next';
 import ms from 'ms';
 
 import { Command, ModuleType } from 'classes/command';
 
 import { createGiveaway, deleteGiveaway, findGiveawayById, getGiveaways, getWinners, updateGiveaway } from 'db/giveaway';
+import { getGuildLanguage } from 'db/guild';
 
 import { logger } from 'utils/logger';
 
@@ -67,7 +69,7 @@ export default new Command({
         .addStringOption((option) => option.setName('id').setDescription('The ID of the giveaway').setRequired(true))
     )
     .addSubcommand((cmd) => cmd.setName('list').setDescription('List all active giveaways')),
-  async execute({ interaction, client }) {
+  async execute({ interaction, client, lng }) {
     if (!interaction.inCachedGuild() || !interaction.channel?.isSendable()) return;
 
     await interaction.deferReply();
@@ -76,6 +78,8 @@ export default new Command({
 
     // Needed for create and list
     const giveaways = await getGiveaways(guildId);
+
+    const guildLng = await getGuildLanguage(guildId);
 
     switch (options.getSubcommand()) {
       case 'create':
@@ -90,13 +94,15 @@ export default new Command({
 
           if (!parsedDuration) {
             await interaction.editReply({
-              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('Invalid duration')]
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('giveaway.create.invalid_duration', { lng }))]
             });
             return;
           }
 
           if (giveaways.length >= MAX_GIVEAWAYS) {
-            await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('Maximum giveaways reached!')] });
+            await interaction.editReply({
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('giveaway.create.max_giveaways', { lng }))]
+            });
             return;
           }
 
@@ -105,16 +111,23 @@ export default new Command({
               embeds: [
                 new EmbedBuilder()
                   .setColor(client.colors.giveaway)
-                  .setTitle('Giveaway')
+                  .setTitle(t('giveaway.message.title', { lng: guildLng }))
                   .addFields(
-                    { name: 'Prize', value: prize },
-                    { name: 'Winners', value: winners.toString() },
-                    { name: 'Ends at', value: `<t:${Math.floor((NOW + parsedDuration) / 1000)}:f> (<t:${Math.floor((NOW + parsedDuration) / 1000)}:R>)` }
+                    { name: t('giveaway.message.prize', { lng: guildLng }), value: prize },
+                    { name: t('giveaway.message.winner', { lng: guildLng, count: winners }), value: winners.toString() },
+                    {
+                      name: t('giveaway.message.ends_at', { lng: guildLng }),
+                      value: `<t:${Math.floor((NOW + parsedDuration) / 1000)}:f> (<t:${Math.floor((NOW + parsedDuration) / 1000)}:R>)`
+                    }
                   )
               ],
               components: [
                 new ActionRowBuilder<ButtonBuilder>().addComponents(
-                  new ButtonBuilder().setCustomId('button-giveaway-join').setLabel('Join').setEmoji('🎉').setStyle(ButtonStyle.Primary)
+                  new ButtonBuilder()
+                    .setCustomId('button-giveaway-join')
+                    .setLabel(t('giveaway.join.label', { lng: guildLng }))
+                    .setEmoji('🎉')
+                    .setStyle(ButtonStyle.Primary)
                 )
               ]
             })
@@ -124,17 +137,23 @@ export default new Command({
           }
 
           const giveaway = await createGiveaway(guildId, channel.id, msg.id, prize, parsedDuration, winners, NOW + parsedDuration, NOW);
+
           await interaction.editReply({
             embeds: [
               new EmbedBuilder()
                 .setColor(client.colors.giveaway)
+                .setTitle(t('giveaway.create.title', { lng }))
                 .setDescription(
                   [
-                    `Giveaway created in ${channel.toString()}.`,
-                    `ID: ${giveaway._id.toString()}`,
-                    `Ends in ${ms(parsedDuration, { long: true })}`,
-                    `Prize is ${prize}`,
-                    `There will be ${winners} winner(s)!`
+                    t('giveaway.info.id', { lng, id: giveaway._id.toString() }),
+                    t('giveaway.info.channel', { lng, channel: channel.toString() }),
+                    t('giveaway.info.prize', { lng, prize }),
+                    t('giveaway.info.winner', { lng, winners: winners.toString(), count: winners }),
+                    t('giveaway.info.duration', { lng, duration: ms(parsedDuration, { long: true }) }),
+                    t('giveaway.info.ends_at', {
+                      lng,
+                      ends_at: `<t:${Math.floor(giveaway.endsAt / 1000)}:f> (<t:${Math.floor(giveaway.endsAt / 1000)}:R>)`
+                    })
                   ].join('\n')
                 )
             ]
@@ -144,52 +163,91 @@ export default new Command({
       case 'edit':
         {
           const id = options.getString('id', true);
-          const prize = options.getString('prize', false);
-          const duration = options.getString('duration', false);
-          const winners = options.getInteger('winners', false);
 
           const giveaway = await findGiveawayById(id);
 
           if (!giveaway) {
-            await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('No giveaway found')] });
+            await interaction.editReply({
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('giveaway.common.invalid_giveaway', { lng }))]
+            });
             return;
           }
 
+          const prize = options.getString('prize', false);
+          const duration = options.getString('duration', false);
+          const winners = options.getInteger('winners', false);
+
           if (!prize && !duration && !winners) {
-            await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('No changes provided')] });
+            await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('giveaway.edit.none', { lng }))] });
             return;
           }
 
           const response: string[] = [];
 
           if (prize) {
-            await updateGiveaway(id, { $set: { prize } });
-            response.push(`Prize changed to ${prize}`);
+            response.push(t('giveaway.edit.prize', { lng, prize, count: winners ?? giveaway.winnerCount }));
           }
 
           if (duration) {
-            const parsedDuration = ms(duration);
-
-            if (!parsedDuration) {
-              await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('Invalid duration')] });
-              return;
-            }
-
-            await updateGiveaway(id, { $set: { duration: ms(duration), endsAt: giveaway.createdAt + parsedDuration } });
-            response.push(`Duration updated! Giveaway will end in ${ms(giveaway.createdAt + parsedDuration - Date.now(), { long: true })}`);
+            response.push(t('giveaway.edit.duration', { lng, duration: ms(giveaway.createdAt + ms(duration) - Date.now(), { long: true }) }));
           }
 
           if (winners) {
-            await updateGiveaway(id, { $set: { winnerCount: winners } });
-            response.push(`Winner count updated to ${winners}`);
+            response.push(t('giveaway.edit.winner', { lng, winners: winners.toString(), count: winners }));
           }
 
           if (!response.length) {
-            await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('No changes provided')] });
+            await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('giveaway.edit.none', { lng }))] });
             return;
           }
 
+          const updatedGiveaway = await updateGiveaway(id, {
+            $set: {
+              winnerCount: winners ?? giveaway.winnerCount,
+              endsAt: duration ? giveaway.createdAt + ms(duration) : giveaway.endsAt,
+              duration: duration ?? giveaway.duration,
+              prize: prize ?? giveaway.prize
+            }
+          });
+
           await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.giveaway).setDescription(response.join('\n'))] });
+
+          const channel = await interaction.guild.channels.fetch(giveaway.channelId).catch((err) => logger.debug({ err }, 'Could not fetch channel'));
+
+          if (!channel?.isSendable()) {
+            return;
+          }
+
+          const msg = await channel.messages.fetch(giveaway.messageId).catch((err) => logger.debug({ err }, 'Could not fetch message'));
+
+          if (!msg) {
+            return;
+          }
+
+          await msg
+            .edit({
+              embeds: [
+                new EmbedBuilder()
+                  .setColor(client.colors.giveaway)
+                  .setTitle(t('giveaway.message.title', { lng: guildLng }))
+                  .addFields(
+                    { name: t('giveaway.message.prize', { lng: guildLng }), value: updatedGiveaway.prize },
+                    {
+                      name: t('giveaway.message.winner', { lng: guildLng, count: updatedGiveaway.winnerCount }),
+                      value: updatedGiveaway.winnerCount.toString()
+                    },
+                    {
+                      name: t('giveaway.message.ends_at', { lng: guildLng }),
+                      value: `<t:${Math.floor(updatedGiveaway.endsAt / 1000)}:f> (<t:${Math.floor(updatedGiveaway.endsAt / 1000)}:R>)`
+                    },
+                    {
+                      name: t('giveaway.message.participant', { lng: guildLng, count: updatedGiveaway.participants.length }),
+                      value: updatedGiveaway.participants.length.toString()
+                    }
+                  )
+              ]
+            })
+            .catch((err) => logger.debug({ err, giveaway }, 'Could not edit giveaway message'));
         }
         break;
       case 'reroll':
@@ -200,24 +258,32 @@ export default new Command({
           const giveaway = await findGiveawayById(id);
 
           if (!giveaway) {
-            await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('No giveaway found')] });
+            await interaction.editReply({
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('giveaway.common.invalid_giveaway', { lng }))]
+            });
             return;
           }
 
           if (giveaway.endsAt > Date.now()) {
-            await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('Giveaway is still active')] });
+            await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('giveaway.common.active', { lng }))] });
             return;
           }
 
           if (giveaway.participants.length < winnerCount) {
-            await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('Not enough participants!')] });
+            await interaction.editReply({
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('giveaway.reroll.no_participants', { lng }))]
+            });
             return;
           }
 
           const winners = getWinners(giveaway.participants, giveaway.winnerIds, winnerCount);
 
           await interaction.editReply({
-            embeds: [new EmbedBuilder().setColor(client.colors.giveaway).setDescription(`The new winner(s) are: ${winners.join(', ')}`)]
+            embeds: [
+              new EmbedBuilder()
+                .setColor(client.colors.giveaway)
+                .setDescription(t('giveaway.reroll.success', { lng, winners: winners.join(', '), count: winners.length }))
+            ]
           });
         }
         break;
@@ -228,23 +294,21 @@ export default new Command({
           const giveaway = await findGiveawayById(id);
 
           if (!giveaway) {
-            await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('No giveaway found')] });
+            await interaction.editReply({
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('giveaway.common.invalid_giveaway', { lng }))]
+            });
             return;
           }
 
           if (giveaway.endsAt < Date.now()) {
-            await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('Giveaway is already ended')] });
+            await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('giveaway.common.inactive', { lng }))] });
             return;
           }
 
           await updateGiveaway(id, { $set: { endsAt: Date.now() } });
 
           await interaction.editReply({
-            embeds: [
-              new EmbedBuilder()
-                .setColor(client.colors.giveaway)
-                .setDescription('Giveaway ended! Please allow up to 10 seconds for the winners to be determined.')
-            ]
+            embeds: [new EmbedBuilder().setColor(client.colors.giveaway).setDescription(t('giveaway.end.success', { lng }))]
           });
         }
         break;
@@ -255,37 +319,56 @@ export default new Command({
           const giveaway = await findGiveawayById(id);
 
           if (!giveaway) {
-            await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('No giveaway found')] });
+            await interaction.editReply({
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('giveaway.common.invalid_giveaway', { lng }))]
+            });
             return;
           }
 
           await deleteGiveaway(id);
 
-          await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.giveaway).setDescription('Giveaway deleted!')] });
+          await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.giveaway).setDescription(t('giveaway.delete.success', { lng }))] });
+
+          const channel = await interaction.guild.channels.fetch(giveaway.channelId).catch((err) => logger.debug({ err }, 'Could not fetch channel'));
+
+          if (!channel?.isSendable()) {
+            return;
+          }
+
+          const msg = await channel.messages.fetch(giveaway.messageId).catch((err) => logger.debug({ err }, 'Could not fetch message'));
+
+          if (!msg) {
+            return;
+          }
+
+          await msg.delete().catch((err) => logger.debug({ err, giveaway }, 'Could not delete message'));
         }
         break;
       case 'list':
         {
           if (!giveaways.length) {
-            await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('No giveaways found!')] });
+            await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('giveaway.list.none', { lng }))] });
             return;
           }
 
           await interaction.editReply({
             embeds: [
-              new EmbedBuilder().setColor(client.colors.giveaway).addFields(
-                giveaways.map((giveaway) => ({
-                  name: giveaway._id.toString(),
-                  value: [
-                    `Prize: ${giveaway.prize}`,
-                    `Winner count: ${giveaway.winnerCount}`,
-                    `Participants: ${giveaway.participants.length}`,
-                    `Duration: ${ms(giveaway.duration, { long: true })}`,
-                    `Ends at: <t:${Math.floor(giveaway.endsAt / 1000)}:f>`,
-                    `Created at <t:${Math.floor(giveaway.createdAt / 1000)}:f>`
-                  ].join('\n')
-                }))
-              )
+              new EmbedBuilder()
+                .setColor(client.colors.giveaway)
+                .setTitle(t('giveaway.list.title', { lng }))
+                .addFields(
+                  giveaways.map((giveaway) => ({
+                    name: giveaway._id.toString(),
+                    value: [
+                      t('giveaway.info.prize', { lng, prize: giveaway.prize }),
+                      t('giveaway.info.winner', { lng, winners: giveaway.winnerCount.toString(), count: giveaway.winnerCount }),
+                      t('giveaway.info.participant', { lng, participants: giveaway.participants.length.toString(), count: giveaway.participants.length }),
+                      t('giveaway.info.duration', { lng, duration: ms(giveaway.duration, { long: true }) }),
+                      t('giveaway.info.ends_at', { lng, ends_at: `<t:${Math.floor(giveaway.endsAt / 1000)}:f>` }),
+                      t('giveaway.info.created_at', { lng, created_at: `<t:${Math.floor(giveaway.createdAt / 1000)}:f>` })
+                    ].join('\n')
+                  }))
+                )
             ]
           });
         }

@@ -1,4 +1,80 @@
 {
+  "giveaway": {
+    "common": {
+      "invalid_giveaway": "Konnte diese Verlosung nicht finden!",
+      "active": "Diese Verlosung ist noch aktiv!",
+      "inactive": "Diese Verlosung ist nicht aktiv!"
+    },
+    "join": {
+      "label": "Join",
+      "already_participant": "Du nimmst bereits an dieser Verlosung teil!",
+      "success": "Du nimmst nun an dieser Verlosung teil!"
+    },
+    "leave": {
+      "label": "Leave",
+      "not_participant": "Du nimmst nicht an dieser Verlosung teil!",
+      "success": "Du nimmst nicht länger an dieser Verlosung teil!"
+    },
+    "message": {
+      "title": "Verlosung",
+      "prize": "Gewinn/Preis",
+      "winner_one": "Gewinner",
+      "winner_other": "Gewinner",
+      "ends_at": "Endet am",
+      "participant_one": "Teilnehmer",
+      "participant_other": "Teilnehmer"
+    },
+    "create": {
+      "max_giveaways": "Maximale Anzahl an Verlosungen erreicht!",
+      "invalid_duration": "Eine ungültige Dauer wurde angegeben!",
+      "title": "Verlosung Erstellt"
+    },
+    "info": {
+      "id": "ID: {{id}}",
+      "channel": "Kanal: {{channel}}",
+      "duration": "Dauer: {{duration}}",
+      "ends_at": "Endet am: {{ends_at}}",
+      "created_at": "Erstellt am {{created_at}}",
+      "prize": "Gewinn/Preis: {{prize}}",
+      "winner_one": "Gewinner: {{winners}}",
+      "winner_other": "Gewinner: {{winners}}",
+      "participant_one": "Teilnehmer: {{participants}}",
+      "participant_other": "Teilnehmer: {{participants}}"
+    },
+    "edit": {
+      "title": "Verlosung Bearbeitet",
+      "duration": "Dauer aktualisiert! Die Verlosung endet **in {{duration}}**.",
+      "winner_one": "Gewinner aktualisiert! Die Verlosung endet mit **{{winners}} Gewinner**.",
+      "winner_other": "Gewinner aktualisiert! Die Verlosung endet mit **{{winners}} Gewinner**.",
+      "prize_one": "Preis aktualisiert! Der Gewinner erhält **{{prize}}**.",
+      "prize_other": "Gewinn aktualisiert! Die Gewinner erhalten **{{prize}}**.",
+      "none": "Es wurden keine Änderungen vorgenommen."
+    },
+    "reroll": {
+      "no_participants": "Es gibt nicht genügend Teilnehmer!",
+      "success_one": "Der Gewinner ist {{winners}}!",
+      "success_other": "Die Gewinner sind {{winners}}!"
+    },
+    "end": {
+      "success": "Die Verlosung wurde beendet! Es kann etwas dauern, bis die Gewinner angekündigt werden."
+    },
+    "delete": {
+      "success": "Die Verlosung wurde gelöscht!"
+    },
+    "list": {
+      "none": "Es gibt keine aktiven Verlosungen!",
+      "title": "Aktive Verlosungen"
+    },
+    "announcement": {
+      "title": "Verlosung ist vorbei!",
+      "description_one": "Glückwunsch an {{winners}}, du hast **{{prize}}** gewonnen!",
+      "description_two": "Glückwunsch an {{winners}}, ihr habt **{{prize}}** gewonnen!",
+      "no_participants_one": "Es gibt nicht genügend Teilnehmer, um {{winnerCount}} Gewinner für **{{prize}}** zu bestimmen!",
+      "no_participants_other": "Es gibt nicht genügend Teilnehmer, um {{winnerCount}} Gewinner für **{{prize}}** zu bestimmen!",
+      "determined_one": "{{winnerCount}} Gewinner wurde bestimmt: {{winners}}",
+      "determined_other": "{{winnerCount}} Gewinner wurden bestimmt: {{winners}}"
+    }
+  },
   "reaction-roles": {
     "enable": {
       "already": "Das Reaktionsrollen-Modul ist bereits aktiviert!",

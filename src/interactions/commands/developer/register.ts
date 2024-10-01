@@ -1,4 +1,4 @@
-import { ApplicationIntegrationType, InteractionContextType, PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
+import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
 
 import { Command, ModuleType } from 'classes/command';
 
@@ -15,11 +15,11 @@ export default new Command({
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
     .setContexts(InteractionContextType.Guild),
-  async execute({ interaction }) {
+  async execute({ interaction, client }) {
     await interaction.deferReply();
 
     await registerCommands();
 
-    await interaction.editReply('Commands have been registered!');
+    await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.developer).setDescription('Commands have been registered')] });
   }
 });

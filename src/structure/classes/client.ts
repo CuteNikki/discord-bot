@@ -45,7 +45,8 @@ export class DiscordClient extends Client {
     level: Colors.Blue,
     reactionRoles: Colors.DarkGreen,
     general: Colors.Blurple,
-    giveaway: Colors.Yellow
+    giveaway: Colors.Yellow,
+    developer: Colors.Blurple
   };
 
   // Custom emojis

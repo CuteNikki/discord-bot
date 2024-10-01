@@ -1,4 +1,4 @@
-import { ApplicationIntegrationType, Colors, EmbedBuilder, InteractionContextType, SlashCommandBuilder } from 'discord.js';
+import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, SlashCommandBuilder } from 'discord.js';
 
 import { Command, ModuleType } from 'classes/command';
 
@@ -28,8 +28,8 @@ export default new Command({
   data: new SlashCommandBuilder()
     .setName('config-developer')
     .setDescription('Only for bot staff/developers')
-    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
-    .setContexts(InteractionContextType.Guild)
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
+    .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel)
     .addSubcommandGroup((subcommandGroup) =>
       subcommandGroup
         .setName('support-guild-id')
@@ -136,7 +136,7 @@ export default new Command({
         )
         .addSubcommand((subcommand) => subcommand.setName('list').setDescription('Lists all banned users'))
     ),
-  async execute({ interaction }) {
+  async execute({ interaction, client }) {
     await interaction.deferReply();
     const { options, user } = interaction;
 
@@ -147,7 +147,9 @@ export default new Command({
       case 'support-guild-id':
         {
           if (!keys.DEVELOPER_USER_IDS.includes(user.id) && !badges.includes(BadgeType.Developer)) {
-            await interaction.editReply('You are not a developer of this bot!');
+            await interaction.editReply({
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('You are not a developer of this bot!')]
+            });
             return;
           }
 
@@ -159,28 +161,32 @@ export default new Command({
                 const guildId = options.getString('guild-id', true);
 
                 if (settings.support.guildId === guildId) {
-                  await interaction.editReply('That is already the guild id');
+                  await interaction.editReply({
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('That is already the guild id')]
+                  });
                   return;
                 }
 
                 await updateSupportGuildId(keys.DISCORD_BOT_ID, guildId);
-                await interaction.editReply('Guild id has been set');
+                await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.developer).setDescription('Guild id has been set')] });
               }
               break;
             case 'remove':
               {
                 if (!settings.support.guildId) {
-                  await interaction.editReply('There is no guild id to remove');
+                  await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('There is no guild id to remove')] });
                   return;
                 }
 
                 await removeSupportGuildId(keys.DISCORD_BOT_ID);
-                await interaction.editReply('Guild id has been removed');
+                await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.developer).setDescription('Guild id has been removed')] });
               }
               break;
             case 'show':
               {
-                await interaction.editReply(`Current guild id: ${settings.support.guildId}`);
+                await interaction.editReply({
+                  embeds: [new EmbedBuilder().setColor(client.colors.developer).setDescription(`Current guild id: ${settings.support.guildId}`)]
+                });
               }
               break;
           }
@@ -189,7 +195,7 @@ export default new Command({
       case 'support-invite-url':
         {
           if (!keys.DEVELOPER_USER_IDS.includes(user.id) && !badges.includes(BadgeType.Developer)) {
-            await interaction.editReply('You are not a developer of this bot!');
+            await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('You are not a developer of this bot!')] });
             return;
           }
 
@@ -201,28 +207,32 @@ export default new Command({
                 const inviteUrl = options.getString('invite-url', true);
 
                 if (settings.support.guildInvite === inviteUrl) {
-                  await interaction.editReply('That is already the invite url');
+                  await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('That is already the invite url')] });
                   return;
                 }
 
                 await updateSupportGuildInvite(keys.DISCORD_BOT_ID, inviteUrl);
-                await interaction.editReply('Invite url has been set');
+                await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.developer).setDescription('Invite url has been set')] });
               }
               break;
             case 'remove':
               {
                 if (!settings.support.guildInvite) {
-                  await interaction.editReply('There is no invite url to remove');
+                  await interaction.editReply({
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('There is no invite url to remove')]
+                  });
                   return;
                 }
 
                 await removeSupportGuildInvite(keys.DISCORD_BOT_ID);
-                await interaction.editReply('Invite url has been removed');
+                await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.developer).setDescription('Invite url has been removed')] });
               }
               break;
             case 'show':
               {
-                await interaction.editReply(`Current invite url: ${settings.support.guildInvite}`);
+                await interaction.editReply({
+                  embeds: [new EmbedBuilder().setColor(client.colors.developer).setDescription(`Current invite url: ${settings.support.guildInvite}`)]
+                });
               }
               break;
           }
@@ -231,7 +241,7 @@ export default new Command({
       case 'bot-invite-url':
         {
           if (!keys.DEVELOPER_USER_IDS.includes(user.id) && !badges.includes(BadgeType.Developer)) {
-            await interaction.editReply('You are not a developer of this bot!');
+            await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('You are not a developer of this bot!')] });
             return;
           }
 
@@ -243,28 +253,32 @@ export default new Command({
                 const inviteUrl = options.getString('invite-url', true);
 
                 if (settings.support.botInvite === inviteUrl) {
-                  await interaction.editReply('That is already the invite url');
+                  await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('That is already the invite url')] });
                   return;
                 }
 
                 await updateSupportBotInvite(keys.DISCORD_BOT_ID, inviteUrl);
-                await interaction.editReply('Invite url has been set');
+                await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.developer).setDescription('Invite url has been set')] });
               }
               break;
             case 'remove':
               {
                 if (!settings.support.botInvite) {
-                  await interaction.editReply('There is no invite url to remove');
+                  await interaction.editReply({
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('There is no invite url to remove')]
+                  });
                   return;
                 }
 
                 await removeSupportBotInvite(keys.DISCORD_BOT_ID);
-                await interaction.editReply('Invite url has been removed');
+                await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.developer).setDescription('Invite url has been removed')] });
               }
               break;
             case 'show':
               {
-                await interaction.editReply(`Current invite url: ${settings.support.botInvite}`);
+                await interaction.editReply({
+                  embeds: [new EmbedBuilder().setColor(client.colors.developer).setDescription(`Current invite url: ${settings.support.botInvite}`)]
+                });
               }
               break;
           }
@@ -273,7 +287,7 @@ export default new Command({
       case 'badges':
         {
           if (!keys.DEVELOPER_USER_IDS.includes(user.id) && !badges.includes(BadgeType.Developer)) {
-            await interaction.editReply('You are not a developer of this bot!');
+            await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('You are not a developer of this bot!')] });
             return;
           }
 
@@ -286,17 +300,29 @@ export default new Command({
                 const targetData = await getUserData(target.id);
 
                 if (targetData.badges.map((badge) => badge.id).includes(badge)) {
-                  await interaction.editReply('User already has that badge!');
+                  await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('User already has that badge!')] });
                   return;
                 }
 
                 await addBadge(target.id, badge);
 
                 const msg = await target
-                  .send(`You have received the ${BadgeType[badge]} badge!`)
+                  .send({
+                    embeds: [
+                      new EmbedBuilder()
+                        .setColor(client.colors.developer)
+                        .setDescription(`You have received the ${BadgeType[badge]} badge by ${user.username}!`)
+                    ]
+                  })
                   .catch((err) => logger.debug({ err, targetId: target.id }, 'Could not send user a DM'));
 
-                await interaction.editReply(`User has received the ${BadgeType[badge]} badge\n${msg ? 'Sent a DM to the user' : ''}`);
+                await interaction.editReply({
+                  embeds: [
+                    new EmbedBuilder()
+                      .setColor(client.colors.developer)
+                      .setDescription(`User has received the ${BadgeType[badge]} badge\n${msg ? 'Sent a DM to the user' : ''}`)
+                  ]
+                });
               }
               break;
             case 'remove':
@@ -307,17 +333,29 @@ export default new Command({
                 const targetData = await getUserData(target.id);
 
                 if (!targetData.badges.map((badge) => badge.id).includes(badge)) {
-                  await interaction.editReply('User does not have that badge!');
+                  await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('User does not have that badge!')] });
                   return;
                 }
 
                 await removeBadge(target.id, badge);
 
                 const msg = await target
-                  .send(`Your ${BadgeType[badge]} badge has been removed!`)
+                  .send({
+                    embeds: [
+                      new EmbedBuilder()
+                        .setColor(client.colors.developer)
+                        .setDescription(`Your ${BadgeType[badge]} badge has been removed by ${user.username}!`)
+                    ]
+                  })
                   .catch((err) => logger.debug({ err, targetId: target.id }, 'Could not send user a DM'));
 
-                await interaction.editReply(`${BadgeType[badge]} badge has been removed from user${msg ? '\nSent a DM to the user' : ''}`);
+                await interaction.editReply({
+                  embeds: [
+                    new EmbedBuilder()
+                      .setColor(client.colors.developer)
+                      .setDescription(`${BadgeType[badge]} badge has been removed from user${msg ? '\nSent a DM to the user' : ''}`)
+                  ]
+                });
               }
               break;
             case 'list':
@@ -337,7 +375,9 @@ export default new Command({
       case 'bans':
         {
           if (!keys.DEVELOPER_USER_IDS.includes(user.id) && !badges.includes(BadgeType.Developer) && !badges.includes(BadgeType.StaffMember)) {
-            await interaction.editReply('You are not a staff member or developer of this bot!');
+            await interaction.editReply({
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('You are not a staff member or developer of this bot!')]
+            });
             return;
           }
 
@@ -349,17 +389,21 @@ export default new Command({
                 const targetSettings = await getUserData(target.id);
 
                 if (targetSettings.banned) {
-                  await interaction.editReply('User is already banned!');
+                  await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('User is already banned!')] });
                   return;
                 }
 
                 await banUser(target.id);
 
                 const msg = await target
-                  .send('You have been banned. You can no longer use this bot.')
+                  .send({
+                    embeds: [new EmbedBuilder().setColor(client.colors.developer).setDescription('You have been banned. You can no longer use this bot.')]
+                  })
                   .catch((err) => logger.debug({ err, targetId: target.id }, 'Could not send user a DM'));
 
-                await interaction.editReply('User has been banned' + (msg ? '\nSent a DM to the user' : ''));
+                await interaction.editReply({
+                  embeds: [new EmbedBuilder().setColor(client.colors.developer).setDescription('User has been banned' + (msg ? '\nSent a DM to the user' : ''))]
+                });
               }
               break;
             case 'remove':
@@ -369,17 +413,23 @@ export default new Command({
                 const targetSettings = await getUserData(target.id);
 
                 if (!targetSettings.banned) {
-                  await interaction.editReply('User is not banned!');
+                  await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('User is not banned!')] });
                   return;
                 }
 
                 await unbanUser(target.id);
 
                 const msg = await target
-                  .send('You have been unbanned. You can use this bot again.')
+                  .send({
+                    embeds: [new EmbedBuilder().setColor(client.colors.developer).setDescription('You have been unbanned. You can use this bot again.')]
+                  })
                   .catch((err) => logger.debug({ err, targetId: target.id }, 'Could not send user a DM'));
 
-                await interaction.editReply('User has been unbanned' + (msg ? '\nSent a DM to the user' : ''));
+                await interaction.editReply({
+                  embeds: [
+                    new EmbedBuilder().setColor(client.colors.developer).setDescription('User has been unbanned' + (msg ? '\nSent a DM to the user' : ''))
+                  ]
+                });
               }
               break;
             case 'list':
@@ -391,8 +441,7 @@ export default new Command({
                   interaction,
                   embeds: chunkedUsers.map((chunk) =>
                     new EmbedBuilder()
-                      .setColor(Colors.Aqua)
-                      .setTitle(`Banned Users`)
+                      .setColor(client.colors.developer)
                       .setDescription(chunk.map((user) => `<@${user.userId}> (${user.userId})`).join('\n\n') || '/')
                   )
                 });

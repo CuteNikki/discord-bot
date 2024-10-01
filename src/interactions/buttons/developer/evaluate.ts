@@ -1,26 +1,10 @@
-import {
-  ActionRowBuilder,
-  ApplicationIntegrationType,
-  InteractionContextType,
-  ModalBuilder,
-  PermissionFlagsBits,
-  SlashCommandBuilder,
-  TextInputBuilder,
-  TextInputStyle
-} from 'discord.js';
+import { ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } from 'discord.js';
 
-import { Command, ModuleType } from 'classes/command';
+import { Button } from 'classes/button';
 
-export default new Command({
-  module: ModuleType.Developer,
+export default new Button({
+  customId: 'button-eval-edit',
   isDeveloperOnly: true,
-  cooldown: 0,
-  data: new SlashCommandBuilder()
-    .setName('eval')
-    .setDescription('Evaluates code')
-    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
-    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
-    .setContexts(InteractionContextType.Guild),
   async execute({ interaction }) {
     await interaction.showModal(
       new ModalBuilder()
@@ -31,6 +15,10 @@ export default new Command({
             new TextInputBuilder()
               .setCustomId('code')
               .setLabel('code to evaluate')
+              .setValue(
+                interaction.message.embeds[0].description?.replace('```js', '').split('').reverse().join('').replace('```', '').split('').reverse().join('') ??
+                  ''
+              )
               .setPlaceholder('console.log("hello world!");')
               .setMaxLength(4000)
               .setRequired(true)

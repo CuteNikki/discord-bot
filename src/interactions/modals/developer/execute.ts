@@ -1,5 +1,5 @@
 import { exec } from 'child_process';
-import { Colors, EmbedBuilder, codeBlock } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, codeBlock } from 'discord.js';
 import { inspect, promisify } from 'util';
 
 import { Modal } from 'classes/modal';
@@ -20,7 +20,7 @@ export default new Modal({
       .getTextInputValue('command')
       .replaceAll('config', 'no')
       .replaceAll('env', 'no')
-      .replaceAll(' token', 'no')
+      .replaceAll('token', 'no')
       .replaceAll('TOKEN', 'no');
 
     try {
@@ -51,13 +51,13 @@ export default new Modal({
           new EmbedBuilder()
             .setTitle('Input')
             .setColor(Colors.Blurple)
-            .setDescription(codeBlock('ts', command.substring(0, 4000))),
+            .setDescription(codeBlock('js', command.substring(0, 4000))),
           new EmbedBuilder()
             .setTitle('Output')
             .setColor(Colors.Green)
             .setDescription(
               codeBlock(
-                'ts',
+                'js',
                 stdout
                   .replaceAll(interaction.client.token, 'no')
                   .replaceAll(interaction.client.token.split('').reverse().join(''), 'no')
@@ -65,6 +65,11 @@ export default new Modal({
                   .substring(0, 4000)
               )
             )
+        ],
+        components: [
+          new ActionRowBuilder<ButtonBuilder>().addComponents(
+            new ButtonBuilder().setCustomId('button-execute-edit').setLabel('Edit').setStyle(ButtonStyle.Primary)
+          )
         ]
       });
     } catch (err: unknown) {
@@ -75,13 +80,13 @@ export default new Modal({
           new EmbedBuilder()
             .setTitle('Input')
             .setColor(Colors.Blurple)
-            .setDescription(codeBlock('ts', command.substring(0, 4000))),
+            .setDescription(codeBlock('js', command.substring(0, 4000))),
           new EmbedBuilder()
             .setTitle('Error')
             .setColor(Colors.Red)
             .setDescription(
               codeBlock(
-                'ts',
+                'js',
                 inspect(err, { depth: 2 })
                   .replaceAll(interaction.client.token, 'no')
                   .replaceAll(interaction.client.token.split('').reverse().join(''), 'no')
@@ -89,6 +94,11 @@ export default new Modal({
                   .substring(0, 4000)
               )
             )
+        ],
+        components: [
+          new ActionRowBuilder<ButtonBuilder>().addComponents(
+            new ButtonBuilder().setCustomId('button-execute-edit').setLabel('Edit').setStyle(ButtonStyle.Primary)
+          )
         ]
       });
     }

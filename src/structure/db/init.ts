@@ -84,7 +84,7 @@ async function clearGiveaways(client: DiscordClient) {
 
     const lng = await getGuildLanguage(guild.id);
 
-    if (winners.length < giveaway.winnerCount) {
+    if (!winners?.length || winners.length < giveaway.winnerCount) {
       await channel
         .send({
           content: `https://discord.com/channels/${guild.id}/${channel.id}/${giveaway.messageId}`,
@@ -93,14 +93,17 @@ async function clearGiveaways(client: DiscordClient) {
               .setColor(client.colors.giveaway)
               .setTitle(t('giveaway.announcement.title', { lng }))
               .setDescription(
-                t('giveaway.announcement.no_participants', {
-                  lng,
-                  count: giveaway.winnerCount,
-                  winnerCount: giveaway.winnerCount.toString(),
-                  prize: giveaway.prize
-                }) + winners.length
-                  ? `\n${t('giveaway.announcement.determined', { lng, count: winners.length, winners: winners.map((id) => `<@${id}>`).join(', ') })}`
-                  : ''
+                [
+                  t('giveaway.announcement.no_participants', {
+                    lng,
+                    count: giveaway.winnerCount,
+                    winnerCount: giveaway.winnerCount.toString(),
+                    prize: giveaway.prize
+                  }),
+                  winners.length
+                    ? `${t('giveaway.announcement.determined', { lng, count: winners.length, winnerCount: winners.length.toString(), winners: winners.map((id) => `<@${id}>`).join(', ') })}`
+                    : ''
+                ].join('\n')
               )
           ]
         })

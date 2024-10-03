@@ -41,7 +41,7 @@ export default new Event({
 
     // Check author only
     if (button.options.isAuthorOnly) {
-      const content = t('interactions.author_only', { lng });
+      const content = t('interactions.author-only', { lng });
       if (interaction.message.interaction && interaction.user.id !== interaction.message.interaction.user.id)
         return interaction.reply({ content, ephemeral: true });
       if (interaction.message.reference && interaction.user.id !== (await interaction.message.fetchReference()).author.id)
@@ -52,7 +52,7 @@ export default new Event({
     if (button.options.permissions?.length) {
       if (!interaction.member)
         return interaction.reply({
-          content: t('interactions.guild_only', { lng }),
+          content: t('interactions.guild-only', { lng }),
           ephemeral: true
         });
       const permissions = interaction.member.permissions as PermissionsBitField;
@@ -71,7 +71,7 @@ export default new Event({
       const permissions = interaction.guild.members.me.permissions;
       if (!permissions.has(button.options.botPermissions)) {
         return interaction.reply({
-          content: t('interactions.bot_permissions', {
+          content: t('interactions.bot-permissions', {
             lng,
             permissions: button.options.botPermissions.join(', ')
           }),
@@ -84,7 +84,7 @@ export default new Event({
     const developerIds = keys.DEVELOPER_USER_IDS;
     if (button.options.isDeveloperOnly && !developerIds.includes(interaction.user.id))
       return interaction.reply({
-        content: t('interactions.developer_only', { lng }),
+        content: t('interactions.developer-only', { lng }),
         ephemeral: true
       });
 

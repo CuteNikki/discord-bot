@@ -68,7 +68,7 @@ export class TicTacToe extends Opponent {
       if (buttonInteraction.user.id !== user.id && buttonInteraction.user.id !== opponent.id)
         return buttonInteraction
           .followUp({
-            content: t('interactions.author_only', {
+            content: t('interactions.author-only', {
               lng: await getUserLanguage(buttonInteraction.user.id)
             }),
             ephemeral: true
@@ -186,7 +186,7 @@ export class TicTacToe extends Opponent {
         const button = new ButtonBuilder()
           .setEmoji(fieldPlayer.emoji)
           .setStyle(fieldPlayer.style)
-          .setCustomId(`TTT_${y * 3 + x}`);
+          .setCustomId(`button-ttt_${y * 3 + x}`);
         if (this.board[y * 3 + x]) button.setDisabled(true);
         row.addComponents(button);
       }

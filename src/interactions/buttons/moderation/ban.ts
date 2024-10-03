@@ -10,7 +10,7 @@ import { InfractionType } from 'types/infraction';
 import { logger } from 'utils/logger';
 
 export default new Button({
-  customId: 'button-ban',
+  customId: 'button-ban_',
   isAuthorOnly: false,
   isCustomIdIncluded: true,
   permissions: ['BanMembers'],
@@ -42,19 +42,19 @@ export default new Button({
 
     const historyOptions = {
       0: t('ban.history.none', { lng }), // 'Delete none'
-      1800: t('ban.history.minutes_30', { lng }), // 'Previous 30 minutes'
-      3600: t('ban.history.minutes_60', { lng }), // 'Previous 60 minutes'
-      10800: t('ban.history.hours_3', { lng }), // 'Previous 3 hours'
-      21600: t('ban.history.hours_6', { lng }), //'Previous 6 hours'
-      43200: t('ban.history.hours_12', { lng }), // 'Previous 12 hours'
-      86400: t('ban.history.hours_24', { lng }), // 'Previous 24 hours'
-      259200: t('ban.history.days_3', { lng }), // 'Previous 3 days'
-      604800: t('ban.history.days_7', { lng }) // 'Previous 7 days'
+      1800: t('ban.history.minutes-30', { lng }), // 'Previous 30 minutes'
+      3600: t('ban.history.minutes-60', { lng }), // 'Previous 60 minutes'
+      10800: t('ban.history.hours-3', { lng }), // 'Previous 3 hours'
+      21600: t('ban.history.hours-6', { lng }), //'Previous 6 hours'
+      43200: t('ban.history.hours-12', { lng }), // 'Previous 12 hours'
+      86400: t('ban.history.hours-24', { lng }), // 'Previous 24 hours'
+      259200: t('ban.history.days-3', { lng }), // 'Previous 3 days'
+      604800: t('ban.history.days-7', { lng }) // 'Previous 7 days'
     };
 
     const receivedDM = await client.users
       .send(target.id, {
-        content: t('ban.target_dm', {
+        content: t('ban.target-dm', {
           lng: targetLng,
           guild: `\`${guild.name}\``,
           reason: `\`${reason ?? t('none', { lng: targetLng })}\``,
@@ -70,8 +70,8 @@ export default new Button({
           user: target.toString(),
           reason: `\`${reason ?? t('none', { lng: targetLng })}\``
         }),
-        t('ban.deleted_history', { lng, deleted: historyOptions[604800] }),
-        receivedDM ? t('ban.dm_received', { lng }) : t('ban.dm_not_received', { lng }),
+        t('ban.deleted-history', { lng, deleted: historyOptions[604800] }),
+        receivedDM ? t('ban.dm-received', { lng }) : t('ban.dm-not-received', { lng }),
         t('ban.permanent', { lng })
       ].join('\n'),
       components: []

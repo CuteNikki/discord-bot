@@ -24,7 +24,7 @@ export default new Command({
   async execute({ interaction }) {
     await interaction.showModal(
       new ModalBuilder()
-        .setCustomId('modal_execute')
+        .setCustomId('modal-execute')
         .setTitle('Execute command')
         .setComponents(
           new ActionRowBuilder<TextInputBuilder>().setComponents(

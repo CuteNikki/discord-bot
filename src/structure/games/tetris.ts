@@ -126,7 +126,7 @@ export class Tetris {
       if (buttonInteraction.user.id !== user.id)
         return buttonInteraction
           .followUp({
-            content: t('interactions.author_only', {
+            content: t('interactions.author-only', {
               lng: await getUserLanguage(buttonInteraction.user.id)
             }),
             ephemeral: true
@@ -209,10 +209,10 @@ export class Tetris {
 
   private getComponents(disabled: boolean = false) {
     return new ActionRowBuilder<ButtonBuilder>().addComponents(
-      new ButtonBuilder().setCustomId('TETRIS_left').setEmoji('⬅️').setStyle(ButtonStyle.Primary).setDisabled(disabled),
-      new ButtonBuilder().setCustomId('TETRIS_right').setEmoji('➡️').setStyle(ButtonStyle.Primary).setDisabled(disabled),
-      new ButtonBuilder().setCustomId('TETRIS_rotate').setEmoji('🔄').setStyle(ButtonStyle.Primary).setDisabled(disabled),
-      new ButtonBuilder().setCustomId('TETRIS_drop').setEmoji('⬇️').setStyle(ButtonStyle.Success).setDisabled(disabled)
+      new ButtonBuilder().setCustomId('button-tetris_left').setEmoji('⬅️').setStyle(ButtonStyle.Primary).setDisabled(disabled),
+      new ButtonBuilder().setCustomId('button-tetris_right').setEmoji('➡️').setStyle(ButtonStyle.Primary).setDisabled(disabled),
+      new ButtonBuilder().setCustomId('button-tetris_rotate').setEmoji('🔄').setStyle(ButtonStyle.Primary).setDisabled(disabled),
+      new ButtonBuilder().setCustomId('button-tetris_drop').setEmoji('⬇️').setStyle(ButtonStyle.Success).setDisabled(disabled)
     );
   }
 

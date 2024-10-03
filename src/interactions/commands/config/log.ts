@@ -239,7 +239,7 @@ export default new Command({
                 }
 
                 if (!event) return interaction.editReply(t('log.events.invalid', { lng }));
-                if (event.enabled) return interaction.editReply(t('log.events.already_enabled', { lng }));
+                if (event.enabled) return interaction.editReply(t('log.events.already-enabled', { lng }));
 
                 await updateGuildSettings(guildId, {
                   $set: { [`log.events.${event.name}`]: true }
@@ -348,7 +348,7 @@ export default new Command({
                 }
 
                 if (!event) return interaction.editReply(t('log.events.invalid', { lng }));
-                if (!event.enabled) return interaction.editReply(t('log.events.already_disabled', { lng }));
+                if (!event.enabled) return interaction.editReply(t('log.events.already-disabled', { lng }));
 
                 await updateGuildSettings(guildId, {
                   $set: { [`log.events.${event.name}`]: false }

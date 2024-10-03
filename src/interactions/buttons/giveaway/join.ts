@@ -21,7 +21,7 @@ export default new Button({
 
     if (!giveaway) {
       await interaction.editReply({
-        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('giveaway.common.invalid_giveaway', { lng }))]
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('giveaway.common.invalid-giveaway', { lng }))]
       });
       return;
     }
@@ -33,7 +33,7 @@ export default new Button({
 
     if (giveaway.participants.includes(interaction.user.id)) {
       await interaction.editReply({
-        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('giveaway.join.already_participant', { lng }))],
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('giveaway.join.already-participant', { lng }))],
         components: [
           new ActionRowBuilder<ButtonBuilder>().addComponents(
             new ButtonBuilder()

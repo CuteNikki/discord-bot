@@ -61,11 +61,11 @@ export default new Command({
       .setThumbnail(user.displayAvatarURL({ size: 4096, extension: 'webp' }))
       .addFields(
         {
-          name: t('userinfo.user_title', { lng }),
+          name: t('userinfo.user-title', { lng }),
           value: [`${user} | ${user.username}`, user.id].join('\n')
         },
         {
-          name: t('userinfo.created_at', { lng }),
+          name: t('userinfo.created-at', { lng }),
           value: `<t:${Math.floor(user.createdTimestamp / 1000)}:d> | <t:${Math.floor(user.createdTimestamp / 1000)}:R>`
         }
       );
@@ -131,7 +131,7 @@ export default new Command({
       .setAuthor({ name: status[member.presence?.status ?? 'offline'], iconURL: statusImage[member.presence?.status ?? 'offline'] })
       .setThumbnail(member.avatarURL({ size: 4096, extension: 'webp' }))
       .addFields({
-        name: t('userinfo.joined_at', { lng }),
+        name: t('userinfo.joined-at', { lng }),
         value: `<t:${Math.floor((member.joinedTimestamp ?? 0) / 1000)}:d> | <t:${Math.floor((member.joinedTimestamp ?? 0) / 1000)}:R>`
       });
 

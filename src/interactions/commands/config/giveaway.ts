@@ -94,14 +94,14 @@ export default new Command({
 
           if (!parsedDuration) {
             await interaction.editReply({
-              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('giveaway.create.invalid_duration', { lng }))]
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('giveaway.create.invalid-duration', { lng }))]
             });
             return;
           }
 
           if (giveaways.length >= MAX_GIVEAWAYS) {
             await interaction.editReply({
-              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('giveaway.create.max_giveaways', { lng }))]
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('giveaway.create.max-giveaways', { lng }))]
             });
             return;
           }
@@ -116,7 +116,7 @@ export default new Command({
                     { name: t('giveaway.message.prize', { lng: guildLng }), value: prize },
                     { name: t('giveaway.message.winner', { lng: guildLng, count: winners }), value: winners.toString() },
                     {
-                      name: t('giveaway.message.ends_at', { lng: guildLng }),
+                      name: t('giveaway.message.ends-at', { lng: guildLng }),
                       value: `<t:${Math.floor((NOW + parsedDuration) / 1000)}:f> (<t:${Math.floor((NOW + parsedDuration) / 1000)}:R>)`
                     }
                   )
@@ -150,9 +150,9 @@ export default new Command({
                     t('giveaway.info.prize', { lng, prize }),
                     t('giveaway.info.winner', { lng, winners: winners.toString(), count: winners }),
                     t('giveaway.info.duration', { lng, duration: ms(parsedDuration, { long: true }) }),
-                    t('giveaway.info.ends_at', {
+                    t('giveaway.info.ends-at', {
                       lng,
-                      ends_at: `<t:${Math.floor(giveaway.endsAt / 1000)}:f> (<t:${Math.floor(giveaway.endsAt / 1000)}:R>)`
+                      endsAt: `<t:${Math.floor(giveaway.endsAt / 1000)}:f> (<t:${Math.floor(giveaway.endsAt / 1000)}:R>)`
                     })
                   ].join('\n')
                 )
@@ -168,7 +168,7 @@ export default new Command({
 
           if (!giveaway) {
             await interaction.editReply({
-              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('giveaway.common.invalid_giveaway', { lng }))]
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('giveaway.common.invalid-giveaway', { lng }))]
             });
             return;
           }
@@ -237,7 +237,7 @@ export default new Command({
                       value: updatedGiveaway.winnerCount.toString()
                     },
                     {
-                      name: t('giveaway.message.ends_at', { lng: guildLng }),
+                      name: t('giveaway.message.ends-at', { lng: guildLng }),
                       value: `<t:${Math.floor(updatedGiveaway.endsAt / 1000)}:f> (<t:${Math.floor(updatedGiveaway.endsAt / 1000)}:R>)`
                     },
                     {
@@ -259,7 +259,7 @@ export default new Command({
 
           if (!giveaway) {
             await interaction.editReply({
-              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('giveaway.common.invalid_giveaway', { lng }))]
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('giveaway.common.invalid-giveaway', { lng }))]
             });
             return;
           }
@@ -271,7 +271,7 @@ export default new Command({
 
           if (giveaway.participants.length < winnerCount) {
             await interaction.editReply({
-              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('giveaway.reroll.no_participants', { lng }))]
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('giveaway.reroll.no-participants', { lng }))]
             });
             return;
           }
@@ -295,7 +295,7 @@ export default new Command({
 
           if (!giveaway) {
             await interaction.editReply({
-              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('giveaway.common.invalid_giveaway', { lng }))]
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('giveaway.common.invalid-giveaway', { lng }))]
             });
             return;
           }
@@ -320,7 +320,7 @@ export default new Command({
 
           if (!giveaway) {
             await interaction.editReply({
-              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('giveaway.common.invalid_giveaway', { lng }))]
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('giveaway.common.invalid-giveaway', { lng }))]
             });
             return;
           }
@@ -364,8 +364,8 @@ export default new Command({
                       t('giveaway.info.winner', { lng, winners: giveaway.winnerCount.toString(), count: giveaway.winnerCount }),
                       t('giveaway.info.participant', { lng, participants: giveaway.participants.length.toString(), count: giveaway.participants.length }),
                       t('giveaway.info.duration', { lng, duration: ms(giveaway.duration, { long: true }) }),
-                      t('giveaway.info.ends_at', { lng, ends_at: `<t:${Math.floor(giveaway.endsAt / 1000)}:f>` }),
-                      t('giveaway.info.created_at', { lng, created_at: `<t:${Math.floor(giveaway.createdAt / 1000)}:f>` })
+                      t('giveaway.info.ends-at', { lng, endsAt: `<t:${Math.floor(giveaway.endsAt / 1000)}:f>` }),
+                      t('giveaway.info.created-at', { lng, createdAt: `<t:${Math.floor(giveaway.createdAt / 1000)}:f>` })
                     ].join('\n')
                   }))
                 )

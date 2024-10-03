@@ -212,7 +212,7 @@ export default new Command({
                               : AnnouncementType[announcement]
                         },
                         {
-                          name: t('level.ignored_roles.title', { lng }),
+                          name: t('level.ignored-roles.title', { lng }),
                           value: ignoredRoles.length
                             ? ignoredRoles
                                 .map((id) => {
@@ -223,7 +223,7 @@ export default new Command({
                             : t('level.none', { lng })
                         },
                         {
-                          name: t('level.ignored_channels.title', { lng }),
+                          name: t('level.ignored-channels.title', { lng }),
                           value: ignoredChannels.length
                             ? ignoredChannels
                                 .map((id) => {
@@ -234,7 +234,7 @@ export default new Command({
                             : t('level.none', { lng })
                         },
                         {
-                          name: t('level.enabled_channels.title', { lng }),
+                          name: t('level.enabled-channels.title', { lng }),
                           value: enabledChannels.length
                             ? enabledChannels
                                 .map((id) => {
@@ -314,7 +314,7 @@ export default new Command({
                       .setColor(client.colors.level)
                       .setTitle(t('level.title', { lng }))
                       .addFields({
-                        name: t('level.ignored_roles.title', { lng }),
+                        name: t('level.ignored-roles.title', { lng }),
                         value: ignoredRoles.length
                           ? ignoredRoles
                               .map((id) => {
@@ -336,7 +336,7 @@ export default new Command({
                       .setColor(client.colors.level)
                       .setTitle(t('level.title', { lng }))
                       .addFields({
-                        name: t('level.ignored_channels.title', { lng }),
+                        name: t('level.ignored-channels.title', { lng }),
                         value: ignoredChannels
                           ? ignoredChannels
                               .map((id) => {
@@ -358,7 +358,7 @@ export default new Command({
                       .setColor(client.colors.level)
                       .setTitle(t('level.title', { lng }))
                       .addFields({
-                        name: t('level.enabled_channels.title', { lng }),
+                        name: t('level.enabled-channels.title', { lng }),
                         value: enabledChannels
                           ? enabledChannels
                               .map((id) => {
@@ -382,7 +382,7 @@ export default new Command({
               {
                 if (enabled) {
                   await interaction.editReply({
-                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.toggle.already_on', { lng }))]
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.toggle.already-on', { lng }))]
                   });
                   return;
                 }
@@ -398,7 +398,7 @@ export default new Command({
               {
                 if (!enabled) {
                   await interaction.editReply({
-                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.toggle.already_off', { lng }))]
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.toggle.already-off', { lng }))]
                   });
                   return;
                 }
@@ -422,7 +422,7 @@ export default new Command({
 
                 if (channelId === channel.id && announcement !== AnnouncementType.OtherChannel) {
                   await interaction.editReply({
-                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.announcement.already_channel', { lng }))]
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.announcement.already-channel', { lng }))]
                   });
                   return;
                 }
@@ -443,7 +443,7 @@ export default new Command({
               {
                 if (announcement === AnnouncementType.UserChannel) {
                   await interaction.editReply({
-                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.announcement.already_user', { lng }))]
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.announcement.already-user', { lng }))]
                   });
                   return;
                 }
@@ -464,7 +464,7 @@ export default new Command({
               {
                 if (announcement === AnnouncementType.PrivateMessage) {
                   await interaction.editReply({
-                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.announcement.already_private', { lng }))]
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.announcement.already-private', { lng }))]
                   });
                   return;
                 }
@@ -485,7 +485,7 @@ export default new Command({
               {
                 if (announcement !== AnnouncementType.None) {
                   await interaction.editReply({
-                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.announcement.already_none', { lng }))]
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.announcement.already-none', { lng }))]
                   });
                   return;
                 }
@@ -567,14 +567,14 @@ export default new Command({
 
                 if (ignoredRoles.includes(role.id)) {
                   await interaction.editReply({
-                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.ignored_roles.already', { lng }))]
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.ignored-roles.already', { lng }))]
                   });
                   return;
                 }
 
                 if (ignoredRoles.length >= 25) {
                   await interaction.editReply({
-                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.ignored_roles.limit', { lng }))]
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.ignored-roles.limit', { lng }))]
                   });
                   return;
                 }
@@ -582,7 +582,7 @@ export default new Command({
                 await updateGuildSettings(guild.id, { $push: { ['level.ignoredRoles']: role.id } });
 
                 await interaction.editReply({
-                  embeds: [new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.ignored_roles.added', { lng, role: role.toString() }))]
+                  embeds: [new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.ignored-roles.added', { lng, role: role.toString() }))]
                 });
               }
               break;
@@ -592,7 +592,7 @@ export default new Command({
 
                 if (!ignoredRoles.includes(roleId)) {
                   await interaction.editReply({
-                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.ignored_roles.invalid', { lng }))]
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.ignored-roles.invalid', { lng }))]
                   });
                   return;
                 }
@@ -600,7 +600,7 @@ export default new Command({
                 await updateGuildSettings(guild.id, { $pull: { ['level.ignoredRoles']: roleId } });
 
                 await interaction.editReply({
-                  embeds: [new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.ignored_roles.removed', { lng }))]
+                  embeds: [new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.ignored-roles.removed', { lng }))]
                 });
               }
               break;
@@ -616,14 +616,14 @@ export default new Command({
 
                 if (ignoredChannels.includes(channel.id)) {
                   await interaction.editReply({
-                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.ignored_channels.already', { lng }))]
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.ignored-channels.already', { lng }))]
                   });
                   return;
                 }
 
                 if (ignoredChannels.length >= 25) {
                   await interaction.editReply({
-                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.ignored_channels.limit', { lng }))]
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.ignored-channels.limit', { lng }))]
                   });
                   return;
                 }
@@ -632,7 +632,7 @@ export default new Command({
 
                 await interaction.editReply({
                   embeds: [
-                    new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.ignored_channels.added', { lng, channel: channel.toString() }))
+                    new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.ignored-channels.added', { lng, channel: channel.toString() }))
                   ]
                 });
               }
@@ -643,7 +643,7 @@ export default new Command({
 
                 if (!ignoredChannels.includes(channelId)) {
                   await interaction.editReply({
-                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.ignored_channels.invalid', { lng }))]
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.ignored-channels.invalid', { lng }))]
                   });
                   return;
                 }
@@ -651,7 +651,7 @@ export default new Command({
                 await updateGuildSettings(guild.id, { $pull: { ['level.ignoredChannels']: channelId } });
 
                 await interaction.editReply({
-                  embeds: [new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.ignored_channels.removed', { lng }))]
+                  embeds: [new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.ignored-channels.removed', { lng }))]
                 });
               }
               break;
@@ -667,14 +667,14 @@ export default new Command({
 
                 if (enabledChannels.includes(channel.id)) {
                   await interaction.editReply({
-                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.enabled_channels.already', { lng }))]
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.enabled-channels.already', { lng }))]
                   });
                   return;
                 }
 
                 if (enabledChannels.length >= 25) {
                   await interaction.editReply({
-                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.enabled_channels.limit', { lng }))]
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.enabled-channels.limit', { lng }))]
                   });
                   return;
                 }
@@ -683,7 +683,7 @@ export default new Command({
 
                 await interaction.editReply({
                   embeds: [
-                    new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.enabled_channels.added', { lng, channel: channel.toString() }))
+                    new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.enabled-channels.added', { lng, channel: channel.toString() }))
                   ]
                 });
               }
@@ -694,7 +694,7 @@ export default new Command({
 
                 if (!enabledChannels.includes(channelId)) {
                   await interaction.editReply({
-                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.enabled_channels.invalid', { lng }))]
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.enabled-channels.invalid', { lng }))]
                   });
                   return;
                 }
@@ -702,7 +702,7 @@ export default new Command({
                 await updateGuildSettings(guild.id, { $pull: { ['level.enabledChannels']: channelId } });
 
                 await interaction.editReply({
-                  embeds: [new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.enabled_channels.removed', { lng }))]
+                  embeds: [new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.enabled-channels.removed', { lng }))]
                 });
               }
               break;
@@ -737,7 +737,7 @@ export default new Command({
                   embeds: [
                     new EmbedBuilder()
                       .setColor(client.colors.level)
-                      .setDescription(t('level.xp.added', { lng, xp, user: user.toString(), new_xp: userLevel.xp, new_level: userLevel.level }))
+                      .setDescription(t('level.xp.added', { lng, xp, user: user.toString(), newXP: userLevel.xp, newLevel: userLevel.level }))
                   ]
                 });
               }
@@ -773,7 +773,7 @@ export default new Command({
                   embeds: [
                     new EmbedBuilder()
                       .setColor(client.colors.level)
-                      .setDescription(t('level.xp.removed', { lng, xp, user: user.toString(), new_xp: updatedLevel.xp, new_level: updatedLevel.level }))
+                      .setDescription(t('level.xp.removed', { lng, xp, user: user.toString(), newXP: updatedLevel.xp, newLevel: updatedLevel.level }))
                   ]
                 });
               }
@@ -803,7 +803,7 @@ export default new Command({
                   embeds: [
                     new EmbedBuilder()
                       .setColor(client.colors.level)
-                      .setDescription(t('level.xp.set', { lng, xp, user: user.toString(), new_xp: userLevel.xp, new_level: userLevel.level }))
+                      .setDescription(t('level.xp.set', { lng, xp, user: user.toString(), newXP: userLevel.xp, newLevel: userLevel.level }))
                   ]
                 });
               }
@@ -839,7 +839,7 @@ export default new Command({
                   embeds: [
                     new EmbedBuilder()
                       .setColor(client.colors.level)
-                      .setDescription(t('level.level.added', { lng, level, user: user.toString(), new_xp: userLevel.xp, new_level: userLevel.level }))
+                      .setDescription(t('level.level.added', { lng, level, user: user.toString(), newXP: userLevel.xp, newLevel: userLevel.level }))
                   ]
                 });
               }
@@ -875,7 +875,7 @@ export default new Command({
                   embeds: [
                     new EmbedBuilder()
                       .setColor(client.colors.level)
-                      .setDescription(t('level.level.removed', { lng, level, user: user.toString(), new_xp: updatedLevel.xp, new_level: updatedLevel.level }))
+                      .setDescription(t('level.level.removed', { lng, level, user: user.toString(), newXP: updatedLevel.xp, newLevel: updatedLevel.level }))
                   ]
                 });
               }
@@ -905,7 +905,7 @@ export default new Command({
                   embeds: [
                     new EmbedBuilder()
                       .setColor(client.colors.level)
-                      .setDescription(t('level.level.set', { lng, level, user: user.toString(), new_xp: userLevel.xp, new_level: userLevel.level }))
+                      .setDescription(t('level.level.set', { lng, level, user: user.toString(), newXP: userLevel.xp, newLevel: userLevel.level }))
                   ]
                 });
               }

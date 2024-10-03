@@ -36,7 +36,7 @@ export default new Event({
               value: author ? `${author.toString()} (\`${author.username}\` | ${author.id})` : '/'
             },
             {
-              name: t('log.emojiDelete.created_at', { lng }),
+              name: t('log.emojiDelete.created-at', { lng }),
               value: `<t:${Math.floor(createdTimestamp / 1000)}:f>`
             },
             {

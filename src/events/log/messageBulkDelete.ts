@@ -55,7 +55,7 @@ export default new Event({
           ),
           {
             name: 'message-bulk-delete.txt',
-            description: t('log.messageBulkDelete.file_description', { lng })
+            description: t('log.messageBulkDelete.file-description', { lng })
           }
         )
       ]

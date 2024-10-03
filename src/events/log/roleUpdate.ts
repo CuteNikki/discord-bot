@@ -35,12 +35,12 @@ export default new Event({
     if (newRole.name !== oldRole.name)
       embed.addFields(
         {
-          name: t('log.roleUpdate.old_name', { lng }),
+          name: t('log.roleUpdate.old-name', { lng }),
           value: oldRole.name,
           inline: true
         },
         {
-          name: t('log.roleUpdate.new_name', { lng }),
+          name: t('log.roleUpdate.new-name', { lng }),
           value: newRole.name,
           inline: true
         },
@@ -49,12 +49,12 @@ export default new Event({
     if (newRole.hexColor !== oldRole.hexColor)
       embed.addFields(
         {
-          name: t('log.roleUpdate.old_color', { lng }),
+          name: t('log.roleUpdate.old-color', { lng }),
           value: oldRole.hexColor,
           inline: true
         },
         {
-          name: t('log.roleUpdate.new_color', { lng }),
+          name: t('log.roleUpdate.new-color', { lng }),
           value: newRole.hexColor,
           inline: true
         },
@@ -63,12 +63,12 @@ export default new Event({
     if (newRole.hoist !== oldRole.hoist)
       embed.addFields(
         {
-          name: t('log.roleUpdate.old_displayed_separately', { lng }),
+          name: t('log.roleUpdate.old-displayed-separately', { lng }),
           value: `${oldRole.hoist}`,
           inline: true
         },
         {
-          name: t('log.roleUpdate.new_displayed_separately', { lng }),
+          name: t('log.roleUpdate.new-displayed-separately', { lng }),
           value: `${newRole.hoist}`,
           inline: true
         },
@@ -77,12 +77,12 @@ export default new Event({
     if (newRole.mentionable !== oldRole.mentionable)
       embed.addFields(
         {
-          name: t('log.roleUpdate.old_mentionable', { lng }),
+          name: t('log.roleUpdate.old-mentionable', { lng }),
           value: `${oldRole.mentionable}`,
           inline: true
         },
         {
-          name: t('log.roleUpdate.new_mentionable', { lng }),
+          name: t('log.roleUpdate.new-mentionable', { lng }),
           value: `${newRole.mentionable}`,
           inline: true
         },
@@ -91,12 +91,12 @@ export default new Event({
     if (newRole.unicodeEmoji !== oldRole.unicodeEmoji)
       embed.addFields(
         {
-          name: t('log.roleUpdate.old_emoji', { lng }),
+          name: t('log.roleUpdate.old-emoji', { lng }),
           value: `${oldRole.unicodeEmoji}`,
           inline: true
         },
         {
-          name: t('log.roleUpdate.new_emoji', { lng }),
+          name: t('log.roleUpdate.new-emoji', { lng }),
           value: `${newRole.unicodeEmoji}`,
           inline: true
         },
@@ -107,7 +107,7 @@ export default new Event({
       const addedPerms = oldRole.permissions.toArray().filter((perm) => !newRole.permissions.toArray().includes(perm));
       embed.addFields(
         {
-          name: t('log.roleUpdate.removed_permissions', { lng }),
+          name: t('log.roleUpdate.removed-permissions', { lng }),
           value:
             removedPerms
               .map((perm) => `\`${perm}\``)
@@ -115,7 +115,7 @@ export default new Event({
               .slice(0, 1000) || '/'
         },
         {
-          name: t('log.roleUpdate.added_permissions', { lng }),
+          name: t('log.roleUpdate.added-permissions', { lng }),
           value:
             addedPerms
               .map((perm) => `\`${perm}\``)

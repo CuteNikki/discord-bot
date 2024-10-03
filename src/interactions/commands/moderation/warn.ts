@@ -36,8 +36,8 @@ export default new Command({
     await interaction.deferReply({ ephemeral: true });
 
     enum CustomIds {
-      Confirm = 'WARN_CONFIRM',
-      Cancel = 'WARN_CANCEL'
+      Confirm = 'button-warn-confirm',
+      Cancel = 'button-warn-cancel'
     }
 
     const { options, guild, user } = interaction;
@@ -55,7 +55,7 @@ export default new Command({
     const staffRolePos = interaction.member.roles.highest.position ?? 0;
 
     if (targetRolePos >= staffRolePos) {
-      await interaction.editReply(t('warn.target.pos_staff', { lng }));
+      await interaction.editReply(t('warn.target.pos-staff', { lng }));
       return;
     }
 
@@ -85,7 +85,7 @@ export default new Command({
     } else if (collector.customId === CustomIds.Confirm) {
       const receivedDM = await client.users
         .send(target.id, {
-          content: t('warn.target_dm', {
+          content: t('warn.target-dm', {
             lng: targetLng,
             guild: `\`${guild.name}\``,
             reason: `\`${reason ?? t('none', { lng })}\``
@@ -100,7 +100,7 @@ export default new Command({
             user: target.toString(),
             reason: `\`${reason ?? t('none', { lng })}\``
           }),
-          receivedDM ? t('warn.dm_received', { lng }) : t('warn.dm_not_received', { lng })
+          receivedDM ? t('warn.dm-received', { lng }) : t('warn.dm-not-received', { lng })
         ].join('\n'),
         components: []
       });

@@ -36,12 +36,12 @@ export default new Event({
     if (newSticker.name !== oldSticker.name)
       embed.addFields(
         {
-          name: t('log.stickerUpdate.old_name', { lng }),
+          name: t('log.stickerUpdate.old-name', { lng }),
           value: oldSticker.name,
           inline: true
         },
         {
-          name: t('log.stickerUpdate.new_name', { lng }),
+          name: t('log.stickerUpdate.new-name', { lng }),
           value: newSticker.name,
           inline: true
         },
@@ -50,12 +50,12 @@ export default new Event({
     if (newSticker.description !== oldSticker.description)
       embed.addFields(
         {
-          name: t('log.stickerUpdate.old_description', { lng }),
+          name: t('log.stickerUpdate.old-description', { lng }),
           value: oldSticker.description ?? '/',
           inline: true
         },
         {
-          name: t('log.stickerUpdate.new_description', { lng }),
+          name: t('log.stickerUpdate.new-description', { lng }),
           value: newSticker.description ?? '/',
           inline: true
         },
@@ -64,12 +64,12 @@ export default new Event({
     if (newSticker.tags !== oldSticker.tags)
       embed.addFields(
         {
-          name: t('log.stickerUpdate.old_tags', { lng }),
+          name: t('log.stickerUpdate.old-tags', { lng }),
           value: oldSticker.tags ?? '/',
           inline: true
         },
         {
-          name: t('log.stickerUpdate.new_tags', { lng }),
+          name: t('log.stickerUpdate.new-tags', { lng }),
           value: newSticker.tags ?? '/',
           inline: true
         },

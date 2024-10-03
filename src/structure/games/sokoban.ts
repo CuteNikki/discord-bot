@@ -62,7 +62,7 @@ export class Sokoban {
       if (buttonInteraction.user.id !== user.id)
         return buttonInteraction
           .followUp({
-            content: t('interactions.author_only', {
+            content: t('interactions.author-only', {
               lng: await getUserLanguage(buttonInteraction.user.id)
             }),
             ephemeral: true
@@ -126,15 +126,15 @@ export class Sokoban {
   private getComponents(disabled: boolean = false) {
     return [
       new ActionRowBuilder<ButtonBuilder>().addComponents(
-        new ButtonBuilder().setCustomId('SOKOBAN_disabled_one').setLabel('\u200b').setStyle(ButtonStyle.Secondary).setDisabled(true),
-        new ButtonBuilder().setCustomId('SOKOBAN_up').setEmoji('⬆️').setStyle(ButtonStyle.Primary).setDisabled(disabled),
-        new ButtonBuilder().setCustomId('SOKOBAN_disabled_two').setLabel('\u200b').setStyle(ButtonStyle.Secondary).setDisabled(true),
-        new ButtonBuilder().setCustomId('SOKOBAN_restart').setEmoji('🔄').setStyle(ButtonStyle.Danger).setDisabled(disabled)
+        new ButtonBuilder().setCustomId('button-sokoban_empty-one').setLabel('\u200b').setStyle(ButtonStyle.Secondary).setDisabled(true),
+        new ButtonBuilder().setCustomId('button-sokoban_up').setEmoji('⬆️').setStyle(ButtonStyle.Primary).setDisabled(disabled),
+        new ButtonBuilder().setCustomId('button-sokoban_empty-two').setLabel('\u200b').setStyle(ButtonStyle.Secondary).setDisabled(true),
+        new ButtonBuilder().setCustomId('button-sokoban_restart').setEmoji('🔄').setStyle(ButtonStyle.Danger).setDisabled(disabled)
       ),
       new ActionRowBuilder<ButtonBuilder>().addComponents(
-        new ButtonBuilder().setCustomId('SOKOBAN_left').setEmoji('⬅️').setStyle(ButtonStyle.Primary).setDisabled(disabled),
-        new ButtonBuilder().setCustomId('SOKOBAN_down').setEmoji('⬇️').setStyle(ButtonStyle.Primary).setDisabled(disabled),
-        new ButtonBuilder().setCustomId('SOKOBAN_right').setEmoji('➡️').setStyle(ButtonStyle.Primary).setDisabled(disabled)
+        new ButtonBuilder().setCustomId('button-sokoban_left').setEmoji('⬅️').setStyle(ButtonStyle.Primary).setDisabled(disabled),
+        new ButtonBuilder().setCustomId('button-sokoban_down').setEmoji('⬇️').setStyle(ButtonStyle.Primary).setDisabled(disabled),
+        new ButtonBuilder().setCustomId('button-sokoban_right').setEmoji('➡️').setStyle(ButtonStyle.Primary).setDisabled(disabled)
       )
     ];
   }

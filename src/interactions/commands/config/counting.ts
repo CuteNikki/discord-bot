@@ -48,14 +48,14 @@ export default new Command({
 
           if (config.counting.channelId) {
             await interaction.editReply({
-              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('counting.already_setup', { lng }))]
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('counting.already-setup', { lng }))]
             });
             return;
           }
 
           if (config.counting.channelId === channel.id) {
             await interaction.editReply({
-              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('counting.already_channel', { lng }))]
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('counting.already-channel', { lng }))]
             });
             return;
           }
@@ -72,7 +72,7 @@ export default new Command({
 
           await interaction.editReply({
             embeds: [
-              new EmbedBuilder().setColor(client.colors.counting).setDescription(t('counting.setup_done', { lng, channel: channel.toString(), number: '1' }))
+              new EmbedBuilder().setColor(client.colors.counting).setDescription(t('counting.setup-done', { lng, channel: channel.toString(), number: '1' }))
             ]
           });
         }
@@ -81,7 +81,7 @@ export default new Command({
         {
           if (!config.counting.channelId) {
             await interaction.editReply({
-              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('counting.not_setup', { lng }))]
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('counting.not-setup', { lng }))]
             });
             return;
           }
@@ -91,24 +91,24 @@ export default new Command({
               new EmbedBuilder().setColor(client.colors.counting).addFields(
                 { name: t('counting.channel', { lng }), value: `<#${config.counting.channelId}>` },
                 {
-                  name: t('counting.reset_on_fail', { lng }),
+                  name: t('counting.reset-on-fail', { lng }),
                   value: config.counting.resetOnFail ? t('enabled', { lng }) : t('disabled', { lng })
                 },
                 {
-                  name: t('counting.highest_number', { lng }),
+                  name: t('counting.highest-number', { lng }),
                   value: config.counting.highestNumberAt
-                    ? t('counting.highest_number_at', {
+                    ? t('counting.highest-number-at', {
                         lng,
                         number: config.counting.highestNumber.toString(),
                         at: `<t:${Math.floor(config.counting.highestNumberAt / 1000)}:f>`
                       })
-                    : t('counting.highest_number_no_at', { lng, number: config.counting.highestNumber.toString() })
+                    : t('counting.highest-number-no-at', { lng, number: config.counting.highestNumber.toString() })
                 },
                 {
-                  name: t('counting.current_number', { lng }),
+                  name: t('counting.current-number', { lng }),
                   value: config.counting.currentNumberBy
-                    ? t('counting.current_number_by', { lng, number: config.counting.currentNumber.toString(), by: `<@${config.counting.currentNumberBy}>` })
-                    : t('counting.current_number_no_by', { lng, number: config.counting.currentNumber.toString() })
+                    ? t('counting.current-number-by', { lng, number: config.counting.currentNumber.toString(), by: `<@${config.counting.currentNumberBy}>` })
+                    : t('counting.current-number-no-by', { lng, number: config.counting.currentNumber.toString() })
                 }
               )
             ]
@@ -122,7 +122,7 @@ export default new Command({
 
           if (!channel && !resetOnFail) {
             await interaction.editReply({
-              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('counting.edit_nothing', { lng }))]
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('counting.edit-nothing', { lng }))]
             });
             return;
           }
@@ -135,7 +135,7 @@ export default new Command({
                 ['counting.channelId']: channel.id
               }
             });
-            response += t('counting.edit_channel', { lng, channel: channel.toString() });
+            response += t('counting.edit-channel', { lng, channel: channel.toString() });
           }
 
           if (resetOnFail !== null && resetOnFail !== config.counting.resetOnFail) {
@@ -144,12 +144,12 @@ export default new Command({
                 ['counting.resetOnFail']: resetOnFail
               }
             });
-            response += resetOnFail ? t('counting.edit_reset_on_fail_enabled', { lng }) : t('counting.edit_reset_on_fail_disabled', { lng });
+            response += resetOnFail ? t('counting.edit-reset-on-fail-enabled', { lng }) : t('counting.edit-reset-on-fail-disabled', { lng });
           }
 
           if (response === '') {
             await interaction.editReply({
-              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('counting.edit_no_changes', { lng }))]
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('counting.edit-no-changes', { lng }))]
             });
             return;
           }
@@ -163,7 +163,7 @@ export default new Command({
         {
           if (!config.counting.channelId) {
             await interaction.editReply({
-              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('counting.not_setup', { lng }))]
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('counting.not-setup', { lng }))]
             });
             return;
           }
@@ -181,7 +181,7 @@ export default new Command({
           });
 
           await interaction.editReply({
-            embeds: [new EmbedBuilder().setColor(client.colors.counting).setDescription(t('counting.reset_done', { lng }))]
+            embeds: [new EmbedBuilder().setColor(client.colors.counting).setDescription(t('counting.reset-done', { lng }))]
           });
         }
         break;

@@ -27,36 +27,36 @@ export default new Event({
           .setTitle(t('log.autoModerationRuleCreate.title', { lng }))
           .addFields(
             {
-              name: t('log.autoModerationRuleCreate.created_by', { lng }),
+              name: t('log.autoModerationRuleCreate.created-by', { lng }),
               value: `<@${creatorId}>`
             },
             {
-              name: t('log.autoModerationRuleCreate.rule_name', { lng }),
+              name: t('log.autoModerationRuleCreate.rule-name', { lng }),
               value: name
             },
             {
-              name: t('log.autoModerationRuleCreate.rule_trigger_type', {
+              name: t('log.autoModerationRuleCreate.rule-trigger-type', {
                 lng
               }),
               value: AutoModerationRuleTriggerType[triggerType]
             },
             {
-              name: t('log.autoModerationRuleCreate.trigger_metadata', { lng }),
+              name: t('log.autoModerationRuleCreate.trigger-metadata', { lng }),
               value: [
-                `${t('log.autoModerationRuleCreate.keyword_filter', { lng })}: ${
+                `${t('log.autoModerationRuleCreate.keyword-filter', { lng })}: ${
                   triggerMetadata.keywordFilter
                     .map((word) => `\`${word}\``)
                     .join(', ')
                     .slice(0, 200) || '/'
                 }`,
-                `${t('log.autoModerationRuleCreate.regex_patterns', { lng })}: ${
+                `${t('log.autoModerationRuleCreate.regex-patterns', { lng })}: ${
                   triggerMetadata.regexPatterns
                     .map((pattern) => `\`${pattern}\``)
                     .join(', ')
                     .slice(0, 200) || '/'
                 }`,
-                `${t('log.autoModerationRuleCreate.mention_total_limit', { lng })}: ${triggerMetadata.mentionTotalLimit || '/'}`,
-                `${t('log.autoModerationRuleCreate.mention_raid_protection', { lng })}: ${triggerMetadata.mentionRaidProtectionEnabled}`
+                `${t('log.autoModerationRuleCreate.mention-total-limit', { lng })}: ${triggerMetadata.mentionTotalLimit || '/'}`,
+                `${t('log.autoModerationRuleCreate.mention-raid-protection', { lng })}: ${triggerMetadata.mentionRaidProtectionEnabled}`
               ].join('\n')
             },
             {
@@ -68,7 +68,7 @@ export default new Event({
                   .slice(0, 1000) || '/'
             },
             {
-              name: t('log.autoModerationRuleCreate.exempt_roles', { lng }),
+              name: t('log.autoModerationRuleCreate.exempt-roles', { lng }),
               value:
                 exemptRoles
                   .map((role) => `<@&${role.id}>`)
@@ -76,7 +76,7 @@ export default new Event({
                   .slice(0, 1000) || '/'
             },
             {
-              name: t('log.autoModerationRuleCreate.exempt_channels', { lng }),
+              name: t('log.autoModerationRuleCreate.exempt-channels', { lng }),
               value:
                 exemptChannels
                   .map((channel) => `<#${channel.id}>`)

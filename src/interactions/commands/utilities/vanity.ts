@@ -20,7 +20,7 @@ export default new Command({
     const invite = await client.fetchInvite(vanity).catch((err) => logger.debug({ err, vanity }, 'Could not fetch invite'));
 
     if (!invite || !invite.guild || !invite.guild.vanityURLCode || invite.guild.vanityURLCode !== vanity) {
-      await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('vanity.not_found', { lng }))] });
+      await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('vanity.not-found', { lng }))] });
       return;
     }
 
@@ -31,7 +31,7 @@ export default new Command({
       .addFields(
         { name: t('vanity.members', { lng }), value: invite.memberCount.toString() },
         {
-          name: t('vanity.created_at', { lng }),
+          name: t('vanity.created-at', { lng }),
           value: `<t:${Math.floor(invite.guild.createdTimestamp / 1000)}:d> | <t:${Math.floor(invite.guild.createdTimestamp / 1000)}:R>`
         }
       );

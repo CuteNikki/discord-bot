@@ -26,7 +26,7 @@ export default new Button({
 
     if (!system) {
       await interaction.reply({
-        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_system', { lng }))],
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid-system', { lng }))],
         ephemeral: true
       });
       return;
@@ -36,7 +36,7 @@ export default new Button({
 
     if (!ticket) {
       await interaction.reply({
-        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_ticket', { lng }))],
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid-ticket', { lng }))],
         ephemeral: true
       });
       return;
@@ -45,7 +45,7 @@ export default new Button({
     if (!member.permissions.has(PermissionFlagsBits.Administrator)) {
       if (!member.roles.cache.has(system.staffRoleId)) {
         await interaction.reply({
-          embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.staff_only', { lng }))],
+          embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.staff-only', { lng }))],
           ephemeral: true
         });
         return;
@@ -63,7 +63,7 @@ export default new Button({
 
     if (!system.transcriptChannelId) {
       await interaction.reply({
-        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_transcript_channel', { lng }))],
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid-transcript-channel', { lng }))],
         files: [transcript]
       });
       return;
@@ -73,7 +73,7 @@ export default new Button({
 
     if (!channel?.isSendable()) {
       await interaction.reply({
-        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_transcript_channel', { lng }))],
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid-transcript-channel', { lng }))],
         files: [transcript]
       });
       return;
@@ -84,10 +84,10 @@ export default new Button({
         embeds: [
           new EmbedBuilder()
             .setColor(client.colors.ticket)
-            .setTitle(t('ticket.transcript_title', { lng }))
+            .setTitle(t('ticket.transcript-title', { lng }))
             .addFields(
               {
-                name: t('ticket.claimed_by', { lng }),
+                name: t('ticket.claimed-by', { lng }),
                 value: `<@${ticket.claimedBy}>`
               },
               {
@@ -100,11 +100,11 @@ export default new Button({
                   .join(', ')}`
               },
               {
-                name: t('ticket.created_for', { lng }),
+                name: t('ticket.created-for', { lng }),
                 value: `${ticket.choice}`
               },
               {
-                name: t('ticket.created_at', { lng }),
+                name: t('ticket.created-at', { lng }),
                 value: `<t:${Math.floor(ticket.createdAt / 1000)}:R>`
               }
             )
@@ -119,7 +119,7 @@ export default new Button({
     }
 
     await interaction.reply({
-      embeds: [new EmbedBuilder().setColor(client.colors.ticket).setDescription(t('ticket.saved_transcript', { lng }))],
+      embeds: [new EmbedBuilder().setColor(client.colors.ticket).setDescription(t('ticket.saved-transcript', { lng }))],
       ephemeral: true
     });
   }

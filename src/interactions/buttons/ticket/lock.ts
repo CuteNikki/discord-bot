@@ -24,7 +24,7 @@ export default new Button({
 
     if (!system) {
       await interaction.reply({
-        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_system', { lng }))],
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid-system', { lng }))],
         ephemeral: true
       });
       return;
@@ -34,7 +34,7 @@ export default new Button({
 
     if (!ticket) {
       await interaction.reply({
-        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_ticket', { lng }))],
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid-ticket', { lng }))],
         ephemeral: true
       });
       return;
@@ -43,7 +43,7 @@ export default new Button({
     if (!member.permissions.has(PermissionFlagsBits.Administrator)) {
       if (!member.roles.cache.has(system.staffRoleId)) {
         await interaction.reply({
-          embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.staff_only', { lng }))],
+          embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.staff-only', { lng }))],
           ephemeral: true
         });
         return;
@@ -51,7 +51,7 @@ export default new Button({
 
       if (!ticket.claimedBy) {
         await interaction.reply({
-          embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.not_claimed', { lng }))],
+          embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.not-claimed', { lng }))],
           ephemeral: true
         });
         return;
@@ -60,7 +60,7 @@ export default new Button({
 
     if (ticket.closed) {
       await interaction.reply({
-        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.already_closed', { lng }))],
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.already-closed', { lng }))],
         ephemeral: true
       });
       return;
@@ -68,7 +68,7 @@ export default new Button({
 
     if (ticket.locked) {
       await interaction.reply({
-        content: t('ticket.already_locked', { lng }),
+        content: t('ticket.already-locked', { lng }),
         ephemeral: true
       });
       return;
@@ -89,7 +89,7 @@ export default new Button({
     await lockTicket(channelId);
 
     await interaction.reply({
-      embeds: [new EmbedBuilder().setColor(client.colors.ticket).setDescription(t('ticket.locked', { lng, locked_by: user.toString() }))],
+      embeds: [new EmbedBuilder().setColor(client.colors.ticket).setDescription(t('ticket.locked', { lng, lockedBy: user.toString() }))],
       components: [
         new ActionRowBuilder<ButtonBuilder>().addComponents(
           new ButtonBuilder()

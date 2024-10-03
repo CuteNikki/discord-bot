@@ -42,7 +42,7 @@ export default new Event({
             },
             { name: t('log.stickerDelete.tags', { lng }), value: tags || '/' },
             {
-              name: t('log.stickerDelete.created_at', { lng }),
+              name: t('log.stickerDelete.created-at', { lng }),
               value: `<t:${Math.floor(createdTimestamp / 1000)}:f>`
             }
           )

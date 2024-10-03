@@ -78,7 +78,7 @@ export class Memory {
       if (buttonInteraction.user.id !== user.id)
         return buttonInteraction
           .followUp({
-            content: t('interactions.author_only', {
+            content: t('interactions.author-only', {
               lng: await getUserLanguage(buttonInteraction.user.id)
             }),
             ephemeral: true
@@ -190,7 +190,7 @@ export class Memory {
     for (let y = 0; y < this.size; y++) {
       const row = new ActionRowBuilder<CustomButtonBuilder>();
       for (let x = 0; x < this.size; x++) {
-        row.addComponents(new CustomButtonBuilder().setStyle(ButtonStyle.Secondary).setLabel('\u200b').setCustomId(`MEMORY_${x}_${y}`));
+        row.addComponents(new CustomButtonBuilder().setStyle(ButtonStyle.Secondary).setLabel('\u200b').setCustomId(`button-memory_${x}_${y}`));
       }
       components.push(row);
     }

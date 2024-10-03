@@ -63,7 +63,7 @@ export default new Event({
       });
       otherEmbed.setDescription(`||${message.content}||`).setFooter({
         text: `⚠️ ${t('phone.link', {
-          otherLng
+          lng: otherLng
         })}`
       });
     }
@@ -85,7 +85,7 @@ export default new Event({
         });
         otherEmbed.setDescription(`||${message.content.slice(0, 1990)}||`).setFooter({
           text: `⚠️ ${t('phone.profanity', {
-            otherLng
+            lng: otherLng
           })}`
         });
       }

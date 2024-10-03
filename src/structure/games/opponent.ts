@@ -8,8 +8,8 @@ import { getUserLanguage } from 'db/user';
 import { logger } from 'utils/logger';
 
 enum CustomIds {
-  Accept = 'OPPONENT_ACCEPT',
-  Reject = 'OPPONENT_REJECT'
+  Accept = 'button-opponent-accept',
+  Reject = 'button-opponent-reject'
 }
 
 export class Opponent {
@@ -82,7 +82,7 @@ export class Opponent {
         if (buttonInteraction.user.id !== opponent.id) {
           return buttonInteraction
             .followUp({
-              content: t('interactions.author_only', {
+              content: t('interactions.author-only', {
                 lng: await getUserLanguage(buttonInteraction.user.id)
               }),
               ephemeral: true

@@ -94,7 +94,7 @@ async function clearGiveaways(client: DiscordClient) {
               .setTitle(t('giveaway.announcement.title', { lng }))
               .setDescription(
                 [
-                  t('giveaway.announcement.no_participants', {
+                  t('giveaway.announcement.no-participants', {
                     lng,
                     count: giveaway.winnerCount,
                     winnerCount: giveaway.winnerCount.toString(),

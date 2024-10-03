@@ -27,7 +27,7 @@ export default new Button({
 
     if (!system) {
       await interaction.reply({
-        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_system', { lng }))],
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid-system', { lng }))],
         ephemeral: true
       });
       return;
@@ -54,7 +54,7 @@ export default new Button({
 
     if (!system.choices.length || !choice) {
       await interaction.editReply({
-        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_option', { lng }))]
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid-option', { lng }))]
       });
       return;
     }
@@ -96,12 +96,12 @@ export default new Button({
     await createTicket(guildId, channel.id, user.id, [user.id], choice.label);
 
     await interaction.editReply({
-      embeds: [new EmbedBuilder().setColor(client.colors.ticket).setDescription(t('ticket.created_user', { lng, channel: channel.toString() }))]
+      embeds: [new EmbedBuilder().setColor(client.colors.ticket).setDescription(t('ticket.created-user', { lng, channel: channel.toString() }))]
     });
 
     await channel.send({
       content: `${interaction.user} | <@&${system.staffRoleId}>`,
-      embeds: [new EmbedBuilder().setColor(client.colors.ticket).setDescription(`${t('ticket.created_channel', { lng, created_by: user.toString() })}`)],
+      embeds: [new EmbedBuilder().setColor(client.colors.ticket).setDescription(`${t('ticket.created-channel', { lng, createdBy: user.toString() })}`)],
       components: [
         new ActionRowBuilder<ButtonBuilder>().addComponents(
           new ButtonBuilder()
@@ -123,7 +123,7 @@ export default new Button({
         new ActionRowBuilder<UserSelectMenuBuilder>().addComponents(
           new UserSelectMenuBuilder()
             .setCustomId(`selection-tickets-user_${system._id.toString()}`)
-            .setPlaceholder(t('ticket.user_select', { lng }))
+            .setPlaceholder(t('ticket.user-select', { lng }))
             .setMaxValues(1)
         )
       ]

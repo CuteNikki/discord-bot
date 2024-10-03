@@ -29,15 +29,15 @@ export default new Event({
           .addFields(
             { name: t('log.inviteCreate.url', { lng }), value: url },
             {
-              name: t('log.inviteCreate.expires_at', { lng }),
+              name: t('log.inviteCreate.expires-at', { lng }),
               value: expiresTimestamp ? `<t:${Math.floor(expiresTimestamp / 1000)}:f>` : 'never'
             },
             {
-              name: t('log.inviteCreate.max_uses', { lng }),
+              name: t('log.inviteCreate.max-uses', { lng }),
               value: `${maxUses || '/'}`
             },
             {
-              name: t('log.inviteCreate.temporary_membership', { lng }),
+              name: t('log.inviteCreate.temporary-membership', { lng }),
               value: `${temporary ?? '/'}`
             },
             {
@@ -45,7 +45,7 @@ export default new Event({
               value: channel ? `${channel.toString()} (\`${channel.name}\` | ${channel.id})` : '/'
             },
             {
-              name: t('log.inviteCreate.created_by', { lng }),
+              name: t('log.inviteCreate.created-by', { lng }),
               value: inviter ? `${inviter.toString()} (\`${inviter.username}\` | ${inviter.id})` : '/'
             }
           )

@@ -76,7 +76,7 @@ export default new Command({
           switch (options.getSubcommand()) {
             case 'on':
               {
-                if (config.moderation.enabled) return interaction.editReply(t('moderation.toggle.already_on', { lng }));
+                if (config.moderation.enabled) return interaction.editReply(t('moderation.toggle.already-on', { lng }));
                 await updateGuildSettings(guildId, {
                   $set: { ['moderation.enabled']: true }
                 });
@@ -85,7 +85,7 @@ export default new Command({
               break;
             case 'off':
               {
-                if (!config.moderation.enabled) return interaction.editReply(t('moderation.toggle.already_off', { lng }));
+                if (!config.moderation.enabled) return interaction.editReply(t('moderation.toggle.already-off', { lng }));
                 await updateGuildSettings(guildId, {
                   $set: { ['moderation.enabled']: false }
                 });

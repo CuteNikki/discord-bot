@@ -35,12 +35,12 @@ export default new Event({
     if (newMessage.content !== oldMessage.content)
       embed.addFields(
         {
-          name: t('log.messageUpdate.old_content', { lng }),
+          name: t('log.messageUpdate.old-content', { lng }),
           value: oldMessage.content ? (oldMessage.content.length > 950 ? oldMessage.content.slice(0, 950) + '...' : oldMessage.content) : '/',
           inline: true
         },
         {
-          name: t('log.messageUpdate.new_content', { lng }),
+          name: t('log.messageUpdate.new-content', { lng }),
           value: newMessage.content ? (newMessage.content.length > 950 ? newMessage.content.slice(0, 950) + '...' : newMessage.content) : '/',
           inline: true
         },
@@ -49,12 +49,12 @@ export default new Event({
     if ((newMessage.pinned ?? false) !== (oldMessage.pinned ?? false))
       embed.addFields(
         {
-          name: t('log.messageUpdate.old_pinned', { lng }),
+          name: t('log.messageUpdate.old-pinned', { lng }),
           value: `${oldMessage.pinned ?? false}`,
           inline: true
         },
         {
-          name: t('log.messageUpdate.new_pinned', { lng }),
+          name: t('log.messageUpdate.new-pinned', { lng }),
           value: `${newMessage.pinned ?? false}`,
           inline: true
         },
@@ -65,7 +65,7 @@ export default new Event({
       const newAttachments = newMessage.attachments.map((a) => a);
 
       embed.addFields({
-        name: t('log.messageUpdate.deleted_attachments', { lng }),
+        name: t('log.messageUpdate.deleted-attachments', { lng }),
         value: oldAttachments
           .filter((attachment) => newAttachments.map((att) => att.id).includes(attachment.id))
           .map((attachment) => attachment.url)

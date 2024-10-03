@@ -122,7 +122,7 @@ export class Snake {
       if (buttonInteraction.user.id !== user.id)
         return buttonInteraction
           .followUp({
-            content: t('interactions.author_only', {
+            content: t('interactions.author-only', {
               lng: await getUserLanguage(buttonInteraction.user.id)
             }),
             ephemeral: true
@@ -229,13 +229,13 @@ export class Snake {
   }
 
   private getComponents() {
-    const disabledOneButton = new ButtonBuilder().setCustomId('SNAKE_DISABLED_ONE').setDisabled(true).setStyle(ButtonStyle.Secondary).setLabel('\u200b');
-    const disabledTwoButton = new ButtonBuilder().setCustomId('SNAKE_DISABLED_TWO').setDisabled(true).setStyle(ButtonStyle.Secondary).setLabel('\u200b');
-    const upButton = new ButtonBuilder().setCustomId('SNAKE_up').setStyle(ButtonStyle.Primary).setEmoji('⬆️');
-    const leftButton = new ButtonBuilder().setCustomId('SNAKE_left').setStyle(ButtonStyle.Primary).setEmoji('⬅️');
-    const downButton = new ButtonBuilder().setCustomId('SNAKE_down').setStyle(ButtonStyle.Primary).setEmoji('⬇️');
-    const rightButton = new ButtonBuilder().setCustomId('SNAKE_right').setStyle(ButtonStyle.Primary).setEmoji('➡️');
-    const stopButton = new ButtonBuilder().setCustomId('SNAKE_stop').setStyle(ButtonStyle.Danger).setEmoji('✖️');
+    const disabledOneButton = new ButtonBuilder().setCustomId('button-snake_empty-two').setDisabled(true).setStyle(ButtonStyle.Secondary).setLabel('\u200b');
+    const disabledTwoButton = new ButtonBuilder().setCustomId('button-snake_empty-one').setDisabled(true).setStyle(ButtonStyle.Secondary).setLabel('\u200b');
+    const upButton = new ButtonBuilder().setCustomId('button-snake_up').setStyle(ButtonStyle.Primary).setEmoji('⬆️');
+    const leftButton = new ButtonBuilder().setCustomId('button-snake_left').setStyle(ButtonStyle.Primary).setEmoji('⬅️');
+    const downButton = new ButtonBuilder().setCustomId('button-snake_down').setStyle(ButtonStyle.Primary).setEmoji('⬇️');
+    const rightButton = new ButtonBuilder().setCustomId('button-snake_right').setStyle(ButtonStyle.Primary).setEmoji('➡️');
+    const stopButton = new ButtonBuilder().setCustomId('button-snake_stop').setStyle(ButtonStyle.Danger).setEmoji('✖️');
 
     return [
       new ActionRowBuilder<ButtonBuilder>().addComponents(disabledOneButton, upButton, disabledTwoButton, stopButton),

@@ -65,7 +65,7 @@ export class RememberEmoji {
         if (buttonInteraction.user.id !== user.id)
           return buttonInteraction
             .followUp({
-              content: t('interactions.author_only', {
+              content: t('interactions.author-only', {
                 lng: await getUserLanguage(buttonInteraction.user.id)
               }),
               ephemeral: true
@@ -129,7 +129,7 @@ export class RememberEmoji {
       for (let x = 0; x < 4; x++) {
         const emoji = this.emojis[y * 4 + x];
 
-        const button = new ButtonBuilder().setCustomId(`REMEMBER_${y * 4 + x}`).setStyle(ButtonStyle.Secondary);
+        const button = new ButtonBuilder().setCustomId(`button-remember_${y * 4 + x}`).setStyle(ButtonStyle.Secondary);
         if (this.selected) button.setStyle(this.emoji === emoji ? ButtonStyle.Success : ButtonStyle.Danger);
 
         if (showEmojis) button.setEmoji(emoji);

@@ -71,7 +71,7 @@ export default new Command({
 
           const currentEmbed = new EmbedBuilder()
             .setColor(client.colors.utilities)
-            .setTitle(t('weather.current.embed_title', { lng }))
+            .setTitle(t('weather.current.embed-title', { lng }))
             .addFields(
               {
                 name: t('weather.location.title', { lng }),
@@ -114,46 +114,46 @@ export default new Command({
                   t('weather.current.cloud', { lng, coverage: current.cloud }),
                   t('weather.current.temperature', {
                     lng,
-                    temp_c: current.temp_c,
-                    temp_f: current.temp_f
+                    tempC: current.temp_c,
+                    tempF: current.temp_f
                   }),
-                  t('weather.current.feels_like', {
+                  t('weather.current.feels-like', {
                     lng,
-                    temp_c: current.feelslike_c,
-                    temp_f: current.feelslike_f
+                    tempC: current.feelslike_c,
+                    tempF: current.feelslike_f
                   }),
-                  t('weather.current.uv_index', { lng, uv: UV_INDEX[current.uv] }),
-                  t('weather.current.wind_direction', {
+                  t('weather.current.uv-index', { lng, uv: UV_INDEX[current.uv] }),
+                  t('weather.current.wind-direction', {
                     lng,
                     direction: COMPASS[current.wind_dir],
                     degree: current.wind_degree
                   }),
-                  t('weather.current.wind_speed', {
+                  t('weather.current.wind-speed', {
                     lng,
-                    speed_kph: current.wind_kph,
-                    speed_mph: current.wind_mph
+                    speedKph: current.wind_kph,
+                    speedMph: current.wind_mph
                   }),
-                  t('weather.current.wind_gust', {
+                  t('weather.current.wind-gust', {
                     lng,
-                    gust_kph: current.gust_kph,
-                    gust_mph: current.gust_mph
+                    gustKph: current.gust_kph,
+                    gustMph: current.gust_mph
                   }),
                   t('weather.current.pressure', {
                     lng,
-                    pressure_mb: current.pressure_mb,
-                    pressure_in: current.pressure_in
+                    pressureMb: current.pressure_mb,
+                    pressureIn: current.pressure_in
                   }),
                   t('weather.current.precipitation', {
                     lng,
-                    precipitation_mm: current.precip_mm,
-                    precipitation_in: current.precip_in
+                    precipitationMm: current.precip_mm,
+                    precipitationIn: current.precip_in
                   }),
                   t('weather.current.visibility', {
                     lng,
-                    vis_km: current.vis_km,
-                    vis_miles: current.vis_miles
+                    visKm: current.vis_km,
+                    visMiles: current.vis_miles
                   }),
-                  t('weather.current.last_updated', {
+                  t('weather.current.last-updated', {
                     lng,
                     updated: current.last_updated
                   })
@@ -178,19 +178,19 @@ export default new Command({
                     lng,
                     so2: (Math.round(current.air_quality.so2 + Number.EPSILON) * 100) / 100
                   }),
-                  t('weather.quality.pm2_5', {
+                  t('weather.quality.pm2-5', {
                     lng,
-                    pm2_5: (Math.round(current.air_quality.pm2_5 + Number.EPSILON) * 100) / 100
+                    pm25: (Math.round(current.air_quality.pm2_5 + Number.EPSILON) * 100) / 100
                   }),
                   t('weather.quality.pm10', {
                     lng,
                     pm10: (Math.round(current.air_quality.pm10 + Number.EPSILON) * 100) / 100
                   }),
-                  t('weather.quality.epa_index', {
+                  t('weather.quality.epa-index', {
                     lng,
                     index: US_EPA_INDEX[current.air_quality['us-epa-index']]
                   }),
-                  t('weather.quality.defra_index', {
+                  t('weather.quality.defra-index', {
                     lng,
                     index: UK_DEFRA_INDEX[current.air_quality['gb-defra-index']]
                   })
@@ -262,52 +262,52 @@ export default new Command({
                     lng,
                     condition: day.condition.text
                   }),
-                  t('weather.forecast.avg_humidity', {
+                  t('weather.forecast.avg-humidity', {
                     lng,
                     humidity: day.avghumidity
                   }),
-                  t('weather.forecast.rain_chance', {
+                  t('weather.forecast.rain-chance', {
                     lng,
                     chance: day.daily_chance_of_rain
                   }),
-                  t('weather.forecast.snow_chance', {
+                  t('weather.forecast.snow-chance', {
                     lng,
                     chance: day.daily_chance_of_snow
                   }),
-                  t('weather.forecast.max_temp', {
+                  t('weather.forecast.max-temp', {
                     lng,
-                    temp_c: day.maxtemp_c,
-                    temp_f: day.maxtemp_f
+                    tempC: day.maxtemp_c,
+                    tempF: day.maxtemp_f
                   }),
-                  t('weather.forecast.min_temp', {
+                  t('weather.forecast.min-temp', {
                     lng,
-                    temp_c: day.mintemp_c,
-                    temp_f: day.mintemp_f
+                    tempC: day.mintemp_c,
+                    tempF: day.mintemp_f
                   }),
-                  t('weather.forecast.avg_temp', {
+                  t('weather.forecast.avg-temp', {
                     lng,
-                    temp_c: day.avgtemp_c,
-                    temp_f: day.avgtemp_f
+                    tempC: day.avgtemp_c,
+                    tempF: day.avgtemp_f
                   }),
-                  t('weather.forecast.uv_index', { lng, uv: UV_INDEX[day.uv] }),
-                  t('weather.forecast.max_wind_speed', {
+                  t('weather.forecast.uv-index', { lng, uv: UV_INDEX[day.uv] }),
+                  t('weather.forecast.max-wind-speed', {
                     lng,
-                    speed_kph: day.maxwind_kph,
-                    speed_mph: day.maxwind_mph
+                    speedKph: day.maxwind_kph,
+                    speedMph: day.maxwind_mph
                   }),
-                  t('weather.forecast.total_precipitation', {
+                  t('weather.forecast.total-precipitation', {
                     lng,
-                    precipitation_mm: day.totalprecip_mm,
-                    precipitation_in: day.totalprecip_in
+                    precipitationMm: day.totalprecip_mm,
+                    precipitationIn: day.totalprecip_in
                   }),
-                  t('weather.forecast.total_snowfall', {
+                  t('weather.forecast.total-snowfall', {
                     lng,
                     snowfall: day.totalsnow_cm
                   }),
-                  t('weather.forecast.avg_visibility', {
+                  t('weather.forecast.avg-visibility', {
                     lng,
-                    vis_km: day.avgvis_km,
-                    vis_miles: day.avgvis_miles
+                    visKm: day.avgvis_km,
+                    visMiles: day.avgvis_miles
                   })
                 ].join('\n')
               )
@@ -317,8 +317,8 @@ export default new Command({
                   t('weather.astro.sunrise', { lng, sunrise: astro.sunrise }),
                   t('weather.astro.sunset', { lng, sunset: astro.sunset }),
                   t('weather.astro.moonset', { lng, moonset: astro.moonset }),
-                  t('weather.astro.moon_phase', { lng, phase: astro.moon_phase }),
-                  t('weather.astro.moon_illumination', {
+                  t('weather.astro.moon-phase', { lng, phase: astro.moon_phase }),
+                  t('weather.astro.moon-illumination', {
                     lng,
                     illumination: astro.moon_illumination
                   })
@@ -412,52 +412,52 @@ export default new Command({
                     lng,
                     condition: day.condition.text
                   }),
-                  t('weather.history.avg_humidity', {
+                  t('weather.history.avg-humidity', {
                     lng,
                     humidity: day.avghumidity
                   }),
-                  t('weather.history.rain_chance', {
+                  t('weather.history.rain-chance', {
                     lng,
                     chance: day.daily_chance_of_rain
                   }),
-                  t('weather.history.snow_chance', {
+                  t('weather.history.snow-chance', {
                     lng,
                     chance: day.daily_chance_of_snow
                   }),
-                  t('weather.history.max_temp', {
+                  t('weather.history.max-temp', {
                     lng,
-                    temp_c: day.maxtemp_c,
-                    temp_f: day.maxtemp_f
+                    tempC: day.maxtemp_c,
+                    tempF: day.maxtemp_f
                   }),
-                  t('weather.history.min_temp', {
+                  t('weather.history.min-temp', {
                     lng,
-                    temp_c: day.mintemp_c,
-                    temp_f: day.mintemp_f
+                    tempC: day.mintemp_c,
+                    tempF: day.mintemp_f
                   }),
-                  t('weather.history.avg_temp', {
+                  t('weather.history.avg-temp', {
                     lng,
-                    temp_c: day.avgtemp_c,
-                    temp_f: day.avgtemp_f
+                    tempC: day.avgtemp_c,
+                    tempF: day.avgtemp_f
                   }),
-                  t('weather.history.uv_index', { lng, uv: UV_INDEX[day.uv] }),
-                  t('weather.history.max_wind_speed', {
+                  t('weather.history.uv-index', { lng, uv: UV_INDEX[day.uv] }),
+                  t('weather.history.max-wind-speed', {
                     lng,
-                    speed_kph: day.maxwind_kph,
-                    speed_mph: day.maxwind_mph
+                    speedKph: day.maxwind_kph,
+                    speedMph: day.maxwind_mph
                   }),
-                  t('weather.history.total_precipitation', {
+                  t('weather.history.total-precipitation', {
                     lng,
-                    precipitation_mm: day.totalprecip_mm,
-                    precipitation_in: day.totalprecip_in
+                    precipitationMm: day.totalprecip_mm,
+                    precipitationIn: day.totalprecip_in
                   }),
-                  t('weather.history.total_snowfall', {
+                  t('weather.history.total-snowfall', {
                     lng,
                     snowfall: day.totalsnow_cm
                   }),
-                  t('weather.history.avg_visibility', {
+                  t('weather.history.avg-visibility', {
                     lng,
-                    vis_km: day.avgvis_km,
-                    vis_miles: day.avgvis_miles
+                    visKm: day.avgvis_km,
+                    visMiles: day.avgvis_miles
                   })
                 ].join('\n')
               },
@@ -467,8 +467,8 @@ export default new Command({
                   t('weather.astro.sunrise', { lng, sunrise: astro.sunrise }),
                   t('weather.astro.sunset', { lng, sunset: astro.sunset }),
                   t('weather.astro.moonset', { lng, moonset: astro.moonset }),
-                  t('weather.astro.moon_phase', { lng, phase: astro.moon_phase }),
-                  t('weather.astro.moon_illumination', {
+                  t('weather.astro.moon-phase', { lng, phase: astro.moon_phase }),
+                  t('weather.astro.moon-illumination', {
                     lng,
                     illumination: astro.moon_illumination
                   })

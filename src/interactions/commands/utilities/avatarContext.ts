@@ -31,7 +31,7 @@ export default new Command<ApplicationCommandType.User>({
     const embeds: EmbedBuilder[] = [
       new EmbedBuilder()
         .setColor(client.colors.utilities)
-        .setTitle(t('avatar.user_avatar', { lng }))
+        .setTitle(t('avatar.user-avatar', { lng }))
         .setImage(user.displayAvatarURL({ size: 4096 }))
     ];
 
@@ -39,7 +39,7 @@ export default new Command<ApplicationCommandType.User>({
       embeds.push(
         new EmbedBuilder()
           .setColor(client.colors.utilities)
-          .setTitle(t('avatar.user_banner', { lng }))
+          .setTitle(t('avatar.user-banner', { lng }))
           .setImage(user.bannerURL({ size: 4096 })!)
       );
     }
@@ -48,7 +48,7 @@ export default new Command<ApplicationCommandType.User>({
       embeds.push(
         new EmbedBuilder()
           .setColor(client.colors.utilities)
-          .setTitle(t('avatar.member_avatar', { lng }))
+          .setTitle(t('avatar.member-avatar', { lng }))
           .setImage(member.displayAvatarURL({ size: 4096 }))
       );
     }

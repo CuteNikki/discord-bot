@@ -33,7 +33,7 @@ export default new Event({
           value: ChannelType[type]
         },
         {
-          name: t('log.channelCreate.permission_overwrites', { lng }),
+          name: t('log.channelCreate.permission-overwrites', { lng }),
           value:
             permissionOverwrites.cache
               .map(

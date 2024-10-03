@@ -37,7 +37,7 @@ export default new Event({
               value: `${position}`
             },
             {
-              name: t('log.roleCreate.displayed_separately', { lng }),
+              name: t('log.roleCreate.displayed-separately', { lng }),
               value: `${hoist}`
             },
             {

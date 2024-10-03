@@ -34,7 +34,7 @@ export default new Event({
           value: `${user.toString()} (\`${user.username}\` | ${user.id})`
         },
         {
-          name: t('log.guildMemberAdd.created_at', { lng }),
+          name: t('log.guildMemberAdd.created-at', { lng }),
           value: `<t:${Math.floor(user.createdTimestamp / 1000)}:f> (<t:${Math.floor(user.createdTimestamp / 1000)}:R>)`
         }
       )
@@ -42,8 +42,8 @@ export default new Event({
 
     if (Date.now() - user.createdTimestamp < 7 * 24 * 60 * 60 * 1000) {
       embed.addFields({
-        name: t('log.guildMemberAdd.potentially_dangerous', { lng }),
-        value: t('log.guildMemberAdd.young_account', { lng })
+        name: t('log.guildMemberAdd.potentially-dangerous', { lng }),
+        value: t('log.guildMemberAdd.young-account', { lng })
       });
       components.push(
         new ActionRowBuilder<ButtonBuilder>().addComponents(

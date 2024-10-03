@@ -48,7 +48,7 @@ export default new Command({
 
           const milliseconds = ms(time);
           if (!milliseconds || milliseconds > ms('31d')) {
-            await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reminder.invalid_time', { lng }))] });
+            await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reminder.invalid-time', { lng }))] });
             return;
           }
           const remindAt = Date.now() + milliseconds;
@@ -74,7 +74,7 @@ export default new Command({
           const reminderId = options.getString('reminder-id', true);
 
           if (!reminders.map((reminder) => reminder._id.toString()).includes(reminderId)) {
-            await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reminder.invalid_id', { lng }))] });
+            await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reminder.invalid-id', { lng }))] });
             return;
           }
 

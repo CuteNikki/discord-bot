@@ -34,11 +34,11 @@ export default new Event({
           value: ChannelType[type]
         },
         {
-          name: t('log.channelDelete.created_at', { lng }),
+          name: t('log.channelDelete.created-at', { lng }),
           value: `<t:${Math.floor(createdTimestamp / 1000)}:f>`
         },
         {
-          name: t('log.channelDelete.permission_overwrites', { lng }),
+          name: t('log.channelDelete.permission-overwrites', { lng }),
           value:
             permissionOverwrites.cache
               .map(

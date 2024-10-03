@@ -101,7 +101,7 @@ export class Trivia {
       if (buttonInteraction.user.id !== user.id)
         return buttonInteraction
           .followUp({
-            content: t('interactions.author_only', {
+            content: t('interactions.author-only', {
               lng: await getUserLanguage(buttonInteraction.user.id)
             }),
             ephemeral: true
@@ -167,8 +167,8 @@ export class Trivia {
     const row = new ActionRowBuilder<ButtonBuilder>();
 
     if (this.options.mode === TriviaMode.Single) {
-      const trueButton = new ButtonBuilder().setStyle(ButtonStyle.Secondary).setCustomId('TRIVIA_True').setLabel('✔️');
-      const falseButton = new ButtonBuilder().setStyle(ButtonStyle.Secondary).setCustomId('TRIVIA_False').setLabel('✖️');
+      const trueButton = new ButtonBuilder().setStyle(ButtonStyle.Secondary).setCustomId('button-trivia_True').setLabel('✔️');
+      const falseButton = new ButtonBuilder().setStyle(ButtonStyle.Secondary).setCustomId('button-trivia_False').setLabel('✖️');
 
       if (this.selected) {
         if (this.trivia.correct_answer === 'True') trueButton.setStyle(ButtonStyle.Success);
@@ -182,7 +182,7 @@ export class Trivia {
 
     if (this.options.mode === TriviaMode.Multiple) {
       for (let i = 0; i < this.answers.length; i++) {
-        const button = new ButtonBuilder().setStyle(ButtonStyle.Primary).setCustomId(`TRIVIA_${this.answers[i]}`).setLabel(this.answers[i]);
+        const button = new ButtonBuilder().setStyle(ButtonStyle.Primary).setCustomId(`button-trivia_${this.answers[i]}`).setLabel(this.answers[i]);
 
         if (this.selected) {
           if (this.trivia.correct_answer !== this.answers[i]) button.setStyle(ButtonStyle.Danger);

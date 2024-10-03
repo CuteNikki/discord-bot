@@ -35,12 +35,12 @@ export default new Event({
     if (newChannel.name !== oldChannel.name)
       embed.addFields(
         {
-          name: t('log.channelUpdate.old_name', { lng }),
+          name: t('log.channelUpdate.old-name', { lng }),
           value: `\`${oldChannel.name}\``,
           inline: true
         },
         {
-          name: t('log.channelUpdate.new_name', { lng }),
+          name: t('log.channelUpdate.new-name', { lng }),
           value: `\`${newChannel.name}\``,
           inline: true
         },
@@ -49,12 +49,12 @@ export default new Event({
     if (newChannel.position !== oldChannel.position)
       embed.addFields(
         {
-          name: t('log.channelUpdate.old_position', { lng }),
+          name: t('log.channelUpdate.old-position', { lng }),
           value: `${oldChannel.position}`,
           inline: true
         },
         {
-          name: t('log.channelUpdate.new_position', { lng }),
+          name: t('log.channelUpdate.new-position', { lng }),
           value: `${newChannel.position}`,
           inline: true
         },
@@ -63,12 +63,12 @@ export default new Event({
     if (newChannel.type !== oldChannel.type)
       embed.addFields(
         {
-          name: t('log.channelUpdate.old_type', { lng }),
+          name: t('log.channelUpdate.old-type', { lng }),
           value: `${ChannelType[oldChannel.type]}`,
           inline: true
         },
         {
-          name: t('log.channelUpdate.new_type', { lng }),
+          name: t('log.channelUpdate.new-type', { lng }),
           value: `${ChannelType[newChannel.type]}`,
           inline: true
         },
@@ -85,7 +85,7 @@ export default new Event({
     if (oldPerms.length || newPerms.length)
       embed.addFields(
         {
-          name: t('log.channelUpdate.old_permission_overwrites', { lng }),
+          name: t('log.channelUpdate.old-permission-overwrites', { lng }),
           value:
             oldPerms
               .map(
@@ -113,7 +113,7 @@ export default new Event({
           inline: true
         },
         {
-          name: t('log.channelUpdate.new_permission_overwrites', { lng }),
+          name: t('log.channelUpdate.new-permission-overwrites', { lng }),
           value:
             newPerms
               .map(
@@ -150,12 +150,12 @@ export default new Event({
       if (newChannel.topic !== oldChannel.topic)
         embed.addFields(
           {
-            name: t('log.channelUpdate.old_topic', { lng }),
+            name: t('log.channelUpdate.old-topic', { lng }),
             value: `${oldChannel.topic?.slice(0, 1000) || '/'}`,
             inline: true
           },
           {
-            name: t('log.channelUpdate.new_topic', { lng }),
+            name: t('log.channelUpdate.new-topic', { lng }),
             value: `${newChannel.topic?.slice(0, 1000) || '/'}`,
             inline: true
           },
@@ -164,12 +164,12 @@ export default new Event({
       if (newChannel.nsfw !== oldChannel.nsfw)
         embed.addFields(
           {
-            name: t('log.channelUpdate.old_nsfw', { lng }),
+            name: t('log.channelUpdate.old-nsfw', { lng }),
             value: `${newChannel.nsfw}`,
             inline: true
           },
           {
-            name: t('log.channelUpdate.new_nsfw', { lng }),
+            name: t('log.channelUpdate.new-nsfw', { lng }),
             value: `${oldChannel.nsfw}`,
             inline: true
           },
@@ -178,12 +178,12 @@ export default new Event({
       if ((newChannel.rateLimitPerUser || 0) !== (oldChannel.rateLimitPerUser || 0))
         embed.addFields(
           {
-            name: t('log.channelUpdate.old_rate_limit', { lng }),
+            name: t('log.channelUpdate.old-rate-limit', { lng }),
             value: `${oldChannel.rateLimitPerUser || '0'}s`,
             inline: true
           },
           {
-            name: t('log.channelUpdate.new_rate_limit', { lng }),
+            name: t('log.channelUpdate.new-rate-limit', { lng }),
             value: `${newChannel.rateLimitPerUser || '0'}s`,
             inline: true
           },
@@ -192,12 +192,12 @@ export default new Event({
       if ((newChannel.defaultAutoArchiveDuration || 4320) !== (oldChannel.defaultAutoArchiveDuration || 4320))
         embed.addFields(
           {
-            name: t('log.channelUpdate.old_auto_archive_duration', { lng }),
+            name: t('log.channelUpdate.old-auto-archive-duration', { lng }),
             value: `${ThreadAutoArchiveDuration[oldChannel.defaultAutoArchiveDuration || 4320]}`,
             inline: true
           },
           {
-            name: t('log.channelUpdate.new_auto_archive_duration', { lng }),
+            name: t('log.channelUpdate.new-auto-archive-duration', { lng }),
             value: `${ThreadAutoArchiveDuration[newChannel.defaultAutoArchiveDuration || 4320]}`,
             inline: true
           },
@@ -211,12 +211,12 @@ export default new Event({
       if (newChannel.nsfw !== oldChannel.nsfw)
         embed.addFields(
           {
-            name: t('log.channelUpdate.old_nsfw', { lng }),
+            name: t('log.channelUpdate.old-nsfw', { lng }),
             value: `${newChannel.nsfw}`,
             inline: true
           },
           {
-            name: t('log.channelUpdate.new_nsfw', { lng }),
+            name: t('log.channelUpdate.new-nsfw', { lng }),
             value: `${oldChannel.nsfw}`,
             inline: true
           },
@@ -225,12 +225,12 @@ export default new Event({
       if (newChannel.rateLimitPerUser !== oldChannel.rateLimitPerUser)
         embed.addFields(
           {
-            name: t('log.channelUpdate.old_rate_limit', { lng }),
+            name: t('log.channelUpdate.old-rate-limit', { lng }),
             value: `${oldChannel.rateLimitPerUser || '0'}s`,
             inline: true
           },
           {
-            name: t('log.channelUpdate.new_rate_limit', { lng }),
+            name: t('log.channelUpdate.new-rate-limit', { lng }),
             value: `${newChannel.rateLimitPerUser || '0'}s`,
             inline: true
           },
@@ -239,12 +239,12 @@ export default new Event({
       if (newChannel.bitrate !== oldChannel.bitrate)
         embed.addFields(
           {
-            name: t('log.channelUpdate.old_bitrate', { lng }),
+            name: t('log.channelUpdate.old-bitrate', { lng }),
             value: `${oldChannel.bitrate}`,
             inline: true
           },
           {
-            name: t('log.channelUpdate.new_bitrate', { lng }),
+            name: t('log.channelUpdate.new-bitrate', { lng }),
             value: `${newChannel.bitrate}`,
             inline: true
           },
@@ -253,12 +253,12 @@ export default new Event({
       if (newChannel.rtcRegion !== oldChannel.rtcRegion)
         embed.addFields(
           {
-            name: t('log.channelUpdate.old_region', { lng }),
+            name: t('log.channelUpdate.old-region', { lng }),
             value: `${oldChannel.rtcRegion || 'Automatic'}`,
             inline: true
           },
           {
-            name: t('log.channelUpdate.new_region', { lng }),
+            name: t('log.channelUpdate.new-region', { lng }),
             value: `${newChannel.rtcRegion || 'Automatic'}`,
             inline: true
           },
@@ -267,12 +267,12 @@ export default new Event({
       if (newChannel.userLimit !== oldChannel.userLimit)
         embed.addFields(
           {
-            name: t('log.channelUpdate.old_user_limit', { lng }),
+            name: t('log.channelUpdate.old-user-limit', { lng }),
             value: `${oldChannel.userLimit}`,
             inline: true
           },
           {
-            name: t('log.channelUpdate.new_user_limit', { lng }),
+            name: t('log.channelUpdate.new-user-limit', { lng }),
             value: `${newChannel.userLimit}`,
             inline: true
           },
@@ -281,12 +281,12 @@ export default new Event({
       if (newChannel.videoQualityMode !== oldChannel.videoQualityMode)
         embed.addFields(
           {
-            name: t('log.channelUpdate.old_video_quality', { lng }),
+            name: t('log.channelUpdate.old-video-quality', { lng }),
             value: `${VideoQualityMode[oldChannel.videoQualityMode || 1]}`,
             inline: true
           },
           {
-            name: t('log.channelUpdate.new_video_quality', { lng }),
+            name: t('log.channelUpdate.new-video-quality', { lng }),
             value: `${VideoQualityMode[newChannel.videoQualityMode || 1]}`,
             inline: true
           },

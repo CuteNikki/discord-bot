@@ -8,7 +8,7 @@ export default new Button({
   async execute({ interaction }) {
     await interaction.showModal(
       new ModalBuilder()
-        .setCustomId('modal_eval')
+        .setCustomId('modal-eval')
         .setTitle('Evaluate code')
         .setComponents(
           new ActionRowBuilder<TextInputBuilder>().setComponents(

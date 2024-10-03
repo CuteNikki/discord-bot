@@ -87,7 +87,7 @@ export default new Command({
                           lng,
                           date: `<t:${Math.floor(infraction.createdAt / 1000)}:f>`
                         }),
-                        t('infractions.history.ends_at', {
+                        t('infractions.history.ends-at', {
                           lng,
                           date: infraction.endsAt ? `<t:${Math.floor(infraction.endsAt / 1000)}:f>` : t('none', { lng })
                         })

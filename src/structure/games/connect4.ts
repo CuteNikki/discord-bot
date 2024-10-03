@@ -111,7 +111,7 @@ export class Connect4 extends Opponent {
       if (buttonInteraction.user.id !== user.id && buttonInteraction.user.id !== opponent.id)
         return buttonInteraction
           .followUp({
-            content: t('interactions.author_only', {
+            content: t('interactions.author-only', {
               lng: await getUserLanguage(buttonInteraction.user.id)
             }),
             ephemeral: true
@@ -296,7 +296,7 @@ export class Connect4 extends Opponent {
         const button = new ButtonBuilder()
           .setEmoji(this.numberEmojis[index])
           .setStyle(ButtonStyle.Primary)
-          .setCustomId(`CONNECT_${index + 1}`);
+          .setCustomId(`button-connect_${index + 1}`);
         row.addComponents(button);
       }
       components.push(row);

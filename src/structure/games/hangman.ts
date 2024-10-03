@@ -111,19 +111,28 @@ export class Hangman {
     collector.on('collect', async (buttonInteraction) => {
       await buttonInteraction.deferUpdate().catch((err) => logger.debug({ err }, 'Could not defer update'));
 
-      if (buttonInteraction.user.id !== user.id)
-        return buttonInteraction.followUp({
-          content: t('interactions.author_only', {
+      if (buttonInteraction.user.id !== user.id) {
+        await buttonInteraction.followUp({
+          content: t('interactions.author-only', {
             lng: await getUserLanguage(buttonInteraction.user.id)
           }),
           ephemeral: true
         });
+        return;
+      }
+
       const guess = buttonInteraction.customId.split('_')[1];
 
-      if (guess === 'stop') return collector.stop();
-      if (parseInt(guess) === 0 || parseInt(guess) === 1) {
-        return interaction.editReply({ components: this.getComponents(parseInt(guess)) }).catch((err) => logger.debug({ err }, 'Could not edit message'));
+      if (guess === 'stop') {
+        collector.stop();
+        return;
       }
+
+      if (parseInt(guess) === 0 || parseInt(guess) === 1) {
+        await interaction.editReply({ components: this.getComponents(parseInt(guess)) }).catch((err) => logger.debug({ err }, 'Could not edit message'));
+        return;
+      }
+
       if (!this.guesses.includes(guess)) {
         this.guesses.push(guess);
         if (!this.word.includes(guess.toLowerCase())) this.damage += 1;
@@ -161,7 +170,10 @@ export class Hangman {
           })
           .catch((err) => logger.debug({ err }, 'Could not edit message'));
 
-        if (this.damage > 4 || this.isGuessCorrect()) return collector.stop();
+        if (this.damage > 4 || this.isGuessCorrect()) {
+          collector.stop();
+          return;
+        }
       }
     });
 
@@ -233,7 +245,7 @@ export class Hangman {
         const button = new ButtonBuilder()
           .setStyle(ButtonStyle.Primary)
           .setLabel(letter)
-          .setCustomId(`HANGMAN_${letter}`)
+          .setCustomId(`button-hangman_${letter}`)
           .setDisabled(this.guesses.includes(letter));
 
         row.addComponents(button);
@@ -243,13 +255,13 @@ export class Hangman {
 
     const extraRow = new ActionRowBuilder<ButtonBuilder>();
 
-    const stopButton = new ButtonBuilder().setStyle(ButtonStyle.Danger).setEmoji('✖️').setCustomId('HANGMAN_stop');
+    const stopButton = new ButtonBuilder().setStyle(ButtonStyle.Danger).setEmoji('✖️').setCustomId('button-hangman_stop');
     const pageButton = new ButtonBuilder()
       .setStyle(ButtonStyle.Success)
       .setEmoji(this.buttonPage === 1 ? '⬅️' : '➡️')
-      .setCustomId(`HANGMAN_${this.buttonPage === 1 ? '0' : '1'}`);
-    const letterY = new ButtonBuilder().setStyle(ButtonStyle.Primary).setLabel('Y').setCustomId('HANGMAN_Y').setDisabled(this.guesses.includes('Y'));
-    const letterZ = new ButtonBuilder().setStyle(ButtonStyle.Primary).setLabel('Z').setCustomId('HANGMAN_Z').setDisabled(this.guesses.includes('Z'));
+      .setCustomId(`button-hangman_${this.buttonPage === 1 ? '0' : '1'}`);
+    const letterY = new ButtonBuilder().setStyle(ButtonStyle.Primary).setLabel('Y').setCustomId('button-hangman_Y').setDisabled(this.guesses.includes('Y'));
+    const letterZ = new ButtonBuilder().setStyle(ButtonStyle.Primary).setLabel('Z').setCustomId('button-hangman_Z').setDisabled(this.guesses.includes('Z'));
 
     extraRow.addComponents(pageButton, stopButton);
     if (this.buttonPage === 1) extraRow.addComponents(letterY, letterZ);

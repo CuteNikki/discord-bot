@@ -27,44 +27,60 @@ export default new Selection({
 
     const system = currentConfig.ticket.systems.find((system) => system._id.toString() === customId.split('_')[1]);
 
-    if (!system)
-      return interaction.reply({
-        content: t('ticket.invalid_system', { lng }),
+    if (!system) {
+      await interaction.reply({
+        content: t('ticket.invalid-system', { lng }),
         ephemeral: true
       });
+      return;
+    }
 
-    const ticket = await ticketModel.findOne({
-      channelId: interaction.channel?.id
-    });
-    if (!ticket)
-      return interaction.reply({
-        content: t('ticket.invalid_ticket', { lng }),
-        ephemeral: true
-      });
+    const ticket = await ticketModel.findOne({ channelId: interaction.channel?.id });
 
-    if (ticket.closed || ticket.locked)
-      return interaction.reply({
-        content: t('ticket.user_unavailable', { lng }),
+    if (!ticket) {
+      await interaction.reply({
+        content: t('ticket.invalid-ticket', { lng }),
         ephemeral: true
       });
+      return;
+    }
 
-    if (user.id !== ticket.createdBy || !member.roles.cache.has(system.staffRoleId)) return interaction.reply({ content: t('ticket.user_permissions') });
+    if (ticket.closed || ticket.locked) {
+      await interaction.reply({
+        content: t('ticket.user-unavailable', { lng }),
+        ephemeral: true
+      });
+      return;
+    }
 
-    if (!targetMember)
-      return interaction.reply({
-        content: t('ticket.user_invalid', { lng }),
+    if (user.id !== ticket.createdBy || !member.roles.cache.has(system.staffRoleId)) {
+      await interaction.reply({ content: t('ticket.user-permissions', { lng }) });
+      return;
+    }
+
+    if (!targetMember) {
+      await interaction.reply({
+        content: t('ticket.user-invalid', { lng }),
         ephemeral: true
       });
-    if (targetMember.roles.cache.has(system.staffRoleId))
-      return interaction.reply({
-        content: t('ticket.user_staff', { lng }),
+      return;
+    }
+
+    if (targetMember.roles.cache.has(system.staffRoleId)) {
+      await interaction.reply({
+        content: t('ticket.user-staff', { lng }),
         ephemeral: true
       });
-    if (targetId === ticket.createdBy)
-      return interaction.reply({
-        content: t('ticket.user_creator', { lng }),
+      return;
+    }
+
+    if (targetId === ticket.createdBy) {
+      await interaction.reply({
+        content: t('ticket.user-creator', { lng }),
         ephemeral: true
       });
+      return;
+    }
 
     if (ticket.users.includes(targetId)) {
       const channel = interaction.channel as TextChannel;
@@ -76,13 +92,13 @@ export default new Selection({
       });
       await ticketModel.findOneAndUpdate({ channelId: channel.id }, { $pull: { users: targetId } });
 
-      return interaction.reply({
+      await interaction.reply({
         embeds: [
           new EmbedBuilder().setDescription(
-            t('ticket.user_removed', {
+            t('ticket.user-removed', {
               lng,
-              target_user: `<@${targetId}>`,
-              removed_by: user.toString()
+              targetUser: `<@${targetId}>`,
+              removedBy: user.toString()
             })
           )
         ]
@@ -97,13 +113,13 @@ export default new Selection({
       });
       await ticketModel.findOneAndUpdate({ channelId: channel.id }, { $push: { users: targetId } });
 
-      return interaction.reply({
+      await interaction.reply({
         embeds: [
           new EmbedBuilder().setDescription(
-            t('ticket.user_added', {
+            t('ticket.user-added', {
               lng,
-              target_user: `<@${targetId}>`,
-              added_by: user.toString()
+              targetUser: `<@${targetId}>`,
+              addedBy: user.toString()
             })
           )
         ]

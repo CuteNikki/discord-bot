@@ -42,7 +42,7 @@ export default new Event({
     if (modal.options.permissions?.length) {
       if (!interaction.member)
         return interaction.reply({
-          content: t('interactions.guild_only', { lng }),
+          content: t('interactions.guild-only', { lng }),
           ephemeral: true
         });
       const permissions = interaction.member.permissions as PermissionsBitField;
@@ -58,7 +58,7 @@ export default new Event({
       const permissions = interaction.guild.members.me.permissions;
       if (!permissions.has(modal.options.botPermissions)) {
         return interaction.reply({
-          content: t('interactions.bot_permissions', {
+          content: t('interactions.bot-permissions', {
             lng,
             permissions: modal.options.botPermissions.join(', ')
           }),
@@ -71,7 +71,7 @@ export default new Event({
     const developerIds = keys.DEVELOPER_USER_IDS;
     if (modal.options.isDeveloperOnly && !developerIds.includes(interaction.user.id))
       return interaction.reply({
-        content: t('interactions.developer_only', { lng }),
+        content: t('interactions.developer-only', { lng }),
         ephemeral: true
       });
 

@@ -34,19 +34,19 @@ export default new Command({
 
     const voiceChannel = interaction.member.voice.channel;
     if (!voiceChannel) {
-      await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom-vc.not_in_vc', { lng }))] });
+      await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom-vc.not-in-vc', { lng }))] });
       return;
     }
 
     const customVoiceChannel = await getCustomVoiceChannel(voiceChannel.id);
 
     if (!customVoiceChannel) {
-      await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom-vc.not_in_custom_vc', { lng }))] });
+      await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom-vc.not-in-custom-vc', { lng }))] });
       return;
     }
 
     if (interaction.user.id !== customVoiceChannel.ownerId) {
-      await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom-vc.not_owner', { lng }))] });
+      await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom-vc.not-owner', { lng }))] });
       return;
     }
 
@@ -132,7 +132,7 @@ export default new Command({
             }
           } catch (err) {
             logger.debug(err, 'Could not disconnect user from custom vc');
-            response += t('custom-vc.remove.not_disconnected', { lng, user: user.toString() });
+            response += t('custom-vc.remove.not-disconnected', { lng, user: user.toString() });
           }
 
           try {
@@ -140,7 +140,7 @@ export default new Command({
             response += t('custom-vc.remove.success', { lng, user: user.toString() });
           } catch (err) {
             logger.debug(err, 'Could not remove permissions from user');
-            response += t('custom-vc.remove.not_removed', { lng, user: user.toString() });
+            response += t('custom-vc.remove.not-removed', { lng, user: user.toString() });
           }
 
           if (response === '') {

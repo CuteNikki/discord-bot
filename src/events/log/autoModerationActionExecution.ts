@@ -27,11 +27,11 @@ export default new Event({
           .setTitle(t('log.autoModerationActionExecution.title', { lng }))
           .addFields(
             {
-              name: t('log.autoModerationActionExecution.action_type', { lng }),
+              name: t('log.autoModerationActionExecution.action-type', { lng }),
               value: AutoModerationActionType[action.type]
             },
             {
-              name: t('log.autoModerationActionExecution.rule_trigger_type', {
+              name: t('log.autoModerationActionExecution.rule-trigger-type', {
                 lng
               }),
               value: AutoModerationRuleTriggerType[ruleTriggerType]
@@ -45,7 +45,7 @@ export default new Event({
               value: `<@${channelId}>`
             },
             {
-              name: t('log.autoModerationActionExecution.matched_content', {
+              name: t('log.autoModerationActionExecution.matched-content', {
                 lng
               }),
               value: matchedContent || '/'

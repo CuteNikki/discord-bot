@@ -83,9 +83,9 @@ export default new Command({
                 name: t('botinfo.system.title', { lng }),
                 value: [
                   t('botinfo.system.os', { lng, operatingSystem }),
-                  t('botinfo.system.cpu_model', { lng, cpuModel }),
-                  t('botinfo.system.cpu_usage', { lng, cpuUsage: cpuUsage.toString() }),
-                  t('botinfo.system.mem_usage', {
+                  t('botinfo.system.cpu-model', { lng, cpuModel }),
+                  t('botinfo.system.cpu-usage', { lng, cpuUsage: cpuUsage.toString() }),
+                  t('botinfo.system.mem-usage', {
                     lng,
                     memoryUsage,
                     memoryUsed,
@@ -117,27 +117,27 @@ export default new Command({
                     lng,
                     commandCount: commands.size.toString()
                   }),
-                  t('botinfo.stats.executed_commands', {
+                  t('botinfo.stats.executed-commands', {
                     lng,
                     executedCommands: stats.commandsExecuted.toString()
                   }),
-                  t('botinfo.stats.failed_commands', {
+                  t('botinfo.stats.failed-commands', {
                     lng,
                     failedCommands: stats.commandsFailed.toString()
                   }),
-                  t('botinfo.stats.buttons_executed', {
+                  t('botinfo.stats.buttons-executed', {
                     lng,
                     buttonsExecuted: stats.buttonsExecuted.toString()
                   }),
-                  t('botinfo.stats.buttons_failed', {
+                  t('botinfo.stats.buttons-failed', {
                     lng,
                     buttonsFailed: stats.buttonsFailed.toString()
                   }),
-                  t('botinfo.stats.guilds_joined', {
+                  t('botinfo.stats.guilds-joined', {
                     lng,
                     guildsJoined: stats.guildsJoined.toString()
                   }),
-                  t('botinfo.stats.guilds_left', {
+                  t('botinfo.stats.guilds-left', {
                     lng,
                     guildsLeft: stats.guildsLeft.toString()
                   })

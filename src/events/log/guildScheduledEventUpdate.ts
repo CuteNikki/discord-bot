@@ -36,12 +36,12 @@ export default new Event({
     if (newEvent.name !== oldEvent.name)
       embed.addFields(
         {
-          name: t('log.guildScheduledEventUpdate.old_name', { lng }),
+          name: t('log.guildScheduledEventUpdate.old-name', { lng }),
           value: oldEvent.name || '/',
           inline: true
         },
         {
-          name: t('log.guildScheduledEventUpdate.new_name', { lng }),
+          name: t('log.guildScheduledEventUpdate.new-name', { lng }),
           value: newEvent.name,
           inline: true
         },
@@ -50,12 +50,12 @@ export default new Event({
     if (newEvent.description !== oldEvent.description)
       embed.addFields(
         {
-          name: t('log.guildScheduledEventUpdate.old_description', { lng }),
+          name: t('log.guildScheduledEventUpdate.old-description', { lng }),
           value: oldEvent.description || '/',
           inline: true
         },
         {
-          name: t('log.guildScheduledEventUpdate.new_description', { lng }),
+          name: t('log.guildScheduledEventUpdate.new-description', { lng }),
           value: newEvent.description || '/',
           inline: true
         },
@@ -64,12 +64,12 @@ export default new Event({
     if (newEvent.image !== oldEvent.image)
       embed.addFields(
         {
-          name: t('log.guildScheduledEventUpdate.old_image', { lng }),
+          name: t('log.guildScheduledEventUpdate.old-image', { lng }),
           value: oldEvent.coverImageURL() || '/',
           inline: true
         },
         {
-          name: t('log.guildScheduledEventUpdate.new_image', { lng }),
+          name: t('log.guildScheduledEventUpdate.new-image', { lng }),
           value: newEvent.coverImageURL() || '/',
           inline: true
         },
@@ -78,12 +78,12 @@ export default new Event({
     if (newEvent.status !== oldEvent.status)
       embed.addFields(
         {
-          name: t('log.guildScheduledEventUpdate.old_status', { lng }),
+          name: t('log.guildScheduledEventUpdate.old-status', { lng }),
           value: GuildScheduledEventStatus[oldEvent.status ?? 0] || '/',
           inline: true
         },
         {
-          name: t('log.guildScheduledEventUpdate.new_status', { lng }),
+          name: t('log.guildScheduledEventUpdate.new-status', { lng }),
           value: GuildScheduledEventStatus[newEvent.status] || '/',
           inline: true
         },
@@ -92,14 +92,14 @@ export default new Event({
     if (newEvent.scheduledEndTimestamp !== oldEvent.scheduledEndTimestamp)
       embed.addFields(
         {
-          name: t('log.guildScheduledEventUpdate.old_end', { lng }),
+          name: t('log.guildScheduledEventUpdate.old-end', { lng }),
           value: oldEvent.scheduledEndTimestamp
             ? `<t:${Math.floor(oldEvent.scheduledEndTimestamp / 1000)}:f> (<t:${Math.floor(oldEvent.scheduledEndTimestamp / 1000)}:R>)`
             : '/',
           inline: true
         },
         {
-          name: t('log.guildScheduledEventUpdate.new_end', { lng }),
+          name: t('log.guildScheduledEventUpdate.new-end', { lng }),
           value: newEvent.scheduledEndTimestamp
             ? `<t:${Math.floor(newEvent.scheduledEndTimestamp / 1000)}:f> (<t:${Math.floor(newEvent.scheduledEndTimestamp / 1000)}:R>)`
             : '/',
@@ -110,14 +110,14 @@ export default new Event({
     if (newEvent.scheduledStartTimestamp !== oldEvent.scheduledStartTimestamp)
       embed.addFields(
         {
-          name: t('log.guildScheduledEventUpdate.old_start', { lng }),
+          name: t('log.guildScheduledEventUpdate.old-start', { lng }),
           value: oldEvent.scheduledStartTimestamp
             ? `<t:${Math.floor(oldEvent.scheduledStartTimestamp / 1000)}:f> (<t:${Math.floor(oldEvent.scheduledStartTimestamp / 1000)}:R>)`
             : '/',
           inline: true
         },
         {
-          name: t('log.guildScheduledEventUpdate.new_start', { lng }),
+          name: t('log.guildScheduledEventUpdate.new-start', { lng }),
           value: newEvent.scheduledStartTimestamp
             ? `<t:${Math.floor(newEvent.scheduledStartTimestamp / 1000)}:f> (<t:${Math.floor(newEvent.scheduledStartTimestamp / 1000)}:R>)`
             : '/',
@@ -128,7 +128,7 @@ export default new Event({
     if (newEvent.channel !== oldEvent.channel || newEvent.entityMetadata?.location !== oldEvent.entityMetadata?.location)
       embed.addFields(
         {
-          name: t('log.guildScheduledEventUpdate.old_location', { lng }),
+          name: t('log.guildScheduledEventUpdate.old-location', { lng }),
           value: oldEvent.channel
             ? `${oldEvent.channel.toString()} (\`${oldEvent.channel.name}\` | ${oldEvent.channel.id})`
             : oldEvent.entityMetadata?.location
@@ -137,7 +137,7 @@ export default new Event({
           inline: true
         },
         {
-          name: t('log.guildScheduledEventUpdate.new_location', { lng }),
+          name: t('log.guildScheduledEventUpdate.new-location', { lng }),
           value: newEvent.channel
             ? `${newEvent.channel.toString()} (\`${newEvent.channel.name}\` | ${newEvent.channel.id})`
             : newEvent.entityMetadata?.location

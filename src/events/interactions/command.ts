@@ -56,7 +56,7 @@ export default new Event({
       const permissions = interaction.guild.members.me.permissions;
       if (!permissions.has(command.options.botPermissions)) {
         return interaction.reply({
-          content: t('interactions.bot_permissions', {
+          content: t('interactions.bot-permissions', {
             lng,
             permissions: command.options.botPermissions.join(', ')
           }),
@@ -69,7 +69,7 @@ export default new Event({
     const developerIds = keys.DEVELOPER_USER_IDS;
     if (command.options.isDeveloperOnly && !developerIds.includes(interaction.user.id))
       return interaction.reply({
-        content: t('interactions.developer_only', { lng }),
+        content: t('interactions.developer-only', { lng }),
         ephemeral: true
       });
 

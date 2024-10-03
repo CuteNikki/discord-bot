@@ -75,12 +75,12 @@ export default new Event({
 
       if (added) {
         levelUpEmbed.addFields({
-          name: t('level.up.title_roles', { lng }),
+          name: t('level.up.title-roles', { lng }),
           value: rewards.map((r) => `<@&${r.roleId}>`).join(' ')
         });
       } else {
         levelUpEmbed.addFields({
-          name: t('level.up.title_roles_error', { lng }),
+          name: t('level.up.title-roles-error', { lng }),
           value: rewards.map((r) => `<@&${r.roleId}>`).join(' ')
         });
       }

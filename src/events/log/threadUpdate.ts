@@ -34,12 +34,12 @@ export default new Event({
     if (newThread.name !== oldThread.name)
       embed.addFields(
         {
-          name: t('log.threadUpdate.old_name', { lng }),
+          name: t('log.threadUpdate.old-name', { lng }),
           value: oldThread.name,
           inline: true
         },
         {
-          name: t('log.threadUpdate.new_name', { lng }),
+          name: t('log.threadUpdate.new-name', { lng }),
           value: newThread.name,
           inline: true
         },
@@ -48,12 +48,12 @@ export default new Event({
     if (newThread.locked !== oldThread.locked)
       embed.addFields(
         {
-          name: t('log.threadUpdate.old_locked', { lng }),
+          name: t('log.threadUpdate.old-locked', { lng }),
           value: `${oldThread.locked}`,
           inline: true
         },
         {
-          name: t('log.threadUpdate.new_locked', { lng }),
+          name: t('log.threadUpdate.new-locked', { lng }),
           value: `${newThread.locked}`,
           inline: true
         },
@@ -62,12 +62,12 @@ export default new Event({
     if (newThread.archived !== oldThread.archived)
       embed.addFields(
         {
-          name: t('log.threadUpdate.old_archived', { lng }),
+          name: t('log.threadUpdate.old-archived', { lng }),
           value: `${oldThread.archived}`,
           inline: true
         },
         {
-          name: t('log.threadUpdate.new_archived', { lng }),
+          name: t('log.threadUpdate.new-archived', { lng }),
           value: `${newThread.archived}`,
           inline: true
         },
@@ -76,12 +76,12 @@ export default new Event({
     if (newThread.archiveTimestamp !== oldThread.archiveTimestamp)
       embed.addFields(
         {
-          name: t('log.threadUpdate.old_archived_at', { lng }),
+          name: t('log.threadUpdate.old-archived-at', { lng }),
           value: oldThread.archiveTimestamp ? `<t:${Math.floor(oldThread.archiveTimestamp / 1000)}:f>` : '/',
           inline: true
         },
         {
-          name: t('log.threadUpdate.new_archived_at', { lng }),
+          name: t('log.threadUpdate.new-archived-at', { lng }),
           value: newThread.archiveTimestamp ? `<t:${Math.floor(newThread.archiveTimestamp / 1000)}:f>` : '/',
           inline: true
         },
@@ -90,12 +90,12 @@ export default new Event({
     if (JSON.stringify(newThread.appliedTags) !== JSON.stringify(oldThread.appliedTags))
       embed.addFields(
         {
-          name: t('log.threadUpdate.old_applied_tags', { lng }),
+          name: t('log.threadUpdate.old-applied-tags', { lng }),
           value: oldThread.appliedTags.join('\n').slice(0, 1000) ?? '/',
           inline: true
         },
         {
-          name: t('log.threadUpdate.new_applied_tags', { lng }),
+          name: t('log.threadUpdate.new-applied-tags', { lng }),
           value: newThread.appliedTags.join('\n').slice(0, 1000) ?? '/',
           inline: true
         },
@@ -106,7 +106,7 @@ export default new Event({
       const removedMembers = oldThread.members.cache.map((m) => m).filter((member) => !newThread.members.cache.map((mem) => mem.id).includes(member.id));
       embed.addFields(
         {
-          name: t('log.threadUpdate.added_members', { lng }),
+          name: t('log.threadUpdate.added-members', { lng }),
           value:
             addedMembers
               .map((member) => `<@${member.id}> (\`${member.user?.username}\` | ${member.user?.id})`)
@@ -115,7 +115,7 @@ export default new Event({
           inline: true
         },
         {
-          name: t('log.threadUpdate.removed_members', { lng }),
+          name: t('log.threadUpdate.removed-members', { lng }),
           value:
             removedMembers
               .map((member) => `<@${member.id}> (\`${member.user?.username}\` | ${member.user?.id})`)

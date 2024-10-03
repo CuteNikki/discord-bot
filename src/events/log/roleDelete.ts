@@ -32,7 +32,7 @@ export default new Event({
               value: `\`${name}\` (${id})`
             },
             {
-              name: t('log.roleDelete.created_at', { lng }),
+              name: t('log.roleDelete.created-at', { lng }),
               value: `<t:${Math.floor(createdTimestamp / 1000)}:f>`
             },
             { name: t('log.roleDelete.color', { lng }), value: `${hexColor}` },
@@ -41,7 +41,7 @@ export default new Event({
               value: `${position}`
             },
             {
-              name: t('log.roleDelete.displayed_separately', { lng }),
+              name: t('log.roleDelete.displayed-separately', { lng }),
               value: `${hoist}`
             },
             {

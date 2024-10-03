@@ -147,15 +147,15 @@ export default new Command({
         {
           name: t('serverinfo.security.title', { lng }),
           value: [
-            t('serverinfo.security.explicit_filter', {
+            t('serverinfo.security.explicit-filter', {
               lng,
               filter: GuildExplicitContentFilter[guild.explicitContentFilter]
             }),
-            t('serverinfo.security.nsfw_level', {
+            t('serverinfo.security.nsfw-level', {
               lng,
               level: GuildNSFWLevel[guild.nsfwLevel]
             }),
-            t('serverinfo.security.verification_level', {
+            t('serverinfo.security.verification-level', {
               lng,
               level: GuildVerificationLevel[guild.verificationLevel]
             })
@@ -181,7 +181,7 @@ export default new Command({
     if (userRoles.length) {
       const displayUserRoles = maxDisplayRoles(userRoles);
       serverEmbed.addFields({
-        name: t('serverinfo.user_roles', {
+        name: t('serverinfo.user-roles', {
           lng,
           showing: displayUserRoles.length,
           total: userRoles.length
@@ -192,7 +192,7 @@ export default new Command({
     if (managedRoles.length) {
       const displayManagedRoles = maxDisplayRoles(managedRoles);
       serverEmbed.addFields({
-        name: t('serverinfo.managed_roles', {
+        name: t('serverinfo.managed-roles', {
           lng,
           showing: displayManagedRoles.length,
           total: managedRoles.length

@@ -170,7 +170,7 @@ export default new Command({
         {
           if (config.welcome.enabled) {
             return interaction.editReply({
-              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('welcome.state.already_enabled', { lng }))]
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('welcome.state.already-enabled', { lng }))]
             });
           }
 
@@ -189,7 +189,7 @@ export default new Command({
         {
           if (!config.welcome.enabled) {
             return interaction.editReply({
-              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('welcome.state.already_disabled', { lng }))]
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('welcome.state.already-disabled', { lng }))]
             });
           }
 

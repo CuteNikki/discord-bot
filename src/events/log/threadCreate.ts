@@ -39,7 +39,7 @@ export default new Event({
               value: owner ? `<@${owner.id}> (\`${owner.user?.username}\` | ${ownerId})` : '/'
             },
             {
-              name: t('log.threadCreate.applied_tags', { lng }),
+              name: t('log.threadCreate.applied-tags', { lng }),
               value: appliedTags.join('\n').slice(0, 1000) || '/'
             }
           )

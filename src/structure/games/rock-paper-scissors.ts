@@ -10,14 +10,14 @@ import { getUserLanguage } from 'db/user';
 import { logger } from 'utils/logger';
 
 enum CustomIds {
-  Rock = 'RPS_Rock',
-  Paper = 'RPS_Paper',
-  Scissors = 'RPS_Scissors'
+  Rock = 'button-rps_rock',
+  Paper = 'button-rps_paper',
+  Scissors = 'button-rps_scissors'
 }
 enum Picks {
-  Rock = '🪨',
-  Paper = '🧻',
-  Scissors = '✂️'
+  rock = '🪨',
+  paper = '🧻',
+  scissors = '✂️'
 }
 
 export class RockPaperScissors extends Opponent {
@@ -101,7 +101,7 @@ export class RockPaperScissors extends Opponent {
 
       if (buttonInteraction.user.id !== user.id && buttonInteraction.user.id !== opponent?.id) {
         return buttonInteraction.followUp({
-          content: t('interactions.author_only', {
+          content: t('interactions.author-only', {
             lng: await getUserLanguage(buttonInteraction.user.id)
           }),
           ephemeral: true
@@ -155,9 +155,9 @@ export class RockPaperScissors extends Opponent {
 
   private isPlayerWinner() {
     return (
-      (this.playerPick === Picks.Rock && this.opponentPick === Picks.Scissors) ||
-      (this.playerPick === Picks.Paper && this.opponentPick === Picks.Rock) ||
-      (this.playerPick === Picks.Scissors && this.opponentPick === Picks.Paper)
+      (this.playerPick === Picks.rock && this.opponentPick === Picks.scissors) ||
+      (this.playerPick === Picks.paper && this.opponentPick === Picks.rock) ||
+      (this.playerPick === Picks.scissors && this.opponentPick === Picks.paper)
     );
   }
 

@@ -563,7 +563,7 @@ export default new Command({
                       new TextInputBuilder()
                         .setCustomId('input-ticket-choices-style')
                         .setLabel(t('ticket.choices.style', { lng }))
-                        .setPlaceholder(t('ticket.choices.style_placeholder', { lng }))
+                        .setPlaceholder(t('ticket.choices.style-placeholder', { lng }))
                         .setStyle(TextInputStyle.Short)
                         .setMaxLength(5)
                         .setRequired(false)
@@ -620,7 +620,7 @@ export default new Command({
               if (style && !isColor) {
                 await choicesModalInteraction
                   .reply({
-                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.choices.invalid_style', { lng }))],
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.choices.invalid-style', { lng }))],
                     ephemeral: true
                   })
                   .catch((err) => logger.debug(err, 'Could not reply'));
@@ -634,7 +634,7 @@ export default new Command({
               if (emoji && !emojiRegex.test(emoji)) {
                 await choicesModalInteraction
                   .reply({
-                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.choices.invalid_emoji', { lng }))],
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.choices.invalid-emoji', { lng }))],
                     ephemeral: true
                   })
                   .catch((err) => logger.debug(err, 'Could not reply'));

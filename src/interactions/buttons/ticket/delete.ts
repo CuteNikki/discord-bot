@@ -23,7 +23,7 @@ export default new Button({
     const system = currentConfig.ticket.systems.find((system) => system._id.toString() === customId.split('_')[1]);
     if (!system) {
       await interaction.reply({
-        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_system', { lng }))],
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid-system', { lng }))],
         ephemeral: true
       });
       return;
@@ -33,7 +33,7 @@ export default new Button({
 
     if (!ticket) {
       await interaction.reply({
-        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid_ticket', { lng }))],
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid-ticket', { lng }))],
         ephemeral: true
       });
       return;
@@ -42,7 +42,7 @@ export default new Button({
     if (!member.permissions.has(PermissionFlagsBits.Administrator)) {
       if (!member.roles.cache.has(system.staffRoleId)) {
         await interaction.reply({
-          embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.staff_only', { lng }))],
+          embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.staff-only', { lng }))],
           ephemeral: true
         });
         return;
@@ -51,13 +51,13 @@ export default new Button({
 
     const hasTranscriptChannel = system.transcriptChannelId ? true : false;
 
-    const description = [t('ticket.ticket_deleted', { lng, deleted_by: user.toString() }), t('ticket.delete_time', { lng })].join('\n');
+    const description = [t('ticket.ticket_deleted', { lng, deletedBy: user.toString() }), t('ticket.delete-time', { lng })].join('\n');
 
     await interaction.reply({
       embeds: [
         new EmbedBuilder()
           .setColor(client.colors.ticket)
-          .setDescription(hasTranscriptChannel ? description + '\n' + t('ticket.delete_reminder', { lng }) : description)
+          .setDescription(hasTranscriptChannel ? description + '\n' + t('ticket.delete-reminder', { lng }) : description)
       ],
       components: hasTranscriptChannel
         ? [

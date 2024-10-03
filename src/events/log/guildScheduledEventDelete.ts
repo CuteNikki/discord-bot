@@ -52,7 +52,7 @@ export default new Event({
               value: creator ? `${creator.toString()} (\`${creator.username}\` | ${creator.id})` : '/'
             },
             {
-              name: t('log.guildScheduledEventDelete.created_at', { lng }),
+              name: t('log.guildScheduledEventDelete.created-at', { lng }),
               value: `<t:${Math.floor(createdTimestamp / 1000)}:f>`
             },
             {

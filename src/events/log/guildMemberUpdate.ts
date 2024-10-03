@@ -34,12 +34,12 @@ export default new Event({
     if (newMember.nickname !== oldMember.nickname)
       embed.addFields(
         {
-          name: t('log.guildMemberUpdate.old_nickname', { lng }),
+          name: t('log.guildMemberUpdate.old-nickname', { lng }),
           value: oldMember.nickname ?? oldMember.displayName,
           inline: true
         },
         {
-          name: t('log.guildMemberUpdate.new_nickname', { lng }),
+          name: t('log.guildMemberUpdate.new-nickname', { lng }),
           value: newMember.nickname ?? newMember.displayName,
           inline: true
         },
@@ -48,12 +48,12 @@ export default new Event({
     if (newMember.displayAvatarURL() !== oldMember.displayAvatarURL())
       embed.addFields(
         {
-          name: t('log.guildMemberUpdate.old_avatar', { lng }),
+          name: t('log.guildMemberUpdate.old-avatar', { lng }),
           value: oldMember.displayAvatarURL(),
           inline: true
         },
         {
-          name: t('log.guildMemberUpdate.new_avatar', { lng }),
+          name: t('log.guildMemberUpdate.new-avatar', { lng }),
           value: newMember.displayAvatarURL(),
           inline: true
         },
@@ -62,12 +62,12 @@ export default new Event({
     if (newMember.pending !== oldMember.pending)
       embed.addFields(
         {
-          name: t('log.guildMemberUpdate.old_pending', { lng }),
+          name: t('log.guildMemberUpdate.old-pending', { lng }),
           value: `${oldMember.pending}`,
           inline: true
         },
         {
-          name: t('log.guildMemberUpdate.new_pending', { lng }),
+          name: t('log.guildMemberUpdate.new-pending', { lng }),
           value: `${newMember.pending}`,
           inline: true
         },
@@ -76,12 +76,12 @@ export default new Event({
     if (newMember.communicationDisabledUntilTimestamp !== oldMember.communicationDisabledUntilTimestamp)
       embed.addFields(
         {
-          name: t('log.guildMemberUpdate.old_timeout', { lng }),
+          name: t('log.guildMemberUpdate.old-timeout', { lng }),
           value: oldMember.communicationDisabledUntilTimestamp ? `<t:${Math.floor(oldMember.communicationDisabledUntilTimestamp / 1000)}:f>` : '/',
           inline: true
         },
         {
-          name: t('log.guildMemberUpdate.new_timeout', { lng }),
+          name: t('log.guildMemberUpdate.new-timeout', { lng }),
           value: newMember.communicationDisabledUntilTimestamp ? `<t:${Math.floor(newMember.communicationDisabledUntilTimestamp / 1000)}:f>` : '/',
           inline: true
         },
@@ -93,7 +93,7 @@ export default new Event({
 
       embed.addFields(
         {
-          name: t('log.guildMemberUpdate.removed_roles', { lng }),
+          name: t('log.guildMemberUpdate.removed-roles', { lng }),
           value:
             removedRoles
               .map((role) => role.toString())
@@ -102,7 +102,7 @@ export default new Event({
           inline: true
         },
         {
-          name: t('log.guildMemberUpdate.added_roles', { lng }),
+          name: t('log.guildMemberUpdate.added-roles', { lng }),
           value:
             addedRoles
               .map((role) => role.toString())
@@ -119,7 +119,7 @@ export default new Event({
 
       embed.addFields(
         {
-          name: t('log.guildMemberUpdate.removed_permissions', { lng }),
+          name: t('log.guildMemberUpdate.removed-permissions', { lng }),
           value:
             removedPerms
               .map((perm) => `\`${perm}\``)
@@ -128,7 +128,7 @@ export default new Event({
           inline: true
         },
         {
-          name: t('log.guildMemberUpdate.added_permissions', { lng }),
+          name: t('log.guildMemberUpdate.added-permissions', { lng }),
           value:
             addedPerms
               .map((perm) => `\`${perm}\``)

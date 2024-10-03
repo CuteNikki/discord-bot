@@ -44,7 +44,7 @@ export default new Command({
       }));
 
     const select = new StringSelectMenuBuilder()
-      .setCustomId('HELP_SELECT')
+      .setCustomId('select-help-category')
       .setMaxValues(1)
       .setPlaceholder(t('commands.placeholder', { lng }))
       .setOptions(...categories);
@@ -76,7 +76,7 @@ export default new Command({
       if (selectInteraction.user.id !== interaction.user.id) {
         await interaction
           .followUp({
-            content: t('interactions.author_only', {
+            content: t('interactions.author-only', {
               lng: await getUserLanguage(selectInteraction.user.id)
             }),
             ephemeral: true
@@ -110,7 +110,7 @@ export default new Command({
         interaction,
         ephemeral,
         disableButtons: false,
-        extraButton: new ButtonBuilder().setCustomId('HELP_BACK').setEmoji('🔙').setStyle(ButtonStyle.Danger),
+        extraButton: new ButtonBuilder().setCustomId('button-help-back').setEmoji('🔙').setStyle(ButtonStyle.Danger),
         extraButtonFunction: async (int) => {
           await int
             .editReply({

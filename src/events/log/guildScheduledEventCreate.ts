@@ -53,7 +53,7 @@ export default new Event({
               value: GuildScheduledEventStatus[status]
             },
             {
-              name: t('log.guildScheduledEventCreate.privacy_level', { lng }),
+              name: t('log.guildScheduledEventCreate.privacy-level', { lng }),
               value: GuildScheduledEventPrivacyLevel[privacyLevel]
             },
             {

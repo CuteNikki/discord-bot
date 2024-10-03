@@ -45,7 +45,7 @@ export default new Command({
           const channel = interaction.options.getChannel('channel', false, [ChannelType.GuildVoice]);
 
           if (!channel && !config.customVC.channelId) {
-            await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom-vc.channel.not_set', { lng }))] });
+            await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom-vc.channel.not-set', { lng }))] });
             return;
           }
 
@@ -72,7 +72,7 @@ export default new Command({
           const channel = interaction.options.getChannel('category', false, [ChannelType.GuildCategory]);
 
           if (!channel && !config.customVC.parentId) {
-            await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom-vc.parent.not_set', { lng }))] });
+            await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom-vc.parent.not-set', { lng }))] });
             return;
           }
 

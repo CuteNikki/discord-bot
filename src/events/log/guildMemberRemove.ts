@@ -34,11 +34,11 @@ export default new Event({
               value: `${user.toString()} (\`${user.username}\` | ${user.id})`
             },
             {
-              name: t('log.guildMemberRemove.created_at', { lng }),
+              name: t('log.guildMemberRemove.created-at', { lng }),
               value: `<t:${Math.floor(user.createdTimestamp / 1000)}:f> (<t:${Math.floor(user.createdTimestamp / 1000)}:R>)`
             },
             {
-              name: t('log.guildMemberRemove.joined_at', { lng }),
+              name: t('log.guildMemberRemove.joined-at', { lng }),
               value: `<t:${Math.floor((joinedTimestamp || 0) / 1000)}:f> (<t:${Math.floor((joinedTimestamp || 0) / 1000)}:R>)`
             }
           )

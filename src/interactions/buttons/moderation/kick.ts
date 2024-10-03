@@ -10,7 +10,7 @@ import { InfractionType } from 'types/infraction';
 import { logger } from 'utils/logger';
 
 export default new Button({
-  customId: 'button-kick',
+  customId: 'button-kick_',
   isAuthorOnly: false,
   isCustomIdIncluded: true,
   permissions: ['KickMembers'],
@@ -40,7 +40,7 @@ export default new Button({
 
     const receivedDM = await client.users
       .send(targetMember.user.id, {
-        content: t('kick.target_dm', {
+        content: t('kick.target-dm', {
           lng: targetLng,
           guild: `\`${guild.name}\``,
           reason: `\`${reason ?? t('none', { lng: targetLng })}\``
@@ -55,7 +55,7 @@ export default new Button({
           user: targetMember.toString(),
           reason: `\`${reason ?? t('none', { lng })}\``
         }),
-        receivedDM ? t('kick.dm_received', { lng }) : t('kick.dm_not_received', { lng })
+        receivedDM ? t('kick.dm-received', { lng }) : t('kick.dm-not-received', { lng })
       ].join('\n'),
       components: []
     });

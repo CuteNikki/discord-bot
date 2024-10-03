@@ -88,7 +88,7 @@ export default new Command({
 
           if (!interaction.inCachedGuild()) {
             await interaction.editReply({
-              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('language.invalid_guild', { lng }))]
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('language.invalid-guild', { lng }))]
             });
             return;
           }
@@ -102,7 +102,7 @@ export default new Command({
 
           if (!interaction.member.permissions.has(PermissionFlagsBits.ManageGuild)) {
             await interaction.editReply({
-              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('language.no_permission', { lng }))]
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('language.no-permission', { lng }))]
             });
             return;
           }

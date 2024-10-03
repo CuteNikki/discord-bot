@@ -129,7 +129,7 @@ export default new Command({
         {
           if (config.farewell.enabled) {
             return interaction.editReply({
-              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('farewell.state.already_enabled', { lng }))]
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('farewell.state.already-enabled', { lng }))]
             });
           }
 
@@ -147,7 +147,7 @@ export default new Command({
       case 'disable': {
         if (!config.farewell.enabled) {
           return interaction.editReply({
-            embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('farewell.state.already_disabled', { lng }))]
+            embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('farewell.state.already-disabled', { lng }))]
           });
         }
 

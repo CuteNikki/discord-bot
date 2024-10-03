@@ -45,12 +45,12 @@ export default new Event({
     if (newEmoji.name !== oldEmoji.name)
       embed.addFields(
         {
-          name: t('log.emojiUpdate.old_name', { lng }),
+          name: t('log.emojiUpdate.old-name', { lng }),
           value: `${oldEmoji.name}`,
           inline: true
         },
         {
-          name: t('log.emojiUpdate.new_name', { lng }),
+          name: t('log.emojiUpdate.new-name', { lng }),
           value: `${newEmoji.name}`,
           inline: true
         },
@@ -59,7 +59,7 @@ export default new Event({
     if (JSON.stringify(newEmoji.roles.cache.toJSON()) !== JSON.stringify(oldEmoji.roles.cache.toJSON())) {
       embed.addFields(
         {
-          name: t('log.emojiUpdate.old_roles', { lng }),
+          name: t('log.emojiUpdate.old-roles', { lng }),
           value:
             oldEmoji.roles.cache
               .map((role) => role.toString())
@@ -68,7 +68,7 @@ export default new Event({
           inline: true
         },
         {
-          name: t('log.emojiUpdate.new_roles', { lng }),
+          name: t('log.emojiUpdate.new-roles', { lng }),
           value:
             newEmoji.roles.cache
               .map((role) => role.toString())

@@ -7,7 +7,7 @@ import { Modal } from 'classes/modal';
 import { logger } from 'utils/logger';
 
 export default new Modal({
-  customId: 'modal_execute',
+  customId: 'modal-execute',
   isCustomIdIncluded: false,
   isDeveloperOnly: true,
   permissions: ['Administrator'],

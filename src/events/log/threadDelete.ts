@@ -40,15 +40,15 @@ export default new Event({
             },
             { name: t('log.threadDelete.locked', { lng }), value: `${locked}` },
             {
-              name: t('log.threadDelete.applied_tags', { lng }),
+              name: t('log.threadDelete.applied-tags', { lng }),
               value: appliedTags.join('\n').slice(0, 1000) || '/'
             },
             {
-              name: t('log.threadDelete.archived_at', { lng }),
+              name: t('log.threadDelete.archived-at', { lng }),
               value: archiveTimestamp ? `<t:${Math.floor(archiveTimestamp / 1000)}:f>` : '/'
             },
             {
-              name: t('log.threadDelete.created_at', { lng }),
+              name: t('log.threadDelete.created-at', { lng }),
               value: createdTimestamp ? `<t:${Math.floor(createdTimestamp / 1000)}:f>` : '/'
             }
           )

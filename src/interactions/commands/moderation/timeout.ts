@@ -38,8 +38,8 @@ export default new Command({
     await interaction.deferReply({ ephemeral: true });
 
     enum CustomIds {
-      Confirm = 'TIMEOUT_CONFIRM',
-      Cancel = 'TIMEOUT_CANCEL'
+      Confirm = 'button-timeout-confirm',
+      Cancel = 'button-timeout-cancel'
     }
 
     const { options, guild, member, user } = interaction;
@@ -59,7 +59,7 @@ export default new Command({
     const duration = ms(userDuration);
 
     if (!duration) {
-      await interaction.editReply(t('timeout.invalid_duration', { lng }));
+      await interaction.editReply(t('timeout.invalid-duration', { lng }));
       return;
     }
 
@@ -72,12 +72,12 @@ export default new Command({
     const botRolePos = guild.members.me?.roles.highest.position ?? 0;
 
     if (targetRolePos >= staffRolePos) {
-      await interaction.editReply(t('timeout.target.pos_staff', { lng }));
+      await interaction.editReply(t('timeout.target.pos-staff', { lng }));
       return;
     }
 
     if (targetRolePos >= botRolePos) {
-      await interaction.editReply(t('timeout.target.pos_bot', { lng }));
+      await interaction.editReply(t('timeout.target.pos-bot', { lng }));
       return;
     }
 
@@ -90,7 +90,7 @@ export default new Command({
 
     if (isTimed) {
       await interaction.editReply(
-        t('timeout.target.timed_out', {
+        t('timeout.target.timed-out', {
           lng,
           date: `<t:${Math.floor(targetMember.communicationDisabledUntilTimestamp / 1000)}:f>`
         })
@@ -131,7 +131,7 @@ export default new Command({
 
       const receivedDM = await client.users
         .send(target.id, {
-          content: t('timeout.target_dm', {
+          content: t('timeout.target-dm', {
             lng: targetLng,
             guild: `\`${guild.name}\``,
             reason: `\`${reason ?? t('none', { lng })}\``,
@@ -147,7 +147,7 @@ export default new Command({
             user: target.toString(),
             reason: `\`${reason ?? t('none', { lng })}\``
           }),
-          receivedDM ? t('timeout.dm_received', { lng }) : t('timeout.dm_not_received', { lng }),
+          receivedDM ? t('timeout.dm-received', { lng }) : t('timeout.dm-not-received', { lng }),
           t('timeout.duration', { lng, duration: durationText })
         ].join('\n'),
         components: []

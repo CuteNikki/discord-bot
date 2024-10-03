@@ -33,7 +33,7 @@ export default new Button({
               value: `${sent.editedTimestamp! - interaction.createdTimestamp}ms`
             },
             {
-              name: t('ping.last_updated', { lng }),
+              name: t('ping.last-updated', { lng }),
               value: `<t:${Math.floor(Date.now() / 1000)}:R>`
             }
           )

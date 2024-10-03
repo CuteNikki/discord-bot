@@ -36,8 +36,8 @@ export default new Command({
     await interaction.deferReply({ ephemeral: true });
 
     enum CustomIds {
-      Confirm = 'KICK_CONFIRM',
-      Cancel = 'KICK_CANCEL'
+      Confirm = 'button-kick-confirm',
+      Cancel = 'button-ban-confirm'
     }
 
     const { options, guild, member, user } = interaction;
@@ -57,11 +57,11 @@ export default new Command({
     const botRolePos = guild.members.me?.roles.highest.position ?? 0;
 
     if (targetRolePos >= staffRolePos) {
-      await interaction.editReply(t('kick.target.pos_staff', { lng }));
+      await interaction.editReply(t('kick.target.pos-staff', { lng }));
       return;
     }
     if (targetRolePos >= botRolePos) {
-      await interaction.editReply(t('kick.target.pos_bot', { lng }));
+      await interaction.editReply(t('kick.target.pos-bot', { lng }));
       return;
     }
 
@@ -101,7 +101,7 @@ export default new Command({
 
       const receivedDM = await client.users
         .send(target.id, {
-          content: t('kick.target_dm', {
+          content: t('kick.target-dm', {
             lng: await getUserLanguage(target.id),
             guild: `\`${guild.name}\``,
             reason: `\`${reason ?? '/'}\``
@@ -112,7 +112,7 @@ export default new Command({
       await collector.update({
         content: [
           t('kick.confirmed', { lng, user: target.toString(), reason: `\`${reason ?? t('none', { lng })}\`` }),
-          receivedDM ? t('kick.dm_received', { lng }) : t('kick.dm_not_received', { lng })
+          receivedDM ? t('kick.dm-received', { lng }) : t('kick.dm-not-received', { lng })
         ].join('\n'),
         components: []
       });

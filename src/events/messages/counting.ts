@@ -41,7 +41,7 @@ export default new Event({
     // Check if the user is repeating their own number
     if (author.id === config.counting.currentNumberBy) {
       await handleDeletion(message, 'Could not delete message from same user');
-      const warnMessage = await message.channel.send(t('counting.warn_repeat', { lng, author }));
+      const warnMessage = await message.channel.send(t('counting.warn-repeat', { lng, author }));
       delayDelete(warnMessage);
       return;
     }
@@ -63,7 +63,7 @@ export default new Event({
         }
       });
 
-      const failMessage = await message.channel.send(t('counting.warn_incorrect', { lng, author }));
+      const failMessage = await message.channel.send(t('counting.warn-incorrect', { lng, author }));
       delayDelete(failMessage);
       return;
     }

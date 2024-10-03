@@ -36,8 +36,8 @@ export default new Command({
     await interaction.deferReply({ ephemeral: true });
 
     enum CustomIds {
-      Confirm = 'UNBAN_CONFIRM',
-      Cancel = 'UNBAN_CANCEL'
+      Confirm = 'button-unban-confirm',
+      Cancel = 'button-unban-cancel'
     }
 
     const { options, guild, user } = interaction;
@@ -50,7 +50,7 @@ export default new Command({
     const isBanned = await guild.bans.fetch(target.id).catch((err) => logger.debug({ err, userId: target.id }, 'Could not fetch target ban'));
 
     if (!isBanned) {
-      await interaction.editReply(t('unban.target.not_banned', { lng }));
+      await interaction.editReply(t('unban.target.not-banned', { lng }));
       return;
     }
 
@@ -85,7 +85,7 @@ export default new Command({
 
       const receivedDM = await client.users
         .send(target.id, {
-          content: t('unban.target_dm', {
+          content: t('unban.target-dm', {
             lng: targetLng,
             guild: `\`${guild.name}\``,
             reason: `\`${reason ?? t('none', { lng })}\``
@@ -100,7 +100,7 @@ export default new Command({
             user: target.toString(),
             reason: `\`${reason ?? t('none', { lng })}\``
           }),
-          receivedDM ? t('unban.dm_received', { lng }) : t('unban.dm_not_received', { lng })
+          receivedDM ? t('unban.dm-received', { lng }) : t('unban.dm-not-received', { lng })
         ].join('\n'),
         components: []
       });

@@ -38,13 +38,13 @@ export default new Event({
               value: `<@${applicationId}>`
             },
             {
-              name: t('log.applicationCommandPermissionsUpdate.command_id', {
+              name: t('log.applicationCommandPermissionsUpdate.command-id', {
                 lng
               }),
               value: `${id}`
             },
             {
-              name: t('log.applicationCommandPermissionsUpdate.updated_permissions', { lng }),
+              name: t('log.applicationCommandPermissionsUpdate.updated-permissions', { lng }),
               value:
                 permissions
                   .map(

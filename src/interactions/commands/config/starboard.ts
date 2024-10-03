@@ -81,7 +81,7 @@ export default new Command({
                   value: config.starboard.channelId ? `<#${config.starboard.channelId}>` : t('none', { lng })
                 },
                 {
-                  name: t('starboard.minimum_stars', { lng }),
+                  name: t('starboard.minimum-stars', { lng }),
                   value: config.starboard.minimumStars ? config.starboard.minimumStars.toString() : t('none', { lng })
                 }
               ])
@@ -91,7 +91,7 @@ export default new Command({
         break;
       case 'disable':
         {
-          if (!config.starboard.enabled) return await interaction.editReply({ content: t('starboard.already_disabled', { lng }) });
+          if (!config.starboard.enabled) return await interaction.editReply({ content: t('starboard.already-disabled', { lng }) });
 
           await updateGuildSettings(guild.id, { $set: { ['starboard.enabled']: false } });
           await interaction.editReply({ content: t('starboard.disabled', { lng }) });
@@ -99,7 +99,7 @@ export default new Command({
         break;
       case 'enable':
         {
-          if (config.starboard.enabled) return await interaction.editReply({ content: t('starboard.already_enabled', { lng }) });
+          if (config.starboard.enabled) return await interaction.editReply({ content: t('starboard.already-enabled', { lng }) });
 
           await updateGuildSettings(guild.id, { $set: { ['starboard.enabled']: true } });
           await interaction.editReply({ content: t('starboard.enabled', { lng }) });
@@ -110,10 +110,10 @@ export default new Command({
           const channel = options.getChannel('channel', true);
           const minimumStars = options.getInteger('stars', true);
 
-          if (channel.type !== ChannelType.GuildText) return await interaction.editReply({ content: t('starboard.invalid_channel', { lng }) });
+          if (channel.type !== ChannelType.GuildText) return await interaction.editReply({ content: t('starboard.invalid-channel', { lng }) });
           if (!channel.permissionsFor(interaction.guild.members.me).has(PermissionsBitField.Flags.SendMessages))
-            return await interaction.editReply({ content: t('starboard.missing_permissions', { lng }) });
-          if (minimumStars < 1 || minimumStars > 100) return await interaction.editReply({ content: t('starboard.invalid_stars', { lng }) });
+            return await interaction.editReply({ content: t('starboard.missing-permissions', { lng }) });
+          if (minimumStars < 1 || minimumStars > 100) return await interaction.editReply({ content: t('starboard.invalid-stars', { lng }) });
 
           await updateGuildSettings(guild.id, {
             $set: { ['starboard.channelId']: channel.id, ['starboard.minimumStars']: minimumStars, ['starboard.enabled']: true }
@@ -126,18 +126,18 @@ export default new Command({
           const channel = options.getChannel('channel', false);
           const minimumStars = options.getInteger('stars', false);
 
-          if (!channel && !minimumStars) return await interaction.editReply({ content: t('starboard.edit_nothing', { lng }) });
+          if (!channel && !minimumStars) return await interaction.editReply({ content: t('starboard.edit-nothing', { lng }) });
 
           if (channel) {
-            if (channel.type !== ChannelType.GuildText) return await interaction.editReply({ content: t('starboard.invalid_channel', { lng }) });
+            if (channel.type !== ChannelType.GuildText) return await interaction.editReply({ content: t('starboard.invalid-channel', { lng }) });
             if (!channel.permissionsFor(interaction.guild.members.me).has(PermissionsBitField.Flags.SendMessages))
-              return await interaction.editReply({ content: t('starboard.missing_permissions', { lng }) });
-            if (channel.id === config.starboard.channelId) return await interaction.editReply({ content: t('starboard.same_channel', { lng }) });
+              return await interaction.editReply({ content: t('starboard.missing-permissions', { lng }) });
+            if (channel.id === config.starboard.channelId) return await interaction.editReply({ content: t('starboard.same-channel', { lng }) });
           }
           if (minimumStars) {
             if (isNaN(minimumStars) || minimumStars < 1 || minimumStars > 100)
-              return await interaction.editReply({ content: t('starboard.invalid_stars', { lng }) });
-            if (minimumStars === config.starboard.minimumStars) return await interaction.editReply({ content: t('starboard.same_stars', { lng }) });
+              return await interaction.editReply({ content: t('starboard.invalid-stars', { lng }) });
+            if (minimumStars === config.starboard.minimumStars) return await interaction.editReply({ content: t('starboard.same-stars', { lng }) });
           }
 
           await updateGuildSettings(guild.id, {
@@ -153,7 +153,7 @@ export default new Command({
       case 'delete':
         {
           if (!config.starboard.channelId && !config.starboard.minimumStars)
-            return await interaction.editReply({ content: t('starboard.delete_nothing', { lng }) });
+            return await interaction.editReply({ content: t('starboard.delete-nothing', { lng }) });
 
           await updateGuildSettings(guild.id, { $unset: { ['starboard.channelId']: 1, ['starboard.minimumStars']: 1 } });
           await interaction.editReply({ content: t('starboard.deleted', { lng }) });

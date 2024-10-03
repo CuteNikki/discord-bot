@@ -21,7 +21,7 @@ export default new Command({
 
     const clusterData = await client.cluster.broadcastEval((c) => ({
       clusterId: c.cluster.id,
-      shardIds: [...c.cluster.ids.keys()],
+      shardIds: c.cluster.shardList,
       totalGuilds: c.guilds.cache.size,
       totalMembers: c.guilds.cache.map((g) => g.memberCount).reduce((a, b) => a + b, 0),
       ping: Math.floor(c.ws.ping),
@@ -42,7 +42,7 @@ export default new Command({
           return { id: c.id, name: c.name };
         })
       })),
-      perShardData: [...c.cluster.ids.keys()].map((shardId) => ({
+      perShardData: c.cluster.shardList.map((shardId) => ({
         shardId: shardId,
         ping: c.ws.shards.get(shardId)?.ping,
         status: Status[c.ws.shards.get(shardId)?.status as Status],

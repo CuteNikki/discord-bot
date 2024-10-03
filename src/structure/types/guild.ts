@@ -75,18 +75,18 @@ export type Embed = {
     value: string; // max 1024 characters
     inline?: boolean;
   }[];
-}
+};
 
 export type Message = {
   content: string | null; // max 2000 characters
   embed: Embed; // max 10 embeds but not using array
-}
+};
 
 export type LevelReward = {
   roleId: string;
   level: number;
   _id: Types.ObjectId;
-}
+};
 
 export type TicketChoice = {
   label: string;
@@ -102,7 +102,7 @@ export type TicketSystem = {
   staffRoleId: string;
   choices: TicketChoice[];
   channelId: string;
-}
+};
 
 export type GuildDocument = {
   _id: Types.ObjectId;
@@ -202,4 +202,4 @@ export type GuildDocument = {
       voiceStateUpdate: boolean;
     };
   };
-}
+};

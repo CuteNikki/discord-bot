@@ -563,14 +563,26 @@ export class CustomEmbedBuilder extends events {
           .setLabel(t('custom-embed.button.message', { lng }))
           .setStyle(ButtonStyle.Secondary)
           .setDisabled(disabled),
-        new ButtonBuilder().setCustomId('button-custom-title').setLabel(t('custom-embed.button.title', { lng })).setStyle(ButtonStyle.Secondary).setDisabled(disabled),
+        new ButtonBuilder()
+          .setCustomId('button-custom-title')
+          .setLabel(t('custom-embed.button.title', { lng }))
+          .setStyle(ButtonStyle.Secondary)
+          .setDisabled(disabled),
         new ButtonBuilder()
           .setCustomId('button-custom-description')
           .setLabel(t('custom-embed.button.description', { lng }))
           .setStyle(ButtonStyle.Secondary)
           .setDisabled(disabled),
-        new ButtonBuilder().setCustomId('button-custom-author').setLabel(t('custom-embed.button.author', { lng })).setStyle(ButtonStyle.Secondary).setDisabled(disabled),
-        new ButtonBuilder().setCustomId('button-custom-footer').setLabel(t('custom-embed.button.footer', { lng })).setStyle(ButtonStyle.Secondary).setDisabled(disabled)
+        new ButtonBuilder()
+          .setCustomId('button-custom-author')
+          .setLabel(t('custom-embed.button.author', { lng }))
+          .setStyle(ButtonStyle.Secondary)
+          .setDisabled(disabled),
+        new ButtonBuilder()
+          .setCustomId('button-custom-footer')
+          .setLabel(t('custom-embed.button.footer', { lng }))
+          .setStyle(ButtonStyle.Secondary)
+          .setDisabled(disabled)
       ),
       new ActionRowBuilder<ButtonBuilder>().setComponents(
         new ButtonBuilder()
@@ -578,8 +590,16 @@ export class CustomEmbedBuilder extends events {
           .setLabel(t('custom-embed.button.thumbnail', { lng }))
           .setStyle(ButtonStyle.Secondary)
           .setDisabled(disabled),
-        new ButtonBuilder().setCustomId('button-custom-image').setLabel(t('custom-embed.button.image', { lng })).setStyle(ButtonStyle.Secondary).setDisabled(disabled),
-        new ButtonBuilder().setCustomId('button-custom-color').setLabel(t('custom-embed.button.color', { lng })).setStyle(ButtonStyle.Secondary).setDisabled(disabled),
+        new ButtonBuilder()
+          .setCustomId('button-custom-image')
+          .setLabel(t('custom-embed.button.image', { lng }))
+          .setStyle(ButtonStyle.Secondary)
+          .setDisabled(disabled),
+        new ButtonBuilder()
+          .setCustomId('button-custom-color')
+          .setLabel(t('custom-embed.button.color', { lng }))
+          .setStyle(ButtonStyle.Secondary)
+          .setDisabled(disabled),
         new ButtonBuilder()
           .setCustomId('button-custom-add-field')
           .setLabel(t('custom-embed.button.add-field', { lng }))
@@ -592,9 +612,21 @@ export class CustomEmbedBuilder extends events {
           .setDisabled(disabled)
       ),
       new ActionRowBuilder<ButtonBuilder>().setComponents(
-        new ButtonBuilder().setCustomId('button-custom-reset').setLabel(t('custom-embed.button.reset', { lng })).setStyle(ButtonStyle.Primary).setDisabled(disabled),
-        new ButtonBuilder().setCustomId('button-custom-submit').setLabel(t('custom-embed.button.submit', { lng })).setStyle(ButtonStyle.Success).setDisabled(disabled),
-        new ButtonBuilder().setCustomId('button-custom-delete').setLabel(t('custom-embed.button.delete', { lng })).setStyle(ButtonStyle.Danger).setDisabled(disabled)
+        new ButtonBuilder()
+          .setCustomId('button-custom-reset')
+          .setLabel(t('custom-embed.button.reset', { lng }))
+          .setStyle(ButtonStyle.Primary)
+          .setDisabled(disabled),
+        new ButtonBuilder()
+          .setCustomId('button-custom-submit')
+          .setLabel(t('custom-embed.button.submit', { lng }))
+          .setStyle(ButtonStyle.Success)
+          .setDisabled(disabled),
+        new ButtonBuilder()
+          .setCustomId('button-custom-delete')
+          .setLabel(t('custom-embed.button.delete', { lng }))
+          .setStyle(ButtonStyle.Danger)
+          .setDisabled(disabled)
       )
     ];
   }

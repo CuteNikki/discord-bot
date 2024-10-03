@@ -325,8 +325,8 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
   - [x] avatar/banner slash and user context menu commands
   - [x] userinfo slash and user context menu commands
   - [x] serverinfo command
-  - [x] weather command
-  - [x] reminder command (weatherapi.com)
+  - [x] weather command (weatherapi.com)
+  - [x] reminder command
 - [ ] developer module (more features might be added)
   - [x] evaluate code (`/eval`)
     - [ ] edit button
@@ -351,6 +351,7 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
     - [ ] 2048 (maybe?)
     - [ ] Lights Out (maybe?)
 - [ ] config commands
+  - [x] giveaway (new)
   - [x] custom voice channels
     - [x] fully customizable for users
   - [x] reaction roles
@@ -359,14 +360,6 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
   - [x] counting game
     - [x] reset on wrong number is optional
   - [ ] word chain game (next word needs to start with the last letter of the previous word)
-  - [ ] giveaway
-    - [x] create giveaway (time, prize, winnercount, channel)
-    - [x] edit giveaway (time, prize, winnercount)
-    - [x] delete giveaway (giveaway id)
-    - [x] reroll giveaway (giveaway id)
-    - [x] list active giveaways
-    - [x] join/leave giveaway (updates participants count on giveaway)
-    - [x] announce winners and delete giveaway on end
   - [ ] economy
     - [ ] needs todo
   - [ ] confession
@@ -381,11 +374,11 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
     - [x] enable/disable module
     - [ ] staff role (maybe? not sure yet)
     - [ ] adjustable option to make reasons required (optional by default)
-  - [x] level config
+  - [ ] level config
     - [ ] refactor
     - [x] disable/enable module
     - [x] modify users level/xp
-    - [x] levelup announcement
+    - [ ] levelup announcement
       - [x] can send to current/other channel or dms
       - [ ] fully customizable message
     - [x] ignored roles and channels
@@ -415,7 +408,7 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
         - [x] bughunter
         - [x] supporter
           - [x] automatically added on support server boost
-  - [x] server log config
+  - [ ] server log config
     - [ ] refactor
     - [x] enable/disable
     - [x] implement events:

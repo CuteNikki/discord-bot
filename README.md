@@ -329,7 +329,6 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
   - [x] reminder command
 - [ ] developer module (more features might be added)
   - [x] evaluate code (`/eval`)
-    - [ ] edit button
   - [x] execute console command (`/exec`)
   - [x] register commands command (`/register-commands`)
 - [ ] fun module
@@ -351,7 +350,7 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
     - [ ] 2048 (maybe?)
     - [ ] Lights Out (maybe?)
 - [ ] config commands
-  - [x] giveaway (new)
+  - [x] giveaway
   - [x] custom voice channels
     - [x] fully customizable for users
   - [x] reaction roles

@@ -22,49 +22,35 @@ export default new Modal({
       .replaceAll('env', 'no')
       .replaceAll('token', 'no')
       .replaceAll('TOKEN', 'no');
+    const input = command.length > 4000 ? command.substring(0, 4000) + '...' : command;
 
     try {
       const execute = promisify(exec);
       const { stdout, stderr } = await execute(command);
 
-      if (stderr)
-        return interaction.editReply({
-          embeds: [
-            new EmbedBuilder()
-              .setTitle('Error')
-              .setColor(Colors.Red)
-              .setDescription(
-                codeBlock(
-                  'ts',
-                  inspect(stderr, { depth: 0 })
-                    .replaceAll(interaction.client.token, 'no')
-                    .replaceAll(interaction.client.token.split('').reverse().join(''), 'no')
-                    .replaceAll('\\n', '\n')
-                    .substring(0, 4000)
-                )
-              )
-          ]
+      if (stderr) {
+        let error = inspect(stderr, { depth: 0 })
+          .replaceAll(interaction.client.token, 'no')
+          .replaceAll(interaction.client.token.split('').reverse().join(''), 'no')
+          .replaceAll('\\n', '\n');
+        error = error.length > 4000 ? error.substring(0, 4000) + '...' : error;
+
+        await interaction.editReply({
+          embeds: [new EmbedBuilder().setTitle('Error').setColor(Colors.Red).setDescription(codeBlock('js', error))]
         });
+        return;
+      }
+
+      let output = stdout
+        .replaceAll(interaction.client.token, 'no')
+        .replaceAll(interaction.client.token.split('').reverse().join(''), 'no')
+        .replaceAll('\\n', '\n');
+      output = output.length > 4000 ? output.substring(0, 4000) + '...' : output;
 
       return interaction.editReply({
         embeds: [
-          new EmbedBuilder()
-            .setTitle('Input')
-            .setColor(Colors.Blurple)
-            .setDescription(codeBlock('js', command.substring(0, 4000))),
-          new EmbedBuilder()
-            .setTitle('Output')
-            .setColor(Colors.Green)
-            .setDescription(
-              codeBlock(
-                'js',
-                stdout
-                  .replaceAll(interaction.client.token, 'no')
-                  .replaceAll(interaction.client.token.split('').reverse().join(''), 'no')
-                  .replaceAll('\\n', '\n')
-                  .substring(0, 4000)
-              )
-            )
+          new EmbedBuilder().setTitle('Input').setColor(Colors.Blurple).setDescription(codeBlock('js', input)),
+          new EmbedBuilder().setTitle('Output').setColor(Colors.Green).setDescription(codeBlock('js', output))
         ],
         components: [
           new ActionRowBuilder<ButtonBuilder>().addComponents(
@@ -75,25 +61,16 @@ export default new Modal({
     } catch (err: unknown) {
       logger.debug({ err }, 'Execute Error');
 
+      let error = inspect(err, { depth: 2 })
+        .replaceAll(interaction.client.token, 'no')
+        .replaceAll(interaction.client.token.split('').reverse().join(''), 'no')
+        .replaceAll('\\n', '\n');
+      error = error.length > 4000 ? error.substring(0, 4000) + '...' : error;
+
       return interaction.editReply({
         embeds: [
-          new EmbedBuilder()
-            .setTitle('Input')
-            .setColor(Colors.Blurple)
-            .setDescription(codeBlock('js', command.substring(0, 4000))),
-          new EmbedBuilder()
-            .setTitle('Error')
-            .setColor(Colors.Red)
-            .setDescription(
-              codeBlock(
-                'js',
-                inspect(err, { depth: 2 })
-                  .replaceAll(interaction.client.token, 'no')
-                  .replaceAll(interaction.client.token.split('').reverse().join(''), 'no')
-                  .replaceAll('\\n', '\n')
-                  .substring(0, 4000)
-              )
-            )
+          new EmbedBuilder().setTitle('Input').setColor(Colors.Blurple).setDescription(codeBlock('js', input)),
+          new EmbedBuilder().setTitle('Error').setColor(Colors.Red).setDescription(codeBlock('js', error))
         ],
         components: [
           new ActionRowBuilder<ButtonBuilder>().addComponents(

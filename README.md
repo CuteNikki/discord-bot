@@ -159,11 +159,11 @@ export default new Command({
     // the order of interaction, client and lng does not matter
 
     // get a guilds language
-    // import { getGuildLanguage } from 'db/guild';
+    // import { getGuildLanguage } from 'db/language';
     // const guildLng = await getGuildLanguage(guildId);
 
     // get a different users language
-    // import { getUserLanguage } from 'db/user';
+    // import { getUserLanguage } from 'db/language';
     // const otherLng = await getUserLanguage(userId);
 
     const color = interaction.options.getString('color', true);

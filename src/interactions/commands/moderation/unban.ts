@@ -13,7 +13,7 @@ import { t } from 'i18next';
 import { Command, ModuleType } from 'classes/command';
 
 import { createInfraction } from 'db/infraction';
-import { getUserLanguage } from 'db/user';
+import { getUserLanguage } from 'db/language';
 
 import { InfractionType } from 'types/infraction';
 

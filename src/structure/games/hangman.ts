@@ -3,7 +3,7 @@ import { t } from 'i18next';
 
 import type { DiscordClient } from 'classes/client';
 
-import { getUserLanguage } from 'db/user';
+import { getUserLanguage } from 'db/language';
 
 import { WORDS } from 'constants/words';
 import { logger } from 'utils/logger';

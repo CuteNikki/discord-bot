@@ -15,7 +15,7 @@ import { Opponent } from 'games/opponent';
 
 import type { DiscordClient } from 'classes/client';
 
-import { getUserLanguage } from 'db/user';
+import { getUserLanguage } from 'db/language';
 
 import { logger } from 'utils/logger';
 

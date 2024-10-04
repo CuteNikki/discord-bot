@@ -9,6 +9,7 @@ import {
 } from 'discord.js';
 import { t } from 'i18next';
 
+import { getUserLanguage } from 'db/language';
 import {
   addAvailableChannel,
   createConnection,
@@ -22,7 +23,6 @@ import {
   removeAvailableChannel,
   removeAvailableChannelById
 } from 'db/phone';
-import { getUserLanguage } from 'db/user';
 
 import { type ConnectionDocument } from 'types/phone';
 

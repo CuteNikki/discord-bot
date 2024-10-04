@@ -4,7 +4,7 @@ import { t } from 'i18next';
 import { Event } from 'classes/event';
 
 import { getGuildSettings, updateGuildSettings } from 'db/guild';
-import { getUserLanguage } from 'db/user';
+import { getUserLanguage } from 'db/language';
 
 import { logger } from 'utils/logger';
 

@@ -15,7 +15,7 @@ import ms from 'ms';
 import { Command, ModuleType } from 'classes/command';
 
 import { createGiveaway, deleteGiveaway, findGiveawayById, getGiveaways, getWinners, updateGiveaway } from 'db/giveaway';
-import { getGuildLanguage } from 'db/guild';
+import { getGuildLanguage } from 'db/language';
 
 import { logger } from 'utils/logger';
 

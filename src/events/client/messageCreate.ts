@@ -3,7 +3,7 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
-import { getUserLanguage } from 'db/user';
+import { getUserLanguage } from 'db/language';
 
 import { logger } from 'utils/logger';
 

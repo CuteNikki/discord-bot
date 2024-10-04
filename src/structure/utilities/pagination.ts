@@ -2,7 +2,7 @@ import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, Compon
 import { t } from 'i18next';
 import ms from 'ms';
 
-import { getUserLanguage } from 'db/user';
+import { getUserLanguage } from 'db/language';
 
 import { logger } from 'utils/logger';
 

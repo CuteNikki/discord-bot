@@ -15,7 +15,7 @@ import ms from 'ms';
 
 import { Command, ModuleType } from 'classes/command';
 
-import { getUserLanguage } from 'db/user';
+import { getUserLanguage } from 'db/language';
 
 import { chunk } from 'utils/common';
 import { logger } from 'utils/logger';

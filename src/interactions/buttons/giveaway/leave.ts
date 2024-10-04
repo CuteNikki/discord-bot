@@ -4,7 +4,7 @@ import { t } from 'i18next';
 import { Button } from 'classes/button';
 
 import { findGiveawayById, removeParticipant } from 'db/giveaway';
-import { getGuildLanguage } from 'db/guild';
+import { getGuildLanguage } from 'db/language';
 
 import { logger } from 'utils/logger';
 

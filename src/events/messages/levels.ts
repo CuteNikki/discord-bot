@@ -3,9 +3,9 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
-import { getGuildLanguage, getGuildSettings } from 'db/guild';
+import { getGuildSettings } from 'db/guild';
+import { getGuildLanguage, getUserLanguage } from 'db/language';
 import { appendXP, getLevelForce, getRandomXP, getRewardsForLevel } from 'db/level';
-import { getUserLanguage } from 'db/user';
 
 import { AnnouncementType } from 'types/guild';
 

@@ -9,11 +9,10 @@ import { DiscordClient } from 'classes/client';
 import { getClientSettings, updateLastWeeklyClearAt } from 'db/client';
 import { deleteCustomVoiceChannel, getCustomVoiceChannels } from 'db/custom-voice';
 import { deleteGiveaway, getAllGiveaways, getWinners } from 'db/giveaway';
-import { getGuildLanguage } from 'db/guild';
 import { closeInfraction, getUnresolvedInfractions } from 'db/infraction';
+import { getGuildLanguage, getUserLanguage } from 'db/language';
 import { deleteWeeklyLevels } from 'db/level';
 import { deleteExpiredReminders, getExpiredReminders } from 'db/reminder';
-import { getUserLanguage } from 'db/user';
 
 import { InfractionType } from 'types/infraction';
 

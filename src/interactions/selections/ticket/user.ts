@@ -4,6 +4,7 @@ import { t } from 'i18next';
 import { Selection } from 'classes/selection';
 
 import { getGuildSettings } from 'db/guild';
+import { addUserToTicket, removeUserFromTicket } from 'db/ticket';
 import { ticketModel } from 'models/ticket';
 
 export default new Selection({
@@ -11,8 +12,9 @@ export default new Selection({
   isCustomIdIncluded: true,
   permissions: [],
   botPermissions: ['ManageChannels', 'SendMessages'],
-  async execute({ interaction }) {
+  async execute({ interaction, lng }) {
     if (!interaction.inCachedGuild() || !interaction.isUserSelectMenu()) return;
+
     const {
       user,
       values: [targetId],
@@ -20,10 +22,12 @@ export default new Selection({
       customId,
       member
     } = interaction;
+
     const targetMember = interaction.guild.members.cache.get(targetId);
 
     const currentConfig = await getGuildSettings(guildId);
-    const lng = currentConfig.language;
+
+    const guildLng = currentConfig.language;
 
     const system = currentConfig.ticket.systems.find((system) => system._id.toString() === customId.split('_')[1]);
 
@@ -84,19 +88,21 @@ export default new Selection({
 
     if (ticket.users.includes(targetId)) {
       const channel = interaction.channel as TextChannel;
+
       await channel.permissionOverwrites.edit(targetId, {
         ViewChannel: false,
         SendMessages: false,
         EmbedLinks: false,
         AttachFiles: false
       });
-      await ticketModel.findOneAndUpdate({ channelId: channel.id }, { $pull: { users: targetId } });
+
+      await removeUserFromTicket(channel.id, targetId);
 
       await interaction.reply({
         embeds: [
           new EmbedBuilder().setDescription(
             t('ticket.user-removed', {
-              lng,
+              lng: guildLng,
               targetUser: `<@${targetId}>`,
               removedBy: user.toString()
             })
@@ -105,19 +111,21 @@ export default new Selection({
       });
     } else {
       const channel = interaction.channel as TextChannel;
+
       await channel.permissionOverwrites.edit(targetId, {
         ViewChannel: true,
         SendMessages: true,
         EmbedLinks: true,
         AttachFiles: true
       });
-      await ticketModel.findOneAndUpdate({ channelId: channel.id }, { $push: { users: targetId } });
+
+      await addUserToTicket(channel.id, targetId);
 
       await interaction.reply({
         embeds: [
           new EmbedBuilder().setDescription(
             t('ticket.user-added', {
-              lng,
+              lng: guildLng,
               targetUser: `<@${targetId}>`,
               addedBy: user.toString()
             })

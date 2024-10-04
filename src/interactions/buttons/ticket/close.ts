@@ -13,12 +13,14 @@ export default new Button({
   isCustomIdIncluded: true,
   permissions: [],
   botPermissions: ['ManageChannels', 'SendMessages'],
-  async execute({ interaction, client }) {
+  async execute({ interaction, client, lng }) {
     if (!interaction.inCachedGuild()) return;
+
     const { user, guildId, channelId, customId, member } = interaction;
 
     const currentConfig = await getGuildSettings(guildId);
-    const lng = currentConfig.language;
+
+    const guildLng = currentConfig.language;
 
     const system = currentConfig.ticket.systems.find((system) => system._id.toString() === customId.split('_')[1]);
     if (!system) {
@@ -61,18 +63,18 @@ export default new Button({
 
     if (ticket.closed) {
       await interaction.reply({
-        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.already-closed', { lng }))],
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.already-closed', { lng: guildLng }))],
         components: hasTranscriptChannel
           ? [
               new ActionRowBuilder<ButtonBuilder>().addComponents(
                 new ButtonBuilder()
                   .setCustomId(`button-tickets-save_${system._id.toString()}`)
-                  .setLabel(t('ticket.save', { lng }))
+                  .setLabel(t('ticket.save', { lng: guildLng }))
                   .setEmoji('💾')
                   .setStyle(ButtonStyle.Success),
                 new ButtonBuilder()
                   .setCustomId(`button-tickets-delete_${system._id.toString()}`)
-                  .setLabel(t('ticket.delete', { lng }))
+                  .setLabel(t('ticket.delete', { lng: guildLng }))
                   .setEmoji('🗑️')
                   .setStyle(ButtonStyle.Danger)
               )
@@ -81,7 +83,7 @@ export default new Button({
               new ActionRowBuilder<ButtonBuilder>().addComponents(
                 new ButtonBuilder()
                   .setCustomId(`button-tickets-delete_${system._id.toString()}`)
-                  .setLabel(t('ticket.delete', { lng }))
+                  .setLabel(t('ticket.delete', { lng: guildLng }))
                   .setEmoji('🗑️')
                   .setStyle(ButtonStyle.Danger)
               )
@@ -105,18 +107,18 @@ export default new Button({
     await closeTicket(channelId);
 
     await interaction.reply({
-      embeds: [new EmbedBuilder().setColor(client.colors.ticket).setDescription(t('ticket.closed', { lng, closed_by: `${user.toString()}` }))],
+      embeds: [new EmbedBuilder().setColor(client.colors.ticket).setDescription(t('ticket.closed', { lng: guildLng, closedBy: user.toString() }))],
       components: hasTranscriptChannel
         ? [
             new ActionRowBuilder<ButtonBuilder>().addComponents(
               new ButtonBuilder()
                 .setCustomId(`button-tickets-save_${system._id.toString()}`)
-                .setLabel(t('ticket.save', { lng }))
+                .setLabel(t('ticket.save', { lng: guildLng }))
                 .setEmoji('🗂️')
                 .setStyle(ButtonStyle.Success),
               new ButtonBuilder()
                 .setCustomId(`button-tickets-delete_${system._id.toString()}`)
-                .setLabel(t('ticket.delete', { lng }))
+                .setLabel(t('ticket.delete', { lng: guildLng }))
                 .setEmoji('✖️')
                 .setStyle(ButtonStyle.Danger)
             )
@@ -125,7 +127,7 @@ export default new Button({
             new ActionRowBuilder<ButtonBuilder>().addComponents(
               new ButtonBuilder()
                 .setCustomId(`button-tickets-delete_${system._id.toString()}`)
-                .setLabel(t('ticket.delete', { lng }))
+                .setLabel(t('ticket.delete', { lng: guildLng }))
                 .setEmoji('🗑️')
                 .setStyle(ButtonStyle.Danger)
             )

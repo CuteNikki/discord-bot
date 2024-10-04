@@ -13,13 +13,14 @@ export default new Button({
   isCustomIdIncluded: true,
   permissions: [],
   botPermissions: ['ManageChannels', 'SendMessages'],
-  async execute({ interaction, client }) {
+  async execute({ interaction, client, lng }) {
     if (!interaction.inCachedGuild()) return;
 
     const { guildId, customId, user, member, channelId } = interaction;
 
     const currentConfig = await getGuildSettings(guildId);
-    const lng = currentConfig.language;
+
+    const guildLng = currentConfig.language;
 
     const system = currentConfig.ticket.systems.find((system) => system._id.toString() === customId.split('_')[1]);
 
@@ -90,12 +91,12 @@ export default new Button({
     await unlockTicket(channelId);
 
     await interaction.reply({
-      embeds: [new EmbedBuilder().setColor(client.colors.ticket).setDescription(t('ticket.unlocked', { lng, unlockedBy: user.toString() }))],
+      embeds: [new EmbedBuilder().setColor(client.colors.ticket).setDescription(t('ticket.unlocked', { lng: guildLng, unlockedBy: user.toString() }))],
       components: [
         new ActionRowBuilder<ButtonBuilder>().addComponents(
           new ButtonBuilder()
             .setCustomId(`button-tickets-lock_${system._id.toString()}`)
-            .setLabel(t('ticket.lock', { lng }))
+            .setLabel(t('ticket.lock', { lng: guildLng }))
             .setEmoji('🔐')
             .setStyle(ButtonStyle.Primary)
         )

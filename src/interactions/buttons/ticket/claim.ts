@@ -11,12 +11,14 @@ export default new Button({
   isCustomIdIncluded: true,
   permissions: [],
   botPermissions: ['SendMessages'],
-  async execute({ interaction, client }) {
+  async execute({ interaction, client, lng }) {
     if (!interaction.inCachedGuild()) return;
+
     const { user, guildId, channelId, customId, member } = interaction;
 
     const currentConfig = await getGuildSettings(guildId);
-    const lng = currentConfig.language;
+
+    const guildLng = currentConfig.language;
 
     const system = currentConfig.ticket.systems.find((system) => system._id.toString() === customId.split('_')[1]);
 
@@ -59,7 +61,7 @@ export default new Button({
     await claimTicket(channelId, user.id);
 
     await interaction.reply({
-      embeds: [new EmbedBuilder().setColor(client.colors.ticket).setDescription(t('ticket.claimed', { lng, claimedBy: user.toString() }))]
+      embeds: [new EmbedBuilder().setColor(client.colors.ticket).setDescription(t('ticket.claimed', { lng: guildLng, claimedBy: user.toString() }))]
     });
   }
 });

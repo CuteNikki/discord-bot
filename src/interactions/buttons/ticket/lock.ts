@@ -13,12 +13,14 @@ export default new Button({
   isCustomIdIncluded: true,
   permissions: [],
   botPermissions: ['ManageChannels', 'SendMessages'],
-  async execute({ interaction, client }) {
+  async execute({ interaction, client, lng }) {
     if (!interaction.inCachedGuild()) return;
+
     const { user, guildId, channelId, customId, member } = interaction;
 
     const currentConfig = await getGuildSettings(guildId);
-    const lng = currentConfig.language;
+
+    const guildLng = currentConfig.language;
 
     const system = currentConfig.ticket.systems.find((system) => system._id.toString() === customId.split('_')[1]);
 
@@ -80,6 +82,7 @@ export default new Button({
       const overwrite = await channel.permissionOverwrites
         .edit(userId, { SendMessages: false })
         .catch((err) => logger.debug({ err, userId }, 'Could not edit channel permissions'));
+
       if (!overwrite) {
         interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.error', { lng }))], ephemeral: true });
         break;
@@ -89,17 +92,17 @@ export default new Button({
     await lockTicket(channelId);
 
     await interaction.reply({
-      embeds: [new EmbedBuilder().setColor(client.colors.ticket).setDescription(t('ticket.locked', { lng, lockedBy: user.toString() }))],
+      embeds: [new EmbedBuilder().setColor(client.colors.ticket).setDescription(t('ticket.locked', { lng: guildLng, lockedBy: user.toString() }))],
       components: [
         new ActionRowBuilder<ButtonBuilder>().addComponents(
           new ButtonBuilder()
             .setCustomId(`button-tickets-unlock_${system._id.toString()}`)
-            .setLabel(t('ticket.unlock', { lng }))
+            .setLabel(t('ticket.unlock', { lng: guildLng }))
             .setEmoji('🔓')
             .setStyle(ButtonStyle.Success),
           new ButtonBuilder()
             .setCustomId(`button-tickets-close_${system._id.toString()}`)
-            .setLabel(t('ticket.close', { lng }))
+            .setLabel(t('ticket.close', { lng: guildLng }))
             .setEmoji('🛑')
             .setStyle(ButtonStyle.Danger)
         )

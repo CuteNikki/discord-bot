@@ -106,3 +106,23 @@ export async function lockTicket(channelId: string): Promise<TicketDocument | nu
 export async function unlockTicket(channelId: string): Promise<TicketDocument | null> {
   return await updateTicket(channelId, { $set: { locked: false } });
 }
+
+/**
+ * Adds a user to a ticket
+ * @param {string} channelId Channel id of the ticket
+ * @param {string} userId User id to add to the ticket
+ * @returns {Promise<TicketDocument | null>} Updated ticket
+ */
+export async function addUserToTicket(channelId: string, userId: string): Promise<TicketDocument | null> {
+  return await updateTicket(channelId, { $push: { users: userId } });
+}
+
+/**
+ * Removes a user from a ticket
+ * @param {string} channelId Channel id of the ticket
+ * @param {string} userId User id to remove from the ticket
+ * @returns {Promise<TicketDocument | null>} Updated ticket
+ */
+export async function removeUserFromTicket(channelId: string, userId: string): Promise<TicketDocument | null> {
+  return await updateTicket(channelId, { $pull: { users: userId } });
+}

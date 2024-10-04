@@ -13,14 +13,17 @@ export default new Button({
   isCustomIdIncluded: true,
   permissions: [],
   botPermissions: ['ManageChannels', 'SendMessages'],
-  async execute({ interaction, client }) {
+  async execute({ interaction, client, lng }) {
     if (!interaction.inCachedGuild()) return;
+
     const { guildId, channelId, customId, user, member } = interaction;
 
     const currentConfig = await getGuildSettings(guildId);
-    const lng = currentConfig.language;
+
+    const guildLng = currentConfig.language;
 
     const system = currentConfig.ticket.systems.find((system) => system._id.toString() === customId.split('_')[1]);
+
     if (!system) {
       await interaction.reply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid-system', { lng }))],
@@ -51,20 +54,20 @@ export default new Button({
 
     const hasTranscriptChannel = system.transcriptChannelId ? true : false;
 
-    const description = [t('ticket.ticket_deleted', { lng, deletedBy: user.toString() }), t('ticket.delete-time', { lng })].join('\n');
+    const description = [t('ticket.ticket_deleted', { lng: guildLng, deletedBy: user.toString() }), t('ticket.delete-time', { lng: guildLng })].join('\n');
 
     await interaction.reply({
       embeds: [
         new EmbedBuilder()
           .setColor(client.colors.ticket)
-          .setDescription(hasTranscriptChannel ? description + '\n' + t('ticket.delete-reminder', { lng }) : description)
+          .setDescription(hasTranscriptChannel ? description + '\n' + t('ticket.delete-reminder', { lng: guildLng }) : description)
       ],
       components: hasTranscriptChannel
         ? [
             new ActionRowBuilder<ButtonBuilder>().addComponents(
               new ButtonBuilder()
                 .setCustomId(`button-tickets-save_${system._id.toString()}`)
-                .setLabel(t('ticket.save', { lng }))
+                .setLabel(t('ticket.save', { lng: guildLng }))
                 .setEmoji('🗂️')
                 .setStyle(ButtonStyle.Success)
             )
@@ -77,7 +80,7 @@ export default new Button({
 
       if (!isDeleted) {
         await interaction
-          .editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.error', { lng }))] })
+          .editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.error', { lng: guildLng }))] })
           .catch((err) => logger.debug({ err }, 'Could not edit reply'));
         return;
       }

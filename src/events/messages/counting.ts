@@ -3,7 +3,8 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
-import { getGuildSettings, updateGuildSettings } from 'db/guild';
+import { failedCounting, increaseCounting } from 'db/counting';
+import { getGuildSettings } from 'db/guild';
 import { getUserLanguage } from 'db/language';
 
 import { logger } from 'utils/logger';
@@ -11,16 +12,19 @@ import { logger } from 'utils/logger';
 export default new Event({
   name: Events.MessageCreate,
   once: false,
-  async execute(client, message) {
-    // Return early if not in guild or author is a bot so we don't react to our own messages
-    if (!message.inGuild() || message.author.bot) return;
+  async execute(_client, message) {
+    if (!message.inGuild() || message.author.bot) {
+      return;
+    }
+
     const { guildId, channel, author } = message;
 
     const lng = await getUserLanguage(author.id);
     const config = await getGuildSettings(guildId);
 
-    // Return early if not in counting channel
-    if (!config.counting.channelId || channel.id !== config.counting.channelId) return;
+    if (!config.counting.channelId || channel.id !== config.counting.channelId) {
+      return;
+    }
 
     const handleDeletion = async (msg: Message, reason: string) => {
       if (msg.deletable) {
@@ -38,11 +42,19 @@ export default new Event({
       }, delay);
     };
 
-    // Check if the user is repeating their own number
     if (author.id === config.counting.currentNumberBy) {
       await handleDeletion(message, 'Could not delete message from same user');
-      const warnMessage = await message.channel.send(t('counting.warn-repeat', { lng, author }));
+
+      const warnMessage = await message.channel
+        .send(t('counting.warn-repeat', { lng, author: author.toString() }))
+        .catch((err) => logger.debug({ err }, 'Could not send message'));
+
+      if (!warnMessage) {
+        return;
+      }
+
       delayDelete(warnMessage);
+
       return;
     }
 
@@ -53,32 +65,27 @@ export default new Event({
     if (sentNumber !== nextNumber.toString()) {
       await handleDeletion(message, 'Invalid number sent');
 
-      if (!config.counting.resetOnFail) return;
+      if (!config.counting.resetOnFail) {
+        return;
+      }
 
-      await updateGuildSettings(guildId, {
-        $set: {
-          'counting.currentNumber': 0,
-          'counting.currentNumberBy': null,
-          'counting.currentNumberAt': null
-        }
-      });
+      await failedCounting(guildId);
 
-      const failMessage = await message.channel.send(t('counting.warn-incorrect', { lng, author }));
+      const failMessage = await message.channel
+        .send(t('counting.warn-incorrect', { lng, author: author.toString() }))
+        .catch((err) => logger.debug({ err }, 'Could not send message'));
+
+      if (!failMessage) {
+        return;
+      }
+
       delayDelete(failMessage);
+
       return;
     }
 
-    // Correct number, proceed with updating and reacting
     await handleReaction(message, '✅');
 
-    await updateGuildSettings(guildId, {
-      $set: {
-        'counting.highestNumber': Math.max(config.counting.highestNumber, nextNumber),
-        'counting.highestNumberAt': nextNumber >= config.counting.highestNumber ? Date.now() : config.counting.highestNumberAt,
-        'counting.currentNumber': nextNumber,
-        'counting.currentNumberBy': author.id,
-        'counting.currentNumberAt': Date.now()
-      }
-    });
+    await increaseCounting(guildId, config.counting.highestNumber, config.counting.highestNumberAt, nextNumber, author.id);
   }
 });

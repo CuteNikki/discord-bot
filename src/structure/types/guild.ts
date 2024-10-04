@@ -1,5 +1,6 @@
 import type { ButtonStyle } from 'discord.js';
 import type { Types } from 'mongoose';
+import type { Counting } from 'types/counting';
 
 import type { ReactionRoleGroup } from 'types/reaction-roles';
 import type { Starboard } from 'types/starboard';
@@ -120,15 +121,7 @@ export type GuildDocument = {
   moderation: {
     enabled: boolean;
   };
-  counting: {
-    channelId: string;
-    resetOnFail: boolean;
-    currentNumberBy: string;
-    currentNumberAt: number;
-    currentNumber: number;
-    highestNumber: number;
-    highestNumberAt: number;
-  };
+  counting: Counting;
   starboard: Starboard;
   level: {
     enabled: boolean;

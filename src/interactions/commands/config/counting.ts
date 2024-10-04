@@ -3,7 +3,7 @@ import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
-import { getGuildSettings, updateGuildSettings } from 'db/guild';
+import { getCounting, resetCounting, setupCounting, updateCounting } from 'db/counting';
 
 export default new Command({
   module: ModuleType.Config,
@@ -38,7 +38,7 @@ export default new Command({
 
     const { options, guildId } = interaction;
 
-    const config = await getGuildSettings(guildId);
+    const counting = await getCounting(guildId);
 
     switch (options.getSubcommand()) {
       case 'setup':
@@ -46,29 +46,21 @@ export default new Command({
           const channel = options.getChannel('channel', true);
           const resetOnFail = options.getBoolean('reset-on-fail', false) ?? false;
 
-          if (config.counting.channelId) {
+          if (counting.channelId) {
             await interaction.editReply({
               embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('counting.already-setup', { lng }))]
             });
             return;
           }
 
-          if (config.counting.channelId === channel.id) {
+          if (counting.channelId === channel.id) {
             await interaction.editReply({
               embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('counting.already-channel', { lng }))]
             });
             return;
           }
 
-          await updateGuildSettings(guildId, {
-            $set: {
-              ['counting.channelId']: channel.id,
-              ['counting.resetOnFail']: resetOnFail,
-              ['counting.currentNumber']: 0,
-              ['counting.currentNumberAt']: null,
-              ['counting.currentNumberBy']: null
-            }
-          });
+          await setupCounting(guildId, channel.id, resetOnFail);
 
           await interaction.editReply({
             embeds: [
@@ -79,7 +71,7 @@ export default new Command({
         break;
       case 'info':
         {
-          if (!config.counting.channelId) {
+          if (!counting.channelId) {
             await interaction.editReply({
               embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('counting.not-setup', { lng }))]
             });
@@ -89,26 +81,26 @@ export default new Command({
           await interaction.editReply({
             embeds: [
               new EmbedBuilder().setColor(client.colors.counting).addFields(
-                { name: t('counting.channel', { lng }), value: `<#${config.counting.channelId}>` },
+                { name: t('counting.channel', { lng }), value: `<#${counting.channelId}>` },
                 {
                   name: t('counting.reset-on-fail', { lng }),
-                  value: config.counting.resetOnFail ? t('enabled', { lng }) : t('disabled', { lng })
+                  value: counting.resetOnFail ? t('enabled', { lng }) : t('disabled', { lng })
                 },
                 {
                   name: t('counting.highest-number', { lng }),
-                  value: config.counting.highestNumberAt
+                  value: counting.highestNumberAt
                     ? t('counting.highest-number-at', {
                         lng,
-                        number: config.counting.highestNumber.toString(),
-                        at: `<t:${Math.floor(config.counting.highestNumberAt / 1000)}:f>`
+                        number: counting.highestNumber.toString(),
+                        at: `<t:${Math.floor(counting.highestNumberAt / 1000)}:f>`
                       })
-                    : t('counting.highest-number-no-at', { lng, number: config.counting.highestNumber.toString() })
+                    : t('counting.highest-number-no-at', { lng, number: counting.highestNumber.toString() })
                 },
                 {
                   name: t('counting.current-number', { lng }),
-                  value: config.counting.currentNumberBy
-                    ? t('counting.current-number-by', { lng, number: config.counting.currentNumber.toString(), by: `<@${config.counting.currentNumberBy}>` })
-                    : t('counting.current-number-no-by', { lng, number: config.counting.currentNumber.toString() })
+                  value: counting.currentNumberBy
+                    ? t('counting.current-number-by', { lng, number: counting.currentNumber.toString(), by: `<@${counting.currentNumberBy}>` })
+                    : t('counting.current-number-no-by', { lng, number: counting.currentNumber.toString() })
                 }
               )
             ]
@@ -129,21 +121,11 @@ export default new Command({
 
           let response = '';
 
-          if (channel && channel.id !== config.counting.channelId) {
-            await updateGuildSettings(guildId, {
-              $set: {
-                ['counting.channelId']: channel.id
-              }
-            });
+          if (channel && channel.id !== counting.channelId) {
             response += t('counting.edit-channel', { lng, channel: channel.toString() });
           }
 
-          if (resetOnFail !== null && resetOnFail !== config.counting.resetOnFail) {
-            await updateGuildSettings(guildId, {
-              $set: {
-                ['counting.resetOnFail']: resetOnFail
-              }
-            });
+          if (resetOnFail !== null && resetOnFail !== counting.resetOnFail) {
             response += resetOnFail ? t('counting.edit-reset-on-fail-enabled', { lng }) : t('counting.edit-reset-on-fail-disabled', { lng });
           }
 
@@ -154,6 +136,8 @@ export default new Command({
             return;
           }
 
+          await updateCounting(guildId, channel?.id ?? counting.channelId, resetOnFail ?? counting.resetOnFail);
+
           await interaction.editReply({
             embeds: [new EmbedBuilder().setColor(client.colors.counting).setDescription(response)]
           });
@@ -161,24 +145,14 @@ export default new Command({
         break;
       case 'reset':
         {
-          if (!config.counting.channelId) {
+          if (!counting.channelId) {
             await interaction.editReply({
               embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('counting.not-setup', { lng }))]
             });
             return;
           }
 
-          await updateGuildSettings(guildId, {
-            $set: {
-              ['counting.channelId']: null,
-              ['counting.resetOnFail']: false,
-              ['counting.highestNumber']: 0,
-              ['counting.highestNumberAt']: null,
-              ['counting.currentNumber']: 0,
-              ['counting.currentNumberBy']: null,
-              ['counting.currentNumberAt']: null
-            }
-          });
+          await resetCounting(guildId);
 
           await interaction.editReply({
             embeds: [new EmbedBuilder().setColor(client.colors.counting).setDescription(t('counting.reset-done', { lng }))]

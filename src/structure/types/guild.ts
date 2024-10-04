@@ -2,6 +2,7 @@ import type { ButtonStyle } from 'discord.js';
 import type { Types } from 'mongoose';
 
 import type { ReactionRoleGroup } from 'types/reaction-roles';
+import type { Starboard } from 'types/starboard';
 
 export enum AnnouncementType {
   UserChannel,
@@ -128,12 +129,7 @@ export type GuildDocument = {
     highestNumber: number;
     highestNumberAt: number;
   };
-  starboard: {
-    enabled: boolean;
-    channelId?: string;
-    minimumStars?: number;
-    messages: { messageId: string; starboardMessageId?: string; reactedUsers: string[] }[];
-  };
+  starboard: Starboard;
   level: {
     enabled: boolean;
     channelId?: string;

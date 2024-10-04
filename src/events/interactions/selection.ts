@@ -1,8 +1,7 @@
-import { Collection, Events, PermissionsBitField } from 'discord.js';
+import { Collection, EmbedBuilder, Events, PermissionsBitField } from 'discord.js';
 import { t } from 'i18next';
 
 import { Event } from 'classes/event';
-import type { Selection } from 'classes/selection';
 
 import { getUserData } from 'db/user';
 
@@ -11,123 +10,164 @@ import { keys } from 'constants/keys';
 import { sendError } from 'utils/error';
 import { supportedLanguages } from 'utils/language';
 
+// Collection of cooldowns so interactions cannot be spammed
+// !! This should not be used for hourly or daily commands as it resets with each restart !!
+const cooldowns = new Collection<string, Collection<string, number>>(); // Collection<customId/commandName, Collection<userId, lastUsedTimestamp>>
+
 export default new Event({
   name: Events.InteractionCreate,
   async execute(client, interaction) {
-    // Since we only want the selection interactions we return early if the interaction is not a selection
+    // We only want to run this event for selections
     if (!interaction.isAnySelectMenu()) return;
 
     const { banned, language } = await getUserData(interaction.user.id);
-    if (banned) return;
 
+    // If the user is banned, we don't want to continue
+    if (banned) {
+      return;
+    }
+
+    // getting the users language
     let lng = language;
     if (!lng) lng = supportedLanguages[0];
 
-    // Get the selection with the interactions custom id and return if it wasn't found
-    let selection: Selection | undefined;
-    for (const key of client.selections.keys()) {
-      if (interaction.customId.includes(key)) {
-        const tempSelection = client.selections.get(key)!;
-        if (!tempSelection.options.isCustomIdIncluded && key !== interaction.customId) {
+    let selection = client.selections.get(interaction.customId);
+
+    /**
+     * isCustomIdIncluded check
+     */
+    if (!selection) {
+      for (const [, sel] of client.selections) {
+        if (!interaction.customId.includes(sel.options.customId) || !sel.options.isCustomIdIncluded) {
           continue;
-        } else {
-          selection = tempSelection;
-          break;
         }
+
+        selection = sel;
+        break;
       }
     }
-    if (!selection) return;
+    // If we don't have a selection, we don't want to continue
+    if (!selection) {
+      return;
+    }
 
-    // Check author only
+    /**
+     * Author only check
+     */
     if (selection.options.isAuthorOnly) {
-      const content = t('interactions.author-only', { lng });
-      if (interaction.message.interaction && interaction.user.id !== interaction.message.interaction.user.id)
-        return interaction.reply({ content, ephemeral: true });
-      if (interaction.message.reference && interaction.user.id !== (await interaction.message.fetchReference()).author.id)
-        return interaction.reply({ content, ephemeral: true });
-    }
-
-    // Permissions check
-    if (selection.options.permissions?.length) {
-      if (!interaction.member)
-        return interaction.reply({
-          content: t('interactions.guild-only', { lng }),
+      if (
+        (interaction.message.interactionMetadata && interaction.user.id !== interaction.message.interactionMetadata.user.id) ||
+        (interaction.message.reference && interaction.user.id !== (await interaction.message.fetchReference())?.author.id)
+      ) {
+        await interaction.reply({
+          embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('interactions.author-only', { lng }))],
           ephemeral: true
         });
+        return;
+      }
+    }
+
+    /**
+     * Member permissions check
+     */
+    if (selection.options.permissions?.length && interaction.member) {
       const permissions = interaction.member.permissions as PermissionsBitField;
-      if (!permissions.has(selection.options.permissions))
-        return interaction.reply({
-          content: t('interactions.permissions', { lng }),
+
+      if (!permissions.has(selection.options.permissions)) {
+        await interaction.reply({
+          embeds: [
+            new EmbedBuilder()
+              .setColor(client.colors.error)
+              .setDescription(t('interactions.permissions', { lng, permissions: selection.options.permissions.join(', ') }))
+          ],
           ephemeral: true
         });
+        return;
+      }
     }
 
-    // Bot permissions check
+    /**
+     * Bot permissions check
+     */
     if (selection.options.botPermissions?.length && interaction.guild?.members.me) {
       const permissions = interaction.guild.members.me.permissions;
+
       if (!permissions.has(selection.options.botPermissions)) {
-        return interaction.reply({
-          content: t('interactions.bot-permissions', {
-            lng,
-            permissions: selection.options.botPermissions.join(', ')
-          }),
+        await interaction.reply({
+          embeds: [
+            new EmbedBuilder()
+              .setColor(client.colors.error)
+              .setDescription(t('interactions.bot-permissions', { lng, permissions: selection.options.botPermissions.join(', ') }))
+          ],
           ephemeral: true
         });
+        return;
       }
     }
 
-    // Check if selection is developer only and return if the user's id doesn't match the developer's id
-    const developerIds = keys.DEVELOPER_USER_IDS;
-    if (selection.options.isDeveloperOnly && !developerIds.includes(interaction.user.id))
-      return interaction.reply({
-        content: t('interactions.developer-only', { lng }),
+    /**
+     * isDeveloperOnly check
+     */
+    if (selection.options.isDeveloperOnly && !keys.DEVELOPER_USER_IDS.includes(interaction.user.id)) {
+      await interaction.reply({
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('interactions.developer-only', { lng }))],
         ephemeral: true
       });
+      return;
+    }
 
-    // Check if cooldowns has the current selection and add the selection if it doesn't have the selection
-    const cooldowns = client.cooldowns;
-    if (!cooldowns.has(selection.options.customId)) cooldowns.set(selection.options.customId, new Collection());
+    /**
+     * Handling cooldowns
+     */
+    if (!cooldowns.has(selection.options.customId)) {
+      cooldowns.set(selection.options.customId, new Collection());
+    }
 
-    const now = Date.now(); // Current time (timestamp)
-    const timestamps = cooldowns.get(selection.options.customId)!; // Get collection of <user id, last used timestamp>
-    // Get the cooldown amount and setting it to 3 seconds if selection does not have a cooldown
-    const defaultCooldown = 3_000;
-    const cooldownAmount = selection.options.cooldown ?? defaultCooldown;
+    const now = Date.now();
+    // collection of <user id, last used timestamp>
+    const timestamps = cooldowns.get(selection.options.customId)!;
+    // the buttons cooldown or 3 seconds
+    const cooldownAmount = selection.options.cooldown ?? 3_000;
 
-    // If the user is still on cooldown and they use the selection again, we send them a message letting them know when the cooldown ends
+    // if the user is still on cooldown
     if (timestamps.has(interaction.user.id)) {
       const expirationTime = timestamps.get(interaction.user.id)! + cooldownAmount;
+
       if (now < expirationTime) {
         const expiredTimestamp = Math.round(expirationTime / 1_000);
-        return interaction.reply({
-          content: t('interactions.cooldown', {
-            lng,
-            action: `\`${selection.options.customId}\``,
-            timestamp: `<t:${expiredTimestamp}:R>`
-          }),
+
+        await interaction.reply({
+          embeds: [
+            new EmbedBuilder()
+              .setColor(client.colors.error)
+              .setDescription(t('interactions.cooldown', { lng, action: `\`${selection.options.customId}\``, timestamp: `<t:${expiredTimestamp}:R>` }))
+          ],
           ephemeral: true
         });
+        return;
       }
     }
-    // Set the user id's last used timestamp to now
+    // Add the user to cooldowns
     timestamps.set(interaction.user.id, now);
-    // Remove the user id's last used timestamp after the cooldown is over
+    // Remove the user from cooldowns after the cooldown is over
     setTimeout(() => timestamps.delete(interaction.user.id), cooldownAmount);
 
-    // Try to run the selection and send an error message if it couldn't run
+    /**
+     * Running the selection
+     */
     try {
-      selection.options.execute({ client, interaction, lng });
+      await selection.options.execute({ client, interaction, lng });
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      const message = t('interactions.error', {
-        lng,
-        error: `\`${err.message}\``
-      });
+      const embed = new EmbedBuilder().setColor(client.colors.error).setDescription(t('interactions.error', { lng, error: err.message }));
 
-      if (interaction.deferred) interaction.editReply({ content: message });
-      else interaction.reply({ content: message, ephemeral: true });
+      if (interaction.deferred) {
+        await interaction.editReply({ embeds: [embed] });
+      } else {
+        await interaction.reply({ embeds: [embed], ephemeral: true });
+      }
 
-      sendError({ client, err, location: `Selection Interaction Error: ${selection.options.customId}` });
+      await sendError({ client, err, location: `Selection Interaction Error: ${selection.options.customId}` });
     }
   }
 });

@@ -1,8 +1,7 @@
-import { Collection, Events, PermissionsBitField } from 'discord.js';
+import { Collection, EmbedBuilder, Events, PermissionsBitField } from 'discord.js';
 import { t } from 'i18next';
 
 import { Event } from 'classes/event';
-import type { Modal } from 'classes/modal';
 
 import { getUserData } from 'db/user';
 
@@ -11,114 +10,146 @@ import { keys } from 'constants/keys';
 import { sendError } from 'utils/error';
 import { supportedLanguages } from 'utils/language';
 
+// Collection of cooldowns so interactions cannot be spammed
+// !! This should not be used for hourly or daily commands as it resets with each restart !!
+const cooldowns = new Collection<string, Collection<string, number>>(); // Collection<customId/commandName, Collection<userId, lastUsedTimestamp>>
+
 export default new Event({
   name: Events.InteractionCreate,
   async execute(client, interaction) {
-    // Since we only want the button interactions we return early if the interaction is not a button
+    // We only want to run this event for modals
     if (!interaction.isModalSubmit()) return;
 
     const { banned, language } = await getUserData(interaction.user.id);
-    if (banned) return;
 
+    // If the user is banned, we don't want to continue
+    if (banned) {
+      return;
+    }
+
+    // getting the users language
     let lng = language;
     if (!lng) lng = supportedLanguages[0];
 
-    // Get the button with the interactions custom id and return if it wasn't found
-    let modal: Modal | undefined;
-    for (const key of client.modals.keys()) {
-      if (interaction.customId.includes(key)) {
-        const tempModal = client.modals.get(key)!;
-        if (!tempModal.options.isCustomIdIncluded && key !== interaction.customId) {
+    let modal = client.modals.get(interaction.customId);
+
+    /**
+     * isCustomIdIncluded check
+     */
+    if (!modal) {
+      for (const [, mdl] of client.modals) {
+        if (!interaction.customId.includes(mdl.options.customId) || !mdl.options.isCustomIdIncluded) {
           continue;
-        } else {
-          modal = tempModal;
-          break;
         }
+
+        modal = mdl;
+        break;
       }
     }
-    if (!modal) return;
-
-    // Permissions check
-    if (modal.options.permissions?.length) {
-      if (!interaction.member)
-        return interaction.reply({
-          content: t('interactions.guild-only', { lng }),
-          ephemeral: true
-        });
-      const permissions = interaction.member.permissions as PermissionsBitField;
-      if (!permissions.has(modal.options.permissions))
-        return interaction.reply({
-          content: t('interactions.permissions', { lng }),
-          ephemeral: true
-        });
+    // If we don't have a modal, we don't want to continue
+    if (!modal) {
+      return;
     }
 
-    // Bot permissions check
+    /**
+     * Member permissions check
+     */
+    if (modal.options.permissions?.length && interaction.member) {
+      const permissions = interaction.member.permissions as PermissionsBitField;
+
+      if (!permissions.has(modal.options.permissions)) {
+        await interaction.reply({
+          embeds: [
+            new EmbedBuilder()
+              .setColor(client.colors.error)
+              .setDescription(t('interactions.permissions', { lng, permissions: modal.options.permissions.join(', ') }))
+          ],
+          ephemeral: true
+        });
+        return;
+      }
+    }
+
+    /**
+     * Bot permissions check
+     */
     if (modal.options.botPermissions?.length && interaction.guild?.members.me) {
       const permissions = interaction.guild.members.me.permissions;
+
       if (!permissions.has(modal.options.botPermissions)) {
-        return interaction.reply({
-          content: t('interactions.bot-permissions', {
-            lng,
-            permissions: modal.options.botPermissions.join(', ')
-          }),
+        await interaction.reply({
+          embeds: [
+            new EmbedBuilder()
+              .setColor(client.colors.error)
+              .setDescription(t('interactions.bot-permissions', { lng, permissions: modal.options.botPermissions.join(', ') }))
+          ],
           ephemeral: true
         });
+        return;
       }
     }
 
-    // Check if button is developer only and return if the user's id doesn't match the developer's id
-    const developerIds = keys.DEVELOPER_USER_IDS;
-    if (modal.options.isDeveloperOnly && !developerIds.includes(interaction.user.id))
+    /**
+     * isDeveloperOnly check
+     */
+    if (modal.options.isDeveloperOnly && !keys.DEVELOPER_USER_IDS.includes(interaction.user.id))
       return interaction.reply({
-        content: t('interactions.developer-only', { lng }),
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('interactions.developer-only', { lng }))],
         ephemeral: true
       });
 
-    // Check if cooldowns has the current button and add the button if it doesn't have the button
-    const cooldowns = client.cooldowns;
-    if (!cooldowns.has(modal.options.customId)) cooldowns.set(modal.options.customId, new Collection());
+    /**
+     * Handling cooldowns
+     */
+    if (!cooldowns.has(modal.options.customId)) {
+      cooldowns.set(modal.options.customId, new Collection());
+    }
 
-    const now = Date.now(); // Current time (timestamp)
-    const timestamps = cooldowns.get(modal.options.customId)!; // Get collection of <user id, last used timestamp>
-    // Get the cooldown amount and setting it to 3 seconds if button does not have a cooldown
-    const defaultCooldown = 3_000;
-    const cooldownAmount = modal.options.cooldown ?? defaultCooldown;
+    const now = Date.now();
+    // collection of <user id, last used timestamp>
+    const timestamps = cooldowns.get(modal.options.customId)!;
+    // the buttons cooldown or 3 seconds
+    const cooldownAmount = modal.options.cooldown ?? 3_000;
 
-    // If the user is still on cooldown and they use the button again, we send them a message letting them know when the cooldown ends
+    // if the user is still on cooldown
     if (timestamps.has(interaction.user.id)) {
       const expirationTime = timestamps.get(interaction.user.id)! + cooldownAmount;
+
       if (now < expirationTime) {
         const expiredTimestamp = Math.round(expirationTime / 1_000);
-        return interaction.reply({
-          content: t('interactions.cooldown', {
-            lng,
-            action: `\`${modal.options.customId}\``,
-            timestamp: `<t:${expiredTimestamp}:R>`
-          }),
+
+        await interaction.reply({
+          embeds: [
+            new EmbedBuilder()
+              .setColor(client.colors.error)
+              .setDescription(t('interactions.cooldown', { lng, action: `\`${modal.options.customId}\``, timestamp: `<t:${expiredTimestamp}:R>` }))
+          ],
           ephemeral: true
         });
+        return;
       }
     }
-    // Set the user id's last used timestamp to now
+    // Add the user to cooldowns
     timestamps.set(interaction.user.id, now);
-    // Remove the user id's last used timestamp after the cooldown is over
+    // Remove the user from cooldowns after the cooldown is over
     setTimeout(() => timestamps.delete(interaction.user.id), cooldownAmount);
 
-    // Try to run the button and send an error message if it couldn't run
+    /**
+     * Running the modal
+     */
     try {
-      modal.options.execute({ client, interaction, lng });
+      await modal.options.execute({ client, interaction, lng });
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      const message = t('interactions.error', {
-        lng,
-        error: `\`${err.message}\``
-      });
+      const embed = new EmbedBuilder().setColor(client.colors.error).setDescription(t('interactions.error', { lng, error: err.message }));
 
-      if (interaction.deferred) interaction.editReply({ content: message });
-      else interaction.reply({ content: message, ephemeral: true });
+      if (interaction.deferred) {
+        await interaction.editReply({ embeds: [embed] });
+      } else {
+        await interaction.reply({ embeds: [embed], ephemeral: true });
+      }
 
-      sendError({ client, err, location: `Modal Interaction Error: ${modal.options.customId}` });
+      await sendError({ client, err, location: `Modal Interaction Error: ${modal.options.customId}` });
     }
   }
 });

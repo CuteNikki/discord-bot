@@ -26,10 +26,6 @@ export class DiscordClient extends Client {
   public modals = new Collection<string, Modal>(); // Collection<customId, modalData>
   public selections = new Collection<string, Selection>(); // Collection<customId, selectionData>
 
-  // Collection of cooldowns so interactions cannot be spammed
-  // !! This should not be used for hourly or daily commands as it resets with each restart !!
-  public cooldowns = new Collection<string, Collection<string, number>>(); // Collection<customId/commandName, Collection<userId, lastUsedTimestamp>>
-
   // Custom colors
   public colors = {
     error: Colors.Red,
@@ -63,6 +59,12 @@ export class DiscordClient extends Client {
       // Setting the bot shards using discord-hybrid-sharding
       shards: getInfo().SHARD_LIST,
       shardCount: getInfo().TOTAL_SHARDS,
+
+      // Throw errors on rate limit instead of sending request after rate limit has ended
+      // We want to handle rate limits immediately instead of sending a request 10 minutes later
+      rest: {
+        rejectOnRateLimit: async () => true
+      },
 
       // Setting the bots presence
       presence: {

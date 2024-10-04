@@ -15,17 +15,30 @@ export default new Event({
   name: Events.GuildMemberUpdate,
   once: false,
   async execute(_client, oldMember, newMember) {
-    if ((newMember.premiumSinceTimestamp ?? false) === (oldMember.premiumSinceTimestamp ?? false)) return;
+    // If the new member did not boost or if the old member was a booster, ignore
+    if (!newMember.premiumSinceTimestamp || oldMember.premiumSinceTimestamp) {
+      return;
+    }
 
     const settings = await getClientSettings(keys.DISCORD_BOT_ID);
-    if (settings.support.guildId !== newMember.guild.id) return;
+
+    // If the member was not updated in the support server, ignore
+    if (settings.support.guildId !== newMember.guild.id) {
+      return;
+    }
 
     const userData = await getUserData(newMember.user.id);
-    if (userData.badges.map((badge) => badge.id).includes(BadgeType.Supporter)) return;
 
+    // If the member already has the Supporter badge, ignore
+    if (userData.badges.map((badge) => badge.id).includes(BadgeType.Supporter)) {
+      return;
+    }
+
+    // Send a thank you message to the member
     await newMember
-      .send('Thank you for boosting the support server. You received the Supporter badge!')
-      .catch((err) => logger.debug({ err, userId: newMember.user.id }, 'Could not send DM'));
+      .send(`Thank you for boosting the support server. You received the **${BadgeType[BadgeType.Supporter]}** badge!`)
+      .catch((err) => logger.debug({ err, user: newMember.user }, 'Could not send DM'));
+    // Add the badge to the member
     await addBadge(newMember.user.id, BadgeType.Supporter);
   }
 });

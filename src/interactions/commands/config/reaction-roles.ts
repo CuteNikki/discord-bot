@@ -172,248 +172,7 @@ export default new Command({
             return;
           }
 
-          let method: 'button' | 'reaction';
-
-          const methodMessage = await interaction
-            .editReply({
-              embeds: [
-                new EmbedBuilder()
-                  .setColor(client.colors.reactionRoles)
-                  .setDescription([t('reaction-roles.method.description', { lng }), t('reaction-roles.method.recommendation', { lng })].join('\n'))
-              ],
-              components: [
-                new ActionRowBuilder<ButtonBuilder>().addComponents(
-                  new ButtonBuilder()
-                    .setCustomId('button-reaction-buttons')
-                    .setLabel(t('reaction-roles.method.buttons', { lng }))
-                    .setStyle(ButtonStyle.Primary),
-                  new ButtonBuilder()
-                    .setCustomId('button-reaction-reactions')
-                    .setLabel(t('reaction-roles.method.reactions', { lng }))
-                    .setStyle(ButtonStyle.Primary)
-                )
-              ]
-            })
-            .catch((err) => logger.debug(err, 'Could not edit reply'));
-          if (!methodMessage) return;
-
-          const methodCollector = methodMessage.createMessageComponentCollector({
-            idle: TIMEOUT_DURATION,
-            componentType: ComponentType.Button,
-            filter: (i) => i.user.id === user.id
-          });
-
-          methodCollector.on('collect', async (methodInteraction) => {
-            if (methodInteraction.customId === 'button-reaction-buttons') {
-              method = 'button';
-              await methodInteraction.deferUpdate().catch((err) => logger.debug(err, 'Could not defer update'));
-              methodCollector.stop('continue');
-              return;
-            }
-            if (methodInteraction.customId === 'button-reaction-reactions') {
-              method = 'reaction';
-              await methodInteraction.deferUpdate().catch((err) => logger.debug(err, 'Could not defer update'));
-              methodCollector.stop('continue');
-              return;
-            }
-          });
-
-          methodCollector.on('end', async (_, reason) => {
-            if (reason !== 'continue' || !method) {
-              await interaction
-                .editReply({
-                  embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.method.none', { lng }))],
-                  components: []
-                })
-                .catch((err) => logger.debug(err, 'Could not edit reply'));
-              return;
-            }
-
-            await handleChannel();
-          });
-
-          let channel: TextChannel;
-
-          async function handleChannel() {
-            const channelMessage = await interaction
-              .editReply({
-                embeds: [
-                  new EmbedBuilder()
-                    .setColor(client.colors.reactionRoles)
-                    .setDescription([t('reaction-roles.channel.description', { lng }), t('reaction-roles.channel.info', { lng })].join('\n'))
-                ],
-                components: [
-                  new ActionRowBuilder<ChannelSelectMenuBuilder>().addComponents(
-                    new ChannelSelectMenuBuilder()
-                      .setCustomId('select-reaction-channel')
-                      .setPlaceholder(t('reaction-roles.channel.placeholder', { lng }))
-                      .setChannelTypes(ChannelType.GuildText)
-                  ),
-                  new ActionRowBuilder<ButtonBuilder>().addComponents(
-                    new ButtonBuilder()
-                      .setCustomId('button-reaction-continue')
-                      .setLabel(t('reaction-roles.setup.continue', { lng }))
-                      .setStyle(ButtonStyle.Primary)
-                  )
-                ]
-              })
-              .catch((err) => logger.debug(err, 'Could not edit reply'));
-            if (!channelMessage) return;
-
-            const channelCollector = channelMessage.createMessageComponentCollector({
-              idle: TIMEOUT_DURATION,
-              filter: (i) => i.user.id === user.id
-            });
-
-            channelCollector.on('collect', async (channelInteraction) => {
-              if (!channelInteraction.inCachedGuild()) return;
-
-              if (channelInteraction.customId === 'button-reaction-continue') {
-                if (!channel) {
-                  await channelInteraction
-                    .reply({
-                      embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.channel.none', { lng }))],
-                      ephemeral: true
-                    })
-                    .catch((err) => logger.debug(err, 'Could not reply'));
-                  return;
-                }
-
-                await channelInteraction.deferUpdate().catch((err) => logger.debug(err, 'Could not defer update'));
-                channelCollector.stop('continue');
-                return;
-              }
-
-              if (channelInteraction.isChannelSelectMenu()) {
-                channel = channelInteraction.channels.first() as TextChannel;
-
-                await channelInteraction
-                  .update({
-                    embeds: [
-                      new EmbedBuilder()
-                        .setColor(client.colors.reactionRoles)
-                        .setDescription(t('reaction-roles.channel.selected', { lng, channel: channel.toString() }))
-                    ]
-                  })
-                  .catch((err) => logger.debug(err, 'Could not update channel'));
-              }
-            });
-
-            channelCollector.on('end', async (_, reason) => {
-              if (reason !== 'continue' || !channel) {
-                await interaction
-                  .editReply({
-                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.channel.none', { lng }))],
-                    components: []
-                  })
-                  .catch((err) => logger.debug(err, 'Could not edit reply'));
-                return;
-              }
-
-              await handleRoles();
-            });
-          }
-
-          let roles: Role[] = [];
-          const reactions: Reaction[] = [];
-
-          async function handleRoles() {
-            const rolesMessage = await interaction
-              .editReply({
-                embeds: [
-                  new EmbedBuilder()
-                    .setColor(client.colors.reactionRoles)
-                    .setDescription([t('reaction-roles.roles.description', { lng }), t('reaction-roles.roles.info', { lng })].join('\n'))
-                ],
-                components: [
-                  new ActionRowBuilder<RoleSelectMenuBuilder>().addComponents(
-                    new RoleSelectMenuBuilder()
-                      .setCustomId('select-reaction-roles')
-                      .setMinValues(1)
-                      .setMaxValues(MAX_ROLES)
-                      .setPlaceholder(t('reaction-roles.roles.placeholder', { lng }))
-                  ),
-                  new ActionRowBuilder<ButtonBuilder>().addComponents(
-                    new ButtonBuilder()
-                      .setCustomId('button-reaction-continue')
-                      .setLabel(t('reaction-roles.setup.continue', { lng }))
-                      .setStyle(ButtonStyle.Primary)
-                  )
-                ]
-              })
-              .catch((err) => logger.debug(err, 'Could not edit reply'));
-            if (!rolesMessage) return;
-
-            const rolesCollector = rolesMessage.createMessageComponentCollector({
-              idle: TIMEOUT_DURATION,
-              filter: (i) => i.user.id === user.id
-            });
-
-            rolesCollector.on('collect', async (roleInteraction) => {
-              if (!roleInteraction.inCachedGuild()) return;
-
-              if (roleInteraction.customId === 'button-reaction-continue') {
-                if (!roles.length) {
-                  await roleInteraction
-                    .reply({
-                      embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.roles.none', { lng }))],
-                      ephemeral: true
-                    })
-                    .catch((err) => logger.debug(err, 'Could not reply'));
-                  return;
-                }
-
-                await roleInteraction.deferUpdate();
-                rolesCollector.stop('continue');
-                return;
-              }
-
-              if (roleInteraction.isRoleSelectMenu()) {
-                roles = roleInteraction.roles
-                  .toJSON()
-                  .filter((r) => !r.managed)
-                  .sort((a, b) => b.position - a.position)
-                  .slice(0, MAX_ROLES);
-
-                if (roles.length <= 0 || roles.length > MAX_ROLES) {
-                  await roleInteraction.reply({
-                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.roles.limit', { lng, max: MAX_ROLES }))],
-                    ephemeral: true
-                  });
-                  return;
-                }
-
-                await roleInteraction
-                  .update({
-                    embeds: [
-                      new EmbedBuilder()
-                        .setColor(client.colors.reactionRoles)
-                        .setDescription(
-                          [
-                            t('reaction-roles.roles.info', { lng }),
-                            t('reaction-roles.roles.selected', { lng, count: roles.length, roles: roles.map((r) => r.toString()).join(', ') })
-                          ].join('\n')
-                        )
-                    ]
-                  })
-                  .catch((err) => logger.debug(err, 'Could not update message'));
-              }
-            });
-
-            rolesCollector.on('end', async (_, reason) => {
-              if (reason !== 'continue' || !roles.length) {
-                await interaction
-                  .editReply({
-                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.roles.none', { lng }))],
-                    components: []
-                  })
-                  .catch((err) => logger.debug(err, 'Could not edit reply'));
-                return;
-              }
-
-              await handleRoleReactions(roles, interaction, lng, user, client, reactions, method, channel);
-            });
-          }
+          await handleMethod(interaction, lng, user, client);
         }
         break;
     }
@@ -556,4 +315,242 @@ async function clearReactions(reactionMessage: Message) {
   } catch (err) {
     logger.debug(err, 'Could not remove all reactions');
   }
+}
+
+async function handleMethod(interaction: ChatInputCommandInteraction, lng: string, user: User, client: DiscordClient) {
+  let method: 'button' | 'reaction';
+
+  const methodMessage = await interaction
+    .editReply({
+      embeds: [
+        new EmbedBuilder()
+          .setColor(client.colors.reactionRoles)
+          .setDescription([t('reaction-roles.method.description', { lng }), t('reaction-roles.method.recommendation', { lng })].join('\n'))
+      ],
+      components: [
+        new ActionRowBuilder<ButtonBuilder>().addComponents(
+          new ButtonBuilder().setCustomId('button-reaction-buttons').setLabel(t('reaction-roles.method.buttons', { lng })).setStyle(ButtonStyle.Primary),
+          new ButtonBuilder().setCustomId('button-reaction-reactions').setLabel(t('reaction-roles.method.reactions', { lng })).setStyle(ButtonStyle.Primary)
+        )
+      ]
+    })
+    .catch((err) => logger.debug(err, 'Could not edit reply'));
+  if (!methodMessage) return;
+
+  const methodCollector = methodMessage.createMessageComponentCollector({
+    idle: TIMEOUT_DURATION,
+    componentType: ComponentType.Button,
+    filter: (i) => i.user.id === user.id
+  });
+
+  methodCollector.on('collect', async (methodInteraction) => {
+    if (methodInteraction.customId === 'button-reaction-buttons') {
+      method = 'button';
+      await methodInteraction.deferUpdate().catch((err) => logger.debug(err, 'Could not defer update'));
+      methodCollector.stop('continue');
+      return;
+    }
+    if (methodInteraction.customId === 'button-reaction-reactions') {
+      method = 'reaction';
+      await methodInteraction.deferUpdate().catch((err) => logger.debug(err, 'Could not defer update'));
+      methodCollector.stop('continue');
+      return;
+    }
+  });
+
+  methodCollector.on('end', async (_, reason) => {
+    if (reason !== 'continue' || !method) {
+      await interaction
+        .editReply({
+          embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.method.none', { lng }))],
+          components: []
+        })
+        .catch((err) => logger.debug(err, 'Could not edit reply'));
+      return;
+    }
+
+    await handleChannel(interaction, lng, user, client, method);
+  });
+}
+
+async function handleChannel(interaction: ChatInputCommandInteraction, lng: string, user: User, client: DiscordClient, method: 'button' | 'reaction') {
+  let channel: TextChannel;
+
+  const channelMessage = await interaction
+    .editReply({
+      embeds: [
+        new EmbedBuilder()
+          .setColor(client.colors.reactionRoles)
+          .setDescription([t('reaction-roles.channel.description', { lng }), t('reaction-roles.channel.info', { lng })].join('\n'))
+      ],
+      components: [
+        new ActionRowBuilder<ChannelSelectMenuBuilder>().addComponents(
+          new ChannelSelectMenuBuilder()
+            .setCustomId('select-reaction-channel')
+            .setPlaceholder(t('reaction-roles.channel.placeholder', { lng }))
+            .setChannelTypes(ChannelType.GuildText)
+        ),
+        new ActionRowBuilder<ButtonBuilder>().addComponents(
+          new ButtonBuilder().setCustomId('button-reaction-continue').setLabel(t('reaction-roles.setup.continue', { lng })).setStyle(ButtonStyle.Primary)
+        )
+      ]
+    })
+    .catch((err) => logger.debug(err, 'Could not edit reply'));
+  if (!channelMessage) return;
+
+  const channelCollector = channelMessage.createMessageComponentCollector({
+    idle: TIMEOUT_DURATION,
+    filter: (i) => i.user.id === user.id
+  });
+
+  channelCollector.on('collect', async (channelInteraction) => {
+    if (!channelInteraction.inCachedGuild()) return;
+
+    if (channelInteraction.customId === 'button-reaction-continue') {
+      if (!channel) {
+        await channelInteraction
+          .reply({
+            embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.channel.none', { lng }))],
+            ephemeral: true
+          })
+          .catch((err) => logger.debug(err, 'Could not reply'));
+        return;
+      }
+
+      await channelInteraction.deferUpdate().catch((err) => logger.debug(err, 'Could not defer update'));
+      channelCollector.stop('continue');
+      return;
+    }
+
+    if (channelInteraction.isChannelSelectMenu()) {
+      channel = channelInteraction.channels.first() as TextChannel;
+
+      await channelInteraction
+        .update({
+          embeds: [
+            new EmbedBuilder().setColor(client.colors.reactionRoles).setDescription(t('reaction-roles.channel.selected', { lng, channel: channel.toString() }))
+          ]
+        })
+        .catch((err) => logger.debug(err, 'Could not update channel'));
+    }
+  });
+
+  channelCollector.on('end', async (_, reason) => {
+    if (reason !== 'continue' || !channel) {
+      await interaction
+        .editReply({
+          embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.channel.none', { lng }))],
+          components: []
+        })
+        .catch((err) => logger.debug(err, 'Could not edit reply'));
+      return;
+    }
+
+    await handleRoles(interaction, lng, user, client, method, channel);
+  });
+}
+
+async function handleRoles(
+  interaction: ChatInputCommandInteraction,
+  lng: string,
+  user: User,
+  client: DiscordClient,
+  method: 'button' | 'reaction',
+  channel: TextChannel
+) {
+  let roles: Role[] = [];
+  const reactions: Reaction[] = [];
+
+  const rolesMessage = await interaction
+    .editReply({
+      embeds: [
+        new EmbedBuilder()
+          .setColor(client.colors.reactionRoles)
+          .setDescription([t('reaction-roles.roles.description', { lng }), t('reaction-roles.roles.info', { lng })].join('\n'))
+      ],
+      components: [
+        new ActionRowBuilder<RoleSelectMenuBuilder>().addComponents(
+          new RoleSelectMenuBuilder()
+            .setCustomId('select-reaction-roles')
+            .setMinValues(1)
+            .setMaxValues(MAX_ROLES)
+            .setPlaceholder(t('reaction-roles.roles.placeholder', { lng }))
+        ),
+        new ActionRowBuilder<ButtonBuilder>().addComponents(
+          new ButtonBuilder().setCustomId('button-reaction-continue').setLabel(t('reaction-roles.setup.continue', { lng })).setStyle(ButtonStyle.Primary)
+        )
+      ]
+    })
+    .catch((err) => logger.debug(err, 'Could not edit reply'));
+  if (!rolesMessage) return;
+
+  const rolesCollector = rolesMessage.createMessageComponentCollector({
+    idle: TIMEOUT_DURATION,
+    filter: (i) => i.user.id === user.id
+  });
+
+  rolesCollector.on('collect', async (roleInteraction) => {
+    if (!roleInteraction.inCachedGuild()) return;
+
+    if (roleInteraction.customId === 'button-reaction-continue') {
+      if (!roles.length) {
+        await roleInteraction
+          .reply({
+            embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.roles.none', { lng }))],
+            ephemeral: true
+          })
+          .catch((err) => logger.debug(err, 'Could not reply'));
+        return;
+      }
+
+      await roleInteraction.deferUpdate();
+      rolesCollector.stop('continue');
+      return;
+    }
+
+    if (roleInteraction.isRoleSelectMenu()) {
+      roles = roleInteraction.roles
+        .toJSON()
+        .filter((r) => !r.managed)
+        .sort((a, b) => b.position - a.position)
+        .slice(0, MAX_ROLES);
+
+      if (roles.length <= 0 || roles.length > MAX_ROLES) {
+        await roleInteraction.reply({
+          embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.roles.limit', { lng, max: MAX_ROLES }))],
+          ephemeral: true
+        });
+        return;
+      }
+
+      await roleInteraction
+        .update({
+          embeds: [
+            new EmbedBuilder()
+              .setColor(client.colors.reactionRoles)
+              .setDescription(
+                [
+                  t('reaction-roles.roles.info', { lng }),
+                  t('reaction-roles.roles.selected', { lng, count: roles.length, roles: roles.map((r) => r.toString()).join(', ') })
+                ].join('\n')
+              )
+          ]
+        })
+        .catch((err) => logger.debug(err, 'Could not update message'));
+    }
+  });
+
+  rolesCollector.on('end', async (_, reason) => {
+    if (reason !== 'continue' || !roles.length) {
+      await interaction
+        .editReply({
+          embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.roles.none', { lng }))],
+          components: []
+        })
+        .catch((err) => logger.debug(err, 'Could not edit reply'));
+      return;
+    }
+
+    await handleRoleReactions(roles, interaction, lng, user, client, reactions, method, channel);
+  });
 }

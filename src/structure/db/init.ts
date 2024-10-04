@@ -14,7 +14,7 @@ import { getGuildLanguage, getUserLanguage } from 'db/language';
 import { deleteWeeklyLevels } from 'db/level';
 import { deleteExpiredReminders, getExpiredReminders } from 'db/reminder';
 
-import { InfractionType } from 'types/infraction';
+import { InfractionType, type InfractionDocument } from 'types/infraction';
 
 import { keys } from 'constants/keys';
 
@@ -231,7 +231,7 @@ async function clearInfractions(client: DiscordClient) {
       await guild.bans
         .remove(infraction.userId, 'Temporary Ban has expired')
         .then(async () => {
-          await closeCurrentInfraction();
+          await closeCurrentInfraction(infraction);
           logger.debug(`[${client.cluster.id}] Unbanned user ${infraction.userId} from guild ${infraction.guildId}`);
         })
         .catch((err) => logger.debug({ err, infraction }, 'Could not unban member after tempban '));
@@ -239,12 +239,12 @@ async function clearInfractions(client: DiscordClient) {
       // To avoid multiple writes to the database we only do this on cluster 0
 
       // Discord handles timeouts for us so we don't need to fetch the guild and remove the timeout
-      await closeCurrentInfraction();
+      await closeCurrentInfraction(infraction);
     }
+  }
 
-    async function closeCurrentInfraction() {
-      await closeInfraction(infraction._id);
-      logger.debug(infraction, `[${client.cluster.id}] Closed infraction`);
-    }
+  async function closeCurrentInfraction(infraction: InfractionDocument) {
+    await closeInfraction(infraction._id);
+    logger.debug(infraction, `[${client.cluster.id}] Closed infraction`);
   }
 }

@@ -10,22 +10,37 @@ export default new Button({
   isCustomIdIncluded: true,
   botPermissions: ['ManageRoles'],
   async execute({ client, interaction, lng }) {
-    if (!interaction.inCachedGuild()) return;
+    if (!interaction.inCachedGuild()) {
+      return;
+    }
 
     await interaction.deferReply({ ephemeral: true });
 
     const config = await getGuildSettings(interaction.guildId);
 
     const group = config.reactionRoles.groups.find((g) => g.messageId === interaction.message.id);
+
+    if (!group) {
+      await interaction.editReply({
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.select.unknown-group', { lng }))]
+      });
+      return;
+    }
+
     const reactionIndex = parseInt(interaction.customId.split('_')[1]);
-
-    if (!group) return;
-
     const reaction = group.reactions[reactionIndex];
-    if (!reaction) return;
+
+    if (!reaction) {
+      return;
+    }
 
     const role = interaction.guild.roles.cache.get(reaction.roleId);
-    if (!role) return interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('Could not find the role.')] });
+
+    if (!role) {
+      return interaction.editReply({
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.select.role-not-found', { lng }))]
+      });
+    }
 
     if (interaction.member.roles.cache.has(reaction.roleId)) {
       await interaction.member.roles.remove(role).catch((err) => console.error(err));

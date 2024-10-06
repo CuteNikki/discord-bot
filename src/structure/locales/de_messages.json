@@ -129,7 +129,9 @@
     },
     "select": {
       "removed": "{{role}} wurde von deinen Rollen entfernt!",
-      "added": "{{role}} wurde zu deinen Rollen hinzugefügt!"
+      "added": "{{role}} wurde zu deinen Rollen hinzugefügt!",
+      "role-not-found": "Die Rolle wurde nicht gefunden!",
+      "unknown-group": "Die Gruppe wurde nicht gefunden!"
     }
   },
   "custom-vc": {

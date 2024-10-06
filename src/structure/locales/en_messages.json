@@ -129,7 +129,9 @@
     },
     "select": {
       "removed": "{{role}} has been removed from your roles!",
-      "added": "{{role}} has been added to your roles!"
+      "added": "{{role}} has been added to your roles!",
+      "role-not-found": "The role was not found!",
+      "unknown-group": "The reaction group was not found!"
     }
   },
   "custom-vc": {

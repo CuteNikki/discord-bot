@@ -42,7 +42,8 @@ export class DiscordClient extends Client {
     reactionRoles: Colors.DarkGreen,
     general: Colors.Blurple,
     giveaway: Colors.Yellow,
-    developer: Colors.Blurple
+    developer: Colors.Blurple,
+    starboard: Colors.Gold
   };
 
   // Custom emojis

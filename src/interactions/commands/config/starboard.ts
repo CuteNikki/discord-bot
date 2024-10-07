@@ -11,7 +11,7 @@ import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
-import { getGuildSettings, updateGuildSettings } from 'db/guild';
+import { deleteStarboard, disableStarboard, enableStarboard, getStarboard, setupStarboard } from 'db/starboard';
 
 export default new Command({
   module: ModuleType.Config,
@@ -58,51 +58,62 @@ export default new Command({
             .setMaxValue(100)
         )
     ),
-  async execute({ interaction, lng }) {
+  async execute({ client, interaction, lng }) {
     if (!interaction.inCachedGuild() || !interaction.guild.members.me) return;
     const { options, guild } = interaction;
 
     await interaction.deferReply({ ephemeral: true });
 
-    const config = await getGuildSettings(guild.id);
+    const starboard = await getStarboard(guild.id);
 
     switch (options.getSubcommand()) {
       case 'config':
         {
           await interaction.editReply({
             embeds: [
-              new EmbedBuilder().setTitle(t('starboard.title', { lng })).addFields([
-                {
-                  name: t('starboard.state', { lng }),
-                  value: `${config.starboard.enabled}`
-                },
-                {
-                  name: t('starboard.channel', { lng }),
-                  value: config.starboard.channelId ? `<#${config.starboard.channelId}>` : t('none', { lng })
-                },
-                {
-                  name: t('starboard.minimum-stars', { lng }),
-                  value: config.starboard.minimumStars ? config.starboard.minimumStars.toString() : t('none', { lng })
-                }
-              ])
+              new EmbedBuilder()
+                .setColor(client.colors.starboard)
+                .setTitle(t('starboard.title', { lng }))
+                .addFields([
+                  {
+                    name: t('starboard.state', { lng }),
+                    value: `${starboard.enabled}`
+                  },
+                  {
+                    name: t('starboard.channel', { lng }),
+                    value: starboard.channelId ? `<#${starboard.channelId}>` : t('none', { lng })
+                  },
+                  {
+                    name: t('starboard.minimum-stars', { lng }),
+                    value: starboard.minimumStars ? starboard.minimumStars.toString() : t('none', { lng })
+                  }
+                ])
             ]
           });
         }
         break;
       case 'disable':
         {
-          if (!config.starboard.enabled) return await interaction.editReply({ content: t('starboard.already-disabled', { lng }) });
+          if (!starboard.enabled) {
+            await interaction.editReply({
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('starboard.already-disabled', { lng }))]
+            });
+            return;
+          }
 
-          await updateGuildSettings(guild.id, { $set: { ['starboard.enabled']: false } });
-          await interaction.editReply({ content: t('starboard.disabled', { lng }) });
+          await disableStarboard(guild.id);
+          await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.starboard).setDescription(t('starboard.disabled', { lng }))] });
         }
         break;
       case 'enable':
         {
-          if (config.starboard.enabled) return await interaction.editReply({ content: t('starboard.already-enabled', { lng }) });
+          if (starboard.enabled) {
+            await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('starboard.already-enabled', { lng }))] });
+            return;
+          }
 
-          await updateGuildSettings(guild.id, { $set: { ['starboard.enabled']: true } });
-          await interaction.editReply({ content: t('starboard.enabled', { lng }) });
+          await enableStarboard(guild.id);
+          await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.starboard).setDescription(t('starboard.enabled', { lng }))] });
         }
         break;
       case 'setup':
@@ -110,15 +121,25 @@ export default new Command({
           const channel = options.getChannel('channel', true);
           const minimumStars = options.getInteger('stars', true);
 
-          if (channel.type !== ChannelType.GuildText) return await interaction.editReply({ content: t('starboard.invalid-channel', { lng }) });
-          if (!channel.permissionsFor(interaction.guild.members.me).has(PermissionsBitField.Flags.SendMessages))
-            return await interaction.editReply({ content: t('starboard.missing-permissions', { lng }) });
-          if (minimumStars < 1 || minimumStars > 100) return await interaction.editReply({ content: t('starboard.invalid-stars', { lng }) });
+          if (channel.type !== ChannelType.GuildText) {
+            await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('starboard.invalid-channel', { lng }))] });
+            return;
+          }
 
-          await updateGuildSettings(guild.id, {
-            $set: { ['starboard.channelId']: channel.id, ['starboard.minimumStars']: minimumStars, ['starboard.enabled']: true }
-          });
-          await interaction.editReply({ content: t('starboard.setup', { lng }) });
+          if (!channel.permissionsFor(interaction.guild.members.me).has(PermissionsBitField.Flags.SendMessages)) {
+            await interaction.editReply({
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('starboard.missing-permissions', { lng }))]
+            });
+            return;
+          }
+
+          if (minimumStars < 1 || minimumStars > 100) {
+            await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('starboard.invalid-stars', { lng }))] });
+            return;
+          }
+
+          await setupStarboard(guild.id, channel.id, minimumStars);
+          await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.starboard).setDescription(t('starboard.setup', { lng }))] });
         }
         break;
       case 'edit':
@@ -126,37 +147,58 @@ export default new Command({
           const channel = options.getChannel('channel', false);
           const minimumStars = options.getInteger('stars', false);
 
-          if (!channel && !minimumStars) return await interaction.editReply({ content: t('starboard.edit-nothing', { lng }) });
+          if (!channel && !minimumStars) {
+            await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('starboard.edit-nothing', { lng }))] });
+            return;
+          }
 
           if (channel) {
-            if (channel.type !== ChannelType.GuildText) return await interaction.editReply({ content: t('starboard.invalid-channel', { lng }) });
-            if (!channel.permissionsFor(interaction.guild.members.me).has(PermissionsBitField.Flags.SendMessages))
-              return await interaction.editReply({ content: t('starboard.missing-permissions', { lng }) });
-            if (channel.id === config.starboard.channelId) return await interaction.editReply({ content: t('starboard.same-channel', { lng }) });
-          }
-          if (minimumStars) {
-            if (isNaN(minimumStars) || minimumStars < 1 || minimumStars > 100)
-              return await interaction.editReply({ content: t('starboard.invalid-stars', { lng }) });
-            if (minimumStars === config.starboard.minimumStars) return await interaction.editReply({ content: t('starboard.same-stars', { lng }) });
-          }
-
-          await updateGuildSettings(guild.id, {
-            $set: {
-              ['starboard.channelId']: channel?.id ?? config.starboard.channelId,
-              ['starboard.minimumStars']: minimumStars ?? config.starboard.minimumStars
+            if (channel.type !== ChannelType.GuildText) {
+              await interaction.editReply({
+                embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('starboard.invalid-channel', { lng }))]
+              });
+              return;
             }
-          });
 
-          await interaction.editReply({ content: t('starboard.edited', { lng }) });
+            if (!channel.permissionsFor(interaction.guild.members.me).has(PermissionsBitField.Flags.SendMessages)) {
+              await interaction.editReply({
+                embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('starboard.missing-permissions', { lng }))]
+              });
+              return;
+            }
+
+            if (channel.id === starboard.channelId) {
+              await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('starboard.same-channel', { lng }))] });
+              return;
+            }
+          }
+
+          if (minimumStars) {
+            if (isNaN(minimumStars) || minimumStars < 1 || minimumStars > 100) {
+              await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('starboard.invalid-stars', { lng }))] });
+              return;
+            }
+
+            if (minimumStars === starboard.minimumStars) {
+              await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('starboard.same-stars', { lng }))] });
+              return;
+            }
+          }
+
+          await setupStarboard(guild.id, channel?.id ?? starboard.channelId, minimumStars ?? starboard.minimumStars);
+
+          await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.starboard).setDescription(t('starboard.edited', { lng }))] });
         }
         break;
       case 'delete':
         {
-          if (!config.starboard.channelId && !config.starboard.minimumStars)
-            return await interaction.editReply({ content: t('starboard.delete-nothing', { lng }) });
+          if (!starboard.channelId && !starboard.minimumStars) {
+            await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('starboard.delete-nothing', { lng }))] });
+            return;
+          }
 
-          await updateGuildSettings(guild.id, { $unset: { ['starboard.channelId']: 1, ['starboard.minimumStars']: 1 } });
-          await interaction.editReply({ content: t('starboard.deleted', { lng }) });
+          await deleteStarboard(guild.id);
+          await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.starboard).setDescription(t('starboard.deleted', { lng }))] });
         }
         break;
     }

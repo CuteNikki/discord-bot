@@ -3,7 +3,6 @@ import type { Types } from 'mongoose';
 import type { Counting } from 'types/counting';
 
 import type { ReactionRoleGroup } from 'types/reaction-roles';
-import type { Starboard } from 'types/starboard';
 
 export enum AnnouncementType {
   UserChannel,
@@ -122,7 +121,6 @@ export type GuildDocument = {
     enabled: boolean;
   };
   counting: Counting;
-  starboard: Starboard;
   level: {
     enabled: boolean;
     channelId?: string;

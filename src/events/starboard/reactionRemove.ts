@@ -2,9 +2,8 @@ import { Events, PermissionsBitField } from 'discord.js';
 
 import { Event } from 'classes/event';
 
-import { updateGuildSettings } from 'db/guild';
+import { getStarboard, removeReactedUser } from 'db/starboard';
 
-import { getStarboard } from 'db/starboard';
 import { logger } from 'utils/logger';
 
 export default new Event({
@@ -43,15 +42,8 @@ export default new Event({
       let stars = knownMessage.reactedUsers.length;
 
       if (knownMessage.reactedUsers.includes(user.id)) {
-        stars -= 1;
-        await updateGuildSettings(guild.id, {
-          $set: {
-            ['starboard.messages']: [
-              ...starboard.messages.filter((msg) => msg.messageId !== knownMessage.messageId),
-              { ...knownMessage, reactedUsers: knownMessage.reactedUsers.filter((reactedUser) => reactedUser !== user.id) }
-            ]
-          }
-        });
+        await removeReactedUser(knownMessage._id, user.id);
+        stars--;
       }
 
       if (knownMessage.starboardMessageId) {
@@ -71,16 +63,8 @@ export default new Event({
       let stars = knownStarboardMessage.reactedUsers.length;
 
       if (knownStarboardMessage.reactedUsers.includes(user.id)) {
-        stars -= 1;
-
-        await updateGuildSettings(guild.id, {
-          $set: {
-            ['starboard.messages']: [
-              ...starboard.messages.filter((msg) => msg.messageId !== knownStarboardMessage.messageId),
-              { ...knownStarboardMessage, reactedUsers: knownStarboardMessage.reactedUsers.filter((reactedUser) => reactedUser !== user.id) }
-            ]
-          }
-        });
+        await removeReactedUser(knownStarboardMessage._id, user.id);
+        stars--;
       }
 
       if (stars < starboard.minimumStars) {

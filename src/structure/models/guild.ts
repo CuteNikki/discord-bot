@@ -62,24 +62,6 @@ export const guildModel: Model<GuildDocument> =
           resetOnFail: false
         }
       },
-      starboard: {
-        type: {
-          enabled: { type: Boolean, default: false, required: true },
-          channelId: { type: String, required: false },
-          minimumStars: { type: Number, required: false },
-          messages: [
-            {
-              messageId: { type: String, required: true },
-              starboardMessageId: { type: String, required: false },
-              reactedUsers: [{ type: String, required: true, default: [] }]
-            }
-          ]
-        },
-        default: {
-          enabled: false,
-          messages: []
-        }
-      },
       ticket: {
         type: {
           enabled: { type: Boolean },

@@ -100,7 +100,7 @@ export async function removeStarboardMessage(guildId: string, _id: Types.ObjectI
  * Adds a reacted user to a starboard message
  * @param {Types.ObjectId | string} _id ID of the starboard message
  * @param {string} userId User ID to add
- * @returns {Promise<StarboardMessageDocument>} Updated starboard message
+ * @returns {Promise<StarboardMessageDocument | null>} Updated starboard message
  */
 export async function addReactedUser(_id: Types.ObjectId | string, userId: string): Promise<StarboardMessageDocument | null> {
   return await starboardMessageModel

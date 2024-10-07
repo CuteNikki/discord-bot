@@ -19,7 +19,7 @@ export default new Event({
 
     const starboard = await getStarboard(newMessage.guild.id);
 
-    if (!starboard.enabled || !starboard.channelId || !starboard.minimumStars) {
+    if (!starboard?.enabled || !starboard.channelId || !starboard.minimumStars) {
       return;
     }
 

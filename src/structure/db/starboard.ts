@@ -6,10 +6,10 @@ import type { StarboardDocument, StarboardMessageDocument } from 'types/starboar
 /**
  * Gets the starboard for a guild
  * @param {string} guildId ID of guild to get starboard for
- * @returns {Promise<StarboardDocument>} Updated Starboard
+ * @returns {Promise<StarboardDocument | null>} The starboard or null
  */
-export async function getStarboard(guildId: string): Promise<StarboardDocument> {
-  return await starboardModel.findOneAndUpdate({ guildId }, {}, { new: true, upsert: true }).populate('messages').lean().exec();
+export async function getStarboard(guildId: string): Promise<StarboardDocument | null> {
+  return await starboardModel.findOne({ guildId }).populate('messages').lean().exec();
 }
 
 /**
@@ -68,7 +68,7 @@ export async function deleteStarboard(guildId: string): Promise<StarboardDocumen
  * @param {string} guildId ID of guild to add on
  * @param {string} messageId Message ID to add
  * @param {string[]} reactedUsers Users that reacted to the message
- * @returns {Promise<StarboardMessageDocument>} Updated guild config
+ * @returns {Promise<StarboardMessageDocument>} Created starboard message
  */
 export async function addStarboardMessage(guildId: string, messageId: string, reactedUsers: string[]): Promise<StarboardMessageDocument> {
   const starboardMessage = await starboardMessageModel.create({ guildId, messageId, reactedUsers });
@@ -85,15 +85,17 @@ export async function addStarboardMessage(guildId: string, messageId: string, re
  * Removes a starboard message
  * @param {string} guildId ID of guild to remove on
  * @param {Types.ObjectId | string} _id Message ID to remove
- * @returns {Promise<StarboardDocument>} Updated guild config
+ * @returns Deleted starboard message
  */
-export async function removeStarboardMessage(guildId: string, _id: Types.ObjectId | string): Promise<StarboardDocument> {
-  await starboardMessageModel.deleteOne({ _id });
+export async function removeStarboardMessage(guildId: string, _id: Types.ObjectId | string) {
+  const starboardMessage = await starboardMessageModel.deleteOne({ _id });
 
-  return await starboardModel
+  await starboardModel
     .findOneAndUpdate({ guildId }, { $pull: { messages: { _id } } }, { new: true, upsert: true })
     .lean()
     .exec();
+
+  return starboardMessage;
 }
 
 /**
@@ -109,6 +111,12 @@ export async function addReactedUser(_id: Types.ObjectId | string, userId: strin
     .exec();
 }
 
+/**
+ * Removes a reacted user from a starboard message
+ * @param {Types.ObjectId | string} _id
+ * @param {string} userId
+ * @returns {Promise<StarboardMessageDocument | null>} Updated starboard message
+ */
 export async function removeReactedUser(_id: Types.ObjectId | string, userId: string): Promise<StarboardMessageDocument | null> {
   return await starboardMessageModel
     .findOneAndUpdate({ _id }, { $pull: { reactedUsers: userId } }, { new: true })

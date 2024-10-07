@@ -21,7 +21,7 @@ export default new Event({
 
     const starboard = await getStarboard(guild.id);
 
-    if (!starboard.enabled || !starboard.channelId || !starboard.minimumStars) {
+    if (!starboard?.enabled || !starboard.channelId || !starboard.minimumStars) {
       return;
     }
 

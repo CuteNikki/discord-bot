@@ -64,7 +64,7 @@ export default new Command({
 
     await interaction.deferReply({ ephemeral: true });
 
-    const starboard = await getStarboard(guild.id);
+    const starboard = (await getStarboard(guild.id)) ?? { enabled: false, channelId: undefined, minimumStars: undefined, messages: [] };
 
     switch (options.getSubcommand()) {
       case 'config':

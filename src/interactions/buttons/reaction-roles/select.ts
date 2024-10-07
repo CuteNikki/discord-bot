@@ -3,7 +3,7 @@ import { t } from 'i18next';
 
 import { Button } from 'classes/button';
 
-import { getGuildSettings } from 'db/guild';
+import { getReactionRoles } from 'db/reaction-roles';
 
 export default new Button({
   customId: 'button-reaction-select',
@@ -16,9 +16,11 @@ export default new Button({
 
     await interaction.deferReply({ ephemeral: true });
 
-    const config = await getGuildSettings(interaction.guildId);
+    const reactionRoles = await getReactionRoles(interaction.guildId);
 
-    const group = config.reactionRoles.groups.find((g) => g.messageId === interaction.message.id);
+    if (!reactionRoles) return;
+
+    const group = reactionRoles.groups.find((g) => g.messageId === interaction.message.id);
 
     if (!group) {
       await interaction.editReply({

@@ -2,7 +2,7 @@ import { Events } from 'discord.js';
 
 import { Event } from 'classes/event';
 
-import { getGuildSettings } from 'db/guild';
+import { getReactionRoles } from 'db/reaction-roles';
 
 export default new Event({
   name: Events.MessageReactionRemove,
@@ -12,13 +12,13 @@ export default new Event({
       return;
     }
 
-    const config = await getGuildSettings(reaction.message.guildId);
+    const reactionRoles = await getReactionRoles(reaction.message.guildId);
 
-    if (!config.reactionRoles.enabled) {
+    if (!reactionRoles?.enabled) {
       return;
     }
 
-    const group = config.reactionRoles.groups.find((g) => g.messageId === reaction.message.id);
+    const group = reactionRoles.groups.find((g) => g.messageId === reaction.message.id);
 
     if (!group) {
       return;

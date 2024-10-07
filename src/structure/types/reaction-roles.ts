@@ -5,9 +5,16 @@ export type Reaction = {
   roleId: string;
 };
 
-export type ReactionRoleGroup = {
+export type ReactionRoleGroupDocument = {
   _id: Types.ObjectId;
   messageId: string;
   channelId: string;
   reactions: Reaction[];
+};
+
+export type ReactionRoleDocument = {
+  _id: Types.ObjectId;
+  guildId: string;
+  enabled: boolean;
+  groups: ReactionRoleGroupDocument[];
 };

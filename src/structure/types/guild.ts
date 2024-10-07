@@ -2,8 +2,6 @@ import type { ButtonStyle } from 'discord.js';
 import type { Types } from 'mongoose';
 import type { Counting } from 'types/counting';
 
-import type { ReactionRoleGroup } from 'types/reaction-roles';
-
 export enum AnnouncementType {
   UserChannel,
   OtherChannel,
@@ -109,10 +107,6 @@ export type GuildDocument = {
   _id: Types.ObjectId;
   guildId: string;
   language?: string;
-  reactionRoles: {
-    enabled: boolean;
-    groups: ReactionRoleGroup[];
-  };
   customVC: {
     channelId: string;
     parentId: string;

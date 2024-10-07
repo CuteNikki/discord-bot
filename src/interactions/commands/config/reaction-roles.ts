@@ -22,8 +22,7 @@ import { t } from 'i18next';
 import type { DiscordClient } from 'classes/client';
 import { Command, ModuleType } from 'classes/command';
 
-import { getGuildSettings } from 'db/guild';
-import { addReactionGroup, deleteReactionGroupById, disableReactionRoles, enableReactionRoles } from 'db/reaction-roles';
+import { addReactionGroup, deleteReactionGroupById, disableReactionRoles, enableReactionRoles, getReactionRoles } from 'db/reaction-roles';
 
 import type { Reaction } from 'types/reaction-roles';
 
@@ -59,12 +58,12 @@ export default new Command({
 
     const { guild, options, user } = interaction;
 
-    const config = await getGuildSettings(guild.id);
+    const reactionRoles = (await getReactionRoles(guild.id)) ?? { enabled: false, channelId: null, groups: [] };
 
     switch (options.getSubcommand()) {
       case 'enable':
         {
-          if (config.reactionRoles.enabled) {
+          if (reactionRoles.enabled) {
             await interaction
               .editReply({
                 embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.enable.already', { lng }))]
@@ -84,7 +83,7 @@ export default new Command({
         break;
       case 'disable':
         {
-          if (!config.reactionRoles.enabled) {
+          if (!reactionRoles.enabled) {
             await interaction
               .editReply({
                 embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.disable.already', { lng }))]
@@ -106,7 +105,7 @@ export default new Command({
         {
           const id = options.getString('id');
 
-          const group = config.reactionRoles.groups.find((g) => g.messageId === id || g._id.toString() === id);
+          const group = reactionRoles.groups.find((g) => g.messageId === id || g._id.toString() === id);
           if (!group) {
             await interaction
               .editReply({
@@ -127,12 +126,12 @@ export default new Command({
         break;
       case 'info':
         {
-          const groups = config.reactionRoles.groups;
+          const groups = reactionRoles.groups;
 
           const embeds = [
             new EmbedBuilder().setColor(client.colors.reactionRoles).addFields({
               name: t('reaction-roles.info.state', { lng }),
-              value: config.reactionRoles.enabled ? t('enabled', { lng }) : t('disabled', { lng })
+              value: reactionRoles.enabled ? t('enabled', { lng }) : t('disabled', { lng })
             })
           ];
           if (groups.length) {
@@ -163,7 +162,7 @@ export default new Command({
         break;
       case 'setup':
         {
-          if (config.reactionRoles.groups.length >= MAX_GROUPS) {
+          if (reactionRoles.groups.length >= MAX_GROUPS) {
             await interaction
               .editReply({
                 embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.setup.limit', { lng, max: MAX_GROUPS }))]

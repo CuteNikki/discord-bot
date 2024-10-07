@@ -9,30 +9,6 @@ export const guildModel: Model<GuildDocument> =
     new Schema<GuildDocument>({
       guildId: { type: String, required: true },
       language: { type: String, required: false },
-      reactionRoles: {
-        type: {
-          enabled: { type: Boolean, default: false },
-          groups: [
-            {
-              type: {
-                messageId: { type: String, required: true },
-                channelId: { type: String, required: true },
-                method: { type: String, required: true, enum: ['button', 'reaction'] },
-                reactions: [
-                  {
-                    emoji: { type: String, required: true },
-                    roleId: { type: String, required: true }
-                  }
-                ]
-              }
-            }
-          ]
-        },
-        default: {
-          enabled: false,
-          groups: []
-        }
-      },
       customVC: {
         type: {
           channelId: { type: String },

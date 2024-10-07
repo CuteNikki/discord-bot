@@ -1,4 +1,12 @@
-import { Colors, EmbedBuilder, PermissionFlagsBits, SlashCommandBuilder, type ColorResolvable } from 'discord.js';
+import {
+  ApplicationIntegrationType,
+  Colors, // All of default discord colors.
+  EmbedBuilder,
+  InteractionContextType,
+  PermissionFlagsBits,
+  SlashCommandBuilder,
+  type ColorResolvable
+} from 'discord.js';
 import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
@@ -6,25 +14,40 @@ import { Command, ModuleType } from 'classes/command';
 import { logger } from 'utils/logger';
 
 export default new Command({
+  // The module this command belongs to.
+  // It categorizes commands in the commands list.
   module: ModuleType.General,
-  cooldown: 1_000, // 1 second cooldown between command uses
-  isDeveloperOnly: false, // only developers can use this command
-  botPermissions: ['SendMessages'], // the bot needs to have this permission to be able to use this command
+  // 1 second cooldown between command uses.
+  cooldown: 1_000,
+  // Only developers can use this command.
+  isDeveloperOnly: false,
+  // The bot needs to have this permission to be able to use this command.
+  botPermissions: ['SendMessages'],
+  // The slash command data.
   data: new SlashCommandBuilder()
-    .setName('preview-color') // command name
-    .setDescription('Sends an embed with a color to preview') // command description
-    .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages) // only users with the manage messages permission can see and use this command
+    .setName('preview-color')
+    .setDescription('Sends an embed with a color to preview')
+    // Allowing the command to be used in guilds, DMs and private channels.
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
+    // Allowing the command to be used in guilds, DMs and private channels.
+    .setContexts(InteractionContextType.BotDM, InteractionContextType.Guild, InteractionContextType.PrivateChannel)
+    // By default only users with the manage messages permission can see and use this command.
+    // UNLESS it was changed in the server settings under the integrations tab (per user or role).
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
+    // Adding options
     .addStringOption(
       (option) =>
         option
-          .setName('color') // option name
-          .setDescription('The color to preview') // option description
-          .setRequired(true) // makes the option required
-          .setAutocomplete(true) // enables autocompletion
+          .setName('color')
+          .setDescription('The color to preview')
+          .setRequired(true) // Makes the option required.
+          .setAutocomplete(true) // Enable autocompletion.
     ),
+  // On input, the autocomplete function is called.
   async autocomplete({ interaction }) {
-    // This gets us whatever the user has typed in the autocomplete
+    // This gets us whatever the user has typed.
     const input = interaction.options.getFocused();
+
     const colors = [
       { name: 'white', value: Colors.White.toString(16) },
       { name: 'aqua', value: Colors.Aqua.toString(16) },
@@ -56,22 +79,61 @@ export default new Command({
       { name: 'dark-but-not-black', value: Colors.DarkButNotBlack.toString(16) },
       { name: 'not-quite-black', value: Colors.NotQuiteBlack.toString(16) }
     ];
-    // Making sure we only return 25 results as that is the max amount allowed by discord
-    if (!input.length) return await interaction.respond(colors.slice(0, 25));
-    await interaction.respond(colors.filter((color) => color.name.toLowerCase().includes(input.toLowerCase())).slice(0, 25));
+
+    // If the input is empty, return all colors but limit to 25!
+    // Discord API only allows for a max of 25 choices.
+    if (!input.length) {
+      await interaction.respond(colors.slice(0, 25));
+      return;
+    }
+
+    await interaction.respond(
+      colors
+        // Filter the colors to only respond with the ones that match the input.
+        .filter((color) => color.name.toLowerCase().includes(input.toLowerCase()))
+        // Again, making sure we only ever return max of 25 results.
+        .slice(0, 25)
+    );
   },
-  // the order of client and interaction does not matter
+  // On command, the execute function is called.
+  // order of interaction, client and lng does not matter.
   async execute({ interaction, lng }) {
+    // get a guilds language:
+    // import { getGuildLanguage } from 'db/language';
+    // const guildLng = await getGuildLanguage(guildId);
+
+    // get a different users language:
+    // import { getUserLanguage } from 'db/language';
+    // const otherLng = await getUserLanguage(userId);
+
+    // get the color the user provided
     const color = interaction.options.getString('color', true);
 
-    // Autocomplete allows you to give the user a list to choose from but they will still be able to type in whatever they want!
-    // It's a must to check if they actually provided a valid color.
+    // Autocomplete allows you to give the user a list to choose from,
+    // but they will still be able to type in whatever they want!
+    // it's a must to check if they actually provided a valid color.
+
     try {
-      await interaction.reply({ embeds: [new EmbedBuilder().setColor(color as ColorResolvable).setDescription(t('preview-color.preview', { lng, color }))] });
+      // Send the embed with the color preview if the color is valid.
+      await interaction.reply({
+        embeds: [
+          new EmbedBuilder()
+            // We get a type error here without the casting.
+            .setColor(color as ColorResolvable)
+            .setDescription(t('preview-color.preview', { lng, color }))
+        ]
+      });
     } catch (err) {
+      // This block runs if an invalid color is provided.
+
       logger.debug({ err }, 'Error while previewing color');
-      if (!interaction.replied) await interaction.reply({ content: t('preview-color.invalid', { lng }) });
-      else await interaction.editReply({ content: t('preview-color.invalid', { lng }) });
+
+      // In case something else went wrong and the reply was actually sent, edit it.
+      if (!interaction.replied) {
+        await interaction.reply({ content: t('preview-color.invalid', { lng }), ephemeral: true });
+      } else {
+        await interaction.editReply({ content: t('preview-color.invalid', { lng }) });
+      }
     }
   }
 });

@@ -6,7 +6,7 @@ This discord bot was built with custom classes, <a href="https://www.i18next.com
 
 [<img src="https://img.shields.io/badge/pino-%23687634.svg?style=for-the-badge&logo=pino&logoColor=white" alt="pino" />](https://getpino.io) [<img src="https://img.shields.io/badge/mongodb-%2347A248.svg?style=for-the-badge&logo=mongodb&logoColor=white" alt="mongodb" />](https://mongodb.com) [<img src="https://img.shields.io/badge/i18next-%2326A69A.svg?style=for-the-badge&logo=i18next&logoColor=white" alt="i18next" />](https://i18next.com) [<img src="https://img.shields.io/badge/discordjs_v14&#46;16&#46;2-%235865F2.svg?style=for-the-badge&logo=discord&logoColor=white" alt="discord.js" />](https://discord.js.org)<br /> [<img src="https://img.shields.io/github/stars/CuteNikki/discord-bot?style=for-the-badge&color=%23d4a72a" alt="Repository Stars" />](https://github.com/CuteNikki/discord-bot/stargazers) [<img src="https://img.shields.io/github/issues/CuteNikki/discord-bot?style=for-the-badge&color=%2371d42a" alt="Repository Issues" />](https://github.com/CuteNikki/discord-bot/issues) [<img src="https://img.shields.io/github/forks/CuteNikki/discord-bot?style=for-the-badge&color=%232ad48a" alt="Repository Forks" />](https://github.com/CuteNikki/discord-bot/forks) [<img src="https://img.shields.io/github/license/cutenikki/discord-bot?style=for-the-badge&color=%232a90d4" alt="License" />]()
 
-###### Made with 💖 by <a href="https://github.com/CuteNikki/">Nikki</a>
+###### Made with 💖 by <a href="https://github.com/CuteNikki/">Nikki</a>.
 
 ## Run it locally
 
@@ -34,45 +34,66 @@ bun install
 
 ```bash
 # copy example.config.json and rename to config.json
-# or use this command if you are on Linux
+# or use this command if you are on Linux.
 cp example.config.json config.json
-# fill in all values (more details in the config file)
+# fill in all values (more details in the config file).
 ```
 
 5. Deploy the slash commands.
 
 ```bash
 bun run deploy
-# you may also use the /register-commands slash command on discord
-# once the commands have been registered using the above command.
+# you may also use the /register-commands slash command on discord,
+# once the commands have been registered using the deploy command.
 ```
 
 6. Run the bot using a script.
 
 ```bash
-# run in development
+# Run in development:
 bun run dev
-# or compile and run
-bun run build
-bun run start
-```
 
-###### You may also use `--debug` for more detailed logs!
+# or compile:
+bun run build
+# and run:
+bun run start
+
+# You may also use --debug for more detailed console logs!
+```
 
 7. (optional) Configure more settings using the developer command.
 
-## How to create new commands, events, buttons, etc.
+```bash
+# This is used for giving Supporter Badge on support server boost.
+/developer-configuration support-guild-id set <guildId>
 
-#### 1. Creating a slash command using the custom command class and i18next.
+# This is used for the /support command.
+/developer-configuration support-invite-url set <url>
 
-This displays the use of all command properties including autocomplete.
+# This is used for the /invite command.
+/developer-configuration bot-invite-url set <url>
+
+# This is used to manage badges of a user.
+/developer-configuration badges add/remove/show <user> [badge]
+
+# This is used to manage bans.
+/developer-configuration bans add/remove/list [user]
+```
+
+## How to create new commands, events, buttons and more.
+
+#### 1. Creating a slash command:
+
+This displays the use of i18next, the command class and all its properties including autocomplete.
 
 ```ts
 import {
-  Colors, // all discord colors
+  Colors, // All of default discord colors.
   EmbedBuilder,
   PermissionFlagsBits,
   SlashCommandBuilder,
+  InteractionContextType,
+  ApplicationIntegrationType,
   type ColorResolvable
 } from 'discord.js';
 import { t } from 'i18next';
@@ -82,37 +103,40 @@ import { Command, ModuleType } from 'classes/command';
 import { logger } from 'utils/logger';
 
 export default new Command({
+  // The module this command belongs to.
+  // It categorizes commands in the commands list.
   module: ModuleType.General,
-  // the module this command belongs to
-  // it categorizes commands in the commands list
+  // 1 second cooldown between command uses.
   cooldown: 1_000,
-  // 1 second cooldown between command uses
+  // Only developers can use this command.
   isDeveloperOnly: false,
-  // only developers can use this command
+  // The bot needs to have this permission to be able to use this command.
   botPermissions: ['SendMessages'],
-  // the bot needs to have this permission to be able to use this command
+  // The slash command data.
   data: new SlashCommandBuilder()
     .setName('preview-color')
-    // command name
     .setDescription('Sends an embed with a color to preview')
-    // command description
+    // Allowing the command to be used in guilds, DMs and private channels.
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
+    // Allowing the command to be used in guilds, DMs and private channels.
+    .setContexts(InteractionContextType.BotDM, InteractionContextType.Guild, InteractionContextType.PrivateChannel)
+    // By default only users with the manage messages permission can see and use this command.
+    // UNLESS it was changed in the server settings under the integrations tab (per user or role).
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
-    // only users with the manage messages permission can see and use this command
+    // Adding options
     .addStringOption(
       (option) =>
         option
           .setName('color')
-          // option name
           .setDescription('The color to preview')
-          // option description
-          .setRequired(true)
-          // makes the option required
-          .setAutocomplete(true)
-      // enables autocompletion
+          .setRequired(true) // Makes the option required.
+          .setAutocomplete(true) // Enable autocompletion.
     ),
+  // On input, the autocomplete function is called.
   async autocomplete({ interaction, client }) {
+    // This gets us whatever the user has typed.
     const input = interaction.options.getFocused();
-    // This gets us whatever the user has typed in the autocomplete
+
     const colors = [
       { name: 'white', value: Colors.White.toString(16) },
       { name: 'aqua', value: Colors.Aqua.toString(16) },
@@ -144,45 +168,56 @@ export default new Command({
       { name: 'dark-but-not-black', value: Colors.DarkButNotBlack.toString(16) },
       { name: 'not-quite-black', value: Colors.NotQuiteBlack.toString(16) }
     ];
-    if (!input.length) return await interaction.respond(colors.slice(0, 25));
+
+    // If the input is empty, return all colors but limit to 25!
+    // Discord API only allows for a max of 25 choices.
+    if (!input.length) {
+      await interaction.respond(colors.slice(0, 25));
+      return;
+    }
+
     await interaction.respond(
       colors
-        .filter(
-          (color) => color.name.toLowerCase().includes(input.toLowerCase())
-          // Check if the input includes the color name
-        )
+        // Filter the colors to only respond with the ones that match the input.
+        .filter((color) => color.name.toLowerCase().includes(input.toLowerCase()))
+        // Again, making sure we only ever return max of 25 results.
         .slice(0, 25)
     );
-    // Making sure we only ever return max of 25 results
   },
+  // On command, the execute function is called.
+  // order of interaction, client and lng does not matter.
   async execute({ interaction, client, lng }) {
-    // the order of interaction, client and lng does not matter
-
-    // get a guilds language
+    // get a guilds language:
     // import { getGuildLanguage } from 'db/language';
     // const guildLng = await getGuildLanguage(guildId);
 
-    // get a different users language
+    // get a different users language:
     // import { getUserLanguage } from 'db/language';
     // const otherLng = await getUserLanguage(userId);
 
+    // get the color the user provided
     const color = interaction.options.getString('color', true);
 
-    // Autocomplete allows you to give the user a list to choose from
+    // Autocomplete allows you to give the user a list to choose from,
     // but they will still be able to type in whatever they want!
     // it's a must to check if they actually provided a valid color.
 
     try {
+      // Send the embed with the color preview if the color is valid.
       await interaction.reply({
         embeds: [
           new EmbedBuilder()
+            // We get a type error here without the casting.
             .setColor(color as ColorResolvable)
-            // casting the color to a color resolvable
             .setDescription(t('preview-color.preview', { lng, color }))
         ]
       });
     } catch (err) {
+      // This block runs if an invalid color is provided.
+
       logger.debug({ err }, 'Error while previewing color');
+
+      // In case something else went wrong and the reply was actually sent, edit it.
       if (!interaction.replied) {
         await interaction.reply({ content: t('preview-color.invalid', { lng }), ephemeral: true });
       } else {
@@ -193,7 +228,7 @@ export default new Command({
 });
 ```
 
-##### Translating messages
+##### Translating messages:
 
 `src/structure/locales/{lng}-messages.json`
 
@@ -206,7 +241,7 @@ export default new Command({
 }
 ```
 
-##### Translating commands
+##### Translating commands:
 
 `src/structure/locales/{lng}-commands.json`
 
@@ -225,7 +260,7 @@ export default new Command({
 }
 ```
 
-#### 2. Creating an event using the custom event class.
+#### 2. Creating an event:
 
 ```ts
 import { Events } from 'discord.js';
@@ -235,38 +270,39 @@ import { Event } from 'classes/event';
 import { logger } from 'utils/logger';
 
 export default new Event({
-  name: Events.ClientReady,
   // the name of the event
-  once: true,
+  name: Events.ClientReady,
   // only run this once, won't run again even if another ready event is emitted
+  once: true,
+  // it is important to always have client first
+  // and other events properties after that
   execute(client, readyClient) {
-    // it is important to always have client first
-    // and other events properties after that
-
     logger.info(`Logged in as ${readyClient.user.username}#${readyClient.user.discriminator}`);
   }
 });
 ```
 
-#### 3. Creating a button using the custom button class.
+#### 3. Creating a button:
 
 ```ts
 import { Button } from 'classes/button';
 
 export default new Button({
+  // The custom identifier of the button.
   customId: 'ping',
-  // the custom id of the button
+  // If the button was received by a command, only the command sender can use this button.
   isAuthorOnly: true,
-  // if the button was received by a command, only the command sender can use this button
-  isCustomIdIncluded: false,
-  // if true then a button with the custom id of "ping-two" would still
-  // trigger this button because the custom id includes "ping"
-  permissions: ['SendMessages'],
-  // the permissions required to use this button
-  botPermissions: ['SendMessages'],
-  // permissions the bot needs to execute this function
+  // If true then a button with the custom id of "abc-ping-abc" would still
+  // trigger this button because the custom id includes "ping".
+  // This is useful to pass an id or other information to the button.
+  isCustomIdIncluded: false, // In this case, we don't need it.
+  // The permissions required by a member to use this button.
+  permissions: ['SendMessages'], // Ignored in DMs.
+  // Permissions the bot needs to execute this function.
+  botPermissions: ['SendMessages'], // Ignored in DMs.
+  // On button click, the execute function is called.
   async execute({ interaction, client, lng }) {
-    await interaction.channel?.send({ content: 'pong!' });
+    await interaction.channel?.send({ content: 'pong!' }); // Send a response in the channel.
   }
 });
 ```

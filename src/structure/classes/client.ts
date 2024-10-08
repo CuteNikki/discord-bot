@@ -64,7 +64,8 @@ export class DiscordClient extends Client {
       // Throw errors on rate limit instead of sending request after rate limit has ended
       // We want to handle rate limits immediately instead of sending a request 10 minutes later
       rest: {
-        rejectOnRateLimit: async () => true
+        // rejectOnRateLimit: async () => true
+        // Turned off for now, as it's causing issues with reaction roles
       },
 
       // Setting the bots presence

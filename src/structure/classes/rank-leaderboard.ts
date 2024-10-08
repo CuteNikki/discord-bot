@@ -1,16 +1,22 @@
+/** @jsx JSX.createElement */
+/** @jsxFrag JSX.Fragment */
+
 import { Builder, Font, FontFactory, JSX, loadImage, StyleSheet, type ImageSource } from 'canvacord';
+
 import { LB_HEIGHT_INTERVAL, LB_MIN_RENDER_HEIGHT, leaderboardColors, type LeaderboardVariants } from 'constants/canvacord';
-import type { LeaderboardProps, PropsType } from 'types/rank-leaderboard';
+
 import { chunk } from 'utils/common';
 
+import type { LeaderboardProps, LeaderboardPropsType } from 'types/canvacord';
+
 const Crown = () => {
-  return (
-    <svg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'>
-      <path
-        d='M16.5 17.5H3.5C3.225 17.5 3 17.7813 3 18.125V19.375C3 19.7188 3.225 20 3.5 20H16.5C16.775 20 17 19.7188 17 19.375V18.125C17 17.7813 16.775 17.5 16.5 17.5ZM18.5 5C17.6719 5 17 5.83984 17 6.875C17 7.15234 17.05 7.41016 17.1375 7.64844L14.875 9.34375C14.3937 9.70313 13.7719 9.5 13.4937 8.89063L10.9469 3.32031C11.2812 2.97656 11.5 2.46094 11.5 1.875C11.5 0.839844 10.8281 0 10 0C9.17188 0 8.5 0.839844 8.5 1.875C8.5 2.46094 8.71875 2.97656 9.05313 3.32031L6.50625 8.89063C6.22812 9.5 5.60312 9.70313 5.125 9.34375L2.86562 7.64844C2.95 7.41406 3.00312 7.15234 3.00312 6.875C3.00312 5.83984 2.33125 5 1.50312 5C0.675 5 0 5.83984 0 6.875C0 7.91016 0.671875 8.75 1.5 8.75C1.58125 8.75 1.6625 8.73438 1.74063 8.71875L4 16.25H16L18.2594 8.71875C18.3375 8.73438 18.4188 8.75 18.5 8.75C19.3281 8.75 20 7.91016 20 6.875C20 5.83984 19.3281 5 18.5 5Z'
-        fill='#FFAA00'
-      />
-    </svg>
+  return JSX.createElement(
+    'svg',
+    { width: '20', height: '20', viewBox: '0 0 20 20', fill: 'none', xmlns: 'http://www.w3.org/2000/svg' },
+    JSX.createElement('path', {
+      d: 'M16.5 17.5H3.5C3.225 17.5 3 17.7813 3 18.125V19.375C3 19.7188 3.225 20 3.5 20H16.5C16.775 20 17 19.7188 17 19.375V18.125C17 17.7813 16.775 17.5 16.5 17.5ZM18.5 5C17.6719 5 17 5.83984 17 6.875C17 7.15234 17.05 7.41016 17.1375 7.64844L14.875 9.34375C14.3937 9.70313 13.7719 9.5 13.4937 8.89063L10.9469 3.32031C11.2812 2.97656 11.5 2.46094 11.5 1.875C11.5 0.839844 10.8281 0 10 0C9.17188 0 8.5 0.839844 8.5 1.875C8.5 2.46094 8.71875 2.97656 9.05313 3.32031L6.50625 8.89063C6.22812 9.5 5.60312 9.70313 5.125 9.34375L2.86562 7.64844C2.95 7.41406 3.00312 7.15234 3.00312 6.875C3.00312 5.83984 2.33125 5 1.50312 5C0.675 5 0 5.83984 0 6.875C0 7.91016 0.671875 8.75 1.5 8.75C1.58125 8.75 1.6625 8.73438 1.74063 8.71875L4 16.25H16L18.2594 8.71875C18.3375 8.73438 18.4188 8.75 18.5 8.75C19.3281 8.75 20 7.91016 20 6.875C20 5.83984 19.3281 5 18.5 5Z',
+      fill: '#FFAA00'
+    })
   );
 };
 
@@ -26,7 +32,7 @@ export class LeaderboardBuilder extends Builder<LeaderboardProps> {
   /**
    * Create a new leaderboard ui builder
    */
-  public constructor(props: PropsType) {
+  public constructor(props: LeaderboardPropsType) {
     super(500, LB_MIN_RENDER_HEIGHT);
 
     this.bootstrap({
@@ -120,7 +126,7 @@ export class LeaderboardBuilder extends Builder<LeaderboardProps> {
    * Render players ui on the canvas
    */
   public renderDefaultPlayers(players: JSX.Element[]) {
-    return <div className='mt-4 flex flex-col items-center justify-center w-[95%]'>{players}</div>;
+    return JSX.createElement('div', { className: 'mt-4 flex flex-col items-center justify-center w-[95%]' }, players as unknown as JSX.Element);
   }
 
   /**
@@ -140,7 +146,9 @@ export class LeaderboardBuilder extends Builder<LeaderboardProps> {
           rank === 2 ? 'rounded-br-none' : rank === 3 ? 'rounded-bl-none' : ''
         )
       },
-      crown ? JSX.createElement('div', { className: 'absolute flex -top-16' }, Crown()) : JSX.createElement('div', { className: 'hidden' }),
+      crown
+        ? JSX.createElement('div', { className: 'absolute flex -top-16' }, Crown() as unknown as JSX.Element)
+        : JSX.createElement('div', { className: 'hidden' }),
       JSX.createElement(
         'div',
         { className: 'flex items-center justify-center flex-col absolute -top-10' },

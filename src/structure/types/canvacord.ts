@@ -1,14 +1,14 @@
-import type { Stylable } from 'canvacord';
+import type { ImageSource, Stylable } from 'canvacord';
 
 export type PresenceStatus = 'online' | 'idle' | 'dnd' | 'offline' | 'streaming' | 'invisible' | 'none';
 
-export type Texts = Partial<{
+export type CardTexts = Partial<{
   level: string;
   xp: string;
   rank: string;
 }>;
 
-export type Styles = Partial<{
+export type CardStyles = Partial<{
   container: Stylable;
   background: Stylable;
   overlay: Stylable;
@@ -47,7 +47,7 @@ export type Styles = Partial<{
   }>;
 }>;
 
-export interface PropsType {
+export interface CardPropsType {
   handle: string | null;
   username: string | null;
   avatar: string;
@@ -58,12 +58,41 @@ export interface PropsType {
   level: number | null;
   backgroundColor?: string;
   abbreviate?: boolean;
-  texts?: Texts;
-  styles?: Styles;
+  texts?: CardTexts;
+  styles?: CardStyles;
 }
 
-export type RankCardProps = PropsType & {
-  texts: Texts;
-  styles: Styles;
+export type RankCardProps = CardPropsType & {
+  texts: CardTexts;
+  styles: CardStyles;
   abbreviate: boolean;
 };
+
+export type LeaderboardTexts = {
+  level: string;
+  xp: string;
+  rank: string;
+};
+
+export type LeaderboardPropsType = {
+  variant?: 'horizontal' | 'default';
+  background?: ImageSource | null;
+  backgroundColor?: string;
+  header?: {
+    title: string;
+    subtitle: string;
+    image: ImageSource;
+  };
+  players: {
+    displayName: string;
+    username: string;
+    level: number;
+    xp: number;
+    rank: number;
+    avatar: ImageSource;
+  }[];
+  text?: LeaderboardTexts;
+  abbreviate?: boolean;
+};
+
+export type LeaderboardProps = LeaderboardPropsType & { text: LeaderboardTexts; background: ImageSource | null; backgroundColor: string; abbreviate: boolean };

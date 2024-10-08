@@ -1,12 +1,16 @@
+/** @jsx JSX.createElement */
+/** @jsxFrag JSX.Fragment */
+
 import { Builder, Font, FontFactory, JSX, StyleSheet } from 'canvacord';
 
 import { statusColors } from 'constants/canvacord';
-import type { PropsType, RankCardProps } from 'types/rank-card';
+
+import type { CardPropsType, RankCardProps } from 'types/canvacord';
 
 export class RankCard extends Builder {
   props: RankCardProps;
 
-  constructor(props: PropsType) {
+  constructor(props: CardPropsType) {
     super(930, 280); // width, height
 
     this.props = {

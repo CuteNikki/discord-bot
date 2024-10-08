@@ -2,12 +2,12 @@ import { ApplicationIntegrationType, AttachmentBuilder, InteractionContextType, 
 import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
+import { RankCard } from 'classes/rank-card';
 
 import { convertLevelToXP, getLevelWithRank, getWeeklyLevelWithRank } from 'db/level';
 
 import type { PositionLevel } from 'types/level';
 
-import { RankCard } from 'utils/rank-card';
 
 export default new Command({
   module: ModuleType.Level,

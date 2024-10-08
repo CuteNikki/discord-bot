@@ -2,9 +2,9 @@ import { ApplicationCommandType, ApplicationIntegrationType, AttachmentBuilder, 
 import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
+import { RankCard } from 'classes/rank-card';
 
 import { convertLevelToXP, getLevelWithRank } from 'db/level';
-import { RankCard } from 'utils/rank-card';
 
 const commandType = ApplicationCommandType.User;
 

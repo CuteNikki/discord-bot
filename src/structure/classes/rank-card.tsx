@@ -2,122 +2,10 @@
 /** @jsxFrag JSX.Fragment */
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Builder, Font, FontFactory, JSX, StyleSheet, type Stylable } from 'canvacord';
+import { Builder, Font, FontFactory, JSX, StyleSheet } from 'canvacord';
 
-type PresenceStatus = 'online' | 'idle' | 'dnd' | 'offline' | 'streaming' | 'invisible' | 'none';
-
-interface PropsType {
-  handle: string | null;
-  username: string | null;
-  avatar: string;
-  status: PresenceStatus | null;
-  currentXP: number | null;
-  requiredXP: number | null;
-  rank: number | null;
-  level: number | null;
-  backgroundColor?: string;
-  abbreviate: boolean;
-  texts?: Partial<{
-    level: string;
-    xp: string;
-    rank: string;
-  }>;
-  styles?: Partial<{
-    container: Stylable;
-    background: Stylable;
-    overlay: Stylable;
-    avatar: Partial<{
-      container: Stylable;
-      image: Stylable;
-      status: Stylable;
-    }>;
-    username: Partial<{
-      container: Stylable;
-      name: Stylable;
-      handle: Stylable;
-    }>;
-    progressbar: Partial<{
-      container: Stylable;
-      thumb: Stylable;
-      track: Stylable;
-    }>;
-    statistics: Partial<{
-      container: Stylable;
-      level: Partial<{
-        container: Stylable;
-        text: Stylable;
-        value: Stylable;
-      }>;
-      xp: Partial<{
-        container: Stylable;
-        text: Stylable;
-        value: Stylable;
-      }>;
-      rank: Partial<{
-        container: Stylable;
-        text: Stylable;
-        value: Stylable;
-      }>;
-    }>;
-  }>;
-}
-
-export type RankCardProps = PropsType & {
-  texts: Partial<{
-    level: string;
-    xp: string;
-    rank: string;
-  }>;
-  styles: Partial<{
-    container: Stylable;
-    background: Stylable;
-    overlay: Stylable;
-    avatar: Partial<{
-      container: Stylable;
-      image: Stylable;
-      status: Stylable;
-    }>;
-    username: Partial<{
-      container: Stylable;
-      name: Stylable;
-      handle: Stylable;
-    }>;
-    progressbar: Partial<{
-      container: Stylable;
-      thumb: Stylable;
-      track: Stylable;
-    }>;
-    statistics: Partial<{
-      container: Stylable;
-      level: Partial<{
-        container: Stylable;
-        text: Stylable;
-        value: Stylable;
-      }>;
-      xp: Partial<{
-        container: Stylable;
-        text: Stylable;
-        value: Stylable;
-      }>;
-      rank: Partial<{
-        container: Stylable;
-        text: Stylable;
-        value: Stylable;
-      }>;
-    }>;
-  }>;
-};
-
-const Colors = {
-  online: '#43b581',
-  idle: '#faa61a',
-  dnd: '#f04747',
-  offline: '#747f8d',
-  streaming: '#593695',
-  invisible: '#747f8d'
-};
-
-const clamp = (value: number) => Math.max(0, Math.min(100, value));
+import { statusColors } from 'constants/canvacord';
+import type { PropsType, RankCardProps } from 'types/rank-card';
 
 export class RankCard extends Builder {
   props: RankCardProps;
@@ -143,6 +31,7 @@ export class RankCard extends Builder {
   async render() {
     const { rank, level, currentXP, requiredXP, abbreviate, username, handle, avatar, status, styles, texts, backgroundColor } = this.props;
 
+    const clamp = (value: number) => Math.max(0, Math.min(100, value));
     const shouldSkipStats = currentXP == null && requiredXP == null;
     const progress = Math.round(((currentXP ?? 0) / (requiredXP ?? 0)) * 100);
     const progressWidth = typeof progress !== 'number' || Number.isNaN(progress) ? 0 : clamp(progress);
@@ -177,7 +66,11 @@ export class RankCard extends Builder {
             />
             {status && status !== 'none' ? (
               <div
-                className={StyleSheet.cn('absolute h-8 w-8 rounded-full bottom-5 right-0 flex', `bg-[${Colors[status]}]`, StyleSheet.tw(styles.avatar?.status))}
+                className={StyleSheet.cn(
+                  'absolute h-8 w-8 rounded-full bottom-5 right-0 flex',
+                  `bg-[${statusColors[status]}]`,
+                  StyleSheet.tw(styles.avatar?.status)
+                )}
                 style={StyleSheet.css(styles.avatar?.status)}
               />
             ) : null}

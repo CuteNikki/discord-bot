@@ -1,4 +1,4 @@
-import type { Stylable } from "canvacord";
+import type { Stylable } from 'canvacord';
 
 export type PresenceStatus = 'online' | 'idle' | 'dnd' | 'offline' | 'streaming' | 'invisible' | 'none';
 

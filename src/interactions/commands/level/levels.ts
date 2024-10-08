@@ -51,7 +51,6 @@ export default new Command({
 
     for (let i = 0; i < chunkedLeaderboard.length; i++) {
       const leaderboardBuilder = new LeaderboardBuilder({
-        variant: i === 0 ? 'default' : 'horizontal',
         players: chunkedLeaderboard[i].map((lvl) => ({
           avatar: lvl.avatar ?? '',
           username: lvl.username ?? 'unknown',
@@ -62,15 +61,17 @@ export default new Command({
         }))
       });
 
+      if (i === 0) {
+        leaderboardBuilder.setVariant('default');
+        leaderboardBuilder.setHeader({ title: guild.name, subtitle: `${guild.memberCount} members`, image: guild.iconURL() ?? '' });
+      } else {
+        leaderboardBuilder.setVariant('horizontal');
+      }
+
       const image = await leaderboardBuilder.build({ format: 'png' });
 
       attachments.push(new AttachmentBuilder(image, { name: `leaderboard_${i}.png` }));
-      embeds.push(
-        new EmbedBuilder()
-          .setColor(client.colors.level)
-          .setTitle(weekly ? t('level.leaderboard.weekly', { lng }) : t('level.leaderboard.title', { lng }))
-          .setImage(`attachment://leaderboard_${i}.png`)
-      );
+      embeds.push(new EmbedBuilder().setColor(client.colors.level).setImage(`attachment://leaderboard_${i}.png`));
     }
 
     await pagination({ interaction, embeds, attachments });

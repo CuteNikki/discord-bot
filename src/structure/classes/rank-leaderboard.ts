@@ -3,7 +3,7 @@
 
 import { Builder, Font, FontFactory, JSX, loadImage, StyleSheet, type ImageSource } from 'canvacord';
 
-import { LB_HEIGHT_INTERVAL, LB_MIN_RENDER_HEIGHT, leaderboardColors, type LeaderboardVariants } from 'constants/canvacord';
+import { leaderboardColors, type LeaderboardVariants } from 'constants/canvacord';
 
 import { chunk } from 'utils/common';
 
@@ -33,18 +33,15 @@ export class LeaderboardBuilder extends Builder<LeaderboardProps> {
    * Create a new leaderboard ui builder
    */
   public constructor(props: LeaderboardPropsType) {
-    super(500, LB_MIN_RENDER_HEIGHT);
+    super(600, 600);
 
     this.bootstrap({
       ...props,
-      variant: props.variant ?? 'default',
       background: props.background ?? null,
       backgroundColor: props.backgroundColor ?? '#2b2f35',
       abbreviate: props.abbreviate ?? true,
       text: props.text ?? { level: 'LEVEL: ', xp: 'XP: ', rank: 'RANK: ' }
     });
-
-    this.variant = props.variant;
 
     this.setStyle({
       borderRadius: '1.5rem'
@@ -202,8 +199,8 @@ export class LeaderboardBuilder extends Builder<LeaderboardProps> {
         JSX.createElement(
           'div',
           { className: 'flex flex-col items-start justify-center' },
-          JSX.createElement('h1', { className: 'text-white font-extrabold text-xl m-0' }, displayName as unknown as JSX.Element),
-          JSX.createElement('h4', { className: 'text-[#9ca0a5] font-medium text-sm m-0' }, `@${username}` as unknown as JSX.Element)
+          JSX.createElement('h1', { className: 'text-white font-extrabold text-lg m-0' }, displayName as unknown as JSX.Element),
+          JSX.createElement('h4', { className: 'text-[#9ca0a5] font-medium text-base m-0' }, `@${username}` as unknown as JSX.Element)
         )
       ),
       JSX.createElement(
@@ -239,12 +236,6 @@ export class LeaderboardBuilder extends Builder<LeaderboardProps> {
       throw new RangeError('Number of players must be greater than 0');
     }
 
-    const adjustedHeight = LB_HEIGHT_INTERVAL[total - 3] ?? LB_MIN_RENDER_HEIGHT;
-
-    this.height = adjustedHeight;
-
-    this.adjustCanvas();
-
     let background, headerImg;
 
     if (options.background) {
@@ -272,7 +263,7 @@ export class LeaderboardBuilder extends Builder<LeaderboardProps> {
               { className: 'flex items-center justify-center flex-col w-full' },
               JSX.createElement('img', { src: headerImg.toDataURL(), className: 'rounded-full w-16 h-w-16', alt: 'header' }),
               JSX.createElement('h1', { className: 'text-white text-xl font-extrabold m-0 mt-2' }, options.header.title as unknown as JSX.Element),
-              JSX.createElement('h2', { className: 'text-white text-sm font-thin m-0' }, options.header.subtitle as unknown as JSX.Element)
+              JSX.createElement('h2', { className: 'text-white text-sm font-medium m-0' }, options.header.subtitle as unknown as JSX.Element)
             )
           : JSX.createElement('div', { className: 'hidden' }),
         JSX.createElement(
@@ -301,8 +292,8 @@ export class LeaderboardBuilder extends Builder<LeaderboardProps> {
         JSX.createElement(
           'div',
           { className: 'flex flex-col justify-center ml-3' },
-          JSX.createElement('div', { className: 'font-semibold -mb-1 flex' }, displayName as unknown as JSX.Element),
-          JSX.createElement('div', { className: 'text-lg font-medium text-[#9ca0a5] flex' }, `@${username}` as unknown as JSX.Element)
+          JSX.createElement('h1', { className: 'text-white text-lg font-extrabold m-0' }, displayName as unknown as JSX.Element),
+          JSX.createElement('h2', { className: 'text-[#9ca0a5] text-base font-medium m-0 mb-2' }, `@${username}` as unknown as JSX.Element)
         )
       ),
       JSX.createElement(
@@ -332,8 +323,7 @@ export class LeaderboardBuilder extends Builder<LeaderboardProps> {
       throw new RangeError('Number of players must be greater than 0');
     }
 
-    this.width = 1002;
-    this.height = 512;
+    this.height = 450;
 
     this.adjustCanvas();
 

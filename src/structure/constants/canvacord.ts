@@ -23,5 +23,4 @@ export const leaderboardColors = {
 
 export type LeaderboardVariants = 'default' | 'horizontal';
 
-export const LB_MIN_RENDER_HEIGHT = 420;
-export const LB_HEIGHT_INTERVAL = [394, 498, 594, 690, 786, 882, 978, 1074] as const;
+export const LB_MIN_RENDER_HEIGHT = 200;

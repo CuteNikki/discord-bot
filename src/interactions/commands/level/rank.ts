@@ -1,4 +1,3 @@
-import { Font, RankCardBuilder } from 'canvacord';
 import { ApplicationIntegrationType, AttachmentBuilder, InteractionContextType, SlashCommandBuilder } from 'discord.js';
 import { t } from 'i18next';
 
@@ -8,7 +7,7 @@ import { convertLevelToXP, getLevelWithRank, getWeeklyLevelWithRank } from 'db/l
 
 import type { PositionLevel } from 'types/level';
 
-import { logger } from 'utils/logger';
+import { RankCard } from 'utils/rank-card';
 
 export default new Command({
   module: ModuleType.Level,
@@ -21,7 +20,7 @@ export default new Command({
     .addUserOption((option) => option.setName('user').setDescription('The user to show the rank of').setRequired(false))
     .addBooleanOption((option) => option.setName('weekly').setDescription("When set to true will show the user's weekly rank").setRequired(false))
     .addBooleanOption((option) => option.setName('ephemeral').setDescription('When set to false will show the message to everyone').setRequired(false)),
-  async execute({ interaction, lng }) {
+  async execute({ client, interaction, lng }) {
     if (!interaction.inCachedGuild()) return;
     const { options, user, guild } = interaction;
 
@@ -42,25 +41,26 @@ export default new Command({
 
     if (!rank) return interaction.editReply(t('level.none', { lng }));
 
-    Font.loadDefault();
+    const card = new RankCard({
+      avatar: target.displayAvatarURL({ extension: 'png', forceStatic: true, size: 1024 }),
+      username: target.displayName,
+      handle: target.username,
+      status: member?.presence?.status ?? 'none',
+      currentXP: rank.xp,
+      requiredXP: convertLevelToXP(rank.level + 1),
+      level: rank.level,
+      rank: rank.position,
+      abbreviate: true,
+      styles: {
+        progressbar: {
+          thumb: `bg-[#${client.colors.level.toString(16)}]`
+        }
+      }
+    });
+    const image = await card.build({ format: 'png' });
 
-    const card = new RankCardBuilder()
-      .setDisplayName(target.displayName)
-      .setUsername(target.username)
-      .setAvatar(target.displayAvatarURL({ size: 1024, forceStatic: true, extension: 'png' }))
-      .setCurrentXP(rank.xp)
-      .setRequiredXP(convertLevelToXP(rank.level + 1))
-      .setLevel(rank.level)
-      .setRank(rank.position)
-      .setStatus(member?.presence?.status ?? 'none');
-
-    const image = await card.build({ format: 'png' }).catch((err) => logger.debug({ err }, 'Could not build rank card'));
-
-    if (image) {
-      await interaction.editReply({
-        files: [new AttachmentBuilder(image, { name: 'rank.png' })]
-      });
-      return;
-    }
+    await interaction.editReply({
+      files: [new AttachmentBuilder(image, { name: 'rank.png' })]
+    });
   }
 });

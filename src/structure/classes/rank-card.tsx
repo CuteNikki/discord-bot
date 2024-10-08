@@ -15,6 +15,7 @@ export class RankCard extends Builder {
 
     this.props = {
       ...props,
+      abbreviate: props.abbreviate ?? true,
       styles: {
         ...props.styles
       },

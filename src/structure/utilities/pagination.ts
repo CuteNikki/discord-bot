@@ -1,4 +1,13 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, ComponentType, type CommandInteraction, type EmbedBuilder } from 'discord.js';
+import {
+  ActionRowBuilder,
+  AttachmentBuilder,
+  ButtonBuilder,
+  ButtonInteraction,
+  ButtonStyle,
+  ComponentType,
+  type CommandInteraction,
+  type EmbedBuilder
+} from 'discord.js';
 import { t } from 'i18next';
 import ms from 'ms';
 
@@ -17,6 +26,7 @@ enum CustomIds {
 export async function pagination({
   interaction,
   embeds,
+  attachments,
   content,
   extraButton,
   extraButtonFunction,
@@ -27,6 +37,7 @@ export async function pagination({
 }: {
   interaction: CommandInteraction;
   embeds: EmbedBuilder[];
+  attachments?: AttachmentBuilder[];
   extraButton?: ButtonBuilder;
   extraButtonFunction?: (buttonInteraction: ButtonInteraction) => Promise<void>;
   content?: string;
@@ -60,7 +71,9 @@ export async function pagination({
   const firstPageIndex = 0;
   const lastPageIndex = embeds.length - 1;
 
-  const msg = await interaction.editReply({ content, embeds: [embeds[index]], components }).catch((err) => logger.debug({ err }, 'Could not edit message'));
+  const msg = await interaction
+    .editReply({ content, embeds: [embeds[index]], files: attachments ? [attachments[index]] : [], components })
+    .catch((err) => logger.debug({ err }, 'Could not edit message'));
   if (!msg) return;
 
   const collector = msg.createMessageComponentCollector({
@@ -101,7 +114,9 @@ export async function pagination({
     }
     buttonPage.setLabel(`${index + 1} / ${embeds.length} `);
 
-    await int.editReply({ embeds: [embeds[index]], components }).catch((err) => logger.debug({ err }, 'Could not edit message'));
+    await int
+      .editReply({ embeds: [embeds[index]], files: attachments ? [attachments[index]] : [], components })
+      .catch((err) => logger.debug({ err }, 'Could not edit message'));
   });
 
   collector.on('end', async (_, reason) => {

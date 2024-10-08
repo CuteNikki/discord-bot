@@ -50,7 +50,6 @@ export default new Command({
       requiredXP: convertLevelToXP(rank.level + 1),
       level: rank.level,
       rank: rank.position,
-      abbreviate: true,
       styles: {
         progressbar: {
           thumb: `bg-[#${client.colors.level.toString(16)}]`

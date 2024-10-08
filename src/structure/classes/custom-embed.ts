@@ -534,7 +534,7 @@ export class CustomEmbedBuilder extends events {
       if (embed) return true;
       else return false;
     } catch (err) {
-      console.log(err);
+      logger.debug({ err }, 'Could not validate embed');
       return false;
     }
   }

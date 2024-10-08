@@ -245,7 +245,16 @@ export async function getWeeklyLeaderboard(guildId: string): Promise<WeeklyLevel
  * @returns {Promise<PositionLevel[]>} Leaderboard with usernames
  */
 export async function computeLeaderboard(leaderboard: (LevelDocument | WeeklyLevelDocument)[], client: DiscordClient): Promise<PositionLevel[]> {
-  return leaderboard.map((level, index) => ({ ...level, position: index + 1, username: client.users.cache.get(level.userId)?.username }));
+  return leaderboard.map((level, index) => {
+    const user = client.users.cache.get(level.userId);
+    return {
+      ...level,
+      position: index + 1,
+      username: user?.username,
+      displayName: user?.displayName,
+      avatar: user?.displayAvatarURL({ forceStatic: true, extension: 'png' })
+    };
+  });
 }
 
 /**

@@ -1,10 +1,11 @@
-import { ApplicationIntegrationType, Colors, EmbedBuilder, InteractionContextType, SlashCommandBuilder } from 'discord.js';
-import { t } from 'i18next';
+import { ApplicationIntegrationType, AttachmentBuilder, EmbedBuilder, InteractionContextType, SlashCommandBuilder } from 'discord.js';
 
 import { Command, ModuleType } from 'classes/command';
 
 import { computeLeaderboard, getLeaderboard, getWeeklyLeaderboard } from 'db/level';
 
+import { LeaderboardBuilder } from 'classes/rank-leaderboard';
+import { t } from 'i18next';
 import { chunk } from 'utils/common';
 import { pagination } from 'utils/pagination';
 
@@ -38,30 +39,40 @@ export default new Command({
 
     const computedLeaderboard = await computeLeaderboard(leaderboard, client);
 
-    const chunkedLeaderboard = chunk(computedLeaderboard, 10);
-    if (!chunkedLeaderboard.length) return interaction.editReply(t('level.none'));
+    if (!computedLeaderboard.length) {
+      await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('level.none', { lng }))] });
+      return;
+    }
 
-    await pagination({
-      interaction,
-      embeds: chunkedLeaderboard.map((level) =>
+    const chunkedLeaderboard = chunk(computedLeaderboard, 5);
+
+    const embeds: EmbedBuilder[] = [];
+    const attachments: AttachmentBuilder[] = [];
+
+    for (let i = 0; i < chunkedLeaderboard.length; i++) {
+      const leaderboardBuilder = new LeaderboardBuilder({
+        variant: i === 0 ? 'default' : 'horizontal',
+        players: chunkedLeaderboard[i].map((lvl) => ({
+          avatar: lvl.avatar ?? '',
+          username: lvl.username ?? 'unknown',
+          displayName: lvl.displayName ?? 'Unknown User',
+          rank: lvl.position,
+          level: lvl.level,
+          xp: lvl.xp
+        }))
+      });
+
+      const image = await leaderboardBuilder.build({ format: 'png' });
+
+      attachments.push(new AttachmentBuilder(image, { name: `leaderboard_${i}.png` }));
+      embeds.push(
         new EmbedBuilder()
-          .setColor(Colors.Blurple)
+          .setColor(client.colors.level)
           .setTitle(weekly ? t('level.leaderboard.weekly', { lng }) : t('level.leaderboard.title', { lng }))
-          .setDescription(
-            level
-              .map(
-                ({ position, username, xp, level, userId }) =>
-                  t('level.leaderboard.position', {
-                    lng,
-                    position,
-                    username: username ?? userId,
-                    xp,
-                    level
-                  }) + `${position === 1 ? ' 🥇' : position === 2 ? ' 🥈' : position === 3 ? ' 🥉' : ''}`
-              )
-              .join('\n')
-          )
-      )
-    });
+          .setImage(`attachment://leaderboard_${i}.png`)
+      );
+    }
+
+    await pagination({ interaction, embeds, attachments });
   }
 });

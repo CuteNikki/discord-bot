@@ -21,4 +21,4 @@ export type LevelDocument = {
  *
  * Username is only available in the computed leaderboard
  */
-export type PositionLevel = LevelDocument & { position: number; username?: string };
+export type PositionLevel = LevelDocument & { position: number; username?: string; displayName?: string; avatar?: string };

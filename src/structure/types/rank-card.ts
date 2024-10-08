@@ -57,7 +57,7 @@ export interface PropsType {
   rank: number | null;
   level: number | null;
   backgroundColor?: string;
-  abbreviate: boolean;
+  abbreviate?: boolean;
   texts?: Texts;
   styles?: Styles;
 }
@@ -65,4 +65,5 @@ export interface PropsType {
 export type RankCardProps = PropsType & {
   texts: Texts;
   styles: Styles;
+  abbreviate: boolean;
 };

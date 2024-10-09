@@ -185,7 +185,7 @@
       }
     ]
   },
-  "custom-vpoce-setup": {
+  "custom-voice-setup": {
     "name": "custom-voice-setup",
     "description": "Give members the option to create their own voice channel",
     "options": [
@@ -492,6 +492,32 @@
           {
             "name": "list",
             "description": "Lists all banned users"
+          }
+        ]
+      },
+      {
+        "name": "export-data",
+        "description": "Shows all stored data",
+        "options": [
+          {
+            "name": "user",
+            "description": "Shows all data of a user",
+            "options": [
+              {
+                "name": "user-id",
+                "description": "The id of the user to show data of"
+              }
+            ]
+          },
+          {
+            "name": "guild",
+            "description": "Shows all data of a guild",
+            "options": [
+              {
+                "name": "guild-id",
+                "description": "The guild to show data of"
+              }
+            ]
           }
         ]
       }

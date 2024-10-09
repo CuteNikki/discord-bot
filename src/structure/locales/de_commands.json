@@ -152,7 +152,7 @@
     ]
   },
   "custom-voice": {
-    "name": "benutzerdefinierter-sprachkanal",
+    "name": "bearbeite-sprachkanal",
     "description": "Bearbeite deinen benutzerdefinierten Sprachkanal",
     "options": [
       {
@@ -186,7 +186,7 @@
     ]
   },
   "custom-voice-setup": {
-    "name": "benutzerdefinierte-sprachkanal-konfig",
+    "name": "bearbeite-sprachkanal-konfig",
     "description": "Erlaubt Mitgliedern, ihren eigenen Sprachkanal zu erstellen",
     "options": [
       {
@@ -492,6 +492,32 @@
           {
             "name": "ansehen",
             "description": "Zeigt alle Verbannungen an"
+          }
+        ]
+      },
+      {
+        "name": "daten-exportieren",
+        "description": "Zeigt alle gespeicherten Daten an",
+        "options": [
+          {
+            "name": "user",
+            "description": "Zeigt alle Daten eines Users an",
+            "options": [
+              {
+                "name": "user-id",
+                "description": "Die ID des Users, dessen Daten angezeigt werden sollen"
+              }
+            ]
+          },
+          {
+            "name": "server",
+            "description": "Zeigt alle Daten einer Server an",
+            "options": [
+              {
+                "name": "server-id",
+                "description": "Die ID des Server, dessen Daten angezeigt werden sollen"
+              }
+            ]
           }
         ]
       }

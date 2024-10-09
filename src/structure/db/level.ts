@@ -264,3 +264,18 @@ export async function computeLeaderboard(leaderboard: (LevelDocument | WeeklyLev
 export async function deleteWeeklyLevels() {
   return await weeklyLevelModel.deleteMany({});
 }
+
+/**
+ * Gets ALL levels that include a user id from ALL guilds
+ * @param {string} userId User ID to get the levels for
+ * @returns {Promise<{ levels: LevelDocument[], weeklyLevels: WeeklyLevelDocument[] }>} All levels
+ */
+export async function getAllLevels(userId: string): Promise<{ levels: LevelDocument[]; weeklyLevels: WeeklyLevelDocument[] }> {
+  const levels = await levelModel.find({ userId }).lean().exec();
+  const weeklyLevels = await weeklyLevelModel.find({ userId }).lean().exec();
+
+  return {
+    levels,
+    weeklyLevels
+  };
+}

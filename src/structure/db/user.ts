@@ -2,6 +2,9 @@ import type { UpdateQuery } from 'mongoose';
 
 import { userModel } from 'models/user';
 
+import { getAllInfractions } from 'db/infraction';
+import { getAllLevels } from 'db/level';
+
 import { BadgeType, type UserDocument } from 'types/user';
 
 /**
@@ -11,6 +14,22 @@ import { BadgeType, type UserDocument } from 'types/user';
  */
 export async function getUserData(userId: string): Promise<UserDocument> {
   return await userModel.findOneAndUpdate({ userId }, {}, { upsert: true, new: true });
+}
+
+/**
+ * Gets ALL data of a user
+ * @param {string} userId User ID to get the user data for
+ */
+export async function getUserDataExport(userId: string) {
+  const userData = await userModel.findOne({ userId }, {}, { upsert: false }).lean().exec();
+  const levels = await getAllLevels(userId);
+  const infractions = await getAllInfractions(userId);
+
+  return {
+    userData,
+    infractions,
+    ...levels
+  };
 }
 
 /**

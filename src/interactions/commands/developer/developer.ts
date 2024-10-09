@@ -1,4 +1,4 @@
-import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, SlashCommandBuilder } from 'discord.js';
+import { ApplicationIntegrationType, AttachmentBuilder, EmbedBuilder, InteractionContextType, SlashCommandBuilder } from 'discord.js';
 
 import { Command, ModuleType } from 'classes/command';
 
@@ -11,7 +11,8 @@ import {
   updateSupportGuildId,
   updateSupportGuildInvite
 } from 'db/client';
-import { addBadge, banUser, getBannedUsers, getUserData, removeBadge, unbanUser } from 'db/user';
+import { addBadge, banUser, getBannedUsers, getUserData, getUserDataExport, removeBadge, unbanUser } from 'db/user';
+import { getGuildSettings } from 'db/guild';
 
 import { BadgeType } from 'types/user';
 
@@ -135,9 +136,26 @@ export default new Command({
             .addUserOption((option) => option.setName('user').setDescription('The user to unban').setRequired(true))
         )
         .addSubcommand((subcommand) => subcommand.setName('list').setDescription('Lists all banned users'))
+    )
+    .addSubcommandGroup((group) =>
+      group
+        .setName('export-data')
+        .setDescription('Shows all stored data')
+        .addSubcommand((cmd) =>
+          cmd
+            .setName('user')
+            .setDescription('Shows all data of a user')
+            .addStringOption((option) => option.setName('user-id').setDescription('The id of the user to show data of').setRequired(true))
+        )
+        .addSubcommand((cmd) =>
+          cmd
+            .setName('guild')
+            .setDescription('Shows all data of a guild')
+            .addStringOption((option) => option.setName('guild-id').setDescription('The guild to show data of').setRequired(true))
+        )
     ),
   async execute({ interaction, client }) {
-    await interaction.deferReply();
+    await interaction.deferReply({ ephemeral: true });
     const { options, user } = interaction;
 
     const userData = await getUserData(user.id);
@@ -444,6 +462,55 @@ export default new Command({
                       .setColor(client.colors.developer)
                       .setDescription(chunk.map((user) => `<@${user.userId}> (${user.userId})`).join('\n\n') || '/')
                   )
+                });
+              }
+              break;
+          }
+        }
+        break;
+      case 'export-data':
+        {
+          if (!keys.DEVELOPER_USER_IDS.includes(user.id) && !badges.includes(BadgeType.Developer)) {
+            await interaction.editReply({
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('You are not a developer of this bot!')]
+            });
+            return;
+          }
+
+          switch (options.getSubcommand()) {
+            case 'user':
+              {
+                const userId = interaction.options.getString('user-id', true);
+
+                const userData = await getUserDataExport(userId);
+
+                if (!userData) {
+                  await interaction.editReply({
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('Could not find any data for that user!')]
+                  });
+                  return;
+                }
+
+                await interaction.editReply({
+                  files: [new AttachmentBuilder(Buffer.from(JSON.stringify(userData, null, 2)), { name: 'user-data.json', description: 'User data' })]
+                });
+              }
+              break;
+            case 'guild':
+              {
+                const guildId = interaction.options.getString('guild-id', true);
+
+                const guildData = await getGuildSettings(guildId);
+
+                if (!guildData) {
+                  await interaction.editReply({
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('Could not find any data for that guild!')]
+                  });
+                  return;
+                }
+
+                await interaction.editReply({
+                  files: [new AttachmentBuilder(Buffer.from(JSON.stringify(guildData, null, 2)), { name: 'guild-data.json', description: 'Guild data' })]
                 });
               }
               break;

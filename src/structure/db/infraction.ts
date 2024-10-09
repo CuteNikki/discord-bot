@@ -88,3 +88,12 @@ export async function getUnresolvedInfractions(): Promise<InfractionDocument[]> 
     .lean()
     .exec();
 }
+
+/**
+ * Gets ALL infractions of a user from ALL guilds
+ * @param {string} userId The ID of the user to get the infractions for
+ * @returns {Promise<InfractionDocument[]>} Infractions
+ */
+export async function getAllInfractions(userId: string): Promise<InfractionDocument[]> {
+  return await infractionModel.find({ userId }).lean().exec();
+}

@@ -19,6 +19,7 @@ export default new Command<typeof commandType>({
   module: ModuleType.Utilities,
   data: new ContextMenuCommandBuilder()
     .setName('userinfo-context')
+    // @ts-expect-error: This is an issue with DiscordJS typings version mismatch in v14.16.3
     .setType(commandType)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
     .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel),

@@ -9,6 +9,7 @@ export default new Command<ApplicationCommandType.User>({
   module: ModuleType.Utilities,
   data: new ContextMenuCommandBuilder()
     .setName('avatar-context')
+    // @ts-expect-error: This is an issue with DiscordJS typings version mismatch in v14.16.3
     .setType(ApplicationCommandType.User)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
     .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel),

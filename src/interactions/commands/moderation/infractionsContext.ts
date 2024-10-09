@@ -23,6 +23,7 @@ export default new Command<typeof commandType>({
   botPermissions: ['SendMessages'],
   data: new ContextMenuCommandBuilder()
     .setName('infractions-context')
+    // @ts-expect-error: This is an issue with DiscordJS typings version mismatch in v14.16.3
     .setType(commandType)
     .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)

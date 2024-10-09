@@ -270,9 +270,24 @@ export async function deleteWeeklyLevels() {
  * @param {string} userId User ID to get the levels for
  * @returns {Promise<{ levels: LevelDocument[], weeklyLevels: WeeklyLevelDocument[] }>} All levels
  */
-export async function getAllLevels(userId: string): Promise<{ levels: LevelDocument[]; weeklyLevels: WeeklyLevelDocument[] }> {
+export async function getAllUserLevels(userId: string): Promise<{ levels: LevelDocument[]; weeklyLevels: WeeklyLevelDocument[] }> {
   const levels = await levelModel.find({ userId }).lean().exec();
   const weeklyLevels = await weeklyLevelModel.find({ userId }).lean().exec();
+
+  return {
+    levels,
+    weeklyLevels
+  };
+}
+
+/**
+ * Gets ALL levels of a guild from ALL users
+ * @param {string} guildId The ID of the guild to get the levels for
+ * @returns {Promise<{ levels: LevelDocument[], weeklyLevels: WeeklyLevelDocument[] }>} All levels
+ */
+export async function getAllGuildLevels(guildId: string): Promise<{ levels: LevelDocument[]; weeklyLevels: WeeklyLevelDocument[] }> {
+  const levels = await levelModel.find({ guildId }).lean().exec();
+  const weeklyLevels = await weeklyLevelModel.find({ guildId }).lean().exec();
 
   return {
     levels,

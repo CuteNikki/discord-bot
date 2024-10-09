@@ -1,3 +1,4 @@
+import { updateGuildSettings } from 'db/guild';
 import { reactionRoleDocumentModel, reactionRoleGroupDocumentModel } from 'models/reaction-roles';
 
 import type { Reaction, ReactionRoleDocument, ReactionRoleGroupDocument } from 'types/reaction-roles';
@@ -42,10 +43,12 @@ export async function disableReactionRoles(guildId: string): Promise<ReactionRol
 export async function addReactionGroup(guildId: string, messageId: string, channelId: string, reactions: Reaction[]): Promise<ReactionRoleGroupDocument> {
   const group = await reactionRoleGroupDocumentModel.create({ messageId, channelId, reactions });
 
-  await reactionRoleDocumentModel
+  const document = await reactionRoleDocumentModel
     .findOneAndUpdate({ guildId }, { $push: { groups: group._id } }, { new: true, upsert: true })
     .lean()
     .exec();
+
+  await updateGuildSettings(guildId, { $set: { reactionRoles: document._id } });
 
   return group;
 }

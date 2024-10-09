@@ -1,5 +1,7 @@
-import { starboardMessageModel, starboardModel } from 'models/starboard';
 import type { Types, UpdateQuery } from 'mongoose';
+
+import { updateGuildSettings } from 'db/guild';
+import { starboardMessageModel, starboardModel } from 'models/starboard';
 
 import type { StarboardDocument, StarboardMessageDocument } from 'types/starboard';
 
@@ -46,10 +48,14 @@ export async function disableStarboard(guildId: string): Promise<StarboardDocume
 export async function setupStarboard(guildId: string, channelId: string | undefined, minimumStars: number = 1): Promise<StarboardDocument> {
   await starboardMessageModel.deleteMany({ guildId });
 
-  return await starboardModel
+  const document = await starboardModel
     .findOneAndUpdate({ guildId }, { $set: { channelId, minimumStars, enabled: true } }, { new: true, upsert: true })
     .lean()
     .exec();
+
+  await updateGuildSettings(guildId, { $set: { starboard: document._id } });
+
+  return document;
 }
 
 /**

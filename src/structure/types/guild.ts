@@ -1,5 +1,6 @@
 import type { ButtonStyle } from 'discord.js';
 import type { Types } from 'mongoose';
+
 import type { Counting } from 'types/counting';
 
 export enum AnnouncementType {
@@ -107,10 +108,9 @@ export type GuildDocument = {
   _id: Types.ObjectId;
   guildId: string;
   language?: string;
-  customVC: {
-    channelId: string;
-    parentId: string;
-  };
+  customVoice?: Types.ObjectId;
+  starboard?: Types.ObjectId;
+  reactionRoles?: Types.ObjectId;
   moderation: {
     enabled: boolean;
   };

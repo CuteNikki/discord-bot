@@ -1,5 +1,6 @@
 import type { UpdateQuery } from 'mongoose';
 
+import { updateGuildSettings } from 'db/guild';
 import { customVoiceModel } from 'models/custom-voice';
 
 import type { CustomVoiceDocument } from 'types/custom-voice';
@@ -20,18 +21,11 @@ export async function getCustomVoice(guildId: string): Promise<CustomVoiceDocume
  * @returns {Promise<CustomVoiceDocument>} Updated custom voice config
  */
 async function updateCustomVoice(guildId: string, query: UpdateQuery<CustomVoiceDocument>): Promise<CustomVoiceDocument> {
-  return await customVoiceModel.findOneAndUpdate({ guildId }, query, { upsert: true, new: true }).lean().exec();
-}
+  const document = await customVoiceModel.findOneAndUpdate({ guildId }, query, { upsert: true, new: true }).lean().exec();
 
-/**
- * Creates a custom voice config
- * @param {string} guildId Guild ID to create the custom voice config for
- * @param {string} channelId Channel ID where custom voice channels will be created in
- * @param {string} parentId Parent/Category ID that holds the custom voice channels
- * @returns {Promise<CustomVoiceDocument>} Created custom voice config
- */
-export async function createCustomVoice(guildId: string, channelId: string, parentId: string): Promise<CustomVoiceDocument> {
-  return await updateCustomVoice(guildId, { $set: { channelId, parentId } });
+  await updateGuildSettings(guildId, { $set: { customVoice: document._id } });
+
+  return document;
 }
 
 /**

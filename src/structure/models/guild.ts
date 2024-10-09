@@ -1,4 +1,4 @@
-import mongoose, { Model, model, Schema } from 'mongoose';
+import mongoose, { Model, model, Schema, Types } from 'mongoose';
 
 import { AnnouncementType, type GuildDocument } from 'types/guild';
 
@@ -9,6 +9,9 @@ export const guildModel: Model<GuildDocument> =
     new Schema<GuildDocument>({
       guildId: { type: String, required: true },
       language: { type: String, required: false },
+      customVoice: { type: Types.ObjectId, required: false },
+      starboard: { type: Types.ObjectId, required: false },
+      reactionRoles: { type: Types.ObjectId, required: false },
       moderation: {
         type: {
           enabled: { type: Boolean }

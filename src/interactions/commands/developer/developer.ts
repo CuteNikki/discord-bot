@@ -11,8 +11,8 @@ import {
   updateSupportGuildId,
   updateSupportGuildInvite
 } from 'db/client';
+import { getGuildDataExport } from 'db/guild';
 import { addBadge, banUser, getBannedUsers, getUserData, getUserDataExport, removeBadge, unbanUser } from 'db/user';
-import { getGuildSettings } from 'db/guild';
 
 import { BadgeType } from 'types/user';
 
@@ -500,7 +500,7 @@ export default new Command({
               {
                 const guildId = interaction.options.getString('guild-id', true);
 
-                const guildData = await getGuildSettings(guildId);
+                const guildData = await getGuildDataExport(guildId);
 
                 if (!guildData) {
                   await interaction.editReply({
@@ -510,7 +510,12 @@ export default new Command({
                 }
 
                 await interaction.editReply({
-                  files: [new AttachmentBuilder(Buffer.from(JSON.stringify(guildData, null, 2)), { name: 'guild-data.json', description: 'Guild data' })]
+                  files: [
+                    new AttachmentBuilder(Buffer.from(JSON.stringify(guildData, null, 2)), {
+                      name: 'guild-data.json',
+                      description: 'Guild data'
+                    })
+                  ]
                 });
               }
               break;

@@ -327,6 +327,7 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
   - [x] custom-voice-setup
   - [x] reaction-roles
   - [x] starboard
+  - [x] counting
 - [ ] utility module (not checked because I'd like to add more)
 - [ ] developer module (more features might be added)
 - [ ] fun module

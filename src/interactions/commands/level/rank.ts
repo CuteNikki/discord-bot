@@ -8,7 +8,6 @@ import { convertLevelToXP, getLevelWithRank, getWeeklyLevelWithRank } from 'db/l
 
 import type { PositionLevel } from 'types/level';
 
-
 export default new Command({
   module: ModuleType.Level,
   botPermissions: ['SendMessages'],

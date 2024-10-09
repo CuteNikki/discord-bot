@@ -492,7 +492,12 @@ export default new Command({
                 }
 
                 await interaction.editReply({
-                  files: [new AttachmentBuilder(Buffer.from(JSON.stringify(userData, null, 2)), { name: 'user-data.json', description: 'User data' })]
+                  files: [
+                    new AttachmentBuilder(Buffer.from(JSON.stringify(userData, null, 2)), {
+                      name: 'user-data.json',
+                      description: 'User data'
+                    })
+                  ]
                 });
               }
               break;

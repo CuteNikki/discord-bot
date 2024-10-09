@@ -3,8 +3,10 @@ import {
   ApplicationIntegrationType,
   ButtonBuilder,
   ButtonStyle,
+  channelMention,
   ChannelType,
   EmbedBuilder,
+  hyperlink,
   InteractionContextType,
   PermissionFlagsBits,
   SlashCommandBuilder
@@ -77,7 +79,7 @@ export default new Command({
             }
           });
           interaction.editReply({
-            embeds: [new EmbedBuilder().setColor(client.colors.welcome).setDescription(t('welcome.channel.set', { lng, channel: `<#${channel.id}>` }))]
+            embeds: [new EmbedBuilder().setColor(client.colors.welcome).setDescription(t('welcome.channel.set', { lng, channel: channel.toString() }))]
           });
         }
         break;
@@ -133,7 +135,7 @@ export default new Command({
           const embeds = [
             new EmbedBuilder().setColor(client.colors.welcome).addFields(
               { name: t('welcome.state.title', { lng }), value: config.welcome.enabled ? t('enabled', { lng }) : t('disabled', { lng }) },
-              { name: t('welcome.channel.title', { lng }), value: config.welcome.channelId ? `<#${config.welcome.channelId}>` : t('none', { lng }) },
+              { name: t('welcome.channel.title', { lng }), value: config.welcome.channelId ? channelMention(config.welcome.channelId) : t('none', { lng }) },
               {
                 name: t('welcome.roles.title', { lng }),
                 value: config.welcome.roles.length ? config.welcome.roles.map((r) => `<@&${r}>`).join('\n') : t('none', { lng })
@@ -145,13 +147,13 @@ export default new Command({
                   `{user.mention} - ${user.toString()}`,
                   `{user.username} - ${user.username}`,
                   `{user.id} - ${user.id}`,
-                  `{user.avatar} - [URL](<${user.displayAvatarURL()}>)`,
+                  `{user.avatar} - ${hyperlink('URL', user.displayAvatarURL())}`,
                   '', // New line to separate user and server placeholders
                   `{server} - ${guild.name}`,
                   `{server.name} - ${guild.name}`,
                   `{server.id} - ${guild.id}`,
                   `{server.member_count} - ${guild.memberCount}`,
-                  `{server.icon} - [URL](<${guild.iconURL()}>)`
+                  `{server.icon} - ${hyperlink('URL', guild.icon ? guild.iconURL()! : t('none', { lng }))}`
                 ].join('\n')
               }
             )

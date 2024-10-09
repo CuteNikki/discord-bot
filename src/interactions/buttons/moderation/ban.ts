@@ -1,3 +1,4 @@
+import { inlineCode } from 'discord.js';
 import { t } from 'i18next';
 
 import { Button } from 'classes/button';
@@ -56,8 +57,8 @@ export default new Button({
       .send(target.id, {
         content: t('ban.target-dm', {
           lng: targetLng,
-          guild: `\`${guild.name}\``,
-          reason: `\`${reason ?? t('none', { lng: targetLng })}\``,
+          guild: inlineCode(guild.name),
+          reason: inlineCode(reason ?? t('none', { lng: targetLng })),
           duration: 'forever'
         })
       })
@@ -68,7 +69,7 @@ export default new Button({
         t('ban.confirmed', {
           lng,
           user: target.toString(),
-          reason: `\`${reason ?? t('none', { lng: targetLng })}\``
+          reason: inlineCode(reason ?? t('none', { lng: targetLng }))
         }),
         t('ban.deleted-history', { lng, deleted: historyOptions[604800] }),
         receivedDM ? t('ban.dm-received', { lng }) : t('ban.dm-not-received', { lng }),

@@ -1,4 +1,14 @@
-import { ApplicationIntegrationType, Colors, EmbedBuilder, InteractionContextType, PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
+import {
+  ApplicationIntegrationType,
+  Colors,
+  EmbedBuilder,
+  InteractionContextType,
+  PermissionFlagsBits,
+  SlashCommandBuilder,
+  time,
+  TimestampStyles,
+  userMention
+} from 'discord.js';
 import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
@@ -77,7 +87,7 @@ export default new Command({
                         }),
                         t('infractions.history.staff', {
                           lng,
-                          staff: `<@${infraction.staffId}>`
+                          staff: userMention(infraction.staffId)
                         }),
                         t('infractions.history.reason', {
                           lng,
@@ -85,11 +95,11 @@ export default new Command({
                         }),
                         t('infractions.history.date', {
                           lng,
-                          date: `<t:${Math.floor(infraction.createdAt / 1000)}:f>`
+                          date: time(Math.floor(infraction.createdAt / 1000), TimestampStyles.ShortDateTime)
                         }),
                         t('infractions.history.ends-at', {
                           lng,
-                          date: infraction.endsAt ? `<t:${Math.floor(infraction.endsAt / 1000)}:f>` : t('none', { lng })
+                          date: infraction.endsAt ? time(Math.floor(infraction.endsAt / 1000), TimestampStyles.ShortDateTime) : t('none', { lng })
                         })
                       ].join('\n')
                     )

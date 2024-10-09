@@ -1,4 +1,13 @@
-import { ApplicationIntegrationType, ChannelType, EmbedBuilder, InteractionContextType, PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
+import {
+  ApplicationIntegrationType,
+  channelMention,
+  ChannelType,
+  EmbedBuilder,
+  hyperlink,
+  InteractionContextType,
+  PermissionFlagsBits,
+  SlashCommandBuilder
+} from 'discord.js';
 import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
@@ -96,7 +105,7 @@ export default new Command({
           const embeds = [
             new EmbedBuilder().setColor(client.colors.farewell).addFields(
               { name: t('farewell.state.title', { lng }), value: config.farewell.enabled ? t('enabled', { lng }) : t('disabled', { lng }) },
-              { name: t('farewell.channel.title', { lng }), value: config.farewell.channelId ? `<#${config.farewell.channelId}>` : t('none', { lng }) },
+              { name: t('farewell.channel.title', { lng }), value: config.farewell.channelId ? channelMention(config.farewell.channelId) : t('none', { lng }) },
               {
                 name: t('farewell.placeholders.title', { lng }),
                 value: [
@@ -104,13 +113,13 @@ export default new Command({
                   `{user.mention} - ${user.toString()}`,
                   `{user.username} - ${user.username}`,
                   `{user.id} - ${user.id}`,
-                  `{user.avatar} - [URL](<${user.displayAvatarURL()}>)`,
+                  `{user.avatar} - ${hyperlink('URL', user.displayAvatarURL())}`,
                   '', // New line to separate user and server placeholders
                   `{server} - ${guild.name}`,
                   `{server.name} - ${guild.name}`,
                   `{server.id} - ${guild.id}`,
                   `{server.member_count} - ${guild.memberCount}`,
-                  `{server.icon} - [URL](<${guild.iconURL()}>)`
+                  `{server.icon} - ${hyperlink('URL', guild.icon ? guild.iconURL()! : t('none', { lng }))})`
                 ].join('\n')
               }
             )

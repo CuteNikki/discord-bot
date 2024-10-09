@@ -4,6 +4,7 @@ import {
   ButtonBuilder,
   ButtonStyle,
   CategoryChannel,
+  channelMention,
   ChannelSelectMenuBuilder,
   ChannelType,
   EmbedBuilder,
@@ -11,6 +12,7 @@ import {
   ModalBuilder,
   PermissionFlagsBits,
   Role,
+  roleMention,
   RoleSelectMenuBuilder,
   SlashCommandBuilder,
   TextChannel,
@@ -144,11 +146,11 @@ export default new Command({
           .setTitle(t('ticket.info.id', { lng, id: _id.toString() }))
           .setDescription(
             [
-              t('ticket.info.staff', { lng, role: `<@&${staffRoleId}>` }),
+              t('ticket.info.staff', { lng, role: roleMention(staffRoleId) }),
               t('ticket.info.max', { lng, max: maxTickets.toString() }),
-              t('ticket.info.channel', { lng, channel: `<#${channelId}>` }),
-              t('ticket.info.transcript', { lng, channel: transcriptChannelId ? `<#${transcriptChannelId}>` : t('none', { lng }) }),
-              t('ticket.info.category', { lng, channel: parentChannelId ? `<#${parentChannelId}>` : t('none', { lng }) }),
+              t('ticket.info.channel', { lng, channel: channelMention(channelId) }),
+              t('ticket.info.transcript', { lng, channel: transcriptChannelId ? channelMention(transcriptChannelId) : t('none', { lng }) }),
+              t('ticket.info.category', { lng, channel: parentChannelId ? channelMention(parentChannelId) : t('none', { lng }) }),
               t('ticket.info.choices', {
                 lng,
                 choices: choices.length
@@ -1001,9 +1003,9 @@ export default new Command({
                 )
                 .setDescription(
                   [
-                    t('ticket.info.staff', { lng, role: `<@&${staffRole?.id}>` }),
+                    t('ticket.info.staff', { lng, role: staffRole?.toString() }),
                     t('ticket.info.max', { lng, max: maxTickets.toString() }),
-                    t('ticket.info.channel', { lng, channel: `<#${channel?.id}>` }),
+                    t('ticket.info.channel', { lng, channel: channel?.toString() }),
                     t('ticket.info.category', { lng, channel: category ? category.toString() : t('none', { lng }) }),
                     t('ticket.info.transcript', { lng, channel: transcriptChannel ? transcriptChannel.toString() : t('none', { lng }) }),
                     t('ticket.info.choices', {

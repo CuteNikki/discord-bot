@@ -1,4 +1,4 @@
-import { codeBlock, Colors, EmbedBuilder, Events, WebhookClient } from 'discord.js';
+import { codeBlock, Colors, EmbedBuilder, Events, inlineCode, time, TimestampStyles, WebhookClient } from 'discord.js';
 import mongoose from 'mongoose';
 
 import type { DiscordClient } from 'classes/client';
@@ -36,15 +36,15 @@ export async function sendError({
     embed
       .setDescription(codeBlock('ts', `Stack: ${err.stack ? (err.stack.length > 3500 ? err.stack.slice(0, 3500) + '...' : err.stack) : 'not available'}`))
       .addFields(
-        { name: 'Name', value: `\`${err.name}\`` },
-        { name: 'Message', value: `\`${err.message}\`` },
-        { name: 'Location', value: `\`${location}\`` },
-        { name: 'Timestamp', value: `<t:${Math.floor(Date.now() / 1000)}:F>` }
+        { name: 'Name', value: inlineCode(err.name) },
+        { name: 'Message', value: inlineCode(err.message) },
+        { name: 'Location', value: inlineCode(location) },
+        { name: 'Timestamp', value: time(Math.floor(Date.now() / 1000), TimestampStyles.LongDateTime) }
       );
   if (reason)
     embed
       .setDescription(`Reason: ${reason}`)
-      .addFields({ name: 'Location', value: location }, { name: 'Timestamp', value: `<t:${Math.floor(Date.now() / 1000)}:F>` });
+      .addFields({ name: 'Location', value: location }, { name: 'Timestamp', value: time(Math.floor(Date.now() / 1000), TimestampStyles.LongDateTime) });
 
   await webhook
     .send({

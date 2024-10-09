@@ -12,6 +12,7 @@ import {
   Message,
   PermissionFlagsBits,
   Role,
+  roleMention,
   RoleSelectMenuBuilder,
   SlashCommandBuilder,
   TextChannel,
@@ -150,7 +151,7 @@ export default new Command({
                   .setDescription(
                     [
                       `https://discord.com/channels/${guild.id}/${group.channelId}/${group.messageId}`,
-                      group.reactions.map((r) => `${r.emoji}: <@&${r.roleId}>`).join('\n')
+                      group.reactions.map((r) => `${r.emoji}: ${roleMention(r.roleId)}`).join('\n')
                     ].join('\n')
                   )
               );
@@ -213,7 +214,7 @@ async function handleRoleReactions(
 
   const msg = await channel
     .send({
-      embeds: [new EmbedBuilder().setColor(client.colors.general).setDescription(reactions.map((r) => `${r.emoji}: <@&${r.roleId}>`).join('\n'))],
+      embeds: [new EmbedBuilder().setColor(client.colors.general).setDescription(reactions.map((r) => `${r.emoji}: ${roleMention(r.roleId)}`).join('\n'))],
       components:
         method === 'button'
           ? chunk(

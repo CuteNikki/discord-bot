@@ -1,4 +1,13 @@
-import { ApplicationIntegrationType, ChannelType, Colors, EmbedBuilder, InteractionContextType, PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
+import {
+  ApplicationIntegrationType,
+  channelMention,
+  ChannelType,
+  Colors,
+  EmbedBuilder,
+  InteractionContextType,
+  PermissionFlagsBits,
+  SlashCommandBuilder
+} from 'discord.js';
 import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
@@ -100,7 +109,7 @@ export default new Command({
                   .setDescription(events.map((e) => `${e.name}: ${e.enabled}`).join('\n'))
                   .addFields({
                     name: t('log.channel.title', { lng }),
-                    value: config.log.channelId ? `<#${config.log.channelId}>` : t('none', { lng })
+                    value: config.log.channelId ? channelMention(config.log.channelId) : t('none', { lng })
                   });
                 interaction.editReply({ embeds: [allConfigEmbed] });
               }
@@ -114,7 +123,7 @@ export default new Command({
                       .setTitle(t('log.title', { lng }))
                       .addFields({
                         name: t('log.channel.title', { lng }),
-                        value: config.log.channelId ? `<#${config.log.channelId}>` : t('none', { lng })
+                        value: config.log.channelId ? channelMention(config.log.channelId) : t('none', { lng })
                       })
                   ]
                 });

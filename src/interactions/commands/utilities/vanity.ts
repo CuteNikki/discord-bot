@@ -1,4 +1,4 @@
-import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, SlashCommandBuilder } from 'discord.js';
+import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, SlashCommandBuilder, time, TimestampStyles } from 'discord.js';
 import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
@@ -32,7 +32,7 @@ export default new Command({
         { name: t('vanity.members', { lng }), value: invite.memberCount.toString() },
         {
           name: t('vanity.created-at', { lng }),
-          value: `<t:${Math.floor(invite.guild.createdTimestamp / 1000)}:d> | <t:${Math.floor(invite.guild.createdTimestamp / 1000)}:R>`
+          value: `${time(Math.floor(invite.guild.createdTimestamp / 1000), TimestampStyles.ShortDate)} | ${time(Math.floor(invite.guild.createdTimestamp / 1000), TimestampStyles.RelativeTime)}`
         }
       );
 

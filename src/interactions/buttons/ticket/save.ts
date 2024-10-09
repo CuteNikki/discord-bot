@@ -1,5 +1,5 @@
-import { ExportReturnType, createTranscript } from 'discord-html-transcripts';
-import { EmbedBuilder, PermissionFlagsBits, type TextBasedChannel } from 'discord.js';
+import { createTranscript, ExportReturnType } from 'discord-html-transcripts';
+import { EmbedBuilder, PermissionFlagsBits, time, TimestampStyles, userMention, type TextBasedChannel } from 'discord.js';
 import { t } from 'i18next';
 
 import { Button } from 'classes/button';
@@ -89,14 +89,14 @@ export default new Button({
             .addFields(
               {
                 name: t('ticket.claimed-by', { lng: guildLng }),
-                value: `<@${ticket.claimedBy}>`
+                value: ticket.claimedBy ? userMention(ticket.claimedBy) : t('none', { lng: guildLng })
               },
               {
                 name: t('ticket.users', { lng: guildLng }),
                 value: `${ticket.users
                   .map((userId) => {
-                    if (userId === ticket.createdBy) return `<@${userId}> (${t('ticket.creator', { lng: guildLng })})`;
-                    else return `<@${userId}>`;
+                    if (userId === ticket.createdBy) return `${userMention(userId)} (${t('ticket.creator', { lng: guildLng })})`;
+                    else return userMention(userId);
                   })
                   .join(', ')}`
               },
@@ -106,7 +106,7 @@ export default new Button({
               },
               {
                 name: t('ticket.created-at', { lng: guildLng }),
-                value: `<t:${Math.floor(ticket.createdAt / 1000)}:R>`
+                value: time(Math.floor(ticket.createdAt / 1000), TimestampStyles.RelativeTime)
               }
             )
         ],

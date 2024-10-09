@@ -1,4 +1,4 @@
-import { EmbedBuilder, Events, type MessageCreateOptions } from 'discord.js';
+import { EmbedBuilder, Events, roleMention, type MessageCreateOptions } from 'discord.js';
 import { t } from 'i18next';
 
 import { Event } from 'classes/event';
@@ -76,12 +76,12 @@ export default new Event({
       if (added) {
         levelUpEmbed.addFields({
           name: t('level.up.title-roles', { lng }),
-          value: rewards.map((r) => `<@&${r.roleId}>`).join(' ')
+          value: rewards.map((r) => roleMention(r.roleId)).join(' ')
         });
       } else {
         levelUpEmbed.addFields({
           name: t('level.up.title-roles-error', { lng }),
-          value: rewards.map((r) => `<@&${r.roleId}>`).join(' ')
+          value: rewards.map((r) => roleMention(r.roleId)).join(' ')
         });
       }
     }

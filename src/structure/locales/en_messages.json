@@ -256,9 +256,9 @@
     "edit-reset-on-fail-disabled": "Reset on fail has been disabled",
     "edit-no-changes": "No changes were made",
     "reset-done": "The channel and all data have been reset",
-    "current-number-by": "{{number}}\nsent by <@{{by}}>\nat <t:{{at}}:f>",
+    "current-number-by": "{{number}}\nsent by {{by}}\nat {{at}}",
     "current-number-no-by": "{{number}}",
-    "highest-number-at": "{{number}}\nachieved at <t:{{at}}:f>",
+    "highest-number-at": "{{number}}\nachieved at {{at}}",
     "highest-number-no-at": "{{number}}",
     "warn-repeat": "{{author}}, you already said the last number! Please wait for someone else to continue.",
     "warn-incorrect": "{{author}}, that is not the next number! Please start over with `1`."

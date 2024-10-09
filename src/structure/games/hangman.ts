@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, type ChatInputCommandInteraction } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, inlineCode, type ChatInputCommandInteraction } from 'discord.js';
 import { t } from 'i18next';
 
 import type { DiscordClient } from 'classes/client';
@@ -162,7 +162,7 @@ export class Hangman {
                   },
                   {
                     name: t('games.hangman.guesses', { lng }),
-                    value: this.guesses.map((letter) => `\`${letter}\``).join(', ') || '/'
+                    value: this.guesses.map((letter) => inlineCode(letter)).join(', ') || '/'
                   }
                 )
             ],
@@ -220,7 +220,7 @@ export class Hangman {
         },
         {
           name: t('games.hangman.guesses', { lng }),
-          value: this.guesses.map((letter) => `\`${letter}\``).join(', ') || '/'
+          value: this.guesses.map((letter) => inlineCode(letter)).join(', ') || '/'
         }
       );
 

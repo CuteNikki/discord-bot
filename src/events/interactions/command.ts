@@ -1,4 +1,4 @@
-import { Collection, EmbedBuilder, Events, type InteractionReplyOptions } from 'discord.js';
+import { Collection, EmbedBuilder, Events, inlineCode, time, TimestampStyles, type InteractionReplyOptions } from 'discord.js';
 import { t } from 'i18next';
 
 import { ModuleType } from 'classes/command';
@@ -123,9 +123,13 @@ export default new Event({
 
         await interaction.reply({
           embeds: [
-            new EmbedBuilder()
-              .setColor(client.colors.error)
-              .setDescription(t('interactions.cooldown', { lng, action: `\`${command.options.data.name}\``, timestamp: `<t:${expiredTimestamp}:R>` }))
+            new EmbedBuilder().setColor(client.colors.error).setDescription(
+              t('interactions.cooldown', {
+                lng,
+                action: inlineCode(command.options.data.name),
+                timestamp: time(expiredTimestamp, TimestampStyles.RelativeTime)
+              })
+            )
           ],
           ephemeral: true
         });

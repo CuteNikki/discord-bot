@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, time, TimestampStyles } from 'discord.js';
 import { t } from 'i18next';
 
 import { Button } from 'classes/button';
@@ -34,7 +34,7 @@ export default new Button({
             },
             {
               name: t('ping.last-updated', { lng }),
-              value: `<t:${Math.floor(Date.now() / 1000)}:R>`
+              value: `${time(Math.floor(Date.now() / 1000), TimestampStyles.RelativeTime)}`
             }
           )
       ],

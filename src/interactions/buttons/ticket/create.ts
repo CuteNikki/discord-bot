@@ -28,9 +28,8 @@ export default new Button({
     const system = currentConfig.ticket.systems.find((system) => system._id.toString() === customId.split('_')[1]);
 
     if (!system) {
-      await interaction.reply({
+      await interaction.editReply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid-system', { lng }))],
-        ephemeral: true
       });
       return;
     }

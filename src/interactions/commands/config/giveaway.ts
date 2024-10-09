@@ -7,7 +7,9 @@ import {
   EmbedBuilder,
   InteractionContextType,
   PermissionFlagsBits,
-  SlashCommandBuilder
+  SlashCommandBuilder,
+  time,
+  TimestampStyles
 } from 'discord.js';
 import { t } from 'i18next';
 import ms from 'ms';
@@ -117,7 +119,7 @@ export default new Command({
                     { name: t('giveaway.message.winner', { lng: guildLng, count: winners }), value: winners.toString() },
                     {
                       name: t('giveaway.message.ends-at', { lng: guildLng }),
-                      value: `<t:${Math.floor((NOW + parsedDuration) / 1000)}:f> (<t:${Math.floor((NOW + parsedDuration) / 1000)}:R>)`
+                      value: `${time(Math.floor((NOW + parsedDuration) / 1000), TimestampStyles.ShortDateTime)} (${time(Math.floor((NOW + parsedDuration) / 1000), TimestampStyles.RelativeTime)})`
                     }
                   )
               ],
@@ -152,7 +154,9 @@ export default new Command({
                     t('giveaway.info.duration', { lng, duration: ms(parsedDuration, { long: true }) }),
                     t('giveaway.info.ends-at', {
                       lng,
-                      endsAt: `<t:${Math.floor(giveaway.endsAt / 1000)}:f> (<t:${Math.floor(giveaway.endsAt / 1000)}:R>)`
+                      endsAt:
+                        time(Math.floor(giveaway.endsAt / 1000), TimestampStyles.ShortDateTime) +
+                        ` (${time(Math.floor(giveaway.endsAt / 1000), TimestampStyles.RelativeTime)})`
                     })
                   ].join('\n')
                 )
@@ -238,7 +242,9 @@ export default new Command({
                     },
                     {
                       name: t('giveaway.message.ends-at', { lng: guildLng }),
-                      value: `<t:${Math.floor(updatedGiveaway.endsAt / 1000)}:f> (<t:${Math.floor(updatedGiveaway.endsAt / 1000)}:R>)`
+                      value:
+                        time(Math.floor(updatedGiveaway.endsAt / 1000), TimestampStyles.ShortDateTime) +
+                        ` (${time(Math.floor(updatedGiveaway.endsAt / 1000), TimestampStyles.RelativeTime)})`
                     },
                     {
                       name: t('giveaway.message.participant', { lng: guildLng, count: updatedGiveaway.participants.length }),
@@ -364,8 +370,8 @@ export default new Command({
                       t('giveaway.info.winner', { lng, winners: giveaway.winnerCount.toString(), count: giveaway.winnerCount }),
                       t('giveaway.info.participant', { lng, participants: giveaway.participants.length.toString(), count: giveaway.participants.length }),
                       t('giveaway.info.duration', { lng, duration: ms(giveaway.duration, { long: true }) }),
-                      t('giveaway.info.ends-at', { lng, endsAt: `<t:${Math.floor(giveaway.endsAt / 1000)}:f>` }),
-                      t('giveaway.info.created-at', { lng, createdAt: `<t:${Math.floor(giveaway.createdAt / 1000)}:f>` })
+                      t('giveaway.info.ends-at', { lng, endsAt: time(Math.floor(giveaway.endsAt / 1000), TimestampStyles.ShortDateTime) }),
+                      t('giveaway.info.created-at', { lng, createdAt: time(Math.floor(giveaway.createdAt / 1000), TimestampStyles.ShortDateTime) })
                     ].join('\n')
                   }))
                 )

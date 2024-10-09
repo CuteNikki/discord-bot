@@ -256,9 +256,9 @@
     "edit-reset-on-fail-disabled": "Bei falscher Nummer wird nun nicht mehr zurückgesetzt.",
     "edit-no-changes": "Es wurden keine Änderungen vorgenommen.",
     "reset-done": "Der Kanal und alle Daten wurden zurückgesetzt.",
-    "current-number-by": "{{number}}\ngeschreiben von <@{{by}}>\nam <t:{{at}}:f>",
+    "current-number-by": "{{number}}\ngeschrieben von {{by}}\nam {{at}}",
     "current-number-no-by": "{{number}}",
-    "highest-number-at": "{{number}}\naufgerichtet am <t:{{at}}:f>",
+    "highest-number-at": "{{number}}\ngeschrieben am {{at}}",
     "highest-number-no-at": "{{number}}",
     "warn-repeat": "{{author}}, du hast bereits die letzte Nummer gesagt! Bitte warte, bis jemand anderes fortfährt.",
     "warn-incorrect": "{{author}}, das ist nicht die nächste Nummer! Bitte starte mit `1`."

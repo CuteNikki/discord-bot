@@ -1,4 +1,14 @@
-import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, SlashCommandBuilder, Team, version } from 'discord.js';
+import {
+  ApplicationIntegrationType,
+  EmbedBuilder,
+  InteractionContextType,
+  SlashCommandBuilder,
+  Team,
+  time,
+  TimestampStyles,
+  userMention,
+  version
+} from 'discord.js';
 import { t } from 'i18next';
 import mongoose from 'mongoose';
 import osu from 'node-os-utils';
@@ -63,18 +73,19 @@ export default new Command({
                 value: [
                   t('botinfo.general.owner', {
                     lng,
-                    owner:
-                      application.owner instanceof Team
-                        ? `<@${application.owner.ownerId}> | ${application.owner.members.get(application.owner.ownerId ?? '')?.user.username}\n${application.owner.ownerId}`
-                        : `<@${application.owner?.id}> (\`${application.owner?.username}\` | ${application.owner?.id})`
+                    owner: application.owner
+                      ? application.owner instanceof Team
+                        ? `${userMention(application.owner.ownerId!)} | ${application.owner.members.get(application.owner.ownerId!)?.user.username}\n${application.owner.ownerId}`
+                        : `${userMention(application.owner.id)} | ${application.owner.username}\n${application.owner.id})`
+                      : t('none', { lng })
                   }),
                   t('botinfo.general.created', {
                     lng,
-                    created: `<t:${Math.floor(application.createdTimestamp / 1000)}:D> | <t:${Math.floor(application.createdTimestamp / 1000)}:R>`
+                    created: `${time(Math.floor(application.createdTimestamp / 1000), TimestampStyles.LongDate)} | ${time(Math.floor(application.createdTimestamp / 1000), TimestampStyles.RelativeTime)}`
                   }),
                   t('botinfo.general.uptime', {
                     lng,
-                    uptime: `<t:${Math.floor(interaction.client.readyTimestamp / 1000)}:R>`
+                    uptime: time(Math.floor(interaction.client.readyTimestamp / 1000), TimestampStyles.RelativeTime)
                   }),
                   t('botinfo.general.ping', { lng, ping: client.ws.ping.toString() })
                 ].join('\n')
@@ -104,7 +115,7 @@ export default new Command({
                   }),
                   t('botinfo.database.weekly', {
                     lng,
-                    date: database.lastWeeklyClearAt ? `<t:${Math.floor(database.lastWeeklyClearAt / 1000)}:D>` : t('none', { lng })
+                    date: database.lastWeeklyClearAt ? time(Math.floor(database.lastWeeklyClearAt / 1000), TimestampStyles.RelativeTime) : t('none', { lng })
                   })
                 ].join('\n')
               },

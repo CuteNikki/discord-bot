@@ -4,9 +4,12 @@ import {
   ButtonBuilder,
   ButtonStyle,
   ComponentType,
+  inlineCode,
   InteractionContextType,
   PermissionFlagsBits,
-  SlashCommandBuilder
+  SlashCommandBuilder,
+  time,
+  TimestampStyles
 } from 'discord.js';
 import { t } from 'i18next';
 import ms from 'ms';
@@ -92,7 +95,7 @@ export default new Command({
       await interaction.editReply(
         t('timeout.target.timed-out', {
           lng,
-          date: `<t:${Math.floor(targetMember.communicationDisabledUntilTimestamp / 1000)}:f>`
+          date: time(Math.floor(targetMember.communicationDisabledUntilTimestamp / 1000), TimestampStyles.ShortDateTime)
         })
       );
       return;
@@ -133,8 +136,8 @@ export default new Command({
         .send(target.id, {
           content: t('timeout.target-dm', {
             lng: targetLng,
-            guild: `\`${guild.name}\``,
-            reason: `\`${reason ?? t('none', { lng })}\``,
+            guild: inlineCode(guild.name),
+            reason: inlineCode(reason ?? t('none', { lng })),
             duration: durationText
           })
         })
@@ -145,7 +148,7 @@ export default new Command({
           t('timeout.confirmed', {
             lng,
             user: target.toString(),
-            reason: `\`${reason ?? t('none', { lng })}\``
+            reason: inlineCode(reason ?? t('none', { lng }))
           }),
           receivedDM ? t('timeout.dm-received', { lng }) : t('timeout.dm-not-received', { lng }),
           t('timeout.duration', { lng, duration: durationText })

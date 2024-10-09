@@ -1,4 +1,12 @@
-import { ApplicationIntegrationType, ChannelType, EmbedBuilder, InteractionContextType, PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
+import {
+  ApplicationIntegrationType,
+  channelMention,
+  ChannelType,
+  EmbedBuilder,
+  InteractionContextType,
+  PermissionFlagsBits,
+  SlashCommandBuilder
+} from 'discord.js';
 import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
@@ -134,8 +142,8 @@ export default new Command({
                 .setColor(client.colors.customVC)
                 .addFields(
                   { name: t('custom-vc.state.title', { lng }), value: config.enabled ? t('enabled', { lng }) : t('disabled', { lng }) },
-                  { name: t('custom-vc.channel.title', { lng }), value: config.channelId ? `<#${config.channelId}>` : t('none', { lng }) },
-                  { name: t('custom-vc.parent.title', { lng }), value: config.parentId ? `<#${config.parentId}>` : t('none', { lng }) }
+                  { name: t('custom-vc.channel.title', { lng }), value: config.channelId ? channelMention(config.channelId) : t('none', { lng }) },
+                  { name: t('custom-vc.parent.title', { lng }), value: config.parentId ? channelMention(config.parentId) : t('none', { lng }) }
                 )
             ]
           });

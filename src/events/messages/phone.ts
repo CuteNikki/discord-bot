@@ -4,7 +4,7 @@ import { t } from 'i18next';
 import { Event } from 'classes/event';
 
 import { getUserLanguage } from 'db/language';
-import { connectionModel } from 'models/phone';
+import { findConnection, updateLastMessageAt } from 'db/phone';
 
 import { logger } from 'utils/logger';
 import { handlePhoneMessageTimeout } from 'utils/phone';
@@ -19,12 +19,7 @@ export default new Event({
     const { channelId, channel, author } = message;
 
     // Find an existing connection for the current channel
-    const existingConnection = await connectionModel
-      .findOne({
-        $or: [{ channelIdOne: channelId }, { channelIdTwo: channelId }]
-      })
-      .lean()
-      .exec();
+    const existingConnection = await findConnection(channelId);
     if (!existingConnection) return;
 
     const lng = await getUserLanguage(author.id);
@@ -37,7 +32,7 @@ export default new Event({
     const embed = new EmbedBuilder()
       .setColor(Colors.Aqua)
       .setAuthor({
-        name: author.globalName ? `${author.globalName} (@${author.username})` : `@${author.username}`,
+        name: author.globalName ? `${author.globalName} (@${author.username})` : `${author.username}`,
         iconURL: author.displayAvatarURL({ extension: 'webp', size: 256 })
       })
       .setDescription(message.content)
@@ -45,7 +40,7 @@ export default new Event({
     const otherEmbed = new EmbedBuilder()
       .setColor(Colors.Blue)
       .setAuthor({
-        name: author.globalName ? `${author.globalName} (@${author.username})` : `@${author.username}`,
+        name: author.globalName ? `${author.globalName} (@${author.username})` : `${author.username}`,
         iconURL: author.displayAvatarURL({ extension: 'webp', size: 256 })
       })
       .setDescription(message.content)
@@ -61,6 +56,7 @@ export default new Event({
           lng
         })}`
       });
+
       otherEmbed.setDescription(`||${message.content}||`).setFooter({
         text: `⚠️ ${t('phone.link', {
           lng: otherLng
@@ -74,6 +70,7 @@ export default new Event({
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message: message.content })
     }).catch((err) => logger.debug({ err }, 'Could not fetch profanity API'));
+
     if (res) {
       const response: { isProfanity: boolean; score: number } = await res.json();
       // Replace message content if it contains profanity
@@ -83,6 +80,7 @@ export default new Event({
             lng
           })}`
         });
+
         otherEmbed.setDescription(`||${message.content.slice(0, 1990)}||`).setFooter({
           text: `⚠️ ${t('phone.profanity', {
             lng: otherLng
@@ -113,10 +111,7 @@ export default new Event({
     // Send the embed to the target channel
     await targetChannel.send({ embeds: [otherEmbed] }).catch((err) => logger.debug({ err, channelId: targetChannel.id }, 'Could not send message'));
 
-    await connectionModel
-      .findOneAndUpdate({ _id: existingConnection._id }, { $set: { lastMessageAt: message.createdAt } })
-      .lean()
-      .exec();
+    await updateLastMessageAt(existingConnection._id);
 
     // Delete connection if it has been inactive
     const TIMEOUT = 1_000 * 60 * 4; // = 4 minutes

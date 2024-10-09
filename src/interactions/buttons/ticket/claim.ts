@@ -1,4 +1,4 @@
-import { EmbedBuilder, PermissionFlagsBits } from 'discord.js';
+import { EmbedBuilder, PermissionFlagsBits, userMention } from 'discord.js';
 import { t } from 'i18next';
 
 import { Button } from 'classes/button';
@@ -52,7 +52,9 @@ export default new Button({
 
     if (ticket.claimedBy) {
       await interaction.reply({
-        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.already-claimed', { lng, claimedBy: `<@${ticket.claimedBy}>` }))],
+        embeds: [
+          new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.already-claimed', { lng, claimedBy: userMention(ticket.claimedBy) }))
+        ],
         ephemeral: true
       });
       return;

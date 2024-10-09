@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, SlashCommandBuilder } from 'discord.js';
+import { ApplicationIntegrationType, EmbedBuilder, inlineCode, InteractionContextType, SlashCommandBuilder } from 'discord.js';
 import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
@@ -347,14 +347,14 @@ export default new Command({
                 lng,
                 formats: [
                   '',
-                  `\`YYYY-MM-DD\` - ${dayjs(currentDate).format('YYYY-MM-DD')}`,
-                  `\`YYYY/MM/DD\` - ${dayjs(currentDate).format('YYYY/MM/DD')}`,
-                  `\`YYYY.MM.DD\` - ${dayjs(currentDate).format('YYYY.MM.DD')}`,
-                  `\`YYYY MM DD\` - ${dayjs(currentDate).format('YYYY MM DD')}`,
-                  `\`MM-DD-YYYY\` - ${dayjs(currentDate).format('MM-DD-YYYY')}`,
-                  `\`MM/DD/YYYY\` - ${dayjs(currentDate).format('MM/DD/YYYY')}`,
-                  `\`MM.DD.YYYY\` - ${dayjs(currentDate).format('MM.DD.YYYY')}`,
-                  `\`MM DD YYYY\` - ${dayjs(currentDate).format('MM DD YYYY')}`
+                  `${inlineCode('YYYY-MM-DD')} - ${dayjs(currentDate).format('YYYY-MM-DD')}`,
+                  `${inlineCode('YYYY/MM/DD')} - ${dayjs(currentDate).format('YYYY/MM/DD')}`,
+                  `${inlineCode('YYYY.MM.DD')} - ${dayjs(currentDate).format('YYYY.MM.DD')}`,
+                  `${inlineCode('YYYY MM DD')} - ${dayjs(currentDate).format('YYYY MM DD')}`,
+                  `${inlineCode('MM-DD-YYYY')} - ${dayjs(currentDate).format('MM-DD-YYYY')}`,
+                  `${inlineCode('MM/DD/YYYY')} - ${dayjs(currentDate).format('MM/DD/YYYY')}`,
+                  `${inlineCode('MM.DD.YYYY')} - ${dayjs(currentDate).format('MM.DD.YYYY')}`,
+                  `${inlineCode('MM DD YYYY')} - ${dayjs(currentDate).format('MM DD YYYY')}`
                 ].join('\n')
               })
             });

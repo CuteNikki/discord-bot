@@ -1,4 +1,4 @@
-import { Collection, EmbedBuilder, Events, PermissionsBitField } from 'discord.js';
+import { Collection, EmbedBuilder, Events, inlineCode, PermissionsBitField, time, TimestampStyles } from 'discord.js';
 import { t } from 'i18next';
 
 import { Event } from 'classes/event';
@@ -146,7 +146,13 @@ export default new Event({
           embeds: [
             new EmbedBuilder()
               .setColor(client.colors.error)
-              .setDescription(t('interactions.cooldown', { lng, action: `\`${button.options.customId}\``, timestamp: `<t:${expiredTimestamp}:R>` }))
+              .setDescription(
+                t('interactions.cooldown', {
+                  lng,
+                  action: inlineCode(button.options.customId),
+                  timestamp: time(expiredTimestamp, TimestampStyles.RelativeTime)
+                })
+              )
           ],
           ephemeral: true
         });

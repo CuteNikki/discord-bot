@@ -6,9 +6,14 @@ import {
   GuildNSFWLevel,
   GuildPremiumTier,
   GuildVerificationLevel,
+  inlineCode,
   InteractionContextType,
   Role,
-  SlashCommandBuilder
+  roleMention,
+  SlashCommandBuilder,
+  time,
+  TimestampStyles,
+  userMention
 } from 'discord.js';
 import { t } from 'i18next';
 
@@ -44,7 +49,7 @@ export default new Command({
       const results: string[] = [];
       let totalLength = 0;
       for (const role of roles) {
-        const roleString = `<@&${role.id}> `;
+        const roleString = roleMention(role.id) + ' ';
         if (roleString.length + totalLength > 1000) break;
         results.push(roleString);
         totalLength += roleString.length;
@@ -56,7 +61,7 @@ export default new Command({
       let totalLength = 0;
       const features = guild.features.map((feature) => feature.toLowerCase().replace(/_/g, ' ')).sort((a, b) => b.localeCompare(a));
       for (const feature of features) {
-        const featureString = `\`${feature.toLowerCase().replace(/_/g, ' ')}\` `;
+        const featureString = inlineCode(feature.toLowerCase().replace(/_/g, ' ')) + ' ';
         if (featureString.length + totalLength > 1000) break;
         results.push(featureString);
         totalLength += featureString.length;
@@ -96,9 +101,9 @@ export default new Command({
             }),
             t('serverinfo.server.created', {
               lng,
-              created: `<t:${Math.floor(guild.createdTimestamp / 1000)}:d> | <t:${Math.floor(guild.createdTimestamp / 1000)}:R>`
+              created: `${time(Math.floor(guild.createdTimestamp / 1000), TimestampStyles.ShortDate)} | ${time(Math.floor(guild.createdTimestamp / 1000), TimestampStyles.RelativeTime)}`
             }),
-            t('serverinfo.server.owner', { lng, owner: `<@${guild.ownerId}> ${client.customEmojis.server_owner}` }),
+            t('serverinfo.server.owner', { lng, owner: `${userMention(guild.ownerId)} ${client.customEmojis.server_owner}` }),
             t('serverinfo.server.vanity', {
               lng,
               vanity: guild.vanityURLCode ?? t('none', { lng })

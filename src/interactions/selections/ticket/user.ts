@@ -1,4 +1,4 @@
-import { EmbedBuilder, type TextChannel } from 'discord.js';
+import { EmbedBuilder, userMention, type TextChannel } from 'discord.js';
 import { t } from 'i18next';
 
 import { Selection } from 'classes/selection';
@@ -103,7 +103,7 @@ export default new Selection({
           new EmbedBuilder().setDescription(
             t('ticket.user-removed', {
               lng: guildLng,
-              targetUser: `<@${targetId}>`,
+              targetUser: userMention(targetId),
               removedBy: user.toString()
             })
           )
@@ -126,7 +126,7 @@ export default new Selection({
           new EmbedBuilder().setDescription(
             t('ticket.user-added', {
               lng: guildLng,
-              targetUser: `<@${targetId}>`,
+              targetUser: userMention(targetId),
               addedBy: user.toString()
             })
           )

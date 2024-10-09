@@ -4,6 +4,7 @@ import {
   ButtonBuilder,
   ButtonStyle,
   ComponentType,
+  inlineCode,
   InteractionContextType,
   PermissionFlagsBits,
   SlashCommandBuilder
@@ -103,15 +104,15 @@ export default new Command({
         .send(target.id, {
           content: t('kick.target-dm', {
             lng: await getUserLanguage(target.id),
-            guild: `\`${guild.name}\``,
-            reason: `\`${reason ?? '/'}\``
+            guild: inlineCode(guild.name),
+            reason: inlineCode(reason ?? t('none', { lng }))
           })
         })
         .catch((err) => logger.debug({ err, userId: target.id }, 'Could not send DM'));
 
       await collector.update({
         content: [
-          t('kick.confirmed', { lng, user: target.toString(), reason: `\`${reason ?? t('none', { lng })}\`` }),
+          t('kick.confirmed', { lng, user: target.toString(), reason: inlineCode(reason ?? t('none', { lng })) }),
           receivedDM ? t('kick.dm-received', { lng }) : t('kick.dm-not-received', { lng })
         ].join('\n'),
         components: []

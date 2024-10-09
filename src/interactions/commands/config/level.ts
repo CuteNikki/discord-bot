@@ -1,4 +1,13 @@
-import { ApplicationIntegrationType, ChannelType, EmbedBuilder, InteractionContextType, PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
+import {
+  ApplicationIntegrationType,
+  channelMention,
+  ChannelType,
+  EmbedBuilder,
+  InteractionContextType,
+  PermissionFlagsBits,
+  roleMention,
+  SlashCommandBuilder
+} from 'discord.js';
 import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
@@ -207,8 +216,8 @@ export default new Command({
                         {
                           name: t('level.announcement.title', { lng }),
                           value:
-                            announcement === AnnouncementType.OtherChannel
-                              ? `${AnnouncementType[announcement]}: <#${channelId}>`
+                            announcement === AnnouncementType.OtherChannel && channelId
+                              ? `${AnnouncementType[announcement]}: ${channelMention(channelId)}`
                               : AnnouncementType[announcement]
                         },
                         {
@@ -216,7 +225,7 @@ export default new Command({
                           value: ignoredRoles.length
                             ? ignoredRoles
                                 .map((id) => {
-                                  if (guild.roles.cache.get(id)) return `<@&${id}>`;
+                                  if (guild.roles.cache.get(id)) return roleMention(id);
                                   else return id;
                                 })
                                 .join(', ')
@@ -227,7 +236,7 @@ export default new Command({
                           value: ignoredChannels.length
                             ? ignoredChannels
                                 .map((id) => {
-                                  if (guild.channels.cache.get(id)) return `<#${id}>`;
+                                  if (guild.channels.cache.get(id)) return channelMention(id);
                                   else return id;
                                 })
                                 .join(', ')
@@ -238,7 +247,7 @@ export default new Command({
                           value: enabledChannels.length
                             ? enabledChannels
                                 .map((id) => {
-                                  if (guild.channels.cache.get(id)) return `<#${id}>`;
+                                  if (guild.channels.cache.get(id)) return channelMention(id);
                                   else return id;
                                 })
                                 .join(', ')
@@ -246,7 +255,7 @@ export default new Command({
                         },
                         {
                           name: t('level.rewards.title', { lng }),
-                          value: rewards.length ? rewards.map(({ level, roleId }) => `${level}: <@&${roleId}>`).join('\n') : t('level.none', { lng })
+                          value: rewards.length ? rewards.map(({ level, roleId }) => `${level}: ${roleMention(roleId)}`).join('\n') : t('level.none', { lng })
                         }
                       )
                   ]
@@ -278,7 +287,9 @@ export default new Command({
                       .addFields({
                         name: t('level.announcement.title', { lng }),
                         value:
-                          announcement === AnnouncementType.OtherChannel ? `${AnnouncementType[announcement]}: <#${channelId}>` : AnnouncementType[announcement]
+                          announcement === AnnouncementType.OtherChannel && channelId
+                            ? `${AnnouncementType[announcement]}: ${channelMention(channelId)}`
+                            : AnnouncementType[announcement]
                       })
                   ]
                 });
@@ -296,7 +307,7 @@ export default new Command({
                         value: rewards.length
                           ? rewards
                               .map(({ level, roleId }) => {
-                                if (guild.roles.cache.get(roleId)) return `${level}: <@&${roleId}>`;
+                                if (guild.roles.cache.get(roleId)) return `${level}: ${roleMention(roleId)}`;
                                 else return `${level}: ${roleId}`;
                               })
                               .join('\n')
@@ -318,7 +329,7 @@ export default new Command({
                         value: ignoredRoles.length
                           ? ignoredRoles
                               .map((id) => {
-                                if (guild.roles.cache.get(id)) return `<@&${id}>`;
+                                if (guild.roles.cache.get(id)) return roleMention(id);
                                 else return id;
                               })
                               .join(', ')
@@ -340,7 +351,7 @@ export default new Command({
                         value: ignoredChannels
                           ? ignoredChannels
                               .map((id) => {
-                                if (guild.channels.cache.get(id)) return `<#${id}>`;
+                                if (guild.channels.cache.get(id)) return channelMention(id);
                                 else return id;
                               })
                               .join(', ')
@@ -362,7 +373,7 @@ export default new Command({
                         value: enabledChannels
                           ? enabledChannels
                               .map((id) => {
-                                if (guild.channels.cache.get(id)) return `<#${id}>`;
+                                if (guild.channels.cache.get(id)) return channelMention(id);
                                 else return id;
                               })
                               .join(', ')

@@ -1,4 +1,4 @@
-import { ApplicationIntegrationType, AttachmentBuilder, EmbedBuilder, InteractionContextType, SlashCommandBuilder } from 'discord.js';
+import { ApplicationIntegrationType, AttachmentBuilder, EmbedBuilder, InteractionContextType, SlashCommandBuilder, time, TimestampStyles } from 'discord.js';
 
 import { Command, ModuleType } from 'classes/command';
 
@@ -383,7 +383,7 @@ export default new Command({
                 const targetData = await getUserData(target.id);
 
                 await interaction.editReply(
-                  `Badges:\n${targetData.badges.map((badge) => `${BadgeType[badge.id]}: <t:${Math.floor(badge.receivedAt / 1000)}:f>`).join('\n')}`
+                  `Badges:\n${targetData.badges.map((badge) => `${BadgeType[badge.id]}: ${time(Math.floor(badge.receivedAt / 1000), TimestampStyles.ShortDateTime)}`).join('\n')}`
                 );
               }
               break;

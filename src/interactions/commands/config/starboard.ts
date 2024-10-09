@@ -1,5 +1,6 @@
 import {
   ApplicationIntegrationType,
+  channelMention,
   ChannelType,
   EmbedBuilder,
   InteractionContextType,
@@ -81,7 +82,7 @@ export default new Command({
                   },
                   {
                     name: t('starboard.channel', { lng }),
-                    value: starboard.channelId ? `<#${starboard.channelId}>` : t('none', { lng })
+                    value: starboard.channelId ? channelMention(starboard.channelId) : t('none', { lng })
                   },
                   {
                     name: t('starboard.minimum-stars', { lng }),

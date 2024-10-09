@@ -4,6 +4,7 @@ import {
   ButtonBuilder,
   ButtonStyle,
   ComponentType,
+  inlineCode,
   InteractionContextType,
   PermissionFlagsBits,
   SlashCommandBuilder
@@ -145,8 +146,8 @@ export default new Command({
         .send(target.id, {
           content: t('ban.target-dm', {
             lng: targetLng,
-            guild: `\`${guild.name}\``,
-            reason: `\`${reason ?? t('none', { lng })}\``,
+            guild: inlineCode(guild.name),
+            reason: inlineCode(reason ?? t('none', { lng })),
             duration: duration ? durationText : t('none', { lng })
           })
         })
@@ -157,7 +158,7 @@ export default new Command({
           t('ban.confirmed', {
             lng,
             user: target.toString(),
-            reason: `\`${reason ?? t('none', { lng })}\``
+            reason: inlineCode(reason ?? t('none', { lng }))
           }),
           t('ban.deleted-history', {
             lng,

@@ -1,4 +1,4 @@
-import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, SlashCommandBuilder } from 'discord.js';
+import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, SlashCommandBuilder, time, TimestampStyles } from 'discord.js';
 import { t } from 'i18next';
 import ms from 'ms';
 
@@ -97,7 +97,7 @@ export default new Command({
                 .addFields(
                   reminders.map((reminder) => ({
                     name: `${reminder._id}`,
-                    value: [`<t:${Math.floor(reminder.remindAt / 1000)}:R>`, reminder.message].join('\n')
+                    value: [time(Math.floor(reminder.remindAt / 1000), TimestampStyles.ShortDateTime), reminder.message].join('\n')
                   }))
                 )
             ]

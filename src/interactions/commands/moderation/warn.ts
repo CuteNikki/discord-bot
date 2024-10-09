@@ -4,6 +4,7 @@ import {
   ButtonBuilder,
   ButtonStyle,
   ComponentType,
+  inlineCode,
   InteractionContextType,
   PermissionFlagsBits,
   SlashCommandBuilder
@@ -87,8 +88,8 @@ export default new Command({
         .send(target.id, {
           content: t('warn.target-dm', {
             lng: targetLng,
-            guild: `\`${guild.name}\``,
-            reason: `\`${reason ?? t('none', { lng })}\``
+            guild: inlineCode(guild.name),
+            reason: inlineCode(reason ?? t('none', { lng }))
           })
         })
         .catch((err) => logger.debug({ err, target }, 'Could not send DM'));
@@ -98,7 +99,7 @@ export default new Command({
           t('warn.confirmed', {
             lng,
             user: target.toString(),
-            reason: `\`${reason ?? t('none', { lng })}\``
+            reason: inlineCode(reason ?? t('none', { lng }))
           }),
           receivedDM ? t('warn.dm-received', { lng }) : t('warn.dm-not-received', { lng })
         ].join('\n'),

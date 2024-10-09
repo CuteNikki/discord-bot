@@ -1,4 +1,4 @@
-import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, SlashCommandBuilder } from 'discord.js';
+import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, SlashCommandBuilder, time, TimestampStyles } from 'discord.js';
 import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
@@ -24,7 +24,7 @@ export default new Command({
           .setDescription(
             t('uptime.description', {
               lng,
-              uptime: `<t:${Math.floor(interaction.client.readyTimestamp / 1000)}:R>`
+              uptime: time(Math.floor(interaction.client.readyTimestamp / 1000), TimestampStyles.RelativeTime)
             })
           )
       ]

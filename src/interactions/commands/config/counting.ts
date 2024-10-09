@@ -1,4 +1,14 @@
-import { ApplicationIntegrationType, ChannelType, EmbedBuilder, InteractionContextType, SlashCommandBuilder } from 'discord.js';
+import {
+  ApplicationIntegrationType,
+  channelMention,
+  ChannelType,
+  EmbedBuilder,
+  InteractionContextType,
+  SlashCommandBuilder,
+  time,
+  TimestampStyles,
+  userMention
+} from 'discord.js';
 import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
@@ -89,7 +99,7 @@ export default new Command({
           await interaction.editReply({
             embeds: [
               new EmbedBuilder().setColor(client.colors.counting).addFields(
-                { name: t('counting.channel', { lng }), value: `<#${counting.channelId}>` },
+                { name: t('counting.channel', { lng }), value: channelMention(counting.channelId) },
                 {
                   name: t('counting.reset-on-fail', { lng }),
                   value: counting.resetOnFail ? t('enabled', { lng }) : t('disabled', { lng })
@@ -100,14 +110,14 @@ export default new Command({
                     ? t('counting.highest-number-at', {
                         lng,
                         number: counting.highestNumber.toString(),
-                        at: `<t:${Math.floor(counting.highestNumberAt / 1000)}:f>`
+                        at: time(Math.floor(counting.highestNumberAt / 1000), TimestampStyles.ShortDateTime)
                       })
                     : t('counting.highest-number-no-at', { lng, number: counting.highestNumber.toString() })
                 },
                 {
                   name: t('counting.current-number', { lng }),
                   value: counting.currentNumberBy
-                    ? t('counting.current-number-by', { lng, number: counting.currentNumber.toString(), by: `<@${counting.currentNumberBy}>` })
+                    ? t('counting.current-number-by', { lng, number: counting.currentNumber.toString(), by: userMention(counting.currentNumberBy) })
                     : t('counting.current-number-no-by', { lng, number: counting.currentNumber.toString() })
                 }
               )

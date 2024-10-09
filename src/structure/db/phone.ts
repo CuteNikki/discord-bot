@@ -67,6 +67,13 @@ export async function findConnection(channelId: string) {
     .exec();
 }
 
+export async function updateLastMessageAt(_id: Types.ObjectId | string, timestamp?: number) {
+  return await connectionModel
+    .findOneAndUpdate({ _id }, { $set: { lastMessageAt: timestamp ?? Date.now() } }, { upsert: false, new: true })
+    .lean()
+    .exec();
+}
+
 /**
  * Find a connection by id
  * @param {Types.ObjectId} _id The id of the connection object to find

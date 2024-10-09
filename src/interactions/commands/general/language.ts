@@ -1,4 +1,4 @@
-import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
+import { ApplicationIntegrationType, EmbedBuilder, inlineCode, InteractionContextType, PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
 import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
@@ -67,7 +67,7 @@ export default new Command({
                   .setDescription(
                     [
                       t('language.invalid', { lng, language }),
-                      t('language.supported', { lng, languages: supportedLanguages.map((value) => `\`${value}\``).join(', ') })
+                      t('language.supported', { lng, languages: supportedLanguages.map((value) => inlineCode(value)).join(', ') })
                     ].join('\n')
                   )
               ]
@@ -114,7 +114,7 @@ export default new Command({
                     t('language.invalid', { lng, language }),
                     t('language.supported', {
                       lng,
-                      languages: supportedLanguages.map((value) => `\`${value}\``).join(', ')
+                      languages: supportedLanguages.map((value) => inlineCode(value)).join(', ')
                     })
                   ].join('\n')
                 )

@@ -1,3 +1,4 @@
+import { inlineCode } from 'discord.js';
 import { t } from 'i18next';
 
 import { Button } from 'classes/button';
@@ -42,8 +43,8 @@ export default new Button({
       .send(targetMember.user.id, {
         content: t('kick.target-dm', {
           lng: targetLng,
-          guild: `\`${guild.name}\``,
-          reason: `\`${reason ?? t('none', { lng: targetLng })}\``
+          guild: inlineCode(guild.name),
+          reason: inlineCode(reason ?? t('none', { lng: targetLng }))
         })
       })
       .catch((err) => logger.debug({ err, targetId }, 'Could not send DM to user'));
@@ -53,7 +54,7 @@ export default new Button({
         t('kick.confirmed', {
           lng,
           user: targetMember.toString(),
-          reason: `\`${reason ?? t('none', { lng })}\``
+          reason: inlineCode(reason ?? t('none', { lng }))
         }),
         receivedDM ? t('kick.dm-received', { lng }) : t('kick.dm-not-received', { lng })
       ].join('\n'),

@@ -49,11 +49,11 @@ export default new Command<typeof commandType>({
           .addFields(
             {
               name: t('translate.input', { lng }),
-              value: codeBlock(targetMessage.content.substring(0, 4000))
+              value: codeBlock(targetMessage.content.length > 1000 ? targetMessage.content.substring(0, 1000) + '...' : targetMessage.content)
             },
             {
               name: t('translate.output', { lng }),
-              value: codeBlock(translated.substring(0, 4000))
+              value: codeBlock(translated.length > 1000 ? translated.substring(0, 1000) + '...' : translated)
             }
           )
       ]

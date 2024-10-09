@@ -1,4 +1,4 @@
-import { Colors, EmbedBuilder, type ChatInputCommandInteraction } from 'discord.js';
+import { Colors, EmbedBuilder, inlineCode, type ChatInputCommandInteraction } from 'discord.js';
 import { t } from 'i18next';
 
 import type { DiscordClient } from 'classes/client';
@@ -48,7 +48,7 @@ export class FastType {
                 name: t('games.typing.sentence', { lng }),
                 value: this.sentence
                   .split(' ')
-                  .map((word) => `\`${word}\``)
+                  .map((word) => inlineCode(word))
                   .join('⠀') // <- invisible character to stop people from copying the sentence and pasting it
               }
             )

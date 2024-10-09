@@ -1,4 +1,14 @@
-import { ActivityType, ApplicationIntegrationType, EmbedBuilder, InteractionContextType, Role, SlashCommandBuilder } from 'discord.js';
+import {
+  ActivityType,
+  ApplicationIntegrationType,
+  EmbedBuilder,
+  InteractionContextType,
+  Role,
+  roleMention,
+  SlashCommandBuilder,
+  time,
+  TimestampStyles
+} from 'discord.js';
 import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
@@ -66,7 +76,7 @@ export default new Command({
         },
         {
           name: t('userinfo.created-at', { lng }),
-          value: `<t:${Math.floor(user.createdTimestamp / 1000)}:d> | <t:${Math.floor(user.createdTimestamp / 1000)}:R>`
+          value: `${time(Math.floor(user.createdTimestamp / 1000), TimestampStyles.ShortDate)} | ${time(Math.floor(user.createdTimestamp / 1000), TimestampStyles.RelativeTime)}`
         }
       );
 
@@ -113,7 +123,7 @@ export default new Command({
       const results: string[] = [];
       let totalLength = 0;
       for (const role of roles) {
-        const roleString = `<@&${role.id}> `;
+        const roleString = roleMention(role.id) + ' ';
         if (roleString.length + totalLength > 1000) break;
         results.push(roleString);
         totalLength += roleString.length;
@@ -132,7 +142,7 @@ export default new Command({
       .setThumbnail(member.avatarURL({ size: 4096, extension: 'webp' }))
       .addFields({
         name: t('userinfo.joined-at', { lng }),
-        value: `<t:${Math.floor((member.joinedTimestamp ?? 0) / 1000)}:d> | <t:${Math.floor((member.joinedTimestamp ?? 0) / 1000)}:R>`
+        value: `${time(Math.floor((member.joinedTimestamp ?? 0) / 1000), TimestampStyles.ShortDate)} | ${time(Math.floor((member.joinedTimestamp ?? 0) / 1000), TimestampStyles.RelativeTime)}`
       });
 
     if (member.presence?.activities?.length) {
@@ -159,7 +169,7 @@ export default new Command({
     if (member.premiumSinceTimestamp) {
       memberEmbed.addFields({
         name: t('userinfo.boosting', { lng }),
-        value: `<t:${Math.floor(member.premiumSinceTimestamp / 1000)}:d> | <t:${Math.floor(member.premiumSinceTimestamp / 1000)}:R>`
+        value: `${time(Math.floor(member.premiumSinceTimestamp / 1000), TimestampStyles.ShortDate)} | ${time(Math.floor(member.premiumSinceTimestamp / 1000), TimestampStyles.RelativeTime)}`
       });
     }
 

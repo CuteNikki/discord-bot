@@ -1,15 +1,15 @@
-import { getGuildSettings, updateGuildSettings } from 'db/guild';
+import { updateGuildSettings } from 'db/guild';
+import { countingModel } from 'models/counting';
 
-import type { Counting } from 'types/counting';
-import type { GuildDocument } from 'types/guild';
+import type { CountingDocument } from 'types/counting';
 
 /**
  * Gets the counting
  * @param {string} guildId Guild ID to get the counting for
- * @returns {Promise<Counting>} Counting
+ * @returns {Promise<Counting | null>} Counting
  */
-export async function getCounting(guildId: string): Promise<Counting> {
-  return (await getGuildSettings(guildId)).counting;
+export async function getCounting(guildId: string): Promise<CountingDocument | null> {
+  return await countingModel.findOne({ guildId }).lean().exec();
 }
 
 /**
@@ -17,37 +17,35 @@ export async function getCounting(guildId: string): Promise<Counting> {
  * @param {string} guildId Guild ID to setup the counting for
  * @param {string} channelId Channel ID to set up the counting for
  * @param {boolean} resetOnFail Reset on fail
- * @returns {Promise<GuildDocument>} Updated guild config
+ * @returns {Promise<CountingDocument>} Counting
  */
-export async function setupCounting(guildId: string, channelId: string, resetOnFail: boolean): Promise<GuildDocument> {
-  return await updateGuildSettings(guildId, {
-    $set: {
-      'counting.channelId': channelId,
-      'counting.resetOnFail': resetOnFail,
-      'counting.currentNumber': 0,
-      'counting.currentNumberBy': null,
-      'counting.currentNumberAt': null
-    }
-  });
+export async function setupCounting(guildId: string, channelId: string, resetOnFail: boolean): Promise<CountingDocument> {
+  const document = await countingModel.findOneAndUpdate(
+    { guildId },
+    { $set: { channelId, resetOnFail, currentNumber: 0, currentNumberBy: null, currentNumberAt: null } },
+    { upsert: true, new: true }
+  );
+
+  await updateGuildSettings(guildId, { $set: { counting: document._id } });
+
+  return document;
 }
 
 /**
  * Resets the counting
  * @param {string} guildId Guild ID to reset the counting for
- * @returns {Promise<GuildDocument>} Updated guild config
+ * @returns {Promise<CountingDocument>} Counting
  */
-export async function resetCounting(guildId: string): Promise<GuildDocument> {
-  return await updateGuildSettings(guildId, {
-    $set: {
-      ['counting.channelId']: null,
-      ['counting.resetOnFail']: false,
-      ['counting.highestNumber']: 0,
-      ['counting.highestNumberAt']: null,
-      ['counting.currentNumber']: 0,
-      ['counting.currentNumberBy']: null,
-      ['counting.currentNumberAt']: null
-    }
-  });
+export async function resetCounting(guildId: string): Promise<CountingDocument> {
+  const document = await countingModel.findOneAndUpdate(
+    { guildId },
+    { $set: { channelId: null, resetOnFail: null, currentNumber: 0, highestNumber: 0, highestNumberAt: null, currentNumberBy: null, currentNumberAt: null } },
+    { upsert: true, new: true }
+  );
+
+  await updateGuildSettings(guildId, { $set: { counting: document._id } });
+
+  return document;
 }
 
 /**
@@ -55,30 +53,27 @@ export async function resetCounting(guildId: string): Promise<GuildDocument> {
  * @param {string} guildId Guild ID to update the counting for
  * @param {string} channelId Channel ID to update the counting for
  * @param {boolean} resetOnFail Reset on fail
- * @returns {Promise<GuildDocument>} Updated guild config
+ * @returns {Promise<CountingDocument>} Counting
  */
-export async function updateCounting(guildId: string, channelId: string, resetOnFail: boolean): Promise<GuildDocument> {
-  return await updateGuildSettings(guildId, {
-    $set: {
-      'counting.channelId': channelId,
-      'counting.resetOnFail': resetOnFail
-    }
-  });
+export async function updateCounting(guildId: string, channelId: string | null, resetOnFail: boolean): Promise<CountingDocument> {
+  const document = await countingModel.findOneAndUpdate({ guildId }, { $set: { channelId, resetOnFail } }, { upsert: true, new: true });
+
+  await updateGuildSettings(guildId, { $set: { counting: document._id } });
+
+  return document;
 }
 
 /**
  * Resets the counting
  * @param {string} guildId Guild ID to reset counting for
- * @returns {Promise<GuildDocument>} Updated guild config
+ * @returns {Promise<CountingDocument | null>} CountingDocument
  */
-export async function failedCounting(guildId: string): Promise<GuildDocument> {
-  return await updateGuildSettings(guildId, {
-    $set: {
-      'counting.currentNumber': 0,
-      'counting.currentNumberBy': null,
-      'counting.currentNumberAt': null
-    }
-  });
+export async function failedCounting(guildId: string): Promise<CountingDocument | null> {
+  return await countingModel.findOneAndUpdate(
+    { guildId },
+    { $set: { currentNumber: 0, currentNumberBy: null, currentNumberAt: null } },
+    { upsert: false, new: true }
+  );
 }
 
 /**
@@ -88,7 +83,7 @@ export async function failedCounting(guildId: string): Promise<GuildDocument> {
  * @param {number} highestNumberAt Highest number at
  * @param {number} nextNumber Next number
  * @param {string} numberBy Number by
- * @returns {Promise<GuildDocument>} Updated guild config
+ * @returns {Promise<CountingDocument>} CountingDocument
  */
 export async function increaseCounting(
   guildId: string,
@@ -96,14 +91,18 @@ export async function increaseCounting(
   highestNumberAt: number,
   nextNumber: number,
   numberBy: string
-): Promise<GuildDocument> {
-  return await updateGuildSettings(guildId, {
-    $set: {
-      'counting.highestNumber': Math.max(highestNumber, nextNumber),
-      'counting.highestNumberAt': nextNumber >= highestNumber ? Date.now() : highestNumberAt,
-      'counting.currentNumber': nextNumber,
-      'counting.currentNumberBy': numberBy,
-      'counting.currentNumberAt': Date.now()
-    }
-  });
+): Promise<CountingDocument | null> {
+  return await countingModel.findOneAndUpdate(
+    { guildId },
+    {
+      $set: {
+        highestNumber: Math.max(highestNumber, nextNumber),
+        highestNumberAt: nextNumber >= highestNumber ? Date.now() : highestNumberAt,
+        currentNumber: nextNumber,
+        currentNumberBy: numberBy,
+        currentNumberAt: Date.now()
+      }
+    },
+    { upsert: false, new: true }
+  );
 }

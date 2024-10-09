@@ -13,7 +13,11 @@ import type { GuildDocument } from 'types/guild';
  * @returns {Promise<GuildDocument>} Guild settings
  */
 export async function getGuildSettings(guildId: string): Promise<GuildDocument> {
-  return await guildModel.findOneAndUpdate({ guildId }, {}, { upsert: true, new: true }).lean().exec();
+  return await guildModel
+    .findOneAndUpdate({ guildId }, {}, { upsert: true, new: true })
+    .populate(['starboard', 'customVoice', 'reactionRoles', 'counting'])
+    .lean()
+    .exec();
 }
 
 /**

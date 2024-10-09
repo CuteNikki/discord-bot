@@ -38,7 +38,15 @@ export default new Command({
 
     const { options, guildId } = interaction;
 
-    const counting = await getCounting(guildId);
+    const counting = (await getCounting(guildId)) ?? {
+      channelId: null,
+      currentNumber: 0,
+      currentNumberAt: null,
+      currentNumberBy: null,
+      highestNumber: 0,
+      highestNumberAt: null,
+      resetOnFail: false
+    };
 
     switch (options.getSubcommand()) {
       case 'setup':

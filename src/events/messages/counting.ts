@@ -3,8 +3,7 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
-import { failedCounting, increaseCounting } from 'db/counting';
-import { getGuildSettings } from 'db/guild';
+import { failedCounting, getCounting, increaseCounting } from 'db/counting';
 import { getUserLanguage } from 'db/language';
 
 import { logger } from 'utils/logger';
@@ -20,9 +19,9 @@ export default new Event({
     const { guildId, channel, author } = message;
 
     const lng = await getUserLanguage(author.id);
-    const config = await getGuildSettings(guildId);
+    const counting = await getCounting(guildId);
 
-    if (!config.counting.channelId || channel.id !== config.counting.channelId) {
+    if (!counting || !counting.channelId || channel.id !== counting.channelId) {
       return;
     }
 
@@ -42,7 +41,7 @@ export default new Event({
       }, delay);
     };
 
-    if (author.id === config.counting.currentNumberBy) {
+    if (author.id === counting.currentNumberBy) {
       await handleDeletion(message, 'Could not delete message from same user');
 
       const warnMessage = await message.channel
@@ -59,13 +58,13 @@ export default new Event({
     }
 
     // Check if the sent message is the correct next number
-    const nextNumber = config.counting.currentNumber + 1;
+    const nextNumber = counting.currentNumber + 1;
     const sentNumber = message.content.match(/^\d+$/)?.[0]; // Match whole numbers only
 
     if (sentNumber !== nextNumber.toString()) {
       await handleDeletion(message, 'Invalid number sent');
 
-      if (!config.counting.resetOnFail) {
+      if (!counting.resetOnFail) {
         return;
       }
 
@@ -86,6 +85,6 @@ export default new Event({
 
     await handleReaction(message, '✅');
 
-    await increaseCounting(guildId, config.counting.highestNumber, config.counting.highestNumberAt, nextNumber, author.id);
+    await increaseCounting(guildId, counting.highestNumber, counting.highestNumberAt, nextNumber, author.id);
   }
 });

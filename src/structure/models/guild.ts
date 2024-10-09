@@ -9,29 +9,16 @@ export const guildModel: Model<GuildDocument> =
     new Schema<GuildDocument>({
       guildId: { type: String, required: true },
       language: { type: String, required: false },
-      customVoice: { type: Types.ObjectId, required: false },
-      starboard: { type: Types.ObjectId, required: false },
-      reactionRoles: { type: Types.ObjectId, required: false },
+      customVoice: { type: Types.ObjectId, ref: 'custom_voice', required: false },
+      starboard: { type: Types.ObjectId, ref: 'starboard', required: false },
+      reactionRoles: { type: Types.ObjectId, ref: 'reaction_role', required: false },
+      counting: { type: Types.ObjectId, ref: 'counting', required: false },
       moderation: {
         type: {
           enabled: { type: Boolean }
         },
         default: {
           enabled: true
-        }
-      },
-      counting: {
-        type: {
-          channelId: { type: String },
-          resetOnFail: { type: Boolean, default: false, required: true },
-          highestNumber: { type: Number, default: 0, required: true },
-          highestNumberAt: { type: Number },
-          currentNumber: { type: Number, default: 0, required: true },
-          currentNumberBy: { type: String },
-          currentNumberAt: { type: Number }
-        },
-        default: {
-          resetOnFail: false
         }
       },
       ticket: {

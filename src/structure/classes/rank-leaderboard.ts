@@ -287,7 +287,11 @@ export class LeaderboardBuilder extends Builder<LeaderboardProps> {
       JSX.createElement(
         'div',
         { className: 'flex justify-between items-center' },
-        JSX.createElement('div', { className: 'flex ml-2 mr-4 text-2xl w-[25px]' }, `#${rank}` as unknown as JSX.Element),
+        JSX.createElement(
+          'div',
+          { className: `flex text-2xl w-[25px]`, style: { marginRight: `${Math.floor((`#${rank}`.length + 2) / 2)}rem` } },
+          `#${rank}` as unknown as JSX.Element
+        ),
         JSX.createElement('img', { src: image.toDataURL(), width: 50, height: 50, className: 'rounded-full flex', alt: 'avatar' }),
         JSX.createElement(
           'div',

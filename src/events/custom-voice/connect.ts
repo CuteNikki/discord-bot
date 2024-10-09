@@ -2,7 +2,7 @@ import { ChannelType, Events, PermissionFlagsBits } from 'discord.js';
 
 import { Event } from 'classes/event';
 
-import { createCustomVoiceChannel, getCustomVoiceChannelByOwner } from 'db/custom-voice';
+import { createCustomVoiceChannel, getCustomVoiceChannelByOwner } from 'db/custom-voice-channel';
 import { getGuildSettings } from 'db/guild';
 
 import { logger } from 'utils/logger';

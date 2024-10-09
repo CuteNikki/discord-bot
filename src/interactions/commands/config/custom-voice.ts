@@ -3,7 +3,7 @@ import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
-import { getCustomVoiceChannel } from 'db/custom-voice';
+import { getCustomVoiceChannel } from 'db/custom-voice-channel';
 
 import { logger } from 'utils/logger';
 

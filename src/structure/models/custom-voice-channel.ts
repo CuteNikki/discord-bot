@@ -1,12 +1,12 @@
 import mongoose, { Model, model, Schema } from 'mongoose';
 
-import type { CustomVoiceDocument } from 'types/custom-voice';
+import type { CustomVoiceChannelDocument } from 'types/custom-voice-channel';
 
-export const customVoiceModel: Model<CustomVoiceDocument> =
+export const customVoiceChannelModel: Model<CustomVoiceChannelDocument> =
   mongoose.models['custom_voice_channel'] ||
-  model<CustomVoiceDocument>(
+  model<CustomVoiceChannelDocument>(
     'custom_voice_channel',
-    new Schema<CustomVoiceDocument>({
+    new Schema<CustomVoiceChannelDocument>({
       channelId: { type: String, required: true },
       guildId: { type: String, required: true },
       ownerId: { type: String, required: true }

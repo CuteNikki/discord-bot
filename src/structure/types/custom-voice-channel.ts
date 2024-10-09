@@ -1,6 +1,6 @@
 import type { Types } from 'mongoose';
 
-export type CustomVoiceDocument = {
+export type CustomVoiceChannelDocument = {
   _id: Types.ObjectId;
   channelId: string;
   guildId: string;

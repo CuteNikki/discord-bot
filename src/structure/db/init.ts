@@ -7,7 +7,7 @@ import { performance } from 'perf_hooks';
 import { DiscordClient } from 'classes/client';
 
 import { getClientSettings, updateLastWeeklyClearAt } from 'db/client';
-import { deleteCustomVoiceChannel, getCustomVoiceChannels } from 'db/custom-voice';
+import { deleteCustomVoiceChannel, getCustomVoiceChannels } from 'db/custom-voice-channel';
 import { deleteGiveaway, getAllGiveaways, getWinners } from 'db/giveaway';
 import { closeInfraction, getUnresolvedInfractions } from 'db/infraction';
 import { getGuildLanguage, getUserLanguage } from 'db/language';

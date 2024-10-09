@@ -13,7 +13,7 @@ export default new Command({
   data: new SlashCommandBuilder()
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
     .setContexts(InteractionContextType.Guild)
-    .setName('customize-voice-channel')
+    .setName('custom-voice')
     .setDescription('Manage your own custom voice channel')
     .addSubcommand((cmd) => cmd.setName('public').setDescription('Makes the channel accessible to everyone'))
     .addSubcommand((cmd) => cmd.setName('private').setDescription('Makes the channel only accessible to you or people you invite'))

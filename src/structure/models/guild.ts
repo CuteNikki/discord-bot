@@ -9,13 +9,6 @@ export const guildModel: Model<GuildDocument> =
     new Schema<GuildDocument>({
       guildId: { type: String, required: true },
       language: { type: String, required: false },
-      customVC: {
-        type: {
-          channelId: { type: String },
-          parentId: { type: String }
-        },
-        default: {}
-      },
       moderation: {
         type: {
           enabled: { type: Boolean }

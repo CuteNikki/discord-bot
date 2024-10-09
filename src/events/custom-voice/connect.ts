@@ -2,8 +2,8 @@ import { ChannelType, Events, PermissionFlagsBits } from 'discord.js';
 
 import { Event } from 'classes/event';
 
+import { getCustomVoice } from 'db/custom-voice';
 import { createCustomVoiceChannel, getCustomVoiceChannelByOwner } from 'db/custom-voice-channel';
-import { getGuildSettings } from 'db/guild';
 
 import { logger } from 'utils/logger';
 
@@ -15,8 +15,8 @@ export default new Event({
     if (!newState.channelId || !newState.member) return;
 
     // if there is no creation channel, return
-    const config = await getGuildSettings(newState.guild.id);
-    if (!config.customVC.channelId) return;
+    const config = await getCustomVoice(newState.guild.id);
+    if (!config?.channelId) return;
 
     // If user tries creating a new channel and they still have a channel, move them to that channel
     const existingCustomChannel = await getCustomVoiceChannelByOwner(newState.member.id);
@@ -28,7 +28,7 @@ export default new Event({
       return newState.member.voice.setChannel(existingCustomChannel.channelId).catch((err) => logger.error(err, 'Could not move user to custom voice channel'));
     }
 
-    if (newState.channelId !== config.customVC.channelId) return;
+    if (newState.channelId !== config.channelId) return;
     // Now we know that the user is in the creation channel
 
     // We need to create a new voice channel for them
@@ -36,7 +36,7 @@ export default new Event({
       .create({
         name: newState.member.user.username,
         type: ChannelType.GuildVoice,
-        parent: config.customVC.parentId ?? newState.guild.channels.cache.get(config.customVC.channelId)?.parentId ?? null,
+        parent: config.parentId ?? newState.guild.channels.cache.get(config.channelId)?.parentId ?? null,
         permissionOverwrites: [
           {
             id: newState.guild.id,

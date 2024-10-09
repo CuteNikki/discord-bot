@@ -380,7 +380,8 @@
       "none": "If no channel is selected then no category will be used.\nYou may press continue to proceed without a category.",
       "placeholder": "Select a category",
       "selected": "You selected the category {{channel}}.",
-      "continue": "Press continue to proceed with selected category."
+      "continue": "Press continue to proceed with selected category.",
+      "remove": "Remove channel"
     },
     "channel": {
       "description": "Select a channel to send the 'create a ticket' message to.",
@@ -403,6 +404,7 @@
     "already-closed": "This ticket has already been closed!",
     "limit": "You cannot have more than {{limit}} tickets!",
     "invalid-option": "Invalid option!",
+    "invalid-system": "That ticket system could not be found or does not exist anymore!",
     "created-channel": "Please send relevant information already before a staff member is here.\nThis speeds up the process and makes it easier for the staff to solve your issue.",
     "user-select": "Add/Remove a user from the ticket",
     "created-user": "A channel ({{channel}}) has been created for you!",

@@ -380,7 +380,8 @@
       "none": "Wenn kein Kanal ausgewählt ist, wird keine Kategorie verwendet.\nDu kannst fortfahren, ohne eine Kategorie auszuwählen.",
       "placeholder": "Kategorie auswählen",
       "selected": "Du hast die Kategorie {{channel}} ausgewählt.",
-      "continue": "Drücke auf Weiter, um mit der ausgewählten Kategorie fortzufahren."
+      "continue": "Drücke auf Weiter, um mit der ausgewählten Kategorie fortzufahren.",
+      "remove": "Kanal entfernen"
     },
     "channel": {
       "description": "Wähle einen Kanal, in den die 'Ticket erstellen' Nachricht gesendet werden soll.",
@@ -403,6 +404,7 @@
     "already-closed": "Dieses Ticket wurde bereits geschlossen!",
     "limit": "Du kannst nicht mehr als {{limit}} offene Tickets haben!",
     "invalid-option": "Ungültige Option!",
+    "invalid-system": "Dieses Ticket System konnte nicht gefunden werden oder existiert nicht mehr!",
     "created-channel": "Bitte sende relevante Informationen, bevor ein Teammitglied da ist.\nDies beschleunigt den Prozess und macht es leichter für das Team, dein Problem zu lösen.",
     "user-select": "Benutzer zum Ticket hinzufügen/entfernen",
     "created-user": "Ein Kanal ({{channel}}) wurde für dich erstellt!",

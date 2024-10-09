@@ -172,6 +172,15 @@
       "not-removed": "Could not remove permissions from {{user}}!",
       "error": "Could not perform any actions!"
     },
+    "state": {
+      "already-disabled": "The custom voice channels are already disabled!",
+      "already-enabled": "The custom voice channels are already enabled!",
+      "enabled": "The custom voice channels have been enabled.",
+      "enable-warning": "You can only create new voice channels if the creation channel is set!",
+      "disabled": "The custom voice channels have been disabled.",
+      "warning": "You can no longer create new voice channels but existing channels are still active until deleted!",
+      "title": "State"
+    },
     "not-in-vc": "You are not in a voice channel!",
     "not-in-custom-vc": "You are not in a custom voice channel!",
     "not-owner": "You are not the owner of the custom voice channel you are in!"

@@ -16,7 +16,7 @@ export default new Event({
 
     // if there is no creation channel, return
     const config = await getCustomVoice(newState.guild.id);
-    if (!config?.channelId) return;
+    if (!config || !config.enabled || !config.channelId) return;
 
     // If user tries creating a new channel and they still have a channel, move them to that channel
     const existingCustomChannel = await getCustomVoiceChannelByOwner(newState.member.id);

@@ -172,6 +172,15 @@
       "not-removed": "Rechte von {{user}} konnten nicht entfernt werden!",
       "error": "Es konnten keine Aktionen ausgeführt werden!"
     },
+    "state": {
+      "already-disabled": "Die benutzerdefinierten Sprachkanäle sind bereits deaktiviert!",
+      "already-enabled": "Die benutzerdefinierten Sprachkanäle sind bereits aktiviert!",
+      "enabled": "Die benutzerdefinierten Sprachkanäle wurden aktiviert.",
+      "enable-warning": "Es können nur Sprackanäle erstellt werden, wenn der Erstellungskanal gesetzt ist!",
+      "disabled": "Die benutzerdefinierten Sprachkanäle wurden deaktiviert.",
+      "disable-warning": "Es können keine neuen Sprachkanäle erstellt werden, aber bereits existierende Kanäle sind dennoch aktiv bis sie gelöscht werden!",
+      "title": "Status"
+    },
     "not-in-vc": "Du bist nicht in einem Sprachkanal!",
     "not-in-custom-vc": "Du bist nicht in einem benutzerdefinierten Sprachkanal!",
     "not-owner": "Du bist nicht der Besitzer des benutzerdefinierten Sprachkanals, in dem du dich befindest!"

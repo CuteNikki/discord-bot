@@ -8,6 +8,7 @@ export const customVoiceModel: Model<CustomVoiceDocument> =
     'custom_voice',
     new Schema<CustomVoiceDocument>({
       guildId: { type: String, required: true },
+      enabled: { type: Boolean, required: true, default: false },
       channelId: { type: String, required: true },
       parentId: { type: String, required: true }
     })

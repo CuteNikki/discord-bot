@@ -151,8 +151,8 @@
       }
     ]
   },
-  "customize-voice-channel": {
-    "name": "bearbeite-sprachkanal",
+  "custom-voice": {
+    "name": "benutzerdefinierter-sprachkanal",
     "description": "Bearbeite deinen benutzerdefinierten Sprachkanal",
     "options": [
       {
@@ -185,8 +185,8 @@
       }
     ]
   },
-  "custom-voice-channel": {
-    "name": "benutzerdefinierten-sprachkanal",
+  "custom-voice-setup": {
+    "name": "benutzerdefinierte-sprachkanal-konfig",
     "description": "Erlaubt Mitgliedern, ihren eigenen Sprachkanal zu erstellen",
     "options": [
       {
@@ -208,6 +208,14 @@
             "description": "(Leer lassen zum entfernen, standardmäßig ist die Kategorie des Erstellungskanals)"
           }
         ]
+      },
+      {
+        "name": "aktivieren",
+        "description": "Aktiviert die benutzerdefinierte Sprachkanal-Funktion"
+      },
+      {
+        "name": "deaktivieren",
+        "description": "Deaktiviert die benutzerdefinierte Sprachkanal-Funktion"
       },
       {
         "name": "info",

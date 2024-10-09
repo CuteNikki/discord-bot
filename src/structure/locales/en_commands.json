@@ -151,8 +151,8 @@
       }
     ]
   },
-  "customize-voice-channel": {
-    "name": "customize-voice-channel",
+  "custom-voice": {
+    "name": "custom-voice",
     "description": "Manage your own custom voice channel",
     "options": [
       {
@@ -185,8 +185,8 @@
       }
     ]
   },
-  "custom-voice-channel": {
-    "name": "custom-voice-channel",
+  "custom-vpoce-setup": {
+    "name": "custom-voice-setup",
     "description": "Give members the option to create their own voice channel",
     "options": [
       {
@@ -208,6 +208,14 @@
             "description": "(leave empty to remove, defaults to the creation channel's parent)"
           }
         ]
+      },
+      {
+        "name": "enable",
+        "description": "Enable the custom voice module"
+      },
+      {
+        "name": "disable",
+        "description": "Disable the custom voice module"
       },
       {
         "name": "info",

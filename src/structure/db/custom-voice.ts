@@ -62,3 +62,21 @@ export async function setCustomVoiceParent(guildId: string, parentId: string | n
 export async function deleteCustomVoice(guildId: string): Promise<CustomVoiceDocument | null> {
   return await customVoiceModel.findOneAndDelete({ guildId }, { upsert: false }).lean().exec();
 }
+
+/**
+ * Enables the custom voice config
+ * @param {string} guildId Guild ID to enable the custom voice config for
+ * @returns {Promise<CustomVoiceDocument>} Updated custom voice config
+ */
+export async function enableCustomVoice(guildId: string): Promise<CustomVoiceDocument> {
+  return await updateCustomVoice(guildId, { $set: { enabled: true } });
+}
+
+/**
+ * Disables the custom voice config
+ * @param {string} guildId Guild ID to disable the custom voice config for
+ * @returns {Promise<CustomVoiceDocument>} Updated custom voice config
+ */
+export async function disableCustomVoice(guildId: string): Promise<CustomVoiceDocument> {
+  return await updateCustomVoice(guildId, { $set: { enabled: false } });
+}

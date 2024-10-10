@@ -18,4 +18,4 @@ const reactionRoleDocumentSchema = new Schema<ReactionRoleDocument>({
 });
 
 export const reactionRoleDocumentModel: Model<ReactionRoleDocument> =
-  mongoose.models['reaction_role'] || model<ReactionRoleDocument>('reaction_role', reactionRoleDocumentSchema);
+  mongoose.models['reaction_role_config'] || model<ReactionRoleDocument>('reaction_role_config', reactionRoleDocumentSchema);

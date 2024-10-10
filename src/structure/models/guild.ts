@@ -9,41 +9,17 @@ export const guildModel: Model<GuildDocument> =
     new Schema<GuildDocument>({
       guildId: { type: String, required: true },
       language: { type: String, required: false },
-      customVoice: { type: Types.ObjectId, ref: 'custom_voice', required: false },
-      starboard: { type: Types.ObjectId, ref: 'starboard', required: false },
-      reactionRoles: { type: Types.ObjectId, ref: 'reaction_role', required: false },
-      counting: { type: Types.ObjectId, ref: 'counting', required: false },
+      customVoice: { type: Types.ObjectId, ref: 'custom_voice_config', required: false },
+      starboard: { type: Types.ObjectId, ref: 'starboard_config', required: false },
+      reactionRoles: { type: Types.ObjectId, ref: 'reaction_role_config', required: false },
+      counting: { type: Types.ObjectId, ref: 'counting_config', required: false },
+      ticket: { type: Types.ObjectId, ref: 'ticket_config', required: false },
       moderation: {
         type: {
           enabled: { type: Boolean }
         },
         default: {
           enabled: true
-        }
-      },
-      ticket: {
-        type: {
-          enabled: { type: Boolean },
-          systems: [
-            {
-              channelId: { type: String, required: true },
-              maxTickets: { type: Number, required: true },
-              transcriptChannelId: { type: String, required: true },
-              parentChannelId: { type: String, required: true },
-              staffRoleId: { type: String, required: true },
-              choices: [
-                {
-                  label: { type: String, required: true },
-                  style: { type: String, required: true },
-                  emoji: { type: String, required: false }
-                }
-              ]
-            }
-          ]
-        },
-        default: {
-          enabled: true,
-          systems: []
         }
       },
       level: {

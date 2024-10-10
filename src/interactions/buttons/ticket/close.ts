@@ -3,8 +3,8 @@ import { t } from 'i18next';
 
 import { Button } from 'classes/button';
 
-import { getGuildSettings } from 'db/guild';
-import { closeTicket, findTicket } from 'db/ticket';
+import { getGuildLanguage } from 'db/language';
+import { closeTicket, findTicket, getTicketGroup } from 'db/ticket';
 
 import { logger } from 'utils/logger';
 
@@ -18,14 +18,13 @@ export default new Button({
 
     const { user, guildId, channelId, customId, member } = interaction;
 
-    const currentConfig = await getGuildSettings(guildId);
+    const guildLng = await getGuildLanguage(guildId);
 
-    const guildLng = currentConfig.language;
+    const group = await getTicketGroup(customId.split('_')[1]);
 
-    const system = currentConfig.ticket.systems.find((system) => system._id.toString() === customId.split('_')[1]);
-    if (!system) {
+    if (!group) {
       await interaction.reply({
-        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid-system', { lng }))],
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid-group', { lng }))],
         ephemeral: true
       });
       return;
@@ -42,7 +41,7 @@ export default new Button({
     }
 
     if (!member.permissions.has(PermissionFlagsBits.Administrator)) {
-      if (!member.roles.cache.has(system.staffRoleId)) {
+      if (!member.roles.cache.has(group.staffRoleId)) {
         await interaction.reply({
           embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.staff-only', { lng }))],
           ephemeral: true
@@ -59,7 +58,7 @@ export default new Button({
       }
     }
 
-    const hasTranscriptChannel = system.transcriptChannelId ? true : false;
+    const hasTranscriptChannel = group.transcriptChannelId ? true : false;
 
     if (ticket.closed) {
       await interaction.reply({
@@ -68,12 +67,12 @@ export default new Button({
           ? [
               new ActionRowBuilder<ButtonBuilder>().addComponents(
                 new ButtonBuilder()
-                  .setCustomId(`button-tickets-save_${system._id.toString()}`)
+                  .setCustomId(`button-tickets-save_${group._id.toString()}`)
                   .setLabel(t('ticket.save', { lng: guildLng }))
                   .setEmoji('💾')
                   .setStyle(ButtonStyle.Success),
                 new ButtonBuilder()
-                  .setCustomId(`button-tickets-delete_${system._id.toString()}`)
+                  .setCustomId(`button-tickets-delete_${group._id.toString()}`)
                   .setLabel(t('ticket.delete', { lng: guildLng }))
                   .setEmoji('🗑️')
                   .setStyle(ButtonStyle.Danger)
@@ -82,7 +81,7 @@ export default new Button({
           : [
               new ActionRowBuilder<ButtonBuilder>().addComponents(
                 new ButtonBuilder()
-                  .setCustomId(`button-tickets-delete_${system._id.toString()}`)
+                  .setCustomId(`button-tickets-delete_${group._id.toString()}`)
                   .setLabel(t('ticket.delete', { lng: guildLng }))
                   .setEmoji('🗑️')
                   .setStyle(ButtonStyle.Danger)
@@ -112,12 +111,12 @@ export default new Button({
         ? [
             new ActionRowBuilder<ButtonBuilder>().addComponents(
               new ButtonBuilder()
-                .setCustomId(`button-tickets-save_${system._id.toString()}`)
+                .setCustomId(`button-tickets-save_${group._id.toString()}`)
                 .setLabel(t('ticket.save', { lng: guildLng }))
                 .setEmoji('🗂️')
                 .setStyle(ButtonStyle.Success),
               new ButtonBuilder()
-                .setCustomId(`button-tickets-delete_${system._id.toString()}`)
+                .setCustomId(`button-tickets-delete_${group._id.toString()}`)
                 .setLabel(t('ticket.delete', { lng: guildLng }))
                 .setEmoji('✖️')
                 .setStyle(ButtonStyle.Danger)
@@ -126,7 +125,7 @@ export default new Button({
         : [
             new ActionRowBuilder<ButtonBuilder>().addComponents(
               new ButtonBuilder()
-                .setCustomId(`button-tickets-delete_${system._id.toString()}`)
+                .setCustomId(`button-tickets-delete_${group._id.toString()}`)
                 .setLabel(t('ticket.delete', { lng: guildLng }))
                 .setEmoji('🗑️')
                 .setStyle(ButtonStyle.Danger)

@@ -119,8 +119,8 @@
       }
     ]
   },
-  "ticket": {
-    "name": "ticket-systems",
+  "tickets": {
+    "name": "tickets",
     "description": "Configure the ticket module",
     "options": [
       {
@@ -141,11 +141,11 @@
       },
       {
         "name": "delete",
-        "description": "Delete a ticket system",
+        "description": "Delete a ticket group",
         "options": [
           {
-            "name": "system-id",
-            "description": "The id of the ticket system to delete"
+            "name": "group-id",
+            "description": "The id of the ticket group to delete"
           }
         ]
       }

@@ -1,8 +1,107 @@
 import type { Types, UpdateQuery } from 'mongoose';
 
-import { ticketModel } from 'models/ticket';
+import { ticketConfigModel, ticketGroupModel, ticketModel } from 'models/ticket';
 
-import type { TicketDocument } from 'types/ticket';
+import { updateGuildSettings } from 'db/guild';
+import type { TicketChoice, TicketConfigDocument, TicketDocument, TicketGroupDocument } from 'types/ticket';
+
+/**
+ * Gets the ticket config
+ * @param {string} guildId Guild ID to get the ticket config for
+ * @returns {Promise<TicketConfigDocument | null>} Ticket config or null if not found
+ */
+export async function getTicketConfig(guildId: string): Promise<TicketConfigDocument | null> {
+  return await ticketConfigModel.findOne({ guildId }, {}, { upsert: false }).lean().exec();
+}
+
+/**
+ * Enables the ticket config
+ * @param {string} guildId Guild ID to enable the ticket config for
+ * @returns {Promise<TicketConfigDocument>} Updated ticket config
+ */
+export async function enableTicketModule(guildId: string): Promise<TicketConfigDocument> {
+  const document = await ticketConfigModel
+    .findOneAndUpdate({ guildId }, { $set: { enabled: true } }, { upsert: true, new: true })
+    .lean()
+    .exec();
+
+  await updateGuildSettings(guildId, { $set: { ticket: document._id } });
+
+  return document;
+}
+
+/**
+ * Disables the ticket config
+ * @param {string} guildId Guild ID to disable the ticket config for
+ * @returns {Promise<TicketConfigDocument>} Updated ticket config
+ */
+export async function disableTicketModule(guildId: string): Promise<TicketConfigDocument> {
+  const document = await ticketConfigModel
+    .findOneAndUpdate({ guildId }, { $set: { enabled: false } }, { upsert: true, new: true })
+    .lean()
+    .exec();
+
+  await updateGuildSettings(guildId, { $set: { ticket: document._id } });
+
+  return document;
+}
+
+/**
+ * Deletes a ticket group
+ * @param {string} guildId Guild ID to delete the ticket group for
+ * @param {Types.ObjectId | string} groupId Ticket group ID to delete
+ * @returns {Promise<void>} Promise that resolves when the ticket group is deleted
+ */
+export async function deleteTicketGroup(guildId: string, groupId: Types.ObjectId | string): Promise<void> {
+  const document = await ticketConfigModel.findOneAndUpdate({ guildId }, { $pull: { systems: { _id: groupId } } }, { upsert: true });
+  await updateGuildSettings(guildId, { $set: { ticket: document?._id } });
+  await ticketGroupModel.findByIdAndDelete(groupId);
+}
+
+/**
+ * Creates a ticket group
+ * @param {string} guildId Guild ID to create the ticket group for
+ * @param {string} staffRoleId
+ * @param {string} transcriptChannelId
+ * @param {string} channelId
+ * @param {string} parentChannelId
+ * @param {TicketChoice[]} choices
+ * @param {number} maxTickets
+ * @returns {Promise<TicketGroupDocument>} Created ticket group
+ */
+export async function createTicketGroup(
+  guildId: string,
+  staffRoleId: string,
+  choices: TicketChoice[],
+  maxTickets: number,
+  channelId: string,
+  transcriptChannelId?: string,
+  parentChannelId?: string
+): Promise<TicketGroupDocument> {
+  const document = await ticketGroupModel.create({
+    guildId,
+    staffRoleId,
+    transcriptChannelId,
+    channelId,
+    parentChannelId,
+    choices,
+    maxTickets
+  });
+
+  const configDocument = await ticketConfigModel.findOneAndUpdate({ guildId }, { $push: { groups: document._id } }, { upsert: true });
+  await updateGuildSettings(guildId, { $set: { ticket: configDocument?._id } });
+
+  return document;
+}
+
+/**
+ * Gets the ticket group by its ID
+ * @param {string} groupId Group ID of the ticket group
+ * @returns {Promise<TicketGroupDocument | null>} Ticket group or null if not found
+ */
+export async function getTicketGroup(groupId: Types.ObjectId | string): Promise<TicketGroupDocument | null> {
+  return await ticketGroupModel.findById(groupId).lean().exec();
+}
 
 /**
  * Gets the ticket by its channel ID
@@ -67,7 +166,7 @@ export async function getTicketsByUser(guildId: string, createdBy: string): Prom
  * @returns {Promise<TicketDocument | null>} Updated ticket
  */
 export async function updateTicket(channelId: string, query: UpdateQuery<TicketDocument>): Promise<TicketDocument | null> {
-  return await ticketModel.findOneAndUpdate({ channelId }, query).lean().exec();
+  return await ticketModel.findOneAndUpdate({ channelId }, query, { upsert: false, new: true }).lean().exec();
 }
 
 /**

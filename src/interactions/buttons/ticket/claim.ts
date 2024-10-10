@@ -3,8 +3,8 @@ import { t } from 'i18next';
 
 import { Button } from 'classes/button';
 
-import { getGuildSettings } from 'db/guild';
-import { claimTicket, findTicket } from 'db/ticket';
+import { getGuildLanguage } from 'db/language';
+import { claimTicket, findTicket, getTicketGroup } from 'db/ticket';
 
 export default new Button({
   customId: 'button-tickets-claim',
@@ -16,15 +16,13 @@ export default new Button({
 
     const { user, guildId, channelId, customId, member } = interaction;
 
-    const currentConfig = await getGuildSettings(guildId);
+    const guildLng = await getGuildLanguage(guildId);
 
-    const guildLng = currentConfig.language;
+    const group = await getTicketGroup(customId.split('_')[1]);
 
-    const system = currentConfig.ticket.systems.find((system) => system._id.toString() === customId.split('_')[1]);
-
-    if (!system) {
+    if (!group) {
       await interaction.reply({
-        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid-system', { lng }))],
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid-group', { lng }))],
         ephemeral: true
       });
       return;
@@ -41,7 +39,7 @@ export default new Button({
     }
 
     if (!member.permissions.has(PermissionFlagsBits.Administrator)) {
-      if (!member.roles.cache.has(system.staffRoleId)) {
+      if (!member.roles.cache.has(group.staffRoleId)) {
         await interaction.reply({
           embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.staff-only', { lng }))],
           ephemeral: true

@@ -307,14 +307,14 @@
       "success": "Das Ticket-Modul wurde deaktiviert."
     },
     "remove": {
-      "invalid": "Das angegebene Ticket-System existiert nicht!",
-      "success": "Das Ticket-System wurde gelöscht."
+      "invalid": "Das angegebene Ticket-Gruppe existiert nicht!",
+      "success": "Das Ticket-Gruppe wurde gelöscht."
     },
     "info": {
       "state": "Status",
       "none": "Es gibt keine zu zeigen...",
       "displayed": "Im Embed unten angezeigt.",
-      "systems": "Ticket-Systeme",
+      "groups": "Ticket-Gruppen",
       "id": "ID: {{id}}",
       "staff": "Teammitglied-Rolle: {{role}}",
       "max": "Max Tickets: {{max}}",
@@ -324,7 +324,7 @@
       "category": "Kategorie: {{channel}}"
     },
     "setup": {
-      "limit": "Du kannst nicht mehr als 5 Ticket-Systeme haben!",
+      "limit": "Du kannst nicht mehr als 5 Ticket-Gruppen haben!",
       "required": "Diese Option ist erforderlich.",
       "optional": "Diese Option ist optional.",
       "continue": "Fortfahren",
@@ -335,7 +335,7 @@
     },
     "staff": {
       "placeholder": "Rolle auswählen",
-      "description": "Wähle eine Rolle, die als Teammitglied für das Ticket-System ausgewählt werden soll.\nDie Teammitglieder-Rolle ist die Rolle, die Tickets beanspruchen und schließen kann.",
+      "description": "Wähle eine Rolle, die als Teammitglied für das Ticket-Gruppe ausgewählt werden soll.\nDie Teammitglieder-Rolle ist die Rolle, die Tickets beanspruchen und schließen kann.",
       "none": "Du musst eine Rolle auswählen, bevor du fortfährst!",
       "selected": "Du hast die Rolle {{role}} ausgewählt.",
       "continue": "Drücke auf Weiter, um mit der ausgewählten Rolle fortzufahren."
@@ -358,7 +358,7 @@
       "continue": "Drücke auf Weiter, um mit dem ausgewählten Kanal fortzufahren."
     },
     "choices": {
-      "description": "Wähle die Auswahlmöglichkeiten für das Ticket-System.\nJede Auswahl wird ein Knopf auf der Nachricht im Kanal sein.",
+      "description": "Wähle die Auswahlmöglichkeiten für das Ticket-Gruppe.\nJede Auswahl wird ein Knopf auf der Nachricht im Kanal sein.",
       "none": "Du musst zwischen 1 und {{max}} Auswahlmöglichkeiten haben, bevor du fortfährst!",
       "limit": "Du kannst nicht mehr als {{max}} Auswahlmöglichkeiten haben!",
       "length": "Es gibt keine Auswahl, die entfernt werden kann!",
@@ -404,7 +404,7 @@
     "already-closed": "Dieses Ticket wurde bereits geschlossen!",
     "limit": "Du kannst nicht mehr als {{limit}} offene Tickets haben!",
     "invalid-option": "Ungültige Option!",
-    "invalid-system": "Dieses Ticket System konnte nicht gefunden werden oder existiert nicht mehr!",
+    "invalid-group": "Dieses Ticket Gruppe konnte nicht gefunden werden oder existiert nicht mehr!",
     "created-channel": "Bitte sende relevante Informationen, bevor ein Teammitglied da ist.\nDies beschleunigt den Prozess und macht es leichter für das Team, dein Problem zu lösen.",
     "user-select": "Benutzer zum Ticket hinzufügen/entfernen",
     "created-user": "Ein Kanal ({{channel}}) wurde für dich erstellt!",
@@ -435,7 +435,8 @@
     "claim": "Beanspruchen",
     "close": "Schließen",
     "lock": "Sperren",
-    "unlock": "Entsperren"
+    "unlock": "Entsperren",
+    "create-disabled": "Es kann kein Ticket erstellt werden.\nDas Ticket-Modul ist derzeit deaktiviert."
   },
   "commands": {
     "placeholder": "Wähle eine Kategorie",

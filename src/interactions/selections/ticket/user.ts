@@ -3,9 +3,8 @@ import { t } from 'i18next';
 
 import { Selection } from 'classes/selection';
 
-import { getGuildSettings } from 'db/guild';
-import { addUserToTicket, removeUserFromTicket } from 'db/ticket';
-import { ticketModel } from 'models/ticket';
+import { getGuildLanguage } from 'db/language';
+import { addUserToTicket, findTicket, getTicketGroup, removeUserFromTicket } from 'db/ticket';
 
 export default new Selection({
   customId: 'selection-tickets-user',
@@ -25,21 +24,19 @@ export default new Selection({
 
     const targetMember = interaction.guild.members.cache.get(targetId);
 
-    const currentConfig = await getGuildSettings(guildId);
+    const guildLng = await getGuildLanguage(guildId);
 
-    const guildLng = currentConfig.language;
+    const group = await getTicketGroup(customId.split('_')[1]);
 
-    const system = currentConfig.ticket.systems.find((system) => system._id.toString() === customId.split('_')[1]);
-
-    if (!system) {
+    if (!group) {
       await interaction.reply({
-        content: t('ticket.invalid-system', { lng }),
+        content: t('ticket.invalid-group', { lng }),
         ephemeral: true
       });
       return;
     }
 
-    const ticket = await ticketModel.findOne({ channelId: interaction.channel?.id });
+    const ticket = await findTicket(interaction.channel!.id);
 
     if (!ticket) {
       await interaction.reply({
@@ -57,7 +54,7 @@ export default new Selection({
       return;
     }
 
-    if (user.id !== ticket.createdBy || !member.roles.cache.has(system.staffRoleId)) {
+    if (user.id !== ticket.createdBy || !member.roles.cache.has(group.staffRoleId)) {
       await interaction.reply({ content: t('ticket.user-permissions', { lng }) });
       return;
     }
@@ -70,7 +67,7 @@ export default new Selection({
       return;
     }
 
-    if (targetMember.roles.cache.has(system.staffRoleId)) {
+    if (targetMember.roles.cache.has(group.staffRoleId)) {
       await interaction.reply({
         content: t('ticket.user-staff', { lng }),
         ephemeral: true

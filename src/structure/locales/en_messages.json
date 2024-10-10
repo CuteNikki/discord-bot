@@ -307,14 +307,14 @@
       "success": "The ticket module has been disabled."
     },
     "remove": {
-      "invalid": "The specified ticket system does not exist!",
-      "success": "The ticket system has been deleted."
+      "invalid": "The specified ticket group does not exist!",
+      "success": "The ticket group has been deleted."
     },
     "info": {
       "state": "State",
       "none": "There are none to show...",
       "displayed": "Displayed in the embeds below.",
-      "systems": "Ticket Systems",
+      "groups": "Ticket Groups",
       "id": "ID: {{id}}",
       "staff": "Staff role: {{role}}",
       "max": "Max tickets: {{max}}",
@@ -324,7 +324,7 @@
       "category": "Category: {{channel}}"
     },
     "setup": {
-      "limit": "You cannot have more than 5 ticket systems!",
+      "limit": "You cannot have more than 5 ticket groups!",
       "required": "This option is required.",
       "optional": "This option is optional.",
       "continue": "Continue",
@@ -335,7 +335,7 @@
     },
     "staff": {
       "placeholder": "Select a role",
-      "description": "Select a role to be the staff role for the ticket system.\nThe staff role is the role that can claim tickets and close them.",
+      "description": "Select a role to be the staff role for the ticket group.\nThe staff role is the role that can claim tickets and close them.",
       "none": "You must select a role before continuing!",
       "selected": "You selected the role {{role}}",
       "continue": "Press continue to proceed with selected role."
@@ -358,7 +358,7 @@
       "continue": "Press continue to proceed with selected channel."
     },
     "choices": {
-      "description": "Select the choices for the ticket system.\nEach choice will be a button on the create message in the channel you will select next.",
+      "description": "Select the choices for the ticket group.\nEach choice will be a button on the create message in the channel you will select next.",
       "none": "You must have between 1 and {{max}} choices before continuing!",
       "limit": "You cannot have more than {{max}} choices!",
       "length": "There are no choices to remove!",
@@ -404,7 +404,7 @@
     "already-closed": "This ticket has already been closed!",
     "limit": "You cannot have more than {{limit}} tickets!",
     "invalid-option": "Invalid option!",
-    "invalid-system": "That ticket system could not be found or does not exist anymore!",
+    "invalid-group": "That ticket group could not be found or does not exist anymore!",
     "created-channel": "Please send relevant information already before a staff member is here.\nThis speeds up the process and makes it easier for the staff to solve your issue.",
     "user-select": "Add/Remove a user from the ticket",
     "created-user": "A channel ({{channel}}) has been created for you!",
@@ -435,7 +435,8 @@
     "claim": "Claim",
     "close": "Close",
     "lock": "Lock",
-    "unlock": "Unlock"
+    "unlock": "Unlock",
+    "create-disabled": "A ticket cannot be created.\nThe ticket module is currently disabled."
   },
   "commands": {
     "placeholder": "Select a category",

@@ -119,8 +119,8 @@
       }
     ]
   },
-  "ticket": {
-    "name": "ticket-systems",
+  "tickets": {
+    "name": "tickets",
     "description": "Konfiguriere das Ticket-Modul",
     "options": [
       {
@@ -141,11 +141,11 @@
       },
       {
         "name": "löschen",
-        "description": "Lösche ein Ticket-System",
+        "description": "Lösche ein Ticket-Gruppe",
         "options": [
           {
-            "name": "system-id",
-            "description": "Die ID des Systems, dass entfernt werden soll"
+            "name": "gruppen-id",
+            "description": "Die ID der Gruppe, dass entfernt werden soll"
           }
         ]
       }

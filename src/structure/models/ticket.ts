@@ -1,6 +1,6 @@
-import mongoose, { Model, model, Schema } from 'mongoose';
+import mongoose, { Model, model, Schema, Types } from 'mongoose';
 
-import type { TicketDocument } from 'types/ticket';
+import type { TicketConfigDocument, TicketDocument, TicketGroupDocument } from 'types/ticket';
 
 export const ticketModel: Model<TicketDocument> =
   mongoose.models['ticket'] ||
@@ -16,5 +16,30 @@ export const ticketModel: Model<TicketDocument> =
       locked: { type: Boolean, default: false },
       users: { type: [{ type: String, required: true }], required: true },
       choice: { type: String, required: true }
+    })
+  );
+
+export const ticketGroupModel: Model<TicketGroupDocument> =
+  mongoose.models['ticket_group'] ||
+  model<TicketGroupDocument>(
+    'ticket_group',
+    new Schema<TicketGroupDocument>({
+      maxTickets: { type: Number, required: true },
+      transcriptChannelId: { type: String, required: true },
+      parentChannelId: { type: String, required: true },
+      staffRoleId: { type: String, required: true },
+      choices: [{ type: Types.ObjectId, ref: 'ticket_choice' }],
+      channelId: { type: String, required: true }
+    })
+  );
+
+export const ticketConfigModel: Model<TicketConfigDocument> =
+  mongoose.models['ticket_config'] ||
+  model<TicketConfigDocument>(
+    'ticket_config',
+    new Schema<TicketConfigDocument>({
+      guildId: { type: String, required: true, unique: true },
+      enabled: { type: Boolean, default: false, required: true },
+      groups: [{ type: Types.ObjectId, ref: 'ticket_group' }]
     })
   );

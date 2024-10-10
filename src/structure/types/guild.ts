@@ -1,4 +1,3 @@
-import type { ButtonStyle } from 'discord.js';
 import type { Types } from 'mongoose';
 
 export enum AnnouncementType {
@@ -86,22 +85,6 @@ export type LevelReward = {
   _id: Types.ObjectId;
 };
 
-export type TicketChoice = {
-  label: string;
-  style: ButtonStyle;
-  emoji?: string;
-};
-
-export type TicketSystem = {
-  _id: Types.ObjectId;
-  maxTickets: number;
-  transcriptChannelId: string;
-  parentChannelId: string;
-  staffRoleId: string;
-  choices: TicketChoice[];
-  channelId: string;
-};
-
 export type GuildDocument = {
   _id: Types.ObjectId;
   guildId: string;
@@ -110,6 +93,7 @@ export type GuildDocument = {
   starboard?: Types.ObjectId;
   reactionRoles?: Types.ObjectId;
   counting?: Types.ObjectId;
+  ticket?: Types.ObjectId;
   moderation: {
     enabled: boolean;
   };
@@ -121,10 +105,6 @@ export type GuildDocument = {
     ignoredChannels: string[];
     enabledChannels: string[];
     rewards: LevelReward[];
-  };
-  ticket: {
-    enabled: boolean;
-    systems: TicketSystem[];
   };
   welcome: {
     enabled: boolean;

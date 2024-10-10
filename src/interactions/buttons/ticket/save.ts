@@ -4,8 +4,8 @@ import { t } from 'i18next';
 
 import { Button } from 'classes/button';
 
-import { getGuildSettings } from 'db/guild';
-import { findTicket } from 'db/ticket';
+import { getGuildLanguage } from 'db/language';
+import { findTicket, getTicketGroup } from 'db/ticket';
 
 import { logger } from 'utils/logger';
 
@@ -19,15 +19,13 @@ export default new Button({
 
     const { guildId, customId, member, channelId } = interaction;
 
-    const currentConfig = await getGuildSettings(guildId);
+    const guildLng = await getGuildLanguage(guildId);
 
-    const guildLng = currentConfig.language;
+    const group = await getTicketGroup(customId.split('_')[1]);
 
-    const system = currentConfig.ticket.systems.find((system) => system._id.toString() === customId.split('_')[1]);
-
-    if (!system) {
+    if (!group) {
       await interaction.reply({
-        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid-system', { lng }))],
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid-group', { lng }))],
         ephemeral: true
       });
       return;
@@ -44,7 +42,7 @@ export default new Button({
     }
 
     if (!member.permissions.has(PermissionFlagsBits.Administrator)) {
-      if (!member.roles.cache.has(system.staffRoleId)) {
+      if (!member.roles.cache.has(group.staffRoleId)) {
         await interaction.reply({
           embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.staff-only', { lng }))],
           ephemeral: true
@@ -62,7 +60,7 @@ export default new Button({
       poweredBy: false
     });
 
-    if (!system.transcriptChannelId) {
+    if (!group.transcriptChannelId) {
       await interaction.reply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid-transcript-channel', { lng: guildLng }))],
         files: [transcript]
@@ -70,7 +68,7 @@ export default new Button({
       return;
     }
 
-    const channel = interaction.guild.channels.cache.get(system.transcriptChannelId);
+    const channel = interaction.guild.channels.cache.get(group.transcriptChannelId);
 
     if (!channel?.isSendable()) {
       await interaction.reply({

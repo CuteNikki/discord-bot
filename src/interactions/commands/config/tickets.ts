@@ -24,42 +24,44 @@ import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
-import { getGuildSettings, updateGuildSettings } from 'db/guild';
+import { getGuildLanguage } from 'db/language';
+import { createTicketGroup, deleteTicketGroup, disableTicketModule, enableTicketModule, getTicketConfig } from 'db/ticket';
 
-import type { TicketChoice } from 'types/guild';
+import type { TicketChoice } from 'types/ticket';
 
 import { logger } from 'utils/logger';
 
 const TIMEOUT_DURATION = 60_000; // Constant for the timeout duration
 const MAX_CHOICES = 5; // Discord has a max of 5 buttons in a row
-const MAX_SYSTEMS = 5; // Limit the amount of ticket systems
+const MAX_GROUPS = 5; // Limit the amount of ticket groups
 const MAX_TICKETS = 2; // The default amount of tickets a user can have open at the same time
 
 export default new Command({
   module: ModuleType.Config,
   botPermissions: ['SendMessages', 'ManageChannels'],
   data: new SlashCommandBuilder()
-    .setName('ticket-systems')
+    .setName('tickets')
     .setDescription('Configure the ticket module')
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels)
     .setContexts(InteractionContextType.Guild)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
     .addSubcommand((cmd) => cmd.setName('enable').setDescription('Enable the ticket module'))
     .addSubcommand((cmd) => cmd.setName('disable').setDescription('Disable the ticket module'))
-    .addSubcommand((cmd) => cmd.setName('setup').setDescription('Start the setup process for a ticket system'))
-    .addSubcommand((cmd) => cmd.setName('info').setDescription('Show information about the ticket systems'))
+    .addSubcommand((cmd) => cmd.setName('setup').setDescription('Start the setup process for a ticket group'))
+    .addSubcommand((cmd) => cmd.setName('info').setDescription('Show information about the ticket groups'))
     .addSubcommand((cmd) =>
       cmd
         .setName('delete')
-        .setDescription('Delete a ticket system')
-        .addStringOption((opt) => opt.setName('system-id').setDescription('The id of the ticket system to delete').setRequired(true))
+        .setDescription('Delete a ticket group')
+        .addStringOption((opt) => opt.setName('group-id').setDescription('The id of the ticket group to delete').setRequired(true))
     ),
   async execute({ interaction, client, lng }) {
     if (!interaction.inCachedGuild()) return;
     await interaction.deferReply();
 
     const { options, user, guild } = interaction;
-    const config = await getGuildSettings(guild.id);
+    // const config = await getGuildSettings(guild.id);
+    const config = (await getTicketConfig(guild.id)) ?? { enabled: false, groups: [] };
 
     // Subcommand handling
     switch (options.getSubcommand()) {
@@ -83,14 +85,14 @@ export default new Command({
     // Function declarations
 
     async function handleEnable() {
-      if (config.ticket.enabled) {
+      if (config.enabled) {
         await interaction
           .editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.enable.already', { lng }))] })
           .catch((err) => logger.debug(err, 'Could not edit reply'));
         return;
       }
 
-      await updateGuildSettings(guild.id, { $set: { ['ticket.enabled']: true } });
+      await enableTicketModule(guild.id);
 
       await interaction
         .editReply({ embeds: [new EmbedBuilder().setColor(client.colors.ticket).setDescription(t('ticket.enable.success', { lng }))] })
@@ -98,14 +100,14 @@ export default new Command({
     }
 
     async function handleDisable() {
-      if (!config.ticket.enabled) {
+      if (!config.enabled) {
         await interaction
           .editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.disable.already', { lng }))] })
           .catch((err) => logger.debug(err, 'Could not edit reply'));
         return;
       }
 
-      await updateGuildSettings(guild.id, { $set: { ['ticket.enabled']: false } });
+      await disableTicketModule(guild.id);
 
       await interaction
         .editReply({ embeds: [new EmbedBuilder().setColor(client.colors.ticket).setDescription(t('ticket.disable.success', { lng }))] })
@@ -113,16 +115,16 @@ export default new Command({
     }
 
     async function handleDelete() {
-      const systemId = interaction.options.getString('system-id');
+      const groupId = interaction.options.getString('group-id', true);
 
-      if (!config.ticket.systems.find((system) => system._id.toString() === systemId)) {
+      if (!config.groups.find((group) => group._id.toString() === groupId)) {
         await interaction
           .editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.remove.invalid', { lng }))] })
           .catch((err) => logger.debug(err, 'Could not edit reply'));
         return;
       }
 
-      await updateGuildSettings(guild.id, { $pull: { ['ticket.systems']: { _id: systemId } } });
+      await deleteTicketGroup(guild.id, groupId);
 
       await interaction
         .editReply({ embeds: [new EmbedBuilder().setColor(client.colors.ticket).setDescription(t('ticket.remove.success', { lng }))] })
@@ -130,17 +132,15 @@ export default new Command({
     }
 
     async function handleInfo() {
-      const systems = config.ticket.systems;
-
-      if (!systems.length) {
+      if (!config.groups) {
         interaction
           .editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.info.none', { lng }))] })
           .catch((err) => logger.debug(err, 'Could not edit reply'));
         return;
       }
 
-      const embeds = systems.map((system) => {
-        const { _id, maxTickets, transcriptChannelId, staffRoleId, choices, channelId, parentChannelId } = system;
+      const embeds = config.groups.map((group) => {
+        const { _id, maxTickets, transcriptChannelId, staffRoleId, choices, channelId, parentChannelId } = group;
         return new EmbedBuilder()
           .setColor(client.colors.ticket)
           .setTitle(t('ticket.info.id', { lng, id: _id.toString() }))
@@ -166,11 +166,11 @@ export default new Command({
             new EmbedBuilder().setColor(client.colors.ticket).addFields(
               {
                 name: t('ticket.info.state', { lng }),
-                value: config.ticket.enabled ? t('enabled', { lng }) : t('disabled', { lng })
+                value: config.enabled ? t('enabled', { lng }) : t('disabled', { lng })
               },
               {
-                name: `${t('ticket.info.systems', { lng })} (${systems.length}/${MAX_SYSTEMS})`,
-                value: systems.length ? t('ticket.info.displayed', { lng }) : t('ticket.info.none', { lng })
+                name: `${t('ticket.info.groups', { lng })} (${config.groups.length}/${MAX_GROUPS})`,
+                value: config.groups.length ? t('ticket.info.displayed', { lng }) : t('ticket.info.none', { lng })
               }
             ),
             ...embeds
@@ -180,7 +180,7 @@ export default new Command({
     } // End of infoSubcommand
 
     async function handleSetup() {
-      if (config.ticket.systems.length >= MAX_SYSTEMS) {
+      if (config.groups.length >= MAX_GROUPS) {
         await interaction
           .editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.setup.limit', { lng }))] })
           .catch((err) => logger.debug(err, 'Could not edit reply'));
@@ -512,7 +512,7 @@ export default new Command({
         choicesCollector.on('collect', async (choicesInteraction) => {
           // If continue is pressed
           if (choicesInteraction.customId === 'button-ticket-choices-continue') {
-            if (!choices.length || choices.length > MAX_SYSTEMS) {
+            if (!choices.length || choices.length > MAX_GROUPS) {
               await choicesInteraction
                 .reply({
                   embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.choices.none', { lng, max: MAX_CHOICES.toString() }))],
@@ -943,34 +943,23 @@ export default new Command({
       } // End of handleChannel
 
       async function handleSubmit() {
-        const updatedConfig = await updateGuildSettings(guild.id, {
-          $push: {
-            ['ticket.systems']: {
-              staffRoleId: staffRole?.id,
-              transcriptChannelId: transcriptChannel?.id,
-              channelId: channel?.id,
-              parentChannelId: category?.id,
-              choices,
-              maxTickets
-            }
-          }
-        });
+        const guildLng = await getGuildLanguage(guild.id);
 
-        const system = updatedConfig.ticket.systems.find((system) => !config.ticket.systems.map((s) => s._id.toString()).includes(system._id.toString()));
+        const newGroup = await createTicketGroup(guild.id, staffRole!.id, choices, maxTickets, channel!.id, transcriptChannel?.id, category?.id);
 
         const msg = await channel
           ?.send({
             embeds: [
               new EmbedBuilder()
                 .setColor(client.colors.general)
-                .setTitle(t('ticket.message.title', { lng: config.language }))
-                .setDescription(t('ticket.message.description', { lng: config.language }))
+                .setTitle(t('ticket.message.title', { lng: guildLng }))
+                .setDescription(t('ticket.message.description', { lng: guildLng }))
             ],
             components: [
               new ActionRowBuilder<ButtonBuilder>().addComponents(
                 choices.map((choice, index) => {
                   const button = new ButtonBuilder()
-                    .setCustomId(`button-tickets-create_${system?._id?.toString()}_${index}`)
+                    .setCustomId(`button-tickets-create_${newGroup._id.toString()}_${index}`)
                     .setLabel(choice.label)
                     .setStyle(choice.style);
                   if (choice.emoji) button.setEmoji(choice.emoji);
@@ -998,7 +987,7 @@ export default new Command({
                 .setTitle(
                   t('ticket.info.id', {
                     lng,
-                    id: system?._id?.toString()
+                    id: newGroup._id.toString()
                   })
                 )
                 .setDescription(

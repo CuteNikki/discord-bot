@@ -3,8 +3,8 @@ import { t } from 'i18next';
 
 import { Button } from 'classes/button';
 
-import { getGuildSettings } from 'db/guild';
-import { createTicket, deleteTicketById, getTicketsByUser } from 'db/ticket';
+import { getGuildLanguage } from 'db/language';
+import { createTicket, deleteTicketById, getTicketConfig, getTicketGroup, getTicketsByUser } from 'db/ticket';
 
 import { logger } from 'utils/logger';
 
@@ -21,15 +21,20 @@ export default new Button({
     const { user, guildId, customId, guild } = interaction;
     const choiceIndex = parseInt(customId.split('_')[2]);
 
-    const currentConfig = await getGuildSettings(guildId);
+    const config = await getTicketConfig(guildId);
 
-    const guildLng = currentConfig.language;
+    if (!config?.enabled) {
+      await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.create-disabled', { lng }))] });
+      return;
+    }
 
-    const system = currentConfig.ticket.systems.find((system) => system._id.toString() === customId.split('_')[1]);
+    const guildLng = await getGuildLanguage(guildId);
 
-    if (!system) {
+    const group = await getTicketGroup(customId.split('_')[1]);
+
+    if (!group) {
       await interaction.editReply({
-        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid-system', { lng }))],
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid-group', { lng }))]
       });
       return;
     }
@@ -44,16 +49,16 @@ export default new Button({
       }
     }
 
-    if (tickets.length >= system.maxTickets) {
+    if (tickets.length >= group.maxTickets) {
       await interaction.editReply({
-        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.limit', { lng, limit: system.maxTickets.toString() }))]
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.limit', { lng, limit: group.maxTickets.toString() }))]
       });
       return;
     }
 
-    const choice = system.choices[choiceIndex];
+    const choice = group.choices[choiceIndex];
 
-    if (!system.choices.length || !choice) {
+    if (!group.choices.length || !choice) {
       await interaction.editReply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid-option', { lng }))]
       });
@@ -64,7 +69,7 @@ export default new Button({
       .create({
         name: `${user.username}-${choice.label}`,
         type: ChannelType.GuildText,
-        parent: system.parentChannelId,
+        parent: group.parentChannelId,
         permissionOverwrites: [
           {
             id: guildId,
@@ -72,7 +77,7 @@ export default new Button({
             deny: [PermissionFlagsBits.ViewChannel]
           },
           {
-            id: system.staffRoleId,
+            id: group.staffRoleId,
             type: 0,
             allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages, PermissionFlagsBits.EmbedLinks, PermissionFlagsBits.AttachFiles]
           },
@@ -103,31 +108,31 @@ export default new Button({
 
     await channel
       .send({
-        content: `${interaction.user} | <@&${system.staffRoleId}>`,
+        content: `${interaction.user} | <@&${group.staffRoleId}>`,
         embeds: [
           new EmbedBuilder().setColor(client.colors.ticket).setDescription(`${t('ticket.created-channel', { lng: guildLng, createdBy: user.toString() })}`)
         ],
         components: [
           new ActionRowBuilder<ButtonBuilder>().addComponents(
             new ButtonBuilder()
-              .setCustomId(`button-tickets-claim_${system._id.toString()}`)
+              .setCustomId(`button-tickets-claim_${group._id.toString()}`)
               .setLabel(t('ticket.claim', { lng: guildLng }))
               .setEmoji('✋')
               .setStyle(ButtonStyle.Success),
             new ButtonBuilder()
-              .setCustomId(`button-tickets-close_${system._id.toString()}`)
+              .setCustomId(`button-tickets-close_${group._id.toString()}`)
               .setLabel(t('ticket.close', { lng: guildLng }))
               .setEmoji('🛑')
               .setStyle(ButtonStyle.Danger),
             new ButtonBuilder()
-              .setCustomId(`button-tickets-lock_${system._id.toString()}`)
+              .setCustomId(`button-tickets-lock_${group._id.toString()}`)
               .setLabel(t('ticket.lock', { lng: guildLng }))
               .setEmoji('🔐')
               .setStyle(ButtonStyle.Primary)
           ),
           new ActionRowBuilder<UserSelectMenuBuilder>().addComponents(
             new UserSelectMenuBuilder()
-              .setCustomId(`selection-tickets-user_${system._id.toString()}`)
+              .setCustomId(`selection-tickets-user_${group._id.toString()}`)
               .setPlaceholder(t('ticket.user-select', { lng: guildLng }))
               .setMaxValues(1)
           )

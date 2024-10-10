@@ -3,9 +3,9 @@ import mongoose, { Model, model, Schema } from 'mongoose';
 import type { CountingDocument } from 'types/counting';
 
 export const countingModel: Model<CountingDocument> =
-  mongoose.models['counting'] ||
+  mongoose.models['counting_config'] ||
   model<CountingDocument>(
-    'counting',
+    'counting_config',
     new Schema<CountingDocument>({
       guildId: { type: String, required: true },
       channelId: { type: String, required: true },

@@ -15,15 +15,7 @@ import {
 
 import type { DiscordClient } from 'classes/client';
 
-export enum ModuleType {
-  Developer,
-  Moderation,
-  Level,
-  General,
-  Utilities,
-  Config,
-  Fun
-}
+import type { ModuleType } from 'types/interactions';
 
 type InteractionType<CommandType extends ApplicationCommandType> = CommandType extends ApplicationCommandType.ChatInput
   ? ChatInputCommandInteraction

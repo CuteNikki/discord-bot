@@ -13,12 +13,14 @@ import { t } from 'i18next';
 import mongoose from 'mongoose';
 import osu from 'node-os-utils';
 
-import { Command, ModuleType } from 'classes/command';
+import { Command } from 'classes/command';
 
 import { getClientSettings } from 'db/client';
 
 import { keys } from 'constants/keys';
 import { logger } from 'utils/logger';
+
+import { ModuleType } from 'types/interactions';
 
 export default new Command({
   module: ModuleType.General,

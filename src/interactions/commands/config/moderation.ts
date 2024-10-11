@@ -1,9 +1,11 @@
 import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, PermissionFlagsBits, roleMention, SlashCommandBuilder } from 'discord.js';
 import { t } from 'i18next';
 
-import { Command, ModuleType } from 'classes/command';
+import { Command } from 'classes/command';
 
 import { disableModeration, enableModeration, getModeration, makeReasonsOptional, makeReasonsRequired, setStaffrole } from 'db/moderation';
+
+import { ModuleType } from 'types/interactions';
 
 export default new Command({
   module: ModuleType.Config,

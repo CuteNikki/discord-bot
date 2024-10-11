@@ -1,6 +1,6 @@
 import { ApplicationIntegrationType, AttachmentBuilder, EmbedBuilder, InteractionContextType, SlashCommandBuilder, time, TimestampStyles } from 'discord.js';
 
-import { Command, ModuleType } from 'classes/command';
+import { Command } from 'classes/command';
 
 import {
   getClientSettings,
@@ -21,6 +21,8 @@ import { keys } from 'constants/keys';
 import { chunk } from 'utils/common';
 import { logger } from 'utils/logger';
 import { pagination } from 'utils/pagination';
+
+import { ModuleType } from 'types/interactions';
 
 export default new Command({
   module: ModuleType.Developer,

@@ -22,14 +22,15 @@ import {
 } from 'discord.js';
 import { t } from 'i18next';
 
-import { Command, ModuleType } from 'classes/command';
+import { Command } from 'classes/command';
 
 import { getGuildLanguage } from 'db/language';
 import { createTicketGroup, deleteTicketGroup, disableTicketModule, enableTicketModule, getTicketConfig } from 'db/ticket';
 
-import type { TicketChoice } from 'types/ticket';
-
 import { logger } from 'utils/logger';
+
+import { ModuleType } from 'types/interactions';
+import type { TicketChoice } from 'types/ticket';
 
 const TIMEOUT_DURATION = 60_000; // Constant for the timeout duration
 const MAX_CHOICES = 5; // Discord has a max of 5 buttons in a row

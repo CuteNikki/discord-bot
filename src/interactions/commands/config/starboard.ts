@@ -10,9 +10,11 @@ import {
 } from 'discord.js';
 import { t } from 'i18next';
 
-import { Command, ModuleType } from 'classes/command';
+import { Command } from 'classes/command';
 
 import { deleteStarboard, disableStarboard, enableStarboard, getStarboard, setupStarboard } from 'db/starboard';
+
+import { ModuleType } from 'types/interactions';
 
 export default new Command({
   module: ModuleType.Config,

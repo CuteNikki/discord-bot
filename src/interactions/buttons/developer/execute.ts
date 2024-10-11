@@ -2,7 +2,10 @@ import { ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } from
 
 import { Button } from 'classes/button';
 
+import { ModuleType } from 'types/interactions';
+
 export default new Button({
+  module: ModuleType.Developer,
   customId: 'button-execute-edit',
   isDeveloperOnly: true,
   async execute({ interaction }) {

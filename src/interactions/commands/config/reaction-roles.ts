@@ -21,14 +21,15 @@ import {
 import { t } from 'i18next';
 
 import type { DiscordClient } from 'classes/client';
-import { Command, ModuleType } from 'classes/command';
+import { Command } from 'classes/command';
 
 import { addReactionGroup, deleteReactionGroupById, disableReactionRoles, enableReactionRoles, getReactionRoles } from 'db/reaction-roles';
 
-import type { Reaction } from 'types/reaction-roles';
-
 import { chunk } from 'utils/common';
 import { logger } from 'utils/logger';
+
+import { ModuleType } from 'types/interactions';
+import type { Reaction } from 'types/reaction-roles';
 
 const TIMEOUT_DURATION = 60_000; // Constant for the timeout duration
 const MAX_ROLES = 20; // Constant for the maximum number of roles

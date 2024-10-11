@@ -1557,7 +1557,7 @@
     "developer-only": "Das können nur die Entwickler!",
     "cooldown": "Bitte warte, bis du {{action}} erneut benutzen kannst. Du kannst es erneut versuchen {{timestamp}}.",
     "error": "Etwas ist schief gelaufen! Fehler: {{error}}",
-    "module": "Du kannst diesen Befehl nur verwenden wenn das {{module}} Modul aktiviert ist!"
+    "module": "Du kannst das nur machen, wenn das {{module}}-Modul aktiviert ist!"
   },
   "pagination": "Komponenten wurden für {{time}} nicht benutzt und deaktiviert!",
   "enabled": "aktiviert",

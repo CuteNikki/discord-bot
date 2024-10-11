@@ -2,9 +2,12 @@ import type { ButtonInteraction, PermissionsString } from 'discord.js';
 
 import type { DiscordClient } from 'classes/client';
 
+import type { ModuleType } from 'types/interactions';
+
 export class Button {
   constructor(
     public options: {
+      module: ModuleType;
       customId: string;
       cooldown?: number; // Cooldown between button executes per user (in milliseconds)
       isDeveloperOnly?: boolean; // If true, can only be used by developers

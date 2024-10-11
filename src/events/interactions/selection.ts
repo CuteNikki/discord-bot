@@ -1,14 +1,17 @@
-import { Collection, EmbedBuilder, Events, inlineCode, PermissionsBitField, time, TimestampStyles } from 'discord.js';
+import { Collection, EmbedBuilder, Events, inlineCode, PermissionsBitField, time, TimestampStyles, type InteractionReplyOptions } from 'discord.js';
 import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
+import { getGuild } from 'db/guild';
 import { getUser } from 'db/user';
-
-import { keys } from 'constants/keys';
 
 import { sendError } from 'utils/error';
 import { supportedLanguages } from 'utils/language';
+
+import { keys } from 'constants/keys';
+
+import { ModuleType } from 'types/interactions';
 
 // Collection of cooldowns so interactions cannot be spammed
 // !! This should not be used for hourly or daily commands as it resets with each restart !!
@@ -49,6 +52,52 @@ export default new Event({
     // If we don't have a selection, we don't want to continue
     if (!selection) {
       return;
+    }
+
+    /**
+     * Module check
+     */
+    if (interaction.guild) {
+      const guildSettings = await getGuild(interaction.guild.id);
+
+      const message: InteractionReplyOptions = {
+        embeds: [
+          new EmbedBuilder().setColor(client.colors.error).setDescription(t('interactions.module', { lng, module: ModuleType[selection.options.module] }))
+        ],
+        ephemeral: true
+      };
+
+      switch (selection.options.module) {
+        case ModuleType.Moderation:
+          if (!guildSettings.moderation?.enabled) {
+            await interaction.reply(message);
+            return;
+          }
+          break;
+        case ModuleType.Level:
+          if (!guildSettings.level?.enabled) {
+            await interaction.reply(message);
+            return;
+          }
+          break;
+        case ModuleType.Welcome:
+          if (!guildSettings.welcome?.enabled) {
+            await interaction.reply(message);
+            return;
+          }
+          break;
+        case ModuleType.Farewell:
+          if (!guildSettings.farewell?.enabled) {
+            await interaction.reply(message);
+            return;
+          }
+          break;
+        case ModuleType.Ticket:
+          if (!guildSettings.ticket?.enabled) {
+            await interaction.reply(message);
+            return;
+          }
+      }
     }
 
     /**

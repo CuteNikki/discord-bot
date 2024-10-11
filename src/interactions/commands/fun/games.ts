@@ -1,6 +1,6 @@
 import { ApplicationIntegrationType, InteractionContextType, SlashCommandBuilder } from 'discord.js';
 
-import { Command, ModuleType } from 'classes/command';
+import { Command } from 'classes/command';
 
 import { WORDS } from 'constants/words';
 
@@ -15,6 +15,8 @@ import { Sokoban } from 'games/sokoban';
 import { Tetris } from 'games/tetris';
 import { TicTacToe } from 'games/tic-tac-toe';
 import { Trivia, TriviaDifficulty, TriviaMode } from 'games/trivia';
+
+import { ModuleType } from 'types/interactions';
 
 export default new Command({
   module: ModuleType.Fun,

@@ -1557,7 +1557,7 @@
     "developer-only": "This can only be done by developers!",
     "cooldown": "Please wait, you are on cooldown for {{action}}. You can use it again {{timestamp}}.",
     "error": "Something went wrong! Error: {{error}}",
-    "module": "You can only use this command if the {{module}} module is enabled!"
+    "module": "You can only use this if the {{module}} module is enabled!"
   },
   "pagination": "Components were not used for {{time}} and have been disabled!",
   "enabled": "enabled",

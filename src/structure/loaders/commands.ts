@@ -5,11 +5,14 @@ import { readdir } from 'node:fs/promises';
 import { performance } from 'perf_hooks';
 
 import type { DiscordClient } from 'classes/client';
-import { ModuleType, type Command } from 'classes/command';
+import type { Command } from 'classes/command';
 
-import { keys } from 'constants/keys';
 import { initTranslation } from 'utils/language';
 import { logger } from 'utils/logger';
+
+import { keys } from 'constants/keys';
+
+import { ModuleType } from 'types/interactions';
 
 export async function getCommandsCollection() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -1,8 +1,10 @@
 import { ApplicationIntegrationType, InteractionContextType, SlashCommandBuilder } from 'discord.js';
 
-import { Command, ModuleType } from 'classes/command';
+import { Command } from 'classes/command';
 
 import { handlePhoneConnection, handlePhoneDisconnect } from 'utils/phone';
+
+import { ModuleType } from 'types/interactions';
 
 export default new Command({
   module: ModuleType.Fun,

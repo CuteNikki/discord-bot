@@ -9,7 +9,9 @@ import {
 } from 'discord.js';
 import { t } from 'i18next';
 
-import { Command, ModuleType } from 'classes/command';
+import { Command } from 'classes/command';
+
+import { ModuleType } from 'types/interactions';
 
 export default new Command({
   module: ModuleType.General,

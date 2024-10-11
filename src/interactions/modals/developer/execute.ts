@@ -6,7 +6,10 @@ import { Modal } from 'classes/modal';
 
 import { logger } from 'utils/logger';
 
+import { ModuleType } from 'types/interactions';
+
 export default new Modal({
+  module: ModuleType.Developer,
   customId: 'modal-execute',
   isCustomIdIncluded: false,
   isDeveloperOnly: true,

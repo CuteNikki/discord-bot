@@ -5,13 +5,15 @@ import { Button } from 'classes/button';
 
 import { createInfraction } from 'db/infraction';
 import { getUserLanguage } from 'db/language';
-
-import { InfractionType } from 'types/infraction';
-
 import { getModeration } from 'db/moderation';
+
 import { logger } from 'utils/logger';
 
+import { InfractionType } from 'types/infraction';
+import { ModuleType } from 'types/interactions';
+
 export default new Button({
+  module: ModuleType.Moderation,
   customId: 'button-ban_',
   isAuthorOnly: false,
   isCustomIdIncluded: true,

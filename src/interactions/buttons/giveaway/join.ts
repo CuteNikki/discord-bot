@@ -8,7 +8,10 @@ import { getGuildLanguage } from 'db/language';
 
 import { logger } from 'utils/logger';
 
+import { ModuleType } from 'types/interactions';
+
 export default new Button({
+  module: ModuleType.Config,
   customId: 'button-giveaway-join',
   async execute({ interaction, client, lng }) {
     if (!interaction.inCachedGuild()) return;

@@ -5,7 +5,10 @@ import { Modal } from 'classes/modal';
 
 import { getGuild, updateGuild } from 'db/guild';
 
+import { ModuleType } from 'types/interactions';
+
 export default new Modal({
+  module: ModuleType.Welcome,
   customId: 'modal-welcome-remove-role',
   permissions: ['ManageGuild'],
   async execute({ client, interaction, lng }) {

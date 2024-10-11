@@ -1,10 +1,12 @@
 import { ApplicationCommandType, ApplicationIntegrationType, AttachmentBuilder, ContextMenuCommandBuilder, InteractionContextType } from 'discord.js';
 import { t } from 'i18next';
 
-import { Command, ModuleType } from 'classes/command';
+import { Command } from 'classes/command';
 import { RankCard } from 'classes/rank-card';
 
 import { convertLevelToExp, getLevelWithRank } from 'db/level';
+
+import { ModuleType } from 'types/interactions';
 
 const commandType = ApplicationCommandType.User;
 

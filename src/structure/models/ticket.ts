@@ -28,7 +28,7 @@ export const ticketGroupModel: Model<TicketGroupDocument> =
       transcriptChannelId: { type: String, required: true },
       parentChannelId: { type: String, required: true },
       staffRoleId: { type: String, required: true },
-      choices: [{ type: Types.ObjectId, ref: 'ticket_choice' }],
+      choices: [{ label: { type: String, required: true }, style: { type: Number, required: true }, emoji: { type: String, required: false } }],
       channelId: { type: String, required: true }
     })
   );

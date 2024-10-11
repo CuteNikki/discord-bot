@@ -3,7 +3,10 @@ import { t } from 'i18next';
 
 import { Button } from 'classes/button';
 
+import { ModuleType } from 'types/interactions';
+
 export default new Button({
+  module: ModuleType.Welcome,
   customId: 'button-welcome-add-role',
   permissions: ['ManageGuild'],
   isAuthorOnly: true,

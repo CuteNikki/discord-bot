@@ -5,8 +5,10 @@ import { Selection } from 'classes/selection';
 
 import { getGuildLanguage } from 'db/language';
 import { addUserToTicket, findTicket, getTicketGroup, removeUserFromTicket } from 'db/ticket';
+import { ModuleType } from 'types/interactions';
 
 export default new Selection({
+  module: ModuleType.Ticket,
   customId: 'selection-tickets-user',
   isCustomIdIncluded: true,
   permissions: [],

@@ -7,11 +7,13 @@ import { createInfraction } from 'db/infraction';
 import { getUserLanguage } from 'db/language';
 import { getModeration } from 'db/moderation';
 
-import { InfractionType } from 'types/infraction';
-
 import { logger } from 'utils/logger';
 
+import { InfractionType } from 'types/infraction';
+import { ModuleType } from 'types/interactions';
+
 export default new Button({
+  module: ModuleType.Moderation,
   customId: 'button-kick_',
   isAuthorOnly: false,
   isCustomIdIncluded: true,

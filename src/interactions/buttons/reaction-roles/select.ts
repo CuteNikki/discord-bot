@@ -5,7 +5,10 @@ import { Button } from 'classes/button';
 
 import { getReactionRoles } from 'db/reaction-roles';
 
+import { ModuleType } from 'types/interactions';
+
 export default new Button({
+  module: ModuleType.Config,
   customId: 'button-reaction-select',
   isCustomIdIncluded: true,
   botPermissions: ['ManageRoles'],

@@ -1,11 +1,13 @@
 import { ApplicationIntegrationType, EmbedBuilder, inlineCode, InteractionContextType, PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
 import { t } from 'i18next';
 
-import { Command, ModuleType } from 'classes/command';
+import { Command } from 'classes/command';
 
 import { getGuildLanguage, updateGuildLanguage, updateUserLanguage } from 'db/language';
 
 import { supportedLanguages } from 'utils/language';
+
+import { ModuleType } from 'types/interactions';
 
 export default new Command({
   module: ModuleType.General,

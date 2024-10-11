@@ -13,13 +13,15 @@ import {
 import { t } from 'i18next';
 import ms from 'ms';
 
-import { Command, ModuleType } from 'classes/command';
+import { Command } from 'classes/command';
 
 import { getUserLanguage } from 'db/language';
 
 import { chunk } from 'utils/common';
 import { logger } from 'utils/logger';
 import { pagination } from 'utils/pagination';
+
+import { ModuleType } from 'types/interactions';
 
 const TIMEOUT = 60_000;
 

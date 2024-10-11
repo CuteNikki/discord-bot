@@ -6,7 +6,10 @@ import { Button } from 'classes/button';
 import { getGuildLanguage } from 'db/language';
 import { claimTicket, findTicket, getTicketGroup } from 'db/ticket';
 
+import { ModuleType } from 'types/interactions';
+
 export default new Button({
+  module: ModuleType.Ticket,
   customId: 'button-tickets-claim',
   isCustomIdIncluded: true,
   permissions: [],

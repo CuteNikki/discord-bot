@@ -105,6 +105,7 @@ import { logger } from 'utils/logger';
 export default new Command({
   // The module this command belongs to.
   // It categorizes commands in the commands list.
+  // It disables this command if the module is disabled.
   module: ModuleType.General,
   // 1 second cooldown between command uses.
   cooldown: 1_000,
@@ -288,6 +289,8 @@ export default new Event({
 import { Button } from 'classes/button';
 
 export default new Button({
+  // The module this button belongs to.
+  module: ModuleType.General,
   // The custom identifier of the button.
   customId: 'ping',
   // If the button was received by a command, only the command sender can use this button.
@@ -323,7 +326,6 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
 
 ## TO-DO
 
-- [ ] Add ModuleType to buttons, selections and modals
 - [ ] Separate all objects from guild schema into separate models and then reconnect them using the ObjectId (use populate to get objects)
   - [x] custom-voice-setup
   - [x] reaction-roles

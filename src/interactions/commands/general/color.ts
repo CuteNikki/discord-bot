@@ -9,9 +9,11 @@ import {
 } from 'discord.js';
 import { t } from 'i18next';
 
-import { Command, ModuleType } from 'classes/command';
+import { Command } from 'classes/command';
 
 import { logger } from 'utils/logger';
+
+import { ModuleType } from 'types/interactions';
 
 export default new Command({
   // The module this command belongs to.

@@ -10,12 +10,14 @@ import {
 } from 'discord.js';
 import { t } from 'i18next';
 
-import { Command, ModuleType } from 'classes/command';
+import { Command } from 'classes/command';
 import { CustomEmbedBuilder, getEmbed, isEmptyEmbed } from 'classes/custom-embed';
 
 import { getGuild, updateGuild } from 'db/guild';
 
 import { logger } from 'utils/logger';
+
+import { ModuleType } from 'types/interactions';
 
 export default new Command({
   module: ModuleType.Config,

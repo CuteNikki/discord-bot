@@ -14,15 +14,16 @@ import {
 import { t } from 'i18next';
 import ms from 'ms';
 
-import { Command, ModuleType } from 'classes/command';
+import { Command } from 'classes/command';
 
 import { createInfraction } from 'db/infraction';
 import { getUserLanguage } from 'db/language';
 import { getModeration } from 'db/moderation';
 
-import { InfractionType } from 'types/infraction';
-
 import { logger } from 'utils/logger';
+
+import { InfractionType } from 'types/infraction';
+import { ModuleType } from 'types/interactions';
 
 export default new Command({
   module: ModuleType.Moderation,

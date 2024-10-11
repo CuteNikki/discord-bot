@@ -1,8 +1,10 @@
 import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
 
-import { Command, ModuleType } from 'classes/command';
+import { Command } from 'classes/command';
 
 import { registerCommands } from 'loaders/commands';
+
+import { ModuleType } from 'types/interactions';
 
 export default new Command({
   module: ModuleType.Developer,

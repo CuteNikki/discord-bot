@@ -12,13 +12,15 @@ import {
 } from 'discord.js';
 import { t } from 'i18next';
 
-import { Command, ModuleType } from 'classes/command';
+import { Command } from 'classes/command';
 
 import { getInfractions } from 'db/infraction';
 import { getModeration } from 'db/moderation';
 
 import { chunk } from 'utils/common';
 import { pagination } from 'utils/pagination';
+
+import { ModuleType } from 'types/interactions';
 
 const commandType = ApplicationCommandType.User;
 

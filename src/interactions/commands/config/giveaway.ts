@@ -14,12 +14,14 @@ import {
 import { t } from 'i18next';
 import ms from 'ms';
 
-import { Command, ModuleType } from 'classes/command';
+import { Command } from 'classes/command';
 
 import { createGiveaway, deleteGiveawayById, findGiveawayById, getGiveawayWinners, getGuildGiveaways, updateGiveawayById } from 'db/giveaway';
 import { getGuildLanguage } from 'db/language';
 
 import { logger } from 'utils/logger';
+
+import { ModuleType } from 'types/interactions';
 
 const MAX_GIVEAWAYS = 6;
 

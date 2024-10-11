@@ -2,9 +2,11 @@ import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, Slash
 import { t } from 'i18next';
 import ms from 'ms';
 
-import { Command, ModuleType } from 'classes/command';
+import { Command } from 'classes/command';
 
 import { createReminder, deleteReminder, getReminders } from 'db/reminder';
+
+import { ModuleType } from 'types/interactions';
 
 export default new Command({
   module: ModuleType.Utilities,

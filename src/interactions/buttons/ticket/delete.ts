@@ -8,7 +8,10 @@ import { deleteTicketById, findTicket, getTicketGroup } from 'db/ticket';
 
 import { logger } from 'utils/logger';
 
+import { ModuleType } from 'types/interactions';
+
 export default new Button({
+  module: ModuleType.Ticket,
   customId: 'button-tickets-delete',
   isCustomIdIncluded: true,
   permissions: [],
@@ -52,7 +55,7 @@ export default new Button({
 
     const hasTranscriptChannel = group.transcriptChannelId ? true : false;
 
-    const description = [t('ticket.ticket_deleted', { lng: guildLng, deletedBy: user.toString() }), t('ticket.delete-time', { lng: guildLng })].join('\n');
+    const description = [t('ticket.ticket-deleted', { lng: guildLng, deletedBy: user.toString() }), t('ticket.delete-time', { lng: guildLng })].join('\n');
 
     await interaction.reply({
       embeds: [

@@ -2,9 +2,12 @@ import type { ModalSubmitInteraction, PermissionsString } from 'discord.js';
 
 import type { DiscordClient } from 'classes/client';
 
+import type { ModuleType } from 'types/interactions';
+
 export class Modal {
   constructor(
     public options: {
+      module: ModuleType;
       customId: string;
       cooldown?: number;
       isDeveloperOnly?: boolean; // If true, can only be used by developers

@@ -1,7 +1,6 @@
 import { Collection, EmbedBuilder, Events, inlineCode, time, TimestampStyles, type InteractionReplyOptions } from 'discord.js';
 import { t } from 'i18next';
 
-import { ModuleType } from 'classes/command';
 import { Event } from 'classes/event';
 
 import { incrementCommandsExecuted, incrementCommandsFailed } from 'db/client';
@@ -12,6 +11,8 @@ import { keys } from 'constants/keys';
 
 import { sendError } from 'utils/error';
 import { supportedLanguages } from 'utils/language';
+
+import { ModuleType } from 'types/interactions';
 
 // Collection of cooldowns so interactions cannot be spammed
 // !! This should not be used for hourly or daily commands as it resets with each restart !!
@@ -63,11 +64,28 @@ export default new Event({
           }
           break;
         case ModuleType.Level:
-          if (!guildSettings.level.enabled) {
+          if (!guildSettings.level?.enabled) {
             await interaction.reply(message);
             return;
           }
           break;
+        case ModuleType.Welcome:
+          if (!guildSettings.welcome?.enabled) {
+            await interaction.reply(message);
+            return;
+          }
+          break;
+        case ModuleType.Farewell:
+          if (!guildSettings.farewell?.enabled) {
+            await interaction.reply(message);
+            return;
+          }
+          break;
+        case ModuleType.Ticket:
+          if (!guildSettings.ticket?.enabled) {
+            await interaction.reply(message);
+            return;
+          }
       }
     }
 

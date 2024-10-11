@@ -10,14 +10,15 @@ import {
 } from 'discord.js';
 import { t } from 'i18next';
 
-import { Command, ModuleType } from 'classes/command';
+import { Command } from 'classes/command';
 
 import { getGuild, updateGuild } from 'db/guild';
 import { addExp, addLevel, getLevel, getRewardsForLevel, setExp, setLevel } from 'db/level';
 
-import { AnnouncementType } from 'types/guild';
-
 import { logger } from 'utils/logger';
+
+import { AnnouncementType } from 'types/guild';
+import { ModuleType } from 'types/interactions';
 
 export default new Command({
   module: ModuleType.Config,

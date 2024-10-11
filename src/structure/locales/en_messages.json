@@ -1104,7 +1104,7 @@
       "disabled": "The moderation module has been disabled."
     },
     "reasons": {
-      "title": "Reasons",
+      "title": "Reasons required",
       "already-required": "The reasons for moderation are already required!",
       "already-optional": "The reasons for moderation are already optional!",
       "required": "The reasons for moderation are now required.",

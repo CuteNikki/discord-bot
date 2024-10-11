@@ -1104,7 +1104,7 @@
       "disabled": "Das Moderations-Modul wurde deaktiviert."
     },
     "reasons": {
-      "title": "Gründe",
+      "title": "Gründe erforderlich",
       "already-required": "Die Gründe für Moderation sind bereits erforderlich!",
       "already-optional": "Die Gründe für Moderation sind bereits optional!",
       "required": "Die Gründe für Moderation sind nun erforderlich.",

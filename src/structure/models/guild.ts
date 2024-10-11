@@ -16,8 +16,8 @@ export const guildModel: Model<GuildDocument> =
       ticket: { type: Types.ObjectId, ref: 'ticket_config', required: false },
       moderation: { type: Types.ObjectId, ref: 'moderation', required: false },
       level: { type: Types.ObjectId, ref: 'level_config', required: false },
-      welcome: { type: Types.ObjectId, ref: 'welcome_config', required: false },
-      farewell: { type: Types.ObjectId, ref: 'farewell_config', required: false },
+      welcome: { type: Types.ObjectId, ref: 'welcome', required: false },
+      farewell: { type: Types.ObjectId, ref: 'farewell', required: false },
       log: {
         type: {
           enabled: { type: Boolean },

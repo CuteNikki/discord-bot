@@ -206,6 +206,9 @@
       "set": "The welcome channel has been set to {{channel}}!",
       "title": "Channel"
     },
+    "placeholders": {
+      "title": "Placeholders"
+    },
     "message": {
       "set": "The welcome message has been set!"
     },

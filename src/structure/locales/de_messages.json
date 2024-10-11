@@ -209,6 +209,9 @@
     "message": {
       "set": "Die Willkommensnachricht wurde gesetzt!"
     },
+    "placeholders": {
+      "title": "Platzhalter"
+    },
     "state": {
       "enabled": "Das Willkommens-Modul wurde aktiviert!",
       "disabled": "Das Willkommens-Modul wurde deaktiviert!",

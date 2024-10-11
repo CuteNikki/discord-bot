@@ -323,6 +323,7 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
 
 ## TO-DO
 
+- [ ] Add ModuleType to buttons, selections and modals
 - [ ] Separate all objects from guild schema into separate models and then reconnect them using the ObjectId (use populate to get objects)
   - [x] custom-voice-setup
   - [x] reaction-roles
@@ -330,6 +331,10 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
   - [x] counting
   - [x] ticket
   - [x] moderation
+  - [ ] level
+  - [ ] welcome
+  - [ ] farewell
+  - [ ] log
 - [ ] utility module (not checked because I'd like to add more)
 - [ ] developer module (more features might be added)
 - [ ] fun module

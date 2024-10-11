@@ -1,12 +1,78 @@
 import type { DiscordClient } from 'classes/client';
+import type { Types, UpdateQuery } from 'mongoose';
 
-import { getGuild } from 'db/guild';
-import { levelModel, weeklyLevelModel } from 'models/level';
-
-import type { LevelReward } from 'types/guild';
-import type { LevelDocument, PositionLevel, WeeklyLevelDocument } from 'types/level';
+import { updateGuild } from 'db/guild';
+import { levelConfigModel, levelModel, weeklyLevelModel } from 'models/level';
 
 import { getRandomNumber } from 'utils/common';
+
+import type { AnnouncementType, LevelReward } from 'types/guild';
+import type { LevelConfigDocument, LevelDocument, PositionLevel, WeeklyLevelDocument } from 'types/level';
+
+export async function getLevelConfig<T extends boolean>(
+  guildId: string,
+  insert: T = false as T
+): Promise<T extends true ? LevelConfigDocument : LevelConfigDocument | null> {
+  let document = await levelConfigModel.findOne({ guildId }).lean().exec();
+
+  if (!document && insert) {
+    document = await updateLevelConfig(guildId, {});
+  }
+
+  return document as T extends true ? LevelConfigDocument : LevelConfigDocument | null;
+}
+
+async function updateLevelConfig(guildId: string, query: UpdateQuery<LevelConfigDocument>): Promise<LevelConfigDocument> {
+  const document = await levelConfigModel.findOneAndUpdate({ guildId }, query, { upsert: true, new: true }).lean().exec();
+
+  await updateGuild(guildId, { $set: { level: document._id } });
+
+  return document;
+}
+
+export async function enableLevel(guildId: string): Promise<LevelConfigDocument> {
+  return updateLevelConfig(guildId, { $set: { enabled: true } });
+}
+
+export async function disableLevel(guildId: string): Promise<LevelConfigDocument> {
+  return updateLevelConfig(guildId, { $set: { enabled: false } });
+}
+
+export async function updateLevelAnnouncement(guildId: string, type: AnnouncementType, channelId?: string): Promise<LevelConfigDocument> {
+  return updateLevelConfig(guildId, { $set: { announcement: type, channelId } });
+}
+
+export async function addLevelReward(guildId: string, level: number, roleId: string): Promise<LevelConfigDocument> {
+  return updateLevelConfig(guildId, { $push: { rewards: { level, roleId } } });
+}
+
+export async function removeLevelRewardById(guildId: string, rewardId: Types.ObjectId | string): Promise<LevelConfigDocument> {
+  return updateLevelConfig(guildId, { $pull: { rewards: { _id: rewardId } } });
+}
+
+export async function addLevelIgnoredRole(guildId: string, roleId: string): Promise<LevelConfigDocument> {
+  return updateLevelConfig(guildId, { $push: { ignoredRoles: roleId } });
+}
+
+export async function removeLevelIgnoredRole(guildId: string, roleId: string): Promise<LevelConfigDocument> {
+  return updateLevelConfig(guildId, { $pull: { ignoredRoles: roleId } });
+}
+
+export async function addLevelIgnoredChannel(guildId: string, channelId: string): Promise<LevelConfigDocument> {
+  return updateLevelConfig(guildId, { $push: { ignoredChannels: channelId } });
+}
+
+export async function removeLevelIgnoredChannel(guildId: string, channelId: string): Promise<LevelConfigDocument> {
+  return updateLevelConfig(guildId, { $pull: { ignoredChannels: channelId } });
+}
+
+export async function addLevelEnabledChannel(guildId: string, channelId: string): Promise<LevelConfigDocument> {
+  return updateLevelConfig(guildId, { $push: { enabledChannels: channelId } });
+}
+
+export async function removeLevelEnabledChannel(guildId: string, channelId: string): Promise<LevelConfigDocument> {
+  return updateLevelConfig(guildId, { $pull: { enabledChannels: channelId } });
+}
 
 /**
  * XP required for a level
@@ -176,10 +242,9 @@ export async function addLevel(userId: string, guildId: string, level: number): 
  * @returns {Promise<LevelReward[]>} Rewards for the level
  */
 export async function getRewardsForLevel(level: LevelDocument | PositionLevel): Promise<LevelReward[]> {
-  const guildSettings = await getGuild(level.guildId);
-  if (!guildSettings) return [];
+  const config = await getLevelConfig(level.guildId, true);
 
-  return guildSettings.level.rewards.filter((rw) => rw.level <= level.level);
+  return config.rewards.filter((rw) => rw.level <= level.level);
 }
 
 /**

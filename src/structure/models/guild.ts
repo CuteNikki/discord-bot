@@ -1,6 +1,6 @@
 import mongoose, { Model, model, Schema, Types } from 'mongoose';
 
-import { AnnouncementType, type GuildDocument } from 'types/guild';
+import { type GuildDocument } from 'types/guild';
 
 export const guildModel: Model<GuildDocument> =
   mongoose.models['guild'] ||
@@ -15,34 +15,7 @@ export const guildModel: Model<GuildDocument> =
       counting: { type: Types.ObjectId, ref: 'counting_config', required: false },
       ticket: { type: Types.ObjectId, ref: 'ticket_config', required: false },
       moderation: { type: Types.ObjectId, ref: 'moderation', required: false },
-      level: {
-        type: {
-          enabled: { type: Boolean },
-          channelId: { type: String },
-          announcement: {
-            type: Number,
-            enum: Object.values(AnnouncementType).filter((value) => typeof value === 'number')
-          },
-          ignoredRoles: [{ type: String }],
-          ignoredChannels: [{ type: String }],
-          enabledChannels: [{ type: String }],
-          rewards: [
-            {
-              level: { type: Number, required: true },
-              roleId: { type: String, required: true }
-            }
-          ]
-        },
-        default: {
-          enabled: false,
-          channelId: undefined,
-          announcement: AnnouncementType.UserChannel,
-          ignoredRoles: [],
-          ignoredChannels: [],
-          enabledChannels: [],
-          rewards: []
-        }
-      },
+      level: { type: Types.ObjectId, ref: 'level_config', required: false },
       welcome: {
         type: {
           channelId: { type: String },

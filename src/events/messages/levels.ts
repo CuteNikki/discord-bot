@@ -3,9 +3,8 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
-import { getGuild } from 'db/guild';
 import { getGuildLanguage, getUserLanguage } from 'db/language';
-import { appendXP, getLevel, getRandomExp, getRewardsForLevel } from 'db/level';
+import { appendXP, getLevel, getLevelConfig, getRandomExp, getRewardsForLevel } from 'db/level';
 
 import { AnnouncementType } from 'types/guild';
 
@@ -24,13 +23,13 @@ export default new Event({
     const { channel, author: user, guild, member } = message;
 
     // Check if levelling is disabled, or if the channel is ignored and return
-    const guildSettings = await getGuild(guild.id);
-    if (
-      !guildSettings ||
-      !guildSettings.level.enabled ||
-      guildSettings.level.ignoredChannels.includes(channel.id) ||
-      (guildSettings.level.enabledChannels.length && !guildSettings.level.enabledChannels.includes(channel.id))
-    ) {
+    const level = (await getLevelConfig(guild.id)) ?? {
+      enabled: false,
+      ignoredChannels: [] as string[],
+      enabledChannels: [] as string[],
+      announcement: AnnouncementType.UserChannel
+    };
+    if (level.enabled || level.ignoredChannels.includes(channel.id) || (level.enabledChannels.length && !level.enabledChannels.includes(channel.id))) {
       return;
     }
 
@@ -56,7 +55,7 @@ export default new Event({
     const rewards = await getRewardsForLevel(updatedLevel);
 
     // Get the language of the user or guild depending on if the message is sent in the guild or to the user
-    const lng = guildSettings.level.announcement === AnnouncementType.OtherChannel ? await getGuildLanguage(guild.id) : await getUserLanguage(user.id);
+    const lng = level.announcement === AnnouncementType.OtherChannel ? await getGuildLanguage(guild.id) : await getUserLanguage(user.id);
 
     const levelUpEmbed = new EmbedBuilder()
       .setColor(client.colors.level)
@@ -91,7 +90,7 @@ export default new Event({
       embeds: [levelUpEmbed]
     };
 
-    switch (guildSettings.level.announcement) {
+    switch (level.announcement) {
       case AnnouncementType.UserChannel:
         {
           // Send the message to the current channel
@@ -106,8 +105,8 @@ export default new Event({
       case AnnouncementType.OtherChannel:
         {
           // Get the guilds announcement channel
-          if (!guildSettings.level.channelId) return;
-          const channel = guild.channels.cache.get(guildSettings.level.channelId);
+          if (!level.channelId) return;
+          const channel = guild.channels.cache.get(level.channelId);
           // If the channel is not sendable, return
           if (!channel?.isSendable()) return;
 

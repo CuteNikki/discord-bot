@@ -1,6 +1,7 @@
 import type { Types } from 'mongoose';
 import type { CountingDocument } from 'types/counting';
 import type { CustomVoiceDocument } from 'types/custom-voice';
+import type { LevelConfigDocument } from 'types/level';
 import type { ModerationDocument } from 'types/moderation';
 import type { ReactionRoleDocument } from 'types/reaction-roles';
 import type { StarboardDocument } from 'types/starboard';
@@ -101,15 +102,7 @@ export type GuildDocument = {
   counting?: CountingDocument;
   ticket?: TicketConfigDocument;
   moderation?: ModerationDocument;
-  level: {
-    enabled: boolean;
-    channelId?: string;
-    announcement: AnnouncementType;
-    ignoredRoles: string[];
-    ignoredChannels: string[];
-    enabledChannels: string[];
-    rewards: LevelReward[];
-  };
+  level?: LevelConfigDocument;
   welcome: {
     enabled: boolean;
     channelId: string;

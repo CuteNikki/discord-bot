@@ -12,12 +12,30 @@ import { t } from 'i18next';
 
 import { Command } from 'classes/command';
 
-import { getGuild, updateGuild } from 'db/guild';
-import { addExp, addLevel, getLevel, getRewardsForLevel, setExp, setLevel } from 'db/level';
+import {
+  addExp,
+  addLevel,
+  addLevelEnabledChannel,
+  addLevelIgnoredChannel,
+  addLevelIgnoredRole,
+  addLevelReward,
+  disableLevel,
+  enableLevel,
+  getLevel,
+  getLevelConfig,
+  getRewardsForLevel,
+  removeLevelEnabledChannel,
+  removeLevelIgnoredChannel,
+  removeLevelIgnoredRole,
+  removeLevelRewardById,
+  setExp,
+  setLevel,
+  updateLevelAnnouncement
+} from 'db/level';
 
 import { logger } from 'utils/logger';
 
-import { AnnouncementType } from 'types/guild';
+import { AnnouncementType, type LevelReward } from 'types/guild';
 import { ModuleType } from 'types/interactions';
 
 export default new Command({
@@ -195,7 +213,16 @@ export default new Command({
 
     const { options, guild } = interaction;
 
-    const { level } = await getGuild(guild.id);
+    const level = (await getLevelConfig(guild.id)) ?? {
+      ignoredRoles: [] as string[],
+      ignoredChannels: [] as string[],
+      enabledChannels: [] as string[],
+      rewards: [] as LevelReward[],
+      announcement: AnnouncementType.UserChannel,
+      enabled: false,
+      channelId: undefined
+    };
+
     const { ignoredRoles, ignoredChannels, enabledChannels, enabled, announcement, rewards, channelId } = level;
 
     switch (options.getSubcommandGroup()) {
@@ -399,7 +426,7 @@ export default new Command({
                   return;
                 }
 
-                await updateGuild(guild.id, { $set: { ['level.enabled']: true } });
+                await enableLevel(guild.id);
 
                 await interaction.editReply({
                   embeds: [new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.toggle.on', { lng }))]
@@ -415,7 +442,7 @@ export default new Command({
                   return;
                 }
 
-                await updateGuild(guild.id, { $set: { ['level.enabled']: false } });
+                await disableLevel(guild.id);
 
                 await interaction.editReply({
                   embeds: [new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.toggle.off', { lng }))]
@@ -439,12 +466,7 @@ export default new Command({
                   return;
                 }
 
-                await updateGuild(guild.id, {
-                  $set: {
-                    ['level.channelId']: channel.id,
-                    ['level.announcement']: AnnouncementType.OtherChannel
-                  }
-                });
+                await updateLevelAnnouncement(guild.id, AnnouncementType.OtherChannel, channel.id);
 
                 await interaction.editReply({
                   embeds: [new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.announcement.other', { lng }))]
@@ -460,12 +482,7 @@ export default new Command({
                   return;
                 }
 
-                await updateGuild(guild.id, {
-                  $set: {
-                    ['level.channelId']: undefined,
-                    ['level.announcement']: AnnouncementType.UserChannel
-                  }
-                });
+                await updateLevelAnnouncement(guild.id, AnnouncementType.UserChannel);
 
                 await interaction.editReply({
                   embeds: [new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.announcement.user', { lng }))]
@@ -481,12 +498,7 @@ export default new Command({
                   return;
                 }
 
-                await updateGuild(guild.id, {
-                  $set: {
-                    ['level.channelId']: undefined,
-                    ['level.announcement']: AnnouncementType.PrivateMessage
-                  }
-                });
+                await updateLevelAnnouncement(guild.id, AnnouncementType.PrivateMessage);
 
                 await interaction.editReply({
                   embeds: [new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.announcement.private', { lng }))]
@@ -502,12 +514,7 @@ export default new Command({
                   return;
                 }
 
-                await updateGuild(guild.id, {
-                  $set: {
-                    ['level.channelId']: undefined,
-                    ['level.announcement']: AnnouncementType.None
-                  }
-                });
+                await updateLevelAnnouncement(guild.id, AnnouncementType.None);
 
                 await interaction.editReply({
                   embeds: [new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.announcement.none', { lng }))]
@@ -541,7 +548,7 @@ export default new Command({
                   return;
                 }
 
-                await updateGuild(guild.id, { $push: { ['level.rewards']: { level, roleId: role.id } } });
+                await addLevelReward(guild.id, level, role.id);
 
                 await interaction.editReply({
                   embeds: [new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.rewards.added', { lng, level, role: role.toString() }))]
@@ -560,7 +567,7 @@ export default new Command({
                   return;
                 }
 
-                await updateGuild(guild.id, { $pull: { ['level.rewards']: { _id: reward._id } } });
+                await removeLevelRewardById(guild.id, reward._id);
 
                 await interaction.editReply({
                   embeds: [new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.rewards.removed', { lng }))]
@@ -591,7 +598,7 @@ export default new Command({
                   return;
                 }
 
-                await updateGuild(guild.id, { $push: { ['level.ignoredRoles']: role.id } });
+                await addLevelIgnoredRole(guild.id, role.id);
 
                 await interaction.editReply({
                   embeds: [new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.ignored-roles.added', { lng, role: role.toString() }))]
@@ -609,7 +616,7 @@ export default new Command({
                   return;
                 }
 
-                await updateGuild(guild.id, { $pull: { ['level.ignoredRoles']: roleId } });
+                await removeLevelIgnoredRole(guild.id, roleId);
 
                 await interaction.editReply({
                   embeds: [new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.ignored-roles.removed', { lng }))]
@@ -640,7 +647,7 @@ export default new Command({
                   return;
                 }
 
-                await updateGuild(guild.id, { $push: { ['level.ignoredChannels']: channel.id } });
+                await addLevelIgnoredChannel(guild.id, channel.id);
 
                 await interaction.editReply({
                   embeds: [
@@ -660,7 +667,7 @@ export default new Command({
                   return;
                 }
 
-                await updateGuild(guild.id, { $pull: { ['level.ignoredChannels']: channelId } });
+                await removeLevelIgnoredChannel(guild.id, channelId);
 
                 await interaction.editReply({
                   embeds: [new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.ignored-channels.removed', { lng }))]
@@ -691,7 +698,7 @@ export default new Command({
                   return;
                 }
 
-                await updateGuild(guild.id, { $push: { ['level.enabledChannels']: channel.id } });
+                await addLevelEnabledChannel(guild.id, channel.id);
 
                 await interaction.editReply({
                   embeds: [
@@ -711,7 +718,7 @@ export default new Command({
                   return;
                 }
 
-                await updateGuild(guild.id, { $pull: { ['level.enabledChannels']: channelId } });
+                await removeLevelEnabledChannel(guild.id, channelId);
 
                 await interaction.editReply({
                   embeds: [new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.enabled-channels.removed', { lng }))]

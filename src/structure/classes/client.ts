@@ -28,7 +28,7 @@ export class DiscordClient extends Client {
 
   // Custom colors
   public colors = {
-    error: Colors.Red,
+    error: Colors.DarkRed,
     warning: Colors.Yellow,
     success: Colors.Green,
     counting: Colors.Blue,
@@ -43,7 +43,8 @@ export class DiscordClient extends Client {
     general: Colors.Blurple,
     giveaway: Colors.Yellow,
     developer: Colors.Blurple,
-    starboard: Colors.Gold
+    starboard: Colors.Gold,
+    moderation: Colors.Red
   };
 
   // Custom emojis

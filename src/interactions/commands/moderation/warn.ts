@@ -15,6 +15,7 @@ import { Command, ModuleType } from 'classes/command';
 
 import { createInfraction } from 'db/infraction';
 import { getUserLanguage } from 'db/language';
+import { getModeration } from 'db/moderation';
 
 import { InfractionType } from 'types/infraction';
 
@@ -41,19 +42,31 @@ export default new Command({
       Cancel = 'button-warn-cancel'
     }
 
-    const { options, guild, user } = interaction;
+    const { options, guild, user, member } = interaction;
 
     const target = options.getUser('user', true);
     const targetMember = await guild.members.fetch(target.id).catch((err) => logger.debug({ err, userId: target.id }, 'Could not fetch target member'));
     const targetLng = await getUserLanguage(target.id);
+
+    const config = await getModeration(guild.id, true);
+
+    if (config.staffroleId && !member.permissions.has(PermissionFlagsBits.ModerateMembers) && !member.roles.cache.has(config.staffroleId)) {
+      await interaction.editReply(t('moderation.staffrole.error', { lng }));
+      return;
+    }
 
     if (!targetMember) {
       await interaction.editReply(t('warn.target.invalid', { lng }));
       return;
     }
 
+    if (config.reasonsRequired && !options.getString('reason', false)) {
+      await interaction.editReply(t('moderation.reasons.required-error', { lng }));
+      return;
+    }
+
     const targetRolePos = targetMember?.roles.highest.position ?? 0;
-    const staffRolePos = interaction.member.roles.highest.position ?? 0;
+    const staffRolePos = member.roles.highest.position ?? 0;
 
     if (targetRolePos >= staffRolePos) {
       await interaction.editReply(t('warn.target.pos-staff', { lng }));

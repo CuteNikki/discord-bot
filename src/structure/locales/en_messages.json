@@ -1098,14 +1098,28 @@
     "title": "Moderation Module",
     "state": {
       "title": "State",
-      "enabled": "enabled",
-      "disabled": "disabled"
+      "already-enabled": "The moderation module is already enabled!",
+      "already-disabled": "The moderation module is already disabled!",
+      "enabled": " The moderation module has been enabled.",
+      "disabled": "The moderation module has been disabled."
     },
-    "toggle": {
-      "already-off": "Moderation module is already disabled!",
-      "already-on": "Moderation module is already enabled!",
-      "off": "Moderation module has been disabled.",
-      "on": "Moderation module has been enabled."
+    "reasons": {
+      "title": "Reasons",
+      "already-required": "The reasons for moderation are already required!",
+      "already-optional": "The reasons for moderation are already optional!",
+      "required": "The reasons for moderation are now required.",
+      "optional": "The reasons for moderation are now optional.",
+      "required-error": "You did not provide a reason! Reasons are required.\nThis can be changed in the moderation config."
+    },
+    "staffrole": {
+      "title": "Staffrole",
+      "already-set": "The staffrole is already set to {{role}}!",
+      "set": "The staffrole has been set to {{role}}.",
+      "no-ban": "The role does not have permissions to ban members!",
+      "no-kick": "The role does not have permissions to kick members!",
+      "no-manage-messages": "The role does not have permissions to manage messages (this is required to be able to delete/purge messages)!",
+      "no-moderate": "The role does not have permissions to moderate members (this is required to be able to timeout members)!",
+      "error": "You do not have the staff role!"
     }
   },
   "level": {

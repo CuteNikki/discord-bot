@@ -14,14 +14,7 @@ export const guildModel: Model<GuildDocument> =
       reactionRoles: { type: Types.ObjectId, ref: 'reaction_role_config', required: false },
       counting: { type: Types.ObjectId, ref: 'counting_config', required: false },
       ticket: { type: Types.ObjectId, ref: 'ticket_config', required: false },
-      moderation: {
-        type: {
-          enabled: { type: Boolean }
-        },
-        default: {
-          enabled: true
-        }
-      },
+      moderation: { type: Types.ObjectId, ref: 'moderation', required: false },
       level: {
         type: {
           enabled: { type: Boolean },

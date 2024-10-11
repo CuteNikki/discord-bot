@@ -1095,17 +1095,31 @@
     }
   },
   "moderation": {
-    "title": "Moderation Modul",
+    "title": "Moderations-Modul",
     "state": {
       "title": "Status",
-      "enabled": "aktiviert",
-      "disabled": "deaktiviert"
+      "already-enabled": "Das Moderations-Modul ist bereits aktiviert!",
+      "already-disabled": "Das Moderations-Modul ist bereits deaktiviert!",
+      "enabled": "Das Moderations-Modul wurde aktiviert.",
+      "disabled": "Das Moderations-Modul wurde deaktiviert."
     },
-    "toggle": {
-      "already-off": "Moderation Modul ist bereits deaktiviert!",
-      "already-on": "Moderation Modul ist bereits aktiviert!",
-      "off": "Moderation Modul wurde deaktiviert.",
-      "on": "Moderation Modul wurde aktiviert."
+    "reasons": {
+      "title": "Gründe",
+      "already-required": "Die Gründe für Moderation sind bereits erforderlich!",
+      "already-optional": "Die Gründe für Moderation sind bereits optional!",
+      "required": "Die Gründe für Moderation sind nun erforderlich.",
+      "optional": "Die Gründe für Moderation sind nun optional.",
+      "required-error": "Du hast keinen Grund angegeben! Gründe wurden erforderlich gestellt.\nDas kann in der Moderations-Konfiguration geändert werden."
+    },
+    "staffrole": {
+      "title": "Team-Rolle",
+      "already-set": "Die Team-Rolle ist bereits auf {{role}} gesetzt!",
+      "set": "Die Team-Rolle wurde auf {{role}} gesetzt.",
+      "no-ban": "Die Rolle hat keine Berechtigung, Mitglieder zu bannen!",
+      "no-kick": "Die Rolle hat keine Berechtigung, Mitglieder zu kicken!",
+      "no-manage-messages": "Die Rolle hat keine Berechtigung, Nachrichten zu verwalten (dies ist notwendig, um Nachrichten zu löschen)!",
+      "no-moderate": "Die Rolle hat keine Berechtigung, Mitglieder zu moderieren (dies ist notwendig, um Mitglieder zu stummen)!",
+      "error": "Du hast keine Teammitglieds-Rolle!"
     }
   },
   "level": {

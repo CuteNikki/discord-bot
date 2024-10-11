@@ -15,7 +15,7 @@ import type { GuildDocument } from 'types/guild';
 export async function getGuildSettings(guildId: string): Promise<GuildDocument> {
   return await guildModel
     .findOneAndUpdate({ guildId }, {}, { upsert: true, new: true })
-    .populate(['starboard', 'customVoice', 'reactionRoles', 'counting', 'ticket'])
+    .populate(['starboard', 'customVoice', 'reactionRoles', 'counting', 'ticket', 'moderation'])
     .lean()
     .exec();
 }

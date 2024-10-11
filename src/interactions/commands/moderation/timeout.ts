@@ -18,6 +18,7 @@ import { Command, ModuleType } from 'classes/command';
 
 import { createInfraction } from 'db/infraction';
 import { getUserLanguage } from 'db/language';
+import { getModeration } from 'db/moderation';
 
 import { InfractionType } from 'types/infraction';
 
@@ -48,13 +49,25 @@ export default new Command({
     const { options, guild, member, user } = interaction;
 
     const target = options.getUser('user', true);
-
+    const targetMember = await guild.members.fetch(target.id).catch((err) => logger.debug({ err, userId: target.id }, 'Could not fetch target member'));
     const targetLng = await getUserLanguage(target.id);
 
-    const targetMember = await guild.members.fetch(target.id).catch((err) => logger.debug({ err, userId: target.id }, 'Could not fetch target member'));
+    const config = await getModeration(guild.id, true);
+
+    if (config.staffroleId && !member.permissions.has(PermissionFlagsBits.ModerateMembers) && !member.roles.cache.has(config.staffroleId)) {
+      await interaction.editReply(t('moderation.staffrole.error', { lng }));
+      return;
+    }
 
     if (!targetMember) {
       await interaction.editReply(t('timeout.target.invalid', { lng }));
+      return;
+    }
+
+    const reason = options.getString('reason', false);
+
+    if (config.reasonsRequired && !reason) {
+      await interaction.editReply(t('moderation.reasons.required-error', { lng }));
       return;
     }
 
@@ -67,8 +80,6 @@ export default new Command({
     }
 
     const durationText = ms(duration, { long: true });
-
-    const reason = options.getString('reason', false);
 
     const targetRolePos = targetMember?.roles.highest.position ?? 0;
     const staffRolePos = member.roles.highest.position ?? 0;

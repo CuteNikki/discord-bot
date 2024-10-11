@@ -14,6 +14,7 @@ import { t } from 'i18next';
 import { Command, ModuleType } from 'classes/command';
 
 import { deleteInfraction, findInfraction, getInfractions } from 'db/infraction';
+import { getModeration } from 'db/moderation';
 
 import { chunk } from 'utils/common';
 import { pagination } from 'utils/pagination';
@@ -41,7 +42,14 @@ export default new Command({
     ),
   async execute({ interaction, lng }) {
     if (!interaction.inCachedGuild()) return;
-    const { options, guildId } = interaction;
+    const { options, guildId, member } = interaction;
+
+    const config = await getModeration(guildId, true);
+
+    if (config.staffroleId && !member.permissions.has(PermissionFlagsBits.ModerateMembers) && !member.roles.cache.has(config.staffroleId)) {
+      await interaction.editReply(t('moderation.staffrole.error', { lng }));
+      return;
+    }
 
     switch (options.getSubcommand()) {
       case 'history':

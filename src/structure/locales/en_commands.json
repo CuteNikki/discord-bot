@@ -879,35 +879,37 @@
       }
     ]
   },
-  "config-moderation": {
-    "name": "moderation-configuration",
+  "moderation": {
+    "name": "moderation",
     "description": "Configure the moderation module",
     "options": [
       {
-        "name": "show",
-        "description": "Shows the current configuration",
-        "options": [
-          {
-            "name": "all",
-            "description": "Shows the entire configuration"
-          },
-          {
-            "name": "state",
-            "description": "Shows the state of the moderation module"
-          }
-        ]
+        "name": "enable",
+        "description": "Enables the moderation module"
       },
       {
-        "name": "toggle",
-        "description": "Toggles the moderation module",
+        "name": "disable",
+        "description": "Disables the moderation module"
+      },
+      {
+        "name": "info",
+        "description": "Shows the current configuration"
+      },
+      {
+        "name": "reasons-required",
+        "description": "Makes reasons for bans, kicks, etc. required"
+      },
+      {
+        "name": "reasons-optional",
+        "description": "Makes reasons for bans, kicks, etc. optional"
+      },
+      {
+        "name": "staffrole",
+        "description": "Sets the staffrole/modrole that allows to moderate",
         "options": [
           {
-            "name": "on",
-            "description": "Turns the moderation module on"
-          },
-          {
-            "name": "off",
-            "description": "Turns the moderation module off"
+            "name": "role",
+            "description": "The role for moderators/staff"
           }
         ]
       }

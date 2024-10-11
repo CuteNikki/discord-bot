@@ -4,6 +4,7 @@ import {
   ButtonBuilder,
   ButtonStyle,
   ComponentType,
+  EmbedBuilder,
   inlineCode,
   InteractionContextType,
   PermissionFlagsBits,
@@ -16,6 +17,7 @@ import { Command, ModuleType } from 'classes/command';
 
 import { createInfraction } from 'db/infraction';
 import { getUserLanguage } from 'db/language';
+import { getModeration } from 'db/moderation';
 
 import { InfractionType } from 'types/infraction';
 
@@ -64,14 +66,28 @@ export default new Command({
 
     const target = options.getUser('user', true);
     const targetMember = await guild.members.fetch(target.id).catch((err) => logger.debug({ err, userId: target.id }, 'Could not fetch target member'));
-
     const targetLng = await getUserLanguage(target.id);
+
+    const config = await getModeration(guild.id, true);
+
+    if (config.staffroleId && !member.permissions.has(PermissionFlagsBits.BanMembers) && !member.roles.cache.has(config.staffroleId)) {
+      await interaction.editReply(t('moderation.staffrole.error', { lng }));
+      return;
+    }
+
+    const reason = options.getString('reason', false);
+
+    if (config.reasonsRequired && !reason) {
+      await interaction.editReply({
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('moderation.reasons.required-error', { lng }))]
+      });
+      return;
+    }
 
     const userDuration = options.getString('duration', false);
     const duration = ms(userDuration ?? '0');
     const durationText = ms(duration, { long: true });
 
-    const reason = options.getString('reason', false);
     const history = options.getInteger('history', false) ?? 604800;
     const historyOptions = {
       0: t('ban.history.none', { lng }), // 'Delete none'

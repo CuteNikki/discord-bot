@@ -13,6 +13,8 @@ import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
+import { getModeration } from 'db/moderation';
+
 import { logger } from 'utils/logger';
 
 export default new Command({
@@ -35,7 +37,14 @@ export default new Command({
     if (!interaction.inCachedGuild() || !interaction.channel) return;
     await interaction.deferReply({ ephemeral: true });
 
-    const { options } = interaction;
+    const { options, member, guild } = interaction;
+
+    const config = await getModeration(guild.id, true);
+
+    if (config.staffroleId && !member.permissions.has(PermissionFlagsBits.ManageMessages) && !member.roles.cache.has(config.staffroleId)) {
+      await interaction.editReply(t('moderation.staffrole.error', { lng }));
+      return;
+    }
 
     const amount = options.getInteger('amount', true);
     const user = options.getUser('user', false);

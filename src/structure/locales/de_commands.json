@@ -879,35 +879,37 @@
       }
     ]
   },
-  "config-moderation": {
-    "name": "moderation-konfiguration",
+  "moderation": {
+    "name": "moderation",
     "description": "Konfiguriere das Moderation-Modul",
     "options": [
       {
-        "name": "ansehen",
-        "description": "Zeigt die aktuelle Konfiguration an",
-        "options": [
-          {
-            "name": "alles",
-            "description": "Zeigt die gesamte Konfiguration an"
-          },
-          {
-            "name": "status",
-            "description": "Zeigt den Status des Moderation-Moduls an"
-          }
-        ]
+        "name": "aktivieren",
+        "description": "Aktiviert das Moderation-Modul"
       },
       {
-        "name": "status",
-        "description": "Schaltet das Moderation-Modul um",
+        "name": "deaktivieren",
+        "description": "Deaktiviert das Moderation-Modul"
+      },
+      {
+        "name": "info",
+        "description": "Zeigt die aktuellen Einstellungen des Moderation-Moduls an"
+      },
+      {
+        "name": "grund-erforderlich",
+        "description": "Macht Grund für Bans, Kicks, etc. erforderlich"
+      },
+      {
+        "name": "grund-optional",
+        "description": "Macht Grund für Bans, Kicks, etc. optional"
+      },
+      {
+        "name": "teamrolle",
+        "description": "Setzt die Team-Rolle, die Moderation durchführen dürfen",
         "options": [
           {
-            "name": "an",
-            "description": "Schaltet das Moderation-Modul an"
-          },
-          {
-            "name": "aus",
-            "description": "Schaltet das Moderation-Modul aus"
+            "name": "rolle",
+            "description": "Die Rolle der Teammitglieder"
           }
         ]
       }

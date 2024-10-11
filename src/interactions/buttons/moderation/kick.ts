@@ -1,10 +1,11 @@
-import { inlineCode } from 'discord.js';
+import { inlineCode, PermissionFlagsBits } from 'discord.js';
 import { t } from 'i18next';
 
 import { Button } from 'classes/button';
 
 import { createInfraction } from 'db/infraction';
 import { getUserLanguage } from 'db/language';
+import { getModeration } from 'db/moderation';
 
 import { InfractionType } from 'types/infraction';
 
@@ -19,10 +20,17 @@ export default new Button({
   async execute({ interaction, client, lng }) {
     if (!interaction.inCachedGuild()) return;
 
-    const { guild } = interaction;
+    const { guild, member } = interaction;
 
     const targetId = interaction.customId.split('_')[1];
     const targetMember = await guild.members.fetch(targetId).catch((err) => logger.debug({ err, targetId }, 'Could not fetch user'));
+
+    const config = await getModeration(guild.id, true);
+
+    if (config.staffroleId && !member.permissions.has(PermissionFlagsBits.KickMembers) && !member.roles.cache.has(config.staffroleId)) {
+      await interaction.editReply(t('moderation.staffrole.error', { lng }));
+      return;
+    }
 
     if (!targetMember) {
       await interaction.reply(t('kick.target.invalid', { lng }));

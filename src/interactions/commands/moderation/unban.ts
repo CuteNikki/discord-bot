@@ -15,6 +15,7 @@ import { Command, ModuleType } from 'classes/command';
 
 import { createInfraction } from 'db/infraction';
 import { getUserLanguage } from 'db/language';
+import { getModeration } from 'db/moderation';
 
 import { InfractionType } from 'types/infraction';
 
@@ -41,12 +42,24 @@ export default new Command({
       Cancel = 'button-unban-cancel'
     }
 
-    const { options, guild, user } = interaction;
+    const { options, guild, user, member } = interaction;
 
     const target = options.getUser('user', true);
     const targetLng = await getUserLanguage(target.id);
 
+    const config = await getModeration(guild.id, true);
+
+    if (config.staffroleId && !member.permissions.has(PermissionFlagsBits.BanMembers) && !member.roles.cache.has(config.staffroleId)) {
+      await interaction.editReply(t('moderation.staffrole.error', { lng }));
+      return;
+    }
+
     const reason = options.getString('reason', false);
+
+    if (config.reasonsRequired && !reason) {
+      await interaction.editReply(t('moderation.reasons.required-error', { lng }));
+      return;
+    }
 
     const isBanned = await guild.bans.fetch(target.id).catch((err) => logger.debug({ err, userId: target.id }, 'Could not fetch target ban'));
 

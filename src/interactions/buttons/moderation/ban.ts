@@ -1,4 +1,4 @@
-import { inlineCode } from 'discord.js';
+import { inlineCode, PermissionFlagsBits } from 'discord.js';
 import { t } from 'i18next';
 
 import { Button } from 'classes/button';
@@ -8,6 +8,7 @@ import { getUserLanguage } from 'db/language';
 
 import { InfractionType } from 'types/infraction';
 
+import { getModeration } from 'db/moderation';
 import { logger } from 'utils/logger';
 
 export default new Button({
@@ -19,10 +20,17 @@ export default new Button({
   async execute({ interaction, client, lng }) {
     if (!interaction.inCachedGuild()) return;
 
-    const { guild } = interaction;
-    const targetId = interaction.customId.split('_')[1];
+    const { guild, member } = interaction;
 
+    const targetId = interaction.customId.split('_')[1];
     const target = await client.users.fetch(targetId).catch((err) => logger.debug({ err, targetId }, 'Could not fetch user'));
+
+    const config = await getModeration(guild.id, true);
+
+    if (config.staffroleId && !member.permissions.has(PermissionFlagsBits.BanMembers) && !member.roles.cache.has(config.staffroleId)) {
+      await interaction.editReply(t('moderation.staffrole.error', { lng }));
+      return;
+    }
 
     if (!target) {
       await interaction.reply(t('ban.failed', { lng }));

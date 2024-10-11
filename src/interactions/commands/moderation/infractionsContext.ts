@@ -15,6 +15,7 @@ import { t } from 'i18next';
 import { Command, ModuleType } from 'classes/command';
 
 import { getInfractions } from 'db/infraction';
+import { getModeration } from 'db/moderation';
 
 import { chunk } from 'utils/common';
 import { pagination } from 'utils/pagination';
@@ -36,7 +37,14 @@ export default new Command<typeof commandType>({
 
     await interaction.deferReply({ ephemeral: true });
 
-    const { guildId } = interaction;
+    const { guildId, member } = interaction;
+
+    const config = await getModeration(guildId, true);
+
+    if (config.staffroleId && !member.permissions.has(PermissionFlagsBits.ModerateMembers) && !member.roles.cache.has(config.staffroleId)) {
+      await interaction.editReply(t('moderation.staffrole.error', { lng }));
+      return;
+    }
 
     const target = interaction.targetUser;
     const targetInfractions = await getInfractions(guildId, target.id);

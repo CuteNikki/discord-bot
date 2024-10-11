@@ -13,7 +13,7 @@ import { t } from 'i18next';
 import { Command } from 'classes/command';
 import { CustomEmbedBuilder, getEmbed, isEmptyEmbed } from 'classes/custom-embed';
 
-import { getGuild, updateGuild } from 'db/guild';
+import { disableFarewell, enableFarewell, getFarewell, removeFarewellChannel, updateFarewellChannel, updateFarewellMessage } from 'db/farewell';
 
 import { logger } from 'utils/logger';
 
@@ -46,7 +46,7 @@ export default new Command({
 
     const { options, guild, user } = interaction;
 
-    const config = await getGuild(guild.id);
+    const farewell = (await getFarewell(guild.id)) ?? { enabled: false, channelId: undefined, message: { content: null, embed: {} } };
 
     switch (options.getSubcommand()) {
       case 'channel':
@@ -54,28 +54,22 @@ export default new Command({
           const channel = options.getChannel('channel', false, [ChannelType.GuildText]);
 
           if (!channel) {
-            if (!config.farewell.channelId) {
+            if (!farewell.channelId) {
               return interaction.editReply({
                 embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('farewell.channel.invalid', { lng }))]
               });
             }
-            await updateGuild(guild.id, {
-              $set: {
-                ['farewell.channelId']: null
-              }
-            });
+
+            await removeFarewellChannel(guild.id);
 
             return interaction.editReply({
               embeds: [new EmbedBuilder().setColor(client.colors.farewell).setDescription(t('farewell.channel.removed', { lng }))]
             });
           }
 
-          await updateGuild(guild.id, {
-            $set: {
-              ['farewell.channelId']: channel.id
-            }
-          });
-          interaction.editReply({
+          await updateFarewellChannel(guild.id, channel.id);
+
+          await interaction.editReply({
             embeds: [new EmbedBuilder().setColor(client.colors.farewell).setDescription(t('farewell.channel.set', { lng, channel: channel.toString() }))]
           });
         }
@@ -85,14 +79,11 @@ export default new Command({
           const customBuilder = new CustomEmbedBuilder({
             client,
             interaction,
-            message: config.farewell.message
+            message: farewell.message
           });
           customBuilder.once('submit', async (msg) => {
-            await updateGuild(guild.id, {
-              $set: {
-                ['farewell.message']: msg
-              }
-            });
+            await updateFarewellMessage(guild.id, msg);
+
             interaction
               .editReply({
                 embeds: [new EmbedBuilder().setColor(client.colors.farewell).setDescription(t('farewell.message.set', { lng }))],
@@ -106,8 +97,8 @@ export default new Command({
         {
           const embeds = [
             new EmbedBuilder().setColor(client.colors.farewell).addFields(
-              { name: t('farewell.state.title', { lng }), value: config.farewell.enabled ? t('enabled', { lng }) : t('disabled', { lng }) },
-              { name: t('farewell.channel.title', { lng }), value: config.farewell.channelId ? channelMention(config.farewell.channelId) : t('none', { lng }) },
+              { name: t('farewell.state.title', { lng }), value: farewell.enabled ? t('enabled', { lng }) : t('disabled', { lng }) },
+              { name: t('farewell.channel.title', { lng }), value: farewell.channelId ? channelMention(farewell.channelId) : t('none', { lng }) },
               {
                 name: t('farewell.placeholders.title', { lng }),
                 value: [
@@ -127,8 +118,8 @@ export default new Command({
             )
           ];
 
-          if (!isEmptyEmbed(config.farewell.message.embed)) {
-            embeds.push(getEmbed(user, guild, config.farewell.message.embed));
+          if (!isEmptyEmbed(farewell.message.embed)) {
+            embeds.push(getEmbed(user, guild, farewell.message.embed));
           }
 
           interaction.editReply({
@@ -138,17 +129,13 @@ export default new Command({
         break;
       case 'enable':
         {
-          if (config.farewell.enabled) {
+          if (farewell.enabled) {
             return interaction.editReply({
               embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('farewell.state.already-enabled', { lng }))]
             });
           }
 
-          await updateGuild(guild.id, {
-            $set: {
-              ['farewell.enabled']: true
-            }
-          });
+          await enableFarewell(guild.id);
 
           return interaction.editReply({
             embeds: [new EmbedBuilder().setColor(client.colors.farewell).setDescription(t('farewell.state.enabled', { lng }))]
@@ -156,17 +143,13 @@ export default new Command({
         }
         break;
       case 'disable': {
-        if (!config.farewell.enabled) {
+        if (!farewell.enabled) {
           return interaction.editReply({
             embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('farewell.state.already-disabled', { lng }))]
           });
         }
 
-        await updateGuild(guild.id, {
-          $set: {
-            ['farewell.enabled']: false
-          }
-        });
+        await disableFarewell(guild.id);
 
         return interaction.editReply({
           embeds: [new EmbedBuilder().setColor(client.colors.farewell).setDescription(t('farewell.state.disabled', { lng }))]

@@ -3,7 +3,7 @@ import { t } from 'i18next';
 
 import { Modal } from 'classes/modal';
 
-import { getGuild, updateGuild } from 'db/guild';
+import { addWelcomeRole, getWelcome } from 'db/welcome';
 
 import { ModuleType } from 'types/interactions';
 
@@ -18,9 +18,14 @@ export default new Modal({
 
     const roleId = interaction.fields.getTextInputValue('role-id');
 
-    const config = await getGuild(interaction.guild.id);
+    const welcome = (await getWelcome(interaction.guild.id)) ?? {
+      enabled: false,
+      roles: [] as string[],
+      message: { content: null, embed: {} },
+      channelId: undefined
+    };
 
-    if (config.welcome.roles.includes(roleId)) {
+    if (welcome.roles.includes(roleId)) {
       await interaction.editReply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('welcome.roles.already', { lng, roleId }))]
       });
@@ -34,9 +39,7 @@ export default new Modal({
       return;
     }
 
-    await updateGuild(interaction.guild.id, {
-      $push: { ['welcome.roles']: roleId }
-    });
+    await addWelcomeRole(interaction.guild.id, roleId);
 
     await interaction.editReply({
       embeds: [new EmbedBuilder().setColor(client.colors.welcome).setDescription(t('welcome.roles.added', { lng, role: `<@&${roleId}>` }))]

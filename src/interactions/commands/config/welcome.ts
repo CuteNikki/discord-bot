@@ -9,6 +9,7 @@ import {
   hyperlink,
   InteractionContextType,
   PermissionFlagsBits,
+  roleMention,
   SlashCommandBuilder
 } from 'discord.js';
 import { t } from 'i18next';
@@ -16,7 +17,7 @@ import { t } from 'i18next';
 import { Command } from 'classes/command';
 import { CustomEmbedBuilder, getEmbed, isEmptyEmbed } from 'classes/custom-embed';
 
-import { getGuild, updateGuild } from 'db/guild';
+import { disableWelcome, enableWelcome, getWelcome, removeWelcomeChannel, updateWelcomeChannel, updateWelcomeMessage } from 'db/welcome';
 
 import { logger } from 'utils/logger';
 
@@ -51,7 +52,7 @@ export default new Command({
 
     const { options, guild, user } = interaction;
 
-    const config = await getGuild(guild.id);
+    const welcome = (await getWelcome(guild.id)) ?? { enabled: false, channelId: undefined, roles: [], message: { content: null, embed: {} } };
 
     switch (options.getSubcommand()) {
       case 'channel':
@@ -59,28 +60,22 @@ export default new Command({
           const channel = options.getChannel('channel', false, [ChannelType.GuildText]);
 
           if (!channel) {
-            if (!config.welcome.channelId) {
+            if (!welcome.channelId) {
               return interaction.editReply({
                 embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('welcome.channel.invalid', { lng }))]
               });
             }
-            await updateGuild(guild.id, {
-              $set: {
-                ['welcome.channelId']: null
-              }
-            });
+
+            await removeWelcomeChannel(guild.id);
 
             return interaction.editReply({
               embeds: [new EmbedBuilder().setColor(client.colors.welcome).setDescription(t('welcome.channel.removed', { lng }))]
             });
           }
 
-          await updateGuild(guild.id, {
-            $set: {
-              ['welcome.channelId']: channel.id
-            }
-          });
-          interaction.editReply({
+          await updateWelcomeChannel(guild.id, channel.id);
+
+          await interaction.editReply({
             embeds: [new EmbedBuilder().setColor(client.colors.welcome).setDescription(t('welcome.channel.set', { lng, channel: channel.toString() }))]
           });
         }
@@ -90,14 +85,10 @@ export default new Command({
           const customBuilder = new CustomEmbedBuilder({
             client,
             interaction,
-            message: config.welcome.message
+            message: welcome.message
           });
           customBuilder.once('submit', async (msg) => {
-            await updateGuild(guild.id, {
-              $set: {
-                ['welcome.message']: msg
-              }
-            });
+            await updateWelcomeMessage(guild.id, msg);
 
             interaction
               .editReply({
@@ -112,14 +103,14 @@ export default new Command({
         {
           const rolesEmbed = new EmbedBuilder().setColor(client.colors.welcome).addFields({
             name: t('welcome.roles.title', { lng }),
-            value: config.welcome.roles.length ? config.welcome.roles.map((r) => `<@&${r}>`).join('\n') : t('none', { lng })
+            value: welcome.roles.length ? welcome.roles.map((r) => roleMention(r)).join('\n') : t('none', { lng })
           });
           const warning = new EmbedBuilder()
             .setColor(client.colors.warning)
             .setDescription(`${client.customEmojis.warning} ${t('welcome.state.warning', { lng })}`);
 
           interaction.editReply({
-            embeds: config.welcome.enabled ? [rolesEmbed] : [warning, rolesEmbed],
+            embeds: welcome.enabled ? [rolesEmbed] : [warning, rolesEmbed],
             components: [
               new ActionRowBuilder<ButtonBuilder>().addComponents(
                 new ButtonBuilder().setCustomId('button-welcome-add-role').setLabel(t('welcome.roles.add-role-button', { lng })).setStyle(ButtonStyle.Success),
@@ -136,11 +127,11 @@ export default new Command({
         {
           const embeds = [
             new EmbedBuilder().setColor(client.colors.welcome).addFields(
-              { name: t('welcome.state.title', { lng }), value: config.welcome.enabled ? t('enabled', { lng }) : t('disabled', { lng }) },
-              { name: t('welcome.channel.title', { lng }), value: config.welcome.channelId ? channelMention(config.welcome.channelId) : t('none', { lng }) },
+              { name: t('welcome.state.title', { lng }), value: welcome.enabled ? t('enabled', { lng }) : t('disabled', { lng }) },
+              { name: t('welcome.channel.title', { lng }), value: welcome.channelId ? channelMention(welcome.channelId) : t('none', { lng }) },
               {
                 name: t('welcome.roles.title', { lng }),
-                value: config.welcome.roles.length ? config.welcome.roles.map((r) => `<@&${r}>`).join('\n') : t('none', { lng })
+                value: welcome.roles.length ? welcome.roles.map((r) => roleMention(r)).join('\n') : t('none', { lng })
               },
               {
                 name: t('welcome.placeholders.title', { lng }),
@@ -161,8 +152,8 @@ export default new Command({
             )
           ];
 
-          if (!isEmptyEmbed(config.welcome.message.embed)) {
-            embeds.push(getEmbed(user, guild, config.welcome.message.embed));
+          if (!isEmptyEmbed(welcome.message.embed)) {
+            embeds.push(getEmbed(user, guild, welcome.message.embed));
           }
 
           interaction.editReply({
@@ -172,17 +163,13 @@ export default new Command({
         break;
       case 'enable':
         {
-          if (config.welcome.enabled) {
+          if (welcome.enabled) {
             return interaction.editReply({
               embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('welcome.state.already-enabled', { lng }))]
             });
           }
 
-          await updateGuild(guild.id, {
-            $set: {
-              ['welcome.enabled']: true
-            }
-          });
+          await enableWelcome(guild.id);
 
           interaction.editReply({
             embeds: [new EmbedBuilder().setColor(client.colors.welcome).setDescription(t('welcome.state.enabled', { lng }))]
@@ -191,17 +178,13 @@ export default new Command({
         break;
       case 'disable':
         {
-          if (!config.welcome.enabled) {
+          if (!welcome.enabled) {
             return interaction.editReply({
               embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('welcome.state.already-disabled', { lng }))]
             });
           }
 
-          await updateGuild(guild.id, {
-            $set: {
-              ['welcome.enabled']: false
-            }
-          });
+          await disableWelcome(guild.id);
 
           interaction.editReply({
             embeds: [new EmbedBuilder().setColor(client.colors.welcome).setDescription(t('welcome.state.disabled', { lng }))]

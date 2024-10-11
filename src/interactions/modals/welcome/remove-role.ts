@@ -3,7 +3,7 @@ import { t } from 'i18next';
 
 import { Modal } from 'classes/modal';
 
-import { getGuild, updateGuild } from 'db/guild';
+import { getWelcome, removeWelcomeRole } from 'db/welcome';
 
 import { ModuleType } from 'types/interactions';
 
@@ -18,16 +18,19 @@ export default new Modal({
 
     const roleId = interaction.fields.getTextInputValue('role-id');
 
-    const config = await getGuild(interaction.guild.id);
+    const welcome = (await getWelcome(interaction.guild.id)) ?? {
+      enabled: false,
+      roles: [] as string[],
+      message: { content: null, embed: {} },
+      channelId: undefined
+    };
 
-    if (!config.welcome.roles.includes(roleId)) {
+    if (!welcome.roles.includes(roleId)) {
       await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('welcome.roles.none', { lng, roleId }))] });
       return;
     }
 
-    await updateGuild(interaction.guild.id, {
-      $pull: { ['welcome.roles']: roleId }
-    });
+    await removeWelcomeRole(interaction.guild.id, roleId);
 
     await interaction.editReply({
       embeds: [new EmbedBuilder().setColor(client.colors.welcome).setDescription(t('welcome.roles.removed', { lng, roleId }))]

@@ -1,11 +1,13 @@
 import type { Types } from 'mongoose';
 import type { CountingDocument } from 'types/counting';
 import type { CustomVoiceDocument } from 'types/custom-voice';
+import type { FarewellDocument } from 'types/farewell';
 import type { LevelConfigDocument } from 'types/level';
 import type { ModerationDocument } from 'types/moderation';
 import type { ReactionRoleDocument } from 'types/reaction-roles';
 import type { StarboardDocument } from 'types/starboard';
 import type { TicketConfigDocument } from 'types/ticket';
+import type { WelcomeDocument } from 'types/welcome';
 
 export enum AnnouncementType {
   UserChannel,
@@ -103,17 +105,8 @@ export type GuildDocument = {
   ticket?: TicketConfigDocument;
   moderation?: ModerationDocument;
   level?: LevelConfigDocument;
-  welcome: {
-    enabled: boolean;
-    channelId: string;
-    roles: string[];
-    message: Message;
-  };
-  farewell: {
-    enabled: boolean;
-    channelId: string;
-    message: Message;
-  };
+  welcome?: WelcomeDocument;
+  farewell?: FarewellDocument;
   log: {
     enabled: boolean;
     channelId?: string;

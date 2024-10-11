@@ -3,7 +3,7 @@ import { Events } from 'discord.js';
 import { getEmbed, replacePlaceholders } from 'classes/custom-embed';
 import { Event } from 'classes/event';
 
-import { getGuild } from 'db/guild';
+import { getFarewell } from 'db/farewell';
 
 import { logger } from 'utils/logger';
 
@@ -13,16 +13,16 @@ export default new Event({
   async execute(_client, member) {
     if (member.user.bot) return;
 
-    const config = await getGuild(member.guild.id);
+    const farewell = (await getFarewell(member.guild.id)) ?? { enabled: false, message: { content: null, embed: {} }, channelId: undefined };
 
-    if (!config.farewell.enabled || !config.farewell.channelId) return;
-    const farewellChannel = await member.guild.channels.fetch(config.farewell.channelId);
+    if (!farewell.enabled || !farewell.channelId) return;
+    const farewellChannel = await member.guild.channels.fetch(farewell.channelId);
     if (!farewellChannel?.isSendable()) return;
 
     await farewellChannel
       .send({
-        content: replacePlaceholders(config.farewell.message.content ?? '', member.user, member.guild),
-        embeds: [getEmbed(member.user, member.guild, config.farewell.message.embed)]
+        content: replacePlaceholders(farewell.message.content ?? '', member.user, member.guild),
+        embeds: [getEmbed(member.user, member.guild, farewell.message.embed)]
       })
       .catch((err) => logger.debug({ err }, 'Could not send farewell message'));
   }

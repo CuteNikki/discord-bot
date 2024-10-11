@@ -7,7 +7,7 @@ import { guildModel } from 'models/guild';
 
 import type { GuildDocument } from 'types/guild';
 
-const DEFAULT_POPULATE = ['starboard', 'customVoice', 'reactionRoles', 'counting', 'ticket', 'moderation', 'level'];
+const DEFAULT_POPULATE = ['starboard', 'customVoice', 'reactionRoles', 'counting', 'ticket', 'moderation', 'level', 'welcome', 'farewell'];
 
 /**
  * Gets or creates the guild settings for a given guild ID

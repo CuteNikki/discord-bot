@@ -24,6 +24,7 @@
     "pino-pretty": "^11.2.2"
   },
   "devDependencies": {
+    "@eslint/compat": "^1.2.0",
     "@types/bun": "^1.1.11",
     "@types/ms": "^0.7.34",
     "@types/node-os-utils": "^1.3.4",
@@ -45,7 +46,7 @@
     "start": "bun run ./dist/src/index.js",
     "build": "rm -rf dist && bun tsc --build ./",
     "pretty": "prettier --write \"./**/*.{js,jsx,mjs,cjs,ts,tsx,json}\"",
-    "lint": "eslint src/**/*.ts"
+    "lint": "eslint --ignore-pattern \"locales/*\""
   },
   "prettier": {
     "printWidth": 160,

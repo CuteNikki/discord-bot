@@ -20,7 +20,7 @@ export default new Event({
       return;
     }
 
-    const settings = await getClientSettings(keys.DISCORD_BOT_ID);
+    const settings = (await getClientSettings(keys.DISCORD_BOT_ID)) ?? { support: { guildId: null } };
 
     // If the member was not updated in the support server, ignore
     if (settings.support.guildId !== newMember.guild.id) {

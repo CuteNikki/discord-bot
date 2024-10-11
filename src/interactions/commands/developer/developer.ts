@@ -171,7 +171,7 @@ export default new Command({
             return;
           }
 
-          const settings = await getClientSettings(keys.DISCORD_BOT_ID);
+          const settings = (await getClientSettings(keys.DISCORD_BOT_ID)) ?? { support: { guildId: null } };
 
           switch (options.getSubcommand()) {
             case 'set':
@@ -217,7 +217,7 @@ export default new Command({
             return;
           }
 
-          const settings = await getClientSettings(keys.DISCORD_BOT_ID);
+          const settings = (await getClientSettings(keys.DISCORD_BOT_ID)) ?? { support: { guildInvite: null } };
 
           switch (options.getSubcommand()) {
             case 'set':
@@ -263,7 +263,7 @@ export default new Command({
             return;
           }
 
-          const settings = await getClientSettings(keys.DISCORD_BOT_ID);
+          const settings = (await getClientSettings(keys.DISCORD_BOT_ID)) ?? { support: { botInvite: null } };
 
           switch (options.getSubcommand()) {
             case 'set':

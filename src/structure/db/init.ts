@@ -170,7 +170,7 @@ async function checkWeeklyLevel() {
   const WEEK = 604800000;
   const NOW = Date.now();
 
-  const { database } = await getClientSettings(keys.DISCORD_BOT_ID);
+  const { database } = (await getClientSettings(keys.DISCORD_BOT_ID)) ?? { database: { lastWeeklyClearAt: 0 } };
 
   // If now is bigger than last weekly clear plus a week, clear weekly database
   if (NOW > database.lastWeeklyClearAt + WEEK) {

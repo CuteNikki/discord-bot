@@ -45,7 +45,10 @@ export default new Command({
       const memoryUsed = (memoryInfo.usedMemMb / 1024).toFixed(2);
       const memoryTotal = Math.round(memoryInfo.totalMemMb / 1024);
 
-      const { database, stats } = await getClientSettings(keys.DISCORD_BOT_ID);
+      const { database, stats } = (await getClientSettings(keys.DISCORD_BOT_ID)) ?? {
+        database: { lastWeeklyClearAt: null },
+        stats: { buttonsExecuted: 0, buttonsFailed: 0, commandsExecuted: 0, commandsFailed: 0, guildsJoined: 0, guildsLeft: 0 }
+      };
 
       const dbStates = {
         0: t('botinfo.database.disconnected', { lng }),

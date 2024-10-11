@@ -7,10 +7,18 @@ import type { ClientDocument } from 'types/client';
 /**
  * Gets the client settings for a given application ID
  * @param {string} applicationId Application ID to get the client settings for
+ * @param {boolean} insert If true, inserts a new document if none exists (optional, default is false)
  * @returns {Promise<ClientDocument>} Client settings
  */
-export async function getClientSettings(applicationId: string): Promise<ClientDocument> {
-  return await clientModel.findOneAndUpdate({ applicationId }, {}, { upsert: true, new: true }).lean().exec();
+export async function getClientSettings<T extends boolean>(
+  applicationId: string,
+  insert: T = false as T
+): Promise<T extends true ? ClientDocument : ClientDocument | null> {
+  let document = await clientModel.findOne({ applicationId }).lean().exec();
+  if (insert && !document) {
+    document = await updateClientSettings(applicationId);
+  }
+  return document as T extends true ? ClientDocument : ClientDocument | null;
 }
 
 /**
@@ -19,7 +27,7 @@ export async function getClientSettings(applicationId: string): Promise<ClientDo
  * @param {UpdateQuery<ClientDocument>} query Query to update the client settings with
  * @returns {Promise<ClientDocument>} Updated client settings
  */
-async function updateClientSettings(applicationId: string, query: UpdateQuery<ClientDocument>): Promise<ClientDocument> {
+async function updateClientSettings(applicationId: string, query: UpdateQuery<ClientDocument> = {}): Promise<ClientDocument> {
   return await clientModel.findOneAndUpdate({ applicationId }, query, { upsert: true, new: true }).lean().exec();
 }
 

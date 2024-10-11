@@ -1,79 +1,69 @@
 import { updateGuildSettings } from 'db/guild';
 import { countingModel } from 'models/counting';
+import type { UpdateQuery } from 'mongoose';
 
 import type { CountingDocument } from 'types/counting';
 
 /**
- * Gets the counting
- * @param {string} guildId Guild ID to get the counting for
- * @returns {Promise<Counting | null>} Counting
+ * Gets the counting settings
+ * @param {string} guildId Guild ID to get the counting settings for
+ * @param {boolean} insert If true, inserts a new document if none exists (optional, default is false)
+ * @returns {Promise<CountingDocument>} Client settings
  */
-export async function getCounting(guildId: string): Promise<CountingDocument | null> {
-  return await countingModel.findOne({ guildId }).lean().exec();
+export async function getCounting<T extends boolean>(
+  guildId: string,
+  insert: T = false as T
+): Promise<T extends true ? CountingDocument : CountingDocument | null> {
+  let document = await countingModel.findOne({ guildId }).lean().exec();
+  if (insert && !document) {
+    document = await updateCounting(guildId);
+  }
+  return document as T extends true ? CountingDocument : CountingDocument | null;
 }
 
 /**
- * Sets up the counting
+ * Updates the counting settings
+ * @param {guildId} guildId Guild ID to update the counting settings for
+ * @param {UpdateQuery<CountingDocument>} query Query to update the counting settings with
+ * @returns {Promise<CountingDocument>} Updated counting settings
+ */
+export async function updateCounting(guildId: string, query: UpdateQuery<CountingDocument> = {}): Promise<CountingDocument> {
+  const document = await countingModel.findOneAndUpdate({ guildId }, query, { upsert: true, new: true }).lean().exec();
+
+  await updateGuildSettings(guildId, { $set: { counting: document._id } });
+
+  return document;
+}
+
+/**
+ * Sets up the counting settings
  * @param {string} guildId Guild ID to setup the counting for
  * @param {string} channelId Channel ID to set up the counting for
- * @param {boolean} resetOnFail Reset on fail
- * @returns {Promise<CountingDocument>} Counting
+ * @param {boolean} resetOnFail Whether to reset on fail
+ * @returns {Promise<CountingDocument>} Counting settings
  */
 export async function setupCounting(guildId: string, channelId: string, resetOnFail: boolean): Promise<CountingDocument> {
-  const document = await countingModel.findOneAndUpdate(
-    { guildId },
-    { $set: { channelId, resetOnFail, currentNumber: 0, currentNumberBy: null, currentNumberAt: null } },
-    { upsert: true, new: true }
-  );
-
-  await updateGuildSettings(guildId, { $set: { counting: document._id } });
-
-  return document;
+  return await updateCounting(guildId, { $set: { channelId, resetOnFail, currentNumber: 0, currentNumberBy: null, currentNumberAt: null } });
 }
 
 /**
- * Resets the counting
+ * Resets the counting settings
  * @param {string} guildId Guild ID to reset the counting for
- * @returns {Promise<CountingDocument>} Counting
+ * @returns {Promise<CountingDocument>} Updated counting settings
  */
 export async function resetCounting(guildId: string): Promise<CountingDocument> {
-  const document = await countingModel.findOneAndUpdate(
-    { guildId },
-    { $set: { channelId: null, resetOnFail: null, currentNumber: 0, highestNumber: 0, highestNumberAt: null, currentNumberBy: null, currentNumberAt: null } },
-    { upsert: true, new: true }
-  );
-
-  await updateGuildSettings(guildId, { $set: { counting: document._id } });
-
-  return document;
+  return await updateCounting(guildId, {
+    $set: { channelId: null, resetOnFail: null, currentNumber: 0, highestNumber: 0, highestNumberAt: null, currentNumberBy: null, currentNumberAt: null }
+  });
 }
 
 /**
- * Updates the counting
- * @param {string} guildId Guild ID to update the counting for
- * @param {string} channelId Channel ID to update the counting for
- * @param {boolean} resetOnFail Reset on fail
- * @returns {Promise<CountingDocument>} Counting
- */
-export async function updateCounting(guildId: string, channelId: string | null, resetOnFail: boolean): Promise<CountingDocument> {
-  const document = await countingModel.findOneAndUpdate({ guildId }, { $set: { channelId, resetOnFail } }, { upsert: true, new: true });
-
-  await updateGuildSettings(guildId, { $set: { counting: document._id } });
-
-  return document;
-}
-
-/**
- * Resets the counting
+ * Resets the counting settings
  * @param {string} guildId Guild ID to reset counting for
- * @returns {Promise<CountingDocument | null>} CountingDocument
+ * @returns {Promise<CountingDocument>} Updated counting settings
  */
-export async function failedCounting(guildId: string): Promise<CountingDocument | null> {
-  return await countingModel.findOneAndUpdate(
-    { guildId },
-    { $set: { currentNumber: 0, currentNumberBy: null, currentNumberAt: null } },
-    { upsert: false, new: true }
-  );
+export async function failedCounting(guildId: string): Promise<CountingDocument> {
+  return await updateCounting(guildId, { $set: { currentNumber: 0, currentNumberBy: null, currentNumberAt: null } });
 }
 
 /**
@@ -83,7 +73,7 @@ export async function failedCounting(guildId: string): Promise<CountingDocument 
  * @param {number} highestNumberAt Highest number at
  * @param {number} nextNumber Next number
  * @param {string} numberBy Number by
- * @returns {Promise<CountingDocument>} CountingDocument
+ * @returns {Promise<CountingDocument>} Updated counting settings
  */
 export async function increaseCounting(
   guildId: string,
@@ -91,18 +81,14 @@ export async function increaseCounting(
   highestNumberAt: number,
   nextNumber: number,
   numberBy: string
-): Promise<CountingDocument | null> {
-  return await countingModel.findOneAndUpdate(
-    { guildId },
-    {
-      $set: {
-        highestNumber: Math.max(highestNumber, nextNumber),
-        highestNumberAt: nextNumber >= highestNumber ? Date.now() : highestNumberAt,
-        currentNumber: nextNumber,
-        currentNumberBy: numberBy,
-        currentNumberAt: Date.now()
-      }
-    },
-    { upsert: false, new: true }
-  );
+): Promise<CountingDocument> {
+  return await updateCounting(guildId, {
+    $set: {
+      highestNumber: Math.max(highestNumber, nextNumber),
+      highestNumberAt: nextNumber >= highestNumber ? Date.now() : highestNumberAt,
+      currentNumber: nextNumber,
+      currentNumberBy: numberBy,
+      currentNumberAt: Date.now()
+    }
+  });
 }

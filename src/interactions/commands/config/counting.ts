@@ -154,7 +154,7 @@ export default new Command({
             return;
           }
 
-          await updateCounting(guildId, channel?.id ?? counting.channelId, resetOnFail ?? counting.resetOnFail);
+          await updateCounting(guildId, { $set: { channelId: channel?.id ?? counting.channelId, resetOnFail: resetOnFail ?? counting.resetOnFail } });
 
           await interaction.editReply({
             embeds: [new EmbedBuilder().setColor(client.colors.counting).setDescription(response)]

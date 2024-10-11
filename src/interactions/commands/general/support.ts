@@ -20,7 +20,7 @@ export default new Command({
     const ephemeral = interaction.options.getBoolean('ephemeral', false) ?? true;
     await interaction.deferReply({ ephemeral });
 
-    const settings = await getClientSettings(keys.DISCORD_BOT_ID);
+    const settings = (await getClientSettings(keys.DISCORD_BOT_ID)) ?? { support: { guildInvite: null } };
 
     await interaction.editReply({
       embeds: [new EmbedBuilder().setColor(client.colors.general).setTitle(t('support.title', { lng })).setDescription(settings.support.guildInvite)]

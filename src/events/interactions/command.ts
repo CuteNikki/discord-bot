@@ -57,7 +57,7 @@ export default new Event({
 
       switch (command.options.module) {
         case ModuleType.Moderation:
-          if (!guildSettings.moderation.enabled) {
+          if (!guildSettings.moderation?.enabled) {
             await interaction.reply(message);
             return;
           }

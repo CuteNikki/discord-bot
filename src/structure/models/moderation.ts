@@ -8,7 +8,7 @@ export const moderationModel: Model<ModerationDocument> =
     'moderation',
     new Schema<ModerationDocument>({
       guildId: { type: String, required: true },
-      enabled: { type: Boolean, default: false, required: true },
+      enabled: { type: Boolean, default: true, required: true },
       staffroleId: { type: String, required: false },
       reasonsRequired: { type: Boolean, default: false, required: true }
     })

@@ -1,4 +1,10 @@
 import type { Types } from 'mongoose';
+import type { CountingDocument } from 'types/counting';
+import type { CustomVoiceDocument } from 'types/custom-voice';
+import type { ModerationDocument } from 'types/moderation';
+import type { ReactionRoleDocument } from 'types/reaction-roles';
+import type { StarboardDocument } from 'types/starboard';
+import type { TicketDocument } from 'types/ticket';
 
 export enum AnnouncementType {
   UserChannel,
@@ -89,14 +95,12 @@ export type GuildDocument = {
   _id: Types.ObjectId;
   guildId: string;
   language?: string;
-  customVoice?: Types.ObjectId;
-  starboard?: Types.ObjectId;
-  reactionRoles?: Types.ObjectId;
-  counting?: Types.ObjectId;
-  ticket?: Types.ObjectId;
-  moderation: {
-    enabled: boolean;
-  };
+  customVoice?: CustomVoiceDocument;
+  starboard?: StarboardDocument;
+  reactionRoles?: ReactionRoleDocument;
+  counting?: CountingDocument;
+  ticket?: TicketDocument;
+  moderation?: ModerationDocument;
   level: {
     enabled: boolean;
     channelId?: string;

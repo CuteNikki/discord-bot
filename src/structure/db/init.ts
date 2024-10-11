@@ -8,8 +8,8 @@ import { DiscordClient } from 'classes/client';
 
 import { getClientSettings, updateLastWeeklyClearAt } from 'db/client';
 import { deleteCustomVoiceChannel, getCustomVoiceChannels } from 'db/custom-voice-channel';
-import { deleteGiveaway, getAllGiveaways, getWinners } from 'db/giveaway';
-import { closeInfraction, getUnresolvedInfractions } from 'db/infraction';
+import { deleteGiveawayById, getAllGiveaways, getGiveawayWinners } from 'db/giveaway';
+import { closeInfractionById, getUnresolvedInfractions } from 'db/infraction';
 import { getGuildLanguage, getUserLanguage } from 'db/language';
 import { deleteWeeklyLevels } from 'db/level';
 import { deleteExpiredReminders, getExpiredReminders } from 'db/reminder';
@@ -79,7 +79,7 @@ async function clearGiveaways(client: DiscordClient) {
       continue; // Continue to the next giveaway
     }
 
-    const winners = getWinners(giveaway.participants, giveaway.winnerIds, giveaway.winnerCount);
+    const winners = getGiveawayWinners(giveaway.participants, giveaway.winnerCount, giveaway.winnerIds);
 
     const lng = await getGuildLanguage(guild.id);
 
@@ -132,7 +132,7 @@ async function clearGiveaways(client: DiscordClient) {
   }
 
   async function deleteCurrentGiveaway(giveaway: GiveawayDocument) {
-    await deleteGiveaway(giveaway._id);
+    await deleteGiveawayById(giveaway._id);
     logger.debug(giveaway, `[${client.cluster.id}] Deleted giveaway`);
   }
 }
@@ -244,7 +244,7 @@ async function clearInfractions(client: DiscordClient) {
   }
 
   async function closeCurrentInfraction(infraction: InfractionDocument) {
-    await closeInfraction(infraction._id);
+    await closeInfractionById(infraction._id);
     logger.debug(infraction, `[${client.cluster.id}] Closed infraction`);
   }
 }

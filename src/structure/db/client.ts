@@ -15,9 +15,11 @@ export async function getClientSettings<T extends boolean>(
   insert: T = false as T
 ): Promise<T extends true ? ClientDocument : ClientDocument | null> {
   let document = await clientModel.findOne({ applicationId }).lean().exec();
+
   if (insert && !document) {
-    document = await updateClientSettings(applicationId);
+    document = await updateClientSettings(applicationId, {});
   }
+
   return document as T extends true ? ClientDocument : ClientDocument | null;
 }
 
@@ -27,7 +29,7 @@ export async function getClientSettings<T extends boolean>(
  * @param {UpdateQuery<ClientDocument>} query Query to update the client settings with
  * @returns {Promise<ClientDocument>} Updated client settings
  */
-async function updateClientSettings(applicationId: string, query: UpdateQuery<ClientDocument> = {}): Promise<ClientDocument> {
+async function updateClientSettings(applicationId: string, query: UpdateQuery<ClientDocument>): Promise<ClientDocument> {
   return await clientModel.findOneAndUpdate({ applicationId }, query, { upsert: true, new: true }).lean().exec();
 }
 

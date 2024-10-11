@@ -3,7 +3,7 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
-import { getGuildSettings } from 'db/guild';
+import { getGuild } from 'db/guild';
 
 import { logger } from 'utils/logger';
 
@@ -14,7 +14,7 @@ export default new Event({
     const { guild, name, id, url, description, format, tags } = sticker;
     if (!guild) return;
 
-    const config = await getGuildSettings(guild.id);
+    const config = await getGuild(guild.id);
 
     if (!config.log.enabled || !config.log.events.stickerCreate || !config.log.channelId) return;
 

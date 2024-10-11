@@ -3,7 +3,7 @@ import { Events } from 'discord.js';
 import { Event } from 'classes/event';
 
 import { getClientSettings } from 'db/client';
-import { addBadge, getUserData } from 'db/user';
+import { addBadge, getUser } from 'db/user';
 
 import { BadgeType } from 'types/user';
 
@@ -27,7 +27,7 @@ export default new Event({
       return;
     }
 
-    const userData = await getUserData(newMember.user.id);
+    const userData = (await getUser(newMember.user.id)) ?? { badges: [] };
 
     // If the member already has the Supporter badge, ignore
     if (userData.badges.map((badge) => badge.id).includes(BadgeType.Supporter)) {

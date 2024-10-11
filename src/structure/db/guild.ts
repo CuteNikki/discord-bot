@@ -1,33 +1,33 @@
 import type { UpdateQuery } from 'mongoose';
 
-import { getGiveaways } from 'db/giveaway';
-import { getAllGuildInfractions } from 'db/infraction';
-import { getAllGuildLevels } from 'db/level';
+import { getGuildGiveaways } from 'db/giveaway';
+import { getGuildInfractions } from 'db/infraction';
+import { getGuildLevels } from 'db/level';
 import { guildModel } from 'models/guild';
 
 import type { GuildDocument } from 'types/guild';
 
+const DEFAULT_POPULATE = ['starboard', 'customVoice', 'reactionRoles', 'counting', 'ticket', 'moderation'];
+
 /**
  * Gets or creates the guild settings for a given guild ID
- * @param {string} guildId Guild ID to get the settings for
+ * @param {string} guildId ID of the guild to get
+ * @param {string[]} populate Modules to populate
  * @returns {Promise<GuildDocument>} Guild settings
  */
-export async function getGuildSettings(guildId: string): Promise<GuildDocument> {
-  return await guildModel
-    .findOneAndUpdate({ guildId }, {}, { upsert: true, new: true })
-    .populate(['starboard', 'customVoice', 'reactionRoles', 'counting', 'ticket', 'moderation'])
-    .lean()
-    .exec();
+export async function getGuild(guildId: string, populate: string[] = DEFAULT_POPULATE): Promise<GuildDocument> {
+  return await updateGuild(guildId, {}, populate);
 }
 
 /**
- * Updates the guild settings for a given guild ID
- * @param {string} guildId Guild ID to update the settings for
- * @param {UpdateQuery<GuildDocument>} query Query to update the settings with
- * @returns {Promise<GuildDocument>} Updated guild settings
+ * Updates guild settings for a given guild ID
+ * @param {string} guildId ID of the guild to update
+ * @param {UpdateQuery<GuildDocument>} query Update query
+ * @param {string[]} populate Modules to populate
+ * @returns {Promise<GuildDocument>} Updates guild settings
  */
-export async function updateGuildSettings(guildId: string, query: UpdateQuery<GuildDocument>): Promise<GuildDocument> {
-  return await guildModel.findOneAndUpdate({ guildId }, query, { upsert: true, new: true }).lean().exec();
+export async function updateGuild(guildId: string, query: UpdateQuery<GuildDocument>, populate: string[] = DEFAULT_POPULATE): Promise<GuildDocument> {
+  return await guildModel.findOneAndUpdate({ guildId }, query, { upsert: true, new: true }).populate(populate).lean().exec();
 }
 
 /**
@@ -35,14 +35,14 @@ export async function updateGuildSettings(guildId: string, query: UpdateQuery<Gu
  * @param {string} guildId Guild ID to get the data for
  * @returns {Promise<object>} All data
  */
-export async function getGuildDataExport(guildId: string): Promise<object> {
-  const guildData = await getGuildSettings(guildId);
-  const giveaways = await getGiveaways(guildId);
-  const infractions = await getAllGuildInfractions(guildId);
-  const levels = await getAllGuildLevels(guildId);
+export async function getGuildExport(guildId: string): Promise<object> {
+  const guild = await getGuild(guildId);
+  const giveaways = await getGuildGiveaways(guildId);
+  const infractions = await getGuildInfractions(guildId);
+  const levels = await getGuildLevels(guildId);
 
   return {
-    ...guildData,
+    ...guild,
     giveaways,
     infractions,
     ...levels

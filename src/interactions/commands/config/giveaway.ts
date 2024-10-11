@@ -16,7 +16,7 @@ import ms from 'ms';
 
 import { Command, ModuleType } from 'classes/command';
 
-import { createGiveaway, deleteGiveaway, findGiveawayById, getGiveaways, getWinners, updateGiveaway } from 'db/giveaway';
+import { createGiveaway, deleteGiveawayById, findGiveawayById, getGiveawayWinners, getGuildGiveaways, updateGiveawayById } from 'db/giveaway';
 import { getGuildLanguage } from 'db/language';
 
 import { logger } from 'utils/logger';
@@ -79,7 +79,7 @@ export default new Command({
     const { options, guildId } = interaction;
 
     // Needed for create and list
-    const giveaways = await getGiveaways(guildId);
+    const giveaways = await getGuildGiveaways(guildId);
 
     const guildLng = await getGuildLanguage(guildId);
 
@@ -205,7 +205,7 @@ export default new Command({
             return;
           }
 
-          const updatedGiveaway = await updateGiveaway(id, {
+          const updatedGiveaway = await updateGiveawayById(id, {
             $set: {
               winnerCount: winners ?? giveaway.winnerCount,
               endsAt: duration ? giveaway.createdAt + ms(duration) : giveaway.endsAt,
@@ -282,7 +282,7 @@ export default new Command({
             return;
           }
 
-          const winners = getWinners(giveaway.participants, giveaway.winnerIds, winnerCount);
+          const winners = getGiveawayWinners(giveaway.participants, winnerCount, giveaway.winnerIds);
 
           await interaction.editReply({
             embeds: [
@@ -311,7 +311,7 @@ export default new Command({
             return;
           }
 
-          await updateGiveaway(id, { $set: { endsAt: Date.now() } });
+          await updateGiveawayById(id, { $set: { endsAt: Date.now() } });
 
           await interaction.editReply({
             embeds: [new EmbedBuilder().setColor(client.colors.giveaway).setDescription(t('giveaway.end.success', { lng }))]
@@ -331,7 +331,7 @@ export default new Command({
             return;
           }
 
-          await deleteGiveaway(id);
+          await deleteGiveawayById(id);
 
           await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.giveaway).setDescription(t('giveaway.delete.success', { lng }))] });
 

@@ -53,30 +53,30 @@ export async function findGiveawayByMessage(messageId: string): Promise<Giveaway
 
 /**
  * Find a giveaway by ID
- * @param {Types.ObjectId | string} id ID of the giveaway
+ * @param {Types.ObjectId | string} giveawayId ID of the giveaway
  * @returns {Promise<GiveawayDocument | null>} Giveaway or null if not found
  */
-export async function findGiveawayById(id: Types.ObjectId | string): Promise<GiveawayDocument | null> {
-  return await giveawayModel.findById(id).lean().exec();
+export async function findGiveawayById(giveawayId: Types.ObjectId | string): Promise<GiveawayDocument | null> {
+  return await giveawayModel.findById(giveawayId).lean().exec();
 }
 
 /**
  * Update a giveaway
- * @param {Types.ObjectId | string} id ID of the giveaway
+ * @param {Types.ObjectId | string} giveawayId ID of the giveaway
  * @param {UpdateQuery<GiveawayDocument>} query Update query
  * @returns {Promise<GiveawayDocument | null>} Updated giveaway or null if not found
  */
-export async function updateGiveaway(id: Types.ObjectId | string, query: UpdateQuery<GiveawayDocument>): Promise<GiveawayDocument> {
-  return await giveawayModel.findOneAndUpdate({ _id: id }, query, { new: true, upsert: true }).lean().exec();
+export async function updateGiveawayById(giveawayId: Types.ObjectId | string, query: UpdateQuery<GiveawayDocument>): Promise<GiveawayDocument> {
+  return await giveawayModel.findOneAndUpdate({ _id: giveawayId }, query, { new: true, upsert: true }).lean().exec();
 }
 
 /**
  * Delete a giveaway
- * @param {Types.ObjectId | string} id ID of the giveaway
+ * @param {Types.ObjectId | string} giveawayId ID of the giveaway
  * @returns {Promise<GiveawayDocument | null>} Deleted giveaway or null if not found
  */
-export async function deleteGiveaway(id: Types.ObjectId | string): Promise<GiveawayDocument | null> {
-  return await giveawayModel.findByIdAndDelete(id).lean().exec();
+export async function deleteGiveawayById(giveawayId: Types.ObjectId | string): Promise<GiveawayDocument | null> {
+  return await giveawayModel.findByIdAndDelete(giveawayId).lean().exec();
 }
 
 /**
@@ -84,7 +84,7 @@ export async function deleteGiveaway(id: Types.ObjectId | string): Promise<Givea
  * @param {string} guildId Guild ID to get the giveaways for
  * @returns {Promise<GiveawayDocument[]>} Giveaways of the guild
  */
-export async function getGiveaways(guildId: string): Promise<GiveawayDocument[]> {
+export async function getGuildGiveaways(guildId: string): Promise<GiveawayDocument[]> {
   return await giveawayModel.find({ guildId }).lean().exec();
 }
 
@@ -102,8 +102,8 @@ export async function getAllGiveaways(): Promise<GiveawayDocument[]> {
  * @param {string} userId user ID of the participant to add
  * @returns {Promise<GiveawayDocument | null>} Giveaway or null if not found
  */
-export async function addParticipant(giveawayId: Types.ObjectId | string, userId: string): Promise<GiveawayDocument | null> {
-  return await updateGiveaway(giveawayId, { $push: { participants: userId } });
+export async function addParticipantById(giveawayId: Types.ObjectId | string, userId: string): Promise<GiveawayDocument | null> {
+  return await updateGiveawayById(giveawayId, { $push: { participants: userId } });
 }
 
 /**
@@ -112,8 +112,8 @@ export async function addParticipant(giveawayId: Types.ObjectId | string, userId
  * @param {string} userId user ID of the participant to remove
  * @returns {Promise<GiveawayDocument | null>} Giveaway or null if not found
  */
-export async function removeParticipant(giveawayId: Types.ObjectId | string, userId: string): Promise<GiveawayDocument | null> {
-  return await updateGiveaway(giveawayId, { $pull: { participants: userId } });
+export async function removeParticipantById(giveawayId: Types.ObjectId | string, userId: string): Promise<GiveawayDocument | null> {
+  return await updateGiveawayById(giveawayId, { $pull: { participants: userId } });
 }
 
 /**
@@ -123,15 +123,16 @@ export async function removeParticipant(giveawayId: Types.ObjectId | string, use
  * @param {number} winnerCount
  * @returns {string[]} Winners
  */
-export function getWinners(participants: string[], winnerIds: string[], winnerCount: number): string[] {
+export function getGiveawayWinners(participants: string[], winnerCount: number = 1, winnerIds?: string[]): string[] {
   const shuffledParticipants = shuffle(participants);
   const winners = [];
 
   for (let i = 0; i < shuffledParticipants.length && winners.length < winnerCount; i++) {
     const participant = shuffledParticipants[i];
-    if (!winnerIds.includes(participant)) {
-      winners.push(participant);
+    if (winnerIds && !winnerIds.includes(participant)) {
+      continue;
     }
+    winners.push(participant);
   }
 
   return winners;

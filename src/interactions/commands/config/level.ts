@@ -12,8 +12,8 @@ import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
-import { getGuildSettings, updateGuildSettings } from 'db/guild';
-import { addLevel, addXP, getLevelForce, getRewardsForLevel, setLevel, setXP } from 'db/level';
+import { getGuild, updateGuild } from 'db/guild';
+import { addExp, addLevel, getLevel, getRewardsForLevel, setExp, setLevel } from 'db/level';
 
 import { AnnouncementType } from 'types/guild';
 
@@ -194,7 +194,7 @@ export default new Command({
 
     const { options, guild } = interaction;
 
-    const { level } = await getGuildSettings(guild.id);
+    const { level } = await getGuild(guild.id);
     const { ignoredRoles, ignoredChannels, enabledChannels, enabled, announcement, rewards, channelId } = level;
 
     switch (options.getSubcommandGroup()) {
@@ -398,7 +398,7 @@ export default new Command({
                   return;
                 }
 
-                await updateGuildSettings(guild.id, { $set: { ['level.enabled']: true } });
+                await updateGuild(guild.id, { $set: { ['level.enabled']: true } });
 
                 await interaction.editReply({
                   embeds: [new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.toggle.on', { lng }))]
@@ -414,7 +414,7 @@ export default new Command({
                   return;
                 }
 
-                await updateGuildSettings(guild.id, { $set: { ['level.enabled']: false } });
+                await updateGuild(guild.id, { $set: { ['level.enabled']: false } });
 
                 await interaction.editReply({
                   embeds: [new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.toggle.off', { lng }))]
@@ -438,7 +438,7 @@ export default new Command({
                   return;
                 }
 
-                await updateGuildSettings(guild.id, {
+                await updateGuild(guild.id, {
                   $set: {
                     ['level.channelId']: channel.id,
                     ['level.announcement']: AnnouncementType.OtherChannel
@@ -459,7 +459,7 @@ export default new Command({
                   return;
                 }
 
-                await updateGuildSettings(guild.id, {
+                await updateGuild(guild.id, {
                   $set: {
                     ['level.channelId']: undefined,
                     ['level.announcement']: AnnouncementType.UserChannel
@@ -480,7 +480,7 @@ export default new Command({
                   return;
                 }
 
-                await updateGuildSettings(guild.id, {
+                await updateGuild(guild.id, {
                   $set: {
                     ['level.channelId']: undefined,
                     ['level.announcement']: AnnouncementType.PrivateMessage
@@ -501,7 +501,7 @@ export default new Command({
                   return;
                 }
 
-                await updateGuildSettings(guild.id, {
+                await updateGuild(guild.id, {
                   $set: {
                     ['level.channelId']: undefined,
                     ['level.announcement']: AnnouncementType.None
@@ -540,7 +540,7 @@ export default new Command({
                   return;
                 }
 
-                await updateGuildSettings(guild.id, { $push: { ['level.rewards']: { level, roleId: role.id } } });
+                await updateGuild(guild.id, { $push: { ['level.rewards']: { level, roleId: role.id } } });
 
                 await interaction.editReply({
                   embeds: [new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.rewards.added', { lng, level, role: role.toString() }))]
@@ -559,7 +559,7 @@ export default new Command({
                   return;
                 }
 
-                await updateGuildSettings(guild.id, { $pull: { ['level.rewards']: { _id: reward._id } } });
+                await updateGuild(guild.id, { $pull: { ['level.rewards']: { _id: reward._id } } });
 
                 await interaction.editReply({
                   embeds: [new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.rewards.removed', { lng }))]
@@ -590,7 +590,7 @@ export default new Command({
                   return;
                 }
 
-                await updateGuildSettings(guild.id, { $push: { ['level.ignoredRoles']: role.id } });
+                await updateGuild(guild.id, { $push: { ['level.ignoredRoles']: role.id } });
 
                 await interaction.editReply({
                   embeds: [new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.ignored-roles.added', { lng, role: role.toString() }))]
@@ -608,7 +608,7 @@ export default new Command({
                   return;
                 }
 
-                await updateGuildSettings(guild.id, { $pull: { ['level.ignoredRoles']: roleId } });
+                await updateGuild(guild.id, { $pull: { ['level.ignoredRoles']: roleId } });
 
                 await interaction.editReply({
                   embeds: [new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.ignored-roles.removed', { lng }))]
@@ -639,7 +639,7 @@ export default new Command({
                   return;
                 }
 
-                await updateGuildSettings(guild.id, { $push: { ['level.ignoredChannels']: channel.id } });
+                await updateGuild(guild.id, { $push: { ['level.ignoredChannels']: channel.id } });
 
                 await interaction.editReply({
                   embeds: [
@@ -659,7 +659,7 @@ export default new Command({
                   return;
                 }
 
-                await updateGuildSettings(guild.id, { $pull: { ['level.ignoredChannels']: channelId } });
+                await updateGuild(guild.id, { $pull: { ['level.ignoredChannels']: channelId } });
 
                 await interaction.editReply({
                   embeds: [new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.ignored-channels.removed', { lng }))]
@@ -690,7 +690,7 @@ export default new Command({
                   return;
                 }
 
-                await updateGuildSettings(guild.id, { $push: { ['level.enabledChannels']: channel.id } });
+                await updateGuild(guild.id, { $push: { ['level.enabledChannels']: channel.id } });
 
                 await interaction.editReply({
                   embeds: [
@@ -710,7 +710,7 @@ export default new Command({
                   return;
                 }
 
-                await updateGuildSettings(guild.id, { $pull: { ['level.enabledChannels']: channelId } });
+                await updateGuild(guild.id, { $pull: { ['level.enabledChannels']: channelId } });
 
                 await interaction.editReply({
                   embeds: [new EmbedBuilder().setColor(client.colors.level).setDescription(t('level.enabled-channels.removed', { lng }))]
@@ -735,7 +735,7 @@ export default new Command({
 
                 const member = guild.members.cache.get(user.id);
 
-                const userLevel = await addXP(user.id, guild.id, xp);
+                const userLevel = await addExp(user.id, guild.id, xp);
                 const rewards = await getRewardsForLevel(userLevel);
 
                 if (member && rewards.length) {
@@ -765,8 +765,8 @@ export default new Command({
 
                 const member = guild.members.cache.get(user.id);
 
-                const currentLevel = await getLevelForce(user.id, guild.id);
-                const updatedLevel = await addXP(user.id, guild.id, -xp);
+                const currentLevel = await getLevel(user.id, guild.id, true);
+                const updatedLevel = await addExp(user.id, guild.id, -xp);
 
                 const oldRewards = await getRewardsForLevel(currentLevel);
                 const newRewards = await getRewardsForLevel(updatedLevel);
@@ -801,7 +801,7 @@ export default new Command({
 
                 const member = guild.members.cache.get(user.id);
 
-                const userLevel = await setXP(user.id, guild.id, xp);
+                const userLevel = await setExp(user.id, guild.id, xp);
                 const rewards = await getRewardsForLevel(userLevel);
 
                 if (member && rewards.length) {
@@ -867,7 +867,7 @@ export default new Command({
 
                 const member = guild.members.cache.get(user.id);
 
-                const currentLevel = await getLevelForce(user.id, guild.id);
+                const currentLevel = await getLevel(user.id, guild.id, true);
                 const updatedLevel = await addLevel(user.id, guild.id, -level);
 
                 const oldRewards = await getRewardsForLevel(currentLevel);

@@ -5,8 +5,8 @@ import { ModuleType } from 'classes/command';
 import { Event } from 'classes/event';
 
 import { incrementCommandsExecuted, incrementCommandsFailed } from 'db/client';
-import { getGuildSettings } from 'db/guild';
-import { getUserData } from 'db/user';
+import { getGuild } from 'db/guild';
+import { getUser } from 'db/user';
 
 import { keys } from 'constants/keys';
 
@@ -23,7 +23,7 @@ export default new Event({
     // We only want to run this event for commands
     if (!interaction.isCommand()) return;
 
-    const { banned, language } = await getUserData(interaction.user.id);
+    const { banned, language } = (await getUser(interaction.user.id)) ?? { banned: false, language: supportedLanguages[0] };
 
     // If the user is banned, we don't want to continue
     if (banned) {
@@ -46,7 +46,7 @@ export default new Event({
      * Module check
      */
     if (interaction.guild) {
-      const guildSettings = await getGuildSettings(interaction.guild.id);
+      const guildSettings = await getGuild(interaction.guild.id);
 
       const message: InteractionReplyOptions = {
         embeds: [

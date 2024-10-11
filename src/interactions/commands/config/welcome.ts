@@ -16,7 +16,7 @@ import { t } from 'i18next';
 import { Command, ModuleType } from 'classes/command';
 import { CustomEmbedBuilder, getEmbed, isEmptyEmbed } from 'classes/custom-embed';
 
-import { getGuildSettings, updateGuildSettings } from 'db/guild';
+import { getGuild, updateGuild } from 'db/guild';
 
 import { logger } from 'utils/logger';
 
@@ -49,7 +49,7 @@ export default new Command({
 
     const { options, guild, user } = interaction;
 
-    const config = await getGuildSettings(guild.id);
+    const config = await getGuild(guild.id);
 
     switch (options.getSubcommand()) {
       case 'channel':
@@ -62,7 +62,7 @@ export default new Command({
                 embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('welcome.channel.invalid', { lng }))]
               });
             }
-            await updateGuildSettings(guild.id, {
+            await updateGuild(guild.id, {
               $set: {
                 ['welcome.channelId']: null
               }
@@ -73,7 +73,7 @@ export default new Command({
             });
           }
 
-          await updateGuildSettings(guild.id, {
+          await updateGuild(guild.id, {
             $set: {
               ['welcome.channelId']: channel.id
             }
@@ -91,7 +91,7 @@ export default new Command({
             message: config.welcome.message
           });
           customBuilder.once('submit', async (msg) => {
-            await updateGuildSettings(guild.id, {
+            await updateGuild(guild.id, {
               $set: {
                 ['welcome.message']: msg
               }
@@ -176,7 +176,7 @@ export default new Command({
             });
           }
 
-          await updateGuildSettings(guild.id, {
+          await updateGuild(guild.id, {
             $set: {
               ['welcome.enabled']: true
             }
@@ -195,7 +195,7 @@ export default new Command({
             });
           }
 
-          await updateGuildSettings(guild.id, {
+          await updateGuild(guild.id, {
             $set: {
               ['welcome.enabled']: false
             }

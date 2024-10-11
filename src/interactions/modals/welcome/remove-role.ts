@@ -3,7 +3,7 @@ import { t } from 'i18next';
 
 import { Modal } from 'classes/modal';
 
-import { getGuildSettings, updateGuildSettings } from 'db/guild';
+import { getGuild, updateGuild } from 'db/guild';
 
 export default new Modal({
   customId: 'modal-welcome-remove-role',
@@ -15,14 +15,14 @@ export default new Modal({
 
     const roleId = interaction.fields.getTextInputValue('role-id');
 
-    const config = await getGuildSettings(interaction.guild.id);
+    const config = await getGuild(interaction.guild.id);
 
     if (!config.welcome.roles.includes(roleId)) {
       await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('welcome.roles.none', { lng, roleId }))] });
       return;
     }
 
-    await updateGuildSettings(interaction.guild.id, {
+    await updateGuild(interaction.guild.id, {
       $pull: { ['welcome.roles']: roleId }
     });
 

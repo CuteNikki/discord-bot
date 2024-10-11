@@ -3,7 +3,7 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
-import { getGuildSettings } from 'db/guild';
+import { getGuild } from 'db/guild';
 
 import { logger } from 'utils/logger';
 
@@ -13,7 +13,7 @@ export default new Event({
   async execute(_client, thread) {
     const { guild, name, id, appliedTags, createdTimestamp, archiveTimestamp, locked, ownerId } = thread;
 
-    const config = await getGuildSettings(guild.id);
+    const config = await getGuild(guild.id);
 
     if (!config.log.enabled || !config.log.events.threadDelete || !config.log.channelId) return;
 

@@ -3,7 +3,7 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
-import { getUserData } from 'db/user';
+import { getUser } from 'db/user';
 
 import { keys } from 'constants/keys';
 
@@ -20,7 +20,7 @@ export default new Event({
     // We only want to run this event for modals
     if (!interaction.isModalSubmit()) return;
 
-    const { banned, language } = await getUserData(interaction.user.id);
+    const { banned, language } = (await getUser(interaction.user.id)) ?? { banned: false, language: supportedLanguages[0] };
 
     // If the user is banned, we don't want to continue
     if (banned) {

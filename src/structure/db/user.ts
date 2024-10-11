@@ -2,8 +2,8 @@ import type { UpdateQuery } from 'mongoose';
 
 import { userModel } from 'models/user';
 
-import { getAllUserInfractions } from 'db/infraction';
-import { getAllUserLevels } from 'db/level';
+import { getUserInfractions } from 'db/infraction';
+import { getUserLevels } from 'db/level';
 
 import { BadgeType, type UserDocument } from 'types/user';
 
@@ -12,8 +12,14 @@ import { BadgeType, type UserDocument } from 'types/user';
  * @param {string} userId User ID to get the user data for
  * @returns {Promise<UserDocument>} User data
  */
-export async function getUserData(userId: string): Promise<UserDocument> {
-  return await userModel.findOneAndUpdate({ userId }, {}, { upsert: true, new: true });
+export async function getUser<T extends boolean>(userId: string, insert: T = false as T): Promise<T extends true ? UserDocument : UserDocument | null> {
+  let document = await userModel.findOne({ userId });
+
+  if (!document && insert) {
+    document = await updateUser(userId, {});
+  }
+
+  return document as T extends true ? UserDocument : UserDocument | null;
 }
 
 /**
@@ -21,25 +27,19 @@ export async function getUserData(userId: string): Promise<UserDocument> {
  * @param {string} userId User ID to get the user data for
  * @returns {Promise<object>} All data
  */
-export async function getUserDataExport(userId: string): Promise<object> {
-  const userData = await userModel.findOne({ userId }, {}, { upsert: false }).lean().exec();
-  const levels = await getAllUserLevels(userId);
-  const infractions = await getAllUserInfractions(userId);
+export async function getUserExport(userId: string): Promise<object> {
+  const user = await getUser(userId);
+  const levels = await getUserLevels(userId);
+  const infractions = await getUserInfractions(userId);
 
   return {
-    ...userData,
+    ...user,
     infractions,
     ...levels
   };
 }
 
-/**
- * Updates the user data for a given user ID
- * @param {string} userId User ID to update the user data for
- * @param {UpdateQuery<UserDocument>} query Query to update the user data with
- * @returns {Promise<UserDocument>} Updated user data
- */
-export async function updateUserData(userId: string, query: UpdateQuery<UserDocument>): Promise<UserDocument> {
+export async function updateUser(userId: string, query: UpdateQuery<UserDocument>) {
   return await userModel.findOneAndUpdate({ userId }, query, { upsert: true, new: true });
 }
 
@@ -50,7 +50,7 @@ export async function updateUserData(userId: string, query: UpdateQuery<UserDocu
  * @returns {Promise<UserDocument>} Updated user data
  */
 export async function addBadge(userId: string, badge: BadgeType): Promise<UserDocument> {
-  return await updateUserData(userId, { $push: { badges: { id: badge, receivedAt: Date.now() } } });
+  return await updateUser(userId, { $push: { badges: { id: badge, receivedAt: Date.now() } } });
 }
 
 /**
@@ -60,7 +60,7 @@ export async function addBadge(userId: string, badge: BadgeType): Promise<UserDo
  * @returns {Promise<UserDocument>} Updated user data
  */
 export async function removeBadge(userId: string, badge: BadgeType): Promise<UserDocument> {
-  return await updateUserData(userId, { $pull: { badges: { id: badge } } });
+  return await updateUser(userId, { $pull: { badges: { id: badge } } });
 }
 
 /**
@@ -69,7 +69,7 @@ export async function removeBadge(userId: string, badge: BadgeType): Promise<Use
  * @returns {Promise<UserDocument>} Updated user data
  */
 export async function banUser(userId: string): Promise<UserDocument> {
-  return await updateUserData(userId, { $set: { banned: true } });
+  return await updateUser(userId, { $set: { banned: true } });
 }
 
 /**
@@ -78,7 +78,7 @@ export async function banUser(userId: string): Promise<UserDocument> {
  * @returns {Promise<UserDocument>} Updated user data
  */
 export async function unbanUser(userId: string): Promise<UserDocument> {
-  return await updateUserData(userId, { $set: { banned: false } });
+  return await updateUser(userId, { $set: { banned: false } });
 }
 
 /**

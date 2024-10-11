@@ -3,7 +3,7 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
-import { getGuildSettings } from 'db/guild';
+import { getGuild } from 'db/guild';
 
 export default new Event({
   name: Events.GuildRoleCreate,
@@ -11,7 +11,7 @@ export default new Event({
   async execute(_client, role) {
     const { guild, name, id, hexColor, position, hoist, mentionable, managed, unicodeEmoji, permissions } = role;
 
-    const config = await getGuildSettings(guild.id);
+    const config = await getGuild(guild.id);
 
     if (!config.log.enabled || !config.log.events.roleCreate || !config.log.channelId) return;
 

@@ -1,5 +1,5 @@
-import { updateGuildSettings } from 'db/guild';
-import { updateUserData } from 'db/user';
+import { updateGuild } from 'db/guild';
+import { updateUser } from 'db/user';
 import { guildModel } from 'models/guild';
 import { userModel } from 'models/user';
 
@@ -18,7 +18,7 @@ export async function getGuildLanguage(guildId: string | null | undefined): Prom
   if (!guildId) return supportedLanguages[0];
 
   // Fetch guild from db and return language
-  const guild = await guildModel.findOne({ guildId }, {}, { upsert: false }).lean().exec();
+  const guild = await guildModel.findOne({ guildId }).lean().exec();
   return guild?.language ?? supportedLanguages[0];
 }
 
@@ -33,7 +33,7 @@ export async function updateGuildLanguage(guildId: string, language: string): Pr
   if (!supportedLanguages.includes(language)) language = supportedLanguages[0];
 
   // Update the guild in db
-  return await updateGuildSettings(guildId, { $set: { language } });
+  return await updateGuild(guildId, { $set: { language } });
 }
 
 /**
@@ -46,7 +46,7 @@ export async function getUserLanguage(userId: string | null | undefined): Promis
   if (!userId) return supportedLanguages[0];
 
   // Return language from user db
-  const userData = await userModel.findOne({ userId }, {}, { upsert: false }).lean().exec();
+  const userData = await userModel.findOne({ userId }).lean().exec();
   return userData?.language ?? supportedLanguages[0];
 }
 
@@ -61,5 +61,5 @@ export async function updateUserLanguage(userId: string, language: string): Prom
   if (!supportedLanguages.includes(language)) language = supportedLanguages[0];
 
   // Update the user in db
-  return await updateUserData(userId, { $set: { language } });
+  return await updateUser(userId, { $set: { language } });
 }

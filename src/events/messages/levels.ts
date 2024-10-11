@@ -3,9 +3,9 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
-import { getGuildSettings } from 'db/guild';
+import { getGuild } from 'db/guild';
 import { getGuildLanguage, getUserLanguage } from 'db/language';
-import { appendXP, getLevelForce, getRandomXP, getRewardsForLevel } from 'db/level';
+import { appendXP, getLevel, getRandomExp, getRewardsForLevel } from 'db/level';
 
 import { AnnouncementType } from 'types/guild';
 
@@ -24,7 +24,7 @@ export default new Event({
     const { channel, author: user, guild, member } = message;
 
     // Check if levelling is disabled, or if the channel is ignored and return
-    const guildSettings = await getGuildSettings(guild.id);
+    const guildSettings = await getGuild(guild.id);
     if (
       !guildSettings ||
       !guildSettings.level.enabled ||
@@ -35,9 +35,9 @@ export default new Event({
     }
 
     // Get current level before adding XP
-    const currentLevel = await getLevelForce(user.id, guild.id);
+    const currentLevel = await getLevel(user.id, guild.id, true);
     // Get updated level after adding XP
-    const updatedLevel = await appendXP(user.id, guild.id, getRandomXP());
+    const updatedLevel = await appendXP(user.id, guild.id, getRandomExp());
 
     // After we added XP, we add the user to a cooldown
     // We do not want the user to level up by spamming

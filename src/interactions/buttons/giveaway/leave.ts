@@ -3,7 +3,7 @@ import { t } from 'i18next';
 
 import { Button } from 'classes/button';
 
-import { findGiveawayById, removeParticipant } from 'db/giveaway';
+import { findGiveawayById, removeParticipantById } from 'db/giveaway';
 import { getGuildLanguage } from 'db/language';
 
 import { logger } from 'utils/logger';
@@ -44,7 +44,7 @@ export default new Button({
       return;
     }
 
-    await removeParticipant(giveaway._id, interaction.user.id);
+    await removeParticipantById(giveaway._id, interaction.user.id);
     await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('giveaway.leave.success', { lng }))] });
 
     const msg = await interaction.channel?.messages.fetch(giveaway.messageId);

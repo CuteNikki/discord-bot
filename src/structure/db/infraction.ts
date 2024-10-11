@@ -53,7 +53,7 @@ export async function getInfractions(guildId: string, userId: string): Promise<I
  * @param {string} infractionId Infraction ID to find
  * @returns {Promise<InfractionDocument | null>} Infraction or null if not found
  */
-export async function findInfraction(infractionId: Types.ObjectId | string): Promise<InfractionDocument | null> {
+export async function getInfractionById(infractionId: Types.ObjectId | string): Promise<InfractionDocument | null> {
   return await infractionModel.findById(infractionId).lean().exec();
 }
 
@@ -62,7 +62,7 @@ export async function findInfraction(infractionId: Types.ObjectId | string): Pro
  * @param {string} infractionId Infraction ID to delete
  * @returns {Promise<InfractionDocument | null>} Deleted infraction or null if not found
  */
-export async function deleteInfraction(infractionId: Types.ObjectId | string): Promise<InfractionDocument | null> {
+export async function deleteInfractionById(infractionId: Types.ObjectId | string): Promise<InfractionDocument | null> {
   return await infractionModel.findByIdAndDelete(infractionId).lean().exec();
 }
 
@@ -71,7 +71,7 @@ export async function deleteInfraction(infractionId: Types.ObjectId | string): P
  * @param {string} infractionId Infraction ID to close
  * @returns {Promise<InfractionDocument | null>} Closed infraction or null if not found
  */
-export async function closeInfraction(infractionId: Types.ObjectId | string): Promise<InfractionDocument | null> {
+export async function closeInfractionById(infractionId: Types.ObjectId | string): Promise<InfractionDocument | null> {
   return await infractionModel
     .findByIdAndUpdate(infractionId, { $set: { closed: true } })
     .lean()
@@ -94,7 +94,7 @@ export async function getUnresolvedInfractions(): Promise<InfractionDocument[]> 
  * @param {string} userId The ID of the user to get the infractions for
  * @returns {Promise<InfractionDocument[]>} Infractions
  */
-export async function getAllUserInfractions(userId: string): Promise<InfractionDocument[]> {
+export async function getUserInfractions(userId: string): Promise<InfractionDocument[]> {
   return await infractionModel.find({ userId }).lean().exec();
 }
 
@@ -103,6 +103,6 @@ export async function getAllUserInfractions(userId: string): Promise<InfractionD
  * @param {string} guildId The ID of the guild to get the infractions for
  * @returns {Promise<InfractionDocument[]>} Infractions
  */
-export async function getAllGuildInfractions(guildId: string): Promise<InfractionDocument[]> {
+export async function getGuildInfractions(guildId: string): Promise<InfractionDocument[]> {
   return await infractionModel.find({ guildId }).lean().exec();
 }

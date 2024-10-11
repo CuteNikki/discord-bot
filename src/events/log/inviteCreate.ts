@@ -3,7 +3,7 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
-import { getGuildSettings } from 'db/guild';
+import { getGuild } from 'db/guild';
 
 export default new Event({
   name: Events.InviteCreate,
@@ -12,7 +12,7 @@ export default new Event({
     const { guild, inviter, channel, url, expiresTimestamp, temporary, maxUses } = invite;
     if (!guild || guild instanceof InviteGuild) return;
 
-    const config = await getGuildSettings(guild.id);
+    const config = await getGuild(guild.id);
 
     if (!config.log.enabled || !config.log.events.inviteCreate || !config.log.channelId) return;
 

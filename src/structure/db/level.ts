@@ -1,8 +1,6 @@
-import type { UpdateQuery } from 'mongoose';
-
 import type { DiscordClient } from 'classes/client';
 
-import { getGuildSettings } from 'db/guild';
+import { getGuild } from 'db/guild';
 import { levelModel, weeklyLevelModel } from 'models/level';
 
 import type { LevelReward } from 'types/guild';
@@ -20,7 +18,7 @@ const XP_PER_LEVEL = 200;
  * @param {number} level
  * @returns {number} Total XP for the level
  */
-export function convertLevelToXP(level: number): number {
+export function convertLevelToExp(level: number): number {
   return level * XP_PER_LEVEL;
 }
 
@@ -29,7 +27,7 @@ export function convertLevelToXP(level: number): number {
  * @param {number} xp
  * @returns {number} Level for the XP
  */
-export function convertXpToLevel(xp: number): number {
+export function convertExpToLevel(xp: number): number {
   return Math.floor(xp / XP_PER_LEVEL);
 }
 
@@ -37,50 +35,50 @@ export function convertXpToLevel(xp: number): number {
  * Gets a random amount of XP
  * @returns {number} a number between 5 and 15
  */
-export function getRandomXP(): number {
+export function getRandomExp(): number {
   return getRandomNumber(5, 15);
 }
 
 /**
- * Gets the level and xp for a user in a guild
- * @param {string} userId
- * @param {string} guildId
- * @returns {Promise<LevelDocument | null>} level object or null if not found
+ * Gets the level and XP for a user in a guild
+ * @param {string} userId ID of the user to get the level for
+ * @param {string} guildId ID of the guild to get the level for
+ * @param {boolean} insert Whether to insert the document if it doesn't exist (optional, default: false)
+ * @returns {Promise<LevelDocument | null>} Level document or null if not found
  */
-export async function getLevel(userId: string, guildId: string): Promise<LevelDocument | null> {
-  return await levelModel.findOne({ userId, guildId }, {}, { upsert: false }).lean().exec();
+export async function getLevel<T extends boolean>(
+  userId: string,
+  guildId: string,
+  insert: T = false as T
+): Promise<T extends true ? LevelDocument : LevelDocument | null> {
+  let document = await levelModel.findOne({ guildId, userId }).lean().exec();
+
+  if (!document && insert) {
+    document = await levelModel.create({ guildId, userId, level: 0, xp: 0 });
+  }
+
+  return document as T extends true ? LevelDocument : LevelDocument | null;
 }
 
 /**
- * Gets or creates the level and xp for a user in a guild
- * @param {string} userId
- * @param {string} guildId
- * @param {UpdateQuery<LevelDocument>} updateQuery
- * @returns {Promise<LevelDocument>} level object
+ * Gets the weekly level and XP for a user in a guild
+ * @param {string} userId ID of the user to get the level for
+ * @param {string} guildId ID of the guild to get the level for
+ * @param {boolean} insert Whether to insert the document if it doesn't exist (optional, default: false)
+ * @returns {Promise<WeeklyLevelDocument | null>} Level document or null if not found
  */
-export async function getLevelForce(userId: string, guildId: string, updateQuery: UpdateQuery<LevelDocument> = {}): Promise<LevelDocument> {
-  return await levelModel.findOneAndUpdate({ userId, guildId }, updateQuery, { upsert: true, new: true }).lean().exec();
-}
+export async function getLevelWeekly<T extends boolean>(
+  userId: string,
+  guildId: string,
+  insert: T = false as T
+): Promise<T extends true ? WeeklyLevelDocument : WeeklyLevelDocument | null> {
+  let document = await weeklyLevelModel.findOne({ guildId, userId }).lean().exec();
 
-/**
- * Gets the weekly level and xp for a user in a guild
- * @param {string} userId
- * @param {string} guildId
- * @returns {Promise<WeeklyLevelDocument | null>} level object or null if not found
- */
-export async function getWeeklyLevel(userId: string, guildId: string): Promise<WeeklyLevelDocument | null> {
-  return await weeklyLevelModel.findOne({ userId, guildId }, {}, { upsert: false }).lean().exec();
-}
+  if (!document && insert) {
+    document = await weeklyLevelModel.create({ guildId, userId, level: 0, xp: 0 });
+  }
 
-/**
- * Gets or creates the weekly level and xp for a user in a guild
- * @param {string} userId
- * @param {string} guildId
- * @param {UpdateQuery<WeeklyLevelDocument>} updateQuery
- * @returns {Promise<WeeklyLevelDocument>} level object
- */
-export async function getWeeklyLevelForce(userId: string, guildId: string, updateQuery: UpdateQuery<WeeklyLevelDocument> = {}): Promise<WeeklyLevelDocument> {
-  return await weeklyLevelModel.findOneAndUpdate({ userId, guildId }, updateQuery, { upsert: true, new: true }).lean().exec();
+  return document as T extends true ? LevelDocument : LevelDocument | null;
 }
 
 /**
@@ -92,16 +90,16 @@ export async function getWeeklyLevelForce(userId: string, guildId: string, updat
  */
 export async function appendXP(userId: string, guildId: string, xp: number): Promise<LevelDocument> {
   // Handle weekly level
-  const currentWeekly = await getWeeklyLevelForce(userId, guildId);
-  const weeklyLevel = convertXpToLevel(currentWeekly.xp + xp);
+  const currentWeekly = await getLevelWeekly(userId, guildId, true);
+  const weeklyLevel = convertExpToLevel(currentWeekly.xp + xp);
   await weeklyLevelModel
     .findOneAndUpdate({ userId, guildId }, { $inc: { xp }, $set: { level: weeklyLevel } }, { upsert: true, new: true })
     .lean()
     .exec();
 
   // Handle current level
-  const current = await getLevelForce(userId, guildId);
-  const level = convertXpToLevel(current.xp + xp);
+  const current = await getLevel(userId, guildId, true);
+  const level = convertExpToLevel(current.xp + xp);
   return await levelModel
     .findOneAndUpdate({ userId, guildId }, { $inc: { xp }, $set: { level: level } }, { upsert: true, new: true })
     .lean()
@@ -109,18 +107,18 @@ export async function appendXP(userId: string, guildId: string, xp: number): Pro
 }
 
 /**
- * Set the xp of a user in a guild
+ * Set the XP of a user in a guild
  * @param {string} userId
  * @param {string} guildId
  * @param {number} xp
  * @returns {Promise<LevelDocument>} Updated level object
  */
-export async function setXP(userId: string, guildId: string, xp: number): Promise<LevelDocument> {
+export async function setExp(userId: string, guildId: string, xp: number): Promise<LevelDocument> {
   // Verify that the XP is within the allowed range
   if (xp > 200000) xp = 200000;
   if (xp < 0) xp = 0;
 
-  const level = convertXpToLevel(xp);
+  const level = convertExpToLevel(xp);
   return await levelModel.findOneAndUpdate({ userId, guildId }, { $set: { level, xp } }, { upsert: true, new: true }).lean().exec();
 }
 
@@ -131,12 +129,12 @@ export async function setXP(userId: string, guildId: string, xp: number): Promis
  * @param {number} xp
  * @returns {Promise<LevelDocument>} Updated level object
  */
-export async function addXP(userId: string, guildId: string, xp: number): Promise<LevelDocument> {
+export async function addExp(userId: string, guildId: string, xp: number): Promise<LevelDocument> {
   // Verify that the XP is within the allowed range
   if (xp > 200000) xp = 200000;
   if (xp < 0) xp = 0;
 
-  const level = convertXpToLevel(xp);
+  const level = convertExpToLevel(xp);
   return await levelModel.findOneAndUpdate({ userId, guildId }, { $inc: { xp }, $set: { level } }, { upsert: true, new: true }).lean().exec();
 }
 
@@ -152,7 +150,7 @@ export async function setLevel(userId: string, guildId: string, level: number): 
   if (level > 1000) level = 1000;
   if (level < 0) level = 0;
 
-  const xp = convertLevelToXP(level);
+  const xp = convertLevelToExp(level);
   return await levelModel.findOneAndUpdate({ userId, guildId }, { $set: { level, xp } }, { upsert: true, new: true }).lean().exec();
 }
 
@@ -168,7 +166,7 @@ export async function addLevel(userId: string, guildId: string, level: number): 
   if (level > 1000) level = 1000;
   if (level < 0) level = 0;
 
-  const xp = convertLevelToXP(level);
+  const xp = convertLevelToExp(level);
   return await levelModel.findOneAndUpdate({ userId, guildId }, { $inc: { xp }, $set: { level } }, { upsert: true, new: true }).lean().exec();
 }
 
@@ -178,7 +176,7 @@ export async function addLevel(userId: string, guildId: string, level: number): 
  * @returns {Promise<LevelReward[]>} Rewards for the level
  */
 export async function getRewardsForLevel(level: LevelDocument | PositionLevel): Promise<LevelReward[]> {
-  const guildSettings = await getGuildSettings(level.guildId);
+  const guildSettings = await getGuild(level.guildId);
   if (!guildSettings) return [];
 
   return guildSettings.level.rewards.filter((rw) => rw.level <= level.level);
@@ -270,7 +268,7 @@ export async function deleteWeeklyLevels() {
  * @param {string} userId User ID to get the levels for
  * @returns {Promise<{ levels: LevelDocument[], weeklyLevels: WeeklyLevelDocument[] }>} All levels
  */
-export async function getAllUserLevels(userId: string): Promise<{ levels: LevelDocument[]; weeklyLevels: WeeklyLevelDocument[] }> {
+export async function getUserLevels(userId: string): Promise<{ levels: LevelDocument[]; weeklyLevels: WeeklyLevelDocument[] }> {
   const levels = await levelModel.find({ userId }).lean().exec();
   const weeklyLevels = await weeklyLevelModel.find({ userId }).lean().exec();
 
@@ -285,7 +283,7 @@ export async function getAllUserLevels(userId: string): Promise<{ levels: LevelD
  * @param {string} guildId The ID of the guild to get the levels for
  * @returns {Promise<{ levels: LevelDocument[], weeklyLevels: WeeklyLevelDocument[] }>} All levels
  */
-export async function getAllGuildLevels(guildId: string): Promise<{ levels: LevelDocument[]; weeklyLevels: WeeklyLevelDocument[] }> {
+export async function getGuildLevels(guildId: string): Promise<{ levels: LevelDocument[]; weeklyLevels: WeeklyLevelDocument[] }> {
   const levels = await levelModel.find({ guildId }).lean().exec();
   const weeklyLevels = await weeklyLevelModel.find({ guildId }).lean().exec();
 

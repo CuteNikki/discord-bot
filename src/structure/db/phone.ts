@@ -69,7 +69,7 @@ export async function findConnection(channelId: string) {
 
 export async function updateLastMessageAt(_id: Types.ObjectId | string, timestamp?: number) {
   return await connectionModel
-    .findOneAndUpdate({ _id }, { $set: { lastMessageAt: timestamp ?? Date.now() } }, { upsert: false, new: true })
+    .findOneAndUpdate({ _id }, { $set: { lastMessageAt: timestamp ?? Date.now() } }, { new: true })
     .lean()
     .exec();
 }

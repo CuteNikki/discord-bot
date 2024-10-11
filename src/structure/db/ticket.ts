@@ -2,7 +2,7 @@ import type { Types, UpdateQuery } from 'mongoose';
 
 import { ticketConfigModel, ticketGroupModel, ticketModel } from 'models/ticket';
 
-import { updateGuildSettings } from 'db/guild';
+import { updateGuild } from 'db/guild';
 import type { TicketChoice, TicketConfigDocument, TicketDocument, TicketGroupDocument } from 'types/ticket';
 
 /**
@@ -11,7 +11,7 @@ import type { TicketChoice, TicketConfigDocument, TicketDocument, TicketGroupDoc
  * @returns {Promise<TicketConfigDocument | null>} Ticket config or null if not found
  */
 export async function getTicketConfig(guildId: string): Promise<TicketConfigDocument | null> {
-  return await ticketConfigModel.findOne({ guildId }, {}, { upsert: false }).lean().exec();
+  return await ticketConfigModel.findOne({ guildId }).lean().exec();
 }
 
 /**
@@ -25,7 +25,7 @@ export async function enableTicketModule(guildId: string): Promise<TicketConfigD
     .lean()
     .exec();
 
-  await updateGuildSettings(guildId, { $set: { ticket: document._id } });
+  await updateGuild(guildId, { $set: { ticket: document._id } });
 
   return document;
 }
@@ -41,7 +41,7 @@ export async function disableTicketModule(guildId: string): Promise<TicketConfig
     .lean()
     .exec();
 
-  await updateGuildSettings(guildId, { $set: { ticket: document._id } });
+  await updateGuild(guildId, { $set: { ticket: document._id } });
 
   return document;
 }
@@ -54,7 +54,7 @@ export async function disableTicketModule(guildId: string): Promise<TicketConfig
  */
 export async function deleteTicketGroup(guildId: string, groupId: Types.ObjectId | string): Promise<void> {
   const document = await ticketConfigModel.findOneAndUpdate({ guildId }, { $pull: { systems: { _id: groupId } } }, { upsert: true });
-  await updateGuildSettings(guildId, { $set: { ticket: document?._id } });
+  await updateGuild(guildId, { $set: { ticket: document?._id } });
   await ticketGroupModel.findByIdAndDelete(groupId);
 }
 
@@ -89,7 +89,7 @@ export async function createTicketGroup(
   });
 
   const configDocument = await ticketConfigModel.findOneAndUpdate({ guildId }, { $push: { groups: document._id } }, { upsert: true });
-  await updateGuildSettings(guildId, { $set: { ticket: configDocument?._id } });
+  await updateGuild(guildId, { $set: { ticket: configDocument?._id } });
 
   return document;
 }
@@ -109,7 +109,7 @@ export async function getTicketGroup(groupId: Types.ObjectId | string): Promise<
  * @returns {Promise<TicketDocument | null>} Ticket or null if not found
  */
 export async function findTicket(channelId: string): Promise<TicketDocument | null> {
-  return await ticketModel.findOne({ channelId }, {}, { upsert: false }).lean().exec();
+  return await ticketModel.findOne({ channelId }).lean().exec();
 }
 
 /**

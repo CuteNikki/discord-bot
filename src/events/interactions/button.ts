@@ -4,7 +4,7 @@ import { t } from 'i18next';
 import { Event } from 'classes/event';
 
 import { incrementButtonsExecuted, incrementButtonsFailed } from 'db/client';
-import { getUserData } from 'db/user';
+import { getUser } from 'db/user';
 
 import { keys } from 'constants/keys';
 
@@ -23,7 +23,7 @@ export default new Event({
       return;
     }
 
-    const { banned, language } = await getUserData(interaction.user.id);
+    const { banned, language } = (await getUser(interaction.user.id)) ?? { banned: false, language: supportedLanguages[0] };
 
     // If the user is banned, we don't want to continue
     if (banned) {
@@ -144,15 +144,13 @@ export default new Event({
 
         await interaction.reply({
           embeds: [
-            new EmbedBuilder()
-              .setColor(client.colors.error)
-              .setDescription(
-                t('interactions.cooldown', {
-                  lng,
-                  action: inlineCode(button.options.customId),
-                  timestamp: time(expiredTimestamp, TimestampStyles.RelativeTime)
-                })
-              )
+            new EmbedBuilder().setColor(client.colors.error).setDescription(
+              t('interactions.cooldown', {
+                lng,
+                action: inlineCode(button.options.customId),
+                timestamp: time(expiredTimestamp, TimestampStyles.RelativeTime)
+              })
+            )
           ],
           ephemeral: true
         });

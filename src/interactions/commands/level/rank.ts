@@ -4,7 +4,7 @@ import { t } from 'i18next';
 import { Command, ModuleType } from 'classes/command';
 import { RankCard } from 'classes/rank-card';
 
-import { convertLevelToXP, getLevelWithRank, getWeeklyLevelWithRank } from 'db/level';
+import { convertLevelToExp, getLevelWithRank, getWeeklyLevelWithRank } from 'db/level';
 
 import type { PositionLevel } from 'types/level';
 
@@ -46,7 +46,7 @@ export default new Command({
       handle: target.username,
       status: member?.presence?.status ?? 'none',
       currentXP: rank.xp,
-      requiredXP: convertLevelToXP(rank.level + 1),
+      requiredXP: convertLevelToExp(rank.level + 1),
       level: rank.level,
       rank: rank.position,
       styles: {

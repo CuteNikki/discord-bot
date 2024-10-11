@@ -3,7 +3,7 @@ import { Events } from 'discord.js';
 import { getEmbed, replacePlaceholders } from 'classes/custom-embed';
 import { Event } from 'classes/event';
 
-import { getGuildSettings } from 'db/guild';
+import { getGuild } from 'db/guild';
 
 import { logger } from 'utils/logger';
 
@@ -13,7 +13,7 @@ export default new Event({
   async execute(_client, oldMember, newMember) {
     if (newMember.user.bot || !oldMember.pending || newMember.pending) return;
 
-    const config = await getGuildSettings(newMember.guild.id);
+    const config = await getGuild(newMember.guild.id);
 
     if (!config.welcome.enabled) return;
     await newMember.roles.add(config.welcome.roles).catch((err) => logger.debug({ err }, 'Could not add role(s)'));

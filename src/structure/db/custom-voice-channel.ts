@@ -7,10 +7,30 @@ import type { CustomVoiceChannelDocument } from 'types/custom-voice-channel';
 /**
  * Gets the custom voice channel data for a given channel ID
  * @param {string} channelId Channel ID to get the custom voice channel data for
+ * @param {boolean} insert If true, inserts a new document if none exists (optional, default is false)
  * @returns {Promise<CustomVoiceChannelDocument | null>} Custom voice channel data or null if not found
  */
-export async function getCustomVoiceChannel(channelId: string): Promise<CustomVoiceChannelDocument | null> {
-  return await customVoiceChannelModel.findOne({ channelId }, {}, { upsert: false }).lean().exec();
+export async function getCustomVoiceChannel<T extends boolean>(
+  channelId: string,
+  insert: T = false as T
+): Promise<T extends true ? CustomVoiceChannelDocument : CustomVoiceChannelDocument | null> {
+  let document = await customVoiceChannelModel.findOne({ channelId }).lean().exec();
+
+  if (insert && !document) {
+    document = await updateCustomVoiceChannel(channelId, {});
+  }
+
+  return document as T extends true ? CustomVoiceChannelDocument : CustomVoiceChannelDocument | null;
+}
+
+/**
+ * Updates a custom voice channel
+ * @param {string} channelId Channel ID to update
+ * @param {UpdateQuery<CustomVoiceChannelDocument>} query Query to update the custom voice channel with
+ * @returns {Promise<CustomVoiceChannelDocument>} Updated custom voice channel
+ */
+export async function updateCustomVoiceChannel(channelId: string, query: UpdateQuery<CustomVoiceChannelDocument>): Promise<CustomVoiceChannelDocument> {
+  return await customVoiceChannelModel.findOneAndUpdate({ channelId }, query, { upsert: true, new: true }).lean().exec();
 }
 
 /**
@@ -19,7 +39,7 @@ export async function getCustomVoiceChannel(channelId: string): Promise<CustomVo
  * @returns {Promise<CustomVoiceChannelDocument | null>} Custom voice channel or null if not found
  */
 export async function getCustomVoiceChannelByOwner(ownerId: string): Promise<CustomVoiceChannelDocument | null> {
-  return await customVoiceChannelModel.findOne({ ownerId }, {}, { upsert: false }).lean().exec();
+  return await customVoiceChannelModel.findOne({ ownerId }).lean().exec();
 }
 
 /**
@@ -40,22 +60,12 @@ export async function getCustomVoiceChannelsByGuild(guildId: string): Promise<Cu
 }
 
 /**
- * Updates a custom voice channel
- * @param {string} channelId Channel ID to update
- * @param {UpdateQuery<CustomVoiceChannelDocument>} query Query to update the custom voice channel with
- * @returns {Promise<CustomVoiceChannelDocument>} Updated custom voice channel
- */
-export async function updateCustomVoiceChannel(channelId: string, query: UpdateQuery<CustomVoiceChannelDocument>): Promise<CustomVoiceChannelDocument> {
-  return await customVoiceChannelModel.findOneAndUpdate({ channelId }, query, { upsert: true, new: true }).lean().exec();
-}
-
-/**
  * Deletes a custom voice channel
  * @param {string} channelId Channel ID to delete
  * @returns {Promise<CustomVoiceChannelDocument | null>} Deleted custom voice channel or null if not found
  */
 export async function deleteCustomVoiceChannel(channelId: string): Promise<CustomVoiceChannelDocument | null> {
-  return await customVoiceChannelModel.findOneAndDelete({ channelId }, { upsert: false }).lean().exec();
+  return await customVoiceChannelModel.findOneAndDelete({ channelId }).lean().exec();
 }
 
 /**
@@ -66,5 +76,5 @@ export async function deleteCustomVoiceChannel(channelId: string): Promise<Custo
  * @returns {Promise<CustomVoiceChannelDocument>} Created custom voice channel
  */
 export async function createCustomVoiceChannel(channelId: string, guildId: string, ownerId: string): Promise<CustomVoiceChannelDocument> {
-  return await customVoiceChannelModel.findOneAndUpdate({ channelId }, { $set: { ownerId, guildId } }, { upsert: true, new: true }).lean().exec();
+  return await updateCustomVoiceChannel(channelId, { channelId, guildId, ownerId });
 }

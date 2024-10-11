@@ -3,7 +3,7 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
-import { getGuildSettings } from 'db/guild';
+import { getGuild } from 'db/guild';
 
 import { logger } from 'utils/logger';
 
@@ -13,7 +13,7 @@ export default new Event({
   async execute(client, data) {
     const { applicationId, guildId, id, permissions } = data;
 
-    const config = await getGuildSettings(guildId);
+    const config = await getGuild(guildId);
 
     if (!config.log.enabled || !config.log.events.applicationCommandPermissionsUpdate || !config.log.channelId) return;
 

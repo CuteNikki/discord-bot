@@ -12,13 +12,13 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
-import { getGuildSettings } from 'db/guild';
+import { getGuild } from 'db/guild';
 
 export default new Event({
   name: Events.GuildUpdate,
   once: false,
   async execute(_client, oldGuild, newGuild) {
-    const config = await getGuildSettings(newGuild.id);
+    const config = await getGuild(newGuild.id);
 
     if (!config.log.enabled || !config.log.events.guildUpdate || !config.log.channelId) return;
 

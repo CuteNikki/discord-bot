@@ -11,8 +11,8 @@ import {
   updateSupportGuildId,
   updateSupportGuildInvite
 } from 'db/client';
-import { getGuildDataExport } from 'db/guild';
-import { addBadge, banUser, getBannedUsers, getUserData, getUserDataExport, removeBadge, unbanUser } from 'db/user';
+import { getGuildExport } from 'db/guild';
+import { addBadge, banUser, getBannedUsers, getUser, getUserExport, removeBadge, unbanUser } from 'db/user';
 
 import { BadgeType } from 'types/user';
 
@@ -158,7 +158,7 @@ export default new Command({
     await interaction.deferReply({ ephemeral: true });
     const { options, user } = interaction;
 
-    const userData = await getUserData(user.id);
+    const userData = (await getUser(user.id)) ?? { badges: [] };
     const badges = userData.badges.map((badge) => badge.id);
 
     switch (options.getSubcommandGroup()) {
@@ -315,7 +315,7 @@ export default new Command({
                 const target = options.getUser('user', true);
                 const badge = options.getInteger('badge', true);
 
-                const targetData = await getUserData(target.id);
+                const targetData = (await getUser(target.id)) ?? { badges: [] };
 
                 if (targetData.badges.map((badge) => badge.id).includes(badge)) {
                   await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('User already has that badge!')] });
@@ -348,7 +348,7 @@ export default new Command({
                 const target = options.getUser('user', true);
                 const badge = options.getInteger('badge', true);
 
-                const targetData = await getUserData(target.id);
+                const targetData = (await getUser(target.id)) ?? { badges: [] };
 
                 if (!targetData.badges.map((badge) => badge.id).includes(badge)) {
                   await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('User does not have that badge!')] });
@@ -380,7 +380,7 @@ export default new Command({
               {
                 const target = options.getUser('user', true);
 
-                const targetData = await getUserData(target.id);
+                const targetData = (await getUser(target.id)) ?? { badges: [] };
 
                 await interaction.editReply(
                   `Badges:\n${targetData.badges.map((badge) => `${BadgeType[badge.id]}: ${time(Math.floor(badge.receivedAt / 1000), TimestampStyles.ShortDateTime)}`).join('\n')}`
@@ -404,7 +404,7 @@ export default new Command({
               {
                 const target = options.getUser('user', true);
 
-                const targetSettings = await getUserData(target.id);
+                const targetSettings = (await getUser(target.id)) ?? { banned: false };
 
                 if (targetSettings.banned) {
                   await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('User is already banned!')] });
@@ -428,7 +428,7 @@ export default new Command({
               {
                 const target = options.getUser('user', true);
 
-                const targetSettings = await getUserData(target.id);
+                const targetSettings = (await getUser(target.id)) ?? { banned: false };
 
                 if (!targetSettings.banned) {
                   await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('User is not banned!')] });
@@ -482,7 +482,7 @@ export default new Command({
               {
                 const userId = interaction.options.getString('user-id', true);
 
-                const userData = await getUserDataExport(userId);
+                const userData = await getUserExport(userId);
 
                 if (!userData) {
                   await interaction.editReply({
@@ -505,7 +505,7 @@ export default new Command({
               {
                 const guildId = interaction.options.getString('guild-id', true);
 
-                const guildData = await getGuildDataExport(guildId);
+                const guildData = await getGuildExport(guildId);
 
                 if (!guildData) {
                   await interaction.editReply({

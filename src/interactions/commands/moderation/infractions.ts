@@ -13,7 +13,7 @@ import { t } from 'i18next';
 
 import { Command, ModuleType } from 'classes/command';
 
-import { deleteInfraction, findInfraction, getInfractions } from 'db/infraction';
+import { deleteInfractionById, getInfractionById, getInfractions } from 'db/infraction';
 import { getModeration } from 'db/moderation';
 
 import { chunk } from 'utils/common';
@@ -120,14 +120,14 @@ export default new Command({
       case 'delete':
         {
           const infractionId = options.getString('infraction', true);
-          const infraction = await findInfraction(infractionId);
+          const infraction = await getInfractionById(infractionId);
 
           if (!infraction || infraction.guildId !== guildId) {
             await interaction.reply(t('infractions.delete.invalid', { lng }));
             return;
           }
 
-          await deleteInfraction(infractionId);
+          await deleteInfractionById(infractionId);
           interaction.reply(t('infractions.delete.success', { lng }));
         }
         break;

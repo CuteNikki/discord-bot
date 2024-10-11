@@ -13,7 +13,7 @@ import { t } from 'i18next';
 import { Command, ModuleType } from 'classes/command';
 import { CustomEmbedBuilder, getEmbed, isEmptyEmbed } from 'classes/custom-embed';
 
-import { getGuildSettings, updateGuildSettings } from 'db/guild';
+import { getGuild, updateGuild } from 'db/guild';
 
 import { logger } from 'utils/logger';
 
@@ -44,7 +44,7 @@ export default new Command({
 
     const { options, guild, user } = interaction;
 
-    const config = await getGuildSettings(guild.id);
+    const config = await getGuild(guild.id);
 
     switch (options.getSubcommand()) {
       case 'channel':
@@ -57,7 +57,7 @@ export default new Command({
                 embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('farewell.channel.invalid', { lng }))]
               });
             }
-            await updateGuildSettings(guild.id, {
+            await updateGuild(guild.id, {
               $set: {
                 ['farewell.channelId']: null
               }
@@ -68,7 +68,7 @@ export default new Command({
             });
           }
 
-          await updateGuildSettings(guild.id, {
+          await updateGuild(guild.id, {
             $set: {
               ['farewell.channelId']: channel.id
             }
@@ -86,7 +86,7 @@ export default new Command({
             message: config.farewell.message
           });
           customBuilder.once('submit', async (msg) => {
-            await updateGuildSettings(guild.id, {
+            await updateGuild(guild.id, {
               $set: {
                 ['farewell.message']: msg
               }
@@ -142,7 +142,7 @@ export default new Command({
             });
           }
 
-          await updateGuildSettings(guild.id, {
+          await updateGuild(guild.id, {
             $set: {
               ['farewell.enabled']: true
             }
@@ -160,7 +160,7 @@ export default new Command({
           });
         }
 
-        await updateGuildSettings(guild.id, {
+        await updateGuild(guild.id, {
           $set: {
             ['farewell.enabled']: false
           }

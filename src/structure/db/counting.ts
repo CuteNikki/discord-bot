@@ -1,6 +1,7 @@
-import { updateGuildSettings } from 'db/guild';
-import { countingModel } from 'models/counting';
 import type { UpdateQuery } from 'mongoose';
+
+import { updateGuild } from 'db/guild';
+import { countingModel } from 'models/counting';
 
 import type { CountingDocument } from 'types/counting';
 
@@ -15,9 +16,11 @@ export async function getCounting<T extends boolean>(
   insert: T = false as T
 ): Promise<T extends true ? CountingDocument : CountingDocument | null> {
   let document = await countingModel.findOne({ guildId }).lean().exec();
+
   if (insert && !document) {
-    document = await updateCounting(guildId);
+    document = await updateCounting(guildId, {});
   }
+
   return document as T extends true ? CountingDocument : CountingDocument | null;
 }
 
@@ -27,10 +30,10 @@ export async function getCounting<T extends boolean>(
  * @param {UpdateQuery<CountingDocument>} query Query to update the counting settings with
  * @returns {Promise<CountingDocument>} Updated counting settings
  */
-export async function updateCounting(guildId: string, query: UpdateQuery<CountingDocument> = {}): Promise<CountingDocument> {
+export async function updateCounting(guildId: string, query: UpdateQuery<CountingDocument>): Promise<CountingDocument> {
   const document = await countingModel.findOneAndUpdate({ guildId }, query, { upsert: true, new: true }).lean().exec();
 
-  await updateGuildSettings(guildId, { $set: { counting: document._id } });
+  await updateGuild(guildId, { $set: { counting: document._id } });
 
   return document;
 }

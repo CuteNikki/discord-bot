@@ -1,6 +1,6 @@
 import type { Types, UpdateQuery } from 'mongoose';
 
-import { updateGuildSettings } from 'db/guild';
+import { updateGuild } from 'db/guild';
 import { starboardMessageModel, starboardModel } from 'models/starboard';
 
 import type { StarboardDocument, StarboardMessageDocument } from 'types/starboard';
@@ -53,7 +53,7 @@ export async function setupStarboard(guildId: string, channelId: string | undefi
     .lean()
     .exec();
 
-  await updateGuildSettings(guildId, { $set: { starboard: document._id } });
+  await updateGuild(guildId, { $set: { starboard: document._id } });
 
   return document;
 }

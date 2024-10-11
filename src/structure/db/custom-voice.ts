@@ -1,6 +1,6 @@
 import type { UpdateQuery } from 'mongoose';
 
-import { updateGuildSettings } from 'db/guild';
+import { updateGuild } from 'db/guild';
 import { customVoiceModel } from 'models/custom-voice';
 
 import type { CustomVoiceDocument } from 'types/custom-voice';
@@ -10,8 +10,17 @@ import type { CustomVoiceDocument } from 'types/custom-voice';
  * @param {string} guildId Guild ID to get the custom voice for
  * @returns {Promise<CustomVoiceDocument | null>} Custom voice config data or null if not found
  */
-export async function getCustomVoice(guildId: string): Promise<CustomVoiceDocument | null> {
-  return await customVoiceModel.findOne({ guildId }, {}, { upsert: false }).lean().exec();
+export async function getCustomVoice<T extends boolean>(
+  guildId: string,
+  insert: boolean = false as T
+): Promise<T extends true ? CustomVoiceDocument : CustomVoiceDocument | null> {
+  let document = await customVoiceModel.findOne({ guildId }).lean().exec();
+
+  if (insert && !document) {
+    document = await updateCustomVoice(guildId, {});
+  }
+
+  return document as T extends true ? CustomVoiceDocument : CustomVoiceDocument | null;
 }
 
 /**
@@ -23,7 +32,7 @@ export async function getCustomVoice(guildId: string): Promise<CustomVoiceDocume
 async function updateCustomVoice(guildId: string, query: UpdateQuery<CustomVoiceDocument>): Promise<CustomVoiceDocument> {
   const document = await customVoiceModel.findOneAndUpdate({ guildId }, query, { upsert: true, new: true }).lean().exec();
 
-  await updateGuildSettings(guildId, { $set: { customVoice: document._id } });
+  await updateGuild(guildId, { $set: { customVoice: document._id } });
 
   return document;
 }
@@ -54,7 +63,7 @@ export async function setCustomVoiceParent(guildId: string, parentId: string | n
  * @returns {Promise<CustomVoiceDocument | null>} Deleted custom voice config or null if not found
  */
 export async function deleteCustomVoice(guildId: string): Promise<CustomVoiceDocument | null> {
-  return await customVoiceModel.findOneAndDelete({ guildId }, { upsert: false }).lean().exec();
+  return await customVoiceModel.findOneAndDelete({ guildId }).lean().exec();
 }
 
 /**

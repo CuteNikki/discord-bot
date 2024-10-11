@@ -1,6 +1,6 @@
 import type { UpdateQuery } from 'mongoose';
 
-import { updateGuildSettings } from 'db/guild';
+import { updateGuild } from 'db/guild';
 import { moderationModel } from 'models/moderation';
 
 import type { ModerationDocument } from 'types/moderation';
@@ -31,7 +31,7 @@ export async function getModeration<T extends boolean>(
 async function updateModeration(guildId: string, query: UpdateQuery<ModerationDocument> = {}): Promise<ModerationDocument> {
   const document = await moderationModel.findOneAndUpdate({ guildId }, query, { upsert: true, new: true }).lean().exec();
 
-  await updateGuildSettings(guildId, { moderation: document._id });
+  await updateGuild(guildId, { moderation: document._id });
 
   return document;
 }

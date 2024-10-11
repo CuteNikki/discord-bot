@@ -1,5 +1,6 @@
-import { updateGuildSettings } from 'db/guild';
-import { reactionRoleDocumentModel, reactionRoleGroupDocumentModel } from 'models/reaction-roles';
+import { updateGuild } from 'db/guild';
+import { reactionRoleGroupModel, reactionRoleModel } from 'models/reaction-roles';
+import type { UpdateQuery } from 'mongoose';
 
 import type { Reaction, ReactionRoleDocument, ReactionRoleGroupDocument } from 'types/reaction-roles';
 
@@ -8,8 +9,29 @@ import type { Reaction, ReactionRoleDocument, ReactionRoleGroupDocument } from '
  * @param {string} guildId
  * @returns {Promise<ReactionRoleDocument | null>} Reaction roles
  */
-export async function getReactionRoles(guildId: string): Promise<ReactionRoleDocument | null> {
-  return await reactionRoleDocumentModel.findOne({ guildId }).populate('groups').lean().exec();
+export async function getReactionRoles<T extends boolean>(
+  guildId: string,
+  insert: T = false as T,
+  populate: string[] = []
+): Promise<T extends true ? ReactionRoleDocument : ReactionRoleDocument | null> {
+  let document = await reactionRoleModel.findOne({ guildId }).lean().exec();
+
+  if (insert && !document) {
+    document = await updateReactionRoles(guildId, {}, populate);
+  }
+
+  return document as T extends true ? ReactionRoleDocument : ReactionRoleDocument | null;
+}
+
+/**
+ * Updates a reaction role config
+ * @param {string} guildId
+ * @param {UpdateQuery<ReactionRoleDocument>} query
+ * @param {string[]} populate
+ * @returns {Promise<ReactionRoleDocument>} Updated reaction role config
+ */
+export async function updateReactionRoles(guildId: string, query: UpdateQuery<ReactionRoleDocument>, populate: string[] = []): Promise<ReactionRoleDocument> {
+  return await reactionRoleModel.findOneAndUpdate({ guildId }, query, { new: true, upsert: true }).populate(populate).lean().exec();
 }
 
 /**
@@ -18,10 +40,7 @@ export async function getReactionRoles(guildId: string): Promise<ReactionRoleDoc
  * @returns {Promise<ReactionRoleDocument>} Updated reaction roles
  */
 export async function enableReactionRoles(guildId: string): Promise<ReactionRoleDocument> {
-  return await reactionRoleDocumentModel
-    .findOneAndUpdate({ guildId }, { $set: { enabled: true } }, { new: true, upsert: true })
-    .lean()
-    .exec();
+  return await updateReactionRoles(guildId, { $set: { enabled: true } });
 }
 
 /**
@@ -30,7 +49,7 @@ export async function enableReactionRoles(guildId: string): Promise<ReactionRole
  * @returns {Promise<ReactionRoleDocument>} Updated reaction roles
  */
 export async function disableReactionRoles(guildId: string): Promise<ReactionRoleDocument> {
-  return await reactionRoleDocumentModel.findOneAndUpdate({ guildId }, { $set: { enabled: false } }, { new: true, upsert: true });
+  return await updateReactionRoles(guildId, { $set: { enabled: false } });
 }
 
 /**
@@ -41,14 +60,14 @@ export async function disableReactionRoles(guildId: string): Promise<ReactionRol
  * @returns {Promise<ReactionRoleGroupDocument>} Created reaction role group
  */
 export async function addReactionGroup(guildId: string, messageId: string, channelId: string, reactions: Reaction[]): Promise<ReactionRoleGroupDocument> {
-  const group = await reactionRoleGroupDocumentModel.create({ messageId, channelId, reactions });
+  const group = await reactionRoleGroupModel.create({ messageId, channelId, reactions });
 
-  const document = await reactionRoleDocumentModel
+  const document = await reactionRoleModel
     .findOneAndUpdate({ guildId }, { $push: { groups: group._id } }, { new: true, upsert: true })
     .lean()
     .exec();
 
-  await updateGuildSettings(guildId, { $set: { reactionRoles: document._id } });
+  await updateGuild(guildId, { $set: { reactionRoles: document._id } });
 
   return group;
 }
@@ -60,12 +79,12 @@ export async function addReactionGroup(guildId: string, messageId: string, chann
  * @returns {Promise<ReactionRoleGroupDocument | null>} The deleted group or null
  */
 export async function deleteReactionGroupById(guildId: string, _id: string): Promise<ReactionRoleGroupDocument | null> {
-  await reactionRoleDocumentModel
+  await reactionRoleModel
     .findOneAndUpdate({ guildId }, { $pull: { groups: { _id } } }, { new: true, upsert: true })
     .lean()
     .exec();
 
-  return await reactionRoleGroupDocumentModel.findOneAndDelete({ _id }).lean().exec();
+  return await reactionRoleGroupModel.findOneAndDelete({ _id }).lean().exec();
 }
 
 /**
@@ -75,10 +94,10 @@ export async function deleteReactionGroupById(guildId: string, _id: string): Pro
  * @returns {Promise<ReactionRoleGroupDocument | null>} The deleted group or null
  */
 export async function deleteReactionGroupByMessage(guildId: string, messageId: string): Promise<ReactionRoleGroupDocument | null> {
-  await reactionRoleDocumentModel
+  await reactionRoleModel
     .findOneAndUpdate({ guildId }, { $pull: { groups: { messageId } } }, { new: true, upsert: true })
     .lean()
     .exec();
 
-  return await reactionRoleGroupDocumentModel.findOneAndDelete({ messageId }).lean().exec();
+  return await reactionRoleGroupModel.findOneAndDelete({ messageId }).lean().exec();
 }

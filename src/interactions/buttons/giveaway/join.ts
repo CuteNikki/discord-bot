@@ -3,7 +3,7 @@ import { t } from 'i18next';
 
 import { Button } from 'classes/button';
 
-import { addParticipant, findGiveawayByMessage } from 'db/giveaway';
+import { addParticipantById, findGiveawayByMessage } from 'db/giveaway';
 import { getGuildLanguage } from 'db/language';
 
 import { logger } from 'utils/logger';
@@ -46,7 +46,7 @@ export default new Button({
       return;
     }
 
-    await addParticipant(giveaway._id, interaction.user.id);
+    await addParticipantById(giveaway._id, interaction.user.id);
     await interaction.editReply({
       embeds: [new EmbedBuilder().setColor(client.colors.giveaway).setDescription(t('giveaway.join.success', { lng }))]
     });

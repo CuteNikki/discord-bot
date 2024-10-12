@@ -1,32 +1,33 @@
-import type { UpdateQuery } from 'mongoose';
+import type { PopulateOptions, UpdateQuery } from 'mongoose';
 
 import { getGuildGiveaways } from 'db/giveaway';
 import { getGuildInfractions } from 'db/infraction';
 import { getGuildLevels } from 'db/level';
 import { guildModel } from 'models/guild';
 
-import type { GuildDocument } from 'types/guild';
+import { DEFAULT_GUILD_POPULATE } from 'constants/populate';
 
-const DEFAULT_POPULATE = [
-  { path: 'starboard' },
-  { path: 'customVoice' },
-  { path: 'reactionRoles', populate: { path: 'groups' } },
-  { path: 'counting' },
-  { path: 'ticket' },
-  { path: 'moderation' },
-  { path: 'level' },
-  { path: 'welcome' },
-  { path: 'farewell' }
-];
+import type { GuildDocument } from 'types/guild';
 
 /**
  * Gets or creates the guild settings for a given guild ID
  * @param {string} guildId ID of the guild to get
- * @param populate Modules to populate
- * @returns {Promise<GuildDocument>} Guild settings
+ * @param {boolean} insert If true, inserts a new document if none exists (optional, default is false)
+ * @param {PopulateOptions[]} populate Modules to populate
+ * @returns {Promise<GuildDocument>} Guild settings or null if not found
  */
-export async function getGuild(guildId: string, populate = DEFAULT_POPULATE): Promise<GuildDocument> {
-  return await updateGuild(guildId, {}, populate);
+export async function getGuild<T extends boolean>(
+  guildId: string,
+  insert: T = false as T,
+  populate: PopulateOptions[] = DEFAULT_GUILD_POPULATE
+): Promise<T extends true ? GuildDocument : GuildDocument | null> {
+  let document = await guildModel.findOne({ guildId }).populate(populate).lean().exec();
+
+  if (insert && !document) {
+    document = await updateGuild(guildId, {}, populate);
+  }
+
+  return document as T extends true ? GuildDocument : GuildDocument | null;
 }
 
 /**
@@ -36,7 +37,11 @@ export async function getGuild(guildId: string, populate = DEFAULT_POPULATE): Pr
  * @param populate Modules to populate
  * @returns {Promise<GuildDocument>} Updates guild settings
  */
-export async function updateGuild(guildId: string, query: UpdateQuery<GuildDocument>, populate = DEFAULT_POPULATE): Promise<GuildDocument> {
+export async function updateGuild(
+  guildId: string,
+  query: UpdateQuery<GuildDocument>,
+  populate: PopulateOptions[] = DEFAULT_GUILD_POPULATE
+): Promise<GuildDocument> {
   return await guildModel.findOneAndUpdate({ guildId }, query, { upsert: true, new: true }).populate(populate).lean().exec();
 }
 

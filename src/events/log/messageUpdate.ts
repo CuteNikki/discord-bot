@@ -4,6 +4,7 @@ import { t } from 'i18next';
 import { Event } from 'classes/event';
 
 import { getGuild } from 'db/guild';
+import { getGuildLanguage } from 'db/language';
 
 export default new Event({
   name: Events.MessageUpdate,
@@ -12,14 +13,14 @@ export default new Event({
     const guild = newMessage.guild;
     if (!guild || !newMessage.author || newMessage.author.bot) return;
 
-    const config = await getGuild(guild.id);
+    const config = await getGuild(guild.id) ?? { log: { enabled: false } };
 
     if (!config.log.enabled || !config.log.events.messageUpdate || !config.log.channelId) return;
 
     const logChannel = await guild.channels.fetch(config.log.channelId);
     if (!logChannel?.isSendable()) return;
 
-    const lng = config.language;
+    const lng = await getGuildLanguage(guild.id);
 
     const embed = new EmbedBuilder()
       .setColor(Colors.Yellow)

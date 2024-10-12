@@ -5,6 +5,7 @@ import { Event } from 'classes/event';
 
 import { getGuild } from 'db/guild';
 
+import { getGuildLanguage } from 'db/language';
 import { logger } from 'utils/logger';
 
 export default new Event({
@@ -13,7 +14,7 @@ export default new Event({
   async execute(client, data) {
     const { applicationId, guildId, id, permissions } = data;
 
-    const config = await getGuild(guildId);
+    const config = (await getGuild(guildId)) ?? { log: { enabled: false } };
 
     if (!config.log.enabled || !config.log.events.applicationCommandPermissionsUpdate || !config.log.channelId) return;
 
@@ -23,7 +24,7 @@ export default new Event({
     const logChannel = await guild.channels.fetch(config.log.channelId);
     if (!logChannel || !logChannel.isSendable()) return;
 
-    const lng = config.language;
+    const lng = await getGuildLanguage(guildId);
 
     await logChannel.send({
       embeds: [

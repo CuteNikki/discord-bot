@@ -13,19 +13,20 @@ import { t } from 'i18next';
 import { Event } from 'classes/event';
 
 import { getGuild } from 'db/guild';
+import { getGuildLanguage } from 'db/language';
 
 export default new Event({
   name: Events.GuildUpdate,
   once: false,
   async execute(_client, oldGuild, newGuild) {
-    const config = await getGuild(newGuild.id);
+    const config = (await getGuild(newGuild.id)) ?? { log: { enabled: false } };
 
     if (!config.log.enabled || !config.log.events.guildUpdate || !config.log.channelId) return;
 
     const logChannel = await newGuild.channels.fetch(config.log.channelId);
     if (!logChannel?.isSendable()) return;
 
-    const lng = config.language;
+    const lng = await getGuildLanguage(newGuild.id);
 
     const embed = new EmbedBuilder().setColor(Colors.Yellow).setTitle(t('log.guildUpdate.title', { lng })).setTimestamp();
 

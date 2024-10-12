@@ -4,6 +4,7 @@ import { t } from 'i18next';
 import { Event } from 'classes/event';
 
 import { getGuild } from 'db/guild';
+import { getGuildLanguage } from 'db/language';
 
 import { logger } from 'utils/logger';
 
@@ -13,7 +14,7 @@ export default new Event({
   async execute(_client, oldEmoji, newEmoji) {
     const guild = newEmoji.guild;
 
-    const config = await getGuild(guild.id);
+    const config = (await getGuild(guild.id)) ?? { log: { enabled: false } };
 
     if (!config.log.enabled || !config.log.events.emojiUpdate || !config.log.channelId) return;
 
@@ -22,7 +23,7 @@ export default new Event({
 
     const author = await newEmoji.fetchAuthor().catch((err) => logger.debug({ err }, 'Could not fetch emoji author'));
 
-    const lng = config.language;
+    const lng = await getGuildLanguage(guild.id);
 
     const embed = new EmbedBuilder()
       .setColor(Colors.Yellow)

@@ -4,6 +4,7 @@ import { t } from 'i18next';
 import { Event } from 'classes/event';
 
 import { getGuild } from 'db/guild';
+import { getGuildLanguage } from 'db/language';
 
 import { logger } from 'utils/logger';
 
@@ -14,7 +15,7 @@ export default new Event({
     const { guild, name, id, url, description, format, tags } = sticker;
     if (!guild) return;
 
-    const config = await getGuild(guild.id);
+    const config = (await getGuild(guild.id)) ?? { log: { enabled: false } };
 
     if (!config.log.enabled || !config.log.events.stickerCreate || !config.log.channelId) return;
 
@@ -23,7 +24,7 @@ export default new Event({
 
     const user = await sticker.user?.fetch().catch((err) => logger.debug({ err }, 'Could not fetch sticker author'));
 
-    const lng = config.language;
+    const lng = await getGuildLanguage(guild.id);
 
     await logChannel.send({
       embeds: [

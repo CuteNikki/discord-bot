@@ -47,7 +47,13 @@ export default new Event({
      * Module check
      */
     if (interaction.guild) {
-      const guildSettings = await getGuild(interaction.guild.id);
+      const guildSettings = (await getGuild(interaction.guild.id)) ?? {
+        moderation: { enabled: false },
+        level: { enabled: false },
+        welcome: { enabled: false },
+        farewell: { enabled: false },
+        ticket: { enabled: false }
+      };
 
       const message: InteractionReplyOptions = {
         embeds: [

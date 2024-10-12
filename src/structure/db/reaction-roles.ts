@@ -1,19 +1,23 @@
-import type { Types, UpdateQuery } from 'mongoose';
+import type { PopulateOptions, Types, UpdateQuery } from 'mongoose';
 
 import { updateGuild } from 'db/guild';
 import { reactionRoleGroupModel, reactionRoleModel } from 'models/reaction-roles';
+
+import { DEFAULT_REACTION_ROLE_POPULATE } from 'constants/populate';
 
 import type { Reaction, ReactionRoleDocument, ReactionRoleGroupDocument } from 'types/reaction-roles';
 
 /**
  * Gets the reaction roles for a guild
  * @param {string} guildId
+ * @param {boolean} insert
+ * @param {PopulateOptions[]} populate
  * @returns {Promise<ReactionRoleDocument | null>} Reaction roles
  */
 export async function getReactionRoles<T extends boolean>(
   guildId: string,
   insert: T = false as T,
-  populate = [{ path: 'groups' }]
+  populate: PopulateOptions[] = DEFAULT_REACTION_ROLE_POPULATE
 ): Promise<T extends true ? ReactionRoleDocument : ReactionRoleDocument | null> {
   let document = await reactionRoleModel.findOne({ guildId }).populate(populate).lean().exec();
 
@@ -28,13 +32,13 @@ export async function getReactionRoles<T extends boolean>(
  * Updates a reaction role config
  * @param {string} guildId
  * @param {UpdateQuery<ReactionRoleDocument>} query
- * @param {string[]} populate
+ * @param {PopulateOptions[]} populate
  * @returns {Promise<ReactionRoleDocument>} Updated reaction role config
  */
 export async function updateReactionRoles(
   guildId: string,
   query: UpdateQuery<ReactionRoleDocument>,
-  populate = [{ path: 'groups' }]
+  populate: PopulateOptions[] = DEFAULT_REACTION_ROLE_POPULATE
 ): Promise<ReactionRoleDocument> {
   return await reactionRoleModel.findOneAndUpdate({ guildId }, query, { new: true, upsert: true }).populate(populate).lean().exec();
 }

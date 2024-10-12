@@ -5,6 +5,7 @@ import { Event } from 'classes/event';
 
 import { getGuild } from 'db/guild';
 
+import { getGuildLanguage } from 'db/language';
 import { logger } from 'utils/logger';
 
 export default new Event({
@@ -14,7 +15,7 @@ export default new Event({
     const { guild, user, partial } = member;
     if (partial) await member.fetch().catch((err) => logger.debug({ err }, 'Could not fetch member'));
 
-    const config = await getGuild(guild.id);
+    const config = (await getGuild(guild.id)) ?? { log: { enabled: false } };
 
     if (!config.log.enabled || !config.log.events.guildMemberAdd || !config.log.channelId) return;
 
@@ -23,7 +24,7 @@ export default new Event({
 
     const components: ActionRowBuilder<ButtonBuilder>[] = [];
 
-    const lng = config.language;
+    const lng = await getGuildLanguage(guild.id);
 
     const embed = new EmbedBuilder()
       .setColor(Colors.Green)

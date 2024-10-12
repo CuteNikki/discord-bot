@@ -4,6 +4,7 @@ import { t } from 'i18next';
 import { Event } from 'classes/event';
 
 import { getGuild } from 'db/guild';
+import { getGuildLanguage } from 'db/language';
 
 export default new Event({
   name: Events.GuildRoleDelete,
@@ -11,14 +12,14 @@ export default new Event({
   async execute(_client, role) {
     const { guild, name, id, hexColor, position, hoist, mentionable, managed, unicodeEmoji, permissions, createdTimestamp } = role;
 
-    const config = await getGuild(guild.id);
+    const config = (await getGuild(guild.id)) ?? { log: { enabled: false } };
 
     if (!config.log.enabled || !config.log.events.roleDelete || !config.log.channelId) return;
 
     const logChannel = await guild.channels.fetch(config.log.channelId);
     if (!logChannel?.isSendable()) return;
 
-    const lng = config.language;
+    const lng = await getGuildLanguage(guild.id);
 
     await logChannel.send({
       embeds: [

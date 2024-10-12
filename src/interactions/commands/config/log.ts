@@ -90,7 +90,8 @@ export default new Command({
 
     const { options, guildId } = interaction;
 
-    const config = await getGuild(guildId);
+    const config = await getGuild(guildId, true);
+
     const events = availableEvents
       .map((eventName) => ({
         name: eventName,

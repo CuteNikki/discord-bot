@@ -4,21 +4,22 @@ import { t } from 'i18next';
 import { Event } from 'classes/event';
 
 import { getGuild } from 'db/guild';
+import { getGuildLanguage } from 'db/language';
 
 export default new Event({
   name: Events.VoiceStateUpdate,
   once: false,
-  async execute(client, oldState, newState) {
+  async execute(_client, oldState, newState) {
     const guild = newState.guild;
 
-    const config = await getGuild(guild.id);
+    const config = (await getGuild(guild.id)) ?? { log: { enabled: false } };
 
     if (!config.log.enabled || !config.log.events.voiceStateUpdate || !config.log.channelId || !newState.member || !oldState.member) return;
 
     const logChannel = await guild.channels.fetch(config.log.channelId);
     if (!logChannel?.isSendable()) return;
 
-    const lng = config.language;
+    const lng = await getGuildLanguage(guild.id);
 
     const embed = new EmbedBuilder()
       .setColor(Colors.Yellow)

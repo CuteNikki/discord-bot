@@ -1,7 +1,6 @@
 import mongoose, { Model, model, Schema } from 'mongoose';
-import { AnnouncementType } from 'types/guild';
 
-import type { LevelConfigDocument, LevelDocument, WeeklyLevelDocument } from 'types/level';
+import { AnnouncementType, type LevelConfigDocument, type LevelDocument, type WeeklyLevelDocument } from 'types/level';
 
 export const levelModel: Model<LevelDocument> =
   mongoose.models['level'] ||

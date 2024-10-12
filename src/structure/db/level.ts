@@ -6,8 +6,7 @@ import { levelConfigModel, levelModel, weeklyLevelModel } from 'models/level';
 
 import { getRandomNumber } from 'utils/common';
 
-import type { AnnouncementType, LevelReward } from 'types/guild';
-import type { LevelConfigDocument, LevelDocument, PositionLevel, WeeklyLevelDocument } from 'types/level';
+import type { LevelConfigDocument, LevelDocument, PositionLevel, WeeklyLevelDocument, AnnouncementType, LevelReward } from 'types/level';
 
 export async function getLevelConfig<T extends boolean>(
   guildId: string,

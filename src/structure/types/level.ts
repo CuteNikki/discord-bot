@@ -1,6 +1,17 @@
 import type { Types } from 'mongoose';
 
-import type { AnnouncementType, LevelReward } from 'types/guild';
+export enum AnnouncementType {
+  UserChannel,
+  OtherChannel,
+  PrivateMessage,
+  None
+}
+
+export type LevelReward = {
+  roleId: string;
+  level: number;
+  _id: Types.ObjectId;
+};
 
 export type LevelConfigDocument = {
   _id: Types.ObjectId;

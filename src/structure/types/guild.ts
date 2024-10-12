@@ -9,13 +9,6 @@ import type { StarboardDocument } from 'types/starboard';
 import type { TicketConfigDocument } from 'types/ticket';
 import type { WelcomeDocument } from 'types/welcome';
 
-export enum AnnouncementType {
-  UserChannel,
-  OtherChannel,
-  PrivateMessage,
-  None
-}
-
 export const availableEvents = [
   'applicationCommandPermissionsUpdate',
   'autoModerationActionExecution',
@@ -86,12 +79,6 @@ export type Embed = {
 export type Message = {
   content: string | null; // max 2000 characters
   embed: Embed; // max 10 embeds but not using array
-};
-
-export type LevelReward = {
-  roleId: string;
-  level: number;
-  _id: Types.ObjectId;
 };
 
 export type GuildDocument = {

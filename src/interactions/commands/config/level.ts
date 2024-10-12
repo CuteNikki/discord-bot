@@ -35,8 +35,8 @@ import {
 
 import { logger } from 'utils/logger';
 
-import { AnnouncementType, type LevelReward } from 'types/guild';
 import { ModuleType } from 'types/interactions';
+import { AnnouncementType, type LevelReward } from 'types/level';
 
 export default new Command({
   module: ModuleType.Config,

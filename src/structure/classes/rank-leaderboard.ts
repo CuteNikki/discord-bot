@@ -164,7 +164,7 @@ export class LeaderboardBuilder extends Builder<LeaderboardProps> {
       ),
       JSX.createElement(
         'div',
-        { className: 'flex flex-col items-center justify-center mt-5' },
+        { className: 'flex flex-col items-center justify-center mt-5 text-center' },
         JSX.createElement('h1', { className: 'text-white text-base font-extrabold m-0' }, displayName as unknown as JSX.Element),
         JSX.createElement('h2', { className: 'text-[#9ca0a5] text-xs font-thin m-0 mb-2' }, `@${username}` as unknown as JSX.Element),
         JSX.createElement(

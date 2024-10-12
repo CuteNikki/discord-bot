@@ -533,65 +533,121 @@
       }
     ]
   },
-  "config-level": {
-    "name": "level-configuration",
+  "level": {
+    "name": "level",
     "description": "Configure the level module",
     "options": [
       {
-        "name": "show",
-        "description": "Shows the current configuration",
+        "name": "xp",
+        "description": "Manage the XP of a member",
         "options": [
           {
-            "name": "all",
-            "description": "Shows the entire configuration"
+            "name": "add",
+            "description": "Adds XP to a member",
+            "options": [
+              {
+                "name": "member",
+                "description": "The member to add XP to"
+              },
+              {
+                "name": "xp",
+                "description": "The XP to add to member"
+              }
+            ]
           },
           {
-            "name": "state",
-            "description": "Shows the state of the level module"
+            "name": "remove",
+            "description": "Removes XP from a member",
+            "options": [
+              {
+                "name": "member",
+                "description": "The member to remove XP from"
+              },
+              {
+                "name": "xp",
+                "description": "The XP to remove from member"
+              }
+            ]
           },
           {
-            "name": "announcement",
-            "description": "Shows the announcement configuration"
-          },
-          {
-            "name": "rewards",
-            "description": "Shows the reward roles and their required level"
-          },
-          {
-            "name": "ignored-roles",
-            "description": "Shows the roles that won't be gaining XP"
-          },
-          {
-            "name": "ignored-channels",
-            "description": "Shows the channels that users won't be gaining XP in"
-          },
-          {
-            "name": "enabled-channels",
-            "description": "If enabled channels are set, users will only be gaining XP in those"
+            "name": "set",
+            "description": "Sets XP of a member",
+            "options": [
+              {
+                "name": "member",
+                "description": "The member to set XP of"
+              },
+              {
+                "name": "xp",
+                "description": "The XP to set the member to"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "toggle",
-        "description": "Toggles the level module",
+        "name": "level",
+        "description": "Manage the level of a member",
         "options": [
           {
-            "name": "on",
-            "description": "Turns the level module on"
+            "name": "add",
+            "description": "Adds level to a member",
+            "options": [
+              {
+                "name": "member",
+                "description": "The member to add level to"
+              },
+              {
+                "name": "level",
+                "description": "The level to add to member"
+              }
+            ]
           },
           {
-            "name": "off",
-            "description": "Turns the level module off"
+            "name": "remove",
+            "description": "Removes level from a member",
+            "options": [
+              {
+                "name": "member",
+                "description": "The member to remove level from"
+              },
+              {
+                "name": "level",
+                "description": "The level to remove from member"
+              }
+            ]
+          },
+          {
+            "name": "set",
+            "description": "Sets level of a member",
+            "options": [
+              {
+                "name": "member",
+                "description": "The member to set level of"
+              },
+              {
+                "name": "level",
+                "description": "The level to set the member to"
+              }
+            ]
           }
         ]
       },
       {
         "name": "announcement",
-        "description": "Configure where the level up is announced",
+        "description": "Configure where a levelup will be announced",
         "options": [
           {
-            "name": "user-channel",
-            "description": "Level ups will be announced in the user's channel and deleted within 5 seconds"
+            "name": "none",
+            "description": "Level ups will not be announced"
+          },
+          {
+            "name": "private-message",
+            "description": "Level ups will be announced in the member's private messages"
+          },
+          {
+            "name": "member-channel",
+            "description": "Level ups will be announced where the member levels up and then deleted"
           },
           {
             "name": "other-channel",
@@ -599,97 +655,7 @@
             "options": [
               {
                 "name": "channel",
-                "description": "The channel to send the level up announcement in"
-              }
-            ]
-          },
-          {
-            "name": "direct-message",
-            "description": "Level ups will be announced in direct messages with the user"
-          },
-          {
-            "name": "none",
-            "description": "Level ups will not be announced"
-          }
-        ]
-      },
-      {
-        "name": "rewards",
-        "description": "Configure the level up rewards",
-        "options": [
-          {
-            "name": "add",
-            "description": "Adds a level up reward",
-            "options": [
-              {
-                "name": "role",
-                "description": "The role to give at level"
-              },
-              {
-                "name": "level",
-                "description": "The level required to get the role"
-              }
-            ]
-          },
-          {
-            "name": "remove",
-            "description": "Removes a level up reward",
-            "options": [
-              {
-                "name": "role-id",
-                "description": "The id of role to remove"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "name": "ignored-roles",
-        "description": "Configure the ignored roles",
-        "options": [
-          {
-            "name": "add",
-            "description": "Adds an ignored role",
-            "options": [
-              {
-                "name": "role",
-                "description": "The role to ignore"
-              }
-            ]
-          },
-          {
-            "name": "remove",
-            "description": "Removes an ignored role",
-            "options": [
-              {
-                "name": "role-id",
-                "description": "The id of role to remove"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "name": "ignored-channels",
-        "description": "Configure the ignored channels",
-        "options": [
-          {
-            "name": "add",
-            "description": "Adds an ignored channel",
-            "options": [
-              {
-                "name": "channel",
-                "description": "The channel to ignore"
-              }
-            ]
-          },
-          {
-            "name": "remove",
-            "description": "Removes an ignored channel",
-            "options": [
-              {
-                "name": "channel-id",
-                "description": "The id of channel to remove"
+                "description": "The channel to send the levelup announcements in"
               }
             ]
           }
@@ -714,6 +680,10 @@
             "description": "Removes an enabled channel",
             "options": [
               {
+                "name": "channel",
+                "description": "The channel to remove"
+              },
+              {
                 "name": "channel-id",
                 "description": "The id of channel to remove"
               }
@@ -722,100 +692,144 @@
         ]
       },
       {
-        "name": "xp",
-        "description": "Manage the XP of a user",
+        "name": "ignored-channels",
+        "description": "Configure the ignored channels",
         "options": [
           {
             "name": "add",
-            "description": "Adds XP to a user",
+            "description": "Adds an ignored channel",
             "options": [
               {
-                "name": "user",
-                "description": "The user to add XP to"
-              },
-              {
-                "name": "xp",
-                "description": "The XP to add to user"
+                "name": "channel",
+                "description": "The channel to ignore"
               }
             ]
           },
           {
             "name": "remove",
-            "description": "Removes XP from a user",
+            "description": "Removes an ignored channel",
             "options": [
               {
-                "name": "user",
-                "description": "The user to remove XP from"
+                "name": "channel",
+                "description": "The channel to remove"
               },
               {
-                "name": "xp",
-                "description": "The XP to remove from user"
-              }
-            ]
-          },
-          {
-            "name": "set",
-            "description": "Sets XP of a user",
-            "options": [
-              {
-                "name": "user",
-                "description": "The user to set XP of"
-              },
-              {
-                "name": "xp",
-                "description": "The XP to set the user to"
+                "name": "channel-id",
+                "description": "The id of channel to remove"
               }
             ]
           }
         ]
       },
       {
-        "name": "level",
-        "description": "Manage the level of a user",
+        "name": "ignored-roles",
+        "description": "Configure the ignored roles",
         "options": [
           {
             "name": "add",
-            "description": "Adds level to a user",
+            "description": "Adds an ignored role",
             "options": [
               {
-                "name": "user",
-                "description": "The user to add level to"
-              },
-              {
-                "name": "level",
-                "description": "The level to add to user"
+                "name": "role",
+                "description": "The role to ignore"
               }
             ]
           },
           {
             "name": "remove",
-            "description": "Removes level from a user",
+            "description": "Removes an ignored role",
             "options": [
               {
-                "name": "user",
-                "description": "The user to remove level from"
+                "name": "role",
+                "description": "The role to remove"
               },
               {
-                "name": "level",
-                "description": "The level to remove from user"
-              }
-            ]
-          },
-          {
-            "name": "set",
-            "description": "Sets level of a user",
-            "options": [
-              {
-                "name": "user",
-                "description": "The user to set level of"
-              },
-              {
-                "name": "level",
-                "description": "The level to set the user to"
+                "name": "role-id",
+                "description": "The id of role to remove"
               }
             ]
           }
         ]
+      },
+      {
+        "name": "rewards",
+        "description": "Configure the level up rewards",
+        "options": [
+          {
+            "name": "add",
+            "description": "Adds a level up reward",
+            "options": [
+              {
+                "name": "role",
+                "description": "The role to give"
+              },
+              {
+                "name": "level",
+                "description": "The level required to get role"
+              }
+            ]
+          },
+          {
+            "name": "remove",
+            "description": "Removes a level up reward",
+            "options": [
+              {
+                "name": "role",
+                "description": "The role to remove"
+              },
+              {
+                "name": "role-id",
+                "description": "The id of role to remove"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "multipliers",
+        "description": "Configure the level up multipliers",
+        "options": [
+          {
+            "name": "add",
+            "description": "Adds a level up multiplier",
+            "options": [
+              {
+                "name": "role",
+                "description": "The role that will have the multiplier"
+              },
+              {
+                "name": "multiplier",
+                "description": "The multiplier to apply"
+              }
+            ]
+          },
+          {
+            "name": "remove",
+            "description": "Removes a level up multiplier",
+            "options": [
+              {
+                "name": "role",
+                "description": "The role to remove"
+              },
+              {
+                "name": "role-id",
+                "description": "The id of role to remove"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "info",
+        "description": "Shows the current configuration"
+      },
+      {
+        "name": "enable",
+        "description": "Enable the level module"
+      },
+      {
+        "name": "disable",
+        "description": "Disable the level module"
       }
     ]
   },

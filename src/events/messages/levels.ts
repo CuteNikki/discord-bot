@@ -34,10 +34,20 @@ export default new Event({
       return;
     }
 
+    let gainedXP = getRandomExp();
+
+    for (const multiplier of level.multipliers) {
+      if (!member?.roles.cache.has(multiplier.roleId)) {
+        continue;
+      }
+
+      gainedXP *= multiplier.multiplier;
+    }
+
     // Get current level before adding XP
     const currentLevel = await getLevel(user.id, guild.id, true);
     // Get updated level after adding XP
-    const updatedLevel = await appendXP(user.id, guild.id, getRandomExp());
+    const updatedLevel = await appendXP(user.id, guild.id, gainedXP);
 
     // After we added XP, we add the user to a cooldown
     // We do not want the user to level up by spamming

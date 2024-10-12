@@ -1132,86 +1132,97 @@
       "error": "Du hast keine Teammitglieds-Rolle!"
     }
   },
-  "level": {
-    "title": "Levels Modul",
+  "level-rework": {
+    "title": "Level-Modul",
     "bot": "Bots können keine XP/Level haben!",
-    "none": "Konnte keine Level Daten finden!",
+    "none": "Konnte keine Level-Daten finden!",
     "state": {
       "title": "Status",
-      "enabled": "aktiviert",
-      "disabled": "deaktiviert"
+      "enabled": "Das Level-Modul wurde aktiviert!",
+      "disabled": "Das Level-Modul wurde deaktiviert!",
+      "already-enabled": "Das Level-Modul ist bereits aktiviert!",
+      "already-disabled": "Das Level-Modul ist bereits deaktiviert!"
+    },
+    "ignored-roles": {
+      "title": "Ignorierte Rollen",
+      "already": "{{role}} ist bereits ignoriert!",
+      "limit": "Du kannst nicht mehr als {{max}} ignorierte Rollen haben!",
+      "added": "{{role}} wurde zu den ignorierten Rollen hinzugefügt.",
+      "none": "Du hast keine Rolle zum Entfernen angegeben!",
+      "invalid": "{{role}} ist keine ignorierte Rolle!",
+      "removed": "{{role}} wurde von den ignorierten Rollen entfernt."
+    },
+    "ignored-channels": {
+      "title": "Ignorierte Kanäle",
+      "already": "{{channel}} ist bereits ignoriert!",
+      "limit": "Du kannst nicht mehr als {{max}} ignorierte Kanäle haben!",
+      "added": "{{channel}} wurde zu den ignorierten Kanälen hinzugefügt.",
+      "none": "Du hast keinen Kanal zum entfernen angegeben!",
+      "invalid": "{{channel}} ist kein ignorierter Kanal!",
+      "removed": "{{channel}} wurde von den ignorierten Kanälen entfernt."
+    },
+    "enabled-channels": {
+      "title": "Aktivierte Kanäle",
+      "already": "{{channel}} ist bereits aktiviert!",
+      "limit": "Du kannst nicht mehr als {{max}} aktivierte Kanäle haben!",
+      "added": "{{channel}} wurde zu den aktivierten Kanälen hinzugefügt.",
+      "none": "Du hast keinen Kanal zum entfernen angegeben!",
+      "invalid": "{{channel}} ist kein aktivierter Kanal!",
+      "removed": "{{channel}} wurde von den aktivierten Kanälen entfernt."
+    },
+    "rewards": {
+      "title": "Levelup Belohnungen",
+      "invalid-level": "Das Level ist ungültig!",
+      "limit": "Du kannst nicht mehr als {{max}} Belohnungen haben!",
+      "already": "{{role}} ist bereits eine Belohnung!",
+      "added": "{{role}} wird nun bei Level {{level}} erhalten.",
+      "none": "Du hast keine Rolle zum Entfernen angegeben!",
+      "invalid": "{{role}} ist keine Belohnung!",
+      "removed": "{{role}} wurde von den Belohnungen entfernt."
+    },
+    "multipliers": {
+      "title": "Multiplikatoren",
+      "invalid-multiplier": "Multiplikator muss zwischen 0 und {{max}} sein!",
+      "limit": "Du kannst nicht mehr als {{max}} Multiplikatoren haben!",
+      "already": "{{role}} ist bereits ein Multiplikator!",
+      "added": "Mit der Rolle {{role}} werden nun {{multiplier}}x XP gewonnen.",
+      "none": "Du hast keine Rolle zum Entfernen angegeben!",
+      "invalid": "{{role}} ist kein Multiplikator!",
+      "removed": "{{role}} wurde von den Multiplikatoren entfernt."
+    },
+    "announcement": {
+      "Ankündigung": "Ankündigung",
+      "already-channel": "Die Ankündigung ist bereits auf {{channel}} gesetzt!",
+      "other": "Level-Ups werden in {{channel}} angekündigt.",
+      "already-user": "Die Ankündigung ist bereits auf den Benutzer-Kanal gesetzt!",
+      "user": "Level-Ups werden dort angekündigt, wo der User ein Level aufsteigt.",
+      "already-private": "Die Ankündigung ist bereits auf den Direktnachrichten des Benutzers gesetzt!",
+      "private": "Level-Ups werden in den Direktnachrichten des Benutzers angekündigt.",
+      "already-none": "Die Ankündigung ist bereits auf keine gesetzt!",
+      "none": "Level-Ups werden nicht angekündigt."
+    },
+    "xp": {
+      "added": "{{xp}}XP zu {{user}} hinzugefügt. {{user}} ist jetzt auf Level {{newLevel}} und hat {{newXP}}XP.",
+      "removed": "{{xp}}XP von {{user}} entfernt. {{user}} ist jetzt auf Level {{newLevel}} und hat {{newXP}}XP.",
+      "set": "XP von {{user}} auf {{xp}}XP gesetzt. {{user}} ist jetzt auf Level {{newLevel}} und hat {{newXP}}XP."
+    },
+    "level": {
+      "added": "{{level}} Level zu {{user}} hinzugefügt. {{user}} ist jetzt auf Level {{newLevel}} und hat {{newXP}}XP.",
+      "removed": "{{level}} Level von {{user}} entfernt. {{user}} ist jetzt auf Level {{newLevel}} und hat {{newXP}}XP.",
+      "set": "{{user}} ist jetzt auf Level {{newLevel}} und hat {{newXP}}XP."
     },
     "leaderboard": {
       "title": "Bestenliste",
       "weekly": "Wöchentliche Bestenliste",
       "position": "{{position}}. {{username}} ({{xp}}XP/LVL{{level}})"
     },
-    "announcement": {
-      "title": "Ankündigung",
-      "already-channel": "Die Ankündigung ist bereits auf den Kanal gesetzt!",
-      "other": "Level ups werden ab jetzt in dem Kanal angekündigt.",
-      "already-user": "Die Ankündigung ist bereits auf User-Kanal gesetzt!",
-      "user": "Level ups werden jetzt dort angekündigt, wo der User ein Level aufsteigt.",
-      "already-private": "Die Ankündigung ist bereits auf Privatnachricht gesetzt!",
-      "private": "Level ups werden jetzt in den Direktnachrichten der User angekündigt.",
-      "already-none": "Die Ankündigung ist bereits auf keine Ankündigung gesetzt!",
-      "none": "Level ups werden nun nicht mehr angekündigt."
-    },
-    "ignored-roles": {
-      "title": "Ignorierte Rollen",
-      "already": "Die Rolle wird bereits ignoriert!",
-      "limit": "Du kannst nicht mehr als 25 ignorierte Rollen haben!",
-      "added": "User mit der Rolle {{role}} erhalten keine XP mehr.",
-      "invalid": "Die Rolle wird nicht ignoriert!",
-      "removed": "Die Rolle wird nun nicht mehr ignoriert."
-    },
-    "ignored-channels": {
-      "title": "Ignorierte Kanäle",
-      "already": "Der Kanal wird bereits ignoriert!",
-      "limit": "Du kannst nicht mehr als 25 ignorierte Kanäle haben!",
-      "added": "User erhalten nun keine XP mehr in {{channel}}.",
-      "invalid": "Der Kanal wird nicht ignoriert!",
-      "removed": "Der Kanal wird nun nicht mehr ignoriert."
-    },
-    "enabled-channels": {
-      "title": "Aktivierte Kanäle",
-      "already": "Das Level Modul ist in dem Kanal bereits aktiviert!",
-      "limit": "Du kannst nicht mehr als 25 aktivierte Kanäle haben!",
-      "added": "Das Level Modul wurde in {{channel}} aktiviert.",
-      "invalid": "Das Level Modul ist für diesen Kanal nicht aktiviert!",
-      "removed": "Das Level Modul wurde für diesen Kanal ausgeschaltet."
-    },
-    "rewards": {
-      "title": "Levelup-Belohnungen",
-      "limit": "Du kannst nicht mehr als 25 Belohnungen haben!",
-      "already": "Diese Rolle ist bereits eine Belohnung!",
-      "added": "User erhalten nun {{role}}, wenn sie die Stufe {{level}} erreichen.",
-      "invalid": "Diese Rolle ist keine Belohnung!",
-      "removed": "User erhalten diese Rolle nicht mehr."
-    },
-    "toggle": {
-      "already-on": "Das Level Modul ist bereits aktiviert!",
-      "already-off": "Das Level Modul ist bereits deaktiviert!",
-      "on": "Das Level Modul wurde aktiviert.",
-      "off": "Das Level Modul wurde deaktiviert."
-    },
-    "xp": {
-      "added": "{{xp}}XP zu {{user}} hinzugefügt. Er ist jetzt auf Level {{newLevel}} und hat {{newXP}}XP.",
-      "removed": "{{xp}}XP von {{user}} entfernt. Er ist jetzt auf Level {{newLevel}} und hat {{newXP}}XP.",
-      "set": "XP von {{user}} auf {{xp}}XP gesetzt. Er ist jetzt auf Level {{newLevel}} und hat {{newXP}}XP."
-    },
-    "level": {
-      "added": "{{level}} Level zu {{user}} hinzugefügt. Er ist jetzt auf Level {{newLevel}} und hat {{newXP}}XP.",
-      "removed": "{{level}} Level von {{user}} entfernt. Er ist jetzt auf Level {{newLevel}} und hat {{newXP}}XP.",
-      "set": "{{user}} ist jetzt auf Level {{newLevel}} und hat {{newXP}}XP."
-    },
     "up": {
       "title": "Glückwunsch",
       "description": "Du bist jetzt Level **{{level}}**!",
       "title-roles_one": "Neue Rolle",
       "title-roles_other": "Neue Rollen",
-      "title-roles-error_one": "Folgende Rolle nicht hinzufügt",
-      "title-roles-error_other": "Folgende Rollen nicht hinzufügt",
+      "title-roles-error_one": "Folgende Rolle nicht hinzufügen",
+      "title-roles-error_other": "Folgende Rollen nicht hinzufügen",
       "message": "Nachricht von {{guild}}:"
     }
   },

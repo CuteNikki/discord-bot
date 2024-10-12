@@ -1133,67 +1133,73 @@
     }
   },
   "level": {
-    "title": "Levels Module",
+    "title": "Level Module",
     "bot": "Bots cannot have XP/Level!",
     "none": "Could not find any level data!",
     "state": {
       "title": "State",
-      "enabled": "enabled",
-      "disabled": "disabled"
-    },
-    "leaderboard": {
-      "title": "Leaderboard",
-      "weekly": "Weekly Leaderboard",
-      "position": "{{position}}. {{username}} ({{xp}}XP/LVL{{level}})"
-    },
-    "announcement": {
-      "title": "Announcement",
-      "already-channel": "The announcement is already set to that channel!",
-      "other": "Level ups will now be announced in that channel.",
-      "already-user": "The announcement is already set to user's channel!",
-      "user": "Level ups will now be announced where the user levels up.",
-      "already-private": "The announcement is already set to private message!",
-      "private": "Level ups will now be announced in user's direct messages.",
-      "already-none": "The announcement is already set to none!",
-      "none": "Level ups will no longer not be announced."
+      "enabled": "The level module has been enabled!",
+      "disabled": "The level module has been disabled!",
+      "already-enabled": "The level module is already enabled!",
+      "already-disabled": "The level module is already disabled!"
     },
     "ignored-roles": {
       "title": "Ignored Roles",
-      "already": "That role is already ignored!",
-      "limit": "You cannot have more than 25 ignored roles!",
-      "added": "Users with the role {{role}} will no longer gain XP.",
-      "invalid": "That role is not ignored!",
-      "removed": "That role will no longer be ignored."
+      "already": "{{role}} is already ignored!",
+      "limit": "You cannot have more than {{max}} ignored roles!",
+      "added": "{{role}} has been added to the ignored roles.",
+      "none": "You did not provide a role to remove!",
+      "invalid": "{{role}} is not an ignored role!",
+      "removed": "{{role}} has been removed from the ignored roles."
     },
     "ignored-channels": {
       "title": "Ignored Channels",
-      "already": "That channel is already ignored!",
-      "limit": "You cannot have more than 25 ignored channels!",
-      "added": "Users will no longer gain XP in {{channel}}.",
-      "invalid": "That channel is not ignored!",
-      "removed": "That channel will no longer be ignored."
+      "already": "{{channel}} is already ignored!",
+      "limit": "You cannot have more than {{max}} ignored channels!",
+      "added": "{{channel}} has been added to the ignored channels.",
+      "none": "You did not provide a channel to remove!",
+      "invalid": "{{channel}} is not an ignored channel!",
+      "removed": "{{channel}} has been removed from the ignored channels."
     },
     "enabled-channels": {
       "title": "Enabled Channels",
-      "already": "The level module is already enabled in that channel!",
-      "limit": "You cannot have more than 25 enabled channels!",
-      "added": "The level module is now enabled in {{channel}}.",
-      "invalid": "The level module is not enabled in that channel!",
-      "removed": "The level module is no longer enabled in that channel."
+      "already": "Gaining XP in {{channel}} is already enabled!",
+      "limit": "You cannot have more than {{max}} enabled channels!",
+      "added": "Gaining XP in {{channel}} has been enabled.",
+      "none": "You did not provide a channel to remove!",
+      "invalid": "{{channel}} is not an enabled channel!",
+      "removed": "Gaining XP has been disabled in {{channel}}."
     },
     "rewards": {
       "title": "Levelup Rewards",
-      "limit": "You cannot have more than 25 rewards!",
-      "already": "That role is already a reward!",
-      "added": "Users will now obtain {{role}} when they reach level {{level}}.",
-      "invalid": "That role is not a reward!",
-      "removed": "Users will no longer obtain that role."
+      "invalid-level": "The level is invalid!",
+      "limit": "You cannot have more than {{max}} rewards!",
+      "already": "{{role}} already has a reward!",
+      "added": "{{role}} will now be given at level {{level}}.",
+      "none": "You did not provide a role to remove!",
+      "invalid": "{{role}} is not a reward role!",
+      "removed": "{{role}} has been removed from the rewards."
     },
-    "toggle": {
-      "already-on": "Levels module is already enabled!",
-      "already-off": "Levels module is already disabled!",
-      "on": "Levels module has been enabled.",
-      "off": "Levels module has been disabled."
+    "multipliers": {
+      "title": "Multipliers",
+      "invalid-multiplier": "Multiplier must be between 0 and {{max}}!",
+      "limit": "You cannot have more than {{max}} multipliers!",
+      "already": "{{role}} already has a multiplier!",
+      "added": "Members with the {{role}} role will now have {{multiplier}}x XP gained.",
+      "none": "You did not provide a role to remove!",
+      "invalid": "{{role}} is not a multiplier role!",
+      "removed": "{{role}} has been removed from the multipliers."
+    },
+    "announcement": {
+      "title": "Announcement",
+      "already-channel": "The announcement is already set to {{channel}}!",
+      "other": "Level ups will be announced in {{channel}}.",
+      "already-user": "The announcement is already set to user's channel!",
+      "user": "Level ups will be announced where the user levels up.",
+      "already-private": "The announcement is already set to private message!",
+      "private": "Level ups will be announced in user's direct messages.",
+      "already-none": "The announcement is already set to none!",
+      "none": "Level ups will not be announced."
     },
     "xp": {
       "added": "Added {{xp}}XP to {{user}}. They are now level {{newLevel}} and have {{newXP}}XP.",
@@ -1204,6 +1210,11 @@
       "added": "Added {{level}} level to {{user}}. They are now level {{newLevel}} and have {{newXP}}XP.",
       "removed": "Removed {{level}} level from {{user}}. They are now level {{newLevel}} and have {{newXP}}XP.",
       "set": "{{user}} is now level {{newLevel}} and has {{newXP}}XP."
+    },
+    "leaderboard": {
+      "title": "Leaderboard",
+      "weekly": "Weekly Leaderboard",
+      "position": "{{position}}. {{username}} ({{xp}}XP/LVL{{level}})"
     },
     "up": {
       "title": "Congratulations",

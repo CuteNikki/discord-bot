@@ -8,9 +8,15 @@ export enum AnnouncementType {
 }
 
 export type LevelReward = {
+  _id: Types.ObjectId;
   roleId: string;
   level: number;
+};
+
+export type Multiplier = {
   _id: Types.ObjectId;
+  roleId: string;
+  multiplier: number;
 };
 
 export type LevelConfigDocument = {
@@ -23,6 +29,7 @@ export type LevelConfigDocument = {
   ignoredChannels: string[];
   enabledChannels: string[];
   rewards: LevelReward[];
+  multipliers: Multiplier[];
 };
 
 export type WeeklyLevelDocument = {

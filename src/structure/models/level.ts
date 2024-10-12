@@ -43,6 +43,7 @@ export const levelConfigModel: Model<LevelConfigDocument> =
       ignoredRoles: [{ type: String, required: false }],
       ignoredChannels: [{ type: String, required: false }],
       enabledChannels: [{ type: String, required: false }],
-      rewards: [{ level: { type: Number, required: true }, roleId: { type: String, required: true } }]
+      rewards: [{ level: { type: Number, required: true }, roleId: { type: String, required: true } }],
+      multipliers: [{ roleId: { type: String, required: true }, multiplier: { type: Number, required: true } }]
     })
   );

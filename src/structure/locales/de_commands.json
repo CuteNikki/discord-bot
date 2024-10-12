@@ -533,55 +533,103 @@
       }
     ]
   },
-  "config-level": {
-    "name": "level-konfiguration",
+  "level": {
+    "name": "level",
     "description": "Konfiguriere das Level-Modul",
     "options": [
       {
-        "name": "ansehen",
-        "description": "Zeigt die aktuelle Konfiguration an",
+        "name": "xp",
+        "description": "Verwalte die XP eines Mitglieds",
         "options": [
           {
-            "name": "alles",
-            "description": "Zeigt die gesamte Konfiguration an"
+            "name": "hinzufügen",
+            "description": "Fügt XP einem Mitglied hinzu",
+            "options": [
+              {
+                "name": "mitglied",
+                "description": "Das Mitglied, dem XP hinzugefügt werden soll"
+              },
+              {
+                "name": "xp",
+                "description": "Die XP, die dem Mitglied hinzugefügt werden soll"
+              }
+            ]
           },
           {
-            "name": "status",
-            "description": "Zeigt den Status des Level-Moduls an"
+            "name": "entfernen",
+            "description": "Entfernt XP eines Mitglieds",
+            "options": [
+              {
+                "name": "user",
+                "description": "Das Mitglied, von dem XP entfernt werden soll"
+              },
+              {
+                "name": "xp",
+                "description": "Die XP, die dem Mitglied entfernt werden soll"
+              }
+            ]
           },
           {
-            "name": "ankündigung",
-            "description": "Zeigt die Ankündigungs-Konfiguration an"
-          },
-          {
-            "name": "belohnungen",
-            "description": "Zeigt die Belohnungen-Rollen und deren benötigte Level an"
-          },
-          {
-            "name": "ignorierte-rollen",
-            "description": "Zeigt die Rollen, die keine XP erhalten"
-          },
-          {
-            "name": "ignorierte-kanäle",
-            "description": "Zeigt die Kanäle, in denen keine XP erhalten wird"
-          },
-          {
-            "name": "aktivierte-kanäle",
-            "description": "Zeigt die aktivierten Kanäle an, in denen XP erhalten wird"
+            "name": "setzen",
+            "description": "Setzt XP eines Mitglieds",
+            "options": [
+              {
+                "name": "mitglied",
+                "description": "Das Mitglied, für den XP gesetzt werden soll"
+              },
+              {
+                "name": "xp",
+                "description": "Die XP, die für das Mitglied gesetzt werden soll"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "status",
-        "description": "Schaltet das Level-Modul um",
+        "name": "level",
+        "description": "Verwalte das Level eines Mitglieds",
         "options": [
           {
-            "name": "an",
-            "description": "Schaltet das Level-Modul an"
+            "name": "hinzufügen",
+            "description": "Fügt Level einem Mitglied hinzu",
+            "options": [
+              {
+                "name": "mitglied",
+                "description": "Das Mitglied, dem Level hinzugefügt werden soll"
+              },
+              {
+                "name": "level",
+                "description": "Das Level, das dem Mitglied hinzugefügt werden soll"
+              }
+            ]
           },
           {
-            "name": "aus",
-            "description": "Schaltet das Level-Modul aus"
+            "name": "entfernen",
+            "description": "Entfernt Level eines Mitglieds",
+            "options": [
+              {
+                "name": "mitglied",
+                "description": "Das Mitglied, von dem das Level entfernt werden soll"
+              },
+              {
+                "name": "level",
+                "description": "Das Level, das vom dem Mitglied entfernt werden soll"
+              }
+            ]
+          },
+          {
+            "name": "setzen",
+            "description": "Setzt Level eines Mitglieds",
+            "options": [
+              {
+                "name": "mitglied",
+                "description": "Das Mitglied, für den das Level gesetzt werden soll"
+              },
+              {
+                "name": "level",
+                "description": "Das Level, das für das Mitglied gesetzt werden soll"
+              }
+            ]
           }
         ]
       },
@@ -590,8 +638,16 @@
         "description": "Konfiguriere, wo die Level-Ankündigung erfolgt",
         "options": [
           {
-            "name": "user-kanal",
-            "description": "Level-Ups werden in dem Kanal des Users angekündigt und in 5 Sekunden gelöscht"
+            "name": "keine",
+            "description": "Level-Ups werden nicht angekündigt"
+          },
+          {
+            "name": "private-nachricht",
+            "description": "Level-Ups werden in privaten Nachrichten mit dem User angekündigt"
+          },
+          {
+            "name": "mitglied-kanal",
+            "description": "Level-Ups werden in dem Kanal des Mitglieds angekündigt und dann gelöscht"
           },
           {
             "name": "anderer-kanal",
@@ -600,96 +656,6 @@
               {
                 "name": "kanal",
                 "description": "Der Kanal, in dem die Level-Ankündigung gesendet wird"
-              }
-            ]
-          },
-          {
-            "name": "private-nachricht",
-            "description": "Level-Ups werden in privaten Nachrichten mit dem User angekündigt"
-          },
-          {
-            "name": "keine",
-            "description": "Level-Ups werden nicht angekündigt"
-          }
-        ]
-      },
-      {
-        "name": "belohnungen",
-        "description": "Konfiguriere die Belohnungen für Level-Ups",
-        "options": [
-          {
-            "name": "hinzufügen",
-            "description": "Fügt eine Belohnung für Level-Ups hinzu",
-            "options": [
-              {
-                "name": "rolle",
-                "description": "Die Rolle, die bei Level-Up gegeben wird"
-              },
-              {
-                "name": "level",
-                "description": "Das Level, für das die Rolle gegeben wird"
-              }
-            ]
-          },
-          {
-            "name": "entfernen",
-            "description": "Entfernt eine Belohnung für Level-Ups",
-            "options": [
-              {
-                "name": "rollen-id",
-                "description": "Die ID der Rolle, die entfernt werden soll"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "name": "ignorierte-rollen",
-        "description": "Konfiguriere die ignorierten Rollen",
-        "options": [
-          {
-            "name": "hinzufügen",
-            "description": "Fügt eine ignorierte Rolle hinzu",
-            "options": [
-              {
-                "name": "rolle",
-                "description": "Die Rolle, die ignoriert werden soll"
-              }
-            ]
-          },
-          {
-            "name": "entfernen",
-            "description": "Entfernt eine ignorierte Rolle",
-            "options": [
-              {
-                "name": "rollen-id",
-                "description": "Die ID der Rolle, die entfernt werden soll"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "name": "ignorierte-kanäle",
-        "description": "Konfiguriere die ignorierten Kanäle",
-        "options": [
-          {
-            "name": "hinzufügen",
-            "description": "Fügt einen ignorierte Kanal hinzu",
-            "options": [
-              {
-                "name": "kanal",
-                "description": "Der Kanal, der ignoriert werden soll"
-              }
-            ]
-          },
-          {
-            "name": "entfernen",
-            "description": "Entfernt einen ignorierte Kanal",
-            "options": [
-              {
-                "name": "kanal-id",
-                "description": "Die ID des Kanals, der entfernt werden soll"
               }
             ]
           }
@@ -714,6 +680,10 @@
             "description": "Entfernt einen aktivierten Kanal",
             "options": [
               {
+                "name": "kanal",
+                "description": "Der Kanal, der entfernt werden soll"
+              },
+              {
                 "name": "kanal-id",
                 "description": "Die ID des Kanals, der entfernt werden soll"
               }
@@ -722,100 +692,144 @@
         ]
       },
       {
-        "name": "xp",
-        "description": "Verwalte die XP eines Users",
+        "name": "ignorierte-kanäle",
+        "description": "Konfiguriere die ignorierten Kanäle",
         "options": [
           {
             "name": "hinzufügen",
-            "description": "Fügt XP einem User hinzu",
+            "description": "Fügt einen ignorierten Kanal hinzu",
             "options": [
               {
-                "name": "user",
-                "description": "Der User, dem XP hinzugefügt werden soll"
-              },
-              {
-                "name": "xp",
-                "description": "Die XP, die dem User hinzugefügt werden soll"
+                "name": "kanal",
+                "description": "Der Kanal, der ignoriert werden soll"
               }
             ]
           },
           {
             "name": "entfernen",
-            "description": "Entfernt XP eines Users",
+            "description": "Entfernt einen ignorierten Kanal",
             "options": [
               {
-                "name": "user",
-                "description": "Der User, von dem XP entfernt werden soll"
+                "name": "kanal",
+                "description": "Der Kanal, der entfernt werden soll"
               },
               {
-                "name": "xp",
-                "description": "Die XP, die vom User entfernt werden soll"
-              }
-            ]
-          },
-          {
-            "name": "setzen",
-            "description": "Setzt XP eines Users",
-            "options": [
-              {
-                "name": "user",
-                "description": "Der User, für den XP gesetzt werden soll"
-              },
-              {
-                "name": "xp",
-                "description": "Die XP, die für den User gesetzt werden soll"
+                "name": "kanal-id",
+                "description": "Die ID des Kanals, der entfernt werden soll"
               }
             ]
           }
         ]
       },
       {
-        "name": "level",
-        "description": "Verwalte das Level eines Users",
+        "name": "ignorierte-rollen",
+        "description": "Konfiguriere die ignorierten Rollen",
         "options": [
           {
             "name": "hinzufügen",
-            "description": "Fügt Level einem User hinzu",
+            "description": "Fügt eine ignorierte Rolle hinzu",
             "options": [
               {
-                "name": "user",
-                "description": "Der User, dem Level hinzugefügt werden soll"
-              },
-              {
-                "name": "level",
-                "description": "Das Level, das dem User hinzugefügt werden soll"
+                "name": "rolle",
+                "description": "Die Rolle, die ignoriert werden soll"
               }
             ]
           },
           {
             "name": "entfernen",
-            "description": "Entfernt Level eines Users",
+            "description": "Entfernt eine ignorierte Rolle",
             "options": [
               {
-                "name": "user",
-                "description": "Der User, von dem Level entfernt werden soll"
+                "name": "rolle",
+                "description": "Die Rolle, die entfernt werden soll"
               },
               {
-                "name": "level",
-                "description": "Das Level, das vom User entfernt werden soll"
-              }
-            ]
-          },
-          {
-            "name": "setzen",
-            "description": "Setzt Level eines Users",
-            "options": [
-              {
-                "name": "user",
-                "description": "Der User, für den Level gesetzt werden soll"
-              },
-              {
-                "name": "level",
-                "description": "Das Level, das für den User gesetzt werden soll"
+                "name": "rollen-id",
+                "description": "Die ID der Rolle, die entfernt werden soll"
               }
             ]
           }
         ]
+      },
+      {
+        "name": "belohungen",
+        "description": "Konfiguriere die Belohungen für Level-Ups",
+        "options": [
+          {
+            "name": "hinzufügen",
+            "description": "Fügt eine Belohung für Level-Ups hinzu",
+            "options": [
+              {
+                "name": "rolle",
+                "description": "Die Rolle, die bei Level-Up gegeben wird"
+              },
+              {
+                "name": "level",
+                "description": "Das Level, für das die Rolle gegeben wird"
+              }
+            ]
+          },
+          {
+            "name": "entfernen",
+            "description": "Entfernt eine Belohung für Level-Ups",
+            "options": [
+              {
+                "name": "rolle",
+                "description": "Die Rolle, die entfernt werden soll"
+              },
+              {
+                "name": "rollen-id",
+                "description": "Die ID der Rolle, die entfernt werden soll"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "multiplikatoren",
+        "description": "Konfiguriere die Multiplikatoren für XP",
+        "options": [
+          {
+            "name": "hinzufügen",
+            "description": "Fügt eine Multiplikator für XP hinzu",
+            "options": [
+              {
+                "name": "rolle",
+                "description": "Die Rolle, die Multiplikator für XP haben soll"
+              },
+              {
+                "name": "multiplier",
+                "description": "Der Multiplikator für XP"
+              }
+            ]
+          },
+          {
+            "name": "entfernen",
+            "description": "Entfernt eine Multiplikator für XP",
+            "options": [
+              {
+                "name": "rolle",
+                "description": "Die Rolle, die entfernt werden soll"
+              },
+              {
+                "name": "rollen-id",
+                "description": "Die ID der Rolle, die entfernt werden soll"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "info",
+        "description": "Zeigt die aktuellen Einstellungen des Level-Moduls an"
+      },
+      {
+        "name": "aktivieren",
+        "description": "Aktiviert das Level-Modul"
+      },
+      {
+        "name": "deaktivieren",
+        "description": "Deaktiviert das Level-Modul"
       }
     ]
   },

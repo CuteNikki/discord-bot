@@ -6,7 +6,7 @@ import { levelConfigModel, levelModel, weeklyLevelModel } from 'models/level';
 
 import { getRandomNumber } from 'utils/common';
 
-import type { LevelConfigDocument, LevelDocument, PositionLevel, WeeklyLevelDocument, AnnouncementType, LevelReward } from 'types/level';
+import type { AnnouncementType, LevelConfigDocument, LevelDocument, LevelReward, PositionLevel, WeeklyLevelDocument } from 'types/level';
 
 export async function getLevelConfig<T extends boolean>(
   guildId: string,
@@ -45,8 +45,20 @@ export async function addLevelReward(guildId: string, level: number, roleId: str
   return updateLevelConfig(guildId, { $push: { rewards: { level, roleId } } });
 }
 
+export async function addLevelMultiplier(guildId: string, roleId: string, multiplier: number): Promise<LevelConfigDocument> {
+  return updateLevelConfig(guildId, { $push: { multipliers: { roleId, multiplier } } });
+}
+
 export async function removeLevelRewardById(guildId: string, rewardId: Types.ObjectId | string): Promise<LevelConfigDocument> {
   return updateLevelConfig(guildId, { $pull: { rewards: { _id: rewardId } } });
+}
+
+export async function removeLevelReward(guildId: string, roleId: string): Promise<LevelConfigDocument> {
+  return updateLevelConfig(guildId, { $pull: { rewards: { roleId } } });
+}
+
+export async function removeLevelMultiplier(guildId: string, roleId: string): Promise<LevelConfigDocument> {
+  return updateLevelConfig(guildId, { $pull: { multipliers: { roleId } } });
 }
 
 export async function addLevelIgnoredRole(guildId: string, roleId: string): Promise<LevelConfigDocument> {

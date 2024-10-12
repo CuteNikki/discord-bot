@@ -808,17 +808,17 @@
       "new-roles": "New Roles"
     },
     "guildBanAdd": {
-      "title": "Guild Ban Add",
+      "title": "Server Ban Add",
       "user": "User",
       "reason": "Reason"
     },
     "guildBanRemove": {
-      "title": "Guild Ban Remove",
+      "title": "Server Ban Remove",
       "user": "User",
       "reason": "Reason"
     },
     "guildMemberAdd": {
-      "title": "Guild Member Add",
+      "title": "Server Member Add",
       "member": "Member",
       "created-at": "Created at",
       "potentially-dangerous": "Potentially Dangerous",
@@ -827,13 +827,13 @@
       "kick": "Kick Member"
     },
     "guildMemberRemove": {
-      "title": "Guild Member Remove",
+      "title": "Server Member Remove",
       "member": "Member",
       "created-at": "Created at",
       "joined-at": "Joined at"
     },
     "guildMemberUpdate": {
-      "title": "Guild Member Update",
+      "title": "Server Member Update",
       "member": "Member",
       "old-nickname": "Old Nickname",
       "new-nickname": "New Nickname",
@@ -849,7 +849,7 @@
       "added-permissions": "Added Permissions"
     },
     "guildScheduledEventCreate": {
-      "title": "Guild Scheduled Event Create",
+      "title": "Server Scheduled Event Create",
       "name": "Name",
       "description": "Description",
       "url": "URL",
@@ -860,7 +860,7 @@
       "end": "End"
     },
     "guildScheduledEventDelete": {
-      "title": "Guild Scheduled Event Delete",
+      "title": "Server Scheduled Event Delete",
       "name": "Name",
       "description": "Description",
       "url": "URL",
@@ -871,7 +871,7 @@
       "end": "End"
     },
     "guildScheduledEventUpdate": {
-      "title": "Guild Scheduled Event Update",
+      "title": "Server Scheduled Event Update",
       "event": "Event",
       "old-name": "Old Name",
       "new-name": "New Name",
@@ -889,17 +889,17 @@
       "new-location": "New Location"
     },
     "guildScheduledEventUserAdd": {
-      "title": "Guild Scheduled Event User Add",
+      "title": "Server Scheduled Event User Add",
       "event": "Event",
       "user": "User"
     },
     "guildScheduledEventUserRemove": {
-      "title": "Guild Scheduled Event User Remove",
+      "title": "Server Scheduled Event User Remove",
       "event": "Event",
       "user": "User"
     },
     "guildUpdate": {
-      "title": "Guild Update",
+      "title": "Server Update",
       "old-name": "Old Name",
       "new-name": "New Name",
       "old-description": "Old Description",
@@ -1231,14 +1231,14 @@
     "uptime": "Uptime: {{uptime}}",
     "ping": "Average Ping: {{ping}}ms",
     "memory": "Memory Usage: {{memory}}MB",
-    "guilds": "Guilds: {{guilds}}",
+    "guilds": "Server: {{guilds}}",
     "members": "Members: {{members}}",
     "pin": "If you spot a red pin it means that you are currently on that shard",
     "shards": {
       "title": "Shard {{id}}",
       "status": "Status: {{status}}",
       "ping": "Ping: {{ping}}ms",
-      "guilds": "Guilds: {{guilds}}",
+      "guilds": "Server: {{guilds}}",
       "members": "Members: {{members}}"
     }
   },
@@ -1385,15 +1385,15 @@
     },
     "stats": {
       "title": "Statistics",
-      "guilds": "Total Guilds: {{guildCount}}",
-      "members": "Total Users: {{memberCount}}",
-      "commands": "Total Commands: {{commandCount}}",
-      "executed-commands": "Commands Executed: {{executedCommands}}",
-      "failed-commands": "Commands Failed: {{failedCommands}}",
-      "buttons-executed": "Buttons Executed: {{buttonsExecuted}}",
-      "buttons-failed": "Buttons Failed: {{buttonsFailed}}",
-      "guilds-joined": "Guilds Joined: {{guildsJoined}}",
-      "guilds-left": "Guilds Left: {{guildsLeft}}"
+      "guilds": "Total servers: {{guildCount}}",
+      "members": "Total users: {{memberCount}}",
+      "commands": "Total commands: {{commandCount}}",
+      "executed-commands": "Commands executed: {{executedCommands}}",
+      "failed-commands": "Commands failed: {{failedCommands}}",
+      "buttons-executed": "Buttons executed: {{buttonsExecuted}}",
+      "buttons-failed": "Buttons failed: {{buttonsFailed}}",
+      "guilds-joined": "Server joins tracked: {{guildsJoined}}",
+      "guilds-left": "Server leaves tracked: {{guildsLeft}}"
     }
   },
   "serverinfo": {
@@ -1572,7 +1572,7 @@
   },
   "interactions": {
     "author-only": "This is not for you!",
-    "guild-only": "This can only be done in a guild!",
+    "guild-only": "This can only be done in a server!",
     "permissions": "You are missing permissions!\n{{permissions}}",
     "bot-permissions": "The bot is missing permissions!\n{{permissions}}",
     "developer-only": "This can only be done by developers!",

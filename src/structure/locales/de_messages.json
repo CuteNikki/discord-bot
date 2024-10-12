@@ -1385,15 +1385,15 @@
     },
     "stats": {
       "title": "Statistiken",
-      "guilds": "Server Insgesamt: {{guildCount}}",
-      "members": "User Insgesamt: {{memberCount}}",
-      "commands": "Befehle Insgesamt: {{commandCount}}",
-      "executed-commands": "Befehle Ausgeführt: {{executedCommands}}",
-      "failed-commands": "Befehle Fehlgeschlagen: {{failedCommands}}",
-      "buttons-executed": "Knöpfe Ausgeführt: {{buttonsExecuted}}",
-      "buttons-failed": "Knöpfe Fehlgeschlagen: {{buttonsFailed}}",
-      "guilds-joined": "Server betreten: {{guildsJoined}}",
-      "guilds-left": "Server verlassen: {{guildsLeft}}"
+      "guilds": "Server insgesamt: {{guildCount}}",
+      "members": "User insgesamt: {{memberCount}}",
+      "commands": "Befehle insgesamt: {{commandCount}}",
+      "executed-commands": "Befehle ausgeführt: {{executedCommands}}",
+      "failed-commands": "Befehle fehlgeschlagen: {{failedCommands}}",
+      "buttons-executed": "Knöpfe ausgeführt: {{buttonsExecuted}}",
+      "buttons-failed": "Knöpfe fehlgeschlagen: {{buttonsFailed}}",
+      "guilds-joined": "Server Beitritte verfolgt: {{guildsJoined}}",
+      "guilds-left": "Server Verlassungen verfolgt: {{guildsLeft}}"
     }
   },
   "serverinfo": {

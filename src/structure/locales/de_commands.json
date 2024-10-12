@@ -108,6 +108,16 @@
         "description": "Zeigt die aktuelle Konfiguration"
       },
       {
+        "name": "re-send",
+        "description": "Sendet eine Reaktionsrollen Gruppe",
+        "options": [
+          {
+            "name": "id",
+            "description": "Die ID der Gruppe"
+          }
+        ]
+      },
+      {
         "name": "löschen",
         "description": "Löscht eine Reaktionsrollen Gruppe",
         "options": [

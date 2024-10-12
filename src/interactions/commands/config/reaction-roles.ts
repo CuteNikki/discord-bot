@@ -23,7 +23,14 @@ import { t } from 'i18next';
 import type { DiscordClient } from 'classes/client';
 import { Command } from 'classes/command';
 
-import { addReactionGroup, deleteReactionGroupById, disableReactionRoles, enableReactionRoles, getReactionRoles } from 'db/reaction-roles';
+import {
+  addReactionGroup,
+  deleteReactionGroupById,
+  disableReactionRoles,
+  enableReactionRoles,
+  getReactionRoles,
+  updateReactionGroupMessage
+} from 'db/reaction-roles';
 
 import { chunk } from 'utils/common';
 import { logger } from 'utils/logger';
@@ -47,6 +54,12 @@ export default new Command({
     .addSubcommand((cmd) => cmd.setName('disable').setDescription('Disable reaction roles.'))
     .addSubcommand((cmd) => cmd.setName('setup').setDescription('Set up reaction roles.'))
     .addSubcommand((cmd) => cmd.setName('info').setDescription('View all reaction role groups.'))
+    .addSubcommand((cmd) =>
+      cmd
+        .setName('re-send')
+        .setDescription('Send a reaction role group.')
+        .addStringOption((option) => option.setName('id').setDescription('The group ID').setRequired(true))
+    )
     .addSubcommand((cmd) =>
       cmd
         .setName('delete')
@@ -124,6 +137,64 @@ export default new Command({
               embeds: [new EmbedBuilder().setColor(client.colors.reactionRoles).setDescription(t('reaction-roles.delete.success', { lng }))]
             })
             .catch((err) => logger.debug(err, 'Could not edit reply'));
+        }
+        break;
+      case 're-send':
+        {
+          const group = reactionRoles.groups.find((g) => g._id.toString() === options.getString('id'));
+
+          if (!group) {
+            await interaction
+              .editReply({
+                embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.re-send.invalid-group', { lng }))]
+              })
+              .catch((err) => logger.debug(err, 'Could not edit reply'));
+            return;
+          }
+
+          const channel = await guild.channels.fetch(group.channelId).catch((err) => logger.debug(err, 'Could not fetch channel'));
+
+          if (!channel || !channel.isSendable()) {
+            await interaction
+              .editReply({
+                embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.re-send.invalid-channel', { lng }))]
+              })
+              .catch((err) => logger.debug(err, 'Could not edit reply'));
+            return;
+          }
+
+          const msg = await channel
+            .send({
+              embeds: [
+                new EmbedBuilder().setColor(client.colors.general).setDescription(group.reactions.map((r) => `${r.emoji}: ${roleMention(r.roleId)}`).join('\n'))
+              ],
+              components: chunk(
+                group.reactions.map((r) => r.emoji),
+                5
+              ).map((chunk, chunkIndex) =>
+                new ActionRowBuilder<ButtonBuilder>().addComponents(
+                  chunk.map((emoji, emojiIndex) =>
+                    new ButtonBuilder()
+                      .setCustomId(`button-reaction-select_${chunkIndex * 5 + emojiIndex}`)
+                      .setEmoji(emoji)
+                      .setStyle(ButtonStyle.Secondary)
+                  )
+                )
+              )
+            })
+            .catch((err) => logger.debug(err, 'Could not send message'));
+          if (!msg) {
+            await interaction.editReply({
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.re-send.failed', { lng }))]
+            });
+            return;
+          }
+
+          await updateReactionGroupMessage(group._id, msg.id);
+
+          await interaction.editReply({
+            embeds: [new EmbedBuilder().setColor(client.colors.reactionRoles).setDescription(t('reaction-roles.re-send.success', { lng }))]
+          });
         }
         break;
       case 'info':

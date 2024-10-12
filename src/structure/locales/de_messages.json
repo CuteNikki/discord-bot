@@ -88,6 +88,12 @@
       "invalid": "Konnte diese Gruppe nicht finden!",
       "success": "Die Gruppe wurde gelöscht."
     },
+    "re-send": {
+      "invalid-group": "Diese Gruppe konnte nicht gefunden werden!",
+      "invalid-channel": "Dieser Kanal kann nicht gesendet werden!",
+      "success": "Die Gruppe wurde erneut gesendet.",
+      "failed": "Es konnte keine Nachricht gesendet werden!"
+    },
     "info": {
       "state": "Status"
     },
@@ -131,7 +137,8 @@
       "removed": "{{role}} wurde von deinen Rollen entfernt!",
       "added": "{{role}} wurde zu deinen Rollen hinzugefügt!",
       "role-not-found": "Die Rolle wurde nicht gefunden!",
-      "unknown-group": "Die Gruppe wurde nicht gefunden!"
+      "unknown-group": "Die Gruppe wurde nicht gefunden!",
+      "failed": "Es konnte keine Rolle hinzugefügt/entfernt werden!"
     }
   },
   "custom-vc": {

@@ -1,4 +1,4 @@
-import type { UpdateQuery } from 'mongoose';
+import type { Types, UpdateQuery } from 'mongoose';
 
 import { updateGuild } from 'db/guild';
 import { reactionRoleGroupModel, reactionRoleModel } from 'models/reaction-roles';
@@ -105,4 +105,8 @@ export async function deleteReactionGroupByMessage(guildId: string, messageId: s
     .exec();
 
   return await reactionRoleGroupModel.findOneAndDelete({ messageId }).lean().exec();
+}
+
+export async function updateReactionGroupMessage(groupId: Types.ObjectId | string, messageId: string): Promise<ReactionRoleGroupDocument> {
+  return await reactionRoleGroupModel.findOneAndUpdate({ _id: groupId }, { $set: { messageId } }, { new: true, upsert: true }).lean().exec();
 }

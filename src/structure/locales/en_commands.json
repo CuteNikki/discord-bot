@@ -108,6 +108,16 @@
         "description": "Shows the current configuration"
       },
       {
+        "name": "re-send",
+        "description": "Sends a reaction role group",
+        "options": [
+          {
+            "name": "id",
+            "description": "The ID of the group"
+          }
+        ]
+      },
+      {
         "name": "delete",
         "description": "Delete a reaction role group",
         "options": [

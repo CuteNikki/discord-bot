@@ -88,6 +88,12 @@
       "invalid": "Could not find that group!",
       "success": "The group has been deleted."
     },
+    "re-send": {
+      "invalid-group": "Could not find that group!",
+      "invalid-channel": "Could not send that channel!",
+      "success": "The group has been re-sent.",
+      "failed": "Could not send a message!"
+    },
     "info": {
       "state": "State"
     },
@@ -131,7 +137,8 @@
       "removed": "{{role}} has been removed from your roles!",
       "added": "{{role}} has been added to your roles!",
       "role-not-found": "The role was not found!",
-      "unknown-group": "The reaction group was not found!"
+      "unknown-group": "The reaction group was not found!",
+      "failed": "Could not add/remove that role!"
     }
   },
   "custom-vc": {

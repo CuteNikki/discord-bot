@@ -138,9 +138,16 @@ export default new Command({
           ];
           if (groups.length) {
             for (const group of groups) {
-              const channel = (await guild.channels.fetch(group.channelId).catch((err) => logger.debug(err, 'Could not fetch channel'))) as TextChannel;
-              const message = await channel?.messages.fetch(group.messageId).catch((err) => logger.debug(err, 'Could not fetch message'));
-              if (!channel || !message) {
+              const channel = await guild.channels.fetch(group.channelId).catch((err) => logger.debug(err, 'Could not fetch channel'));
+
+              if (!channel || !channel.isSendable()) {
+                await deleteReactionGroupById(guild.id, group._id.toString());
+                continue;
+              }
+
+              const message = await channel.messages.fetch(group.messageId).catch((err) => logger.debug(err, 'Could not fetch message'));
+
+              if (!message) {
                 await deleteReactionGroupById(guild.id, group._id.toString());
                 continue;
               }

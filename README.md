@@ -326,7 +326,6 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
 
 ## TO-DO
 
-- [ ] Add XP per minute in a voice channel
 - [ ] Separate all objects from guild schema into separate models and then reconnect them using the ObjectId (use populate to get objects)
   - [x] custom-voice-setup
   - [x] reaction-roles

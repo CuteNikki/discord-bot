@@ -7,15 +7,25 @@ import { guildModel } from 'models/guild';
 
 import type { GuildDocument } from 'types/guild';
 
-const DEFAULT_POPULATE = ['starboard', 'customVoice', 'reactionRoles', 'counting', 'ticket', 'moderation', 'level', 'welcome', 'farewell'];
+const DEFAULT_POPULATE = [
+  { path: 'starboard' },
+  { path: 'customVoice' },
+  { path: 'reactionRoles', populate: { path: 'groups' } },
+  { path: 'counting' },
+  { path: 'ticket' },
+  { path: 'moderation' },
+  { path: 'level' },
+  { path: 'welcome' },
+  { path: 'farewell' }
+];
 
 /**
  * Gets or creates the guild settings for a given guild ID
  * @param {string} guildId ID of the guild to get
- * @param {string[]} populate Modules to populate
+ * @param populate Modules to populate
  * @returns {Promise<GuildDocument>} Guild settings
  */
-export async function getGuild(guildId: string, populate: string[] = DEFAULT_POPULATE): Promise<GuildDocument> {
+export async function getGuild(guildId: string, populate = DEFAULT_POPULATE): Promise<GuildDocument> {
   return await updateGuild(guildId, {}, populate);
 }
 
@@ -23,10 +33,10 @@ export async function getGuild(guildId: string, populate: string[] = DEFAULT_POP
  * Updates guild settings for a given guild ID
  * @param {string} guildId ID of the guild to update
  * @param {UpdateQuery<GuildDocument>} query Update query
- * @param {string[]} populate Modules to populate
+ * @param populate Modules to populate
  * @returns {Promise<GuildDocument>} Updates guild settings
  */
-export async function updateGuild(guildId: string, query: UpdateQuery<GuildDocument>, populate: string[] = DEFAULT_POPULATE): Promise<GuildDocument> {
+export async function updateGuild(guildId: string, query: UpdateQuery<GuildDocument>, populate = DEFAULT_POPULATE): Promise<GuildDocument> {
   return await guildModel.findOneAndUpdate({ guildId }, query, { upsert: true, new: true }).populate(populate).lean().exec();
 }
 

@@ -29,7 +29,8 @@ export default new Event({
       enabledChannels: [] as string[],
       announcement: AnnouncementType.UserChannel
     };
-    if (level.enabled || level.ignoredChannels.includes(channel.id) || (level.enabledChannels.length && !level.enabledChannels.includes(channel.id))) {
+
+    if (!level.enabled || level.ignoredChannels.includes(channel.id) || (level.enabledChannels.length && !level.enabledChannels.includes(channel.id))) {
       return;
     }
 

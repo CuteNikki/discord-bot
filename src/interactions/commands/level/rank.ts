@@ -39,7 +39,9 @@ export default new Command({
       rank = await getWeeklyLevelWithRank(target.id, guild.id);
     }
 
-    if (!rank) return interaction.editReply(t('level.none', { lng }));
+    if (!rank) {
+      return interaction.editReply(t('level.none', { lng }));
+    }
 
     const card = new RankCard({
       avatar: target.displayAvatarURL({ extension: 'png', forceStatic: true, size: 1024 }),

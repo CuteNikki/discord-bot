@@ -54,8 +54,8 @@ export default new Command({
     for (let i = 0; i < chunkedLeaderboard.length; i++) {
       const leaderboardBuilder = new LeaderboardBuilder({
         players: chunkedLeaderboard[i].map((lvl) => ({
-          avatar: lvl.avatar ?? '',
-          username: lvl.username ?? 'unknown',
+          avatar: lvl.avatar,
+          username: lvl.username ?? lvl.userId,
           displayName: lvl.displayName ?? 'Unknown User',
           rank: lvl.position,
           level: lvl.level,

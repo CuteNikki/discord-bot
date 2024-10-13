@@ -66,11 +66,13 @@ export class RankCard extends Builder {
             className: StyleSheet.cn('flex relative', StyleSheet.tw(styles.avatar?.container)),
             style: StyleSheet.css(styles.avatar?.container)
           },
-          JSX.createElement('img', {
-            alt: 'avatar',
-            src: avatar,
-            className: StyleSheet.cn('h-38 w-38 rounded-full ml-4', StyleSheet.tw(styles.avatar?.image))
-          }),
+          avatar
+            ? JSX.createElement('img', {
+                alt: 'avatar',
+                src: avatar,
+                className: StyleSheet.cn('h-38 w-38 rounded-full ml-4', StyleSheet.tw(styles.avatar?.image))
+              })
+            : JSX.createElement('div', { className: StyleSheet.cn('h-38 w-38 rounded-full ml-4', StyleSheet.tw(styles.avatar?.image)) }),
           status
             ? status !== 'none'
               ? JSX.createElement('div', {

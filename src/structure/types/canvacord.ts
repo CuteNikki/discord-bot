@@ -50,7 +50,7 @@ export type CardStyles = Partial<{
 export interface CardPropsType {
   handle: string | null;
   username: string | null;
-  avatar: string;
+  avatar?: string;
   status: PresenceStatus | null;
   currentXP: number | null;
   requiredXP: number | null;
@@ -89,7 +89,7 @@ export type LeaderboardPropsType = {
     level: number;
     xp: number;
     rank: number;
-    avatar: ImageSource;
+    avatar?: ImageSource;
   }[];
   text?: LeaderboardTexts;
   abbreviate?: boolean;

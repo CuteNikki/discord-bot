@@ -130,7 +130,6 @@ export class LeaderboardBuilder extends Builder<LeaderboardProps> {
    * Render top players ui on the canvas
    */
   public async renderDefaultTop({ avatar, displayName, level, rank, username, xp }: LeaderboardProps['players'][number]) {
-    const image = await loadImage(avatar);
     const currentColor = leaderboardColors[rank === 1 ? 'gold' : rank === 2 ? 'silver' : 'bronze'];
     const crown = rank === 1;
 
@@ -149,11 +148,13 @@ export class LeaderboardBuilder extends Builder<LeaderboardProps> {
       JSX.createElement(
         'div',
         { className: 'flex items-center justify-center flex-col absolute -top-10' },
-        JSX.createElement('img', {
-          src: image.toDataURL(),
-          alt: 'avatar',
-          className: StyleSheet.cn(`border-[3px] border-[${currentColor}] rounded-full h-18 w-18`)
-        }),
+        avatar
+          ? JSX.createElement('img', {
+              src: (await loadImage(avatar)).toDataURL(),
+              className: StyleSheet.cn(`border-[3px] border-[${currentColor}] rounded-full h-18 w-18`),
+              alt: 'avatar'
+            })
+          : JSX.createElement('div', { className: StyleSheet.cn(`border-[3px] border-[${currentColor}] rounded-full h-18 w-18`) }),
         JSX.createElement(
           'div',
           {
@@ -185,8 +186,6 @@ export class LeaderboardBuilder extends Builder<LeaderboardProps> {
    * Render player ui on the canvas
    */
   public async renderDefaultPlayer({ avatar, displayName, level, rank, username, xp }: LeaderboardProps['players'][number]) {
-    const image = await loadImage(avatar);
-
     return JSX.createElement(
       'div',
       {
@@ -195,7 +194,9 @@ export class LeaderboardBuilder extends Builder<LeaderboardProps> {
       JSX.createElement(
         'div',
         { className: 'flex flex-row' },
-        JSX.createElement('img', { src: image.toDataURL(), className: 'rounded-full h-14 w-14 mr-2', alt: 'avatar' }),
+        avatar
+          ? JSX.createElement('img', { src: (await loadImage(avatar)).toDataURL(), className: 'rounded-full h-14 w-14 mr-2', alt: 'avatar' })
+          : JSX.createElement('div', { className: 'rounded-full h-14 w-14 mr-2' }),
         JSX.createElement(
           'div',
           { className: 'flex flex-col items-start justify-center' },
@@ -277,8 +278,6 @@ export class LeaderboardBuilder extends Builder<LeaderboardProps> {
   }
 
   public async renderHorizontalPlayer({ avatar, displayName, level, rank, username, xp }: LeaderboardProps['players'][number]) {
-    const image = await loadImage(avatar);
-
     return JSX.createElement(
       'div',
       {
@@ -292,7 +291,9 @@ export class LeaderboardBuilder extends Builder<LeaderboardProps> {
           { className: `flex text-2xl w-[25px]`, style: { marginRight: `${Math.floor((`#${rank}`.length + 2) / 2)}rem` } },
           `#${rank}` as unknown as JSX.Element
         ),
-        JSX.createElement('img', { src: image.toDataURL(), width: 50, height: 50, className: 'rounded-full flex', alt: 'avatar' }),
+        avatar
+          ? JSX.createElement('img', { src: (await loadImage(avatar)).toDataURL(), width: 50, height: 50, className: 'rounded-full flex', alt: 'avatar' })
+          : JSX.createElement('div', { width: 50, height: 50, className: 'rounded-full flex', alt: 'avatar' }),
         JSX.createElement(
           'div',
           { className: 'flex flex-col justify-center ml-3' },

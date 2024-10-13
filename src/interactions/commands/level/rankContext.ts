@@ -30,7 +30,10 @@ export default new Command<typeof commandType>({
     const member = guild.members.cache.get(target.id);
 
     const rank = await getLevelWithRank(target.id, guild.id);
-    if (!rank) return interaction.editReply(t('level.none', { lng }));
+
+    if (!rank) {
+      return interaction.editReply(t('level.none', { lng }));
+    }
 
     const card = new RankCard({
       avatar: target.displayAvatarURL({ extension: 'png', forceStatic: true, size: 1024 }),

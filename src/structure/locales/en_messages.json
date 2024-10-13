@@ -977,13 +977,15 @@
       "author": "Author",
       "content": "Content",
       "reactions": "Reactions",
-      "attachments": "Attachments"
+      "attachments": "Attachments",
+      "channel": "Channel"
     },
     "messageReactionRemoveAll": {
       "title": "Message Reaction Remove All",
       "author": "Author",
       "message": "Message",
-      "reactions": "Reactions"
+      "reactions": "Reactions",
+      "channel": "Channel"
     },
     "messageUpdate": {
       "title": "Message Update",
@@ -992,7 +994,8 @@
       "new-content": "New Content",
       "old-pinned": "Old Pinned",
       "new-pinned": "New Pinned",
-      "deleted-attachments": "Deleted Attachments"
+      "deleted-attachments": "Deleted Attachments",
+      "channel": "Channel"
     },
     "roleCreate": {
       "title": "Role Create",

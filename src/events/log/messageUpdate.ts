@@ -42,10 +42,16 @@ export default new Event({
     const embed = new EmbedBuilder()
       .setColor(Colors.Yellow)
       .setTitle(t('log.messageUpdate.title', { lng }))
-      .addFields({
-        name: t('log.messageUpdate.author', { lng }),
-        value: `${newMessage.author.toString()} (\`${newMessage.author.username}\` | ${newMessage.author.id})`
-      })
+      .addFields(
+        {
+          name: t('log.messageUpdate.author', { lng }),
+          value: `${newMessage.author.toString()} (\`${newMessage.author.username}\` | ${newMessage.author.id})`
+        },
+        {
+          name: t('log.messageDelete.channel', { lng }),
+          value: `${newMessage.channel.toString()} | ${newMessage.channel.id}`
+        }
+      )
       .setTimestamp();
 
     const emptyField = { name: '\u200b', value: '\u200b', inline: true };

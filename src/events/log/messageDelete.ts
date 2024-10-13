@@ -43,39 +43,47 @@ export default new Event({
 
     const lng = await getGuildLanguage(guild.id);
 
+    const embed = new EmbedBuilder()
+      .setColor(Colors.Red)
+      .setTitle(t('log.messageDelete.title', { lng }))
+      .setDescription(
+        `${t('log.messageDelete.content', { lng })}: ${message.content ? (message.content.length > 3800 ? message.content.slice(0, 3800) + '...' : message.content) : '/'}`
+      )
+      .addFields(
+        {
+          name: t('log.messageDelete.author', { lng }),
+          value: `${message.author.toString()} (\`${message.author.username}\` | ${message.author.id})`
+        },
+        {
+          name: t('log.messageDelete.channel', { lng }),
+          value: `${message.channel.toString()} | ${message.channel.id}`
+        }
+      )
+      .setTimestamp();
+
+    if (message.reactions.cache.size) {
+      embed.addFields({
+        name: t('log.messageDelete.reactions', { lng }),
+        value: message.reactions.cache
+          .map((reaction) => `${reaction.count}x ${reaction.emoji}`)
+          .join('\n')
+          .slice(0, 1000)
+      });
+    }
+
+    if (message.attachments.size) {
+      embed.addFields({
+        name: t('log.messageDelete.attachments', { lng }),
+        value: message.attachments
+          .map((attachment) => attachment.url)
+          .join('\n')
+          .slice(0, 1000)
+      });
+    }
+
     await logChannel
       .send({
-        embeds: [
-          new EmbedBuilder()
-            .setColor(Colors.Red)
-            .setTitle(t('log.messageDelete.title', { lng }))
-            .setDescription(
-              `${t('log.messageDelete.content', { lng })}: ${message.content ? (message.content.length > 3800 ? message.content.slice(0, 3800) + '...' : message.content) : '/'}`
-            )
-            .addFields(
-              {
-                name: t('log.messageDelete.author', { lng }),
-                value: `${message.author.toString()} (\`${message.author.username}\` | ${message.author.id})`
-              },
-              {
-                name: t('log.messageDelete.reactions', { lng }),
-                value:
-                  message.reactions.cache
-                    .map((reaction) => `${reaction.count}x ${reaction.emoji}`)
-                    .join('\n')
-                    .slice(0, 1000) || '/'
-              },
-              {
-                name: t('log.messageDelete.attachments', { lng }),
-                value:
-                  message.attachments
-                    .map((attachment) => attachment.url)
-                    .join('\n')
-                    .slice(0, 1000) || '/'
-              }
-            )
-            .setTimestamp()
-        ],
+        embeds: [embed],
         files: message.attachments.map((a) => a)
       })
       .catch((err) => logger.debug({ err }, 'GuildLog | MessageDelete: Could not send message'));

@@ -977,13 +977,15 @@
       "author": "Author",
       "content": "Inhalt",
       "reactions": "Reaktionen",
-      "attachments": "Anhänge"
+      "attachments": "Anhänge",
+      "channel": "Kanal"
     },
     "messageReactionRemoveAll": {
       "title": "Alle Reaktionen auf Nachricht entfernt",
       "author": "Author",
       "message": "Nachricht",
-      "reactions": "Reaktionen"
+      "reactions": "Reaktionen",
+      "channel": "Kanal"
     },
     "messageUpdate": {
       "title": "Nachricht aktualisiert",
@@ -992,7 +994,8 @@
       "new-content": "Neuer Inhalt",
       "old-pinned": "Altes angepinnt",
       "new-pinned": "Neues angepinnt",
-      "deleted-attachments": "Gelöschte Anhänge"
+      "deleted-attachments": "Gelöschte Anhänge",
+      "channel": "Kanal"
     },
     "roleCreate": {
       "title": "Rolle erstellt",

@@ -3,8 +3,12 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
-import { getGuild } from 'db/guild';
+import { getGuildLog } from 'db/guild-log';
 import { getGuildLanguage } from 'db/language';
+
+import { logger } from 'utils/logger';
+
+import type { GuildLogEvent } from 'types/guild-log';
 
 export default new Event({
   name: Events.GuildRoleUpdate,
@@ -12,12 +16,22 @@ export default new Event({
   async execute(_client, oldRole, newRole) {
     const guild = newRole.guild;
 
-    const config = (await getGuild(guild.id)) ?? { log: { enabled: false } };
+    const log = (await getGuildLog(guild.id)) ?? { enabled: false, events: [] as GuildLogEvent[] };
 
-    if (!config.log.enabled || !config.log.events.roleUpdate || !config.log.channelId) return;
+    const event = log.events.find((e) => e.name === Events.GuildRoleUpdate) ?? {
+      channelId: undefined,
+      enabled: false
+    };
 
-    const logChannel = await guild.channels.fetch(config.log.channelId);
-    if (!logChannel?.isSendable()) return;
+    if (!log.enabled || !event.enabled || !event.channelId) {
+      return;
+    }
+
+    const logChannel = await guild.channels.fetch(event.channelId).catch((err) => logger.debug({ err }, 'GuildLog | RoleUpdate: Could not fetch channel'));
+
+    if (!logChannel?.isSendable()) {
+      return;
+    }
 
     const lng = await getGuildLanguage(guild.id);
 
@@ -33,7 +47,7 @@ export default new Event({
 
     const emptyField = { name: '\u200b', value: '\u200b', inline: true };
 
-    if (newRole.name !== oldRole.name)
+    if (newRole.name !== oldRole.name) {
       embed.addFields(
         {
           name: t('log.roleUpdate.old-name', { lng }),
@@ -47,7 +61,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newRole.hexColor !== oldRole.hexColor)
+    }
+
+    if (newRole.hexColor !== oldRole.hexColor) {
       embed.addFields(
         {
           name: t('log.roleUpdate.old-color', { lng }),
@@ -61,7 +77,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newRole.hoist !== oldRole.hoist)
+    }
+
+    if (newRole.hoist !== oldRole.hoist) {
       embed.addFields(
         {
           name: t('log.roleUpdate.old-displayed-separately', { lng }),
@@ -75,7 +93,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newRole.mentionable !== oldRole.mentionable)
+    }
+
+    if (newRole.mentionable !== oldRole.mentionable) {
       embed.addFields(
         {
           name: t('log.roleUpdate.old-mentionable', { lng }),
@@ -89,7 +109,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newRole.unicodeEmoji !== oldRole.unicodeEmoji)
+    }
+
+    if (newRole.unicodeEmoji !== oldRole.unicodeEmoji) {
       embed.addFields(
         {
           name: t('log.roleUpdate.old-emoji', { lng }),
@@ -103,9 +125,12 @@ export default new Event({
         },
         emptyField
       );
+    }
+
     if (newRole.permissions.bitfield !== oldRole.permissions.bitfield) {
       const removedPerms = newRole.permissions.toArray().filter((perm) => !oldRole.permissions.toArray().includes(perm));
       const addedPerms = oldRole.permissions.toArray().filter((perm) => !newRole.permissions.toArray().includes(perm));
+
       embed.addFields(
         {
           name: t('log.roleUpdate.removed-permissions', { lng }),
@@ -128,8 +153,11 @@ export default new Event({
     }
 
     const embedData = embed.toJSON();
-    if (!embedData.fields?.length || embedData.fields.length > 25 || embedData.fields.length <= 1) return;
 
-    await logChannel.send({ embeds: [embed] });
+    if (!embedData.fields?.length || embedData.fields.length > 25 || embedData.fields.length <= 1) {
+      return;
+    }
+
+    await logChannel.send({ embeds: [embed] }).catch((err) => logger.debug({ err }, 'GuildLog | RoleUpdate: Could not send message'));
   }
 });

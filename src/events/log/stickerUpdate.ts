@@ -3,22 +3,39 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
-import { getGuild } from 'db/guild';
+import { getGuildLog } from 'db/guild-log';
 import { getGuildLanguage } from 'db/language';
+
+import { logger } from 'utils/logger';
+
+import type { GuildLogEvent } from 'types/guild-log';
 
 export default new Event({
   name: Events.GuildStickerUpdate,
   once: false,
   async execute(_client, oldSticker, newSticker) {
     const guild = newSticker.guild;
-    if (!guild) return;
 
-    const config = (await getGuild(guild.id)) ?? { log: { enabled: false } };
+    if (!guild) {
+      return;
+    }
 
-    if (!config.log.enabled || !config.log.events.stickerUpdate || !config.log.channelId) return;
+    const log = (await getGuildLog(guild.id)) ?? { enabled: false, events: [] as GuildLogEvent[] };
 
-    const logChannel = await guild.channels.fetch(config.log.channelId);
-    if (!logChannel?.isSendable()) return;
+    const event = log.events.find((e) => e.name === Events.GuildStickerUpdate) ?? {
+      channelId: undefined,
+      enabled: false
+    };
+
+    if (!log.enabled || !event.enabled || !event.channelId) {
+      return;
+    }
+
+    const logChannel = await guild.channels.fetch(event.channelId).catch((err) => logger.debug({ err }, 'GuildLog | StickerUpdate: Could not fetch channel'));
+
+    if (!logChannel?.isSendable()) {
+      return;
+    }
 
     const lng = await getGuildLanguage(guild.id);
 
@@ -34,7 +51,7 @@ export default new Event({
 
     const emptyField = { name: '\u200b', value: '\u200b', inline: true };
 
-    if (newSticker.name !== oldSticker.name)
+    if (newSticker.name !== oldSticker.name) {
       embed.addFields(
         {
           name: t('log.stickerUpdate.old-name', { lng }),
@@ -48,7 +65,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newSticker.description !== oldSticker.description)
+    }
+
+    if (newSticker.description !== oldSticker.description) {
       embed.addFields(
         {
           name: t('log.stickerUpdate.old-description', { lng }),
@@ -62,7 +81,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newSticker.tags !== oldSticker.tags)
+    }
+
+    if (newSticker.tags !== oldSticker.tags) {
       embed.addFields(
         {
           name: t('log.stickerUpdate.old-tags', { lng }),
@@ -76,7 +97,8 @@ export default new Event({
         },
         emptyField
       );
+    }
 
-    await logChannel.send({ embeds: [embed] });
+    await logChannel.send({ embeds: [embed] }).catch((err) => logger.debug({ err }, 'GuildLog | StickerUpdate: Could not send message'));
   }
 });

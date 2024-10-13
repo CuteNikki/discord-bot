@@ -3,8 +3,10 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
-import { getGuild } from 'db/guild';
+import { getGuildLog } from 'db/guild-log';
 import { getGuildLanguage } from 'db/language';
+
+import type { GuildLogEvent } from 'types/guild-log';
 
 import { logger } from 'utils/logger';
 
@@ -14,12 +16,22 @@ export default new Event({
   async execute(_client, oldEmoji, newEmoji) {
     const guild = newEmoji.guild;
 
-    const config = (await getGuild(guild.id)) ?? { log: { enabled: false } };
+    const log = (await getGuildLog(guild.id)) ?? { enabled: false, events: [] as GuildLogEvent[] };
 
-    if (!config.log.enabled || !config.log.events.emojiUpdate || !config.log.channelId) return;
+    const event = log.events.find((e) => e.name === Events.GuildEmojiUpdate) ?? {
+      channelId: undefined,
+      enabled: false
+    };
 
-    const logChannel = await guild.channels.fetch(config.log.channelId);
-    if (!logChannel?.isSendable()) return;
+    if (!log.enabled || !event.enabled || !event.channelId) {
+      return;
+    }
+
+    const logChannel = await guild.channels.fetch(event.channelId).catch((err) => logger.debug({ err }, 'GuildLog | EmojiUpdate: Could not fetch channel'));
+
+    if (!logChannel?.isSendable()) {
+      return;
+    }
 
     const author = await newEmoji.fetchAuthor().catch((err) => logger.debug({ err }, 'Could not fetch emoji author'));
 
@@ -43,7 +55,7 @@ export default new Event({
 
     const emptyField = { name: '\u200b', value: '\u200b', inline: true };
 
-    if (newEmoji.name !== oldEmoji.name)
+    if (newEmoji.name !== oldEmoji.name) {
       embed.addFields(
         {
           name: t('log.emojiUpdate.old-name', { lng }),
@@ -57,6 +69,8 @@ export default new Event({
         },
         emptyField
       );
+    }
+
     if (JSON.stringify(newEmoji.roles.cache.toJSON()) !== JSON.stringify(oldEmoji.roles.cache.toJSON())) {
       embed.addFields(
         {
@@ -81,8 +95,10 @@ export default new Event({
       );
     }
 
-    await logChannel.send({
-      embeds: [embed]
-    });
+    await logChannel
+      .send({
+        embeds: [embed]
+      })
+      .catch((err) => logger.debug({ err }, 'GuildLog | EmojiUpdate: Could not send message'));
   }
 });

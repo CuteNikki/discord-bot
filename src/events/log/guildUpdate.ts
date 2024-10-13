@@ -12,19 +12,33 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
-import { getGuild } from 'db/guild';
+import { getGuildLog } from 'db/guild-log';
 import { getGuildLanguage } from 'db/language';
+
+import { logger } from 'utils/logger';
+
+import type { GuildLogEvent } from 'types/guild-log';
 
 export default new Event({
   name: Events.GuildUpdate,
   once: false,
   async execute(_client, oldGuild, newGuild) {
-    const config = (await getGuild(newGuild.id)) ?? { log: { enabled: false } };
+    const log = (await getGuildLog(newGuild.id)) ?? { enabled: false, events: [] as GuildLogEvent[] };
 
-    if (!config.log.enabled || !config.log.events.guildUpdate || !config.log.channelId) return;
+    const event = log.events.find((e) => e.name === Events.GuildUpdate) ?? {
+      channelId: undefined,
+      enabled: false
+    };
 
-    const logChannel = await newGuild.channels.fetch(config.log.channelId);
-    if (!logChannel?.isSendable()) return;
+    if (!log.enabled || !event.enabled || !event.channelId) {
+      return;
+    }
+
+    const logChannel = await newGuild.channels.fetch(event.channelId).catch((err) => logger.debug({ err }, 'GuildLog | GuildUpdate: Could not fetch channel'));
+
+    if (!logChannel?.isSendable()) {
+      return;
+    }
 
     const lng = await getGuildLanguage(newGuild.id);
 
@@ -32,7 +46,7 @@ export default new Event({
 
     const emptyField = { name: '\u200b', value: '\u200b', inline: true };
 
-    if (newGuild.name !== oldGuild.name)
+    if (newGuild.name !== oldGuild.name) {
       embed.addFields(
         {
           name: t('log.guildUpdate.old-name', { lng }),
@@ -46,7 +60,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newGuild.description !== oldGuild.description)
+    }
+
+    if (newGuild.description !== oldGuild.description) {
       embed.addFields(
         {
           name: t('log.guildUpdate.old-description', { lng }),
@@ -60,7 +76,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newGuild.preferredLocale !== oldGuild.preferredLocale)
+    }
+
+    if (newGuild.preferredLocale !== oldGuild.preferredLocale) {
       embed.addFields(
         {
           name: t('log.guildUpdate.old-preferred-locale', { lng }),
@@ -74,7 +92,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newGuild.icon !== oldGuild.icon)
+    }
+
+    if (newGuild.icon !== oldGuild.icon) {
       embed.addFields(
         {
           name: t('log.guildUpdate.old-icon', { lng }),
@@ -88,7 +108,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newGuild.discoverySplash !== oldGuild.discoverySplash)
+    }
+
+    if (newGuild.discoverySplash !== oldGuild.discoverySplash) {
       embed.addFields(
         {
           name: t('log.guildUpdate.old-discovery-splash', { lng }),
@@ -102,7 +124,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newGuild.banner !== oldGuild.banner)
+    }
+
+    if (newGuild.banner !== oldGuild.banner) {
       embed.addFields(
         {
           name: t('log.guildUpdate.old-banner', { lng }),
@@ -116,7 +140,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newGuild.premiumProgressBarEnabled !== oldGuild.premiumProgressBarEnabled)
+    }
+
+    if (newGuild.premiumProgressBarEnabled !== oldGuild.premiumProgressBarEnabled) {
       embed.addFields(
         {
           name: t('log.guildUpdate.old-premium-progress-bar-enabled', { lng }),
@@ -130,7 +156,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newGuild.defaultMessageNotifications !== oldGuild.defaultMessageNotifications)
+    }
+
+    if (newGuild.defaultMessageNotifications !== oldGuild.defaultMessageNotifications) {
       embed.addFields(
         {
           name: t('log.guildUpdate.old-default-message-notifications', { lng }),
@@ -144,7 +172,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newGuild.mfaLevel !== oldGuild.mfaLevel)
+    }
+
+    if (newGuild.mfaLevel !== oldGuild.mfaLevel) {
       embed.addFields(
         {
           name: t('log.guildUpdate.old-mfa-level', { lng }),
@@ -158,7 +188,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newGuild.nsfwLevel !== oldGuild.nsfwLevel)
+    }
+
+    if (newGuild.nsfwLevel !== oldGuild.nsfwLevel) {
       embed.addFields(
         {
           name: t('log.guildUpdate.old-nsfw-level', { lng }),
@@ -172,7 +204,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newGuild.verificationLevel !== oldGuild.verificationLevel)
+    }
+
+    if (newGuild.verificationLevel !== oldGuild.verificationLevel) {
       embed.addFields(
         {
           name: t('log.guildUpdate.old-verification-level', { lng }),
@@ -186,7 +220,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newGuild.explicitContentFilter !== oldGuild.explicitContentFilter)
+    }
+
+    if (newGuild.explicitContentFilter !== oldGuild.explicitContentFilter) {
       embed.addFields(
         {
           name: t('log.guildUpdate.old-explicit-content-filter', { lng }),
@@ -200,7 +236,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newGuild.ownerId !== oldGuild.ownerId)
+    }
+
+    if (newGuild.ownerId !== oldGuild.ownerId) {
       embed.addFields(
         {
           name: t('log.guildUpdate.old-owner', { lng }),
@@ -214,7 +252,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newGuild.vanityURLCode !== oldGuild.vanityURLCode)
+    }
+
+    if (newGuild.vanityURLCode !== oldGuild.vanityURLCode) {
       embed.addFields(
         {
           name: t('log.guildUpdate.old-vanity-url', { lng }),
@@ -228,7 +268,9 @@ export default new Event({
         },
         emptyField
       );
-    if ((newGuild.widgetEnabled || false) !== (oldGuild.widgetEnabled || false))
+    }
+
+    if ((newGuild.widgetEnabled || false) !== (oldGuild.widgetEnabled || false)) {
       embed.addFields(
         {
           name: t('log.guildUpdate.old-widget-enabled', { lng }),
@@ -242,7 +284,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newGuild.widgetChannelId !== oldGuild.widgetChannelId)
+    }
+
+    if (newGuild.widgetChannelId !== oldGuild.widgetChannelId) {
       embed.addFields(
         {
           name: t('log.guildUpdate.old-widget-channel', { lng }),
@@ -256,7 +300,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newGuild.afkTimeout !== oldGuild.afkTimeout)
+    }
+
+    if (newGuild.afkTimeout !== oldGuild.afkTimeout) {
       embed.addFields(
         {
           name: t('log.guildUpdate.old-afk-timeout', { lng }),
@@ -270,7 +316,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newGuild.afkChannelId !== oldGuild.afkChannelId)
+    }
+
+    if (newGuild.afkChannelId !== oldGuild.afkChannelId) {
       embed.addFields(
         {
           name: t('log.guildUpdate.old-afk-channel', { lng }),
@@ -284,7 +332,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newGuild.publicUpdatesChannelId !== oldGuild.publicUpdatesChannelId)
+    }
+
+    if (newGuild.publicUpdatesChannelId !== oldGuild.publicUpdatesChannelId) {
       embed.addFields(
         {
           name: t('log.guildUpdate.old-public-updates-channel', { lng }),
@@ -302,7 +352,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newGuild.rulesChannelId !== oldGuild.rulesChannelId)
+    }
+
+    if (newGuild.rulesChannelId !== oldGuild.rulesChannelId) {
       embed.addFields(
         {
           name: t('log.guildUpdate.old-rules-channel', { lng }),
@@ -316,7 +368,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newGuild.safetyAlertsChannelId !== oldGuild.safetyAlertsChannelId)
+    }
+
+    if (newGuild.safetyAlertsChannelId !== oldGuild.safetyAlertsChannelId) {
       embed.addFields(
         {
           name: t('log.guildUpdate.old-safety-alerts-channel', { lng }),
@@ -334,7 +388,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newGuild.systemChannelId !== oldGuild.systemChannelId)
+    }
+
+    if (newGuild.systemChannelId !== oldGuild.systemChannelId) {
       embed.addFields(
         {
           name: t('log.guildUpdate.old-system-channel', { lng }),
@@ -348,12 +404,17 @@ export default new Event({
         },
         emptyField
       );
+    }
 
     const embedData = embed.toJSON();
-    if (!embedData.fields?.length || embedData.fields.length > 25) return;
+    if (!embedData.fields?.length || embedData.fields.length > 25) {
+      return;
+    }
 
-    await logChannel.send({
-      embeds: [embed]
-    });
+    await logChannel
+      .send({
+        embeds: [embed]
+      })
+      .catch((err) => logger.debug({ err }, 'GuildLog | GuildUpdate: Could not send message'));
   }
 });

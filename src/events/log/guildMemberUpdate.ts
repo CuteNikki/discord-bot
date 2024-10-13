@@ -3,8 +3,12 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
-import { getGuild } from 'db/guild';
+import { getGuildLog } from 'db/guild-log';
 import { getGuildLanguage } from 'db/language';
+
+import { logger } from 'utils/logger';
+
+import type { GuildLogEvent } from 'types/guild-log';
 
 export default new Event({
   name: Events.GuildMemberUpdate,
@@ -12,12 +16,24 @@ export default new Event({
   async execute(_client, oldMember, newMember) {
     const guild = newMember.guild;
 
-    const config = (await getGuild(guild.id)) ?? { log: { enabled: false } };
+    const log = (await getGuildLog(guild.id)) ?? { enabled: false, events: [] as GuildLogEvent[] };
 
-    if (!config.log.enabled || !config.log.events.guildMemberUpdate || !config.log.channelId) return;
+    const event = log.events.find((e) => e.name === Events.GuildMemberUpdate) ?? {
+      channelId: undefined,
+      enabled: false
+    };
 
-    const logChannel = await guild.channels.fetch(config.log.channelId);
-    if (!logChannel?.isSendable()) return;
+    if (!log.enabled || !event.enabled || !event.channelId) {
+      return;
+    }
+
+    const logChannel = await guild.channels
+      .fetch(event.channelId)
+      .catch((err) => logger.debug({ err }, 'GuildLog | GuildMemberUpdate: Could not fetch channel'));
+
+    if (!logChannel?.isSendable()) {
+      return;
+    }
 
     const lng = await getGuildLanguage(guild.id);
 
@@ -32,7 +48,7 @@ export default new Event({
 
     const emptyField = { name: '\u200b', value: '\u200b', inline: true };
 
-    if (newMember.nickname !== oldMember.nickname)
+    if (newMember.nickname !== oldMember.nickname) {
       embed.addFields(
         {
           name: t('log.guildMemberUpdate.old-nickname', { lng }),
@@ -46,7 +62,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newMember.displayAvatarURL() !== oldMember.displayAvatarURL())
+    }
+
+    if (newMember.displayAvatarURL() !== oldMember.displayAvatarURL()) {
       embed.addFields(
         {
           name: t('log.guildMemberUpdate.old-avatar', { lng }),
@@ -60,7 +78,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newMember.pending !== oldMember.pending)
+    }
+
+    if (newMember.pending !== oldMember.pending) {
       embed.addFields(
         {
           name: t('log.guildMemberUpdate.old-pending', { lng }),
@@ -74,7 +94,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newMember.communicationDisabledUntilTimestamp !== oldMember.communicationDisabledUntilTimestamp)
+    }
+
+    if (newMember.communicationDisabledUntilTimestamp !== oldMember.communicationDisabledUntilTimestamp) {
       embed.addFields(
         {
           name: t('log.guildMemberUpdate.old-timeout', { lng }),
@@ -88,6 +110,8 @@ export default new Event({
         },
         emptyField
       );
+    }
+
     if (JSON.stringify(newMember.roles.cache.toJSON()) !== JSON.stringify(oldMember.roles.cache.toJSON())) {
       const removedRoles = oldMember.roles.cache.map((r) => r).filter((role) => !newMember.roles.cache.map((r) => r.id).includes(role.id));
       const addedRoles = newMember.roles.cache.map((r) => r).filter((role) => !oldMember.roles.cache.map((r) => r.id).includes(role.id));
@@ -114,6 +138,7 @@ export default new Event({
         emptyField
       );
     }
+
     if (newMember.permissions.bitfield !== oldMember.permissions.bitfield) {
       const removedPerms = oldMember.permissions.toArray().filter((perm) => !newMember.permissions.toArray().includes(perm));
       const addedPerms = newMember.permissions.toArray().filter((perm) => !oldMember.permissions.toArray().includes(perm));
@@ -142,10 +167,15 @@ export default new Event({
     }
 
     const embedData = embed.toJSON();
-    if (!embedData.fields?.length || embedData.fields.length > 25 || embedData.fields.length <= 1) return;
 
-    await logChannel.send({
-      embeds: [embed]
-    });
+    if (!embedData.fields?.length || embedData.fields.length > 25 || embedData.fields.length <= 1) {
+      return;
+    }
+
+    await logChannel
+      .send({
+        embeds: [embed]
+      })
+      .catch((err) => logger.debug({ err }, 'GuildLog | GuildMemberUpdate: Could not send message'));
   }
 });

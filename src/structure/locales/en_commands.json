@@ -833,51 +833,13 @@
       }
     ]
   },
-  "config-log": {
-    "name": "log-configuration",
-    "description": "Configure the log module",
+  "log": {
+    "name": "log",
+    "description": "Configure the guild log",
     "options": [
       {
-        "name": "show",
-        "description": "Shows the current configuration",
-        "options": [
-          {
-            "name": "all",
-            "description": "Shows the entire configuration"
-          },
-          {
-            "name": "channel",
-            "description": "Shows the log channel"
-          },
-          {
-            "name": "events",
-            "description": "Shows the state of events that are logged"
-          }
-        ]
-      },
-      {
-        "name": "channel",
-        "description": "Configure the log channel",
-        "options": [
-          {
-            "name": "set",
-            "description": "Sets the log channel",
-            "options": [
-              {
-                "name": "channel",
-                "description": "The log channel"
-              }
-            ]
-          },
-          {
-            "name": "remove",
-            "description": "Removes the log channel"
-          }
-        ]
-      },
-      {
         "name": "events",
-        "description": "Manage the events",
+        "description": "Configure the logged events",
         "options": [
           {
             "name": "enable",
@@ -885,7 +847,17 @@
             "options": [
               {
                 "name": "event",
-                "description": "Name of the event"
+                "description": "The name of the event"
+              },
+              {
+                "name": "channel",
+                "description": "The channel to send a message to on event",
+                "options": [
+                  {
+                    "name": "channel",
+                    "description": "Channel to send message to"
+                  }
+                ]
               }
             ]
           },
@@ -895,11 +867,23 @@
             "options": [
               {
                 "name": "event",
-                "description": "Name of the event"
+                "description": "The name of the event"
               }
             ]
           }
         ]
+      },
+      {
+        "name": "enable",
+        "description": "Enables the guild log"
+      },
+      {
+        "name": "disable",
+        "description": "Disables the guild log"
+      },
+      {
+        "name": "info",
+        "description": "Shows the current guild log configuration"
       }
     ]
   },

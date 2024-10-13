@@ -3,8 +3,12 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
-import { getGuild } from 'db/guild';
+import { getGuildLog } from 'db/guild-log';
 import { getGuildLanguage } from 'db/language';
+
+import { logger } from 'utils/logger';
+
+import type { GuildLogEvent } from 'types/guild-log';
 
 export default new Event({
   name: Events.VoiceStateUpdate,
@@ -12,12 +16,28 @@ export default new Event({
   async execute(_client, oldState, newState) {
     const guild = newState.guild;
 
-    const config = (await getGuild(guild.id)) ?? { log: { enabled: false } };
+    if (!guild || !newState.member || !oldState.member) {
+      return;
+    }
 
-    if (!config.log.enabled || !config.log.events.voiceStateUpdate || !config.log.channelId || !newState.member || !oldState.member) return;
+    const log = (await getGuildLog(guild.id)) ?? { enabled: false, events: [] as GuildLogEvent[] };
 
-    const logChannel = await guild.channels.fetch(config.log.channelId);
-    if (!logChannel?.isSendable()) return;
+    const event = log.events.find((e) => e.name === Events.VoiceStateUpdate) ?? {
+      channelId: undefined,
+      enabled: false
+    };
+
+    if (!log.enabled || !event.enabled || !event.channelId) {
+      return;
+    }
+
+    const logChannel = await guild.channels
+      .fetch(event.channelId)
+      .catch((err) => logger.debug({ err }, 'GuildLog | VoiceStateUpdate: Could not fetch channel'));
+
+    if (!logChannel?.isSendable()) {
+      return;
+    }
 
     const lng = await getGuildLanguage(guild.id);
 
@@ -32,7 +52,7 @@ export default new Event({
 
     const emptyField = { name: '\u200b', value: '\u200b', inline: true };
 
-    if ((newState.selfDeaf ?? false) !== (oldState.selfDeaf ?? false))
+    if ((newState.selfDeaf ?? false) !== (oldState.selfDeaf ?? false)) {
       embed.addFields(
         {
           name: t('log.voiceStateUpdate.old-self-deaf', { lng }),
@@ -46,7 +66,9 @@ export default new Event({
         },
         emptyField
       );
-    if ((newState.serverDeaf ?? false) !== (oldState.serverDeaf ?? false))
+    }
+
+    if ((newState.serverDeaf ?? false) !== (oldState.serverDeaf ?? false)) {
       embed.addFields(
         {
           name: t('log.voiceStateUpdate.old-server-deaf', { lng }),
@@ -60,7 +82,9 @@ export default new Event({
         },
         emptyField
       );
-    if ((newState.selfMute ?? false) !== (oldState.selfMute ?? false))
+    }
+
+    if ((newState.selfMute ?? false) !== (oldState.selfMute ?? false)) {
       embed.addFields(
         {
           name: t('log.voiceStateUpdate.old-self-mute', { lng }),
@@ -74,7 +98,9 @@ export default new Event({
         },
         emptyField
       );
-    if ((newState.serverMute ?? false) !== (oldState.serverMute ?? false))
+    }
+
+    if ((newState.serverMute ?? false) !== (oldState.serverMute ?? false)) {
       embed.addFields(
         {
           name: t('log.voiceStateUpdate.old-server-mute', { lng }),
@@ -88,7 +114,9 @@ export default new Event({
         },
         emptyField
       );
-    if ((newState.selfVideo ?? false) !== (oldState.selfVideo ?? false))
+    }
+
+    if ((newState.selfVideo ?? false) !== (oldState.selfVideo ?? false)) {
       embed.addFields(
         {
           name: t('log.voiceStateUpdate.old-self-video', { lng }),
@@ -102,7 +130,9 @@ export default new Event({
         },
         emptyField
       );
-    if ((newState.streaming ?? false) !== (oldState.streaming ?? false))
+    }
+
+    if ((newState.streaming ?? false) !== (oldState.streaming ?? false)) {
       embed.addFields(
         {
           name: t('log.voiceStateUpdate.old-streaming', { lng }),
@@ -116,7 +146,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newState.channelId !== oldState.channelId)
+    }
+
+    if (newState.channelId !== oldState.channelId) {
       embed.addFields(
         {
           name: t('log.voiceStateUpdate.old-channel', { lng }),
@@ -130,7 +162,8 @@ export default new Event({
         },
         emptyField
       );
+    }
 
-    await logChannel.send({ embeds: [embed] });
+    await logChannel.send({ embeds: [embed] }).catch((err) => logger.debug({ err }, 'GuildLog | VoiceStateUpdate: Could not send message'));
   }
 });

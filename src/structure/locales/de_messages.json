@@ -658,19 +658,24 @@
     }
   },
   "log": {
-    "title": "Log Konfiguration",
-    "channel": {
-      "title": "Kanal",
-      "set": "Der Kanal wurde gesetzt!",
-      "removed": "Der Kanal wurde entfernt!",
-      "none": "Es gibt keinen Kanal zum entfernen!"
+    "title": "Log-Modul",
+    "state": {
+      "title": "Status",
+      "already-disabled": "Das Log-Modul ist bereits deaktiviert!",
+      "already-enabled": "Das Log-Modul ist bereits aktiviert!",
+      "enabled": "Das Log-Modul wurde aktiviert.",
+      "disabled": "Das Log-Modul wurde deaktiviert."
     },
     "events": {
-      "enabled": "Erfolgreich aktiviert!",
+      "title-enabled": "Aktivierte Events",
+      "title-disabled": "Deaktivierte Events",
+      "title-unconfigured": "Nicht konfigurierte Events",
+      "invalid": "Das ist kein gültiges Event!",
       "already-enabled": "Das Event ist bereits aktiviert!",
       "already-disabled": "Das Event ist bereits deaktiviert!",
-      "invalid": "Das ist kein gültiges Event!",
-      "disabled": "Erfolgreich deaktiviert!"
+      "enabled": "Erfolgreich aktiviert!",
+      "disabled": "Erfolgreich deaktiviert!",
+      "missing-permissions": "Ich habe keine Berechtigung, Nachrichten in diesem Kanal zu senden!"
     },
     "applicationCommandPermissionsUpdate": {
       "title": "Applikation Befehlsberechtigungen aktualisiert",

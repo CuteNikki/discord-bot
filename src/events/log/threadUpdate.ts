@@ -3,8 +3,12 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
-import { getGuild } from 'db/guild';
+import { getGuildLog } from 'db/guild-log';
 import { getGuildLanguage } from 'db/language';
+
+import { logger } from 'utils/logger';
+
+import type { GuildLogEvent } from 'types/guild-log';
 
 export default new Event({
   name: Events.ThreadUpdate,
@@ -12,12 +16,22 @@ export default new Event({
   async execute(_client, oldThread, newThread) {
     const guild = newThread.guild;
 
-    const config = (await getGuild(guild.id)) ?? { log: { enabled: false } };
+    const log = (await getGuildLog(guild.id)) ?? { enabled: false, events: [] as GuildLogEvent[] };
 
-    if (!config.log.enabled || !config.log.events.threadUpdate || !config.log.channelId) return;
+    const event = log.events.find((e) => e.name === Events.ThreadUpdate) ?? {
+      channelId: undefined,
+      enabled: false
+    };
 
-    const logChannel = await guild.channels.fetch(config.log.channelId);
-    if (!logChannel?.isSendable()) return;
+    if (!log.enabled || !event.enabled || !event.channelId) {
+      return;
+    }
+
+    const logChannel = await guild.channels.fetch(event.channelId).catch((err) => logger.debug({ err }, 'GuildLog | ThreadUpdate: Could not fetch channel'));
+
+    if (!logChannel?.isSendable()) {
+      return;
+    }
 
     const lng = await getGuildLanguage(guild.id);
 
@@ -32,7 +46,7 @@ export default new Event({
 
     const emptyField = { name: '\u200b', value: '\u200b', inline: true };
 
-    if (newThread.name !== oldThread.name)
+    if (newThread.name !== oldThread.name) {
       embed.addFields(
         {
           name: t('log.threadUpdate.old-name', { lng }),
@@ -46,7 +60,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newThread.locked !== oldThread.locked)
+    }
+
+    if (newThread.locked !== oldThread.locked) {
       embed.addFields(
         {
           name: t('log.threadUpdate.old-locked', { lng }),
@@ -60,7 +76,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newThread.archived !== oldThread.archived)
+    }
+
+    if (newThread.archived !== oldThread.archived) {
       embed.addFields(
         {
           name: t('log.threadUpdate.old-archived', { lng }),
@@ -74,7 +92,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newThread.archiveTimestamp !== oldThread.archiveTimestamp)
+    }
+
+    if (newThread.archiveTimestamp !== oldThread.archiveTimestamp) {
       embed.addFields(
         {
           name: t('log.threadUpdate.old-archived-at', { lng }),
@@ -88,7 +108,9 @@ export default new Event({
         },
         emptyField
       );
-    if (JSON.stringify(newThread.appliedTags) !== JSON.stringify(oldThread.appliedTags))
+    }
+
+    if (JSON.stringify(newThread.appliedTags) !== JSON.stringify(oldThread.appliedTags)) {
       embed.addFields(
         {
           name: t('log.threadUpdate.old-applied-tags', { lng }),
@@ -102,6 +124,8 @@ export default new Event({
         },
         emptyField
       );
+    }
+
     if (JSON.stringify(newThread.members.cache.toJSON()) !== JSON.stringify(oldThread.members.cache.toJSON())) {
       const addedMembers = newThread.members.cache.map((m) => m).filter((member) => !oldThread.members.cache.map((mem) => mem.id).includes(member.id));
       const removedMembers = oldThread.members.cache.map((m) => m).filter((member) => !newThread.members.cache.map((mem) => mem.id).includes(member.id));
@@ -129,8 +153,11 @@ export default new Event({
     }
 
     const embedData = embed.toJSON();
-    if (!embedData.fields?.length || embedData.fields.length > 25) return;
 
-    await logChannel.send({ embeds: [embed] });
+    if (!embedData.fields?.length || embedData.fields.length > 25) {
+      return;
+    }
+
+    await logChannel.send({ embeds: [embed] }).catch((err) => logger.debug({ err }, 'GuildLog | ThreadUpdate: Could not send message'));
   }
 });

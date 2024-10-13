@@ -3,8 +3,12 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
-import { getGuild } from 'db/guild';
+import { getGuildLog } from 'db/guild-log';
 import { getGuildLanguage } from 'db/language';
+
+import { logger } from 'utils/logger';
+
+import type { GuildLogEvent } from 'types/guild-log';
 
 export default new Event({
   name: Events.AutoModerationRuleUpdate,
@@ -12,12 +16,24 @@ export default new Event({
   async execute(_client, oldAutoModerationRule, newAutoModerationRule) {
     const guild = newAutoModerationRule.guild;
 
-    const config = await getGuild(guild.id) ?? { log: { enabled: false } };
+    const log = (await getGuildLog(guild.id)) ?? { enabled: false, events: [] as GuildLogEvent[] };
 
-    if (!config.log.enabled || !config.log.events.autoModerationRuleUpdate || !config.log.channelId || !oldAutoModerationRule || !newAutoModerationRule) return;
+    const event = log.events.find((e) => e.name === Events.AutoModerationRuleUpdate) ?? {
+      channelId: undefined,
+      enabled: false
+    };
 
-    const logChannel = await guild.channels.fetch(config.log.channelId);
-    if (!logChannel?.isSendable()) return;
+    if (!log.enabled || !event.enabled || !event.channelId || !oldAutoModerationRule || !newAutoModerationRule) {
+      return;
+    }
+
+    const logChannel = await guild.channels
+      .fetch(event.channelId)
+      .catch((err) => logger.debug({ err }, 'GuildLog | AutoModerationRuleUpdate: Could not fetch channel'));
+
+    if (!logChannel?.isSendable()) {
+      return;
+    }
 
     const lng = await getGuildLanguage(guild.id);
 
@@ -32,7 +48,7 @@ export default new Event({
 
     const emptyField = { name: '\u200b', value: '\u200b', inline: true };
 
-    if (newAutoModerationRule.name !== oldAutoModerationRule.name)
+    if (newAutoModerationRule.name !== oldAutoModerationRule.name) {
       embed.addFields(
         {
           name: t('log.autoModerationRuleUpdate.old-name', { lng }),
@@ -46,7 +62,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newAutoModerationRule.enabled !== oldAutoModerationRule.enabled)
+    }
+
+    if (newAutoModerationRule.enabled !== oldAutoModerationRule.enabled) {
       embed.addFields(
         {
           name: t('log.autoModerationRuleUpdate.old-enabled', { lng }),
@@ -60,7 +78,9 @@ export default new Event({
         },
         emptyField
       );
-    if (JSON.stringify(newAutoModerationRule.actions) !== JSON.stringify(oldAutoModerationRule.actions))
+    }
+
+    if (JSON.stringify(newAutoModerationRule.actions) !== JSON.stringify(oldAutoModerationRule.actions)) {
       embed.addFields(
         {
           name: t('log.autoModerationRuleUpdate.old-actions', { lng }),
@@ -82,7 +102,9 @@ export default new Event({
         },
         emptyField
       );
-    if (JSON.stringify(newAutoModerationRule.exemptRoles) !== JSON.stringify(oldAutoModerationRule.exemptRoles))
+    }
+
+    if (JSON.stringify(newAutoModerationRule.exemptRoles) !== JSON.stringify(oldAutoModerationRule.exemptRoles)) {
       embed.addFields(
         {
           name: t('log.autoModerationRuleUpdate.old-exempt-roles', { lng }),
@@ -104,7 +126,9 @@ export default new Event({
         },
         emptyField
       );
-    if (JSON.stringify(newAutoModerationRule.exemptChannels) !== JSON.stringify(oldAutoModerationRule.exemptChannels))
+    }
+
+    if (JSON.stringify(newAutoModerationRule.exemptChannels) !== JSON.stringify(oldAutoModerationRule.exemptChannels)) {
       embed.addFields(
         {
           name: t('log.autoModerationRuleUpdate.old-exempt-channels', { lng }),
@@ -126,7 +150,9 @@ export default new Event({
         },
         emptyField
       );
-    if (JSON.stringify(newAutoModerationRule.triggerMetadata) !== JSON.stringify(oldAutoModerationRule.triggerMetadata))
+    }
+
+    if (JSON.stringify(newAutoModerationRule.triggerMetadata) !== JSON.stringify(oldAutoModerationRule.triggerMetadata)) {
       embed.addFields(
         {
           name: t('log.autoModerationRuleUpdate.old-trigger-metadata', { lng }),
@@ -170,9 +196,12 @@ export default new Event({
         },
         emptyField
       );
+    }
 
-    await logChannel.send({
-      embeds: [embed]
-    });
+    await logChannel
+      .send({
+        embeds: [embed]
+      })
+      .catch((err) => logger.debug({ err }, 'GuildLog | AutoModerationRuleUpdate: Could not send message'));
   }
 });

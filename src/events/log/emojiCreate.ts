@@ -3,10 +3,12 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
-import { getGuild } from 'db/guild';
+import { getGuildLog } from 'db/guild-log';
 import { getGuildLanguage } from 'db/language';
 
 import { logger } from 'utils/logger';
+
+import type { GuildLogEvent } from 'types/guild-log';
 
 export default new Event({
   name: Events.GuildEmojiCreate,
@@ -14,47 +16,59 @@ export default new Event({
   async execute(_client, emoji) {
     const { guild, name, id, animated, managed, identifier } = emoji;
 
-    const config = (await getGuild(guild.id)) ?? { log: { enabled: false } };
+    const log = (await getGuildLog(guild.id)) ?? { enabled: false, events: [] as GuildLogEvent[] };
 
-    if (!config.log.enabled || !config.log.events.emojiCreate || !config.log.channelId) return;
+    const event = log.events.find((e) => e.name === Events.GuildEmojiCreate) ?? {
+      channelId: undefined,
+      enabled: false
+    };
 
-    const logChannel = await guild.channels.fetch(config.log.channelId);
-    if (!logChannel?.isSendable()) return;
+    if (!log.enabled || !event.enabled || !event.channelId) {
+      return;
+    }
+
+    const logChannel = await guild.channels.fetch(event.channelId).catch((err) => logger.debug({ err }, 'GuildLog | EmojiCreate: Could not fetch channel'));
+
+    if (!logChannel?.isSendable()) {
+      return;
+    }
 
     const author = await emoji.fetchAuthor().catch((err) => logger.debug({ err }, 'Could not fetch emoji author'));
 
     const lng = await getGuildLanguage(guild.id);
 
-    await logChannel.send({
-      embeds: [
-        new EmbedBuilder()
-          .setColor(Colors.Green)
-          .setTitle(t('log.emojiCreate.title', { lng }))
-          .setThumbnail(emoji.imageURL({ size: 1024 }))
-          .addFields(
-            {
-              name: t('log.emojiCreate.emoji', { lng }),
-              value: `${emoji.toString()} (\`${name}\` | ${id})`
-            },
-            {
-              name: t('log.emojiCreate.author', { lng }),
-              value: author ? `${author.toString()} (\`${author.username}\` | ${author.id})` : '/'
-            },
-            {
-              name: t('log.emojiCreate.identifier', { lng }),
-              value: `\`${identifier}\``
-            },
-            {
-              name: t('log.emojiCreate.animated', { lng }),
-              value: `${animated ?? '/'}`
-            },
-            {
-              name: t('log.emojiCreate.managed', { lng }),
-              value: `${managed ?? '/'}`
-            }
-          )
-          .setTimestamp()
-      ]
-    });
+    await logChannel
+      .send({
+        embeds: [
+          new EmbedBuilder()
+            .setColor(Colors.Green)
+            .setTitle(t('log.emojiCreate.title', { lng }))
+            .setThumbnail(emoji.imageURL({ size: 1024 }))
+            .addFields(
+              {
+                name: t('log.emojiCreate.emoji', { lng }),
+                value: `${emoji.toString()} (\`${name}\` | ${id})`
+              },
+              {
+                name: t('log.emojiCreate.author', { lng }),
+                value: author ? `${author.toString()} (\`${author.username}\` | ${author.id})` : '/'
+              },
+              {
+                name: t('log.emojiCreate.identifier', { lng }),
+                value: `\`${identifier}\``
+              },
+              {
+                name: t('log.emojiCreate.animated', { lng }),
+                value: `${animated ?? '/'}`
+              },
+              {
+                name: t('log.emojiCreate.managed', { lng }),
+                value: `${managed ?? '/'}`
+              }
+            )
+            .setTimestamp()
+        ]
+      })
+      .catch((err) => logger.debug({ err }, 'GuildLog | EmojiCreate: Could not send message'));
   }
 });

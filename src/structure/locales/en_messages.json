@@ -658,19 +658,24 @@
     }
   },
   "log": {
-    "title": "Log Configuration",
-    "channel": {
-      "title": "Channel",
-      "set": "The channel has been set!",
-      "removed": "The channel has been removed!",
-      "none": "There is no channel to remove!"
+    "title": "Log Module",
+    "state": {
+      "title": "State",
+      "already-disabled": "The log module is already disabled!",
+      "already-enabled": "The log module is already enabled!",
+      "enabled": "The log module has been enabled.",
+      "disabled": "The log module has been disabled."
     },
     "events": {
-      "enabled": "Successfully enabled!",
+      "title-enabled": "Enabled Events",
+      "title-disabled": "Disabled Events",
+      "title-unconfigured": "Unconfigured Events",
+      "invalid": "That is not a valid event!",
       "already-enabled": "That event is already enabled!",
       "already-disabled": "That event is already disabled!",
-      "invalid": "That is not a valid event!",
-      "disabled": "Successfully disabled!"
+      "enabled": "Successfully enabled!",
+      "disabled": "Successfully disabled!",
+      "missing-permissions": "I do not have the permissions to send messages in that channel!"
     },
     "applicationCommandPermissionsUpdate": {
       "title": "Application Command Permissions Update",

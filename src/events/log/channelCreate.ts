@@ -3,8 +3,12 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
-import { getGuild } from 'db/guild';
+import { getGuildLog } from 'db/guild-log';
 import { getGuildLanguage } from 'db/language';
+
+import { logger } from 'utils/logger';
+
+import type { GuildLogEvent } from 'types/guild-log';
 
 export default new Event({
   name: Events.ChannelCreate,
@@ -12,12 +16,22 @@ export default new Event({
   async execute(_client, channel) {
     const { guild, name, id, type, parent, permissionOverwrites } = channel;
 
-    const config = (await getGuild(guild.id)) ?? { log: { enabled: false } };
+    const log = (await getGuildLog(guild.id)) ?? { enabled: false, events: [] as GuildLogEvent[] };
 
-    if (!config.log.enabled || !config.log.events.channelCreate || !config.log.channelId) return;
+    const event = log.events.find((e) => e.name === Events.ChannelCreate) ?? {
+      channelId: undefined,
+      enabled: false
+    };
 
-    const logChannel = await guild.channels.fetch(config.log.channelId);
-    if (!logChannel?.isSendable()) return;
+    if (!log.enabled || !event.enabled || !event.channelId) {
+      return;
+    }
+
+    const logChannel = await guild.channels.fetch(event.channelId).catch((err) => logger.debug({ err }, 'GuildLog | ChannelCreate: Could not fetch channel'));
+
+    if (!logChannel?.isSendable()) {
+      return;
+    }
 
     const lng = await getGuildLanguage(guild.id);
 
@@ -63,14 +77,17 @@ export default new Event({
       )
       .setTimestamp();
 
-    if (parent)
+    if (parent) {
       embed.addFields({
         name: t('log.channelCreate.category', { lng }),
         value: `\`${parent.name}\` (${parent.id})`
       });
+    }
 
-    await logChannel.send({
-      embeds: [embed]
-    });
+    await logChannel
+      .send({
+        embeds: [embed]
+      })
+      .catch((err) => logger.debug({ err }, 'GuildLog | ChannelCreate: Could not send message'));
   }
 });

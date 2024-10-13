@@ -3,22 +3,39 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
-import { getGuild } from 'db/guild';
+import { getGuildLog } from 'db/guild-log';
 import { getGuildLanguage } from 'db/language';
+
+import { logger } from 'utils/logger';
+
+import type { GuildLogEvent } from 'types/guild-log';
 
 export default new Event({
   name: Events.MessageUpdate,
   once: false,
   async execute(_client, oldMessage, newMessage) {
     const guild = newMessage.guild;
-    if (!guild || !newMessage.author || newMessage.author.bot) return;
 
-    const config = await getGuild(guild.id) ?? { log: { enabled: false } };
+    if (!guild || !newMessage.author || newMessage.author.bot) {
+      return;
+    }
 
-    if (!config.log.enabled || !config.log.events.messageUpdate || !config.log.channelId) return;
+    const log = (await getGuildLog(guild.id)) ?? { enabled: false, events: [] as GuildLogEvent[] };
 
-    const logChannel = await guild.channels.fetch(config.log.channelId);
-    if (!logChannel?.isSendable()) return;
+    const event = log.events.find((e) => e.name === Events.MessageUpdate) ?? {
+      channelId: undefined,
+      enabled: false
+    };
+
+    if (!log.enabled || !event.enabled || !event.channelId) {
+      return;
+    }
+
+    const logChannel = await guild.channels.fetch(event.channelId).catch((err) => logger.debug({ err }, 'GuildLog | MessageUpdate: Could not fetch channel'));
+
+    if (!logChannel?.isSendable()) {
+      return;
+    }
 
     const lng = await getGuildLanguage(guild.id);
 
@@ -33,7 +50,7 @@ export default new Event({
 
     const emptyField = { name: '\u200b', value: '\u200b', inline: true };
 
-    if (newMessage.content !== oldMessage.content)
+    if (newMessage.content !== oldMessage.content) {
       embed.addFields(
         {
           name: t('log.messageUpdate.old-content', { lng }),
@@ -47,7 +64,9 @@ export default new Event({
         },
         emptyField
       );
-    if ((newMessage.pinned ?? false) !== (oldMessage.pinned ?? false))
+    }
+
+    if ((newMessage.pinned ?? false) !== (oldMessage.pinned ?? false)) {
       embed.addFields(
         {
           name: t('log.messageUpdate.old-pinned', { lng }),
@@ -61,6 +80,8 @@ export default new Event({
         },
         emptyField
       );
+    }
+
     if (newMessage.attachments.size !== oldMessage.attachments.size) {
       const oldAttachments = oldMessage.attachments.map((a) => a);
       const newAttachments = newMessage.attachments.map((a) => a);
@@ -76,10 +97,15 @@ export default new Event({
     }
 
     const embedData = embed.toJSON();
-    if (!embedData.fields?.length || embedData.fields.length > 25) return;
 
-    await logChannel.send({
-      embeds: [embed]
-    });
+    if (!embedData.fields?.length || embedData.fields.length > 25) {
+      return;
+    }
+
+    await logChannel
+      .send({
+        embeds: [embed]
+      })
+      .catch((err) => logger.debug({ err }, 'GuildLog | MessageUpdate: Could not send message'));
   }
 });

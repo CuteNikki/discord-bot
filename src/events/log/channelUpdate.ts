@@ -3,8 +3,12 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
-import { getGuild } from 'db/guild';
+import { getGuildLog } from 'db/guild-log';
 import { getGuildLanguage } from 'db/language';
+
+import { logger } from 'utils/logger';
+
+import type { GuildLogEvent } from 'types/guild-log';
 
 export default new Event({
   name: Events.ChannelUpdate,
@@ -13,12 +17,22 @@ export default new Event({
     if (oldChannel.isDMBased() || newChannel.isDMBased()) return;
     const guild = newChannel.guild;
 
-    const config = (await getGuild(guild.id)) ?? { log: { enabled: false } };
+    const log = (await getGuildLog(guild.id)) ?? { enabled: false, events: [] as GuildLogEvent[] };
 
-    if (!config.log.enabled || !config.log.events.channelUpdate || !config.log.channelId) return;
+    const event = log.events.find((e) => e.name === Events.ChannelUpdate) ?? {
+      channelId: undefined,
+      enabled: false
+    };
 
-    const logChannel = await guild.channels.fetch(config.log.channelId);
-    if (!logChannel?.isSendable()) return;
+    if (!log.enabled || !event.enabled || !event.channelId) {
+      return;
+    }
+
+    const logChannel = await guild.channels.fetch(event.channelId).catch((err) => logger.debug({ err }, 'GuildLog | ChannelUpdate: Could not fetch channel'));
+
+    if (!logChannel?.isSendable()) {
+      return;
+    }
 
     const lng = await getGuildLanguage(guild.id);
 
@@ -33,7 +47,7 @@ export default new Event({
 
     const emptyField = { name: '\u200b', value: '\u200b', inline: true };
 
-    if (newChannel.name !== oldChannel.name)
+    if (newChannel.name !== oldChannel.name) {
       embed.addFields(
         {
           name: t('log.channelUpdate.old-name', { lng }),
@@ -47,7 +61,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newChannel.position !== oldChannel.position)
+    }
+
+    if (newChannel.position !== oldChannel.position) {
       embed.addFields(
         {
           name: t('log.channelUpdate.old-position', { lng }),
@@ -61,7 +77,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newChannel.type !== oldChannel.type)
+    }
+
+    if (newChannel.type !== oldChannel.type) {
       embed.addFields(
         {
           name: t('log.channelUpdate.old-type', { lng }),
@@ -75,6 +93,7 @@ export default new Event({
         },
         emptyField
       );
+    }
 
     const oldPerms = oldChannel.permissionOverwrites.cache
       .map((p) => p)
@@ -83,7 +102,7 @@ export default new Event({
       .map((p) => p)
       .filter((permission) => !oldChannel.permissionOverwrites.cache.map((p) => JSON.stringify(p)).includes(JSON.stringify(permission)));
 
-    if (oldPerms.length || newPerms.length)
+    if (oldPerms.length || newPerms.length) {
       embed.addFields(
         {
           name: t('log.channelUpdate.old-permission-overwrites', { lng }),
@@ -143,12 +162,13 @@ export default new Event({
         },
         emptyField
       );
+    }
 
     if (
       (newChannel.type === ChannelType.GuildText || newChannel.type === ChannelType.GuildAnnouncement) &&
       (oldChannel.type === ChannelType.GuildText || oldChannel.type === ChannelType.GuildAnnouncement)
     ) {
-      if (newChannel.topic !== oldChannel.topic)
+      if (newChannel.topic !== oldChannel.topic) {
         embed.addFields(
           {
             name: t('log.channelUpdate.old-topic', { lng }),
@@ -162,7 +182,9 @@ export default new Event({
           },
           emptyField
         );
-      if (newChannel.nsfw !== oldChannel.nsfw)
+      }
+
+      if (newChannel.nsfw !== oldChannel.nsfw) {
         embed.addFields(
           {
             name: t('log.channelUpdate.old-nsfw', { lng }),
@@ -176,7 +198,9 @@ export default new Event({
           },
           emptyField
         );
-      if ((newChannel.rateLimitPerUser || 0) !== (oldChannel.rateLimitPerUser || 0))
+      }
+
+      if ((newChannel.rateLimitPerUser || 0) !== (oldChannel.rateLimitPerUser || 0)) {
         embed.addFields(
           {
             name: t('log.channelUpdate.old-rate-limit', { lng }),
@@ -190,7 +214,9 @@ export default new Event({
           },
           emptyField
         );
-      if ((newChannel.defaultAutoArchiveDuration || 4320) !== (oldChannel.defaultAutoArchiveDuration || 4320))
+      }
+
+      if ((newChannel.defaultAutoArchiveDuration || 4320) !== (oldChannel.defaultAutoArchiveDuration || 4320)) {
         embed.addFields(
           {
             name: t('log.channelUpdate.old-auto-archive-duration', { lng }),
@@ -204,12 +230,14 @@ export default new Event({
           },
           emptyField
         );
+      }
     }
+
     if (
       (newChannel.type === ChannelType.GuildVoice || newChannel.type === ChannelType.GuildStageVoice) &&
       (oldChannel.type === ChannelType.GuildVoice || oldChannel.type === ChannelType.GuildStageVoice)
     ) {
-      if (newChannel.nsfw !== oldChannel.nsfw)
+      if (newChannel.nsfw !== oldChannel.nsfw) {
         embed.addFields(
           {
             name: t('log.channelUpdate.old-nsfw', { lng }),
@@ -223,7 +251,9 @@ export default new Event({
           },
           emptyField
         );
-      if (newChannel.rateLimitPerUser !== oldChannel.rateLimitPerUser)
+      }
+
+      if (newChannel.rateLimitPerUser !== oldChannel.rateLimitPerUser) {
         embed.addFields(
           {
             name: t('log.channelUpdate.old-rate-limit', { lng }),
@@ -237,7 +267,9 @@ export default new Event({
           },
           emptyField
         );
-      if (newChannel.bitrate !== oldChannel.bitrate)
+      }
+
+      if (newChannel.bitrate !== oldChannel.bitrate) {
         embed.addFields(
           {
             name: t('log.channelUpdate.old-bitrate', { lng }),
@@ -251,7 +283,9 @@ export default new Event({
           },
           emptyField
         );
-      if (newChannel.rtcRegion !== oldChannel.rtcRegion)
+      }
+
+      if (newChannel.rtcRegion !== oldChannel.rtcRegion) {
         embed.addFields(
           {
             name: t('log.channelUpdate.old-region', { lng }),
@@ -265,7 +299,9 @@ export default new Event({
           },
           emptyField
         );
-      if (newChannel.userLimit !== oldChannel.userLimit)
+      }
+
+      if (newChannel.userLimit !== oldChannel.userLimit) {
         embed.addFields(
           {
             name: t('log.channelUpdate.old-user-limit', { lng }),
@@ -279,7 +315,9 @@ export default new Event({
           },
           emptyField
         );
-      if (newChannel.videoQualityMode !== oldChannel.videoQualityMode)
+      }
+
+      if (newChannel.videoQualityMode !== oldChannel.videoQualityMode) {
         embed.addFields(
           {
             name: t('log.channelUpdate.old-video-quality', { lng }),
@@ -293,13 +331,16 @@ export default new Event({
           },
           emptyField
         );
+      }
     }
 
     const embedData = embed.toJSON();
     if (!embedData.fields?.length || embedData.fields.length > 25 || embedData.fields.length <= 1) return;
 
-    await logChannel.send({
-      embeds: [embed]
-    });
+    await logChannel
+      .send({
+        embeds: [embed]
+      })
+      .catch((err) => logger.debug({ err }, 'GuildLog | ChannelUpdate: Could not send message'));
   }
 });

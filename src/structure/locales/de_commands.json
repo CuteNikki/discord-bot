@@ -833,48 +833,10 @@
       }
     ]
   },
-  "config-log": {
-    "name": "log-konfiguration",
+  "log": {
+    "name": "log",
     "description": "Konfiguriere das Log-Modul",
     "options": [
-      {
-        "name": "ansehen",
-        "description": "Zeigt die aktuelle Konfiguration an",
-        "options": [
-          {
-            "name": "alles",
-            "description": "Zeigt die gesamte Konfiguration an"
-          },
-          {
-            "name": "kanal",
-            "description": "Zeigt den Log-Kanal an"
-          },
-          {
-            "name": "events",
-            "description": "Zeigt den Status der Events an"
-          }
-        ]
-      },
-      {
-        "name": "kanal",
-        "description": "Konfiguriere den Log-Kanal",
-        "options": [
-          {
-            "name": "setzen",
-            "description": "Setzt den Log-Kanal",
-            "options": [
-              {
-                "name": "kanal",
-                "description": "Der Log-Kanal"
-              }
-            ]
-          },
-          {
-            "name": "entfernen",
-            "description": "Entfernt den Log-Kanal"
-          }
-        ]
-      },
       {
         "name": "events",
         "description": "Konfiguriere die Events",
@@ -885,7 +847,11 @@
             "options": [
               {
                 "name": "event",
-                "description": "Name des Events"
+                "description": "Der Name des Events"
+              },
+              {
+                "name": "kanal",
+                "description": "Der Kanal, in dem die Events gesendet werden"
               }
             ]
           },
@@ -895,11 +861,23 @@
             "options": [
               {
                 "name": "event",
-                "description": "Name des Events"
+                "description": "Der Name des Events"
               }
             ]
           }
         ]
+      },
+      {
+        "name": "aktivieren",
+        "description": "Aktiviert das Log-Modul"
+      },
+      {
+        "name": "deaktivieren",
+        "description": "Deaktiviert das Log-Modul"
+      },
+      {
+        "name": "info",
+        "description": "Zeigt die aktuelle Konfiguration"
       }
     ]
   },

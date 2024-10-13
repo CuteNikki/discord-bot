@@ -3,22 +3,41 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
-import { getGuild } from 'db/guild';
+import { getGuildLog } from 'db/guild-log';
 import { getGuildLanguage } from 'db/language';
+
+import { logger } from 'utils/logger';
+
+import type { GuildLogEvent } from 'types/guild-log';
 
 export default new Event({
   name: Events.GuildScheduledEventUpdate,
   once: false,
   async execute(_client, oldEvent, newEvent) {
     const guild = newEvent.guild;
-    if (!guild || !oldEvent || !newEvent) return;
 
-    const config = await getGuild(guild.id) ?? { log: { enabled: false } };
+    if (!guild || !oldEvent || !newEvent) {
+      return;
+    }
 
-    if (!config.log.enabled || !config.log.events.guildScheduledEventUpdate || !config.log.channelId) return;
+    const log = (await getGuildLog(guild.id)) ?? { enabled: false, events: [] as GuildLogEvent[] };
 
-    const logChannel = await guild.channels.fetch(config.log.channelId);
-    if (!logChannel?.isSendable()) return;
+    const event = log.events.find((e) => e.name === Events.GuildScheduledEventUpdate) ?? {
+      channelId: undefined,
+      enabled: false
+    };
+
+    if (!log.enabled || !event.enabled || !event.channelId) {
+      return;
+    }
+
+    const logChannel = await guild.channels
+      .fetch(event.channelId)
+      .catch((err) => logger.debug({ err }, 'GuildLog | GuildScheduledEventUpdate: Could not fetch channel'));
+
+    if (!logChannel?.isSendable()) {
+      return;
+    }
 
     const lng = await getGuildLanguage(guild.id);
 
@@ -34,7 +53,7 @@ export default new Event({
 
     const emptyField = { name: '\u200b', value: '\u200b', inline: true };
 
-    if (newEvent.name !== oldEvent.name)
+    if (newEvent.name !== oldEvent.name) {
       embed.addFields(
         {
           name: t('log.guildScheduledEventUpdate.old-name', { lng }),
@@ -48,7 +67,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newEvent.description !== oldEvent.description)
+    }
+
+    if (newEvent.description !== oldEvent.description) {
       embed.addFields(
         {
           name: t('log.guildScheduledEventUpdate.old-description', { lng }),
@@ -62,7 +83,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newEvent.image !== oldEvent.image)
+    }
+
+    if (newEvent.image !== oldEvent.image) {
       embed.addFields(
         {
           name: t('log.guildScheduledEventUpdate.old-image', { lng }),
@@ -76,7 +99,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newEvent.status !== oldEvent.status)
+    }
+
+    if (newEvent.status !== oldEvent.status) {
       embed.addFields(
         {
           name: t('log.guildScheduledEventUpdate.old-status', { lng }),
@@ -90,7 +115,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newEvent.scheduledEndTimestamp !== oldEvent.scheduledEndTimestamp)
+    }
+
+    if (newEvent.scheduledEndTimestamp !== oldEvent.scheduledEndTimestamp) {
       embed.addFields(
         {
           name: t('log.guildScheduledEventUpdate.old-end', { lng }),
@@ -108,7 +135,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newEvent.scheduledStartTimestamp !== oldEvent.scheduledStartTimestamp)
+    }
+
+    if (newEvent.scheduledStartTimestamp !== oldEvent.scheduledStartTimestamp) {
       embed.addFields(
         {
           name: t('log.guildScheduledEventUpdate.old-start', { lng }),
@@ -126,7 +155,9 @@ export default new Event({
         },
         emptyField
       );
-    if (newEvent.channel !== oldEvent.channel || newEvent.entityMetadata?.location !== oldEvent.entityMetadata?.location)
+    }
+
+    if (newEvent.channel !== oldEvent.channel || newEvent.entityMetadata?.location !== oldEvent.entityMetadata?.location) {
       embed.addFields(
         {
           name: t('log.guildScheduledEventUpdate.old-location', { lng }),
@@ -148,7 +179,8 @@ export default new Event({
         },
         emptyField
       );
+    }
 
-    await logChannel.send({ embeds: [embed] });
+    await logChannel.send({ embeds: [embed] }).catch((err) => logger.debug({ err }, 'GuildLog | GuildScheduledEventUpdate: Could not send message'));
   }
 });

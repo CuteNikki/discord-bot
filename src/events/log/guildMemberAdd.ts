@@ -3,24 +3,39 @@ import { t } from 'i18next';
 
 import { Event } from 'classes/event';
 
-import { getGuild } from 'db/guild';
-
+import { getGuildLog } from 'db/guild-log';
 import { getGuildLanguage } from 'db/language';
+
 import { logger } from 'utils/logger';
+
+import type { GuildLogEvent } from 'types/guild-log';
 
 export default new Event({
   name: Events.GuildMemberAdd,
   once: false,
   async execute(_client, member) {
     const { guild, user, partial } = member;
-    if (partial) await member.fetch().catch((err) => logger.debug({ err }, 'Could not fetch member'));
 
-    const config = (await getGuild(guild.id)) ?? { log: { enabled: false } };
+    if (partial) {
+      await member.fetch().catch((err) => logger.debug({ err }, 'GuildLog | GuildMemberAdd: Could not fetch member'));
+    }
 
-    if (!config.log.enabled || !config.log.events.guildMemberAdd || !config.log.channelId) return;
+    const log = (await getGuildLog(guild.id)) ?? { enabled: false, events: [] as GuildLogEvent[] };
 
-    const logChannel = await guild.channels.fetch(config.log.channelId);
-    if (!logChannel?.isSendable()) return;
+    const event = log.events.find((e) => e.name === Events.GuildMemberAdd) ?? {
+      channelId: undefined,
+      enabled: false
+    };
+
+    if (!log.enabled || !event.enabled || !event.channelId) {
+      return;
+    }
+
+    const logChannel = await guild.channels.fetch(event.channelId).catch((err) => logger.debug({ err }, 'GuildLog | GuildMemberAdd: Could not fetch channel'));
+
+    if (!logChannel?.isSendable()) {
+      return;
+    }
 
     const components: ActionRowBuilder<ButtonBuilder>[] = [];
 
@@ -54,9 +69,11 @@ export default new Event({
       );
     }
 
-    await logChannel.send({
-      embeds: [embed],
-      components
-    });
+    await logChannel
+      .send({
+        embeds: [embed],
+        components
+      })
+      .catch((err) => logger.debug({ err }, 'GuildLog | GuildMemberAdd: Could not send message'));
   }
 });

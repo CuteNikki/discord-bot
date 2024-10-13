@@ -5,6 +5,8 @@ import { Button } from 'classes/button';
 
 import { getReactionRoles } from 'db/reaction-roles';
 
+import { logger } from 'utils/logger';
+
 import { ModuleType } from 'types/interactions';
 
 export default new Button({
@@ -48,7 +50,7 @@ export default new Button({
     }
 
     if (interaction.member.roles.cache.has(reaction.roleId)) {
-      const success = await interaction.member.roles.remove(role).catch((err) => console.error(err));
+      const success = await interaction.member.roles.remove(role).catch((err) => logger.debug({ err }, 'ReactionRoles | Select: Could not remove role'));
 
       if (!success) {
         await interaction.editReply({
@@ -61,7 +63,7 @@ export default new Button({
         embeds: [new EmbedBuilder().setColor(client.colors.success).setDescription(t('reaction-roles.select.removed', { lng, role: role.toString() }))]
       });
     } else {
-      const success = await interaction.member.roles.add(role).catch((err) => console.error(err));
+      const success = await interaction.member.roles.add(role).catch((err) => logger.debug({ err }, 'ReactionRoles | Select: Could not add role'));
 
       if (!success) {
         await interaction.editReply({

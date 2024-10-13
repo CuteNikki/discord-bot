@@ -4,6 +4,8 @@ import { Event } from 'classes/event';
 
 import { getReactionRoles } from 'db/reaction-roles';
 
+import { logger } from 'utils/logger';
+
 export default new Event({
   name: Events.MessageReactionAdd,
   once: false,
@@ -46,6 +48,6 @@ export default new Event({
       return;
     }
 
-    await member.roles.add(role).catch((err) => console.error(err));
+    await member.roles.add(role).catch((err) => logger.debug({ err }, 'ReactionRoles | ReactionAdd: Could not add role'));
   }
 });

@@ -4,6 +4,8 @@ import { Event } from 'classes/event';
 
 import { getReactionRoles } from 'db/reaction-roles';
 
+import { logger } from 'utils/logger';
+
 export default new Event({
   name: Events.MessageReactionRemove,
   once: false,
@@ -46,6 +48,6 @@ export default new Event({
       return;
     }
 
-    await member.roles.remove(role).catch((err) => console.error(err));
+    await member.roles.remove(role).catch((err) => logger.debug({ err }, 'ReactionRoles | ReactionRemove: Could not remove role'));
   }
 });

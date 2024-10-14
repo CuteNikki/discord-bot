@@ -326,17 +326,9 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
 
 ## TO-DO
 
-- [ ] Separate all objects from guild schema into separate models and then reconnect them using the ObjectId (use populate to get objects)
-  - [x] custom-voice-setup
-  - [x] reaction-roles
-  - [x] starboard
-  - [x] counting
-  - [x] ticket
-  - [x] moderation
-  - [x] level
-  - [x] welcome
-  - [x] farewell
-  - [ ] log
+- Voice levelling
+  - [ ] Stop members from levelling in voice channels if they're alone
+  - [ ] Currently, only people joining a voice channel after the bot has started can level up (on startup, the bot should check if a member is in a voice channel and start giving out xp)
 - [ ] utility module (not checked because I'd like to add more)
 - [ ] developer module (more features might be added)
 - [ ] fun module

@@ -1,5 +1,5 @@
 import { CronJob } from 'cron';
-import { Colors, EmbedBuilder } from 'discord.js';
+import { Colors, EmbedBuilder, roleMention, type MessageCreateOptions } from 'discord.js';
 import { t } from 'i18next';
 import { connect } from 'mongoose';
 import { performance } from 'perf_hooks';
@@ -11,16 +11,17 @@ import { deleteCustomVoiceChannel, getCustomVoiceChannels } from 'db/custom-voic
 import { deleteGiveawayById, getAllGiveaways, getGiveawayWinners } from 'db/giveaway';
 import { closeInfractionById, getUnresolvedInfractions } from 'db/infraction';
 import { getGuildLanguage, getUserLanguage } from 'db/language';
-import { deleteWeeklyLevels } from 'db/level';
+import { appendXP, deleteWeeklyLevels, getLevel, getLevelConfig, getRandomExp, getRewardsForLevel } from 'db/level';
 import { deleteExpiredReminders, getExpiredReminders } from 'db/reminder';
 
-import { InfractionType, type InfractionDocument } from 'types/infraction';
+import { sendError } from 'utils/error';
+import { logger } from 'utils/logger';
 
 import { keys } from 'constants/keys';
 
 import type { GiveawayDocument } from 'types/giveaway';
-import { sendError } from 'utils/error';
-import { logger } from 'utils/logger';
+import { InfractionType, type InfractionDocument } from 'types/infraction';
+import { AnnouncementType } from 'types/level';
 
 export async function initDatabase(client: DiscordClient) {
   const startTime = performance.now(); // This is used for logging the time it takes to connect to the database
@@ -47,7 +48,8 @@ export async function initDatabase(client: DiscordClient) {
             // These actions can be done on any cluster
             await Promise.allSettled([
               clearGiveaways(client), // Clear ended giveaways
-              clearInfractions(client) // Clear expired infractions
+              clearInfractions(client), // Clear expired infractions
+              giveExpToVoiceMembers(client) // Give exp to voice members
             ]);
 
             const jobEndTime = performance.now();
@@ -59,6 +61,167 @@ export async function initDatabase(client: DiscordClient) {
       });
     })
     .catch((err) => sendError({ client, err, location: 'Mongoose Connection Error' }));
+}
+
+async function giveExpToVoiceMembers(client: DiscordClient) {
+  if (!client.voiceLevels.size) {
+    // logger.debug(`VoiceStateExp: no members to give exp to`);
+    return;
+  }
+
+  for (const [userId, { channelId, guildId, lastRan }] of client.voiceLevels) {
+    const NOW = Date.now();
+
+    // logger.debug({ channelId, guildId, lastRan }, `VoiceStateExp: checking member (${userId})`);
+
+    if (NOW - lastRan < 60_000) {
+      // logger.debug(`VoiceStateExp: member was last given exp in the last minute, skipping (${userId})`);
+      continue;
+    }
+
+    const guild = client.guilds.cache.get(guildId);
+
+    if (!guild) {
+      // logger.debug(`VoiceStateExp: guild not found, skipping (${userId}) (${guildId})`);
+      continue;
+    }
+
+    const channel = guild.channels.cache.get(channelId);
+
+    if (!channel?.isVoiceBased()) {
+      // logger.debug(`VoiceStateExp: channel not voice based, skipping (${userId}) (${channelId})`);
+      continue;
+    }
+
+    const member = channel.members.get(userId);
+
+    if (!member) {
+      // logger.debug(`VoiceStateExp: member not found, skipping (${userId})`);
+      continue;
+    }
+
+    const levelConfig = (await getLevelConfig(guild.id)) ?? { enabled: false, enabledChannels: [], ignoredChannels: [] };
+
+    // logger.debug({ levelConfig }, `VoiceStateExp: level config (${userId}) (${guild.name} | ${guild.id})`);
+
+    if (!levelConfig.enabled) {
+      // logger.debug(`VoiceStateExp: level is not enabled, skipping (${userId})`);
+      continue;
+    }
+
+    if (levelConfig.enabledChannels.length && !levelConfig.enabledChannels.includes(channel.id)) {
+      // logger.debug(`VoiceStateExp: channel is not enabled, skipping (${userId}) (${channel.name} | ${channel.id})`);
+      continue;
+    }
+
+    if (levelConfig.ignoredChannels.length && levelConfig.ignoredChannels.includes(channel.id)) {
+      // logger.debug(`VoiceStateExp: channel is ignored, skipping (${userId}) (${channel.name} | ${channel.id})`);
+      continue;
+    }
+
+    if (member.voice.deaf || member.voice.selfDeaf || member.voice.mute || member.voice.selfMute) {
+      // logger.debug(`VoiceStateExp: member is deafened or muted, skipping (${userId})`);
+      continue;
+    }
+
+    if (channel.members.size <= 1) {
+      // logger.debug(`VoiceStateExp: channel has only one member, skipping (${userId}) (${channel.name} | ${channel.id})`);
+      continue;
+    }
+
+    let gainedXP = Math.floor(getRandomExp() / 2);
+
+    for (const multiplier of levelConfig.multipliers) {
+      if (member.roles.cache.has(multiplier.roleId)) {
+        gainedXP *= multiplier.multiplier;
+      }
+    }
+
+    const currentLevel = await getLevel(userId, guildId, true);
+    const updatedLevel = await appendXP(userId, guildId, gainedXP);
+
+    // logger.debug({ currentLevel, updatedLevel }, `VoiceStateExp: exp added (${userId}) (${guild.name} | ${guild.id})`);
+
+    client.voiceLevels.set(userId, { channelId, guildId, lastRan: NOW });
+
+    if (currentLevel.level === updatedLevel.level) {
+      continue;
+    }
+
+    const rewards = await getRewardsForLevel(updatedLevel);
+
+    if (rewards.length) {
+      await member.roles.add(rewards.map((r) => r.roleId)).catch((err) => logger.debug({ err }, 'Could not add role(s)'));
+    }
+
+    const lng = levelConfig.announcement === AnnouncementType.OtherChannel ? await getGuildLanguage(guildId) : await getUserLanguage(userId);
+
+    const levelUpEmbed = new EmbedBuilder()
+      .setColor(client.colors.level)
+      .setAuthor({
+        name: member.displayName as string,
+        iconURL: member.displayAvatarURL()
+      })
+      .addFields({
+        name: t('level.up.title', { lng }),
+        value: t('level.up.description', { lng, level: updatedLevel.level })
+      });
+
+    if (rewards.length) {
+      const added = await member.roles.add(rewards.map((r) => r.roleId)).catch((err) => logger.debug({ err }, 'Could not add role(s)'));
+
+      if (added) {
+        levelUpEmbed.addFields({
+          name: t('level.up.title-roles', { lng }),
+          value: rewards.map((r) => roleMention(r.roleId)).join(' ')
+        });
+      } else {
+        levelUpEmbed.addFields({
+          name: t('level.up.title-roles-error', { lng }),
+          value: rewards.map((r) => roleMention(r.roleId)).join(' ')
+        });
+      }
+    }
+
+    const levelUpMessage: MessageCreateOptions = {
+      content: member.toString(),
+      embeds: [levelUpEmbed]
+    };
+
+    switch (levelConfig.announcement) {
+      case AnnouncementType.UserChannel:
+        {
+          const msg = await channel?.send(levelUpMessage).catch((err) => logger.debug({ err }, 'could not send message'));
+
+          setTimeout(async () => {
+            if (msg && msg.deletable) await msg.delete().catch((err) => logger.debug({ err }, 'could not delete message'));
+          }, 5000);
+        }
+        break;
+      case AnnouncementType.OtherChannel:
+        {
+          if (!levelConfig.channelId) {
+            return;
+          }
+
+          const channel = guild.channels.cache.get(levelConfig.channelId);
+
+          if (!channel?.isSendable()) {
+            return;
+          }
+
+          await channel.send(levelUpMessage).catch((err) => logger.debug({ err }, 'could not send message'));
+        }
+        break;
+      case AnnouncementType.PrivateMessage:
+        {
+          levelUpMessage.content = t('level.up.message', { lng, guild: guild.name });
+
+          await client.users.send(userId, levelUpMessage).catch((err) => logger.debug({ err, userId }, 'could not send DM'));
+        }
+        break;
+    }
+  }
 }
 
 async function clearGiveaways(client: DiscordClient) {
@@ -110,7 +273,7 @@ async function clearGiveaways(client: DiscordClient) {
           await deleteCurrentGiveaway(giveaway);
         })
         .catch((err) => logger.debug({ err, giveaway }, 'Could not send message'));
-      continue; // Continue to the next giveaway
+      continue;
     }
 
     await channel

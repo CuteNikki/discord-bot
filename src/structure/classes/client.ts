@@ -15,6 +15,7 @@ import { loadSelections } from 'loaders/selection';
 import { initDatabase } from 'db/init';
 
 import { keys } from 'constants/keys';
+
 import { listenToErrors } from 'utils/error';
 import { initTranslation } from 'utils/language';
 
@@ -24,7 +25,11 @@ export class DiscordClient extends Client {
   public commands = new Collection<string, Command<any>>(); // Collection<commandName, commandData>
   public buttons = new Collection<string, Button>(); // Collection<customId, buttonData>
   public modals = new Collection<string, Modal>(); // Collection<customId, modalData>
-  public selections = new Collection<string, Selection>(); // Collection<customId, selectionData>
+  public selections = new Collection<string, Selection>(); // Collection<customId, selectionData
+
+  // Collections for handling voice levelling
+  //                       Collection<userId, { channelId: string; guildId: string; lastRan: number }>
+  public voiceLevels = new Collection<string, { channelId: string; guildId: string; lastRan: number }>();
 
   // Custom colors
   public colors = {

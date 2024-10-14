@@ -326,22 +326,38 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
 
 ## TO-DO
 
-- [ ] utility module (not checked because I'd like to add more)
-- [ ] developer module (more features might be added)
-- [ ] fun module
+- [ ] general
+  - [ ] bugreport command
+- [x] utility module (more features might be added)
+- [x] developer module (more features might be added)
+  - [ ] bugreport config
+- [ ] fun module (more features will be added)
   - [x] game command
     - [ ] 2048 (maybe?)
     - [ ] Lights Out (maybe?)
 - [ ] config commands
-  - [ ] reaction roles
+  - [x] reaction roles (already implemented)
     - [ ] fully customizable message
   - [ ] word chain game (next word needs to start with the last letter of the previous word)
   - [ ] economy
-    - [ ] needs todo
+    - [ ] balance
+    - [ ] deposit
+    - [ ] withdraw
+    - [ ] gift/pay
+    - [ ] work
+    - [ ] begg
+    - [ ] flip
+    - [ ] shop (maybe?)
+      - [ ] inventory
+      - [ ] sell
+      - [ ] buy
   - [ ] confession
-    - [ ] needs todo
+    - [ ] config command
+    - [ ] confess
   - [ ] suggestions
-    - [ ] needs todo
+    - [ ] config command
+    - [ ] suggest
   - [ ] level config
+    - [x] text and voice levelling is fully implemented with ignored & enabled channels, announcements, reward and multiplier roles
     - [ ] levelup announcement
       - [ ] fully customizable message

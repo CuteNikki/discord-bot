@@ -128,8 +128,8 @@ export default new Event({
     }
 
     if (newRole.permissions.bitfield !== oldRole.permissions.bitfield) {
-      const removedPerms = newRole.permissions.toArray().filter((perm) => !oldRole.permissions.toArray().includes(perm));
-      const addedPerms = oldRole.permissions.toArray().filter((perm) => !newRole.permissions.toArray().includes(perm));
+      const removedPerms = oldRole.permissions.toArray().filter((perm) => !newRole.permissions.toArray().includes(perm));
+      const addedPerms = newRole.permissions.toArray().filter((perm) => !oldRole.permissions.toArray().includes(perm));
 
       embed.addFields(
         {
@@ -138,7 +138,8 @@ export default new Event({
             removedPerms
               .map((perm) => `\`${perm}\``)
               .join(', ')
-              .slice(0, 1000) || '/'
+              .slice(0, 1000) || '/',
+          inline: true
         },
         {
           name: t('log.roleUpdate.added-permissions', { lng }),
@@ -146,7 +147,8 @@ export default new Event({
             addedPerms
               .map((perm) => `\`${perm}\``)
               .join(', ')
-              .slice(0, 1000) || '/'
+              .slice(0, 1000) || '/',
+          inline: true
         },
         emptyField
       );

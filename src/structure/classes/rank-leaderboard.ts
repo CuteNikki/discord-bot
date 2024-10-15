@@ -33,7 +33,7 @@ export class LeaderboardBuilder extends Builder<LeaderboardProps> {
    * Create a new leaderboard ui builder
    */
   public constructor(props: LeaderboardPropsType) {
-    super(600, 600);
+    super(600, 650);
 
     this.bootstrap({
       ...props,

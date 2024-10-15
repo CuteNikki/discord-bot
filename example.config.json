@@ -18,14 +18,17 @@
     "GUILD_IDS": [],
 
     "comment_6": "This is the webhook url that will be used for logging errors",
-    "ERROR_WEBHOOK": "optional"
+    "ERROR_WEBHOOK": "optional",
+
+    "comment_7": "This is the webhook url that will be used to send bugreports",
+    "BUGREPORT_WEBHOOK": "optional"
   },
   "DATABASE": {
-    "comment_7": "Get your URI from https://www.mongodb.com/",
+    "comment_8": "Get your URI from https://www.mongodb.com/",
     "URI": "required"
   },
   "API_KEYS": {
-    "comment_8": "Get your API key from https://www.weatherapi.com/",
+    "comment_9": "Get your API key from https://www.weatherapi.com/",
     "WEATHER": "required"
   }
 }

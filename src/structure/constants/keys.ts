@@ -6,8 +6,6 @@ if (!config || !config.DISCORD_BOT?.TOKEN) {
   process.exit(0);
 }
 
-// We use undefined for required config variables and null for optional ones
-// This is to differentiate between the two and create logs
 const keys = {
   DISCORD_BOT_TOKEN: config.DISCORD_BOT.TOKEN ?? 'required',
   DISCORD_BOT_ID: config.DISCORD_BOT.ID ?? 'required',
@@ -15,6 +13,7 @@ const keys = {
   DEVELOPER_USER_IDS: config.DEVELOPER.USER_IDS ?? [],
   DEVELOPER_GUILD_IDS: config.DEVELOPER.GUILD_IDS ?? [],
   DEVELOPER_ERROR_WEBHOOK: config.DEVELOPER.ERROR_WEBHOOK ?? 'optional',
+  DEVELOPER_BUG_REPORT_WEBHOOK: config.DEVELOPER.BUG_REPORT_WEBHOOK ?? 'optional',
   DATABASE_URI: config.DATABASE.URI ?? 'required',
   WEATHER_API_KEY: config.API_KEYS.WEATHER ?? 'required'
 };

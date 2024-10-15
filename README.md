@@ -326,11 +326,8 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
 
 ## TO-DO
 
-- [ ] general
-  - [ ] bugreport command
 - [x] utility module (more features might be added)
 - [x] developer module (more features might be added)
-  - [ ] bugreport config
 - [ ] fun module (more features will be added)
   - [x] game command
     - [ ] 2048 (maybe?)

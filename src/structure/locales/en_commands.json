@@ -1,4 +1,8 @@
 {
+  "bug-report": {
+    "name": "bug-report",
+    "description": "Send a bug-report to the developer"
+  },
   "giveaway": {
     "name": "giveaway",
     "description": "Create and manage giveaways for your community",

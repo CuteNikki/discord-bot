@@ -1,4 +1,10 @@
 {
+  "bug-report": {
+    "title": "Fehlermeldung",
+    "description": "Beschreibe deinen Fehler",
+    "unavailable": "Fehlermeldungen sind derzeit nicht verfügbar!",
+    "success": "Fehlermeldung wurde gesendet!"
+  },
   "giveaway": {
     "common": {
       "invalid-giveaway": "Konnte diese Verlosung nicht finden!",

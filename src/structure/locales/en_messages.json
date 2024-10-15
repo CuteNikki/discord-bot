@@ -1,4 +1,10 @@
 {
+  "bug-report": {
+    "title": "Bug-Report",
+    "description": "Describe your bug",
+    "unavailable": "Bug-Reports are currently unavailable!",
+    "success": "Report has been sent!"
+  },
   "giveaway": {
     "common": {
       "invalid-giveaway": "Could not find that giveaway!",

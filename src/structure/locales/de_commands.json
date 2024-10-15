@@ -1,4 +1,8 @@
 {
+  "bug-report": {
+    "name": "fehlermeldung",
+    "description": "Sende eine Fehlermeldung an den Entwickler"
+  },
   "giveaway": {
     "name": "verlosung",
     "description": "Erstelle und verwalte Verlosungen für deine Mitglieder",

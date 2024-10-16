@@ -1,6 +1,18 @@
 import pino from 'pino';
 
-export const logger = pino({
-  transport: { target: 'pino-pretty' },
-  level: process.argv.includes('--debug') ? 'debug' : 'info'
-});
+export const logger = pino(
+  {},
+  pino.transport({
+    targets: [
+      {
+        target: 'pino-pretty',
+        level: process.argv.includes('--debug') ? 'debug' : 'info',
+        options: { ignore: 'pid,hostname', translateTime: 'SYS:yyyy-mm-dd HH:MM:ss' }
+      },
+      {
+        target: 'pino/file',
+        options: { destination: `${__dirname}/../../../pino.log` }
+      }
+    ]
+  })
+);

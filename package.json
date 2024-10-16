@@ -46,7 +46,8 @@
     "start": "bun run ./dist/src/index.js",
     "build": "rm -rf dist && bun tsc --build ./",
     "pretty": "prettier --write \"./**/*.{js,jsx,mjs,cjs,ts,tsx,json}\"",
-    "lint": "eslint --ignore-pattern \"locales/*\""
+    "lint": "eslint --ignore-pattern \"locales/*\"",
+    "dellog": "rm pino.log"
   },
   "prettier": {
     "printWidth": 160,

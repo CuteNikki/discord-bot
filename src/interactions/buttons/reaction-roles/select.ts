@@ -1,4 +1,4 @@
-import { EmbedBuilder, roleMention } from 'discord.js';
+import { EmbedBuilder, PermissionFlagsBits, roleMention } from 'discord.js';
 import { t } from 'i18next';
 
 import { Button } from 'classes/button';
@@ -34,7 +34,11 @@ export default new Button({
       return;
     }
 
-    if (group.requiredRoles?.length && !interaction.member.roles.cache.hasAll(...group.requiredRoles)) {
+    if (
+      group.requiredRoles?.length &&
+      !interaction.member.roles.cache.hasAll(...group.requiredRoles) &&
+      !interaction.member.permissions.has(PermissionFlagsBits.ManageRoles)
+    ) {
       const roles = group.requiredRoles.map((r) => roleMention(r));
 
       await interaction.editReply({

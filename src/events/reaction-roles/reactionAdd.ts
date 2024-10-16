@@ -1,4 +1,4 @@
-import { Events } from 'discord.js';
+import { Events, PermissionFlagsBits } from 'discord.js';
 
 import { Event } from 'classes/event';
 
@@ -44,7 +44,7 @@ export default new Event({
       return;
     }
 
-    if (group.requiredRoles?.length && !member.roles.cache.hasAll(...group.requiredRoles)) {
+    if (group.requiredRoles?.length && !member.roles.cache.hasAll(...group.requiredRoles) && !member.permissions.has(PermissionFlagsBits.ManageRoles)) {
       return;
     }
 

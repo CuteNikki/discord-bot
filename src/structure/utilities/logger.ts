@@ -1,7 +1,9 @@
 import pino from 'pino';
 
 export const logger = pino(
-  {},
+  {
+    level: process.argv.includes('--debug') ? 'debug' : 'info'
+  },
   pino.transport({
     targets: [
       {

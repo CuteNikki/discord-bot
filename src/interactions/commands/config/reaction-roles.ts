@@ -549,7 +549,7 @@ async function handleRequiredRoles(
         new ActionRowBuilder<RoleSelectMenuBuilder>().addComponents(
           new RoleSelectMenuBuilder()
             .setCustomId('select-reaction-roles')
-            .setMinValues(1)
+            .setMinValues(0)
             .setMaxValues(MAX_REQ_ROLES)
             .setPlaceholder(t('reaction-roles.required-roles.placeholder', { lng }))
         ),
@@ -582,16 +582,6 @@ async function handleRequiredRoles(
         .filter((r) => !r.managed)
         .sort((a, b) => b.position - a.position)
         .slice(0, MAX_REQ_ROLES);
-
-      if (requiredRoles.length <= 0 || requiredRoles.length > MAX_REQ_ROLES) {
-        await roleInteraction
-          .reply({
-            embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.required-roles.none', { lng }))],
-            ephemeral: true
-          })
-          .catch((err) => logger.debug(err, 'Could not reply'));
-        return;
-      }
 
       await roleInteraction
         .update({

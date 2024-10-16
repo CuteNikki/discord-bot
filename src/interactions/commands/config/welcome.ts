@@ -103,7 +103,14 @@ export default new Command({
         {
           const rolesEmbed = new EmbedBuilder().setColor(client.colors.welcome).addFields({
             name: t('welcome.roles.title', { lng }),
-            value: welcome.roles.length ? welcome.roles.map((r) => roleMention(r)).join('\n') : t('none', { lng })
+            value: welcome.roles.length
+              ? welcome.roles
+                  .map((r) => {
+                    const role = guild.roles.cache.get(r);
+                    return role ? role.toString() : role;
+                  })
+                  .join('\n')
+              : t('none', { lng })
           });
           const warning = new EmbedBuilder()
             .setColor(client.colors.warning)

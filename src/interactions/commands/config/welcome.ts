@@ -107,7 +107,7 @@ export default new Command({
               ? welcome.roles
                   .map((r) => {
                     const role = guild.roles.cache.get(r);
-                    return role ? role.toString() : r;
+                    return role ? role.toString() : role;
                   })
                   .join('\n')
               : t('none', { lng })

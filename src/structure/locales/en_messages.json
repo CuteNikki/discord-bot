@@ -121,7 +121,8 @@
       "title": "Required roles",
       "description": "Select the roles that are required to use the reaction role group.",
       "info": "You may proceed without selecting any roles by pressing continue.",
-      "placeholder": "Select the required roles"
+      "placeholder": "Select the required roles",
+      "none": "You did not select any roles or press continue!"
     },
     "method": {
       "description": "Please choose between either buttons or reactions for the reaction role group.",

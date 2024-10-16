@@ -122,7 +122,7 @@
       "description": "Wähle die Rollen aus, die für die Verwendung der Reaktionsrollen-Gruppe erforderlich sind.",
       "info": "Du kannst ohne Auswahl einer Rolle fortfahren, indem du auf weiter drückst.",
       "placeholder": "Wähle die benötigten Rollen aus",
-      "none": "Du hast keine Rollen ausgewählt!"
+      "none": "Du hast keine Rollen ausgewählt oder auf weiter gedrückt!"
     },
     "method": {
       "description": "Bitte wähle zwischen Buttons oder Reaktionen für die Reaktionsrollen-Gruppe aus.",

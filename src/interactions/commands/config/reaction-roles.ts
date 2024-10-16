@@ -601,7 +601,7 @@ async function handleRequiredRoles(
   });
 
   requiredRolesCollector.on('end', async (_, reason) => {
-    if (reason !== 'continue' || !requiredRoles.length) {
+    if (reason !== 'continue') {
       await interaction
         .editReply({
           embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.required-roles.none', { lng }))],

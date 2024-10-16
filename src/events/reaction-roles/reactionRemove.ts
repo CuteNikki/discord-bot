@@ -44,6 +44,10 @@ export default new Event({
       return;
     }
 
+    if (group.requiredRoles?.length && !member.roles.cache.hasAll(...group.requiredRoles)) {
+      return;
+    }
+
     if (!member.roles.cache.has(role.id)) {
       return;
     }

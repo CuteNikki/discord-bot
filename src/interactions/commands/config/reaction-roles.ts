@@ -40,6 +40,7 @@ import type { Reaction } from 'types/reaction-roles';
 
 const TIMEOUT_DURATION = 60_000; // Constant for the timeout duration
 const MAX_ROLES = 20; // Constant for the maximum number of roles
+const MAX_REQ_ROLES = 5; // Constant for the maximum number of required roles
 const MAX_GROUPS = 10; // Constant for the maximum number of groups
 
 export default new Command({
@@ -227,6 +228,20 @@ export default new Command({
                 new EmbedBuilder()
                   .setColor(client.colors.reactionRoles)
                   .setTitle(group._id.toString())
+                  .addFields(
+                    { name: t('reaction-roles.mode.title', { lng }), value: group.singleMode ? t('enabled', { lng }) : t('disabled', { lng }) },
+                    {
+                      name: t('reaction-roles.required-roles.title'),
+                      value: group.requiredRoles?.length
+                        ? group.requiredRoles
+                            .map((r) => {
+                              const role = guild.roles.cache.get(r);
+                              return role ? role.toString() : r;
+                            })
+                            .join(', ')
+                        : t('none', { lng })
+                    }
+                  )
                   .setDescription(
                     [
                       `https://discord.com/channels/${guild.id}/${group.channelId}/${group.messageId}`,
@@ -266,6 +281,8 @@ async function handleRoleReactions(
   client: DiscordClient,
   reactions: Reaction[],
   method: 'button' | 'reaction',
+  mode: boolean,
+  requiredRoles: Role[],
   channel: TextChannel
 ) {
   for (const role of roles) {
@@ -319,7 +336,14 @@ async function handleRoleReactions(
     }
   }
 
-  await addReactionGroup(interaction.guildId!, msg.id, channel.id, reactions);
+  await addReactionGroup(
+    interaction.guildId!,
+    msg.id,
+    channel.id,
+    mode,
+    requiredRoles.map((r) => r.id),
+    reactions
+  );
 
   await interaction
     .editReply({
@@ -448,11 +472,168 @@ async function handleMethod(interaction: ChatInputCommandInteraction, lng: strin
       return;
     }
 
-    await handleChannel(interaction, lng, user, client, method);
+    await handleMode(interaction, lng, user, client, method);
   });
 }
 
-async function handleChannel(interaction: ChatInputCommandInteraction, lng: string, user: User, client: DiscordClient, method: 'button' | 'reaction') {
+async function handleMode(interaction: ChatInputCommandInteraction, lng: string, user: User, client: DiscordClient, method: 'button' | 'reaction') {
+  let mode: boolean = false;
+
+  const modeMessage = await interaction
+    .editReply({
+      embeds: [
+        new EmbedBuilder()
+          .setColor(client.colors.reactionRoles)
+          .setDescription([t('reaction-roles.mode.description', { lng }), t('reaction-roles.mode.info', { lng })].join('\n'))
+      ],
+      components: [
+        new ActionRowBuilder<ButtonBuilder>().addComponents(
+          new ButtonBuilder().setCustomId('button-reaction-single').setLabel(t('reaction-roles.mode.single', { lng })).setStyle(ButtonStyle.Primary),
+          new ButtonBuilder().setCustomId('button-reaction-multi').setLabel(t('reaction-roles.mode.multi', { lng })).setStyle(ButtonStyle.Primary)
+        )
+      ]
+    })
+    .catch((err) => logger.debug(err, 'Could not edit reply'));
+
+  if (!modeMessage) return;
+
+  const modeCollector = modeMessage.createMessageComponentCollector({
+    filter: (i) => i.user.id === user.id,
+    time: TIMEOUT_DURATION
+  });
+
+  modeCollector.on('collect', async (modeInteraction) => {
+    if (modeInteraction.customId === 'button-reaction-single') {
+      mode = true;
+      await modeInteraction.deferUpdate().catch((err) => logger.debug(err, 'Could not defer update'));
+    } else if (modeInteraction.customId === 'button-reaction-multi') {
+      mode = false;
+      await modeInteraction.deferUpdate().catch((err) => logger.debug(err, 'Could not defer update'));
+    }
+    modeCollector.stop();
+  });
+
+  modeCollector.on('end', async (_, reason) => {
+    if (reason === 'time') {
+      await modeMessage
+        .edit({
+          embeds: [new EmbedBuilder().setColor(client.colors.reactionRoles).setDescription(t('reaction-roles.mode.timeout', { lng }))],
+          components: []
+        })
+        .catch((err) => logger.debug(err, 'Could not edit reply'));
+      return;
+    }
+
+    await handleRequiredRoles(interaction, lng, user, client, method, mode);
+  });
+}
+
+async function handleRequiredRoles(
+  interaction: ChatInputCommandInteraction,
+  lng: string,
+  user: User,
+  client: DiscordClient,
+  method: 'button' | 'reaction',
+  mode: boolean
+) {
+  let requiredRoles: Role[] = [];
+
+  const requiredRolesMessage = await interaction
+    .editReply({
+      embeds: [
+        new EmbedBuilder()
+          .setColor(client.colors.reactionRoles)
+          .setDescription([t('reaction-roles.required-roles.description', { lng }), t('reaction-roles.required-roles.info', { lng })].join('\n'))
+      ],
+      components: [
+        new ActionRowBuilder<RoleSelectMenuBuilder>().addComponents(
+          new RoleSelectMenuBuilder()
+            .setCustomId('select-reaction-roles')
+            .setMinValues(1)
+            .setMaxValues(MAX_REQ_ROLES)
+            .setPlaceholder(t('reaction-roles.required-roles.placeholder', { lng }))
+        ),
+        new ActionRowBuilder<ButtonBuilder>().addComponents(
+          new ButtonBuilder().setCustomId('button-reaction-continue').setLabel(t('reaction-roles.setup.continue', { lng })).setStyle(ButtonStyle.Primary)
+        )
+      ]
+    })
+    .catch((err) => logger.debug(err, 'Could not edit reply'));
+
+  if (!requiredRolesMessage) return;
+
+  const requiredRolesCollector = requiredRolesMessage.createMessageComponentCollector({
+    filter: (i) => i.user.id === user.id,
+    idle: TIMEOUT_DURATION
+  });
+
+  requiredRolesCollector.on('collect', async (roleInteraction) => {
+    if (!roleInteraction.inCachedGuild()) return;
+
+    if (roleInteraction.customId === 'button-reaction-continue') {
+      requiredRolesCollector.stop('continue');
+      await roleInteraction.deferUpdate().catch((err) => logger.debug(err, 'Could not defer update'));
+      return;
+    }
+
+    if (roleInteraction.isRoleSelectMenu()) {
+      requiredRoles = roleInteraction.roles
+        .toJSON()
+        .filter((r) => !r.managed)
+        .sort((a, b) => b.position - a.position)
+        .slice(0, MAX_REQ_ROLES);
+
+      if (requiredRoles.length <= 0 || requiredRoles.length > MAX_REQ_ROLES) {
+        await roleInteraction
+          .reply({
+            embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.required-roles.none', { lng }))],
+            ephemeral: true
+          })
+          .catch((err) => logger.debug(err, 'Could not reply'));
+        return;
+      }
+
+      await roleInteraction
+        .update({
+          embeds: [
+            new EmbedBuilder()
+              .setColor(client.colors.reactionRoles)
+              .setDescription(
+                [
+                  t('reaction-roles.required-roles.info', { lng }),
+                  t('reaction-roles.required-roles.selected', { lng, count: requiredRoles.length, roles: requiredRoles.map((r) => r.toString()).join(', ') })
+                ].join('\n')
+              )
+          ]
+        })
+        .catch((err) => logger.debug(err, 'Could not update message'));
+    }
+  });
+
+  requiredRolesCollector.on('end', async (_, reason) => {
+    if (reason !== 'continue' || !requiredRoles.length) {
+      await interaction
+        .editReply({
+          embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.required-roles.none', { lng }))],
+          components: []
+        })
+        .catch((err) => logger.debug(err, 'Could not edit reply'));
+      return;
+    }
+
+    await handleChannel(interaction, lng, user, client, method, mode, requiredRoles);
+  });
+}
+
+async function handleChannel(
+  interaction: ChatInputCommandInteraction,
+  lng: string,
+  user: User,
+  client: DiscordClient,
+  method: 'button' | 'reaction',
+  mode: boolean,
+  requiredRoles: Role[]
+) {
   let channel: TextChannel;
 
   const channelMessage = await interaction
@@ -525,7 +706,7 @@ async function handleChannel(interaction: ChatInputCommandInteraction, lng: stri
       return;
     }
 
-    await handleRoles(interaction, lng, user, client, method, channel);
+    await handleRoles(interaction, lng, user, client, method, mode, requiredRoles, channel);
   });
 }
 
@@ -535,6 +716,8 @@ async function handleRoles(
   user: User,
   client: DiscordClient,
   method: 'button' | 'reaction',
+  mode: boolean,
+  requiredRoles: Role[],
   channel: TextChannel
 ) {
   let roles: Role[] = [];
@@ -630,6 +813,6 @@ async function handleRoles(
       return;
     }
 
-    await handleRoleReactions(roles, interaction, lng, user, client, reactions, method, channel);
+    await handleRoleReactions(roles, interaction, lng, user, client, reactions, method, mode, requiredRoles, channel);
   });
 }

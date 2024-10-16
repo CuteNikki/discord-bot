@@ -9,6 +9,8 @@ export type ReactionRoleGroupDocument = {
   _id: Types.ObjectId;
   messageId: string;
   channelId: string;
+  singleMode?: boolean;
+  requiredRoles?: string[];
   reactions: Reaction[];
 };
 

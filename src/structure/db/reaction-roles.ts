@@ -68,8 +68,15 @@ export async function disableReactionRoles(guildId: string): Promise<ReactionRol
  * @param {Reaction[]} reactions
  * @returns {Promise<ReactionRoleGroupDocument>} Created reaction role group
  */
-export async function addReactionGroup(guildId: string, messageId: string, channelId: string, reactions: Reaction[]): Promise<ReactionRoleGroupDocument> {
-  const group = await reactionRoleGroupModel.create({ messageId, channelId, reactions });
+export async function addReactionGroup(
+  guildId: string,
+  messageId: string,
+  channelId: string,
+  singleMode: boolean,
+  requiredRoles: string[],
+  reactions: Reaction[]
+): Promise<ReactionRoleGroupDocument> {
+  const group = await reactionRoleGroupModel.create({ messageId, channelId, reactions, singleMode, requiredRoles });
 
   const document = await reactionRoleModel
     .findOneAndUpdate({ guildId }, { $push: { groups: group._id } }, { new: true, upsert: true })

@@ -109,6 +109,21 @@
       "success_one": "Eine neue Gruppe mit {{count}} Reaktion wurde in {{channel}} erstellt.",
       "success_other": "Eine neue Gruppe mit {{count}} Reaktionen wurde in {{channel}} erstellt."
     },
+    "mode": {
+      "title": "Einzel-Modus",
+      "description": "Bitte wähle zwischen Einzel- und Mehrfach-Modus für die Reaktionsrollen-Gruppe aus.",
+      "info": "Mehrfach: Mitglieder können mehrere Rollen auswählen.\nEinzel: Mitglieder können nur eine Rolle auswählen.",
+      "single": "Einzel",
+      "multi": "Mehrfach",
+      "none": "Du hast keinen Modus ausgewählt!"
+    },
+    "required-roles": {
+      "title": "Benötigte Rollen",
+      "description": "Wähle die Rollen aus, die für die Verwendung der Reaktionsrollen-Gruppe erforderlich sind.",
+      "info": "Du kannst ohne Auswahl einer Rolle fortfahren, indem du auf weiter drückst.",
+      "placeholder": "Wähle die benötigten Rollen aus",
+      "none": "Du hast keine Rollen ausgewählt!"
+    },
     "method": {
       "description": "Bitte wähle zwischen Buttons oder Reaktionen für die Reaktionsrollen-Gruppe aus.",
       "recommendation": "Wir empfehlen die Verwendung von Buttons, da sie intuitiver sind und besseres Benutzerfeedback bieten.",

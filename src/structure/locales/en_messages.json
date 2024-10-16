@@ -109,6 +109,20 @@
       "success_one": "A new group with {{count}} reaction has been created in {{channel}}.",
       "success_other": "A new group with {{count}} reactions has been created in {{channel}}."
     },
+    "mode": {
+      "title": "Single mode",
+      "description": "Please choose between either single or multi mode for the reaction role group.",
+      "info": "Multi: members can choose multiple roles.\nSingle: members can only choose one role at a time.",
+      "single": "Single",
+      "multi": "Multi",
+      "none": "You did not select a mode!"
+    },
+    "required-roles": {
+      "title": "Required roles",
+      "description": "Select the roles that are required to use the reaction role group.",
+      "info": "You may proceed without selecting any roles by pressing continue.",
+      "placeholder": "Select the required roles"
+    },
     "method": {
       "description": "Please choose between either buttons or reactions for the reaction role group.",
       "recommendation": "We recommend using buttons as they are more intuitive and provide better user feedback.",
@@ -144,7 +158,10 @@
       "added": "{{role}} has been added to your roles!",
       "role-not-found": "The role was not found!",
       "unknown-group": "The reaction group was not found!",
-      "failed": "Could not add/remove that role!"
+      "failed": "Could not add/remove that role!",
+      "required-roles_one": "You are missing a required role!\n{{roles}}",
+      "required-roles_other": "You are missing required roles!\n{{roles}}",
+      "single-mode": "You can only choose one role from this reaction group!\nRemove your other role before selecting a different."
     }
   },
   "custom-vc": {

@@ -44,6 +44,20 @@ export default new Event({
       return;
     }
 
+    if (group.requiredRoles?.length && !member.roles.cache.hasAll(...group.requiredRoles)) {
+      return;
+    }
+
+    if (group.singleMode && member.roles.cache.hasAny(...group.reactions.map((r) => r.roleId))) {
+      const removed = await member.roles
+        .remove(member.roles.cache.filter((r) => group.reactions.map((rea) => rea.roleId).includes(r.id))!)
+        .catch((err) => logger.debug({ err }, 'ReactionRoles | Select: Could not remove role'));
+
+      if (!removed) {
+        return;
+      }
+    }
+
     if (member.roles.cache.has(role.id)) {
       return;
     }

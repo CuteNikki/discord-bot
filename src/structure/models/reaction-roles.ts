@@ -9,6 +9,8 @@ export const reactionRoleGroupModel: Model<ReactionRoleGroupDocument> =
     new Schema<ReactionRoleGroupDocument>({
       messageId: { type: String, required: true },
       channelId: { type: String, required: true },
+      singleMode: { type: Boolean, required: false, default: false },
+      requiredRoles: [{ type: String, required: true }],
       reactions: [{ emoji: { type: String, required: true }, roleId: { type: String, required: true } }]
     })
   );

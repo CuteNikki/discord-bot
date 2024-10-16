@@ -334,6 +334,8 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
     - [ ] Lights Out (maybe?)
 - [ ] config commands
   - [x] reaction roles (already implemented)
+    - [ ] single mode (only able to select one role)
+    - [ ] required roles to use the reaction group
     - [ ] fully customizable message
   - [ ] word chain game (next word needs to start with the last letter of the previous word)
   - [ ] economy

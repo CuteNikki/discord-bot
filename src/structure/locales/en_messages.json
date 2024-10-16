@@ -217,18 +217,8 @@
   },
   "welcome": {
     "roles": {
-      "add-role-modal-title": "Add Welcome Role",
-      "add-role-modal-input": "Role ID",
-      "remove-role-modal-title": "Remove Welcome Role",
-      "remove-role-modal-input": "Role ID",
-      "title": "Roles",
-      "already": "That role ({roleId}) is already in the welcome roles!",
-      "invalid": "That role ({roleId}) does not exist on the server!",
-      "added": "The role ({{role}}) has been added to the welcome roles!",
-      "removed": "The role ({{roleId}}) has been removed from the welcome roles!",
-      "none": "The role ({{roleId}}) is not in the welcome roles!",
-      "add-role-button": "Add Role",
-      "remove-role-button": "Remove Role"
+      "title": "Welcome roles",
+      "placeholder": "Add/Remove roles"
     },
     "channel": {
       "invalid": "You did not provide a channel and there is none to remove!",

@@ -215,18 +215,8 @@
   },
   "welcome": {
     "roles": {
-      "add-role-modal-title": "Willkommens-Rolle hinzufügen",
-      "add-role-modal-input": "Rollen-ID",
-      "remove-role-modal-title": "Willkommens-Rolle entfernen",
-      "remove-role-modal-input": "Rollen-ID",
-      "title": "Rollen",
-      "already": "Die Rolle ({roleId}) ist bereits eine Willkommensrolle!",
-      "invalid": "Die Rolle ({roleId}) existiert nicht auf dem Server!",
-      "added": "Die Rolle ({{role}}) wurde zu den Willkommensrollen hinzugefügt!",
-      "removed": "Die Rolle ({{roleId}}) wurde von den Willkommensrollen entfernt!",
-      "none": "Die Rolle ({{roleId}}) ist keine Willkommensrolle!",
-      "add-role-button": "Rolle hinzufügen",
-      "remove-role-button": "Rolle entfernen"
+      "title": "Willkommensrollen",
+      "placeholder": "Rollen hinzufügen/entfernen"
     },
     "channel": {
       "invalid": "Du hast keinen Kanal angegeben und es gibt keinen zum entfernen!",

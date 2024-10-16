@@ -1,8 +1,6 @@
 import {
   ActionRowBuilder,
   ApplicationIntegrationType,
-  ButtonBuilder,
-  ButtonStyle,
   channelMention,
   ChannelType,
   EmbedBuilder,
@@ -10,6 +8,7 @@ import {
   InteractionContextType,
   PermissionFlagsBits,
   roleMention,
+  RoleSelectMenuBuilder,
   SlashCommandBuilder
 } from 'discord.js';
 import { t } from 'i18next';
@@ -101,30 +100,35 @@ export default new Command({
         break;
       case 'roles':
         {
-          const rolesEmbed = new EmbedBuilder().setColor(client.colors.welcome).addFields({
-            name: t('welcome.roles.title', { lng }),
-            value: welcome.roles.length
-              ? welcome.roles
-                  .map((r) => {
-                    const role = guild.roles.cache.get(r);
-                    return role ? role.toString() : r;
-                  })
-                  .join('\n')
-              : t('none', { lng })
-          });
-          const warning = new EmbedBuilder()
-            .setColor(client.colors.warning)
-            .setDescription(`${client.customEmojis.warning} ${t('welcome.state.warning', { lng })}`);
+          const rolesEmbed = new EmbedBuilder()
+            .setColor(client.colors.welcome)
+            .setTitle(t('welcome.roles.title', { lng }))
+            .setDescription(
+              welcome.roles.length
+                ? welcome.roles
+                    .map((r) => {
+                      const role = guild.roles.cache.get(r);
+                      return role ? role.toString() : r;
+                    })
+                    .join('\n')
+                : t('none', { lng })
+            );
 
           interaction.editReply({
-            embeds: welcome.enabled ? [rolesEmbed] : [warning, rolesEmbed],
+            embeds: welcome.enabled
+              ? [rolesEmbed]
+              : [
+                  rolesEmbed,
+                  new EmbedBuilder().setColor(client.colors.warning).setDescription(`${client.customEmojis.warning} ${t('welcome.state.warning', { lng })}`)
+                ],
             components: [
-              new ActionRowBuilder<ButtonBuilder>().addComponents(
-                new ButtonBuilder().setCustomId('button-welcome-add-role').setLabel(t('welcome.roles.add-role-button', { lng })).setStyle(ButtonStyle.Success),
-                new ButtonBuilder()
-                  .setCustomId('button-welcome-remove-role')
-                  .setLabel(t('welcome.roles.remove-role-button', { lng }))
-                  .setStyle(ButtonStyle.Danger)
+              new ActionRowBuilder<RoleSelectMenuBuilder>().addComponents(
+                new RoleSelectMenuBuilder()
+                  .setCustomId('selection-welcome-roles')
+                  .setDefaultRoles(welcome.roles)
+                  .setMinValues(0)
+                  .setMaxValues(15)
+                  .setPlaceholder(t('welcome.roles.placeholder', { lng }))
               )
             ]
           });

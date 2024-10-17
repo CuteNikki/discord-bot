@@ -36,7 +36,7 @@ export default new Button({
 
     if (
       group.requiredRoles?.length &&
-      !interaction.member.roles.cache.hasAll(...group.requiredRoles) &&
+      !interaction.member.roles.cache.hasAny(...group.requiredRoles) &&
       !interaction.member.permissions.has(PermissionFlagsBits.ManageRoles)
     ) {
       const roles = group.requiredRoles.map((r) => roleMention(r));

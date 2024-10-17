@@ -44,7 +44,7 @@ export default new Event({
       return;
     }
 
-    if (group.requiredRoles?.length && !member.roles.cache.hasAll(...group.requiredRoles) && !member.permissions.has(PermissionFlagsBits.ManageRoles)) {
+    if (group.requiredRoles?.length && !member.roles.cache.hasAny(...group.requiredRoles) && !member.permissions.has(PermissionFlagsBits.ManageRoles)) {
       return;
     }
 

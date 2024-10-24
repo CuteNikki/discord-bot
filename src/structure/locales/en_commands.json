@@ -1480,9 +1480,15 @@
   "userinfo-context": {
     "name": "View User-Information"
   },
-  "vanity": {
+  "vanity-check": {
     "name": "vanity-check",
-    "description": "Check to see if a vanity url is available"
+    "description": "Check to see if a vanity url is available",
+    "options": [
+      {
+        "name": "url",
+        "description": "The vanity url to check"
+      }
+    ]
   },
   "weather": {
     "name": "weather",

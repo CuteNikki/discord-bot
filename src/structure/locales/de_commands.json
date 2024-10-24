@@ -1474,9 +1474,15 @@
   "userinfo-context": {
     "name": "User-Informationen ansehen"
   },
-  "vanity": {
+  "vanity-check": {
     "name": "vanity-check",
-    "description": "Überprüft, ob eine Vanity-URL verfügbar ist"
+    "description": "Überprüft, ob eine Vanity-URL verfügbar ist",
+    "options": [
+      {
+        "name": "url",
+        "description": "Die Vanity-URL, die überprüft werden soll"
+      }
+    ]
   },
   "weather": {
     "name": "wetter",

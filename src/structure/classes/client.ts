@@ -49,7 +49,8 @@ export class DiscordClient extends Client {
     giveaway: Colors.Yellow,
     developer: Colors.Blurple,
     starboard: Colors.Gold,
-    moderation: Colors.Red
+    moderation: Colors.Red,
+    fun: Colors.DarkGold
   };
 
   // Custom emojis

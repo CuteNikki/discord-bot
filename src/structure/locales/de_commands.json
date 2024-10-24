@@ -1,4 +1,63 @@
 {
+  "action": {
+    "name": "aktion",
+    "description": "Sendet ein GIF deiner Wahl (z.B. erröten, tanzen, weinen und mehr)",
+    "options": [
+      {
+        "name": "aktion",
+        "description": "Die Aktion, die du ausführen möchtest",
+        "choices": [
+          "erröten",
+          "verwirrt",
+          "cringen",
+          "weinen",
+          "tanzen",
+          "essen",
+          "glücklich",
+          "traurig",
+          "lächeln",
+          "smug",
+          "nachdenken",
+          "daumen-hoch",
+          "winken",
+          "zwinkern"
+        ]
+      }
+    ]
+  },
+  "interaction": {
+    "name": "interaktion",
+    "description": "Sendet ein GIF deiner Wahl (z.B. umarmen, küssen, schlagen und mehr)",
+    "options": [
+      {
+        "name": "aktion",
+        "description": "Die Aktion, die du ausführen möchtest",
+        "choices": [
+          "beißen",
+          "hauen",
+          "mobben",
+          "kuscheln",
+          "füttern",
+          "high-five",
+          "händchen-halten",
+          "umarmen",
+          "treten",
+          "küssen",
+          "töten",
+          "tätscheln",
+          "anstupsen",
+          "schlagen",
+          "umrennen",
+          "kitzeln",
+          "werfen"
+        ]
+      },
+      {
+        "name": "ziel",
+        "description": "Der User, mit dem du interagieren möchtest"
+      }
+    ]
+  },
   "roleinfo": {
     "name": "rollen-informationen",
     "description": "Zeigt Informationen über eine Rolle an",

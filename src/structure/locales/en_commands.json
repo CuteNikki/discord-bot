@@ -1,4 +1,48 @@
 {
+  "action": {
+    "name": "action",
+    "description": "Sends a GIF of your choice (e.g. blush, dance, cry and more)",
+    "options": [
+      {
+        "name": "action",
+        "description": "The action to perform",
+        "choices": ["blush", "confused", "cringe", "cry", "dance", "eat", "happy", "sad", "sip", "smile", "smug", "think", "thumbsup", "wave", "wink"]
+      }
+    ]
+  },
+  "interaction": {
+    "name": "interaction",
+    "description": "Sends a GIF of your choice (e.g. hug, bonk, yeet and more)",
+    "options": [
+      {
+        "name": "action",
+        "description": "The action to perform",
+        "choices": [
+          "bite",
+          "bonk",
+          "bully",
+          "cuddle",
+          "feed",
+          "high-five",
+          "hug",
+          "hold-hands",
+          "kick",
+          "kiss",
+          "kill",
+          "pat",
+          "poke",
+          "slap",
+          "tackle",
+          "tickle",
+          "yeet"
+        ]
+      },
+      {
+        "name": "target",
+        "description": "The user to interact with"
+      }
+    ]
+  },
   "roleinfo": {
     "name": "role-information",
     "description": "Shows information about a role",

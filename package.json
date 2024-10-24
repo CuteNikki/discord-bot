@@ -11,6 +11,7 @@
     "canvacord": "^6.0.2",
     "cron": "^3.1.7",
     "dayjs": "^1.11.13",
+    "discord-actions": "^2.3.13",
     "discord-html-transcripts": "^3.2.0",
     "discord-hybrid-sharding": "^2.2.3",
     "discord.js": "^14.16.3",

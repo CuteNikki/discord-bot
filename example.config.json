@@ -21,7 +21,7 @@
     "ERROR_WEBHOOK": "optional",
 
     "comment_7": "This is the webhook url that will be used to send bugreports",
-    "BUGREPORT_WEBHOOK": "optional"
+    "BUG_REPORT_WEBHOOK": "optional"
   },
   "DATABASE": {
     "comment_8": "Get your URI from https://www.mongodb.com/",

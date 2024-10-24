@@ -39,7 +39,10 @@ export default new Command({
     await interaction.deferReply({ ephemeral });
 
     const categories = Object.values(ModuleType)
-      .filter((category) => typeof category !== 'string' && category !== ModuleType.Developer)
+      .filter(
+        (category) =>
+          typeof category !== 'string' && category !== ModuleType.Developer && client.commands.filter((cmd) => cmd.options.module === category).size > 0
+      )
       .map((category) => ({
         label: ModuleType[category as number],
         value: category.toString()
@@ -128,8 +131,8 @@ export default new Command({
             .setTitle(categoryName)
             .addFields(
               chunk.map((cmd) => ({
-                name: `</${cmd.name}:${applicationCmds.find((c) => c.name === cmd.name)?.id}>`,
-                value: cmd.description
+                name: `</${t(`${cmd.name}.name`, { lng, ns: 'commands' })}:${applicationCmds.find((c) => c.name === cmd.name)?.id}>`,
+                value: t(`${cmd.name}.description`, { lng, ns: 'commands' })
               }))
             )
         )

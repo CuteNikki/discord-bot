@@ -1,4 +1,18 @@
 {
+  "roleinfo": {
+    "name": "role-information",
+    "description": "Shows information about a role",
+    "options": [
+      {
+        "name": "role",
+        "description": "The role to show information of"
+      },
+      {
+        "name": "ephemeral",
+        "description": "If *True*, message can only be seen by you"
+      }
+    ]
+  },
   "bug-report": {
     "name": "bug-report",
     "description": "Send a bug-report to the developer"

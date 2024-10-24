@@ -1,4 +1,17 @@
 {
+  "roleinfo": {
+    "title": "Rolleninformationen",
+    "name": "Name",
+    "id": "ID",
+    "color": "Farbe",
+    "position": " Position",
+    "managed": "Verwaltet",
+    "created-at": "Erstellt am",
+    "hoist": "Separat angezeigt",
+    "mentionable": "Erwähnbar",
+    "members": "Mitglieder mit der Rolle",
+    "permissions": "Berechtigungen"
+  },
   "bug-report": {
     "title": "Fehlermeldung",
     "description": "Beschreibe deinen Fehler",

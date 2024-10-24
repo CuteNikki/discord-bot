@@ -1,4 +1,18 @@
 {
+  "roleinfo": {
+    "name": "rollen-informationen",
+    "description": "Zeigt Informationen über eine Rolle an",
+    "options": [
+      {
+        "name": "rolle",
+        "description": "Die Rolle, über die Informationen angezeigt werden sollen"
+      },
+      {
+        "name": "geheim",
+        "description": "Wenn *True*, kann die Nachricht nur von dir gesehen werden"
+      }
+    ]
+  },
   "bug-report": {
     "name": "fehlermeldung",
     "description": "Sende eine Fehlermeldung an den Entwickler"

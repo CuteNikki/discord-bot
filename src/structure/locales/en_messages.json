@@ -1,4 +1,17 @@
 {
+  "roleinfo": {
+    "title": "Role Information",
+    "name": "Name",
+    "id": "ID",
+    "color": "Color",
+    "position": "Position",
+    "managed": "Managed",
+    "created-at": "Created at",
+    "hoist": "Displayed Separately",
+    "mentionable": "Mentionable",
+    "members": "Members with Role",
+    "permissions": "Permissions"
+  },
   "bug-report": {
     "title": "Bug-Report",
     "description": "Describe your bug",

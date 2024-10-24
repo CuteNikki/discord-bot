@@ -147,6 +147,7 @@ export class Sokoban {
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
       board = this.createEmptyBoard(rows, cols);
       this.placeWalls(board); // Place walls
+      this.placePlayer(board); // Place player
       const { boxes, storages } = this.placeBoxesAndStorages(board);
 
       // Check if all boxes are reachable

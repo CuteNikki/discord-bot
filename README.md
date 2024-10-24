@@ -332,8 +332,7 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
   - [x] game command
     - [ ] 2048 (maybe?)
     - [ ] Lights Out (maybe?)
-- [ ] config commands
-  - [ ] Adjust welcome roles to use a select menu rather than a modal with ids
+- [ ] config 
   - [x] reaction roles (already implemented)
     - [ ] fully customizable message
   - [ ] word chain game (next word needs to start with the last letter of the previous word)

@@ -1,4 +1,4 @@
-import { Colors, EmbedBuilder, Events } from 'discord.js';
+import { AttachmentBuilder, Colors, EmbedBuilder, Events } from 'discord.js';
 import { t } from 'i18next';
 
 import { Event } from 'classes/event';
@@ -16,7 +16,12 @@ export default new Event({
   async execute(_client, oldMessage, newMessage) {
     const guild = newMessage.guild;
 
-    if (!guild || !newMessage.author || newMessage.author.bot) {
+    if (
+      !guild ||
+      !newMessage.author ||
+      newMessage.author.bot ||
+      (oldMessage.content === newMessage.content && oldMessage.attachments.size === newMessage.attachments.size && oldMessage.pinned === newMessage.pinned)
+    ) {
       return;
     }
 
@@ -110,7 +115,18 @@ export default new Event({
 
     await logChannel
       .send({
-        embeds: [embed]
+        embeds: [embed],
+        files:
+          (oldMessage.content?.length ?? 0) > 950 || (newMessage.content?.length ?? 0) > 950
+            ? [
+                new AttachmentBuilder(Buffer.from(oldMessage.content ?? ''), {
+                  name: 'old-msg-content.txt'
+                }),
+                new AttachmentBuilder(Buffer.from(oldMessage.content ?? ''), {
+                  name: 'new-msg-content.txt'
+                })
+              ]
+            : []
       })
       .catch((err) => logger.debug({ err }, 'GuildLog | MessageUpdate: Could not send message'));
   }

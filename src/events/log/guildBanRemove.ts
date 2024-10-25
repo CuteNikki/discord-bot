@@ -14,11 +14,13 @@ export default new Event({
   name: Events.GuildBanRemove,
   once: false,
   async execute(_client, ban) {
-    const { guild, user, reason, partial } = ban;
+    const details = await ban.fetch().catch((err) => logger.debug({ err }, 'GuildLog | GuildBanRemove: Could not fetch ban'));
 
-    if (partial) {
-      await ban.fetch().catch((err) => logger.debug({ err }, 'GuildLog | GuildBanRemove: Could not fetch ban'));
+    if (!details) {
+      return;
     }
+
+    const { guild, user, reason } = details;
 
     const log = (await getGuildLog(guild.id)) ?? { enabled: false, events: [] as GuildLogEvent[] };
 

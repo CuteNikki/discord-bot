@@ -93,17 +93,18 @@ export default new Event({
       );
     }
 
-    if (newMessage.attachments.size !== oldMessage.attachments.size) {
+    if ((newMessage.attachments.size ?? 0) !== (oldMessage.attachments.size ?? 0)) {
       const oldAttachments = oldMessage.attachments.map((a) => a);
       const newAttachments = newMessage.attachments.map((a) => a);
 
       embed.addFields({
         name: t('log.messageUpdate.deleted-attachments', { lng }),
-        value: oldAttachments
-          .filter((attachment) => newAttachments.map((att) => att.id).includes(attachment.id))
-          .map((attachment) => attachment.url)
-          .join('\n')
-          .slice(0, 1000)
+        value:
+          oldAttachments
+            .filter((attachment) => newAttachments.map((att) => att.id).includes(attachment.id))
+            .map((attachment) => attachment.url)
+            .join('\n')
+            .slice(0, 1000) ?? t('none', { lng })
       });
     }
 

@@ -97,14 +97,11 @@ export default new Event({
       const oldAttachments = oldMessage.attachments.map((a) => a);
       const newAttachments = newMessage.attachments.map((a) => a);
 
+      const removedAttachments = oldAttachments.filter((a) => !newAttachments.some((b) => a.id === b.id)).map((a) => a.url);
+
       embed.addFields({
         name: t('log.messageUpdate.deleted-attachments', { lng }),
-        value:
-          oldAttachments
-            .filter((attachment) => newAttachments.map((att) => att.id).includes(attachment.id))
-            .map((attachment) => attachment.url)
-            .join('\n')
-            .slice(0, 1000) ?? t('none', { lng })
+        value: removedAttachments.length ? removedAttachments.join('\n').slice(0, 1000) : t('none', { lng })
       });
     }
 

@@ -1,15 +1,22 @@
-# Economy System
+## Economy System
 
-## Overview
+### Overview
 
 Users can manage their money through a wallet or a bank account. The system provides various commands to interact with their finances and items.
+
+### Features
+
+- **Wallet and Bank**: Manage money in the wallet or bank.
+- **Marriage System**: Marry another user and display the status on the profile.
+- **Profiles**: Display badges, marriage status, and other information.
+- **Gambling System**: Engage in various gambling activities to win or lose money.
 
 ### Notation
 
 - `[]` = optional argument
 - `<>` = required argument
 
-## Financial Commands
+### Financial Commands
 
 | Command                | Description                                              |
 | ---------------------- | -------------------------------------------------------- |
@@ -21,7 +28,7 @@ Users can manage their money through a wallet or a bank account. The system prov
 | `/daily`               | Claim the daily reward                                   |
 | `/leaderboard`         | View top users based on wealth.                          |
 
-## Item Commands
+### Item Commands
 
 | Command                   | Description                                                      |
 | ------------------------- | ---------------------------------------------------------------- |
@@ -31,14 +38,14 @@ Users can manage their money through a wallet or a bank account. The system prov
 | `/transfer <item> <user>` | Give items to another user                                       |
 | `/inventory`              | Check the current inventory of items                             |
 
-## Marriage Commands
+### Marriage Commands
 
 | Command         | Description                                 |
 | --------------- | ------------------------------------------- |
 | `/marry <user>` | Marry another user (requires marriage ring) |
 | `/divorce`      | End a marriage (ring not returned)          |
 
-## Gambling Commands
+### Gambling Commands
 
 | Command              | Description                                  |
 | -------------------- | -------------------------------------------- |
@@ -47,16 +54,9 @@ Users can manage their money through a wallet or a bank account. The system prov
 | `/coinflip <amount>` | Flip a coin and double your money if you win |
 | `/dice <amount>`     | Roll a dice and win based on the outcome     |
 
-## Profile Commands
+### Profile Commands
 
 | Command                     | Description                   |
 | --------------------------- | ----------------------------- |
 | `/profile view [user]`      | View the profile of a user    |
 | `/profile edit description` | Edit your profile description |
-
-## Features
-
-- **Wallet and Bank**: Manage money in the wallet or bank.
-- **Marriage System**: Marry another user and display the status on the profile.
-- **Profiles**: Display badges, marriage status, and other information.
-- **Gambling System**: Engage in various gambling activities to win or lose money.

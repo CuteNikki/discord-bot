@@ -264,6 +264,16 @@
             "description": "The limit of members"
           }
         ]
+      },
+      {
+        "name": "transfer",
+        "description": "Transfer ownership of the voice channel to someone else",
+        "options": [
+          {
+            "name": "member",
+            "description": "The member to transfer the ownership to"
+          }
+        ]
       }
     ]
   },

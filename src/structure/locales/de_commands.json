@@ -279,6 +279,16 @@
             "description": "Das Limit an Mitgliedern"
           }
         ]
+      },
+      {
+        "name": "transferieren",
+        "description": "Überträgt den Besitz des Kanals an jemand anderen",
+        "options": [
+          {
+            "name": "mitglied",
+            "description": "Das Mitglied, dem du den Kanal übertragen möchtest"
+          }
+        ]
       }
     ]
   },

@@ -212,6 +212,13 @@
     }
   },
   "custom-vc": {
+    "transfer": {
+      "not-found": "Das Mitglied konnte nicht gefunden werden!",
+      "already": "Das Mitglied besitzt bereits einen anderen Kanal!",
+      "already-owns": "Das Mitglied besitzt bereits den benutzerdefinierten Sprachkanal!",
+      "success": "Der Besitz des benutzerdefinierten Sprachkanals wurde erfolgreich an {{user}} übertragen!",
+      "error": "Der Besitz des benutzerdefinierten Sprachkanals konnte nicht übertragen werden!"
+    },
     "max-members": {
       "title": "Maximale Mitglieder",
       "already": "Das ist bereits die Anzahl an maximale Mitglieder!",

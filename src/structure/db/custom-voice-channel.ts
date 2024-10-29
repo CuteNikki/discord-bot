@@ -78,3 +78,13 @@ export async function deleteCustomVoiceChannel(channelId: string): Promise<Custo
 export async function createCustomVoiceChannel(channelId: string, guildId: string, ownerId: string): Promise<CustomVoiceChannelDocument> {
   return await updateCustomVoiceChannel(channelId, { channelId, guildId, ownerId });
 }
+
+/**
+ * Set the owner of a custom voice channel
+ * @param {string} channelId Channel ID to set the owner for
+ * @param {string} ownerId Owner ID to set
+ * @returns {Promise<CustomVoiceChannelDocument>} Updated custom voice channel
+ */
+export async function setCustomVoiceOwner(channelId: string, ownerId: string): Promise<CustomVoiceChannelDocument> {
+  return await updateCustomVoiceChannel(channelId, { ownerId });
+}

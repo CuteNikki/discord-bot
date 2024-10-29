@@ -3,7 +3,7 @@ import { t } from 'i18next';
 
 import { Command } from 'classes/command';
 
-import { getCustomVoiceChannel } from 'db/custom-voice-channel';
+import { getCustomVoiceChannel, getCustomVoiceChannelByOwner, setCustomVoiceOwner } from 'db/custom-voice-channel';
 
 import { logger } from 'utils/logger';
 
@@ -36,6 +36,12 @@ export default new Command({
         .setName('max-members')
         .setDescription('Change the max amount of members for your custom voice')
         .addIntegerOption((option) => option.setName('limit').setDescription('The limit of members').setMinValue(0).setMaxValue(99).setRequired(true))
+    )
+    .addSubcommand((cmd) =>
+      cmd
+        .setName('transfer')
+        .setDescription('Transfer ownership of the custom voice channel to someone else')
+        .addUserOption((option) => option.setName('member').setDescription('The member to transfer the ownership to').setRequired(true))
     ),
   async execute({ client, interaction, lng }) {
     if (!interaction.inCachedGuild()) {
@@ -207,6 +213,57 @@ export default new Command({
             logger.debug(err, 'Could not change max members');
             await interaction.editReply({
               embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom-vc.max-members.error', { lng }))]
+            });
+          }
+        }
+        break;
+      case 'transfer':
+        {
+          const user = interaction.options.getUser('member', true);
+          const member = interaction.guild.members.cache.get(user.id);
+
+          if (!member) {
+            await interaction.editReply({
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom-vc.transfer.not-found', { lng }))]
+            });
+            return;
+          }
+
+          if (member.id === customVoiceChannel.ownerId) {
+            await interaction.editReply({
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom-vc.transfer.already', { lng }))]
+            });
+            return;
+          }
+
+          const alreadyOwnsChannel = await getCustomVoiceChannelByOwner(member.id);
+
+          if (alreadyOwnsChannel) {
+            await interaction.editReply({
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom-vc.transfer.already-owns', { lng }))]
+            });
+            return;
+          }
+
+          try {
+            await voiceChannel.edit({ name: member.user.username });
+            await voiceChannel.permissionOverwrites.edit(member.id, {
+              Connect: true,
+              Speak: true,
+              ViewChannel: true,
+              SendMessages: true,
+              UseApplicationCommands: true
+            });
+
+            await setCustomVoiceOwner(voiceChannel.id, member.id);
+
+            await interaction.editReply({
+              embeds: [new EmbedBuilder().setColor(client.colors.customVC).setDescription(t('custom-vc.transfer.success', { lng, user: member.toString() }))]
+            });
+          } catch (err) {
+            logger.debug(err, 'Could not transfer ownership');
+            await interaction.editReply({
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom-vc.transfer.error', { lng }))]
             });
           }
         }

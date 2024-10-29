@@ -215,6 +215,13 @@
     }
   },
   "custom-vc": {
+    "transfer": {
+      "not-found": "That member could not be found!",
+      "already": "That member is already the owner of the custom voice channel!",
+      "already-owns": "That member already owns another channel!",
+      "success": "The owner of the custom voice channel has been transferred to {{user}}!",
+      "error": "Could not transfer the ownership of the custom voice channel!"
+    },
     "max-members": {
       "title": "Max members",
       "already": "That is already the max member limit!",

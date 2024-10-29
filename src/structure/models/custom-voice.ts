@@ -10,6 +10,7 @@ export const customVoiceModel: Model<CustomVoiceDocument> =
       guildId: { type: String, required: true },
       enabled: { type: Boolean, required: true, default: false },
       channelId: { type: String, required: true },
-      parentId: { type: String, required: true }
+      parentId: { type: String, required: true },
+      defaultLimit: { type: Number, required: false }
     })
   );

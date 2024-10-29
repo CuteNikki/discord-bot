@@ -212,6 +212,12 @@
     }
   },
   "custom-vc": {
+    "max-members": {
+      "title": "Maximale Mitglieder",
+      "already": "Das ist bereits die Anzahl an maximale Mitglieder!",
+      "success": "Die maximale Anzahl an Mitgliedern ist nun {{limit}}.",
+      "error": "Die maximale Anzahl an Mitgliedern konnte nicht geändert werden!"
+    },
     "channel": {
       "not-set": "Du hast keinen Kanal angegeben und es gibt keinen zum Entfernen!",
       "removed": "Der benutzerdefinierte Sprachkanal wurde entfernt!",

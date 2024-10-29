@@ -37,11 +37,21 @@ export default new Event({
         name: newState.member.user.username,
         type: ChannelType.GuildVoice,
         parent: config.parentId ?? newState.guild.channels.cache.get(config.channelId)?.parentId ?? null,
+        userLimit: config.defaultLimit ?? undefined,
         permissionOverwrites: [
           {
             id: newState.guild.id,
-            deny: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages, PermissionFlagsBits.Connect, PermissionFlagsBits.Speak],
             allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages, PermissionFlagsBits.Connect, PermissionFlagsBits.Speak]
+          },
+          {
+            id: newState.member.id,
+            allow: [
+              PermissionFlagsBits.ViewChannel,
+              PermissionFlagsBits.SendMessages,
+              PermissionFlagsBits.Connect,
+              PermissionFlagsBits.Speak,
+              PermissionFlagsBits.UseApplicationCommands
+            ]
           }
         ]
       })

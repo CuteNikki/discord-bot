@@ -30,6 +30,12 @@ export default new Command({
         .setName('remove')
         .setDescription('Remove permissions from someone to join your channel')
         .addUserOption((option) => option.setName('user').setDescription('The user to remove permissions of').setRequired(true))
+    )
+    .addSubcommand((cmd) =>
+      cmd
+        .setName('max-members')
+        .setDescription('Change the max amount of members for your custom voice')
+        .addIntegerOption((option) => option.setName('limit').setDescription('The limit of members').setMinValue(0).setMaxValue(99).setRequired(true))
     ),
   async execute({ client, interaction, lng }) {
     if (!interaction.inCachedGuild()) {
@@ -65,8 +71,15 @@ export default new Command({
           }
 
           try {
-            await voiceChannel.permissionOverwrites.edit(interaction.guildId, { Connect: true, Speak: true, ViewChannel: true, SendMessages: true });
-            await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.customVC).setDescription(t('custom-vc.public.success', { lng }))] });
+            await voiceChannel.permissionOverwrites.edit(interaction.guildId, {
+              Connect: true,
+              Speak: true,
+              ViewChannel: true,
+              SendMessages: true
+            });
+            await interaction.editReply({
+              embeds: [new EmbedBuilder().setColor(client.colors.customVC).setDescription(t('custom-vc.public.success', { lng }))]
+            });
           } catch (err) {
             logger.debug(err, 'Could not give permissions');
             await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom-vc.public.error', { lng }))] });
@@ -81,8 +94,15 @@ export default new Command({
           }
 
           try {
-            await voiceChannel.permissionOverwrites.edit(interaction.guildId, { Connect: false, Speak: false, ViewChannel: false, SendMessages: false });
-            await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.customVC).setDescription(t('custom-vc.private.success', { lng }))] });
+            await voiceChannel.permissionOverwrites.edit(interaction.guildId, {
+              Connect: false,
+              Speak: false,
+              ViewChannel: false,
+              SendMessages: false
+            });
+            await interaction.editReply({
+              embeds: [new EmbedBuilder().setColor(client.colors.customVC).setDescription(t('custom-vc.private.success', { lng }))]
+            });
           } catch (err) {
             logger.debug(err, 'Could not remove permissions');
             await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom-vc.private.error', { lng }))] });
@@ -104,7 +124,12 @@ export default new Command({
           }
 
           try {
-            await voiceChannel.permissionOverwrites.edit(user.id, { Connect: true, Speak: true, ViewChannel: true, SendMessages: true });
+            await voiceChannel.permissionOverwrites.edit(user.id, {
+              Connect: true,
+              Speak: true,
+              ViewChannel: true,
+              SendMessages: true
+            });
             await interaction.editReply({
               embeds: [new EmbedBuilder().setColor(client.colors.customVC).setDescription(t('custom-vc.invite.success', { lng, user: user.toString() }))]
             });
@@ -142,7 +167,12 @@ export default new Command({
           }
 
           try {
-            await voiceChannel.permissionOverwrites.edit(user.id, { Connect: false, Speak: false, ViewChannel: false, SendMessages: false });
+            await voiceChannel.permissionOverwrites.edit(user.id, {
+              Connect: false,
+              Speak: false,
+              ViewChannel: false,
+              SendMessages: false
+            });
             response += t('custom-vc.remove.success', { lng, user: user.toString() });
           } catch (err) {
             logger.debug(err, 'Could not remove permissions from user');
@@ -155,6 +185,30 @@ export default new Command({
           }
 
           await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.customVC).setDescription(response)] });
+        }
+        break;
+      case 'max-members':
+        {
+          const limit = interaction.options.getInteger('limit', true);
+
+          if (limit === voiceChannel.userLimit) {
+            await interaction.editReply({
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom-vc.max-members.already', { lng }))]
+            });
+            return;
+          }
+
+          try {
+            await voiceChannel.edit({ userLimit: limit });
+            await interaction.editReply({
+              embeds: [new EmbedBuilder().setColor(client.colors.customVC).setDescription(t('custom-vc.max-members.success', { lng, limit }))]
+            });
+          } catch (err) {
+            logger.debug(err, 'Could not change max members');
+            await interaction.editReply({
+              embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom-vc.max-members.error', { lng }))]
+            });
+          }
         }
         break;
     }

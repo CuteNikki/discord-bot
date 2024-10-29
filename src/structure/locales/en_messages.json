@@ -215,6 +215,12 @@
     }
   },
   "custom-vc": {
+    "max-members": {
+      "title": "Max members",
+      "already": "That is already the max member limit!",
+      "success": "The max member limit was set to {{limit}}.",
+      "error": "Could not set the max member limit!"
+    },
     "channel": {
       "not-set": "You did not provide a channel and there is none to remove!",
       "removed": "The custom voice channel has been removed!",

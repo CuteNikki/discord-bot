@@ -6,4 +6,5 @@ export type CustomVoiceDocument = {
   enabled: boolean;
   channelId: string;
   parentId: string;
+  defaultLimit: number;
 };

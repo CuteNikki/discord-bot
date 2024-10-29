@@ -11,7 +11,7 @@ import { t } from 'i18next';
 
 import { Command } from 'classes/command';
 
-import { disableCustomVoice, enableCustomVoice, getCustomVoice, setCustomVoiceChannel, setCustomVoiceParent } from 'db/custom-voice';
+import { disableCustomVoice, enableCustomVoice, getCustomVoice, setCustomVoiceChannel, setCustomVoiceLimit, setCustomVoiceParent } from 'db/custom-voice';
 
 import { ModuleType } from 'types/interactions';
 
@@ -43,13 +43,19 @@ export default new Command({
             .addChannelTypes(ChannelType.GuildCategory)
         )
     )
+    .addSubcommand((cmd) =>
+      cmd
+        .setName('max-members')
+        .setDescription('Sets the default max member limit of the custom voice channels')
+        .addIntegerOption((option) => option.setName('limit').setDescription('The limit of members').setMinValue(0).setMaxValue(99).setRequired(true))
+    )
     .addSubcommand((cmd) => cmd.setName('enable').setDescription('Enables the custom voice channel feature'))
     .addSubcommand((cmd) => cmd.setName('disable').setDescription('Disables the custom voice channel feature'))
     .addSubcommand((cmd) => cmd.setName('info').setDescription('Shows the current custom voice channel settings')),
   async execute({ client, interaction, lng }) {
     if (!interaction.inCachedGuild()) return;
 
-    const config = (await getCustomVoice(interaction.guildId)) ?? { channelId: null, parentId: null, enabled: false };
+    const config = (await getCustomVoice(interaction.guildId)) ?? { channelId: null, parentId: null, enabled: false, defaultLimit: 'infinite' };
 
     switch (interaction.options.getSubcommand()) {
       case 'channel':
@@ -102,6 +108,21 @@ export default new Command({
           await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.customVC).setDescription(t('custom-vc.parent.success', { lng }))] });
         }
         break;
+      case 'max-members':
+        {
+          const limit = interaction.options.getInteger('limit', true);
+
+          if (limit === config.defaultLimit) {
+            await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom-vc.max-members.already', { lng }))] });
+            return;
+          }
+
+          await setCustomVoiceLimit(interaction.guild.id, limit);
+          await interaction.reply({
+            embeds: [new EmbedBuilder().setColor(client.colors.customVC).setDescription(t('custom-vc.max-members.success', { lng, limit }))]
+          });
+        }
+        break;
       case 'enable':
         {
           if (config.enabled) {
@@ -145,7 +166,8 @@ export default new Command({
                 .addFields(
                   { name: t('custom-vc.state.title', { lng }), value: config.enabled ? t('enabled', { lng }) : t('disabled', { lng }) },
                   { name: t('custom-vc.channel.title', { lng }), value: config.channelId ? channelMention(config.channelId) : t('none', { lng }) },
-                  { name: t('custom-vc.parent.title', { lng }), value: config.parentId ? channelMention(config.parentId) : t('none', { lng }) }
+                  { name: t('custom-vc.parent.title', { lng }), value: config.parentId ? channelMention(config.parentId) : t('none', { lng }) },
+                  { name: t('custom-vc.max-members.title', { lng }), value: config.defaultLimit ? config.defaultLimit.toString() : t('none', { lng }) }
                 )
             ]
           });

@@ -83,3 +83,13 @@ export async function enableCustomVoice(guildId: string): Promise<CustomVoiceDoc
 export async function disableCustomVoice(guildId: string): Promise<CustomVoiceDocument> {
   return await updateCustomVoice(guildId, { $set: { enabled: false } });
 }
+
+/**
+ * Sets the default limit of members for custom voice channels
+ * @param {string} guildId Guild ID to set the custom voice config for
+ * @param {number} limit Limit of members for custom voice channels
+ * @returns {Promise<CustomVoiceDocument>} Updated custom voice config
+ */
+export async function setCustomVoiceLimit(guildId: string, limit: number): Promise<CustomVoiceDocument> {
+  return await updateCustomVoice(guildId, { $set: { defaultLimit: limit } });
+}

@@ -254,6 +254,16 @@
             "description": "The user to remove permissions of"
           }
         ]
+      },
+      {
+        "name": "max-members",
+        "description": "Change the max amount of members for you custom voice",
+        "options": [
+          {
+            "name": "limit",
+            "description": "The limit of members"
+          }
+        ]
       }
     ]
   },
@@ -278,6 +288,16 @@
           {
             "name": "category",
             "description": "(leave empty to remove, defaults to the creation channel's parent)"
+          }
+        ]
+      },
+      {
+        "name": "max-members",
+        "description": "The maximum amount of members in a custom voice channel",
+        "options": [
+          {
+            "name": "limit",
+            "description": "The limit of members"
           }
         ]
       },

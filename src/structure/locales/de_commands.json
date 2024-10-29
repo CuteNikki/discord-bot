@@ -269,6 +269,16 @@
             "description": "Der Benutzer, von dem die Rechte entfernt möchtest"
           }
         ]
+      },
+      {
+        "name": "max-mitglieder",
+        "description": "Änder die maximale Anzahl an Mitglieder für deinen Kanal",
+        "options": [
+          {
+            "name": "limit",
+            "description": "Das Limit an Mitgliedern"
+          }
+        ]
       }
     ]
   },
@@ -293,6 +303,16 @@
           {
             "name": "kategorie",
             "description": "(Leer lassen zum entfernen, standardmäßig ist die Kategorie des Erstellungskanals)"
+          }
+        ]
+      },
+      {
+        "name": "max-mitglieder",
+        "description": "Die maximale Anzahl an Mitgliedern für benutzerdefinierte Sprachkanäle",
+        "options": [
+          {
+            "name": "limit",
+            "description": "Die maximale Anzahl an Mitgliedern"
           }
         ]
       },

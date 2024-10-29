@@ -21,14 +21,17 @@
     "ERROR_WEBHOOK": "optional",
 
     "comment_7": "This is the webhook url that will be used to send bugreports",
-    "BUG_REPORT_WEBHOOK": "optional"
+    "BUG_REPORT_WEBHOOK": "optional",
+
+    "comment_8": "This is the weekhook url that will be used for a guild feed",
+    "GUILD_FEED_WEBHOOK": "optional"
   },
   "DATABASE": {
-    "comment_8": "Get your URI from https://www.mongodb.com/",
+    "comment_9": "Get your URI from https://www.mongodb.com/",
     "URI": "required"
   },
   "API_KEYS": {
-    "comment_9": "Get your API key from https://www.weatherapi.com/",
+    "comment_10": "Get your API key from https://www.weatherapi.com/",
     "WEATHER": "required"
   }
 }

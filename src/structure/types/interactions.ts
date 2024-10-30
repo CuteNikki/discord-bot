@@ -8,5 +8,6 @@ export enum ModuleType {
   Fun,
   Ticket,
   Welcome,
-  Farewell
+  Farewell,
+  Economy
 }

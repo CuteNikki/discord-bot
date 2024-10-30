@@ -19,6 +19,21 @@ export const userModel: Model<UserDocument> =
           },
           receivedAt: { type: Number, required: true }
         }
+      ],
+      marriedTo: { type: String, required: false },
+      marriedAt: { type: Number, required: false },
+      lastDaily: { type: Number, required: false },
+      wallet: { type: Number, required: true, default: 0 },
+      bank: { type: Number, required: true, default: 0 },
+      description: { type: String, required: false },
+      inventory: [
+        {
+          id: { type: Number, required: true },
+          category: { type: Number, required: true },
+          emoji: { type: String, required: true },
+          name: { type: String, required: true },
+          description: { type: String, required: true }
+        }
       ]
     })
   );

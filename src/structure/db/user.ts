@@ -5,7 +5,7 @@ import { userModel } from 'models/user';
 import { getUserInfractions } from 'db/infraction';
 import { getUserLevels } from 'db/level';
 
-import { BadgeType, type UserDocument } from 'types/user';
+import { BadgeType, type Item, type UserDocument } from 'types/user';
 
 /**
  * Gets the user data for a given user ID
@@ -13,7 +13,7 @@ import { BadgeType, type UserDocument } from 'types/user';
  * @returns {Promise<UserDocument>} User data
  */
 export async function getUser<T extends boolean>(userId: string, insert: T = false as T): Promise<T extends true ? UserDocument : UserDocument | null> {
-  let document = await userModel.findOne({ userId });
+  let document = await userModel.findOne({ userId }).lean().exec();
 
   if (!document && insert) {
     document = await updateUser(userId, {});
@@ -87,4 +87,122 @@ export async function unbanUser(userId: string): Promise<UserDocument> {
  */
 export async function getBannedUsers(): Promise<UserDocument[]> {
   return await userModel.find({ banned: true }).lean().exec();
+}
+
+/**
+ * Updates the description of a user
+ * @param {string} userId User ID to update the description for
+ * @param {string} description Description to set
+ * @returns {Promise<UserDocument>} Updated user data
+ */
+export async function updateDescription(userId: string, description: string): Promise<UserDocument> {
+  return await updateUser(userId, { $set: { description } });
+}
+
+/**
+ * Marries two users
+ * @param {string} userIdOne First user ID
+ * @param {string} userIdTwo Second user ID
+ * @returns {Promise<{ userOne: UserDocument, userTwo: UserDocument}>} Updated user data for both users
+ */
+export async function marryUsers(userIdOne: string, userIdTwo: string): Promise<{ userOne: UserDocument; userTwo: UserDocument }> {
+  const marriedAt = Date.now();
+
+  const updatedUserOne = await updateUser(userIdOne, { $set: { marriedTo: userIdTwo, marriedAt } });
+  const updatedUserTwo = await updateUser(userIdOne, { $set: { marriedTo: userIdOne, marriedAt } });
+
+  return { userOne: updatedUserOne, userTwo: updatedUserTwo };
+}
+
+/**
+ * Divorces two users
+ * @param {string} userIdOne First user ID
+ * @param {string} userIdTwo Second user ID
+ * @returns {Promise<{ userOne: UserDocument, userTwo: UserDocument}>} Updated user data for both users
+ */
+export async function divorceUsers(userIdOne: string, userIdTwo: string): Promise<{ userOne: UserDocument; userTwo: UserDocument }> {
+  const updatedUserOne = await updateUser(userIdOne, { $set: { marriedTo: null, marriedAt: null } });
+  const updatedUserTwo = await updateUser(userIdTwo, { $set: { marriedTo: null, marriedAt: null } });
+
+  return { userOne: updatedUserOne, userTwo: updatedUserTwo };
+}
+
+/**
+ * Adds an item to the inventory of a user
+ * @param {string} userId User ID to add the item to
+ * @param {Item} item Item to add
+ * @returns {Promise<UserDocument>} Updated user data
+ */
+export async function addItem(userId: string, item: Item): Promise<UserDocument> {
+  return await updateUser(userId, { $push: { inventory: item } });
+}
+
+/**
+ * Removes an item from the inventory of a user
+ * @param {string} userId User ID to remove the item from
+ * @param {number} itemId Item ID to remove
+ * @returns {Promise<UserDocument>} Updated user data
+ */
+export async function removeItem(userId: string, itemId: number): Promise<UserDocument> {
+  return await updateUser(userId, { $pull: { inventory: { id: itemId } } });
+}
+
+/**
+ * Deposits money into the bank of a user
+ * @param {string} userId User ID to deposit the money into
+ * @param {number} amount Amount to deposit
+ * @returns {Promise<UserDocument>} Updated user data
+ */
+export async function deposit(userId: string, amount: number): Promise<UserDocument> {
+  return await updateUser(userId, { $inc: { bank: amount } });
+}
+
+/**
+ * Withdraws money from the bank of a user
+ * @param {string} userId User ID to withdraw the money from
+ * @param {number} amount Amount to withdraw
+ * @returns {Promise<UserDocument>} Updated user data
+ */
+export async function withdraw(userId: string, amount: number): Promise<UserDocument> {
+  return await updateUser(userId, { $inc: { bank: -amount } });
+}
+
+/**
+ * Adds money to the wallet of a user
+ * @param {string} userId User ID to add the money to
+ * @param {number} amount Amount to add
+ * @returns {Promise<UserDocument>} Updated user data
+ */
+export async function addMoney(userId: string, amount: number): Promise<UserDocument> {
+  return await updateUser(userId, { $inc: { wallet: amount } });
+}
+
+/**
+ * Removes money from the wallet of a user
+ * @param {string} userId User ID to remove the money from
+ * @param {number} amount Amount to remove
+ * @returns {Promise<UserDocument>} Updated user data
+ */
+export async function removeMoney(userId: string, amount: number): Promise<UserDocument> {
+  return await updateUser(userId, { $inc: { wallet: -amount } });
+}
+
+/**
+ * Adds money to the wallet of a user
+ * @param {string} userId User ID to add the money to
+ * @param {number} amount Amount to add
+ * @returns {Promise<UserDocument>} Updated user data
+ */
+export async function addBank(userId: string, amount: number): Promise<UserDocument> {
+  return await updateUser(userId, { $inc: { bank: amount } });
+}
+
+/**
+ * Removes money from the wallet of a user
+ * @param {string} userId User ID to remove the money from
+ * @param {number} amount Amount to remove
+ * @returns {Promise<UserDocument>} Updated user data
+ */
+export async function removeBank(userId: string, amount: number): Promise<UserDocument> {
+  return await updateUser(userId, { $inc: { bank: -amount } });
 }

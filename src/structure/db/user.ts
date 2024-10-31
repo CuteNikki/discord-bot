@@ -5,7 +5,7 @@ import { userModel } from 'models/user';
 import { getUserInfractions } from 'db/infraction';
 import { getUserLevels } from 'db/level';
 
-import { BadgeType, type Item, type UserDocument } from 'types/user';
+import { BadgeType, fishingRod, pickaxe, type Item, type UserDocument } from 'types/user';
 
 /**
  * Gets the user data for a given user ID
@@ -138,6 +138,16 @@ export async function addItem(userId: string, item: Item): Promise<UserDocument>
 }
 
 /**
+ * Adds multiple items to the inventory of a user
+ * @param {string} userId User ID to add the items to
+ * @param {Item[]} items Items to add
+ * @returns {Promise<UserDocument>} Updated user data
+ */
+export async function addItems(userId: string, items: Item[]): Promise<UserDocument> {
+  return await updateUser(userId, { $push: { inventory: { $each: items } } });
+}
+
+/**
  * Removes an item from the inventory of a user
  * @param {string} userId User ID to remove the item from
  * @param {number} itemId Item ID to remove
@@ -145,6 +155,16 @@ export async function addItem(userId: string, item: Item): Promise<UserDocument>
  */
 export async function removeItem(userId: string, itemId: number): Promise<UserDocument> {
   return await updateUser(userId, { $pull: { inventory: { id: itemId } } });
+}
+
+/**
+ * Removes multiple items from the inventory of a user
+ * @param {string} userId User ID to remove the items from
+ * @param {number[]} itemIds Item IDs to remove
+ * @returns {Promise<UserDocument>} Updated user data
+ */
+export async function removeItems(userId: string, itemIds: number[]): Promise<UserDocument> {
+  return await updateUser(userId, { $pull: { inventory: { id: { $in: itemIds } } } });
 }
 
 /**
@@ -205,4 +225,17 @@ export async function addBank(userId: string, amount: number): Promise<UserDocum
  */
 export async function removeBank(userId: string, amount: number): Promise<UserDocument> {
   return await updateUser(userId, { $inc: { bank: -amount } });
+}
+
+/**
+ * The user has completed the economy onboarding
+ * @param {string} userId User ID to set the economy onboarding for
+ * @returns {Promise<UserDocument>} Updated user data
+ */
+export async function economyOboarded(userId: string): Promise<UserDocument> {
+  return await updateUser(userId, {
+    $set: { economyOnboarding: false },
+    $push: { inventory: { $each: [pickaxe, fishingRod] } },
+    $inc: { bank: 1000 }
+  });
 }

@@ -3,7 +3,7 @@ import { t } from 'i18next';
 
 import { Command } from 'classes/command';
 
-import { getUser } from 'db/user';
+import { economyOboarded, getUser } from 'db/user';
 
 import { ModuleType } from 'types/interactions';
 import { ItemCategory, type Item } from 'types/user';
@@ -25,19 +25,18 @@ export default new Command({
 
     const user = interaction.options.getUser('user') ?? interaction.user;
 
-    const { inventory } = (await getUser(user.id, user.id === interaction.user.id)) ?? { inventory: [] };
+    let userData = (await getUser(user.id, user.id === interaction.user.id)) ?? { inventory: [], economyOnboarding: false };
 
-    if (!inventory?.length && user.id !== interaction.user.id) {
-      interaction.editReply({ content: t('inventory.failed', { user: user.tag, lng }) });
-      return;
+    if (!userData.economyOnboarding && user.id === interaction.user.id) {
+      userData = await economyOboarded(user.id);
     }
 
-    if (!inventory?.length) {
+    if (!userData.inventory?.length) {
       interaction.editReply({ content: t('inventory.empty', { lng }) });
       return;
     }
 
-    const items = (inventory as (Item & { amount: number })[]).filter((item, index, array) => {
+    const items = (userData.inventory as (Item & { amount: number })[]).filter((item, index, array) => {
       const first = array.findIndex(({ id }) => item.id === id);
 
       if (first === index) return (item.amount = 1);

@@ -3,7 +3,7 @@ import { t } from 'i18next';
 
 import { Command } from 'classes/command';
 
-import { getUser } from 'db/user';
+import { economyOboarded, getUser } from 'db/user';
 
 import { ModuleType } from 'types/interactions';
 
@@ -23,7 +23,11 @@ export default new Command({
 
     const user = interaction.options.getUser('user') ?? interaction.user;
 
-    const userData = (await getUser(user.id, user.id === interaction.user.id)) ?? { bank: 0, wallet: 0 };
+    let userData = (await getUser(user.id, user.id === interaction.user.id)) ?? { bank: 0, wallet: 0, economyOnboarding: true };
+
+    if (userData.economyOnboarding && user.id === interaction.user.id) {
+      userData = await economyOboarded(user.id);
+    }
 
     await interaction.editReply({
       embeds: [

@@ -1,4 +1,4 @@
-import { ApplicationIntegrationType, codeBlock, InteractionContextType, SlashCommandBuilder } from 'discord.js';
+import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, SlashCommandBuilder } from 'discord.js';
 import { t } from 'i18next';
 
 import { Command } from 'classes/command';
@@ -6,7 +6,7 @@ import { Command } from 'classes/command';
 import { getUser } from 'db/user';
 
 import { ModuleType } from 'types/interactions';
-import type { Item, ItemType } from 'types/user';
+import { ItemCategory, type Item } from 'types/user';
 
 export default new Command({
   module: ModuleType.Economy,
@@ -18,7 +18,7 @@ export default new Command({
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
     .addUserOption((option) => option.setName('user').setDescription('The user you want to view the inventory of'))
     .addBooleanOption((option) => option.setName('ephemeral').setDescription('Whether the response should be ephemeral')),
-  async execute({ interaction, lng }) {
+  async execute({ interaction, lng, client }) {
     const ephemeral = interaction.options.getBoolean('ephemeral') ?? true;
 
     await interaction.deferReply({ ephemeral });
@@ -37,23 +37,35 @@ export default new Command({
       return;
     }
 
-    // Create a map to count occurrences of each item
-    const itemCounts = new Map<ItemType, { item: Item; count: number }>();
+    const items = (inventory as (Item & { amount: number })[]).filter((item, index, array) => {
+      const first = array.findIndex(({ id }) => item.id === id);
 
-    inventory.forEach((item) => {
-      if (itemCounts.has(item.id)) {
-        itemCounts.get(item.id)!.count++;
-      } else {
-        itemCounts.set(item.id, { item, count: 1 });
-      }
+      if (first === index) return (item.amount = 1);
+      else array[first].amount++;
     });
 
-    // Convert the map to an array of items with their counts
-    const countedInventory = Array.from(itemCounts.values()).map(({ item, count }) => ({
-      ...item,
-      count
+    const categories = items.map(({ category }) => category).filter((category, index, array) => array.indexOf(category) === index);
+
+    const itemsByCategory = categories.map((category) => ({
+      category,
+      items: items.filter(({ category: c }) => c === category)
     }));
 
-    interaction.editReply({ content: codeBlock('json', JSON.stringify(countedInventory, null, 2)) });
+    await interaction.editReply({
+      embeds: [
+        new EmbedBuilder()
+          .setColor(client.colors.economy)
+          .setAuthor({
+            name: t('inventory.title', { lng, user: user.displayName }),
+            iconURL: user.displayAvatarURL()
+          })
+          .addFields(
+            itemsByCategory.map(({ category, items }) => ({
+              name: ItemCategory[category],
+              value: items.map(({ emoji, name, amount, id, description }) => `**${amount}x** \`${emoji} ${name} (ID: ${id})\`\n${description}`).join('\n')
+            }))
+          )
+      ]
+    });
   }
 });

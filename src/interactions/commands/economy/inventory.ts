@@ -25,9 +25,9 @@ export default new Command({
 
     const user = interaction.options.getUser('user') ?? interaction.user;
 
-    let userData = (await getUser(user.id, user.id === interaction.user.id)) ?? { inventory: [], economyOnboarding: false };
+    let userData = (await getUser(user.id, user.id === interaction.user.id)) ?? { inventory: [], economyOnboarding: true };
 
-    if (!userData.economyOnboarding && user.id === interaction.user.id) {
+    if (userData.economyOnboarding && user.id === interaction.user.id) {
       userData = await economyOboarded(user.id);
     }
 

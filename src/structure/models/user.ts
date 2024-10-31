@@ -20,7 +20,7 @@ export const userModel: Model<UserDocument> =
           receivedAt: { type: Number, required: true }
         }
       ],
-      economyOnboarding: { type: Boolean, required: true, default: false },
+      economyOnboarding: { type: Boolean, required: true, default: true },
       marriedTo: { type: String, required: false },
       marriedAt: { type: Number, required: false },
       lastDaily: { type: Number, required: false },

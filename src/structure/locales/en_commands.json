@@ -1,4 +1,18 @@
 {
+  "balance": {
+    "name": "balance",
+    "description": "Shows your balance or the balance of someone else",
+    "options": [
+      {
+        "name": "user",
+        "description": "The user to show the balance of"
+      },
+      {
+        "name": "ephemeral",
+        "description": "If *True*, message can only be seen by you"
+      }
+    ]
+  },
   "inventory": {
     "name": "inventory",
     "description": "View your own or someone else's inventory",

@@ -1,4 +1,9 @@
 {
+  "balance": {
+    "title": "{{user}}'s Balance",
+    "wallet": "Wallet",
+    "bank": "Bank"
+  },
   "inventory": {
     "empty": "Your inventory is empty!",
     "empty-other": "{{user}}'s inventory is empty!",

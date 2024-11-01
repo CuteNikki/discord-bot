@@ -1,4 +1,9 @@
 {
+  "balance": {
+    "title": "{{user}}'s Guthaben",
+    "wallet": "Geldbörse",
+    "bank": "Bank"
+  },
   "inventory": {
     "empty": "Dein Inventar ist leer!",
     "empty-other": "Das Inventar von {{user}} leer!",

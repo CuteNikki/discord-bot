@@ -255,8 +255,8 @@
         "description": "Lade jemanden ein, deinen Kanal beizutreten",
         "options": [
           {
-            "name": "benutzer",
-            "description": "Der Benutzer, den du einladen möchtest"
+            "name": "mitglied",
+            "description": "Das Mitglied, dass du einladen möchtest"
           }
         ]
       },
@@ -265,8 +265,8 @@
         "description": "Entfernt die Rechte von jemandem, dem Kanal beizutreten",
         "options": [
           {
-            "name": "benutzer",
-            "description": "Der Benutzer, von dem die Rechte entfernt möchtest"
+            "name": "mitglied",
+            "description": "Das Mitglied, von dem die Rechte entfernt werden sollen"
           }
         ]
       },

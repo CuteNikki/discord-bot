@@ -240,8 +240,8 @@
         "description": "Invite someone to join your channel",
         "options": [
           {
-            "name": "user",
-            "description": "The user to invite"
+            "name": "member",
+            "description": "The member to invite"
           }
         ]
       },
@@ -250,8 +250,8 @@
         "description": "Remove permissions from someone to join your channel",
         "options": [
           {
-            "name": "user",
-            "description": "The user to remove permissions of"
+            "name": "member",
+            "description": "The member to remove permissions of"
           }
         ]
       },

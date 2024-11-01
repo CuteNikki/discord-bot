@@ -1,4 +1,18 @@
 {
+  "inventory": {
+    "name": "inventar",
+    "description": "Zeigt das Inventar von dir oder jemand anderes",
+    "options": [
+      {
+        "name": "user",
+        "description": "Der User, von dem du das Inventar ansehen möchtest"
+      },
+      {
+        "name": "geheim",
+        "description": "Wenn *True*, kann die Nachricht nur von dir gesehen werden"
+      }
+    ]
+  },
   "action": {
     "name": "aktion",
     "description": "Sendet ein GIF deiner Wahl (z.B. erröten, tanzen, weinen und mehr)",

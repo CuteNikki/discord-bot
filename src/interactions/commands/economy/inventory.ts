@@ -32,7 +32,13 @@ export default new Command({
     }
 
     if (!userData.inventory?.length) {
-      interaction.editReply({ content: t('inventory.empty', { lng }) });
+      interaction.editReply({
+        embeds: [
+          new EmbedBuilder()
+            .setColor(client.colors.error)
+            .setDescription(user.id === interaction.user.id ? t('inventory.empty', { lng }) : t('inventory.empty-other', { lng, user: user.toString() }))
+        ]
+      });
       return;
     }
 

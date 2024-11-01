@@ -1,4 +1,9 @@
 {
+  "inventory": {
+    "empty": "Dein Inventar ist leer!",
+    "empty-other": "Das Inventar von {{user}} leer!",
+    "title": "{{user}}'s Inventar"
+  },
   "interaction": {
     "self": "Du kannst keine Aktionen auf dich selbst anwenden!",
     "bite": "**{{user}}** _beißt_ **{{target}}**",

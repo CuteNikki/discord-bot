@@ -1,4 +1,18 @@
 {
+  "inventory": {
+    "name": "inventory",
+    "description": "View your own or someone else's inventory",
+    "options": [
+      {
+        "name": "user",
+        "description": "The user to show the inventory of"
+      },
+      {
+        "name": "ephemeral",
+        "description": "If *True*, message can only be seen by you"
+      }
+    ]
+  },
   "action": {
     "name": "action",
     "description": "Sends a GIF of your choice (e.g. blush, dance, cry and more)",

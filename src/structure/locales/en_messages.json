@@ -1,4 +1,9 @@
 {
+  "inventory": {
+    "empty": "Your inventory is empty!",
+    "empty-other": "{{user}}'s inventory is empty!",
+    "title": "{{user}}'s inventory"
+  },
   "interaction": {
     "self": "You cannot perform actions on yourself",
     "bite": "**{{user}}** _bites_ **{{target}}**",

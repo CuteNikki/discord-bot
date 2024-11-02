@@ -33,7 +33,7 @@ export default new Command({
       embeds: [
         new EmbedBuilder()
           .setColor(client.colors.economy)
-          .setAuthor({ name: t('balance.title', { lng, user: user.username }), iconURL: user.displayAvatarURL() })
+          .setAuthor({ name: t('balance.title', { lng, user: user.displayName }), iconURL: user.displayAvatarURL() })
           .addFields(
             {
               name: t('balance.wallet', { lng }),

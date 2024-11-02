@@ -174,7 +174,7 @@ export async function removeItems(userId: string, itemIds: number[]): Promise<Us
  * @returns {Promise<UserDocument>} Updated user data
  */
 export async function deposit(userId: string, amount: number): Promise<UserDocument> {
-  return await updateUser(userId, { $inc: { bank: amount } });
+  return await updateUser(userId, { $inc: { bank: amount, wallet: -amount } });
 }
 
 /**
@@ -184,7 +184,7 @@ export async function deposit(userId: string, amount: number): Promise<UserDocum
  * @returns {Promise<UserDocument>} Updated user data
  */
 export async function withdraw(userId: string, amount: number): Promise<UserDocument> {
-  return await updateUser(userId, { $inc: { bank: -amount } });
+  return await updateUser(userId, { $inc: { bank: -amount, wallet: amount } });
 }
 
 /**

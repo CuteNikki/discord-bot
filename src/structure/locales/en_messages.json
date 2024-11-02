@@ -1,4 +1,14 @@
 {
+  "deposit": {
+    "invalid": "Invalid amount provided!",
+    "insufficient": "You do not have enough money to deposit that amount!",
+    "success": "Successfully deposited **{{amount}}** to your bank!"
+  },
+  "withdraw": {
+    "invalid": "Invalid amount provided!",
+    "insufficient": "You do not have enough money in your bank to withdraw that amount!",
+    "success": "Successfully withdrew **{{amount}}** from your bank!"
+  },
   "balance": {
     "title": "{{user}}'s Balance",
     "wallet": "Wallet",

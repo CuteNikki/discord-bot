@@ -1,4 +1,24 @@
 {
+  "deposit": {
+    "name": "einzahlen",
+    "description": "Zahle dein Guthaben auf dein Bankkonto ein",
+    "options": [
+      {
+        "name": "betrag",
+        "description": "Der Betrag, den du einzahlen möchtest"
+      }
+    ]
+  },
+  "withdraw": {
+    "name": "abheben",
+    "description": "Hebe dein Guthaben von deinem Bankkonto ab",
+    "options": [
+      {
+        "name": "betrag",
+        "description": "Der Betrag, den du abheben möchtest"
+      }
+    ]
+  },
   "balance": {
     "name": "guthaben",
     "description": "Zeigt dein Guthaben oder das von jemand anderem",

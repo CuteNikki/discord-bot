@@ -1,4 +1,24 @@
 {
+  "deposit": {
+    "name": "deposit",
+    "description": "Deposit your balance into your bank account",
+    "options": [
+      {
+        "name": "amount",
+        "description": "The amount you want to deposit"
+      }
+    ]
+  },
+  "withdraw": {
+    "name": "withdraw",
+    "description": "Withdraw your balance from your bank account",
+    "options": [
+      {
+        "name": "amount",
+        "description": "The amount you want to withdraw"
+      }
+    ]
+  },
   "balance": {
     "name": "balance",
     "description": "Shows your balance or the balance of someone else",

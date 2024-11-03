@@ -337,17 +337,23 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
     - [ ] fully customizable message
   - [ ] word chain game (next word needs to start with the last letter of the previous word)
   - [ ] economy
-    - [ ] balance
-    - [ ] deposit
-    - [ ] withdraw
-    - [ ] gift/pay
+    - [x] balance
+    - [x] deposit
+    - [x] withdraw
+    - [x] pay
+    - [x] inventory
+    - [ ] rob
+    - [ ] daily
+    - [ ] leaderboard
     - [ ] work
-    - [ ] begg
-    - [ ] flip
-    - [ ] shop (maybe?)
-      - [ ] inventory
-      - [ ] sell
-      - [ ] buy
+    - [ ] marry
+    - [ ] divorce
+    - [ ] bet
+    - [ ] slots
+    - [ ] coinflip
+    - [ ] dice
+    - [ ] profile
+    - [ ] shop
   - [ ] confession
     - [ ] config command
     - [ ] confess

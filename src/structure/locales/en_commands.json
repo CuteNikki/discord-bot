@@ -1,4 +1,18 @@
 {
+  "pay": {
+    "name": "pay",
+    "description": "Pay someone money with your money",
+    "options": [
+      {
+        "name": "user",
+        "description": "The user to pay"
+      },
+      {
+        "name": "amount",
+        "description": "The amount you want to pay"
+      }
+    ]
+  },
   "deposit": {
     "name": "deposit",
     "description": "Deposit your balance into your bank account",

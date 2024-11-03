@@ -1,4 +1,18 @@
 {
+  "pay": {
+    "name": "bezahlen",
+    "description": "Bezahle jemanden mit deinem Geld",
+    "options": [
+      {
+        "name": "user",
+        "description": "Der User, dem du Geld geben möchtest"
+      },
+      {
+        "name": "betrag",
+        "description": "Der Betrag, den du geben möchtest"
+      }
+    ]
+  },
   "deposit": {
     "name": "einzahlen",
     "description": "Zahle dein Guthaben auf dein Bankkonto ein",

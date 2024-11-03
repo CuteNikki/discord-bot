@@ -21,8 +21,8 @@ Users can manage their money through a wallet or a bank account. The system prov
 | Command                | Description                                              | Implemented |
 | ---------------------- | -------------------------------------------------------- | ----------- |
 | `/balance [user]`      | Check the amount of money in the wallet and bank         | ✅          |
-| `/deposit <amount>`    | Move money from the wallet to the bank                   | ❌          |
-| `/withdraw <amount>`   | Move money from the bank to the wallet                   | ❌          |
+| `/deposit <amount>`    | Move money from the wallet to the bank                   | ✅          |
+| `/withdraw <amount>`   | Move money from the bank to the wallet                   | ✅          |
 | `/pay <user> <amount>` | Send money to another user                               | ❌          |
 | `/rob <user>`          | Steal money from another user's wallet (1-hour cooldown) | ❌          |
 | `/daily`               | Claim the daily reward                                   | ❌          |

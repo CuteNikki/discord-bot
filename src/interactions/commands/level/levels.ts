@@ -65,7 +65,11 @@ export default new Command({
 
       if (i === 0) {
         leaderboardBuilder.setVariant('default');
-        leaderboardBuilder.setHeader({ title: guild.name, subtitle: `${guild.memberCount} members`, image: guild.iconURL() ?? '' });
+        leaderboardBuilder.setHeader({
+          title: guild.name,
+          subtitle: `${guild.memberCount} members`,
+          image: guild.iconURL({ forceStatic: true, extension: 'png', size: 256 }) ?? ''
+        });
       } else {
         leaderboardBuilder.setVariant('horizontal');
       }

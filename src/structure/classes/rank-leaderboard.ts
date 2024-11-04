@@ -328,7 +328,7 @@ export class LeaderboardBuilder extends Builder<LeaderboardProps> {
       throw new RangeError('Number of players must be greater than 0');
     }
 
-    this.height = 450;
+    this.height = 500;
 
     this.adjustCanvas();
 

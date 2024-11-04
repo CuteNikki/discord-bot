@@ -12,7 +12,7 @@ export async function getLevelConfig<T extends boolean>(
   guildId: string,
   insert: T = false as T
 ): Promise<T extends true ? LevelConfigDocument : LevelConfigDocument | null> {
-  let document = await levelConfigModel.findOne({ guildId }).lean().exec();
+  let document = (await levelConfigModel.findOne({ guildId }).lean().exec()) as LevelConfigDocument | null;
 
   if (!document && insert) {
     document = await updateLevelConfig(guildId, {});
@@ -326,7 +326,7 @@ export async function computeLeaderboard(leaderboard: (LevelDocument | WeeklyLev
       position: index + 1,
       username: user?.username,
       displayName: user?.displayName,
-      avatar: user?.displayAvatarURL({ forceStatic: true, extension: 'png' })
+      avatar: user?.displayAvatarURL({ forceStatic: true, extension: 'png', size: 128 })
     };
   });
 }

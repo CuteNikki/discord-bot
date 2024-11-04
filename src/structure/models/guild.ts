@@ -18,6 +18,7 @@ export const guildModel: Model<GuildDocument> =
       level: { type: Types.ObjectId, ref: 'level_config', required: false },
       welcome: { type: Types.ObjectId, ref: 'welcome', required: false },
       farewell: { type: Types.ObjectId, ref: 'farewell', required: false },
-      log: { type: Types.ObjectId, ref: 'guild_log', required: false }
+      log: { type: Types.ObjectId, ref: 'guild_log', required: false },
+      economy: { type: Types.ObjectId, ref: 'economy_config', required: false }
     })
   );

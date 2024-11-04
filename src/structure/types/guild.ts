@@ -2,6 +2,7 @@ import type { Types } from 'mongoose';
 
 import type { CountingDocument } from 'types/counting';
 import type { CustomVoiceDocument } from 'types/custom-voice';
+import type { EconomyDocument } from 'types/economy';
 import type { FarewellDocument } from 'types/farewell';
 import type { GuildLogDocument } from 'types/guild-log';
 import type { LevelConfigDocument } from 'types/level';
@@ -11,7 +12,6 @@ import type { StarboardDocument } from 'types/starboard';
 import type { TicketConfigDocument } from 'types/ticket';
 import type { WelcomeDocument } from 'types/welcome';
 
-// !! Embed cannot be empty !!
 // Either a title, description, author-name, footer-text or field is needed
 export type Embed = {
   color?: string | number | string;
@@ -56,4 +56,5 @@ export type GuildDocument = {
   welcome?: WelcomeDocument;
   farewell?: FarewellDocument;
   log?: GuildLogDocument;
+  economy?: EconomyDocument;
 };

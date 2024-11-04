@@ -10,7 +10,8 @@ export const DEFAULT_GUILD_POPULATE: PopulateOptions[] = [
   { path: 'level' },
   { path: 'welcome' },
   { path: 'farewell' },
-  { path: 'log' }
+  { path: 'log' },
+  { path: 'economy' }
 ];
 
 export const DEFAULT_REACTION_ROLE_POPULATE: PopulateOptions[] = [{ path: 'groups' }];

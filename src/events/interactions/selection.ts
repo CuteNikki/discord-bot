@@ -63,7 +63,8 @@ export default new Event({
         level: { enabled: false },
         welcome: { enabled: false },
         farewell: { enabled: false },
-        ticket: { enabled: false }
+        ticket: { enabled: false },
+        economy: { enabled: false }
       };
 
       const message: InteractionReplyOptions = {
@@ -103,6 +104,13 @@ export default new Event({
             await interaction.reply(message);
             return;
           }
+          break;
+        case ModuleType.Economy:
+          if (!guildSettings.economy?.enabled) {
+            await interaction.reply(message);
+            return;
+          }
+          break;
       }
     }
 

@@ -18,9 +18,9 @@ Users can manage their money through a wallet or a bank account. The system prov
 
 ### Config Commands
 
-| Command           | Description                                     | Implemented |
-| ----------------- | ----------------------------------------------- | ----------- |
-| `/economy enable` | Enable/Disable the economy module on the server | ✅          |
+| Command    | Description                                     | Implemented |
+| ---------- | ----------------------------------------------- | ----------- |
+| `/economy` | Enable/Disable the economy module on the server | ✅          |
 
 ### Financial Commands
 

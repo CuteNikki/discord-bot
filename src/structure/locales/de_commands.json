@@ -1,4 +1,22 @@
 {
+  "transfer": {
+    "name": "übertragen",
+    "description": "Übertrage Gegenstände an einen anderen User",
+    "options": [
+      {
+        "name": "gegenstand",
+        "description": "Der Gegenstand, den du übertragen möchtest"
+      },
+      {
+        "name": "user",
+        "description": "Der User, an den du den Gegenstand übertragen möchtest"
+      },
+      {
+        "name": "menge",
+        "description": "Die Menge, die du übertragen möchtest"
+      }
+    ]
+  },
   "economy": {
     "name": "wirtschaft",
     "description": "Konfiguriere das Wirtschaftssystem",

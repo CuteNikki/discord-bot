@@ -1,4 +1,10 @@
 {
+  "transfer": {
+    "bot": "You cannot transfer items to a bot!",
+    "success": "Successfully transferred **{{amount}}x {{item}}** to {{user}}!",
+    "invalid": "Invalid amount provided!",
+    "insufficient": "You do not have **{{item}}** or not enough!"
+  },
   "economy": {
     "title": "Economy Config",
     "state": {
@@ -10,6 +16,7 @@
     }
   },
   "pay": {
+    "bot": "You cannot transfer money to a bot!",
     "invalid": "Invalid amount provided!",
     "insufficient": "You do not have enough money to pay that amount!",
     "success": "Successfully paid **${{amount}}** to {{user}}!"
@@ -25,11 +32,13 @@
     "success": "Successfully withdrew **${{amount}}** from your bank!"
   },
   "balance": {
+    "bot": "Bots do not have a balance!",
     "title": "{{user}}'s Balance",
     "wallet": "Wallet",
     "bank": "Bank"
   },
   "inventory": {
+    "bot": "Bots do not have inventories!",
     "empty": "Your inventory is empty!",
     "empty-other": "{{user}}'s inventory is empty!",
     "title": "{{user}}'s inventory"

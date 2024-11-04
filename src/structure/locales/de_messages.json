@@ -1,4 +1,10 @@
 {
+  "transfer": {
+    "bot": "Gegenstände können nicht an Bots gesendet werden!",
+    "success": "Erfolgreich **{{amount}}x {{item}}** an {{user}} gesendet!",
+    "invalid": "Ungültige Menge angegeben!",
+    "insufficient": "Du hast nicht **{{item}}** oder nicht genügend!"
+  },
   "economy": {
     "title": "Wirtschafts-Konfiguration",
     "state": {
@@ -10,6 +16,7 @@
     }
   },
   "pay": {
+    "bot": "Geld kann nicht an Bots gesendet werden!",
     "invalid": "Ungültiger Betrag angegeben!",
     "insufficient": "Du hast nicht genug Geld, um diesen Betrag zu bezahlen!",
     "success": "Erfolgreich **${{amount}}** an {{user}} gezahlt!"
@@ -25,11 +32,13 @@
     "success": "Erfolgreich **${{amount}}** von deinem Bankkonto abgehoben!"
   },
   "balance": {
+    "bot": "Bots können kein Geld haben!",
     "title": "{{user}}'s Guthaben",
     "wallet": "Geldbörse",
     "bank": "Bank"
   },
   "inventory": {
+    "bot": "Bots können kein Inventar haben!",
     "empty": "Dein Inventar ist leer!",
     "empty-other": "Das Inventar von {{user}} leer!",
     "title": "{{user}}'s Inventar"

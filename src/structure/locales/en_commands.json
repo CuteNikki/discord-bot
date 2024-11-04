@@ -1,4 +1,22 @@
 {
+  "transfer": {
+    "name": "transfer",
+    "description": "Transfer items to another user",
+    "options": [
+      {
+        "name": "item",
+        "description": "The item you want to transfer"
+      },
+      {
+        "name": "user",
+        "description": "The user to transfer item to"
+      },
+      {
+        "name": "amount",
+        "description": "The amount you want to transfer"
+      }
+    ]
+  },
   "economy": {
     "name": "economy",
     "description": "Configure the economy module",

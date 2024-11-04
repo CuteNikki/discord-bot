@@ -23,6 +23,13 @@ export default new Command({
 
     const user = interaction.options.getUser('user') ?? interaction.user;
 
+    if (user.bot) {
+      await interaction.editReply({
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('balance.bot', { lng }))]
+      });
+      return;
+    }
+
     let userData = (await getUser(user.id, user.id === interaction.user.id)) ?? { bank: 0, wallet: 0, economyOnboarding: true };
 
     if (userData.economyOnboarding && user.id === interaction.user.id) {

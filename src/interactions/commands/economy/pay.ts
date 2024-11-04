@@ -20,24 +20,32 @@ export default new Command({
     const user = interaction.options.getUser('user', true);
     const amount = interaction.options.getInteger('amount', true);
 
+    if (user.bot) {
+      await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('pay.bot', { lng }))], ephemeral: true });
+      return;
+    }
+
     if (user.id === interaction.user.id) {
-      return interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('pay.self', { lng }))], ephemeral: true });
+      await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('pay.self', { lng }))], ephemeral: true });
+      return;
     }
 
     if (amount <= 0) {
-      return interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('pay.invalid', { lng }))], ephemeral: true });
+      await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('pay.invalid', { lng }))], ephemeral: true });
+      return;
     }
 
     const userData = await getUser(interaction.user.id, true);
 
     if (userData.wallet < amount) {
-      return interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('pay.insufficient', { lng }))], ephemeral: true });
+      await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('pay.insufficient', { lng }))], ephemeral: true });
+      return;
     }
 
     await removeMoney(interaction.user.id, amount);
     await addMoney(user.id, amount);
 
-    return interaction.reply({
+    await interaction.reply({
       embeds: [new EmbedBuilder().setColor(client.colors.economy).setDescription(t('pay.success', { lng, amount, user: user.toString() }))],
       ephemeral: true
     });

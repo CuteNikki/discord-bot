@@ -25,6 +25,13 @@ export default new Command({
 
     const user = interaction.options.getUser('user') ?? interaction.user;
 
+    if (user.bot) {
+      interaction.editReply({
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('inventory.bot', { lng }))]
+      });
+      return;
+    }
+
     let userData = (await getUser(user.id, user.id === interaction.user.id)) ?? { inventory: [], economyOnboarding: true };
 
     if (userData.economyOnboarding && user.id === interaction.user.id) {

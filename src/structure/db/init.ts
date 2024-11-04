@@ -386,22 +386,24 @@ async function clearInfractions(client: DiscordClient) {
     if (infraction.action === InfractionType.TempBan) {
       // Fetch the infraction's guild to unban the user
       const guild = client.guilds.cache.get(infraction.guildId);
-      // If we can't find the guild, we can't unban so we close the infraction
+
+      // If we can't find the guild, we can't unban
       if (!guild) {
         continue;
       }
-      // If we have a guild, we try to unban the user and close the infraction
+
+      // We try to unban the user and close the infraction
       await guild.bans
         .remove(infraction.userId, 'Temporary Ban has expired')
-        .then(async () => {
-          await closeCurrentInfraction(infraction);
+        .then(() => {
           logger.debug(`[${client.cluster.id}] Unbanned user ${infraction.userId} from guild ${infraction.guildId}`);
         })
         .catch((err) => logger.debug({ err, infraction }, 'Could not unban member after tempban '));
+      await closeCurrentInfraction(infraction);
     } else if (infraction.action === InfractionType.Timeout && client.cluster.id === 0) {
       // To avoid multiple writes to the database we only do this on cluster 0
 
-      // Discord handles timeouts for us so we don't need to fetch the guild and remove the timeout
+      // Discord handles timeouts for us so we don't need to fetch and remove the timeout
       await closeCurrentInfraction(infraction);
     }
   }

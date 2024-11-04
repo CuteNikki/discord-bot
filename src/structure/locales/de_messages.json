@@ -1,4 +1,14 @@
 {
+  "economy": {
+    "title": "Wirtschafts-Konfiguration",
+    "state": {
+      "enabled": "Das Wirtschaftsmodul wurde aktiviert!",
+      "disabled": "Das Wirtschaftsmodul wurde deaktiviert!",
+      "already-enabled": "Das Wirtschaftsmodul ist bereits aktiviert!",
+      "already-disabled": "Das Wirtschaftsmodul ist bereits deaktiviert!",
+      "title": "Status"
+    }
+  },
   "pay": {
     "invalid": "Ungültiger Betrag angegeben!",
     "insufficient": "Du hast nicht genug Geld, um diesen Betrag zu bezahlen!",

@@ -1,4 +1,14 @@
 {
+  "economy": {
+    "title": "Economy Config",
+    "state": {
+      "enabled": "The economy module has been enabled!",
+      "disabled": "The economy module has been disabled!",
+      "already-enabled": "The economy module is already enabled!",
+      "already-disabled": "The economy module is already disabled!",
+      "title": "State"
+    }
+  },
   "pay": {
     "invalid": "Invalid amount provided!",
     "insufficient": "You do not have enough money to pay that amount!",

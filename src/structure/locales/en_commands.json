@@ -1,4 +1,22 @@
 {
+  "economy": {
+    "name": "economy",
+    "description": "Configure the economy module",
+    "options": [
+      {
+        "name": "enable",
+        "description": "Enable the economy system"
+      },
+      {
+        "name": "disable",
+        "description": "Disable the economy system"
+      },
+      {
+        "name": "info",
+        "description": "Get information about the economy system"
+      }
+    ]
+  },
   "pay": {
     "name": "pay",
     "description": "Pay someone money with your money",

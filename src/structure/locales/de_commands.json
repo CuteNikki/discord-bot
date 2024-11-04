@@ -1,4 +1,22 @@
 {
+  "economy": {
+    "name": "wirtschaft",
+    "description": "Konfiguriere das Wirtschaftssystem",
+    "options": [
+      {
+        "name": "aktivieren",
+        "description": "Aktiviert das Wirtschaftssystem"
+      },
+      {
+        "name": "deaktivieren",
+        "description": "Deaktiviert das Wirtschaftssystem"
+      },
+      {
+        "name": "info",
+        "description": "Zeigt Informationen über das Wirtschaftssystem"
+      }
+    ]
+  },
   "pay": {
     "name": "bezahlen",
     "description": "Bezahle jemanden mit deinem Geld",

@@ -1,6 +1,8 @@
-import type { PopulateOptions, UpdateQuery } from 'mongoose';
+import type { UpdateQuery } from 'mongoose';
 
 import { economyModel } from 'models/economy';
+
+import { updateGuild } from 'db/guild';
 
 import type { EconomyDocument } from 'types/economy';
 
@@ -14,7 +16,7 @@ export async function getEconomy<T extends boolean>(
   guildId: string,
   insert: T = false as T
 ): Promise<T extends true ? EconomyDocument : EconomyDocument | null> {
-  let document = (await economyModel.findOne({ guildId }).lean().exec()) as EconomyDocument;
+  let document = await economyModel.findOne({ guildId }).lean().exec();
 
   if (insert && !document) {
     document = await updateEconomy(guildId, {});
@@ -29,8 +31,12 @@ export async function getEconomy<T extends boolean>(
  * @param {UpdateQuery<EconomyDocument>} query Update query
  * @returns {Promise<EconomyDocument>} Updates economy settings
  */
-export async function updateEconomy(guildId: string, query: UpdateQuery<EconomyDocument>, populate: PopulateOptions[] = []): Promise<EconomyDocument> {
-  return await economyModel.findOneAndUpdate({ guildId }, query, { upsert: true, new: true }).populate(populate).lean().exec();
+export async function updateEconomy(guildId: string, query: UpdateQuery<EconomyDocument>): Promise<EconomyDocument> {
+  const document = await economyModel.findOneAndUpdate({ guildId }, query, { upsert: true, new: true }).lean().exec();
+
+  await updateGuild(guildId, { $set: { economy: document._id } });
+
+  return document;
 }
 
 /**

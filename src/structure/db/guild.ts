@@ -7,6 +7,7 @@ import { guildModel } from 'models/guild';
 
 import { DEFAULT_GUILD_POPULATE } from 'constants/populate';
 
+import { getEconomy } from 'db/economy';
 import type { GuildDocument } from 'types/guild';
 
 /**
@@ -55,11 +56,13 @@ export async function getGuildExport(guildId: string): Promise<object> {
   const giveaways = await getGuildGiveaways(guildId);
   const infractions = await getGuildInfractions(guildId);
   const levels = await getGuildLevels(guildId);
+  const economy = await getEconomy(guildId);
 
   return {
     ...guild,
     giveaways,
     infractions,
+    economy,
     ...levels
   };
 }

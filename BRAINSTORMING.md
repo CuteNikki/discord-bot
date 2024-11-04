@@ -16,6 +16,12 @@ Users can manage their money through a wallet or a bank account. The system prov
 - `[]` = optional argument
 - `<>` = required argument
 
+### Config Commands
+
+| Command           | Description                                     | Implemented |
+| ----------------- | ----------------------------------------------- | ----------- |
+| `/economy enable` | Enable/Disable the economy module on the server | ✅          |
+
 ### Financial Commands
 
 | Command                | Description                                              | Implemented |

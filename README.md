@@ -337,6 +337,7 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
     - [ ] fully customizable message
   - [ ] word chain game (next word needs to start with the last letter of the previous word)
   - [ ] economy
+    - [x] config
     - [x] balance
     - [x] deposit
     - [x] withdraw

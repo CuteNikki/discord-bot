@@ -10,7 +10,6 @@ import { ItemCategory, type Item } from 'types/user';
 
 export default new Command({
   module: ModuleType.Economy,
-  isDeveloperOnly: true,
   data: new SlashCommandBuilder()
     .setName('inventory')
     .setDescription("View your or someone else's inventory.")

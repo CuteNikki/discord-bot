@@ -239,3 +239,13 @@ export async function economyOboarded(userId: string): Promise<UserDocument> {
     $inc: { bank: 1000 }
   });
 }
+
+/**
+ * Claims the daily reward for a user
+ * @param {string} userId User ID to claim the daily reward for
+ * @param {number} timestamp Timestamp to set as the last daily
+ * @returns {Promise<UserDocument>} Updated user data
+ */
+export async function claimDaily(userId: string, timestamp?: number): Promise<UserDocument> {
+  return await updateUser(userId, { $set: { lastDaily: timestamp ?? Date.now() }, $inc: { bank: 1000 } });
+}

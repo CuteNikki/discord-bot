@@ -1,4 +1,8 @@
 {
+  "daily": {
+    "cooldown": "Cannot claim daily reward yet!\nCan be claimed {{left}}",
+    "claimed": "Successfully claimed daily reward!\nClaim again {{next}}"
+  },
   "transfer": {
     "bot": "You cannot transfer items to a bot!",
     "success": "Successfully transferred **{{amount}}x {{item}}** to {{user}}!",

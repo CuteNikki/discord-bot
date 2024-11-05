@@ -1,4 +1,8 @@
 {
+  "daily": {
+    "name": "daily",
+    "description": "Claim your daily reward"
+  },
   "transfer": {
     "name": "transfer",
     "description": "Transfer items to another user",

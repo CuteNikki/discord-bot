@@ -1,4 +1,8 @@
 {
+  "daily": {
+    "cooldown": "Tägliche Belohnung kann noch nicht beansprucht werden!\nKann beansprucht werden {{left}}",
+    "claimed": "Tägliche Belohnung erfolgreich beansprucht!\nErneut beanspruchen {{next}}"
+  },
   "transfer": {
     "bot": "Gegenstände können nicht an Bots gesendet werden!",
     "success": "Erfolgreich **{{amount}}x {{item}}** an {{user}} gesendet!",

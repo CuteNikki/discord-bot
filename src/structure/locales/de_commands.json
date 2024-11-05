@@ -1,4 +1,8 @@
 {
+  "daily": {
+    "name": "täglich",
+    "description": "Fordere deine tägliche Belohnung ein"
+  },
   "transfer": {
     "name": "übertragen",
     "description": "Übertrage Gegenstände an einen anderen User",

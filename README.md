@@ -343,8 +343,8 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
     - [x] withdraw
     - [x] pay
     - [x] inventory
+    - [x] daily
     - [ ] rob
-    - [ ] daily
     - [ ] leaderboard
     - [ ] work
     - [ ] marry

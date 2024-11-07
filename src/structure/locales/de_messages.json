@@ -40,17 +40,17 @@
     "bot": "Geld kann nicht an Bots gesendet werden!",
     "invalid": "Ungültiger Betrag angegeben!",
     "insufficient": "Du hast nicht genug Geld, um diesen Betrag zu bezahlen!",
-    "success": "Erfolgreich **${{amount}}** an {{user}} gezahlt!"
+    "success": "Erfolgreich {{amount}} an {{user}} gezahlt!"
   },
   "deposit": {
     "invalid": "Ungültiger Betrag angegeben!",
     "insufficient": "Du hast nicht genug Geld, um diesen Betrag einzuzahlen!",
-    "success": "Erfolgreich **${{amount}}** auf dein Bankkonto eingezahlt!"
+    "success": "Erfolgreich {{amount}} auf dein Bankkonto eingezahlt!"
   },
   "withdraw": {
     "invalid": "Ungültiger Betrag angegeben!",
     "insufficient": "Du hast nicht genug Geld auf deinem Bankkonto, um diesen Betrag abzuheben!",
-    "success": "Erfolgreich **${{amount}}** von deinem Bankkonto abgehoben!"
+    "success": "Erfolgreich {{amount}} von deinem Bankkonto abgehoben!"
   },
   "balance": {
     "bot": "Bots können kein Geld haben!",

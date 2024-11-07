@@ -40,17 +40,17 @@
     "bot": "You cannot transfer money to a bot!",
     "invalid": "Invalid amount provided!",
     "insufficient": "You do not have enough money to pay that amount!",
-    "success": "Successfully paid **${{amount}}** to {{user}}!"
+    "success": "Successfully paid {{amount}} to {{user}}!"
   },
   "deposit": {
     "invalid": "Invalid amount provided!",
     "insufficient": "You do not have enough money to deposit that amount!",
-    "success": "Successfully deposited **${{amount}}** to your bank!"
+    "success": "Successfully deposited {{amount}} to your bank!"
   },
   "withdraw": {
     "invalid": "Invalid amount provided!",
     "insufficient": "You do not have enough money in your bank to withdraw that amount!",
-    "success": "Successfully withdrew **${{amount}}** from your bank!"
+    "success": "Successfully withdrew {{amount}} from your bank!"
   },
   "balance": {
     "bot": "Bots do not have a balance!",

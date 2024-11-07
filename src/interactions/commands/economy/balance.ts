@@ -43,12 +43,12 @@ export default new Command({
           .setAuthor({ name: t('balance.title', { lng, user: user.displayName }), iconURL: user.displayAvatarURL() })
           .addFields(
             {
-              name: t('balance.wallet', { lng }),
-              value: `$${userData.wallet}`
+              name: t('balance.bank', { lng }),
+              value: Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(userData.bank)
             },
             {
-              name: t('balance.bank', { lng }),
-              value: `$${userData.bank}`
+              name: t('balance.wallet', { lng }),
+              value: Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(userData.wallet)
             }
           )
       ]

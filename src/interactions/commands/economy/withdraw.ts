@@ -45,7 +45,11 @@ export default new Command({
     await withdraw(interaction.user.id, amount);
 
     interaction.reply({
-      embeds: [new EmbedBuilder().setColor(client.colors.economy).setDescription(t('withdraw.success', { lng, amount }))],
+      embeds: [
+        new EmbedBuilder()
+          .setColor(client.colors.economy)
+          .setDescription(t('withdraw.success', { lng, amount: Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount) }))
+      ],
       ephemeral: true
     });
   }

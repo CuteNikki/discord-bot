@@ -1,11 +1,13 @@
 import type { UpdateQuery } from 'mongoose';
 
+import type { DiscordClient } from 'classes/client';
+
 import { userModel } from 'models/user';
 
 import { getUserInfractions } from 'db/infraction';
 import { getUserLevels } from 'db/level';
 
-import { BadgeType, cookie, fishingRod, marriageRing, pickaxe, type Item, type UserDocument } from 'types/user';
+import { BadgeType, cookie, fishingRod, marriageRing, pickaxe, type Item, type PositionUser, type UserDocument } from 'types/user';
 
 /**
  * Gets the user data for a given user ID
@@ -248,4 +250,36 @@ export async function economyOboarded(userId: string): Promise<UserDocument> {
  */
 export async function claimDaily(userId: string, timestamp?: number): Promise<UserDocument> {
   return await updateUser(userId, { $set: { lastDaily: timestamp ?? Date.now() }, $inc: { bank: 1000 } });
+}
+
+/**
+ * Gets the leaderboard
+ * @returns {Promise<UserDocument[]>} Leaderboard data
+ */
+export async function getLeaderboard(): Promise<UserDocument[]> {
+  return await userModel
+    .find({})
+    .sort([['bank', 'descending']])
+    .limit(10)
+    .lean()
+    .exec();
+}
+
+/**
+ * Computes the leaderboard with the user data
+ * @param {UserDocument[]} leaderboard Leaderboard data
+ * @param {DiscordClient} client Discord client
+ * @returns {Promise<PositionUser[]>} Computed leaderboard
+ */
+export async function computeLeaderboard(leaderboard: UserDocument[], client: DiscordClient): Promise<PositionUser[]> {
+  return leaderboard.map((user, index) => {
+    const discordUser = client.users.cache.get(user.userId);
+    return {
+      ...user,
+      position: index + 1,
+      username: discordUser?.username,
+      displayName: discordUser?.displayName,
+      avatar: discordUser?.displayAvatarURL({ forceStatic: true, extension: 'png', size: 128 })
+    };
+  });
 }

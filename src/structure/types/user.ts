@@ -58,6 +58,13 @@ export type UserDocument = {
   inventory: Item[];
 };
 
+/**
+ * This type is used to get the rank of a user in the leaderboard
+ *
+ * Username, displayname and avatar is only available in the computed leaderboard
+ */
+export type PositionUser = UserDocument & { position: number; username?: string; displayName?: string; avatar?: string };
+
 export const pickaxe: Item = {
   id: ItemType.Pickaxe,
   category: ItemCategory.Tools,

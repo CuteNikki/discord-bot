@@ -3,7 +3,7 @@ import { t } from 'i18next';
 
 import { Command } from 'classes/command';
 
-import { addMoney, getUser, removeMoney } from 'db/user';
+import { addBank, getUser, removeBank } from 'db/user';
 
 import { ModuleType } from 'types/interactions';
 
@@ -37,16 +37,22 @@ export default new Command({
 
     const userData = await getUser(interaction.user.id, true);
 
-    if (userData.wallet < amount) {
+    if (userData.bank < amount) {
       await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('pay.insufficient', { lng }))], ephemeral: true });
       return;
     }
 
-    await removeMoney(interaction.user.id, amount);
-    await addMoney(user.id, amount);
+    await removeBank(interaction.user.id, amount);
+    await addBank(user.id, amount);
 
     await interaction.reply({
-      embeds: [new EmbedBuilder().setColor(client.colors.economy).setDescription(t('pay.success', { lng, amount, user: user.toString() }))],
+      embeds: [
+        new EmbedBuilder()
+          .setColor(client.colors.economy)
+          .setDescription(
+            t('pay.success', { lng, amount: Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount), user: user.toString() })
+          )
+      ],
       ephemeral: true
     });
   }

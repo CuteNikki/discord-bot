@@ -5,7 +5,7 @@ import { userModel } from 'models/user';
 import { getUserInfractions } from 'db/infraction';
 import { getUserLevels } from 'db/level';
 
-import { BadgeType, fishingRod, pickaxe, type Item, type UserDocument } from 'types/user';
+import { BadgeType, cookie, fishingRod, marriageRing, pickaxe, type Item, type UserDocument } from 'types/user';
 
 /**
  * Gets the user data for a given user ID
@@ -235,7 +235,7 @@ export async function removeBank(userId: string, amount: number): Promise<UserDo
 export async function economyOboarded(userId: string): Promise<UserDocument> {
   return await updateUser(userId, {
     $set: { economyOnboarding: false },
-    $push: { inventory: { $each: [pickaxe, fishingRod] } },
+    $push: { inventory: { $each: [pickaxe, fishingRod, marriageRing, cookie] } },
     $inc: { bank: 1000 }
   });
 }

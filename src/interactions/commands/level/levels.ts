@@ -2,7 +2,7 @@ import { ApplicationIntegrationType, AttachmentBuilder, EmbedBuilder, Interactio
 import { t } from 'i18next';
 
 import { Command } from 'classes/command';
-import { LeaderboardBuilder } from 'classes/rank-leaderboard';
+import { LeaderboardBuilder } from 'classes/level-leaderboard';
 
 import { computeLeaderboard, getLeaderboard, getWeeklyLeaderboard } from 'db/level';
 

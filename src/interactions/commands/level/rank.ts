@@ -2,7 +2,7 @@ import { ApplicationIntegrationType, AttachmentBuilder, InteractionContextType, 
 import { t } from 'i18next';
 
 import { Command } from 'classes/command';
-import { RankCard } from 'classes/rank-card';
+import { RankCard } from 'classes/level-card';
 
 import { convertLevelToExp, getLevelWithRank, getWeeklyLevelWithRank } from 'db/level';
 

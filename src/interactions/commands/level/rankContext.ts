@@ -2,7 +2,7 @@ import { ApplicationCommandType, ApplicationIntegrationType, AttachmentBuilder, 
 import { t } from 'i18next';
 
 import { Command } from 'classes/command';
-import { RankCard } from 'classes/rank-card';
+import { RankCard } from 'classes/level-card';
 
 import { convertLevelToExp, getLevelWithRank } from 'db/level';
 

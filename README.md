@@ -344,6 +344,7 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
     - [x] pay
     - [x] inventory
     - [x] daily
+    - [x] transfer
     - [ ] rob
     - [ ] leaderboard
     - [ ] work

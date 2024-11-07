@@ -41,7 +41,7 @@ Users can manage their money through a wallet or a bank account. The system prov
 | `/work mine`              | Mine for items and money (1-hour cooldown, requires pickaxe)     | ❌          |
 | `/work fish`              | Fish for items and money (1-hour cooldown, requires fishing rod) | ❌          |
 | `/shop`                   | Buy and sell items                                               | ❌          |
-| `/transfer <item> <user>` | Give items to another user                                       | ❌          |
+| `/transfer <item> <user>` | Give items to another user                                       | ✅          |
 | `/inventory [user]`       | Check the current inventory of items                             | ✅          |
 
 ### Marriage Commands

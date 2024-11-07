@@ -16,7 +16,7 @@ export async function getEconomy<T extends boolean>(
   guildId: string,
   insert: T = false as T
 ): Promise<T extends true ? EconomyDocument : EconomyDocument | null> {
-  let document = await economyModel.findOne({ guildId }).lean().exec();
+  let document = await economyModel.findOne({ guildId }).lean().exec() as EconomyDocument;
 
   if (insert && !document) {
     document = await updateEconomy(guildId, {});

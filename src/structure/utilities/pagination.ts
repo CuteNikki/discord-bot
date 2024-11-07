@@ -72,7 +72,7 @@ export async function pagination({
   const lastPageIndex = embeds.length - 1;
 
   const msg = await interaction
-    .editReply({ content, embeds: [embeds[index]], files: attachments ? [attachments[index]] : [], components })
+    .editReply({ content, embeds: [embeds[index]], files: attachments?.length ? [attachments[index]] : [], components })
     .catch((err) => logger.debug({ err }, 'Could not edit message'));
   if (!msg) return;
 

@@ -1,4 +1,14 @@
 {
+  "leaderboard": {
+    "name": "leaderboard",
+    "description": "Shows the richest users",
+    "options": [
+      {
+        "name": "ephemeral",
+        "description": "If *True*, message can only be seen by you"
+      }
+    ]
+  },
   "divorce": {
     "name": "divorce",
     "description": "Divorce your partner"

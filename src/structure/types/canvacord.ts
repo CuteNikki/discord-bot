@@ -74,6 +74,12 @@ export type LeaderboardTexts = {
   rank: string;
 };
 
+export type EconomyLeaderboardTexts = {
+  bank: string;
+  wallet: string;
+  rank: string;
+};
+
 export type LeaderboardPropsType = {
   variant?: 'horizontal' | 'default';
   background?: ImageSource | null;
@@ -95,4 +101,37 @@ export type LeaderboardPropsType = {
   abbreviate?: boolean;
 };
 
-export type LeaderboardProps = LeaderboardPropsType & { text: LeaderboardTexts; background: ImageSource | null; backgroundColor: string; abbreviate: boolean };
+export type EconomyLeaderboardPropsType = {
+  variant?: 'horizontal' | 'default';
+  background?: ImageSource | null;
+  backgroundColor?: string;
+  header?: {
+    title: string;
+    subtitle: string;
+    image: ImageSource;
+  };
+  players: {
+    displayName: string;
+    username: string;
+    bank: number;
+    wallet: number;
+    rank: number;
+    avatar?: ImageSource;
+  }[];
+  text?: EconomyLeaderboardTexts;
+  abbreviate?: boolean;
+};
+
+export type LeaderboardProps = LeaderboardPropsType & {
+  text: LeaderboardTexts;
+  background: ImageSource | null;
+  backgroundColor: string;
+  abbreviate: boolean;
+};
+
+export type EconomyLeaderboardProps = EconomyLeaderboardPropsType & {
+  text: EconomyLeaderboardTexts;
+  background: ImageSource | null;
+  backgroundColor: string;
+  abbreviate: boolean;
+};

@@ -1,4 +1,14 @@
 {
+  "leaderboard": {
+    "name": "rangliste",
+    "description": "Zeigt die reichesten User an",
+    "options": [
+      {
+        "name": "geheim",
+        "description": "Wenn *True*, kann die Nachricht nur von dir gesehen werden"
+      }
+    ]
+  },
   "divorce": {
     "name": "scheiden",
     "description": "Scheide dich von deinem Partner"

@@ -345,11 +345,11 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
     - [x] inventory
     - [x] daily
     - [x] transfer
+    - [x] marry
+    - [x] divorce
     - [ ] rob
     - [ ] leaderboard
     - [ ] work
-    - [ ] marry
-    - [ ] divorce
     - [ ] bet
     - [ ] slots
     - [ ] coinflip

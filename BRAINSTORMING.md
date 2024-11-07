@@ -48,8 +48,8 @@ Users can manage their money through a wallet or a bank account. The system prov
 
 | Command         | Description                                 | Implemented |
 | --------------- | ------------------------------------------- | ----------- |
-| `/marry <user>` | Marry another user (requires marriage ring) | ❌          |
-| `/divorce`      | End a marriage (ring not returned)          | ❌          |
+| `/marry <user>` | Marry another user (requires marriage ring) | ✅          |
+| `/divorce`      | End a marriage (ring not returned)          | ✅          |
 
 ### Gambling Commands
 

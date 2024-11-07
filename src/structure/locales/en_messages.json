@@ -1,4 +1,17 @@
 {
+  "marry": {
+    "self": "You cannot marry yourself!",
+    "bot": "You cannot marry a bot!",
+    "already-user": "You are already married!",
+    "already-target": "{{target}} is already married!",
+    "ring": "You do not have a marriage ring to propose with!",
+    "confirm": "{{user}} would like to marry you!",
+    "accept": "Accept",
+    "decline": "Decline",
+    "timeout": "{{target}} did not answer in time!",
+    "accepted": "{{target}} accepted your proposal!",
+    "declined": "{{target}} declined your proposal!"
+  },
   "daily": {
     "cooldown": "Cannot claim daily reward yet!\nCan be claimed {{left}}",
     "claimed": "Successfully claimed daily reward!\nClaim again {{next}}"

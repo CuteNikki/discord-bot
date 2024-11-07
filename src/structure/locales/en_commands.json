@@ -1,4 +1,14 @@
 {
+  "marry": {
+    "name": "marry",
+    "description": "Marry someone",
+    "options": [
+      {
+        "name": "user",
+        "description": "The user to marry"
+      }
+    ]
+  },
   "daily": {
     "name": "daily",
     "description": "Claim your daily reward"

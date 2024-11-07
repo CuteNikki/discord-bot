@@ -1,4 +1,17 @@
 {
+  "marry": {
+    "self": "Du kannst dich nicht selbst heiraten!",
+    "bot": "Du kannst keinen Bot heiraten!",
+    "already-user": "Du bist bereits verheiratet!",
+    "already-target": "{{target}} ist bereits verheiratet!",
+    "ring": "Du hast keinen Heiratsring!",
+    "confirm": "{{user}} möchte dich heiraten!",
+    "accept": "Akzeptieren",
+    "decline": "Ablehnen",
+    "timeout": "{{target}} hat nicht rechtzeitig geantwortet!",
+    "accepted": "{{target}} hat deinen Heiratsantrag angenommen!",
+    "declined": "{{target}} hat deinen Heiratsantrag abgelehnt!"
+  },
   "daily": {
     "cooldown": "Tägliche Belohnung kann noch nicht beansprucht werden!\nKann beansprucht werden {{left}}",
     "claimed": "Tägliche Belohnung erfolgreich beansprucht!\nErneut beanspruchen {{next}}"

@@ -1,4 +1,8 @@
 {
+  "divorce": {
+    "none": "You are not married!",
+    "success": "You are now divorced!"
+  },
   "marry": {
     "self": "You cannot marry yourself!",
     "bot": "You cannot marry a bot!",

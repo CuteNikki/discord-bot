@@ -1,4 +1,8 @@
 {
+  "divorce": {
+    "name": "divorce",
+    "description": "Divorce your partner"
+  },
   "marry": {
     "name": "marry",
     "description": "Marry someone",

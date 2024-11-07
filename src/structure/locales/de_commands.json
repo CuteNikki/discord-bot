@@ -1,4 +1,8 @@
 {
+  "divorce": {
+    "name": "scheiden",
+    "description": "Scheide dich von deinem Partner"
+  },
   "marry": {
     "name": "heiraten",
     "description": "Heirate jemanden",

@@ -1,4 +1,8 @@
 {
+  "divorce": {
+    "divorce": "Du bist nicht verheiratet!",
+    "success": "Erfolgreich geschieden!"
+  },
   "marry": {
     "self": "Du kannst dich nicht selbst heiraten!",
     "bot": "Du kannst keinen Bot heiraten!",

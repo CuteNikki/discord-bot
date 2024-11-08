@@ -32,7 +32,7 @@ Users can manage their money through a wallet or a bank account. The system prov
 | `/pay <user> <amount>` | Send money to another user                               | ✅          |
 | `/rob <user>`          | Steal money from another user's wallet (1-hour cooldown) | ❌          |
 | `/daily`               | Claim the daily reward                                   | ✅          |
-| `/leaderboard`         | View top users based on wealth.                          | ❌          |
+| `/leaderboard`         | View top users based on wealth.                          | ✅          |
 
 ### Item Commands
 

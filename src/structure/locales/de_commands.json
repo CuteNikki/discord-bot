@@ -1,4 +1,14 @@
 {
+  "rob": {
+    "name": "rauben",
+    "description": "Raubt jemanden aus",
+    "options": [
+      {
+        "name": "user",
+        "description": "Der User, den du ausrauben möchtest"
+      }
+    ]
+  },
   "leaderboard": {
     "name": "rangliste",
     "description": "Zeigt die reichesten User an",

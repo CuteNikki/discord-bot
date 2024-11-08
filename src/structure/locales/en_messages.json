@@ -1,4 +1,12 @@
 {
+  "rob": {
+    "self": "You cannot rob yourself!",
+    "bot": "You cannot rob a bot!",
+    "none": "{{target}} does not have any money on them!",
+    "fail": "You got caught and lost {{amount}}!",
+    "success": "You successfully robbed {{target}} and gained {{amount}}!",
+    "cooldown": "You can rob again {{left}}!"
+  },
   "divorce": {
     "none": "You are not married!",
     "success": "You are now divorced!"

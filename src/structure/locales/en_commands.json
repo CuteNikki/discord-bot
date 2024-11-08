@@ -1,4 +1,14 @@
 {
+  "rob": {
+    "name": "rob",
+    "description": "Rob someone to get their money",
+    "options": [
+      {
+        "name": "user",
+        "description": "The user to rob"
+      }
+    ]
+  },
   "leaderboard": {
     "name": "leaderboard",
     "description": "Shows the richest users",

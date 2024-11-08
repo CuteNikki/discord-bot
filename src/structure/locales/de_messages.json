@@ -1,4 +1,12 @@
 {
+  "rob": {
+    "self": "Du kannst dich nicht selbst ausrauben!",
+    "bot": "Du kannst keinen Bot ausrauben!",
+    "none": "{{target}} hat kein Geld mit sich!",
+    "fail": "Du wurdest erwischt und hast {{amount}} verloren!",
+    "success": "Du hast erfolgreich {{target}} ausgeraubt und {{amount}} bekommen!",
+    "cooldown": "Du kannst erst {{left}} erneut ausrauben!"
+  },
   "divorce": {
     "divorce": "Du bist nicht verheiratet!",
     "success": "Erfolgreich geschieden!"

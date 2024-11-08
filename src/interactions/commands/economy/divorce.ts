@@ -23,6 +23,6 @@ export default new Command({
 
     await divorceUsers(interaction.user.id, userData.marriedTo);
 
-    return interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.economy).setDescription(t('divorce.success', { lng }))], ephemeral: true });
+    return interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.economy).setDescription(t('divorce.success', { lng }))] });
   }
 });

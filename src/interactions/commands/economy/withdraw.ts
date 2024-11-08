@@ -50,7 +50,6 @@ export default new Command({
           .setColor(client.colors.economy)
           .setDescription(t('withdraw.success', { lng, amount: Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount) }))
       ],
-      ephemeral: true
     });
   }
 });

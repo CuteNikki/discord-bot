@@ -9,6 +9,7 @@ import { ModuleType } from 'types/interactions';
 
 export default new Command({
   module: ModuleType.Economy,
+  cooldown: 0, // We have another cooldown for daily, which is stored in the database
   data: new SlashCommandBuilder()
     .setName('daily')
     .setDescription('Claim your daily reward')

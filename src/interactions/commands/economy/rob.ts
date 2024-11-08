@@ -11,6 +11,7 @@ import { ModuleType } from 'types/interactions';
 
 export default new Command({
   module: ModuleType.Economy,
+  cooldown: 0, // We have another cooldown for robbing, which is stored in the database
   data: new SlashCommandBuilder()
     .setName('rob')
     .setDescription('Rob a user')
@@ -78,8 +79,7 @@ export default new Command({
           new EmbedBuilder()
             .setColor(client.colors.error)
             .setDescription(t('rob.fail', { lng, amount: Intl.NumberFormat('en-US', { currency: 'USD', style: 'currency' }).format(randomAmount) }))
-        ],
-        ephemeral: true
+        ]
       });
     }
 
@@ -96,8 +96,7 @@ export default new Command({
           .setDescription(
             t('rob.success', { lng, target: user.toString(), amount: Intl.NumberFormat('en-US', { currency: 'USD', style: 'currency' }).format(randomAmount) })
           )
-      ],
-      ephemeral: true
+      ]
     });
   }
 });

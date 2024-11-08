@@ -53,7 +53,6 @@ export default new Command({
             t('pay.success', { lng, amount: Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount), user: user.toString() })
           )
       ],
-      ephemeral: true
     });
   }
 });

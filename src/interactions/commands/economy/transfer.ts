@@ -61,7 +61,6 @@ export default new Command({
 
     await interaction.reply({
       embeds: [new EmbedBuilder().setColor(client.colors.economy).setDescription(t('transfer.success', { lng, amount, item, user: user.toString() }))],
-      ephemeral: true
     });
   }
 });

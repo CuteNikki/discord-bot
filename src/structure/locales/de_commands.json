@@ -1,4 +1,15 @@
 {
+  "work": {
+    "name": "arbeiten",
+    "description": "Verdiene Geld und Items durch Arbeiten",
+    "options": [
+      {
+        "name": "aktion",
+        "description": "Die Aktion, die du ausführen möchtest",
+        "choices": ["minen", "fischen", "holzfällen", "kämpfen"]
+      }
+    ]
+  },
   "rob": {
     "name": "rauben",
     "description": "Raubt jemanden aus",

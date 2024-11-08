@@ -1,4 +1,19 @@
 {
+  "work": {
+    "cooldown": "Du kannst erst {{left}} erneut arbeiten!",
+    "no-pickaxe": "Du hast keine Spitzhacke!",
+    "mined": "Du hast {{rocks}} Steine gefunden und {{money}} verdient!",
+    "mined-diamond": "Du hast {{rocks}} Steine gefunden und {{money}} verdient!\nDu hast auch einen Diamenten gefunden und deine Spitzhacke dabei verloren.",
+    "no-rod": "Du hast keine Angel!",
+    "fish": "Du hast {{fish}} Fische, {{scrap}} Abfall und {{money}} verdient!",
+    "fish-boot": "Du hast {{fish}} Fische, {{scrap}} Abfall und {{money}} verdient!\nDu hast auch einen Schuh gefunden und deine Angel dabei verloren.",
+    "no-axe": "Du hast keine Axt!",
+    "lumber": "Du hast Bäume gefällt. Dabei hast du {{wood}} Holz und {{money}} verdient!",
+    "no-sword": "Du hast kein Schwert!",
+    "fight": "Du hast um dein Leben gekämpft und {{money}} erhalten!",
+    "fight-failed": "Du hast dein Schwert im Kampf verloren. Du solltest nächtes mal ein Schild mitnehmen.",
+    "fight-shield": "Du hast dein Schild im Kampf verloren, aber mit {{money}} überlebt!"
+  },
   "rob": {
     "self": "Du kannst dich nicht selbst ausrauben!",
     "bot": "Du kannst keinen Bot ausrauben!",

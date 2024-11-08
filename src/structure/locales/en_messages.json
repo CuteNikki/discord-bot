@@ -1,4 +1,19 @@
 {
+  "work": {
+    "cooldown": "You can work again {{left}}!",
+    "no-pickaxe": "You do not have a pickaxe!",
+    "mined": "You mined {{rocks}} fancy rocks and earned {{money}}!",
+    "mined-diamond": "You mined {{rocks}} fancy rocks and earned {{money}}!\nYou also found a diamond but you lost your pickaxe.",
+    "no-rod": "You do not have a fishing rod!",
+    "fish": "You went fishing and caught {{fish}} fish, {{scrap}} scrap and earned {{money}}!",
+    "fish-boot": "You went fishing and caught {{fish}} fish, {{scrap}} scrap and earned {{money}}!\nYou also caught a boot which broke your fishing rod.",
+    "no-axe": "You do not have an axe",
+    "lumber": "You chopped down trees and obtained {{wood}} wood and earned {{money}}!",
+    "no-sword": "You do not have a sword!",
+    "fight": "You fought for your live and earned {{money}}!",
+    "fight-failed": "You fought for your live and lost your sword, you should bring a shield next time!",
+    "fight-shield": "You fought for your live and lost your shield but earned {{money}}!"
+  },
   "rob": {
     "self": "You cannot rob yourself!",
     "bot": "You cannot rob a bot!",

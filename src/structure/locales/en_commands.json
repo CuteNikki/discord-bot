@@ -1,4 +1,15 @@
 {
+  "work": {
+    "name": "work",
+    "description": "Work to earn money and items",
+    "options": [
+      {
+        "name": "action",
+        "description": "The action to perform",
+        "choices": ["mine", "fish", "lumber", "fight"]
+      }
+    ]
+  },
   "rob": {
     "name": "rob",
     "description": "Rob someone to get their money",

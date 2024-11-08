@@ -348,7 +348,7 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
     - [x] marry
     - [x] divorce
     - [x] leaderboard
-    - [ ] rob
+    - [x] rob
     - [ ] work
     - [ ] bet
     - [ ] slots

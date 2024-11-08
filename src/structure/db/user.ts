@@ -265,6 +265,16 @@ export async function hasRobbed(userId: string, timestamp?: number): Promise<Use
 }
 
 /**
+ * Sets the lastWork to a date
+ * @param {string} userId User ID to check
+ * @param {number} timestamp Timestamp to set as the last work
+ * @returns {Promise<UserDocument>} Updated user data
+ */
+export async function hasWorked(userId: string, timestamp?: number): Promise<UserDocument> {
+  return await updateUser(userId, { $set: { lastWork: timestamp ?? Date.now() } });
+}
+
+/**
  * Gets the leaderboard
  * @returns {Promise<UserDocument[]>} Leaderboard data
  */

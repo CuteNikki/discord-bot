@@ -36,15 +36,12 @@ Users can manage their money through a wallet or a bank account. The system prov
 
 ### Item Commands
 
-| Command                   | Description                                                      | Implemented |
-| ------------------------- | ---------------------------------------------------------------- | ----------- |
-| `/work mine`              | Mine for items and money (1-hour cooldown, requires pickaxe)     | ❌          |
-| `/work fish`              | Fish for items and money (1-hour cooldown, requires fishing rod) | ❌          |
-| `/work lumber`            | Gather wood and money (1-hour cooldown, requires axe)            | ❌          |
-| `/work fight`             | Slay enemies for money (1-hour cooldown, requires sword)         | ❌          |
-| `/shop`                   | Buy and sell items                                               | ❌          |
-| `/transfer <item> <user>` | Give items to another user                                       | ✅          |
-| `/inventory [user]`       | Check the current inventory of items                             | ✅          |
+| Command                   | Description                                                  | Implemented |
+| ------------------------- | ------------------------------------------------------------ | ----------- |
+| `/work <job>`             | Get items and money (1-hour cooldown, requires tool for job) | ✅          |
+| `/transfer <item> <user>` | Give items to another user                                   | ✅          |
+| `/inventory [user]`       | Check the current inventory of items                         | ✅          |
+| `/shop`                   | Buy and sell items                                           | ❌          |
 
 ### Marriage Commands
 

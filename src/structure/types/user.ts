@@ -56,6 +56,7 @@ export type UserDocument = {
   marriedTo?: string;
   marriedAt?: number;
   lastDaily?: number;
+  lastRob?: number;
   wallet: number;
   bank: number;
   description?: string;

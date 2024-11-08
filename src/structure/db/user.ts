@@ -255,6 +255,16 @@ export async function claimDaily(userId: string, timestamp?: number): Promise<Us
 }
 
 /**
+ * Sets the lastRob to a date
+ * @param {string} userId User ID to check
+ * @param {number} timestamp Timestamp to set as the last rob
+ * @returns {Promise<UserDocument>} Updated user data
+ */
+export async function hasRobbed(userId: string, timestamp?: number): Promise<UserDocument> {
+  return await updateUser(userId, { $set: { lastRob: timestamp ?? Date.now() } });
+}
+
+/**
  * Gets the leaderboard
  * @returns {Promise<UserDocument[]>} Leaderboard data
  */

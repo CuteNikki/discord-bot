@@ -24,6 +24,7 @@ export const userModel: Model<UserDocument> =
       marriedTo: { type: String, required: false },
       marriedAt: { type: Number, required: false },
       lastDaily: { type: Number, required: false },
+      lastRob: { type: Number, required: false },
       wallet: { type: Number, required: true, default: 0 },
       bank: { type: Number, required: true, default: 0 },
       description: { type: String, required: false },

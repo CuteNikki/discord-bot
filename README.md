@@ -350,7 +350,7 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
     - [x] leaderboard
     - [x] rob
     - [x] work
-    - [ ] bet
+    - [x] bet
     - [ ] slots
     - [ ] coinflip
     - [ ] dice

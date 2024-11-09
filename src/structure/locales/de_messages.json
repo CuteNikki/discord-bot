@@ -1,4 +1,10 @@
 {
+  "bet": {
+    "invalid": "Ungültiger Betrag angegeben!",
+    "insufficient": "Du hast nicht genug Geld, um diesen Betrag zu setzen!",
+    "win": "Du hast {{amount}} gewonnen!",
+    "lose": "Du hast {{amount}} verloren!"
+  },
   "work": {
     "cooldown": "Du kannst erst {{left}} erneut arbeiten!",
     "no-pickaxe": "Du hast keine Spitzhacke!",

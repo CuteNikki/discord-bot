@@ -1,4 +1,14 @@
 {
+  "bet": {
+    "name": "wette",
+    "description": "Wette dein Geld und verdopple es oder verliere es",
+    "options": [
+      {
+        "name": "betrag",
+        "description": "Der Betrag, den du wetten möchtest"
+      }
+    ]
+  },
   "work": {
     "name": "arbeiten",
     "description": "Verdiene Geld und Items durch Arbeiten",

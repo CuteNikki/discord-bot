@@ -1,4 +1,10 @@
 {
+  "bet": {
+    "invalid": "Invalid amount provided!",
+    "insufficient": "You do not have enough money to bet that amount!",
+    "win": "You bet {{amount}} and won!",
+    "lose": "You bet {{amount}} and lost!"
+  },
   "work": {
     "cooldown": "You can work again {{left}}!",
     "no-pickaxe": "You do not have a pickaxe!",

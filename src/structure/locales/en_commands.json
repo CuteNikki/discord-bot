@@ -1,4 +1,14 @@
 {
+  "bet": {
+    "name": "bet",
+    "description": "Bet your money to earn more",
+    "options": [
+      {
+        "name": "amount",
+        "description": "The amount you want to bet"
+      }
+    ]
+  },
   "work": {
     "name": "work",
     "description": "Work to earn money and items",

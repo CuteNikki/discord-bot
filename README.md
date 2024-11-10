@@ -364,5 +364,5 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
     - [ ] suggest
   - [ ] level config
     - [x] text and voice levelling is fully implemented with ignored & enabled channels, announcements, reward and multiplier roles
-    - [ ] levelup announcement
+    - [x] levelup announcement
       - [ ] fully customizable message

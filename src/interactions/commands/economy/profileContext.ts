@@ -22,7 +22,7 @@ import { BadgeType } from 'types/user';
 const commandType = ApplicationCommandType.User;
 
 export default new Command<typeof commandType>({
-  module: ModuleType.Utilities,
+  module: ModuleType.Economy,
   data: new ContextMenuCommandBuilder()
     .setName('profile-context')
     // @ts-expect-error: This is an issue with DiscordJS typings version mismatch in v14.16.3

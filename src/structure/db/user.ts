@@ -113,7 +113,7 @@ export async function marryUsers(userIdOne: string, userIdTwo: string): Promise<
   const marriedAt = Date.now();
 
   const updatedUserOne = await updateUser(userIdOne, { $set: { marriedTo: userIdTwo, marriedAt } });
-  const updatedUserTwo = await updateUser(userIdOne, { $set: { marriedTo: userIdOne, marriedAt } });
+  const updatedUserTwo = await updateUser(userIdTwo, { $set: { marriedTo: userIdOne, marriedAt } });
 
   return { userOne: updatedUserOne, userTwo: updatedUserTwo };
 }

@@ -21,8 +21,6 @@ export default new Command({
     const now = Date.now();
     const timeLeft = (lastDaily ?? 0) + cooldown - now;
 
-    console.log(lastDaily, now, timeLeft);
-
     if (timeLeft > 0) {
       return interaction.reply({
         embeds: [

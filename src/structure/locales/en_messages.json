@@ -1,4 +1,12 @@
 {
+  "coinflip": {
+    "insufficient": "You do not have enough money to coinflip that amount!",
+    "flipping": "Flipping a coin...",
+    "win-money": "The coin landed on {{win}}. Your choice was {{choice}}. You won {{amount}}!",
+    "win": "The coin landed on {{win}}. Your choice was {{choice}}. You won!",
+    "lose-money": "The coin landed on {{win}}. Your choice was {{choice}}. You lost {{amount}}!",
+    "lose": "The coin landed on {{win}}. Your choice was {{choice}}. You lost!"
+  },
   "bet": {
     "invalid": "Invalid amount provided!",
     "insufficient": "You do not have enough money to bet that amount!",

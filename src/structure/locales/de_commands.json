@@ -1,4 +1,19 @@
 {
+  "coinflip": {
+    "name": "münzwurf",
+    "description": "Wirf eine Münze und gewinne oder verliere Geld",
+    "options": [
+      {
+        "name": "wahl",
+        "description": "Die Wahl, die du treffen möchtest",
+        "choices": ["kopf", "zahl"]
+      },
+      {
+        "name": "betrag",
+        "description": "Der Betrag, den du wetten möchtest"
+      }
+    ]
+  },
   "bet": {
     "name": "wette",
     "description": "Wette dein Geld und verdopple es oder verliere es",

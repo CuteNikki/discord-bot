@@ -1,4 +1,12 @@
 {
+  "coinflip": {
+    "insufficient": "Du hast nicht genug Geld, um zu spielen!",
+    "flipping": "Münze wird geworfen...",
+    "win-money": "Die Münze ist auf {{win}} gelandet. Du hast {{choice}} gewählt. Du hast {{amount}} gewonnen!",
+    "win": "Die Münze ist auf {{win}} gelandet. Du hast {{choice}} gewählt. Du hast gewonnen!",
+    "lose-money": "Die Münze ist auf {{win}} gelandet. Du hast {{choice}} gewählt. Du hast {{amount}} verloren!",
+    "lose": "Die Münze ist auf {{win}} gelandet. Du hast {{choice}} gewählt. Du hast verloren!"
+  },
   "bet": {
     "invalid": "Ungültiger Betrag angegeben!",
     "insufficient": "Du hast nicht genug Geld, um diesen Betrag zu setzen!",

@@ -1,4 +1,19 @@
 {
+  "coinflip": {
+    "name": "coinflip",
+    "description": "Flip a coin to get heads or tails",
+    "options": [
+      {
+        "name": "choice",
+        "description": "The choice you want to make",
+        "choices": ["heads", "tails"]
+      },
+      {
+        "name": "amount",
+        "description": "The amount you want to bet"
+      }
+    ]
+  },
   "bet": {
     "name": "bet",
     "description": "Bet your money to earn more",

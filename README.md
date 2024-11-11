@@ -352,7 +352,6 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
     - [x] work
     - [x] bet
     - [x] coinflip
-      - [ ] add a secret where the coin lands on the side (0.1% chance) which gives you a badge (achievement) and after you have unlocked it, it will never happen again.
     - [ ] slots
     - [ ] dice
     - [ ] profile

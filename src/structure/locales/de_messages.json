@@ -5,7 +5,8 @@
     "win-money": "Die Münze ist auf {{win}} gelandet. Du hast {{choice}} gewählt. Du hast {{amount}} gewonnen!",
     "win": "Die Münze ist auf {{win}} gelandet. Du hast {{choice}} gewählt. Du hast gewonnen!",
     "lose-money": "Die Münze ist auf {{win}} gelandet. Du hast {{choice}} gewählt. Du hast {{amount}} verloren!",
-    "lose": "Die Münze ist auf {{win}} gelandet. Du hast {{choice}} gewählt. Du hast verloren!"
+    "lose": "Die Münze ist auf {{win}} gelandet. Du hast {{choice}} gewählt. Du hast verloren!",
+    "edge": "Die Münze ist auf ihrem Rand gelandet. Du hast ein geheimes Abzeichen erhalten. Die Wahrscheinlichkeit hierfür beträgt 0,1%."
   },
   "bet": {
     "invalid": "Ungültiger Betrag angegeben!",

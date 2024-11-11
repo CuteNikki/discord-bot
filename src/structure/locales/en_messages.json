@@ -5,7 +5,8 @@
     "win-money": "The coin landed on {{win}}. Your choice was {{choice}}. You won {{amount}}!",
     "win": "The coin landed on {{win}}. Your choice was {{choice}}. You won!",
     "lose-money": "The coin landed on {{win}}. Your choice was {{choice}}. You lost {{amount}}!",
-    "lose": "The coin landed on {{win}}. Your choice was {{choice}}. You lost!"
+    "lose": "The coin landed on {{win}}. Your choice was {{choice}}. You lost!",
+    "edge": "The coin laded on its edge! You have been given a secret badge. There is only a 0.1% chance of getitng this."
   },
   "bet": {
     "invalid": "Invalid amount provided!",

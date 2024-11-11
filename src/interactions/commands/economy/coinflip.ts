@@ -3,9 +3,10 @@ import { t } from 'i18next';
 
 import { Command } from 'classes/command';
 
-import { addBank, getUser, removeBank } from 'db/user';
+import { addBadge, addBank, getUser, removeBank } from 'db/user';
 
 import { ModuleType } from 'types/interactions';
+import { BadgeType } from 'types/user';
 
 const MIN_AMOUNT = 1;
 const MAX_AMOUNT = 5_000;
@@ -32,7 +33,11 @@ export default new Command({
     const choice = interaction.options.getString('choice') ?? ['heads', 'tails'][Math.floor(Math.random() * 2)];
     const amount = interaction.options.getInteger('amount') ?? 0;
 
-    const win = ['heads', 'tails'][Math.floor(Math.random() * 2)];
+    const userData = (await getUser(interaction.user.id)) ?? { bank: 0, badges: [] };
+    const hasBadge = userData.badges.map((b) => b.id).includes(BadgeType.Coinflipper);
+
+    const random = Math.random();
+    const win = !hasBadge && random < 0.001 ? 'edge' : ['heads', 'tails'][Math.floor(Math.random() * 2)];
     const hasWon = choice === win;
 
     const message = await interaction
@@ -42,12 +47,14 @@ export default new Command({
       })
       .catch(() => {});
 
-    if (!message) return;
+    if (!message) {
+      return;
+    }
 
     if (amount >= MIN_AMOUNT && amount < MAX_AMOUNT) {
-      const userData = (await getUser(interaction.user.id)) ?? { bank: 0 };
-
-      if (userData.bank < amount) return;
+      if (userData.bank < amount) {
+        return;
+      }
 
       if (hasWon) {
         await addBank(interaction.user.id, amount);
@@ -56,14 +63,19 @@ export default new Command({
       }
     }
 
-    const responseKey = hasWon ? (amount > 0 ? 'coinflip.win-money' : 'coinflip.win') : amount > 0 ? 'coinflip.lose-money' : 'coinflip.lose';
+    const responseKey =
+      win === 'edge' ? 'coinflip.edge' : hasWon ? (amount > 0 ? 'coinflip.win-money' : 'coinflip.win') : amount > 0 ? 'coinflip.lose-money' : 'coinflip.lose';
+
+    if (!hasBadge && win === 'edge') {
+      await addBadge(interaction.user.id, BadgeType.Coinflipper);
+    }
 
     setTimeout(() => {
       message
         .edit({
           embeds: [
             new EmbedBuilder()
-              .setColor(hasWon ? Colors.Green : Colors.Red)
+              .setColor(win === 'edge' ? Colors.Gold : hasWon ? Colors.Green : Colors.Red)
               .setDescription(t(responseKey, { amount: Intl.NumberFormat('en-US', { currency: 'USD', style: 'currency' }).format(amount), choice, win, lng }))
           ]
         })

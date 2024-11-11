@@ -352,9 +352,8 @@ This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICE
     - [x] work
     - [x] bet
     - [x] coinflip
-    - [ ] slots
-    - [ ] dice
-    - [ ] profile
+    - [x] profile
+    - [x] profile context
     - [ ] shop
   - [ ] confession
     - [ ] config command

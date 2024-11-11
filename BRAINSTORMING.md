@@ -60,15 +60,14 @@ Users can manage their money through a wallet or a bank account. The system prov
 | -------------------- | -------------------------------------------- | ----------- |
 | `/bet <amount>`      | Place a bet and try to win more money        | ✅          |
 | `/coinflip <amount>` | Flip a coin and double your money if you win | ✅          |
-| `/slots <amount>`    | Play a slot machine game                     | ❌          |
-| `/dice <amount>`     | Roll a dice and win based on the outcome     | ❌          |
 
 ### Profile Commands
 
-| Command                     | Description                   | Implemented |
-| --------------------------- | ----------------------------- | ----------- |
-| `/profile view [user]`      | View the profile of a user    | ❌          |
-| `/profile edit description` | Edit your profile description | ❌          |
+| Command    | Description                 | Implemented |
+| ---------- | --------------------------- | ----------- |
+| `/profile` | View profiles or edit yours | ✅          |
+
+There is also a profile context command.
 
 <br/>
 

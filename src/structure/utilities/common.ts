@@ -1,3 +1,6 @@
+import type { DiscordClient } from 'classes/client';
+import { BadgeType } from 'types/user';
+
 /**
  * Gets a random number between min and max
  * @param {number} min
@@ -38,4 +41,23 @@ export function shuffle<T>(array: T[]): T[] {
   }
 
   return array;
+}
+
+export function getBadgeEmoji(badge: BadgeType, client: DiscordClient) {
+  switch (badge) {
+    case BadgeType.StaffMember:
+      return client.customEmojis.discord_employee;
+    case BadgeType.Bughunter:
+      return client.customEmojis.bughunter;
+    case BadgeType.ExpertBughunter:
+      return client.customEmojis.bughunter_two;
+    case BadgeType.Supporter:
+      return client.customEmojis.booster;
+    case BadgeType.Developer:
+      return client.customEmojis.verified_bot_developer;
+    case BadgeType.Translator:
+      return client.customEmojis.alumni;
+    case BadgeType.Coinflipper:
+      return client.customEmojis.coin;
+  }
 }

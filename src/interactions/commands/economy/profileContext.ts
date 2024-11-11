@@ -90,6 +90,10 @@ export default new Command<typeof commandType>({
       embed.addFields({ name: t('profile.view.language', { lng }), value: userData.language });
     }
 
+    if (!embed.data.fields?.length) {
+      return interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('profile.view.empty', { lng }))] });
+    }
+
     return interaction.editReply({ embeds: [embed] });
   }
 });

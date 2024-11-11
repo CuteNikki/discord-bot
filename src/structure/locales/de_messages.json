@@ -4,6 +4,7 @@
       "description": "Deine Beschreibung wurde aktualisiert"
     },
     "view": {
+      "empty": "Dieses Profil ist leer!",
       "banned": "Dieser User ist gebannt und kann den Bot nicht länger verwenden.",
       "bot": "Bots können kein Profil haben!",
       "description": "Beschreibung",

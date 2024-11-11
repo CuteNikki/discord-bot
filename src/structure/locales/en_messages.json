@@ -4,6 +4,7 @@
       "description": "Your description has been updated!"
     },
     "view": {
+      "empty": "This profile is empty!",
       "banned": "This user is banned! They cannot use this bot.",
       "bot": "Bots cannot have profiles!",
       "description": "Description",

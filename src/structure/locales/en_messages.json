@@ -24,6 +24,7 @@
     "fish-boot": "You went fishing and caught {{fish}} fish, {{scrap}} scrap and earned {{money}}!\nYou also caught a boot which broke your fishing rod.",
     "no-axe": "You do not have an axe",
     "lumber": "You chopped down trees and obtained {{wood}} wood and earned {{money}}!",
+    "lumber-broke": "You chopped down trees and obtained {{wood}} wood and earned {{money}}!\nYour axe broke in the process.",
     "no-sword": "You do not have a sword!",
     "fight": "You fought for your live and earned {{money}}!",
     "fight-failed": "You fought for your live and lost your sword, you should bring a shield next time!",

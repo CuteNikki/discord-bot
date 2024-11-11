@@ -12,6 +12,9 @@ import { boot, diamond, fish, rock, scrap, wood } from 'constants/items';
 import { ModuleType } from 'types/interactions';
 import { ItemType } from 'types/user';
 
+const BREAK_CHANCE = 5;
+const DEATH_CHANCE = 10;
+
 export default new Command({
   module: ModuleType.Economy,
   cooldown: 0, // We have another cooldown for work, which is stored in the database
@@ -69,7 +72,7 @@ export default new Command({
           const randomRocks = getRandomNumber(2, 5);
           const items = new Array(randomRocks).fill(rock);
 
-          const foundDiamond = getRandomNumber(1, 100) <= 15;
+          const foundDiamond = getRandomNumber(1, 100) <= BREAK_CHANCE;
 
           if (foundDiamond) {
             items.push(diamond);
@@ -113,7 +116,7 @@ export default new Command({
           const randomScrap = getRandomNumber(1, 3);
           const items = new Array(randomFish).fill(fish).concat(new Array(randomScrap).fill(scrap));
 
-          const caughtBoot = getRandomNumber(1, 100) <= 15;
+          const caughtBoot = getRandomNumber(1, 100) <= BREAK_CHANCE;
 
           if (caughtBoot) {
             items.push(boot);
@@ -162,10 +165,15 @@ export default new Command({
           const randomMoney = getRandomNumber(100, 500);
           await addMoney(interaction.user.id, randomMoney);
 
+          const lostAxe = getRandomNumber(1, 100) <= BREAK_CHANCE;
+          if (lostAxe) {
+            await removeItem(interaction.user.id, ItemType.Axe);
+          }
+
           interaction.reply({
             embeds: [
               new EmbedBuilder().setColor(client.colors.economy).setDescription(
-                t('work.lumber', {
+                t(lostAxe ? 'work.lumber-broke' : 'work.lumber', {
                   lng,
                   wood: randomWood.toString(),
                   money: Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(randomMoney)
@@ -184,7 +192,7 @@ export default new Command({
             });
           }
 
-          const failed = getRandomNumber(1, 100) <= 15;
+          const failed = getRandomNumber(1, 100) <= DEATH_CHANCE;
           const hasShield = userData?.inventory.find((item) => item.id === ItemType.Shield);
 
           if (failed && !hasShield) {

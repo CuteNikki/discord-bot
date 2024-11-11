@@ -1,4 +1,18 @@
 {
+  "profile": {
+    "edit": {
+      "description": "Deine Beschreibung wurde aktualisiert"
+    },
+    "view": {
+      "banned": "Dieser User ist gebannt und kann den Bot nicht länger verwenden.",
+      "bot": "Bots können kein Profil haben!",
+      "description": "Beschreibung",
+      "badges": "Abzeichen",
+      "balance": "Guthaben",
+      "marriage": "Ehepartner",
+      "language": "Sprache"
+    }
+  },
   "coinflip": {
     "insufficient": "Du hast nicht genug Geld, um zu spielen!",
     "flipping": "Münze wird geworfen...",

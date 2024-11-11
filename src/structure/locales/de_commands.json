@@ -1,4 +1,43 @@
 {
+  "profile-context": {
+    "name": "Profil ansehen"
+  },
+  "profile": {
+    "name": "profil",
+    "description": "Profile anzeigen oder dein eigenes bearbeiten",
+    "options": [
+      {
+        "name": "bearbeiten",
+        "description": "Bearbeite dein Profil",
+        "options": [
+          {
+            "name": "beschreibung",
+            "description": "Bearbeite die Beschreibung deines Profils",
+            "options": [
+              {
+                "name": "beschreibung",
+                "description": "Die neue Beschreibung deines Profils"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "anzeigen",
+        "description": "Zeige dein Profil oder das von jemand anderem an",
+        "options": [
+          {
+            "name": "user",
+            "description": "Der Benutzer, dessen Profil angezeigt werden soll"
+          },
+          {
+            "name": "geheim",
+            "description": "Wenn *True*, kann die Nachricht nur von dir gesehen werden"
+          }
+        ]
+      }
+    ]
+  },
   "coinflip": {
     "name": "münzwurf",
     "description": "Wirf eine Münze und gewinne oder verliere Geld",

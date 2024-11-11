@@ -1,4 +1,18 @@
 {
+  "profile": {
+    "edit": {
+      "description": "Your description has been updated!"
+    },
+    "view": {
+      "banned": "This user is banned! They cannot use this bot.",
+      "bot": "Bots cannot have profiles!",
+      "description": "Description",
+      "badges": "Custom Badges",
+      "balance": "Balance",
+      "marriage": "Marriage",
+      "language": "Language"
+    }
+  },
   "coinflip": {
     "insufficient": "You do not have enough money to coinflip that amount!",
     "flipping": "Flipping a coin...",

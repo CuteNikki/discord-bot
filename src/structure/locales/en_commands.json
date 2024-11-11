@@ -1,4 +1,43 @@
 {
+  "profile-context": {
+    "name": "Show Profile"
+  },
+  "profile": {
+    "name": "profile",
+    "description": "View profiles or edit yours",
+    "options": [
+      {
+        "name": "edit",
+        "description": "Edit your profile",
+        "options": [
+          {
+            "name": "description",
+            "description": "Edit the description of your profile",
+            "options": [
+              {
+                "name": "description",
+                "description": "The new description of your profile"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "view",
+        "description": "View your profile or someone else's",
+        "options": [
+          {
+            "name": "user",
+            "description": "The user to view the profile of"
+          },
+          {
+            "name": "ephemeral",
+            "description": "If *True*, message can only be seen by you"
+          }
+        ]
+      }
+    ]
+  },
   "coinflip": {
     "name": "coinflip",
     "description": "Flip a coin to get heads or tails",
@@ -1738,7 +1777,7 @@
     ]
   },
   "userinfo-context": {
-    "name": "View User-Information"
+    "name": "Show User-Information"
   },
   "vanity-check": {
     "name": "vanity-check",

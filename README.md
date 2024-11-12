@@ -8,6 +8,20 @@ This discord bot was built with custom classes, <a href="https://www.i18next.com
 
 ###### Made with 💖 by <a href="https://github.com/CuteNikki/">Nikki</a>.
 
+## Table of Contents
+
+- [Run it locally](#run-it-locally)
+- [How to create new commands, events, buttons and more](#how-to-create-new-commands-events-buttons-and-more)
+  - [Creating a slash command](#creating-a-slash-command)
+  - [Creating an event](#creating-an-event)
+  - [Creating a button](#creating-a-button)
+  - [Translating commands](#translating-commands)
+  - [Translating messages](#translating-messages)
+- [Contributing](#contributing)
+- [Show your support](#show-your-support)
+- [License](#license)
+- [TO-DO](#to-do)
+
 ## Run it locally
 
 All it takes is just 6-7 simple steps.
@@ -80,11 +94,11 @@ bun run start
 /developer-configuration bans add/remove/list [user]
 ```
 
-## How to create new commands, events, buttons and more.
+## How to create new commands, events, buttons and more
 
-#### 1. Creating a slash command:
+### Creating a slash command
 
-This displays the use of i18next, the command class and all its properties including autocomplete.
+This displays the use of i18next, the command class, and all its properties including autocomplete.
 
 ```ts
 import {
@@ -229,39 +243,8 @@ export default new Command({
 });
 ```
 
-##### Translating messages:
 
-`src/structure/locales/{lng}-messages.json`
-
-```json
-{
-  "preview-color": {
-    "preview": "Heres a preview of the color {{color}}!",
-    "invalid": "The color you provided is invalid!"
-  }
-}
-```
-
-##### Translating commands:
-
-`src/structure/locales/{lng}-commands.json`
-
-```json
-{
-  "preview-color": {
-    "name": "preview-color",
-    "description": "Sends an embed with a color to preview",
-    "options": [
-      {
-        "name": "color",
-        "description": "The color to preview"
-      }
-    ]
-  }
-}
-```
-
-#### 2. Creating an event:
+#### Creating an event
 
 ```ts
 import { Events } from 'discord.js';
@@ -283,7 +266,7 @@ export default new Event({
 });
 ```
 
-#### 3. Creating a button:
+### Creating a button
 
 ```ts
 import { Button } from 'classes/button';
@@ -308,6 +291,38 @@ export default new Button({
     await interaction.channel?.send({ content: 'pong!' }); // Send a response in the channel.
   }
 });
+```
+
+### Translating commands
+
+`src/structure/locales/{lng}-commands.json`
+
+```json
+{
+  "preview-color": {
+    "name": "preview-color",
+    "description": "Sends an embed with a color to preview",
+    "options": [
+      {
+        "name": "color",
+        "description": "The color to preview"
+      }
+    ]
+  }
+}
+```
+
+### Translating messages
+
+`src/structure/locales/{lng}-messages.json`
+
+```json
+{
+  "preview-color": {
+    "preview": "Heres a preview of the color {{color}}!",
+    "invalid": "The color you provided is invalid!"
+  }
+}
 ```
 
 ## Contributing

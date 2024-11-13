@@ -2,11 +2,11 @@
 
 # DiscordJS V14 Bot written in TypeScript
 
-This discord bot was built with custom classes, <a href="https://www.i18next.com/">i18next</a> for translations, <a href="https://getpino.io/">Pino</a> as logger and <a href="https://www.mongodb.com/">MongoDB</a> as database.</p>
+This Discord bot was built with custom classes, [i18next](https://www.i18next.com/) for translations, [Pino](https://getpino.io/) as logger, and [MongoDB](https://www.mongodb.com/) as database.
 
-[<img src="https://img.shields.io/badge/pino-%23687634.svg?style=for-the-badge&logo=pino&logoColor=white" alt="pino" />](https://getpino.io) [<img src="https://img.shields.io/badge/mongodb-%2347A248.svg?style=for-the-badge&logo=mongodb&logoColor=white" alt="mongodb" />](https://mongodb.com) [<img src="https://img.shields.io/badge/i18next-%2326A69A.svg?style=for-the-badge&logo=i18next&logoColor=white" alt="i18next" />](https://i18next.com) [<img src="https://img.shields.io/badge/discordjs_v14&#46;16&#46;3-%235865F2.svg?style=for-the-badge&logo=discord&logoColor=white" alt="discord.js" />](https://discord.js.org)<br /> [<img src="https://img.shields.io/github/stars/CuteNikki/discord-bot?style=for-the-badge&color=%23d4a72a" alt="Repository Stars" />](https://github.com/CuteNikki/discord-bot/stargazers) [<img src="https://img.shields.io/github/issues/CuteNikki/discord-bot?style=for-the-badge&color=%2371d42a" alt="Repository Issues" />](https://github.com/CuteNikki/discord-bot/issues) [<img src="https://img.shields.io/github/forks/CuteNikki/discord-bot?style=for-the-badge&color=%232ad48a" alt="Repository Forks" />](https://github.com/CuteNikki/discord-bot/forks) [<img src="https://img.shields.io/github/license/cutenikki/discord-bot?style=for-the-badge&color=%232a90d4" alt="License" />]()
+[![pino](https://img.shields.io/badge/pino-%23687634.svg?style=for-the-badge&logo=pino&logoColor=white)](https://getpino.io) [![mongodb](https://img.shields.io/badge/mongodb-%2347A248.svg?style=for-the-badge&logo=mongodb&logoColor=white)](https://mongodb.com) [![i18next](https://img.shields.io/badge/i18next-%2326A69A.svg?style=for-the-badge&logo=i18next&logoColor=white)](https://i18next.com) [![discord.js](https://img.shields.io/badge/discordjs_v14.16.3-%235865F2.svg?style=for-the-badge&logo=discord&logoColor=white)](https://discord.js.org) [![Repository Stars](https://img.shields.io/github/stars/CuteNikki/discord-bot?style=for-the-badge&color=%23d4a72a)](https://github.com/CuteNikki/discord-bot/stargazers) [![Repository Issues](https://img.shields.io/github/issues/CuteNikki/discord-bot?style=for-the-badge&color=%2371d42a)](https://github.com/CuteNikki/discord-bot/issues) [![Repository Forks](https://img.shields.io/github/forks/CuteNikki/discord-bot?style=for-the-badge&color=%232ad48a)](https://github.com/CuteNikki/discord-bot/forks) [![License](https://img.shields.io/github/license/cutenikki/discord-bot?style=for-the-badge&color=%232a90d4)]()
 
-###### Made with 💖 by <a href="https://github.com/CuteNikki/">Nikki</a>.
+###### Made with 💖 by [Nikki](https://github.com/CuteNikki/).
 
 ## Table of Contents
 
@@ -28,71 +28,71 @@ All it takes is just 6-7 simple steps.
 
 1. Clone the repository.
 
-```bash
-git clone https://github.com/CuteNikki/discord-bot.git
-```
+    ```bash
+    git clone https://github.com/CuteNikki/discord-bot.git
+    ```
 
 2. Navigate into the project directory.
 
-```bash
-cd discord-bot
-```
+    ```bash
+    cd discord-bot
+    ```
 
 3. Install all the dependencies.
 
-```bash
-bun install
-```
+    ```bash
+    bun install
+    ```
 
 4. Set up your config file.
 
-```bash
-# copy example.config.json and rename to config.json
-# or use this command if you are on Linux.
-cp example.config.json config.json
-# fill in all values (more details in the config file).
-```
+    ```bash
+    # copy example.config.json and rename to config.json
+    # or use this command if you are on Linux.
+    cp example.config.json config.json
+    # fill in all values (more details in the config file).
+    ```
 
 5. Deploy the slash commands.
 
-```bash
-bun run deploy
-# you may also use the /register-commands slash command on discord,
-# once the commands have been registered using the deploy command.
-```
+    ```bash
+    bun run deploy
+    # you may also use the /register-commands slash command on discord,
+    # once the commands have been registered using the deploy command.
+    ```
 
 6. Run the bot using a script.
 
-```bash
-# Run in development:
-bun run dev
+    ```bash
+    # Run in development:
+    bun run dev
 
-# or compile:
-bun run build
-# and run:
-bun run start
+    # or compile:
+    bun run build
+    # and run:
+    bun run start
 
-# You may also use --debug for more detailed console logs!
-```
+    # You may also use --debug for more detailed console logs!
+    ```
 
 7. (optional) Configure more settings using the developer command.
 
-```bash
-# This is used for giving Supporter Badge on support server boost.
-/developer-configuration support-guild-id set <guildId>
+    ```bash
+    # This is used for giving Supporter Badge on support server boost.
+    /developer-configuration support-guild-id set <guildId>
 
-# This is used for the /support command.
-/developer-configuration support-invite-url set <url>
+    # This is used for the /support command.
+    /developer-configuration support-invite-url set <url>
 
-# This is used for the /invite command.
-/developer-configuration bot-invite-url set <url>
+    # This is used for the /invite command.
+    /developer-configuration bot-invite-url set <url>
 
-# This is used to manage badges of a user.
-/developer-configuration badges add/remove/show <user> [badge]
+    # This is used to manage badges of a user.
+    /developer-configuration badges add/remove/show <user> [badge]
 
-# This is used to manage bans.
-/developer-configuration bans add/remove/list [user]
-```
+    # This is used to manage bans.
+    /developer-configuration bans add/remove/list [user]
+    ```
 
 ## How to create new commands, events, buttons and more
 
@@ -243,8 +243,7 @@ export default new Command({
 });
 ```
 
-
-#### Creating an event
+### Creating an event
 
 ```ts
 import { Events } from 'discord.js';
@@ -319,7 +318,7 @@ export default new Button({
 ```json
 {
   "preview-color": {
-    "preview": "Heres a preview of the color {{color}}!",
+    "preview": "Here's a preview of the color {{color}}!",
     "invalid": "The color you provided is invalid!"
   }
 }
@@ -327,8 +326,8 @@ export default new Button({
 
 ## Contributing
 
-Contributions, issues and feature requests are welcome.
-Feel free to check <a href="https://github.com/CuteNikki/discord-bot/issues">issues page</a> if you want to contribute.
+Contributions, issues, and feature requests are welcome.
+Feel free to check the [issues page](https://github.com/CuteNikki/discord-bot/issues) if you want to contribute.
 
 ## Show your support
 
@@ -336,8 +335,8 @@ Please ⭐️ this repository if this project helped you!
 
 ## License
 
-Copyright © 2024 <a href="https://github.com/CuteNikki">CuteNikki</a>.
-This project is <a href="https://github.com/CuteNikki/discord-bot/blob/main/LICENSE">MIT</a> licensed.
+Copyright © 2024 [CuteNikki](https://github.com/CuteNikki).
+This project is [MIT](https://github.com/CuteNikki/discord-bot/blob/main/LICENSE) licensed.
 
 ## TO-DO
 

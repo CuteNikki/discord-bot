@@ -150,7 +150,7 @@ export class LeaderboardBuilder extends Builder<EconomyLeaderboardProps> {
         { className: 'flex items-center justify-center flex-col absolute -top-10' },
         avatar
           ? JSX.createElement('img', {
-              src: (await loadImage(avatar)).toDataURL(),
+              src: avatar,
               className: StyleSheet.cn(`border-[3px] border-[${currentColor}] rounded-full h-18 w-18`),
               alt: 'avatar'
             })
@@ -195,7 +195,7 @@ export class LeaderboardBuilder extends Builder<EconomyLeaderboardProps> {
         'div',
         { className: 'flex flex-row' },
         avatar
-          ? JSX.createElement('img', { src: (await loadImage(avatar)).toDataURL(), className: 'rounded-full h-14 w-14 mr-2', alt: 'avatar' })
+          ? JSX.createElement('img', { src: avatar, className: 'rounded-full h-14 w-14 mr-2', alt: 'avatar' })
           : JSX.createElement('div', { className: 'rounded-full h-14 w-14 mr-2' }),
         JSX.createElement(
           'div',
@@ -292,7 +292,7 @@ export class LeaderboardBuilder extends Builder<EconomyLeaderboardProps> {
           `#${rank}` as unknown as JSX.Element
         ),
         avatar
-          ? JSX.createElement('img', { src: (await loadImage(avatar)).toDataURL(), width: 50, height: 50, className: 'rounded-full flex', alt: 'avatar' })
+          ? JSX.createElement('img', { src: avatar, width: 50, height: 50, className: 'rounded-full flex', alt: 'avatar' })
           : JSX.createElement('div', { width: 50, height: 50, className: 'rounded-full flex', alt: 'avatar' }),
         JSX.createElement(
           'div',

@@ -2,6 +2,8 @@ import type { UpdateQuery } from 'mongoose';
 
 import { clientModel } from 'models/client';
 
+import { defaultShop } from 'constants/shop';
+
 import type { ClientDocument } from 'types/client';
 
 /**
@@ -14,7 +16,7 @@ export async function getClientSettings<T extends boolean>(
   applicationId: string,
   insert: T = false as T
 ): Promise<T extends true ? ClientDocument : ClientDocument | null> {
-  let document = await clientModel.findOne({ applicationId }).lean().exec();
+  let document: ClientDocument | null = await clientModel.findOne({ applicationId }).lean().exec();
 
   if (insert && !document) {
     document = await updateClientSettings(applicationId, {});
@@ -152,4 +154,13 @@ export async function incrementGuildsJoined(applicationId: string): Promise<Clie
  */
 export async function incrementGuildsLeft(applicationId: string): Promise<ClientDocument> {
   return await updateClientSettings(applicationId, { $inc: { ['stats.guildsLeft']: 1 } });
+}
+
+/**
+ * Sets the shop for a given application ID
+ * @param {string} applicationId Application ID to set the shop for
+ * @returns {Promise<ClientDocument>} Updated client settings
+ */
+export async function setupDefaultShop(applicationId: string): Promise<ClientDocument> {
+  return await updateClientSettings(applicationId, { $set: { shop: defaultShop } });
 }

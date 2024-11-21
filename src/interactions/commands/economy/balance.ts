@@ -1,4 +1,12 @@
-import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, SlashCommandBuilder } from 'discord.js';
+import {
+  ActionRowBuilder,
+  ApplicationIntegrationType,
+  ButtonBuilder,
+  ButtonStyle,
+  EmbedBuilder,
+  InteractionContextType,
+  SlashCommandBuilder
+} from 'discord.js';
 import { t } from 'i18next';
 
 import { Command } from 'classes/command';
@@ -51,6 +59,11 @@ export default new Command({
               value: Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(userData.wallet)
             }
           )
+      ],
+      components: [
+        new ActionRowBuilder<ButtonBuilder>().setComponents(
+          new ButtonBuilder().setCustomId(`button-balance-refresh_${user.id}`).setEmoji('🔄').setStyle(ButtonStyle.Secondary)
+        )
       ]
     });
   }

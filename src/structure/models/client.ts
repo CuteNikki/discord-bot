@@ -1,5 +1,7 @@
 import mongoose, { Model, model, Schema } from 'mongoose';
 
+import { defaultShop } from 'constants/shop';
+
 import type { ClientDocument } from 'types/client';
 
 export const clientModel: Model<ClientDocument> =
@@ -37,6 +39,20 @@ export const clientModel: Model<ClientDocument> =
           guildsJoined: 0,
           guildsLeft: 0
         }
+      },
+      shop: {
+        type: [
+          {
+            id: { type: Number, required: true },
+            category: { type: Number, required: true },
+            emoji: { type: String, required: true },
+            name: { type: String, required: true },
+            description: { type: String, required: true },
+            buyPrice: { type: Number, required: true },
+            sellPrice: { type: Number, required: true }
+          }
+        ],
+        default: defaultShop
       }
     })
   );

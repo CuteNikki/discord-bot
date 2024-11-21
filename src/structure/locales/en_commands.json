@@ -1,4 +1,8 @@
 {
+  "shop": {
+    "name": "shop",
+    "description": "View the shop"
+  },
   "profile-context": {
     "name": "Show Profile"
   },

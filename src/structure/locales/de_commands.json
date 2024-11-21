@@ -1,4 +1,8 @@
 {
+  "shop": {
+    "name": "shop",
+    "description": "Zeigt den Shop an"
+  },
   "profile-context": {
     "name": "Profil ansehen"
   },

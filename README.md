@@ -368,7 +368,7 @@ This project is [MIT](https://github.com/CuteNikki/discord-bot/blob/main/LICENSE
     - [x] coinflip
     - [x] profile
     - [x] profile context
-    - [ ] shop
+    - [x] shop
   - [ ] confession
     - [ ] config command
     - [ ] confess

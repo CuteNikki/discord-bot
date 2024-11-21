@@ -327,7 +327,10 @@
       "added": "{{role}} wurde zu deinen Rollen hinzugefügt!",
       "role-not-found": "Die Rolle wurde nicht gefunden!",
       "unknown-group": "Die Gruppe wurde nicht gefunden!",
-      "failed": "Es konnte keine Rolle hinzugefügt/entfernt werden!"
+      "failed": "Es konnte keine Rolle hinzugefügt/entfernt werden!",
+      "required-roles_one": "Dir fehlt eine benötigte Rolle!\n{{roles}}",
+      "required-roles_other": "Dir fehlen benötigte Rollen!\n{{roles}}",
+      "single-mode": "Du kannst dir nur eine Rolle aussuchen!\nEntferne die andere Rolle, bevor du eine andere auswählst."
     }
   },
   "custom-vc": {

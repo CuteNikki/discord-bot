@@ -15,6 +15,8 @@ This Discord bot was built with custom classes, [i18next](https://www.i18next.co
   - [Creating a slash command](#creating-a-slash-command)
   - [Creating an event](#creating-an-event)
   - [Creating a button](#creating-a-button)
+  - [Adding a new language](#adding-a-new-language)
+    - [Currently Supported](#currently-supported-languages)
   - [Translating commands](#translating-commands)
   - [Translating messages](#translating-messages)
 - [Contributing](#contributing)
@@ -292,9 +294,21 @@ export default new Button({
 });
 ```
 
+### Adding a new language
+
+1. Add the new language to supported lanuguages in `src/structure/utilities/language.ts`.
+2. Create a new folder in locales (`src/structure/locales/{lng}`).
+3. Create namespace files for commands and messages.
+4. Translate all values to the new language.
+
+##### Currently supported languages
+
+- `en` Englisch (100%)
+- `de` German (100%)
+
 ### Translating commands
 
-`src/structure/locales/{lng}-commands.json`
+`src/structure/locales/{lng}/commands.json`
 
 ```json
 {
@@ -313,7 +327,7 @@ export default new Button({
 
 ### Translating messages
 
-`src/structure/locales/{lng}-messages.json`
+`src/structure/locales/{lng}/messages.json`
 
 ```json
 {

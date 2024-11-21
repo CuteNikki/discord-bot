@@ -14,7 +14,7 @@ export async function initTranslation() {
       escapeValue: false
     },
     backend: {
-      loadPath: 'src/structure/locales/{{lng}}_{{ns}}.json'
+      loadPath: 'src/structure/locales/{{lng}}/{{ns}}.json'
     }
   });
 }

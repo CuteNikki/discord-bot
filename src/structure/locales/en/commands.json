@@ -221,7 +221,22 @@
       {
         "name": "action",
         "description": "The action to perform",
-        "choices": ["blush", "confused", "cringe", "cry", "dance", "eat", "happy", "sad", "smile", "smug", "think", "thumbsup", "wave", "wink"]
+        "choices": [
+          "blush", 
+          "confused", 
+          "cringe", 
+          "cry", 
+          "dance", 
+          "eat", 
+          "happy", 
+          "sad", 
+          "smile", 
+          "smug", 
+          "think", 
+          "thumbsup", 
+          "wave", 
+          "wink"
+        ]
       }
     ]
   },

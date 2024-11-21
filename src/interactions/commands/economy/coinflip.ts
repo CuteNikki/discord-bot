@@ -40,16 +40,11 @@ export default new Command({
     const win = !hasBadge && random < 0.001 ? 'edge' : ['heads', 'tails'][Math.floor(Math.random() * 2)];
     const hasWon = choice === win;
 
-    const message = await interaction
+    await interaction
       .reply({
-        embeds: [new EmbedBuilder().setColor(client.colors.economy).setDescription(t('coinflip.flipping', { lng }))],
-        fetchReply: true
+        embeds: [new EmbedBuilder().setColor(client.colors.economy).setDescription(t('coinflip.flipping', { lng }))]
       })
       .catch(() => {});
-
-    if (!message) {
-      return;
-    }
 
     if (amount >= MIN_AMOUNT && amount < MAX_AMOUNT) {
       if (userData.bank < amount) {
@@ -71,8 +66,8 @@ export default new Command({
     }
 
     setTimeout(() => {
-      message
-        .edit({
+      interaction
+        .editReply({
           embeds: [
             new EmbedBuilder()
               .setColor(win === 'edge' ? Colors.Gold : hasWon ? Colors.Green : Colors.Red)

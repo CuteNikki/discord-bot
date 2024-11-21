@@ -28,71 +28,71 @@ All it takes is just 6-7 simple steps.
 
 1. Clone the repository.
 
-    ```bash
-    git clone https://github.com/CuteNikki/discord-bot.git
-    ```
+   ```bash
+   git clone https://github.com/CuteNikki/discord-bot.git
+   ```
 
 2. Navigate into the project directory.
 
-    ```bash
-    cd discord-bot
-    ```
+   ```bash
+   cd discord-bot
+   ```
 
 3. Install all the dependencies.
 
-    ```bash
-    bun install
-    ```
+   ```bash
+   bun install
+   ```
 
 4. Set up your config file.
 
-    ```bash
-    # copy example.config.json and rename to config.json
-    # or use this command if you are on Linux.
-    cp example.config.json config.json
-    # fill in all values (more details in the config file).
-    ```
+   ```bash
+   # copy example.config.json and rename to config.json
+   # or use this command if you are on Linux.
+   cp example.config.json config.json
+   # fill in all values (more details in the config file).
+   ```
 
 5. Deploy the slash commands.
 
-    ```bash
-    bun run deploy
-    # you may also use the /register-commands slash command on discord,
-    # once the commands have been registered using the deploy command.
-    ```
+   ```bash
+   bun run deploy
+   # you may also use the /register-commands slash command on discord,
+   # once the commands have been registered using the deploy command.
+   ```
 
 6. Run the bot using a script.
 
-    ```bash
-    # Run in development:
-    bun run dev
+   ```bash
+   # Run in development:
+   bun run dev
 
-    # or compile:
-    bun run build
-    # and run:
-    bun run start
+   # or compile:
+   bun run build
+   # and run:
+   bun run start
 
-    # You may also use --debug for more detailed console logs!
-    ```
+   # You may also use --debug for more detailed console logs!
+   ```
 
 7. (optional) Configure more settings using the developer command.
 
-    ```bash
-    # This is used for giving Supporter Badge on support server boost.
-    /developer-configuration support-guild-id set <guildId>
+   ```bash
+   # This is used for giving Supporter Badge on support server boost.
+   /developer-configuration support-guild-id set <guildId>
 
-    # This is used for the /support command.
-    /developer-configuration support-invite-url set <url>
+   # This is used for the /support command.
+   /developer-configuration support-invite-url set <url>
 
-    # This is used for the /invite command.
-    /developer-configuration bot-invite-url set <url>
+   # This is used for the /invite command.
+   /developer-configuration bot-invite-url set <url>
 
-    # This is used to manage badges of a user.
-    /developer-configuration badges add/remove/show <user> [badge]
+   # This is used to manage badges of a user.
+   /developer-configuration badges add/remove/show <user> [badge]
 
-    # This is used to manage bans.
-    /developer-configuration bans add/remove/list [user]
-    ```
+   # This is used to manage bans.
+   /developer-configuration bans add/remove/list [user]
+   ```
 
 ## How to create new commands, events, buttons and more
 
@@ -369,6 +369,8 @@ This project is [MIT](https://github.com/CuteNikki/discord-bot/blob/main/LICENSE
     - [x] profile
     - [x] profile context
     - [x] shop
+    - [ ] buy
+    - [ ] sell
   - [ ] confession
     - [ ] config command
     - [ ] confess

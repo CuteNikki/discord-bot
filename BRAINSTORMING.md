@@ -45,7 +45,9 @@ Users can manage their money through a wallet or a bank account. The system prov
 | `/work <job>`             | Get items and money (1-hour cooldown, requires tool for job) | ✅          |
 | `/transfer <item> <user>` | Give items to another user                                   | ✅          |
 | `/inventory [user]`       | Check the current inventory of items                         | ✅          |
-| `/shop`                   | Buy and sell items                                           | ✅          |
+| `/shop`                   | View the shop                                                | ✅          |
+| `/sell <item> [amount]`   | Sell an item                                                 | ❌          |
+| `/buy <item> [amount]`    | Buy an item                                                  | ❌          |
 
 ### Marriage Commands
 

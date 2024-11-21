@@ -13,7 +13,7 @@ export const logger = pino(
       },
       {
         target: 'pino/file',
-        options: { destination: `${__dirname}/../../../pino.log` }
+        options: { destination: `${process.cwd()}/pino.log` }
       }
     ]
   })

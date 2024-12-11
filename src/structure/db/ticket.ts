@@ -3,6 +3,7 @@ import type { Types, UpdateQuery } from 'mongoose';
 import { ticketConfigModel, ticketGroupModel, ticketModel } from 'models/ticket';
 
 import { updateGuild } from 'db/guild';
+
 import type { TicketChoice, TicketConfigDocument, TicketDocument, TicketGroupDocument } from 'types/ticket';
 
 /**
@@ -11,7 +12,7 @@ import type { TicketChoice, TicketConfigDocument, TicketDocument, TicketGroupDoc
  * @returns {Promise<TicketConfigDocument | null>} Ticket config or null if not found
  */
 export async function getTicketConfig(guildId: string): Promise<TicketConfigDocument | null> {
-  return await ticketConfigModel.findOne({ guildId }).lean().exec();
+  return await ticketConfigModel.findOne({ guildId }).populate({ path: 'groups' }).lean().exec();
 }
 
 /**
@@ -53,7 +54,10 @@ export async function disableTicketModule(guildId: string): Promise<TicketConfig
  * @returns {Promise<void>} Promise that resolves when the ticket group is deleted
  */
 export async function deleteTicketGroup(guildId: string, groupId: Types.ObjectId | string): Promise<void> {
-  const document = await ticketConfigModel.findOneAndUpdate({ guildId }, { $pull: { systems: { _id: groupId } } }, { upsert: true });
+  const document = await ticketConfigModel
+    .findOneAndUpdate({ guildId }, { $pull: { systems: { _id: groupId } } }, { upsert: true })
+    .lean()
+    .exec();
   await updateGuild(guildId, { $set: { ticket: document?._id } });
   await ticketGroupModel.findByIdAndDelete(groupId);
 }
@@ -88,7 +92,10 @@ export async function createTicketGroup(
     maxTickets
   });
 
-  const configDocument = await ticketConfigModel.findOneAndUpdate({ guildId }, { $push: { groups: document._id } }, { upsert: true });
+  const configDocument = await ticketConfigModel
+    .findOneAndUpdate({ guildId }, { $push: { groups: document._id } }, { upsert: true })
+    .lean()
+    .exec();
   await updateGuild(guildId, { $set: { ticket: configDocument?._id } });
 
   return document;

@@ -182,6 +182,7 @@ export class Tetris {
 
     return await interaction
       .editReply({
+        content: null,
         embeds: [
           new EmbedBuilder()
             .setColor(Colors.Red)

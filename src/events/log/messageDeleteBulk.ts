@@ -39,7 +39,7 @@ export default new Event({
 
     const logChannel = await guild.channels
       .fetch(event.channelId)
-      .catch((err) => logger.debug({ err }, 'GuildLog | MessageBulkDelete: Could not fetch channel'));
+      .catch((err) => logger.debug({ err }, 'GuildLog | MessageDeleteBulk: Could not fetch channel'));
 
     if (!logChannel?.isSendable()) {
       return;
@@ -52,9 +52,9 @@ export default new Event({
         embeds: [
           new EmbedBuilder()
             .setColor(Colors.Red)
-            .setTitle(t('log.messageBulkDelete.title', { lng }))
+            .setTitle(t('log.messageDeleteBulk.title', { lng }))
             .setDescription(
-              t('log.messageBulkDelete.description', {
+              t('log.messageDeleteBulk.description', {
                 lng,
                 messages: messages.size,
                 channel: messages.first()?.channel.toString()
@@ -68,22 +68,22 @@ export default new Event({
               `${messages
                 .map(
                   (message) =>
-                    `${t('log.messageBulkDelete.author', { lng })}: ${message.author?.username} (${message.author?.id})\n${t(
-                      'log.messageBulkDelete.attachments',
+                    `${t('log.messageDeleteBulk.author', { lng })}: ${message.author?.username} (${message.author?.id})\n${t(
+                      'log.messageDeleteBulk.attachments',
                       {
                         lng
                       }
-                    )}: ${message.attachments.map((attachment) => attachment.url).join('\n          ')}\n${t('log.messageBulkDelete.content', { lng })}: ${message.content}`
+                    )}: ${message.attachments.map((attachment) => attachment.url).join('\n          ')}\n${t('log.messageDeleteBulk.content', { lng })}: ${message.content}`
                 )
                 .join('\n\n')}`
             ),
             {
               name: 'message-bulk-delete.txt',
-              description: t('log.messageBulkDelete.file-description', { lng })
+              description: t('log.messageDeleteBulk.file-description', { lng })
             }
           )
         ]
       })
-      .catch((err) => logger.debug({ err }, 'GuildLog | MessageBulkDelete: Could not send message'));
+      .catch((err) => logger.debug({ err }, 'GuildLog | MessageDeleteBulk: Could not send message'));
   }
 });

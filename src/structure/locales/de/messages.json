@@ -1159,7 +1159,7 @@
       "url": "URL",
       "channel": "Kanal"
     },
-    "messageBulkDelete": {
+    "messageDeleteBulk": {
       "title": "Nachrichten-Bulk-Löschung",
       "description": "{{messages}} gelöschte Nachrichten in {{channel}}",
       "author": "Author",

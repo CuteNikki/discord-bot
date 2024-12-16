@@ -227,23 +227,6 @@ export default new Command({
             .setColor(client.colors.general)
             .setTitle(t('log.events.title-unconfigured', { lng }))
             .setDescription(unconfiguredEvents.length ? unconfiguredEvents.join('\n') : t('none', { lng }))
-          // .addFields(
-          //   { name: t('log.state.title', { lng }), value: log.enabled ? t('enabled', { lng }) : t('disabled', { lng }) },
-          //   {
-          //     name: t('log.events.title-enabled', { lng }),
-          //     value: enabledEvents.length
-          //       ? enabledEvents.map((e) => `${e.name}: ${guild.channels.cache.get(e.channelId) ? channelMention(e.channelId) : e.channelId}`).join('\n')
-          //       : t('none', { lng })
-          //   }
-          // {
-          //   name: t('log.events.title-disabled', { lng }),
-          //   value: disabledEvents.length ? disabledEvents.map((e) => e.name).join('\n') : t('none', { lng })
-          // },
-          // {
-          //   name: t('log.events.title-unconfigured', { lng }),
-          //   value: unconfiguredEvents.length ? unconfiguredEvents.join('\n') : t('none', { lng })
-          // }
-          // )
         ]
       });
     }

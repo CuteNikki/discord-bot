@@ -1,4 +1,7 @@
 {
+  "decide": {
+    "result": "**Optionen:** {{options}}\n**Das Ergebnis ist:** {{result}}"
+  },
   "profile": {
     "edit": {
       "description": "Deine Beschreibung wurde aktualisiert"

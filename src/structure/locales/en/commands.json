@@ -1,4 +1,18 @@
 {
+  "decide": {
+    "name": "decide",
+    "description": "Helps you decide between options",
+    "options": [
+      {
+        "name": "options",
+        "description": "Separate each option with a ; (semicolon)"
+      },
+      {
+        "name": "ephemeral",
+        "description": "If *True*, message can only be seen by you"
+      }
+    ]
+  },
   "shop": {
     "name": "shop",
     "description": "View the shop"

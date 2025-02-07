@@ -1,4 +1,18 @@
 {
+  "decide": {
+    "name": "entscheiden",
+    "description": "Entscheidet für dich",
+    "options": [
+      {
+        "name": "optionen",
+        "description": "Trenne jede Option mit einem ; (Semikolon)"
+      },
+      {
+        "name": "geheim",
+        "description": "Wenn *True*, kann die Nachricht nur von dir gesehen werden"
+      }
+    ]
+  },
   "shop": {
     "name": "shop",
     "description": "Zeigt den Shop an"

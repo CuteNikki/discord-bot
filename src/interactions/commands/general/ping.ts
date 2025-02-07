@@ -28,8 +28,8 @@ export default new Command({
 
     const sent = await interaction.reply({
       content: t('ping.pinging', { lng }),
-      fetchReply: true,
-      flags: ephemeral ? [MessageFlags.Ephemeral] : undefined
+      flags: ephemeral ? [MessageFlags.Ephemeral] : undefined,
+      withResponse: true
     });
 
     const websocketHeartbeat = interaction.guild?.shard.ping ?? client.ws.ping;
@@ -47,7 +47,7 @@ export default new Command({
             },
             {
               name: t('ping.roundtrip', { lng }),
-              value: `${sent.createdTimestamp - interaction.createdTimestamp}ms`
+              value: `${sent.resource!.message!.createdTimestamp - interaction.createdTimestamp}ms`
             }
           )
       ],

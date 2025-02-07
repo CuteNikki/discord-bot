@@ -15,7 +15,7 @@ export default new Button({
   async execute({ interaction, client, lng }) {
     const sent = await interaction.update({
       content: t('ping.pinging', { lng }),
-      fetchReply: true
+      withResponse: true
     });
 
     const websocketHeartbeat = interaction.guild?.shard.ping ?? client.ws.ping;
@@ -33,7 +33,7 @@ export default new Button({
             },
             {
               name: t('ping.roundtrip', { lng }),
-              value: `${sent.editedTimestamp! - interaction.createdTimestamp}ms`
+              value: `${sent.resource!.message!.editedTimestamp! - interaction.createdTimestamp}ms`
             },
             {
               name: t('ping.last-updated', { lng }),

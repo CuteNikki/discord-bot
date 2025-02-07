@@ -6,6 +6,7 @@ import {
   ContextMenuCommandBuilder,
   EmbedBuilder,
   InteractionContextType,
+  MessageFlags,
   codeBlock
 } from 'discord.js';
 import { t } from 'i18next';
@@ -21,12 +22,11 @@ export default new Command<typeof commandType>({
   botPermissions: ['SendMessages'],
   data: new ContextMenuCommandBuilder()
     .setName('translate-context')
-    // @ts-expect-error: This is an issue with DiscordJS typings version mismatch in v14.16.3
     .setType(commandType)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
     .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel),
   async execute({ interaction, client, lng }) {
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 
     const { targetMessage } = interaction;
 

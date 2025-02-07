@@ -1,4 +1,4 @@
-import { Collection, EmbedBuilder, Events, inlineCode, time, TimestampStyles, type InteractionReplyOptions } from 'discord.js';
+import { Collection, EmbedBuilder, Events, inlineCode, MessageFlags, time, TimestampStyles, type InteractionReplyOptions } from 'discord.js';
 import { t } from 'i18next';
 
 import { Event } from 'classes/event';
@@ -60,7 +60,7 @@ export default new Event({
         embeds: [
           new EmbedBuilder().setColor(client.colors.error).setDescription(t('interactions.module', { lng, module: ModuleType[command.options.module] }))
         ],
-        ephemeral: true
+        flags: [MessageFlags.Ephemeral]
       };
 
       switch (command.options.module) {
@@ -116,7 +116,7 @@ export default new Event({
               .setColor(client.colors.error)
               .setDescription(t('interactions.bot-permissions', { lng, permissions: command.options.botPermissions.join(', ') }))
           ],
-          ephemeral: true
+          flags: [MessageFlags.Ephemeral]
         });
         return;
       }
@@ -128,7 +128,7 @@ export default new Event({
     if (command.options.isDeveloperOnly && !keys.DEVELOPER_USER_IDS.includes(interaction.user.id)) {
       await interaction.reply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('interactions.developer-only', { lng }))],
-        ephemeral: true
+        flags: [MessageFlags.Ephemeral]
       });
       return;
     }
@@ -163,7 +163,7 @@ export default new Event({
               })
             )
           ],
-          ephemeral: true
+          flags: [MessageFlags.Ephemeral]
         });
         return;
       }
@@ -186,7 +186,7 @@ export default new Event({
       if (interaction.deferred) {
         await interaction.editReply({ embeds: [embed] });
       } else {
-        await interaction.reply({ embeds: [embed], ephemeral: true });
+        await interaction.reply({ embeds: [embed], flags: [MessageFlags.Ephemeral] });
       }
 
       await sendError({ client, err, location: `Command Interaction Error: ${command.options.data.name}` });

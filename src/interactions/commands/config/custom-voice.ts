@@ -1,4 +1,4 @@
-import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
+import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, MessageFlags, PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
 import { t } from 'i18next';
 
 import { Command } from 'classes/command';
@@ -48,7 +48,7 @@ export default new Command({
       return;
     }
 
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 
     const voiceChannel = interaction.member.voice.channel;
     if (!voiceChannel) {

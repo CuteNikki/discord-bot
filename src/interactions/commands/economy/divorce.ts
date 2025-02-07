@@ -1,4 +1,4 @@
-import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, SlashCommandBuilder } from 'discord.js';
+import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, MessageFlags, SlashCommandBuilder } from 'discord.js';
 import { t } from 'i18next';
 
 import { Command } from 'classes/command';
@@ -18,7 +18,10 @@ export default new Command({
     const userData = await getUser(interaction.user.id);
 
     if (!userData?.marriedTo) {
-      return interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('divorce.none', { lng }))], ephemeral: true });
+      return interaction.reply({
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('divorce.none', { lng }))],
+        flags: [MessageFlags.Ephemeral]
+      });
     }
 
     await divorceUsers(interaction.user.id, userData.marriedTo);

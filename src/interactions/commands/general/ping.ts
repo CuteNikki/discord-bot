@@ -5,6 +5,7 @@ import {
   ButtonStyle,
   EmbedBuilder,
   InteractionContextType,
+  MessageFlags,
   SlashCommandBuilder
 } from 'discord.js';
 import { t } from 'i18next';
@@ -28,7 +29,7 @@ export default new Command({
     const sent = await interaction.reply({
       content: t('ping.pinging', { lng }),
       fetchReply: true,
-      ephemeral
+      flags: ephemeral ? [MessageFlags.Ephemeral] : undefined
     });
 
     const websocketHeartbeat = interaction.guild?.shard.ping ?? client.ws.ping;

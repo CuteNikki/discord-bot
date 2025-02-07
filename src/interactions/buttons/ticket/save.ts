@@ -1,5 +1,5 @@
 import { createTranscript, ExportReturnType } from 'discord-html-transcripts';
-import { EmbedBuilder, PermissionFlagsBits, time, TimestampStyles, userMention, type TextBasedChannel } from 'discord.js';
+import { EmbedBuilder, MessageFlags, PermissionFlagsBits, time, TimestampStyles, userMention, type TextBasedChannel } from 'discord.js';
 import { t } from 'i18next';
 
 import { Button } from 'classes/button';
@@ -29,7 +29,7 @@ export default new Button({
     if (!group) {
       await interaction.reply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid-group', { lng }))],
-        ephemeral: true
+        flags: [MessageFlags.Ephemeral]
       });
       return;
     }
@@ -39,7 +39,7 @@ export default new Button({
     if (!ticket) {
       await interaction.reply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid-ticket', { lng }))],
-        ephemeral: true
+        flags: [MessageFlags.Ephemeral]
       });
       return;
     }
@@ -48,7 +48,7 @@ export default new Button({
       if (!member.roles.cache.has(group.staffRoleId)) {
         await interaction.reply({
           embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.staff-only', { lng }))],
-          ephemeral: true
+          flags: [MessageFlags.Ephemeral]
         });
         return;
       }
@@ -116,7 +116,10 @@ export default new Button({
       .catch((err) => logger.debug({ err }, 'Could not send transcript'));
 
     if (!msg) {
-      await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.error', { lng }))], ephemeral: true });
+      await interaction.reply({
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.error', { lng }))],
+        flags: [MessageFlags.Ephemeral]
+      });
       return;
     }
 

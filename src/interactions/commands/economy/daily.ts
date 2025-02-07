@@ -1,4 +1,4 @@
-import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, SlashCommandBuilder, time, TimestampStyles } from 'discord.js';
+import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, MessageFlags, SlashCommandBuilder, time, TimestampStyles } from 'discord.js';
 import { t } from 'i18next';
 
 import { Command } from 'classes/command';
@@ -28,7 +28,7 @@ export default new Command({
             .setColor(client.colors.error)
             .setDescription(t('daily.cooldown', { lng, left: time(Math.floor((now + timeLeft) / 1000), TimestampStyles.RelativeTime) }))
         ],
-        ephemeral: true
+        flags: [MessageFlags.Ephemeral]
       });
     }
 
@@ -40,7 +40,7 @@ export default new Command({
           .setColor(client.colors.economy)
           .setDescription(t('daily.claimed', { lng, next: time(Math.floor((Date.now() + cooldown) / 1000), TimestampStyles.RelativeTime) }))
       ],
-      ephemeral: true
+      flags: [MessageFlags.Ephemeral]
     });
   }
 });

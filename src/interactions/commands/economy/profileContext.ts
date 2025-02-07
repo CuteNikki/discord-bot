@@ -4,6 +4,7 @@ import {
   ContextMenuCommandBuilder,
   EmbedBuilder,
   InteractionContextType,
+  MessageFlags,
   time,
   TimestampStyles
 } from 'discord.js';
@@ -25,7 +26,6 @@ export default new Command<typeof commandType>({
   module: ModuleType.Economy,
   data: new ContextMenuCommandBuilder()
     .setName('profile-context')
-    // @ts-expect-error: This is an issue with DiscordJS typings version mismatch in v14.16.3
     .setType(commandType)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
     .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel),
@@ -35,10 +35,13 @@ export default new Command<typeof commandType>({
     const user = options.getUser('user') || interaction.user;
 
     if (user.bot) {
-      return interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('profile.view.bot', { lng }))], ephemeral: true });
+      return interaction.reply({
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('profile.view.bot', { lng }))],
+        flags: [MessageFlags.Ephemeral]
+      });
     }
 
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 
     const userData = (await getUser(user.id)) ?? {
       banned: false,

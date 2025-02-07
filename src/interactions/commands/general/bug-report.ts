@@ -3,6 +3,7 @@ import {
   ApplicationIntegrationType,
   EmbedBuilder,
   InteractionContextType,
+  MessageFlags,
   ModalBuilder,
   SlashCommandBuilder,
   TextInputBuilder,
@@ -27,7 +28,7 @@ export default new Command({
     if (!keys.DEVELOPER_BUG_REPORT_WEBHOOK || keys.DEVELOPER_BUG_REPORT_WEBHOOK === 'optional') {
       await interaction.reply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('bug-report.unavailable', { lng }))],
-        ephemeral: true
+        flags: [MessageFlags.Ephemeral]
       });
       return;
     }

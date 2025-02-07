@@ -1,4 +1,4 @@
-import { EmbedBuilder, userMention, type TextChannel } from 'discord.js';
+import { EmbedBuilder, MessageFlags, userMention, type TextChannel } from 'discord.js';
 import { t } from 'i18next';
 
 import { Selection } from 'classes/selection';
@@ -33,7 +33,7 @@ export default new Selection({
     if (!group) {
       await interaction.reply({
         content: t('ticket.invalid-group', { lng }),
-        ephemeral: true
+        flags: [MessageFlags.Ephemeral]
       });
       return;
     }
@@ -43,7 +43,7 @@ export default new Selection({
     if (!ticket) {
       await interaction.reply({
         content: t('ticket.invalid-ticket', { lng }),
-        ephemeral: true
+        flags: [MessageFlags.Ephemeral]
       });
       return;
     }
@@ -51,7 +51,7 @@ export default new Selection({
     if (ticket.closed || ticket.locked) {
       await interaction.reply({
         content: t('ticket.user-unavailable', { lng }),
-        ephemeral: true
+        flags: [MessageFlags.Ephemeral]
       });
       return;
     }
@@ -64,7 +64,7 @@ export default new Selection({
     if (!targetMember) {
       await interaction.reply({
         content: t('ticket.user-invalid', { lng }),
-        ephemeral: true
+        flags: [MessageFlags.Ephemeral]
       });
       return;
     }
@@ -72,7 +72,7 @@ export default new Selection({
     if (targetMember.roles.cache.has(group.staffRoleId)) {
       await interaction.reply({
         content: t('ticket.user-staff', { lng }),
-        ephemeral: true
+        flags: [MessageFlags.Ephemeral]
       });
       return;
     }
@@ -80,7 +80,7 @@ export default new Selection({
     if (targetId === ticket.createdBy) {
       await interaction.reply({
         content: t('ticket.user-creator', { lng }),
-        ephemeral: true
+        flags: [MessageFlags.Ephemeral]
       });
       return;
     }

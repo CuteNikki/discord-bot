@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, type ChatInputCommandInteraction, type User } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, MessageFlags, type ChatInputCommandInteraction, type User } from 'discord.js';
 import { t } from 'i18next';
 
 import { Opponent } from 'games/opponent';
@@ -71,7 +71,7 @@ export class TicTacToe extends Opponent {
             content: t('interactions.author-only', {
               lng: await getUserLanguage(buttonInteraction.user.id)
             }),
-            ephemeral: true
+            flags: [MessageFlags.Ephemeral]
           })
           .catch((err) => logger.debug({ err }, 'Could not follow up'));
 
@@ -79,13 +79,13 @@ export class TicTacToe extends Opponent {
         return buttonInteraction
           .followUp({
             content: t('games.ttt.turn', { lng: opponentLng }),
-            ephemeral: true
+            flags: [MessageFlags.Ephemeral]
           })
           .catch((err) => logger.debug({ err }, 'Could not follow up'));
 
       if (!this.playerTurn && buttonInteraction.user.id !== opponent.id)
         return buttonInteraction
-          .followUp({ content: t('games.ttt.turn', { lng }), ephemeral: true })
+          .followUp({ content: t('games.ttt.turn', { lng }), flags: [MessageFlags.Ephemeral] })
           .catch((err) => logger.debug({ err }, 'Could not follow up'));
 
       this.board[parseInt(buttonInteraction.customId.split('_')[1])] = this.playerTurn ? 1 : 2;

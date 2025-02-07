@@ -4,6 +4,7 @@ import {
   ButtonStyle,
   Colors,
   EmbedBuilder,
+  MessageFlags,
   type APIButtonComponent,
   type ChatInputCommandInteraction,
   type JSONEncodable,
@@ -114,7 +115,7 @@ export class Connect4 extends Opponent {
             content: t('interactions.author-only', {
               lng: await getUserLanguage(buttonInteraction.user.id)
             }),
-            ephemeral: true
+            flags: [MessageFlags.Ephemeral]
           })
           .catch((err) => logger.debug({ err }, 'Could not follow up'));
 
@@ -122,7 +123,7 @@ export class Connect4 extends Opponent {
         return buttonInteraction
           .followUp({
             content: t('games.connect.turn', { lng: opponentLng }),
-            ephemeral: true
+            flags: [MessageFlags.Ephemeral]
           })
           .catch((err) => logger.debug({ err }, 'Could not follow up'));
 
@@ -130,7 +131,7 @@ export class Connect4 extends Opponent {
         return buttonInteraction
           .followUp({
             content: t('games.connect.turn', { lng }),
-            ephemeral: true
+            flags: [MessageFlags.Ephemeral]
           })
           .catch((err) => logger.debug({ err }, 'Could not follow up'));
 

@@ -1,4 +1,4 @@
-import { ApplicationCommandType, ApplicationIntegrationType, ContextMenuCommandBuilder, EmbedBuilder, InteractionContextType } from 'discord.js';
+import { ApplicationCommandType, ApplicationIntegrationType, ContextMenuCommandBuilder, EmbedBuilder, InteractionContextType, MessageFlags } from 'discord.js';
 import { t } from 'i18next';
 
 import { Command } from 'classes/command';
@@ -11,12 +11,11 @@ export default new Command<ApplicationCommandType.User>({
   module: ModuleType.Utilities,
   data: new ContextMenuCommandBuilder()
     .setName('avatar-context')
-    // @ts-expect-error: This is an issue with DiscordJS typings version mismatch in v14.16.3
     .setType(ApplicationCommandType.User)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
     .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel),
   async execute({ interaction, client, lng }) {
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 
     const { guild, user: author } = interaction;
 

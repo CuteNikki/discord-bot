@@ -5,6 +5,7 @@ import {
   ButtonStyle,
   EmbedBuilder,
   InteractionContextType,
+  MessageFlags,
   SlashCommandBuilder
 } from 'discord.js';
 import { t } from 'i18next';
@@ -27,7 +28,7 @@ export default new Command({
   async execute({ interaction, client, lng }) {
     const ephemeral = interaction.options.getBoolean('ephemeral') ?? true;
 
-    await interaction.deferReply({ ephemeral });
+    await interaction.deferReply({ flags: ephemeral ? [MessageFlags.Ephemeral] : undefined });
 
     const user = interaction.options.getUser('user') ?? interaction.user;
 

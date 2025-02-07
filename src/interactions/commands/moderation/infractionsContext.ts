@@ -5,6 +5,7 @@ import {
   ContextMenuCommandBuilder,
   EmbedBuilder,
   InteractionContextType,
+  MessageFlags,
   PermissionFlagsBits,
   time,
   TimestampStyles,
@@ -29,7 +30,6 @@ export default new Command<typeof commandType>({
   botPermissions: ['SendMessages'],
   data: new ContextMenuCommandBuilder()
     .setName('infractions-context')
-    // @ts-expect-error: This is an issue with DiscordJS typings version mismatch in v14.16.3
     .setType(commandType)
     .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
@@ -37,7 +37,7 @@ export default new Command<typeof commandType>({
   async execute({ interaction, lng }) {
     if (!interaction.inCachedGuild()) return;
 
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 
     const { guildId, member } = interaction;
 

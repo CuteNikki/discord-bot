@@ -1,4 +1,14 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, Message, type ChatInputCommandInteraction, type User } from 'discord.js';
+import {
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  Colors,
+  EmbedBuilder,
+  Message,
+  MessageFlags,
+  type ChatInputCommandInteraction,
+  type User
+} from 'discord.js';
 import { t } from 'i18next';
 
 import type { DiscordClient } from 'classes/client';
@@ -85,7 +95,7 @@ export class Opponent {
               content: t('interactions.author-only', {
                 lng: await getUserLanguage(buttonInteraction.user.id)
               }),
-              ephemeral: true
+              flags: [MessageFlags.Ephemeral]
             })
             .catch((err) => logger.debug({ err }, 'Could not follow up'));
         }

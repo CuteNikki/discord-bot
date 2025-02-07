@@ -1,4 +1,4 @@
-import { EmbedBuilder, PermissionFlagsBits, roleMention } from 'discord.js';
+import { EmbedBuilder, MessageFlags, PermissionFlagsBits, roleMention } from 'discord.js';
 import { t } from 'i18next';
 
 import { Button } from 'classes/button';
@@ -19,7 +19,7 @@ export default new Button({
       return;
     }
 
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 
     const reactionRoles = await getReactionRoles(interaction.guildId);
 

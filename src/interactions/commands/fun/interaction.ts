@@ -1,5 +1,5 @@
-import { bite, bonk, cuddle, feed, highfive, holdhand, hug, kick, kill, kiss, pat, poke, slap, tackle, tickle, yeet, bully } from 'discord-actions';
-import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, SlashCommandBuilder } from 'discord.js';
+import { bite, bonk, bully, cuddle, feed, highfive, holdhand, hug, kick, kill, kiss, pat, poke, slap, tackle, tickle, yeet } from 'discord-actions';
+import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, MessageFlags, SlashCommandBuilder } from 'discord.js';
 import { t } from 'i18next';
 
 import { Command } from 'classes/command';
@@ -47,7 +47,10 @@ export default new Command({
     const targetMember = interaction.guild?.members.cache.get(target.id);
 
     if (target.id === interaction.user.id) {
-      return interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('interaction.self', { lng }))], ephemeral: true });
+      return interaction.reply({
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('interaction.self', { lng }))],
+        flags: [MessageFlags.Ephemeral]
+      });
     }
 
     let gif: string | null;

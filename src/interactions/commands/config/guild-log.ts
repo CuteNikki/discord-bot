@@ -4,6 +4,7 @@ import {
   ChannelType,
   EmbedBuilder,
   InteractionContextType,
+  MessageFlags,
   PermissionFlagsBits,
   SlashCommandBuilder
 } from 'discord.js';
@@ -78,7 +79,7 @@ export default new Command({
   async execute({ client, interaction, lng }) {
     if (!interaction.inCachedGuild()) return;
 
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 
     const { options, guild } = interaction;
 

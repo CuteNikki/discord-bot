@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, type ChatInputCommandInteraction, type User } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, MessageFlags, type ChatInputCommandInteraction, type User } from 'discord.js';
 import { t } from 'i18next';
 
 import { Opponent } from 'games/opponent';
@@ -104,7 +104,7 @@ export class RockPaperScissors extends Opponent {
           content: t('interactions.author-only', {
             lng: await getUserLanguage(buttonInteraction.user.id)
           }),
-          ephemeral: true
+          flags: [MessageFlags.Ephemeral]
         });
       }
 
@@ -113,14 +113,14 @@ export class RockPaperScissors extends Opponent {
           return buttonInteraction
             .followUp({
               content: t('games.rpc.already', { lng }),
-              ephemeral: true
+              flags: [MessageFlags.Ephemeral]
             })
             .catch((err) => logger.debug({ err }, 'Could not follow up'));
         this.playerPick = Picks[buttonInteraction.customId.split('_')[1] as keyof typeof Picks];
         await buttonInteraction
           .followUp({
             content: t('games.rpc.picked', { lng, pick: this.playerPick }),
-            ephemeral: true
+            flags: [MessageFlags.Ephemeral]
           })
           .catch((err) => logger.debug({ err }, 'Could not follow up'));
       }
@@ -130,7 +130,7 @@ export class RockPaperScissors extends Opponent {
           return buttonInteraction
             .followUp({
               content: t('games.rpc.already', { lng: opponentLng }),
-              ephemeral: true
+              flags: [MessageFlags.Ephemeral]
             })
             .catch((err) => logger.debug({ err }, 'Could not follow up'));
         this.opponentPick = Picks[buttonInteraction.customId.split('_')[1] as keyof typeof Picks];
@@ -140,7 +140,7 @@ export class RockPaperScissors extends Opponent {
               lng: opponentLng,
               pick: this.opponentPick
             }),
-            ephemeral: true
+            flags: [MessageFlags.Ephemeral]
           })
           .catch((err) => logger.debug({ err }, 'Could not follow up'));
       }

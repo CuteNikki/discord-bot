@@ -3,6 +3,7 @@ import {
   Colors, // All of default discord colors.
   EmbedBuilder,
   InteractionContextType,
+  MessageFlags,
   PermissionFlagsBits,
   SlashCommandBuilder,
   type ColorResolvable
@@ -132,7 +133,7 @@ export default new Command({
 
       // In case something else went wrong and the reply was actually sent, edit it.
       if (!interaction.replied) {
-        await interaction.reply({ content: t('preview-color.invalid', { lng }), ephemeral: true });
+        await interaction.reply({ content: t('preview-color.invalid', { lng }), flags: [MessageFlags.Ephemeral] });
       } else {
         await interaction.editReply({ content: t('preview-color.invalid', { lng }) });
       }

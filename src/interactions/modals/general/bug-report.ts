@@ -1,4 +1,4 @@
-import { EmbedBuilder, WebhookClient } from 'discord.js';
+import { EmbedBuilder, MessageFlags, WebhookClient } from 'discord.js';
 import { t } from 'i18next';
 
 import { Modal } from 'classes/modal';
@@ -13,7 +13,10 @@ export default new Modal({
   customId: 'modal-bug-report',
   async execute({ interaction, client, lng }) {
     if (!keys.DEVELOPER_BUG_REPORT_WEBHOOK || keys.DEVELOPER_BUG_REPORT_WEBHOOK === 'optional') {
-      await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('bug-report.unavailable', { lng }))], ephemeral: true });
+      await interaction.reply({
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('bug-report.unavailable', { lng }))],
+        flags: [MessageFlags.Ephemeral]
+      });
       return;
     }
 
@@ -24,12 +27,15 @@ export default new Modal({
     if (!webhook || !description.length) {
       await interaction.reply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('bug-report.unavailable', { lng }))],
-        ephemeral: true
+        flags: [MessageFlags.Ephemeral]
       });
       return;
     }
 
-    await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.general).setDescription(t('bug-report.success', { lng }))], ephemeral: true });
+    await interaction.reply({
+      embeds: [new EmbedBuilder().setColor(client.colors.general).setDescription(t('bug-report.success', { lng }))],
+      flags: [MessageFlags.Ephemeral]
+    });
 
     await webhook
       .send({

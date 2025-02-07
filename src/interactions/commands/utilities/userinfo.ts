@@ -3,6 +3,7 @@ import {
   ApplicationIntegrationType,
   EmbedBuilder,
   InteractionContextType,
+  MessageFlags,
   Role,
   roleMention,
   SlashCommandBuilder,
@@ -29,7 +30,7 @@ export default new Command({
     .addBooleanOption((option) => option.setName('ephemeral').setDescription('When set to false will show the message to everyone').setRequired(false)),
   async execute({ interaction, client, lng }) {
     const ephemeral = interaction.options.getBoolean('ephemeral', false) ?? true;
-    await interaction.deferReply({ ephemeral });
+    await interaction.deferReply({ flags: ephemeral ? [MessageFlags.Ephemeral] : undefined });
 
     const user = await client.users
       .fetch(interaction.options.getUser('user', false)?.id ?? interaction.user.id, {

@@ -5,6 +5,7 @@ import {
   Colors,
   EmbedBuilder,
   InteractionContextType,
+  MessageFlags,
   PermissionFlagsBits,
   SlashCommandBuilder,
   type FetchMessagesOptions
@@ -37,7 +38,7 @@ export default new Command({
     .addStringOption((option) => option.setName('after').setDescription('Only delete sent messages after the given message link').setRequired(false)),
   async execute({ interaction, lng }) {
     if (!interaction.inCachedGuild() || !interaction.channel) return;
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 
     const { options, member, guild } = interaction;
 

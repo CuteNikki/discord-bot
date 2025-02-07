@@ -1,4 +1,4 @@
-import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, SlashCommandBuilder } from 'discord.js';
+import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, MessageFlags, SlashCommandBuilder } from 'discord.js';
 import { t } from 'i18next';
 
 import { Command } from 'classes/command';
@@ -20,7 +20,7 @@ export default new Command({
     .addBooleanOption((option) => option.setName('ephemeral').setDescription('Shows the message to everyone when false').setRequired(false)),
   async execute({ interaction, lng, client }) {
     const ephemeral = interaction.options.getBoolean('ephemeral', false) ?? true;
-    await interaction.deferReply({ ephemeral });
+    await interaction.deferReply({ flags: ephemeral ? [MessageFlags.Ephemeral] : undefined });
 
     const settings = (await getClientSettings(keys.DISCORD_BOT_ID)) ?? { support: { guildInvite: null } };
 

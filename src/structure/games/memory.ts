@@ -4,6 +4,7 @@ import {
   ButtonStyle,
   Colors,
   EmbedBuilder,
+  MessageFlags,
   type APIButtonComponent,
   type ButtonComponentData,
   type ChatInputCommandInteraction
@@ -81,7 +82,7 @@ export class Memory {
             content: t('interactions.author-only', {
               lng: await getUserLanguage(buttonInteraction.user.id)
             }),
-            ephemeral: true
+            flags: [MessageFlags.Ephemeral]
           })
           .catch((err) => logger.debug({ err }, 'Could not follow up'));
 

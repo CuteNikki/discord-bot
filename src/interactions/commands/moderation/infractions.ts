@@ -3,6 +3,7 @@ import {
   Colors,
   EmbedBuilder,
   InteractionContextType,
+  MessageFlags,
   PermissionFlagsBits,
   SlashCommandBuilder,
   time,
@@ -56,7 +57,7 @@ export default new Command({
     switch (options.getSubcommand()) {
       case 'history':
         {
-          await interaction.deferReply({ ephemeral: true });
+          await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 
           const target = options.getUser('user', true);
           const targetInfractions = await getInfractions(guildId, target.id);

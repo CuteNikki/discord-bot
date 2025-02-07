@@ -9,6 +9,7 @@ import {
   ChannelType,
   EmbedBuilder,
   InteractionContextType,
+  MessageFlags,
   ModalBuilder,
   PermissionFlagsBits,
   Role,
@@ -227,7 +228,7 @@ export default new Command({
               await staffInteraction
                 .followUp({
                   embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.staff.none', { lng }))],
-                  ephemeral: true
+                  flags: [MessageFlags.Ephemeral]
                 })
                 .catch((err) => logger.debug(err, 'Could not follow up'));
               return;
@@ -337,7 +338,7 @@ export default new Command({
               .catch(() => {
                 maxInteraction.followUp({
                   embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.modal.no-submit', { lng }))],
-                  ephemeral: true
+                  flags: [MessageFlags.Ephemeral]
                 });
                 return;
               });
@@ -518,7 +519,7 @@ export default new Command({
               await choicesInteraction
                 .reply({
                   embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.choices.none', { lng, max: MAX_CHOICES.toString() }))],
-                  ephemeral: true
+                  flags: [MessageFlags.Ephemeral]
                 })
                 .catch((err) => logger.debug(err, 'Could not reply'));
               return;
@@ -535,7 +536,7 @@ export default new Command({
               await choicesInteraction
                 .reply({
                   embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.choices.limit', { lng, max: MAX_CHOICES.toString() }))],
-                  ephemeral: true
+                  flags: [MessageFlags.Ephemeral]
                 })
                 .catch((err) => logger.debug(err, 'Could not reply'));
               return;
@@ -586,7 +587,7 @@ export default new Command({
                 await choicesInteraction
                   .followUp({
                     embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.modal.no-submit', { lng }))],
-                    ephemeral: true
+                    flags: [MessageFlags.Ephemeral]
                   })
                   .catch((err) => logger.debug(err, 'Could not follow up'));
                 return;
@@ -601,7 +602,7 @@ export default new Command({
                 await choicesModalInteraction
                   .reply({
                     embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.choices.duplicate', { lng }))],
-                    ephemeral: true
+                    flags: [MessageFlags.Ephemeral]
                   })
                   .catch((err) => logger.debug(err, 'Could not reply'));
                 return;
@@ -625,7 +626,7 @@ export default new Command({
                 await choicesModalInteraction
                   .reply({
                     embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.choices.invalid-style', { lng }))],
-                    ephemeral: true
+                    flags: [MessageFlags.Ephemeral]
                   })
                   .catch((err) => logger.debug(err, 'Could not reply'));
                 return;
@@ -639,7 +640,7 @@ export default new Command({
                 await choicesModalInteraction
                   .reply({
                     embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.choices.invalid-emoji', { lng }))],
-                    ephemeral: true
+                    flags: [MessageFlags.Ephemeral]
                   })
                   .catch((err) => logger.debug(err, 'Could not reply'));
                 return;
@@ -672,7 +673,7 @@ export default new Command({
               await choicesInteraction
                 .reply({
                   embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.choices.length', { lng }))],
-                  ephemeral: true
+                  flags: [MessageFlags.Ephemeral]
                 })
                 .catch((err) => logger.debug(err, 'Could not reply'));
               return;
@@ -706,7 +707,7 @@ export default new Command({
                 await choicesInteraction
                   .followUp({
                     embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.modal.no-submit', { lng }))],
-                    ephemeral: true
+                    flags: [MessageFlags.Ephemeral]
                   })
                   .catch((err) => logger.debug(err, 'Could not follow up'));
                 return;
@@ -720,7 +721,7 @@ export default new Command({
               await choicesModalInteraction
                 .reply({
                   embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.choices.invalid', { lng }))],
-                  ephemeral: true
+                  flags: [MessageFlags.Ephemeral]
                 })
                 .catch((err) => logger.debug(err, 'Could not reply'));
               return;
@@ -891,7 +892,7 @@ export default new Command({
             if (!channel) {
               await channelInteraction.reply({
                 embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.channel.none', { lng }))],
-                ephemeral: true
+                flags: [MessageFlags.Ephemeral]
               });
               return;
             }
@@ -908,7 +909,7 @@ export default new Command({
             if (!channel.permissionsFor(guild.members.me!).has(PermissionFlagsBits.SendMessages)) {
               channelInteraction.reply({
                 embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.channel.permissions', { lng }))],
-                ephemeral: true
+                flags: [MessageFlags.Ephemeral]
               });
               return;
             }

@@ -5,6 +5,7 @@ import {
   ButtonInteraction,
   ButtonStyle,
   ComponentType,
+  MessageFlags,
   type CommandInteraction,
   type EmbedBuilder
 } from 'discord.js';
@@ -46,7 +47,7 @@ export async function pagination({
   footer?: boolean;
   disableButtons?: boolean;
 }) {
-  if (!interaction.deferred) await interaction.deferReply({ ephemeral });
+  if (!interaction.deferred) await interaction.deferReply({ flags: ephemeral ? [MessageFlags.Ephemeral] : undefined });
   const { user } = interaction;
   const lng = await getUserLanguage(user.id);
 

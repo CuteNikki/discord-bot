@@ -1,4 +1,12 @@
-import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, PermissionFlagsBits, roleMention, SlashCommandBuilder } from 'discord.js';
+import {
+  ApplicationIntegrationType,
+  EmbedBuilder,
+  InteractionContextType,
+  MessageFlags,
+  PermissionFlagsBits,
+  roleMention,
+  SlashCommandBuilder
+} from 'discord.js';
 import { t } from 'i18next';
 
 import { Command } from 'classes/command';
@@ -30,7 +38,7 @@ export default new Command({
   async execute({ client, interaction, lng }) {
     if (!interaction.inCachedGuild()) return;
 
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 
     const { options, guildId } = interaction;
 

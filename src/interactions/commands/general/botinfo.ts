@@ -2,6 +2,7 @@ import {
   ApplicationIntegrationType,
   EmbedBuilder,
   InteractionContextType,
+  MessageFlags,
   SlashCommandBuilder,
   Team,
   time,
@@ -33,7 +34,7 @@ export default new Command({
     .addBooleanOption((option) => option.setName('ephemeral').setDescription('When set to false will show the message to everyone')),
   async execute({ interaction, client, lng }) {
     const ephemeral = interaction.options.getBoolean('ephemeral', false) ?? true;
-    await interaction.deferReply({ ephemeral });
+    await interaction.deferReply({ flags: ephemeral ? [MessageFlags.Ephemeral] : undefined });
 
     try {
       const application = await interaction.client.application.fetch();

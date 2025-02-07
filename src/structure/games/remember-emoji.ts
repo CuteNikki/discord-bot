@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, type ChatInputCommandInteraction } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, MessageFlags, type ChatInputCommandInteraction } from 'discord.js';
 import { t } from 'i18next';
 
 import type { DiscordClient } from 'classes/client';
@@ -68,7 +68,7 @@ export class RememberEmoji {
               content: t('interactions.author-only', {
                 lng: await getUserLanguage(buttonInteraction.user.id)
               }),
-              ephemeral: true
+              flags: [MessageFlags.Ephemeral]
             })
             .catch((err) => logger.debug({ err }, 'Could not follow up'));
 

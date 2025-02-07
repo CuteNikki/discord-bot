@@ -1,4 +1,14 @@
-import { Collection, EmbedBuilder, Events, inlineCode, PermissionsBitField, time, TimestampStyles, type InteractionReplyOptions } from 'discord.js';
+import {
+  Collection,
+  EmbedBuilder,
+  Events,
+  inlineCode,
+  MessageFlags,
+  PermissionsBitField,
+  time,
+  TimestampStyles,
+  type InteractionReplyOptions
+} from 'discord.js';
 import { t } from 'i18next';
 
 import { Event } from 'classes/event';
@@ -69,7 +79,7 @@ export default new Event({
 
       const message: InteractionReplyOptions = {
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('interactions.module', { lng, module: ModuleType[modal.options.module] }))],
-        ephemeral: true
+        flags: [MessageFlags.Ephemeral]
       };
 
       switch (modal.options.module) {
@@ -125,7 +135,7 @@ export default new Event({
               .setColor(client.colors.error)
               .setDescription(t('interactions.permissions', { lng, permissions: modal.options.permissions.join(', ') }))
           ],
-          ephemeral: true
+          flags: [MessageFlags.Ephemeral]
         });
         return;
       }
@@ -144,7 +154,7 @@ export default new Event({
               .setColor(client.colors.error)
               .setDescription(t('interactions.bot-permissions', { lng, permissions: modal.options.botPermissions.join(', ') }))
           ],
-          ephemeral: true
+          flags: [MessageFlags.Ephemeral]
         });
         return;
       }
@@ -156,7 +166,7 @@ export default new Event({
     if (modal.options.isDeveloperOnly && !keys.DEVELOPER_USER_IDS.includes(interaction.user.id))
       return interaction.reply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('interactions.developer-only', { lng }))],
-        ephemeral: true
+        flags: [MessageFlags.Ephemeral]
       });
 
     /**
@@ -187,7 +197,7 @@ export default new Event({
                 t('interactions.cooldown', { lng, action: inlineCode(modal.options.customId), timestamp: time(expiredTimestamp, TimestampStyles.RelativeTime) })
               )
           ],
-          ephemeral: true
+          flags: [MessageFlags.Ephemeral]
         });
         return;
       }
@@ -209,7 +219,7 @@ export default new Event({
       if (interaction.deferred) {
         await interaction.editReply({ embeds: [embed] });
       } else {
-        await interaction.reply({ embeds: [embed], ephemeral: true });
+        await interaction.reply({ embeds: [embed], flags: [MessageFlags.Ephemeral] });
       }
 
       await sendError({ client, err, location: `Modal Interaction Error: ${modal.options.customId}` });

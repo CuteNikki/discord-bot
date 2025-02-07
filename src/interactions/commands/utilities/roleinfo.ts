@@ -1,4 +1,4 @@
-import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, SlashCommandBuilder, time, TimestampStyles } from 'discord.js';
+import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, MessageFlags, SlashCommandBuilder, time, TimestampStyles } from 'discord.js';
 
 import { Command } from 'classes/command';
 
@@ -21,7 +21,7 @@ export default new Command({
 
     const ephemeral = interaction.options.getBoolean('ephemeral', false) ?? true;
 
-    await interaction.deferReply({ ephemeral });
+    await interaction.deferReply({ flags: ephemeral ? [MessageFlags.Ephemeral] : undefined });
 
     const role = interaction.options.getRole('role', true);
 

@@ -1,4 +1,4 @@
-import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, SlashCommandBuilder, time, TimestampStyles } from 'discord.js';
+import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, MessageFlags, SlashCommandBuilder, time, TimestampStyles } from 'discord.js';
 import { t } from 'i18next';
 import ms from 'ms';
 
@@ -31,7 +31,7 @@ export default new Command({
     )
     .addSubcommand((subcommand) => subcommand.setName('list').setDescription('Lists all your reminders')),
   async execute({ interaction, client, lng }) {
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 
     const { user, options, channelId } = interaction;
 

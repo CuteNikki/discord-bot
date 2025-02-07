@@ -3,6 +3,7 @@ import {
   channelMention,
   EmbedBuilder,
   InteractionContextType,
+  MessageFlags,
   PermissionFlagsBits,
   roleMention,
   SlashCommandBuilder
@@ -217,7 +218,7 @@ export default new Command({
   async execute({ interaction, client, lng }) {
     if (!interaction.inCachedGuild()) return;
 
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 
     const { options, guild } = interaction;
 

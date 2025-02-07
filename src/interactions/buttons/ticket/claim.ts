@@ -26,7 +26,7 @@ export default new Button({
     if (!group) {
       await interaction.reply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid-group', { lng }))],
-        ephemeral: true
+        flags: [MessageFlags.Ephemeral]
       });
       return;
     }
@@ -36,7 +36,7 @@ export default new Button({
     if (!ticket) {
       await interaction.reply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.invalid-ticket', { lng }))],
-        ephemeral: true
+        flags: [MessageFlags.Ephemeral]
       });
       return;
     }
@@ -45,7 +45,7 @@ export default new Button({
       if (!member.roles.cache.has(group.staffRoleId)) {
         await interaction.reply({
           embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.staff-only', { lng }))],
-          ephemeral: true
+          flags: [MessageFlags.Ephemeral]
         });
         return;
       }
@@ -56,7 +56,7 @@ export default new Button({
         embeds: [
           new EmbedBuilder().setColor(client.colors.error).setDescription(t('ticket.already-claimed', { lng, claimedBy: userMention(ticket.claimedBy) }))
         ],
-        ephemeral: true
+        flags: [MessageFlags.Ephemeral]
       });
       return;
     }

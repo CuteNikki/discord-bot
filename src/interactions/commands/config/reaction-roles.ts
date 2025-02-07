@@ -10,6 +10,7 @@ import {
   EmbedBuilder,
   InteractionContextType,
   Message,
+  MessageFlags,
   PermissionFlagsBits,
   Role,
   roleMention,
@@ -661,7 +662,7 @@ async function handleChannel(
         await channelInteraction
           .reply({
             embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.channel.none', { lng }))],
-            ephemeral: true
+            flags: [MessageFlags.Ephemeral]
           })
           .catch((err) => logger.debug(err, 'Could not reply'));
         return;
@@ -749,7 +750,7 @@ async function handleRoles(
         await roleInteraction
           .reply({
             embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.roles.none', { lng }))],
-            ephemeral: true
+            flags: [MessageFlags.Ephemeral]
           })
           .catch((err) => logger.debug(err, 'Could not reply'));
         return;
@@ -770,7 +771,7 @@ async function handleRoles(
       if (roles.length <= 0 || roles.length > MAX_ROLES) {
         await roleInteraction.reply({
           embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reaction-roles.roles.limit', { lng, max: MAX_ROLES }))],
-          ephemeral: true
+          flags: [MessageFlags.Ephemeral]
         });
         return;
       }

@@ -6,6 +6,7 @@ import {
   ComponentType,
   inlineCode,
   InteractionContextType,
+  MessageFlags,
   PermissionFlagsBits,
   SlashCommandBuilder
 } from 'discord.js';
@@ -36,7 +37,7 @@ export default new Command({
   async execute({ interaction, client, lng }) {
     if (!interaction.inCachedGuild()) return;
 
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 
     enum CustomIds {
       Confirm = 'button-warn-confirm',

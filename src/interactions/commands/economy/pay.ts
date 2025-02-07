@@ -1,4 +1,4 @@
-import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, SlashCommandBuilder } from 'discord.js';
+import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, MessageFlags, SlashCommandBuilder } from 'discord.js';
 import { t } from 'i18next';
 
 import { Command } from 'classes/command';
@@ -21,24 +21,36 @@ export default new Command({
     const amount = interaction.options.getInteger('amount', true);
 
     if (user.bot) {
-      await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('pay.bot', { lng }))], ephemeral: true });
+      await interaction.reply({
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('pay.bot', { lng }))],
+        flags: [MessageFlags.Ephemeral]
+      });
       return;
     }
 
     if (user.id === interaction.user.id) {
-      await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('pay.self', { lng }))], ephemeral: true });
+      await interaction.reply({
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('pay.self', { lng }))],
+        flags: [MessageFlags.Ephemeral]
+      });
       return;
     }
 
     if (amount <= 0) {
-      await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('pay.invalid', { lng }))], ephemeral: true });
+      await interaction.reply({
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('pay.invalid', { lng }))],
+        flags: [MessageFlags.Ephemeral]
+      });
       return;
     }
 
     const userData = await getUser(interaction.user.id, true);
 
     if (userData.bank < amount) {
-      await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('pay.insufficient', { lng }))], ephemeral: true });
+      await interaction.reply({
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('pay.insufficient', { lng }))],
+        flags: [MessageFlags.Ephemeral]
+      });
       return;
     }
 
@@ -52,7 +64,7 @@ export default new Command({
           .setDescription(
             t('pay.success', { lng, amount: Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount), user: user.toString() })
           )
-      ],
+      ]
     });
   }
 });

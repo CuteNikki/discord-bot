@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, inlineCode, type ChatInputCommandInteraction } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, inlineCode, MessageFlags, type ChatInputCommandInteraction } from 'discord.js';
 import { t } from 'i18next';
 
 import type { DiscordClient } from 'classes/client';
@@ -116,7 +116,7 @@ export class Hangman {
           content: t('interactions.author-only', {
             lng: await getUserLanguage(buttonInteraction.user.id)
           }),
-          ephemeral: true
+          flags: [MessageFlags.Ephemeral]
         });
         return;
       }

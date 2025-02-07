@@ -1,4 +1,4 @@
-import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, SlashCommandBuilder, time, TimestampStyles } from 'discord.js';
+import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, MessageFlags, SlashCommandBuilder, time, TimestampStyles } from 'discord.js';
 import { t } from 'i18next';
 
 import { Command } from 'classes/command';
@@ -47,7 +47,7 @@ export default new Command({
 
         return interaction.reply({
           embeds: [new EmbedBuilder().setColor(client.colors.economy).setDescription(t('profile.edit.description', { description }))],
-          ephemeral: true
+          flags: [MessageFlags.Ephemeral]
         });
       }
     }
@@ -59,11 +59,11 @@ export default new Command({
       if (user.bot) {
         return interaction.reply({
           embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('profile.view.bot', { lng }))],
-          ephemeral: true
+          flags: ephemeral ? [MessageFlags.Ephemeral] : undefined
         });
       }
 
-      await interaction.deferReply({ ephemeral });
+      await interaction.deferReply({ flags: ephemeral ? [MessageFlags.Ephemeral] : undefined });
 
       const userData = (await getUser(user.id)) ?? {
         banned: false,

@@ -1,4 +1,4 @@
-import { ApplicationIntegrationType, AttachmentBuilder, EmbedBuilder, InteractionContextType, SlashCommandBuilder } from 'discord.js';
+import { ApplicationIntegrationType, AttachmentBuilder, EmbedBuilder, InteractionContextType, MessageFlags, SlashCommandBuilder } from 'discord.js';
 import { t } from 'i18next';
 
 import { LeaderboardBuilder } from 'classes/balance-leaderboard';
@@ -28,7 +28,7 @@ export default new Command({
     const { options } = interaction;
 
     const ephemeral = options.getBoolean('ephemeral', false) ?? true;
-    await interaction.deferReply({ ephemeral });
+    await interaction.deferReply({ flags: ephemeral ? [MessageFlags.Ephemeral] : undefined });
 
     const leaderboard = await getLeaderboard();
     const computedLeaderboard = await computeLeaderboard(leaderboard, client);

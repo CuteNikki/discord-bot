@@ -4,7 +4,7 @@
 
 This Discord bot was built with custom classes, [i18next](https://www.i18next.com/) for translations, [Pino](https://getpino.io/) as logger, and [MongoDB](https://www.mongodb.com/) as database.
 
-[![pino](https://img.shields.io/badge/pino-%23687634.svg?style=for-the-badge&logo=pino&logoColor=white)](https://getpino.io) [![mongodb](https://img.shields.io/badge/mongodb-%2347A248.svg?style=for-the-badge&logo=mongodb&logoColor=white)](https://mongodb.com) [![i18next](https://img.shields.io/badge/i18next-%2326A69A.svg?style=for-the-badge&logo=i18next&logoColor=white)](https://i18next.com) [![discord.js](https://img.shields.io/badge/discordjs_v14.16.3-%235865F2.svg?style=for-the-badge&logo=discord&logoColor=white)](https://discord.js.org) 
+[![pino](https://img.shields.io/badge/pino-%23687634.svg?style=for-the-badge&logo=pino&logoColor=white)](https://getpino.io) [![mongodb](https://img.shields.io/badge/mongodb-%2347A248.svg?style=for-the-badge&logo=mongodb&logoColor=white)](https://mongodb.com) [![i18next](https://img.shields.io/badge/i18next-%2326A69A.svg?style=for-the-badge&logo=i18next&logoColor=white)](https://i18next.com) [![discord.js](https://img.shields.io/badge/discordjs_v14.16.3-%235865F2.svg?style=for-the-badge&logo=discord&logoColor=white)](https://discord.js.org)
 <br />
 [![Repository Stars](https://img.shields.io/github/stars/CuteNikki/discord-bot?style=for-the-badge&color=%23d4a72a)](https://github.com/CuteNikki/discord-bot/stargazers) [![Repository Issues](https://img.shields.io/github/issues/CuteNikki/discord-bot?style=for-the-badge&color=%2371d42a)](https://github.com/CuteNikki/discord-bot/issues) [![Repository Forks](https://img.shields.io/github/forks/CuteNikki/discord-bot?style=for-the-badge&color=%232ad48a)](https://github.com/CuteNikki/discord-bot/forks) [![License](https://img.shields.io/github/license/cutenikki/discord-bot?style=for-the-badge&color=%232a90d4)]()
 
@@ -108,6 +108,7 @@ This displays the use of i18next, the command class, and all its properties incl
 import {
   Colors, // All of default discord colors.
   EmbedBuilder,
+  MessageFlags,
   PermissionFlagsBits,
   SlashCommandBuilder,
   InteractionContextType,
@@ -238,7 +239,7 @@ export default new Command({
 
       // In case something else went wrong and the reply was actually sent, edit it.
       if (!interaction.replied) {
-        await interaction.reply({ content: t('preview-color.invalid', { lng }), ephemeral: true });
+        await interaction.reply({ content: t('preview-color.invalid', { lng }), flags: [MessageFlags.Ephemeral] });
       } else {
         await interaction.editReply({ content: t('preview-color.invalid', { lng }) });
       }

@@ -1,4 +1,4 @@
-import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, SlashCommandBuilder } from 'discord.js';
+import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, MessageFlags, SlashCommandBuilder } from 'discord.js';
 import { t } from 'i18next';
 
 import { Command } from 'classes/command';
@@ -28,7 +28,7 @@ export default new Command({
       if (isNaN(amount) || amount <= 0) {
         interaction.reply({
           embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('withdraw.invalid', { lng }))],
-          ephemeral: true
+          flags: [MessageFlags.Ephemeral]
         });
         return;
       }
@@ -37,7 +37,7 @@ export default new Command({
     if (userData.bank < amount) {
       interaction.reply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('withdraw.insufficient', { lng }))],
-        ephemeral: true
+        flags: [MessageFlags.Ephemeral]
       });
       return;
     }
@@ -49,7 +49,7 @@ export default new Command({
         new EmbedBuilder()
           .setColor(client.colors.economy)
           .setDescription(t('withdraw.success', { lng, amount: Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount) }))
-      ],
+      ]
     });
   }
 });

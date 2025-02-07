@@ -1,4 +1,4 @@
-import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, SlashCommandBuilder, Status } from 'discord.js';
+import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, MessageFlags, SlashCommandBuilder, Status } from 'discord.js';
 import { t } from 'i18next';
 import ms from 'ms';
 
@@ -19,7 +19,7 @@ export default new Command({
     .addBooleanOption((option) => option.setName('ephemeral').setDescription('When set to false will show the message to everyone')),
   async execute({ interaction, client, lng }) {
     const ephemeral = interaction.options.getBoolean('ephemeral', false) ?? true;
-    await interaction.deferReply({ ephemeral });
+    await interaction.deferReply({ flags: ephemeral ? [MessageFlags.Ephemeral] : undefined });
 
     const clusterData = await client.cluster.broadcastEval((c) => ({
       clusterId: c.cluster.id,

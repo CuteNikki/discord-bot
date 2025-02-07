@@ -7,6 +7,7 @@ import {
   ComponentType,
   EmbedBuilder,
   InteractionContextType,
+  MessageFlags,
   SlashCommandBuilder
 } from 'discord.js';
 import { t } from 'i18next';
@@ -35,11 +36,17 @@ export default new Command({
     const user = interaction.options.getUser('user', true);
 
     if (user.id === interaction.user.id) {
-      return interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('marry.self', { lng }))], ephemeral: true });
+      return interaction.reply({
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('marry.self', { lng }))],
+        flags: [MessageFlags.Ephemeral]
+      });
     }
 
     if (user.bot) {
-      return interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('marry.bot', { lng }))], ephemeral: true });
+      return interaction.reply({
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('marry.bot', { lng }))],
+        flags: [MessageFlags.Ephemeral]
+      });
     }
 
     const userData = await getUser(interaction.user.id);
@@ -47,7 +54,7 @@ export default new Command({
     if (userData?.marriedTo) {
       return interaction.reply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('marry.already-user', { lng }))],
-        ephemeral: true
+        flags: [MessageFlags.Ephemeral]
       });
     }
 
@@ -56,7 +63,7 @@ export default new Command({
     if (targetData?.marriedTo) {
       return interaction.reply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('marry.already-target', { lng, target: user.toString() }))],
-        ephemeral: true
+        flags: [MessageFlags.Ephemeral]
       });
     }
 
@@ -65,7 +72,7 @@ export default new Command({
     if (!marriageRing) {
       return interaction.reply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('marry.ring', { lng }))],
-        ephemeral: true
+        flags: [MessageFlags.Ephemeral]
       });
     }
 

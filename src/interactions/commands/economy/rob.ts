@@ -1,4 +1,4 @@
-import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, SlashCommandBuilder, time, TimestampStyles } from 'discord.js';
+import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, MessageFlags, SlashCommandBuilder, time, TimestampStyles } from 'discord.js';
 import { t } from 'i18next';
 
 import { Command } from 'classes/command';
@@ -22,11 +22,17 @@ export default new Command({
     const user = interaction.options.getUser('user', true);
 
     if (user.id === interaction.user.id) {
-      return interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('rob.self', { lng }))], ephemeral: true });
+      return interaction.reply({
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('rob.self', { lng }))],
+        flags: [MessageFlags.Ephemeral]
+      });
     }
 
     if (user.bot) {
-      return interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('rob.bot', { lng }))], ephemeral: true });
+      return interaction.reply({
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('rob.bot', { lng }))],
+        flags: [MessageFlags.Ephemeral]
+      });
     }
 
     const targetData = await getUser(user.id);
@@ -34,7 +40,7 @@ export default new Command({
     if (!targetData?.wallet || targetData.wallet < 1) {
       return interaction.reply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('rob.none', { lng, target: user.toString() }))],
-        ephemeral: true
+        flags: [MessageFlags.Ephemeral]
       });
     }
 
@@ -51,7 +57,7 @@ export default new Command({
             .setColor(client.colors.error)
             .setDescription(t('rob.cooldown', { lng, left: time(Math.floor((now + timeLeft) / 1000), TimestampStyles.RelativeTime) }))
         ],
-        ephemeral: true
+        flags: [MessageFlags.Ephemeral]
       });
     }
 

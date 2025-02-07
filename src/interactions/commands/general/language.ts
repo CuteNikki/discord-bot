@@ -1,4 +1,12 @@
-import { ApplicationIntegrationType, EmbedBuilder, inlineCode, InteractionContextType, PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
+import {
+  ApplicationIntegrationType,
+  EmbedBuilder,
+  inlineCode,
+  InteractionContextType,
+  MessageFlags,
+  PermissionFlagsBits,
+  SlashCommandBuilder
+} from 'discord.js';
 import { t } from 'i18next';
 
 import { Command } from 'classes/command';
@@ -44,7 +52,7 @@ export default new Command({
     await interaction.respond(filtered.map((choice) => ({ name: choice, value: choice })).slice(0, 25));
   },
   async execute({ interaction, lng, client }) {
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
     const { user, options } = interaction;
 
     const guildLng = await getGuildLanguage(interaction.guildId);

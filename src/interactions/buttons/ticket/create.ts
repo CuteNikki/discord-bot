@@ -1,4 +1,14 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelType, EmbedBuilder, PermissionFlagsBits, TextChannel, UserSelectMenuBuilder } from 'discord.js';
+import {
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  ChannelType,
+  EmbedBuilder,
+  MessageFlags,
+  PermissionFlagsBits,
+  TextChannel,
+  UserSelectMenuBuilder
+} from 'discord.js';
 import { t } from 'i18next';
 
 import { Button } from 'classes/button';
@@ -19,7 +29,7 @@ export default new Button({
   async execute({ interaction, client, lng }) {
     if (!interaction.inCachedGuild()) return;
 
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 
     const { user, guildId, customId, guild } = interaction;
     const choiceIndex = parseInt(customId.split('_')[2]);

@@ -1,4 +1,4 @@
-import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, SlashCommandBuilder } from 'discord.js';
+import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, MessageFlags, SlashCommandBuilder } from 'discord.js';
 import { t } from 'i18next';
 
 import { Command } from 'classes/command';
@@ -23,12 +23,18 @@ export default new Command({
     const amount = interaction.options.getInteger('amount') ?? 1;
 
     if (user.bot) {
-      await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('transfer.bot', { lng }))], ephemeral: true });
+      await interaction.reply({
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('transfer.bot', { lng }))],
+        flags: [MessageFlags.Ephemeral]
+      });
       return;
     }
 
     if (amount < 1) {
-      await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('transfer.invalid', { lng }))], ephemeral: true });
+      await interaction.reply({
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('transfer.invalid', { lng }))],
+        flags: [MessageFlags.Ephemeral]
+      });
       return;
     }
 
@@ -39,7 +45,7 @@ export default new Command({
     if (!foundItems.length) {
       await interaction.reply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('transfer.insufficient', { lng }))],
-        ephemeral: true
+        flags: [MessageFlags.Ephemeral]
       });
       return;
     }
@@ -47,7 +53,7 @@ export default new Command({
     if (foundItems.length < amount) {
       await interaction.reply({
         embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('transfer.insufficient', { lng }))],
-        ephemeral: true
+        flags: [MessageFlags.Ephemeral]
       });
       return;
     }
@@ -60,7 +66,7 @@ export default new Command({
     await addItems(user.id, foundItems.slice(0, amount));
 
     await interaction.reply({
-      embeds: [new EmbedBuilder().setColor(client.colors.economy).setDescription(t('transfer.success', { lng, amount, item, user: user.toString() }))],
+      embeds: [new EmbedBuilder().setColor(client.colors.economy).setDescription(t('transfer.success', { lng, amount, item, user: user.toString() }))]
     });
   }
 });

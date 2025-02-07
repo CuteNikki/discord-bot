@@ -1,4 +1,11 @@
-import { ApplicationCommandType, ApplicationIntegrationType, AttachmentBuilder, ContextMenuCommandBuilder, InteractionContextType } from 'discord.js';
+import {
+  ApplicationCommandType,
+  ApplicationIntegrationType,
+  AttachmentBuilder,
+  ContextMenuCommandBuilder,
+  InteractionContextType,
+  MessageFlags
+} from 'discord.js';
 import { t } from 'i18next';
 
 import { Command } from 'classes/command';
@@ -15,14 +22,13 @@ export default new Command<typeof commandType>({
   botPermissions: ['SendMessages'],
   data: new ContextMenuCommandBuilder()
     .setName('rank-context')
-    // @ts-expect-error: This is an issue with DiscordJS typings version mismatch in v14.16.3
     .setType(commandType)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
     .setContexts(InteractionContextType.Guild),
   async execute({ client, interaction, lng }) {
     if (!interaction.inCachedGuild()) return;
 
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 
     const { options, guild } = interaction;
 

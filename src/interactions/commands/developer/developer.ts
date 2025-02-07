@@ -1,4 +1,13 @@
-import { ApplicationIntegrationType, AttachmentBuilder, EmbedBuilder, InteractionContextType, SlashCommandBuilder, time, TimestampStyles } from 'discord.js';
+import {
+  ApplicationIntegrationType,
+  AttachmentBuilder,
+  EmbedBuilder,
+  InteractionContextType,
+  MessageFlags,
+  SlashCommandBuilder,
+  time,
+  TimestampStyles
+} from 'discord.js';
 
 import { Command } from 'classes/command';
 
@@ -157,7 +166,7 @@ export default new Command({
         )
     ),
   async execute({ interaction, client }) {
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
     const { options, user } = interaction;
 
     const userData = (await getUser(user.id)) ?? { badges: [] };

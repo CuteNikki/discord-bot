@@ -4,6 +4,7 @@ import {
   ChannelType,
   EmbedBuilder,
   InteractionContextType,
+  MessageFlags,
   PermissionFlagsBits,
   PermissionsBitField,
   SlashCommandBuilder
@@ -65,7 +66,7 @@ export default new Command({
     if (!interaction.inCachedGuild() || !interaction.guild.members.me) return;
     const { options, guild } = interaction;
 
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 
     const starboard = (await getStarboard(guild.id)) ?? { enabled: false, channelId: undefined, minimumStars: undefined, messages: [] };
 

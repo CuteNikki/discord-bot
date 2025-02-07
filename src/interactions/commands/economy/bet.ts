@@ -1,4 +1,4 @@
-import { ApplicationIntegrationType, Colors, EmbedBuilder, InteractionContextType, SlashCommandBuilder } from 'discord.js';
+import { ApplicationIntegrationType, Colors, EmbedBuilder, InteractionContextType, MessageFlags, SlashCommandBuilder } from 'discord.js';
 import { t } from 'i18next';
 
 import { Command } from 'classes/command';
@@ -21,12 +21,18 @@ export default new Command({
     const amount = interaction.options.getInteger('amount', true);
 
     if (amount <= 0) {
-      return interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('bet.invalid', { lng }))], ephemeral: true });
+      return interaction.reply({
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('bet.invalid', { lng }))],
+        flags: [MessageFlags.Ephemeral]
+      });
     }
 
     const userData = await getUser(interaction.user.id);
     if ((userData?.bank ?? 0) < amount) {
-      return interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('bet.insufficient', { lng }))], ephemeral: true });
+      return interaction.reply({
+        embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('bet.insufficient', { lng }))],
+        flags: [MessageFlags.Ephemeral]
+      });
     }
 
     const win = Math.random() < 0.5;

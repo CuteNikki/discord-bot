@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { ApplicationIntegrationType, EmbedBuilder, inlineCode, InteractionContextType, SlashCommandBuilder } from 'discord.js';
+import { ApplicationIntegrationType, EmbedBuilder, inlineCode, InteractionContextType, MessageFlags, SlashCommandBuilder } from 'discord.js';
 import { t } from 'i18next';
 
 import { Command } from 'classes/command';
@@ -53,7 +53,7 @@ export default new Command({
     ),
   async execute({ interaction, client, lng }) {
     const ephemeral = interaction.options.getBoolean('ephemeral', false) ?? true;
-    await interaction.deferReply({ ephemeral });
+    await interaction.deferReply({ flags: ephemeral ? [MessageFlags.Ephemeral] : undefined });
 
     const { options } = interaction;
 

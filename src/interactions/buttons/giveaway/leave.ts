@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, MessageFlags } from 'discord.js';
 import { t } from 'i18next';
 
 import { Button } from 'classes/button';
@@ -17,7 +17,7 @@ export default new Button({
   async execute({ interaction, client, lng }) {
     if (!interaction.inCachedGuild()) return;
 
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 
     const giveaway = await findGiveawayById(interaction.customId.split('_')[1]);
 

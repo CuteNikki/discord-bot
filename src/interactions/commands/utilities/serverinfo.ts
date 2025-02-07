@@ -8,6 +8,7 @@ import {
   GuildVerificationLevel,
   inlineCode,
   InteractionContextType,
+  MessageFlags,
   Role,
   roleMention,
   SlashCommandBuilder,
@@ -34,7 +35,7 @@ export default new Command({
     if (!interaction.inCachedGuild()) return;
 
     const ephemeral = interaction.options.getBoolean('ephemeral', false) ?? true;
-    await interaction.deferReply({ ephemeral });
+    await interaction.deferReply({ flags: ephemeral ? [MessageFlags.Ephemeral] : undefined });
 
     const guild = await interaction.guild.fetch();
     const { channels, emojis, roles, stickers, members, memberCount } = guild;

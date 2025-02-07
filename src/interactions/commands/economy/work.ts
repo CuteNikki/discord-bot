@@ -1,4 +1,4 @@
-import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, SlashCommandBuilder, time, TimestampStyles } from 'discord.js';
+import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, MessageFlags, SlashCommandBuilder, time, TimestampStyles } from 'discord.js';
 import { t } from 'i18next';
 
 import { Command } from 'classes/command';
@@ -53,7 +53,7 @@ export default new Command({
             .setColor(client.colors.error)
             .setDescription(t('work.cooldown', { lng, left: time(Math.floor((now + timeLeft) / 1000), TimestampStyles.RelativeTime) }))
         ],
-        ephemeral: true
+        flags: [MessageFlags.Ephemeral]
       });
     }
 
@@ -65,7 +65,7 @@ export default new Command({
           if (!userData?.inventory.find((item) => item.id === ItemType.Pickaxe)) {
             return interaction.reply({
               embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('work.no-pickaxe', { lng }))],
-              ephemeral: true
+              flags: [MessageFlags.Ephemeral]
             });
           }
 
@@ -108,7 +108,7 @@ export default new Command({
           if (!userData?.inventory.find((item) => item.id === ItemType.FishingRod)) {
             return interaction.reply({
               embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('work.no-rod', { lng }))],
-              ephemeral: true
+              flags: [MessageFlags.Ephemeral]
             });
           }
 
@@ -154,7 +154,7 @@ export default new Command({
           if (!userData?.inventory.find((item) => item.id === ItemType.Axe)) {
             return interaction.reply({
               embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('work.no-axe', { lng }))],
-              ephemeral: true
+              flags: [MessageFlags.Ephemeral]
             });
           }
 
@@ -188,7 +188,7 @@ export default new Command({
           if (!userData?.inventory.find((item) => item.id === ItemType.Sword)) {
             return interaction.reply({
               embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('work.no-sword', { lng }))],
-              ephemeral: true
+              flags: [MessageFlags.Ephemeral]
             });
           }
 

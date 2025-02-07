@@ -1687,7 +1687,8 @@
     "failed": "Something went wrong while getting user!",
     "user-avatar": "User Avatar",
     "user-banner": "User Banner",
-    "member-avatar": "Member Avatar"
+    "member-avatar": "Member Avatar",
+    "member-banner": "Member Banner"
   },
   "language": {
     "current": "Current language is `{{language}}`",

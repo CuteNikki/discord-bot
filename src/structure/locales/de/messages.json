@@ -1687,7 +1687,8 @@
     "failed": "Beim Abrufen des Users ist ein Fehler aufgetreten!",
     "user-avatar": "User Avatar",
     "user-banner": "User Banner",
-    "member-avatar": "Mitglied Avatar"
+    "member-avatar": "Mitglied Avatar",
+    "member-banner": "Mitglied Banner"
   },
   "language": {
     "current": "Momentane Sprache ist `{{language}}`",

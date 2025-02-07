@@ -55,6 +55,15 @@ export default new Command<ApplicationCommandType.User>({
       );
     }
 
+    if (member && member.banner) {
+      embeds.push(
+        new EmbedBuilder()
+          .setColor(client.colors.utilities)
+          .setTitle(t('avatar.member-banner', { lng }))
+          .setImage(member.bannerURL({ size: 4096 })!)
+      );
+    }
+
     await interaction.editReply({ embeds });
   }
 });

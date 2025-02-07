@@ -657,6 +657,7 @@
     "lost": "Die Telefonverbindung wurde verloren!",
     "reconnect": "Verbinde mit einem Telefon",
     "disconnect": "Verbindung trennen",
+    "reply": "Replying to",
     "connect": {
       "already": "Der Kanal ist bereits mit einem Telefon verbunden!",
       "connected": "Eine Telefonverbindung wurde hergestellt!",

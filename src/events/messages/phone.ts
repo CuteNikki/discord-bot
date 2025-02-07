@@ -65,29 +65,29 @@ export default new Event({
     }
 
     // Check for profanity using an external API
-    const res = await fetch('https://vector.profanity.dev', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: message.content })
-    }).catch((err) => logger.debug({ err }, 'Could not fetch profanity API'));
+    // const res = await fetch('https://vector.profanity.dev', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify({ message: message.content })
+    // }).catch((err) => logger.debug({ err }, 'Could not fetch profanity API'));
 
-    if (res) {
-      const response: { isProfanity: boolean; score: number } = await res.json();
-      // Replace message content if it contains profanity
-      if (response.isProfanity) {
-        embed.setDescription(`||${message.content.slice(0, 1990)}||`).setFooter({
-          text: `⚠️ ${t('phone.profanity', {
-            lng
-          })}`
-        });
+    // if (res) {
+    //   const response: { isProfanity: boolean; score: number } = await res.json();
+    //   // Replace message content if it contains profanity
+    //   if (response.isProfanity) {
+    //     embed.setDescription(`||${message.content.slice(0, 1990)}||`).setFooter({
+    //       text: `⚠️ ${t('phone.profanity', {
+    //         lng
+    //       })}`
+    //     });
 
-        otherEmbed.setDescription(`||${message.content.slice(0, 1990)}||`).setFooter({
-          text: `⚠️ ${t('phone.profanity', {
-            lng: otherLng
-          })}`
-        });
-      }
-    }
+    //     otherEmbed.setDescription(`||${message.content.slice(0, 1990)}||`).setFooter({
+    //       text: `⚠️ ${t('phone.profanity', {
+    //         lng: otherLng
+    //       })}`
+    //     });
+    //   }
+    // }
 
     // Determine the connected channel ID
     const connectedChannelId = existingConnection.channelIdOne === message.channel.id ? existingConnection.channelIdTwo : existingConnection.channelIdOne;
@@ -99,17 +99,62 @@ export default new Event({
     // Ensure the target channel is a text channel
     if (!targetChannel?.isSendable()) return;
 
-    // Send the embed to current channel if message can be deleted
+    // If the message is a reply, show what the user is replying to
+    const replyMessage = await message.fetchReference().catch(() => null);
+
+    let replyEmbed: EmbedBuilder | null = null;
+    let otherReplyEmbed: EmbedBuilder | null = null;
+
+    if (replyMessage && replyMessage.author) {
+      if (replyMessage.content) {
+        replyEmbed = new EmbedBuilder()
+          .setColor(client.colors.phone)
+          .setAuthor({
+            name: `${t('phone.reply', { lng })} ${replyMessage.author.globalName ? `${replyMessage.author.globalName} (@${replyMessage.author.username})` : `${replyMessage.author.username}`}`,
+            iconURL: replyMessage.author.displayAvatarURL({ extension: 'webp', size: 256 })
+          })
+          .setDescription(replyMessage.content)
+          .setTimestamp(replyMessage.createdAt);
+        otherReplyEmbed = new EmbedBuilder()
+          .setColor(client.colors.phone)
+          .setAuthor({
+            name: `${t('phone.reply', { lng: otherLng })} ${replyMessage.author.globalName ? `${replyMessage.author.globalName} (@${replyMessage.author.username})` : `${replyMessage.author.username}`}`,
+            iconURL: replyMessage.author.displayAvatarURL({ extension: 'webp', size: 256 })
+          })
+          .setDescription(replyMessage.content)
+          .setTimestamp(replyMessage.createdAt);
+      } else if (replyMessage.embeds.length) {
+        replyEmbed = new EmbedBuilder(replyMessage.embeds[0].data).setColor(client.colors.phone).setAuthor({
+          name: t('phone.reply', { lng }) + ` ${replyMessage.embeds[0].data.author?.name}`,
+          iconURL: replyMessage.embeds[0].data.author?.icon_url
+        });
+        otherReplyEmbed = new EmbedBuilder(replyMessage.embeds[0].data).setColor(client.colors.phone).setAuthor({
+          name: t('phone.reply', { lng: otherLng }) + ` ${replyMessage.embeds[0].data.author?.name}`,
+          iconURL: replyMessage.embeds[0].data.author?.icon_url
+        });
+      }
+    }
+
+    // Send the embed to current channel if message can be deleted or else react to it
     if (message.deletable)
       await message
         .delete()
         .catch((err) => logger.debug({ err, messageId: message.id }, 'Could not delete message'))
         .then(async () => {
-          await channel.send({ embeds: [embed] }).catch((err) => logger.debug({ err, channelId: channel.id }, 'Could not send message'));
+          await channel
+            .send({
+              embeds: replyEmbed ? [embed, replyEmbed] : [embed]
+            })
+            .catch((err) => logger.debug({ err, channelId: channel.id }, 'Could not send message'));
         });
     else message.react('✅').catch((err) => logger.debug({ err, messageId: message.id }, 'Could not react'));
+
     // Send the embed to the target channel
-    await targetChannel.send({ embeds: [otherEmbed] }).catch((err) => logger.debug({ err, channelId: targetChannel.id }, 'Could not send message'));
+    await targetChannel
+      .send({
+        embeds: otherReplyEmbed ? [otherEmbed, otherReplyEmbed] : [otherEmbed]
+      })
+      .catch((err) => logger.debug({ err, channelId: targetChannel.id }, 'Could not send message'));
 
     await updateLastMessageAt(existingConnection._id);
 

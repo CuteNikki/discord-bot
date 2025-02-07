@@ -657,6 +657,7 @@
     "lost": "Phone connection has been lost!",
     "reconnect": "Connect to another phone",
     "disconnect": "Disconnect from phone",
+    "reply": "Replying to",
     "connect": {
       "already": "This channel is already connected to a phone!",
       "connected": "A phone connection has been made!",

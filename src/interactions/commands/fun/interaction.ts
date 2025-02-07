@@ -57,7 +57,7 @@ export default new Command({
     const message = t(`interaction.${action}`, {
       lng,
       user: interaction.inCachedGuild() ? interaction.member.displayName : interaction.user.displayName,
-      target: targetMember ? targetMember.displayName : target.username
+      target: targetMember ? targetMember.displayName : target.displayName
     });
 
     switch (action) {

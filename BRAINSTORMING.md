@@ -46,8 +46,8 @@ Users can manage their money through a wallet or a bank account. The system prov
 | `/transfer <item> <user>` | Give items to another user                                   | ✅          |
 | `/inventory [user]`       | Check the current inventory of items                         | ✅          |
 | `/shop`                   | View the shop                                                | ✅          |
-| `/sell <item> [amount]`   | Sell an item                                                 | ❌          |
-| `/buy <item> [amount]`    | Buy an item                                                  | ❌          |
+| `/sell <item> [amount]`   | Sell an item                                                 | ✅          |
+| `/buy <item> [amount]`    | Buy an item                                                  | ✅          |
 
 ### Marriage Commands
 

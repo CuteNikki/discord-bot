@@ -174,11 +174,14 @@ export async function removeItem(userId: string, itemId: number): Promise<UserDo
 /**
  * Removes multiple items from the inventory of a user
  * @param {string} userId User ID to remove the items from
- * @param {number[]} itemIds Item IDs to remove
+ * @param {number} itemId Item ID to remove
+ * @param {number} amount Amount of items to remove
  * @returns {Promise<UserDocument>} Updated user data
  */
-export async function removeItems(userId: string, itemIds: number[]): Promise<UserDocument> {
-  return await updateUser(userId, { $pull: { inventory: { id: { $in: itemIds } } } });
+export async function removeItems(userId: string, itemId: number, amount: number): Promise<UserDocument> {
+  const user = await getUser(userId, true);
+  const updatedInventory = user.inventory.filter((item) => !(item.id === itemId && amount-- > 0));
+  return await updateUser(userId, { $set: { inventory: updatedInventory } });
 }
 
 /**

@@ -65,11 +65,7 @@ export default new Command({
       return;
     }
 
-    await removeItems(
-      interaction.user.id,
-      foundItems.slice(0, amount).map((i) => i.id)
-    );
-
+    await removeItems(interaction.user.id, foundItems[0].id, amount);
     await addItems(user.id, foundItems.slice(0, amount));
 
     await interaction.reply({

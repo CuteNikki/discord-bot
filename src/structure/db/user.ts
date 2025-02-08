@@ -94,13 +94,23 @@ export async function getBannedUsers(): Promise<UserDocument[]> {
 }
 
 /**
- * Updates the description of a user
+ * Updates the description of a users profile
  * @param {string} userId User ID to update the description for
  * @param {string} description Description to set
  * @returns {Promise<UserDocument>} Updated user data
  */
-export async function updateDescription(userId: string, description: string): Promise<UserDocument> {
-  return await updateUser(userId, { $set: { description } });
+export async function updateDescription(userId: string, description: string | null): Promise<UserDocument> {
+  return await updateUser(userId, { $set: { description: description } });
+}
+
+/**
+ * Updates the color of a users profile
+ * @param {string} userId User ID to update the description for
+ * @param {string} color Description to set
+ * @returns {Promise<UserDocument>} Updated user data
+ */
+export async function updateColor(userId: string, color: string | null): Promise<UserDocument> {
+  return await updateUser(userId, { $set: { color: color } });
 }
 
 /**

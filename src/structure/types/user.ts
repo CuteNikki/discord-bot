@@ -62,6 +62,7 @@ export type UserDocument = {
   wallet: number;
   bank: number;
   description?: string;
+  color?: string;
   inventory: Item[];
 };
 

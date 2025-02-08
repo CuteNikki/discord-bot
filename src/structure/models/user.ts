@@ -29,6 +29,7 @@ export const userModel: Model<UserDocument> =
       wallet: { type: Number, required: true, default: 0 },
       bank: { type: Number, required: true, default: 0 },
       description: { type: String, required: false },
+      color: { type: String, required: false },
       inventory: [
         {
           id: { type: Number, required: true },

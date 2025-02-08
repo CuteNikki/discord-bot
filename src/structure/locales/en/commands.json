@@ -37,6 +37,16 @@
                 "description": "The new description of your profile"
               }
             ]
+          },
+          {
+            "name": "color",
+            "description": "Edit the color of your profile",
+            "options": [
+              {
+                "name": "color",
+                "description": "The new color of your profile"
+              }
+            ]
           }
         ]
       },
@@ -235,22 +245,7 @@
       {
         "name": "action",
         "description": "The action to perform",
-        "choices": [
-          "blush", 
-          "confused", 
-          "cringe", 
-          "cry", 
-          "dance", 
-          "eat", 
-          "happy", 
-          "sad", 
-          "smile", 
-          "smug", 
-          "think", 
-          "thumbsup", 
-          "wave", 
-          "wink"
-        ]
+        "choices": ["blush", "confused", "cringe", "cry", "dance", "eat", "happy", "sad", "smile", "smug", "think", "thumbsup", "wave", "wink"]
       }
     ]
   },

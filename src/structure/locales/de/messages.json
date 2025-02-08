@@ -4,7 +4,16 @@
   },
   "profile": {
     "edit": {
-      "description": "Deine Beschreibung wurde aktualisiert"
+      "description": {
+        "removed": "Beschreibung wurde entfernt!",
+        "set": "Beschreibung wurde gesetzt!",
+        "link": "Beschreibung darf keine Links enthalten!"
+      },
+      "color": {
+        "removed": "Farbe wurde zurückgesetzt!",
+        "invalid": "Ungültige Farbge angegeben!",
+        "set": "Farbe wurde gesetzt!"
+      }
     },
     "view": {
       "empty": "Dieses Profil ist leer!",

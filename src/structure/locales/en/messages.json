@@ -4,7 +4,16 @@
   },
   "profile": {
     "edit": {
-      "description": "Your description has been updated!"
+      "description": {
+        "removed": "Description has been removed!",
+        "set": "Description has been set!",
+        "link": "Description cannot contain links!"
+      },
+      "color": {
+        "removed": "Color has been reset!",
+        "invalid": "Invalid color provided!",
+        "set": "Color has been set!"
+      }
     },
     "view": {
       "empty": "This profile is empty!",

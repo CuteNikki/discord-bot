@@ -161,7 +161,7 @@ export default new Command({
           value: userData.badges
             .sort((a, b) => a.id - b.id)
             .map((badge) => `${getBadgeEmoji(badge.id, client)} ${BadgeType[badge.id]}`)
-            .join(' ')
+            .join('\n')
         });
       }
 

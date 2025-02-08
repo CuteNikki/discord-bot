@@ -1,4 +1,4 @@
-import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
+import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, SlashCommandBuilder } from 'discord.js';
 
 import { Command } from 'classes/command';
 
@@ -11,7 +11,11 @@ import { ItemCategory } from 'types/user';
 
 export default new Command({
   module: ModuleType.Economy,
-  data: new SlashCommandBuilder().setName('shop').setDescription('View the shop'),
+  data: new SlashCommandBuilder()
+    .setName('shop')
+    .setDescription('View the shop')
+    .setContexts(InteractionContextType.BotDM, InteractionContextType.Guild, InteractionContextType.PrivateChannel)
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall),
   async execute({ client, interaction }) {
     await interaction.deferReply();
 

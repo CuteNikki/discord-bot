@@ -1,4 +1,4 @@
-import { EmbedBuilder, MessageFlags, SlashCommandBuilder } from 'discord.js';
+import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, MessageFlags, SlashCommandBuilder } from 'discord.js';
 import { t } from 'i18next';
 
 import { Command } from 'classes/command';
@@ -10,6 +10,8 @@ export default new Command({
   data: new SlashCommandBuilder()
     .setName('decide')
     .setDescription('Helps you decide between options')
+    .setContexts(InteractionContextType.BotDM, InteractionContextType.Guild, InteractionContextType.PrivateChannel)
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
     .addStringOption((option) => option.setName('options').setDescription('Separate each option with a semicolon (;)').setRequired(true).setMaxLength(1000))
     .addBooleanOption((option) => option.setName('ephemeral').setDescription('Whether the response should be ephemeral').setRequired(false)),
   async execute({ client, interaction, lng }) {

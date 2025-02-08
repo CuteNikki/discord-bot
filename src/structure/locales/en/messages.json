@@ -1,4 +1,14 @@
 {
+  "buy": {
+    "invalid": "Invalid item or amount provided!",
+    "insufficient": "You do not have enough money to buy that amount!",
+    "success": "Successfully bought **{{amount}}x {{item}}** for {{price}}!"
+  },
+  "sell": {
+    "invalid": "Invalid item or amount provided!",
+    "insufficient": "You do not have enough items to sell that amount!",
+    "success": "Successfully sold **{{amount}}x {{item}}** for {{price}}!"
+  },
   "decide": {
     "result": "**Options:** {{options}}\n**The result is:** {{result}}"
   },

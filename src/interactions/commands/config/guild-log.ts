@@ -22,7 +22,7 @@ import {
   getGuildLog
 } from 'db/guild-log';
 
-import { RECOMMENDED_DISABLED_GUILD_LOG_EVENTS, RECOMMENDED_ENABLED_GUILD_LOG_EVENTS, VALID_GUILD_LOG_EVENTS } from 'constants/guild-log';
+import { LOG_EVENT_RECOMMENDATIONS_DISABLED, LOG_EVENT_RECOMMENDATIONS_ENABLED, LOG_EVENT_VALIDATION_LIST } from 'constants/guild-log';
 
 import type { GuildLogEvent } from 'types/guild-log';
 import { ModuleType } from 'types/interactions';
@@ -64,14 +64,18 @@ export default new Command({
         [
           { name: 'all', value: 'all' },
           { name: 'recommended', value: 'recommended' },
-          ...VALID_GUILD_LOG_EVENTS.map((event) => ({ name: event, value: event }))
+          ...LOG_EVENT_VALIDATION_LIST.map((event) => ({ name: event, value: event }))
         ].slice(0, 25)
       );
       return;
     }
 
     await interaction.respond(
-      [{ name: 'all', value: 'all' }, { name: 'recommended', value: 'recommended' }, ...VALID_GUILD_LOG_EVENTS.map((event) => ({ name: event, value: event }))]
+      [
+        { name: 'all', value: 'all' },
+        { name: 'recommended', value: 'recommended' },
+        ...LOG_EVENT_VALIDATION_LIST.map((event) => ({ name: event, value: event }))
+      ]
         .filter((e) => e.name.toLowerCase().includes(event.toLowerCase()))
         .slice(0, 25)
     );
@@ -90,7 +94,7 @@ export default new Command({
         const event = options.getString('event', true);
         const channel = options.getChannel('channel', true, [ChannelType.GuildText]);
 
-        if (![...VALID_GUILD_LOG_EVENTS, 'all', 'recommended'].includes(event)) {
+        if (![...LOG_EVENT_VALIDATION_LIST, 'all', 'recommended'].includes(event)) {
           await interaction.editReply({
             embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('log.events.invalid', { lng }))]
           });
@@ -114,9 +118,9 @@ export default new Command({
         }
 
         if (event === 'all') {
-          await enableGuildLogEvents(guild.id, VALID_GUILD_LOG_EVENTS, channel.id);
+          await enableGuildLogEvents(guild.id, LOG_EVENT_VALIDATION_LIST, channel.id);
         } else if (event === 'recommended') {
-          await enableGuildLogEvents(guild.id, RECOMMENDED_ENABLED_GUILD_LOG_EVENTS, channel.id);
+          await enableGuildLogEvents(guild.id, LOG_EVENT_RECOMMENDATIONS_DISABLED, channel.id);
         } else {
           await enableGuildLogEvent(guild.id, event, channel.id);
         }
@@ -130,7 +134,7 @@ export default new Command({
       if (options.getSubcommand() === 'disable') {
         const event = options.getString('event', true);
 
-        if (![...VALID_GUILD_LOG_EVENTS, 'all', 'recommended'].includes(event)) {
+        if (![...LOG_EVENT_VALIDATION_LIST, 'all', 'recommended'].includes(event)) {
           await interaction.editReply({
             embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('log.events.invalid', { lng }))]
           });
@@ -150,12 +154,12 @@ export default new Command({
         if (event === 'all') {
           await disableGuildLogEvents(
             guild.id,
-            VALID_GUILD_LOG_EVENTS.map((e) => ({ name: e, channelId: log.events.find((ev) => ev.name === e)?.channelId }))
+            LOG_EVENT_VALIDATION_LIST.map((e) => ({ name: e, channelId: log.events.find((ev) => ev.name === e)?.channelId }))
           );
         } else if (event === 'recommended') {
           await disableGuildLogEvents(
             guild.id,
-            RECOMMENDED_DISABLED_GUILD_LOG_EVENTS.map((e) => ({ name: e, channelId: log.events.find((ev) => ev.name === e)?.channelId }))
+            LOG_EVENT_RECOMMENDATIONS_ENABLED.map((e) => ({ name: e, channelId: log.events.find((ev) => ev.name === e)?.channelId }))
           );
         } else {
           await disableGuildLogEvent(guild.id, event);
@@ -201,7 +205,7 @@ export default new Command({
     if (options.getSubcommand() === 'info') {
       const enabledEvents = log.events.filter((event) => event.enabled && event.channelId);
       const disabledEvents = log.events.filter((event) => !event.enabled);
-      const unconfiguredEvents = VALID_GUILD_LOG_EVENTS.filter((event) => !log.events.find((e) => e.name === event));
+      const unconfiguredEvents = LOG_EVENT_VALIDATION_LIST.filter((event) => !log.events.find((e) => e.name === event));
 
       await interaction.editReply({
         embeds: [

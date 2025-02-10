@@ -1,5 +1,5 @@
 import { owoify } from 'discord-actions';
-import { MessageFlags, SlashCommandBuilder } from 'discord.js';
+import { ApplicationIntegrationType, InteractionContextType, MessageFlags, SlashCommandBuilder } from 'discord.js';
 
 import { Command } from 'classes/command';
 
@@ -10,6 +10,8 @@ export default new Command({
   data: new SlashCommandBuilder()
     .setName('owoify')
     .setDescription('Owoify a message')
+    .setContexts(InteractionContextType.BotDM, InteractionContextType.Guild, InteractionContextType.PrivateChannel)
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
     .addStringOption((option) => option.setName('message').setDescription('The message to owoify').setRequired(true))
     .addBooleanOption((option) => option.setName('ephemeral').setDescription('Whether the response should be ephemeral')),
   async execute({ interaction }) {

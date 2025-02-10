@@ -46,10 +46,16 @@ export type LoggedEvent = {
   channelId?: string;
   /** Array of channel IDs where the event is excluded */
   excludedChannels?: string[];
+  /** Array of channel IDs where the event is included */
+  includedChannels?: string[];
   /** Array of role IDs where the event is excluded */
   excludedRoles?: string[];
+  /** Array of role IDs where the event is included */
+  includedRoles?: string[];
   /** Array of user IDs where the event is excluded */
   excludedUsers?: string[];
+  /** Array of user IDs where the event is included */
+  includedUsers?: string[];
 };
 
 export type GuildLogEvent = {

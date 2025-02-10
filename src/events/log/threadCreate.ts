@@ -8,7 +8,7 @@ import { getGuildLanguage } from 'db/language';
 
 import { logger } from 'utils/logger';
 
-import type { GuildLogEvent } from 'types/guild-log';
+import type { LoggedEvent } from 'types/guild-log';
 
 export default new Event({
   name: Events.ThreadCreate,
@@ -16,7 +16,7 @@ export default new Event({
   async execute(_client, thread) {
     const { guild, name, id, appliedTags, ownerId } = thread;
 
-    const log = (await getGuildLog(guild.id)) ?? { enabled: false, events: [] as GuildLogEvent[] };
+    const log = (await getGuildLog(guild.id)) ?? { enabled: false, events: [] as LoggedEvent[] };
 
     const event = log.events.find((e) => e.name === Events.ThreadCreate) ?? {
       channelId: undefined,

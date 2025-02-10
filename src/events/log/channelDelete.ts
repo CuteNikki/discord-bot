@@ -8,7 +8,7 @@ import { getGuildLanguage } from 'db/language';
 
 import { logger } from 'utils/logger';
 
-import type { GuildLogEvent } from 'types/guild-log';
+import type { LoggedEvent } from 'types/guild-log';
 
 export default new Event({
   name: Events.ChannelDelete,
@@ -17,7 +17,7 @@ export default new Event({
     if (channel.isDMBased()) return;
     const { guild, name, id, type, parent, createdTimestamp, permissionOverwrites } = channel;
 
-    const log = (await getGuildLog(guild.id)) ?? { enabled: false, events: [] as GuildLogEvent[] };
+    const log = (await getGuildLog(guild.id)) ?? { enabled: false, events: [] as LoggedEvent[] };
 
     const event = log.events.find((e) => e.name === Events.ChannelDelete) ?? {
       channelId: undefined,

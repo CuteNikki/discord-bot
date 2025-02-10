@@ -24,7 +24,7 @@ import {
 
 import { LOG_EVENT_RECOMMENDATIONS_DISABLED, LOG_EVENT_RECOMMENDATIONS_ENABLED, LOG_EVENT_VALIDATION_LIST } from 'constants/guild-log';
 
-import type { GuildLogEvent } from 'types/guild-log';
+import type { LoggedEvent } from 'types/guild-log';
 import { ModuleType } from 'types/interactions';
 
 export default new Command({
@@ -87,7 +87,7 @@ export default new Command({
 
     const { options, guild } = interaction;
 
-    const log = (await getGuildLog(guild.id)) ?? { enabled: false, events: [] as GuildLogEvent[] };
+    const log = (await getGuildLog(guild.id)) ?? { enabled: false, events: [] as LoggedEvent[] };
 
     if (options.getSubcommandGroup() === 'events') {
       if (options.getSubcommand() === 'enable') {

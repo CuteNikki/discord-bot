@@ -6,7 +6,7 @@ import { Event } from 'classes/event';
 import { getGuildLog } from 'db/guild-log';
 import { getGuildLanguage } from 'db/language';
 
-import type { GuildLogEvent } from 'types/guild-log';
+import type { LoggedEvent } from 'types/guild-log';
 
 import { logger } from 'utils/logger';
 
@@ -16,7 +16,7 @@ export default new Event({
   async execute(_client, oldEmoji, newEmoji) {
     const guild = newEmoji.guild;
 
-    const log = (await getGuildLog(guild.id)) ?? { enabled: false, events: [] as GuildLogEvent[] };
+    const log = (await getGuildLog(guild.id)) ?? { enabled: false, events: [] as LoggedEvent[] };
 
     const event = log.events.find((e) => e.name === Events.GuildEmojiUpdate) ?? {
       channelId: undefined,

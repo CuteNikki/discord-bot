@@ -17,13 +17,13 @@ import { getGuildLanguage } from 'db/language';
 
 import { logger } from 'utils/logger';
 
-import type { GuildLogEvent } from 'types/guild-log';
+import type { LoggedEvent } from 'types/guild-log';
 
 export default new Event({
   name: Events.GuildUpdate,
   once: false,
   async execute(_client, oldGuild, newGuild) {
-    const log = (await getGuildLog(newGuild.id)) ?? { enabled: false, events: [] as GuildLogEvent[] };
+    const log = (await getGuildLog(newGuild.id)) ?? { enabled: false, events: [] as LoggedEvent[] };
 
     const event = log.events.find((e) => e.name === Events.GuildUpdate) ?? {
       channelId: undefined,

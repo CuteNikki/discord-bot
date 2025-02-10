@@ -8,7 +8,7 @@ import { getGuildLanguage } from 'db/language';
 
 import { logger } from 'utils/logger';
 
-import type { GuildLogEvent } from 'types/guild-log';
+import type { LoggedEvent } from 'types/guild-log';
 
 export default new Event({
   name: Events.GuildMemberAdd,
@@ -20,7 +20,7 @@ export default new Event({
       await member.fetch().catch((err) => logger.debug({ err }, 'GuildLog | GuildMemberAdd: Could not fetch member'));
     }
 
-    const log = (await getGuildLog(guild.id)) ?? { enabled: false, events: [] as GuildLogEvent[] };
+    const log = (await getGuildLog(guild.id)) ?? { enabled: false, events: [] as LoggedEvent[] };
 
     const event = log.events.find((e) => e.name === Events.GuildMemberAdd) ?? {
       channelId: undefined,

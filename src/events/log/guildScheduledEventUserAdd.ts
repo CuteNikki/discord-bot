@@ -8,7 +8,7 @@ import { getGuildLanguage } from 'db/language';
 
 import { logger } from 'utils/logger';
 
-import type { GuildLogEvent } from 'types/guild-log';
+import type { LoggedEvent } from 'types/guild-log';
 
 export default new Event({
   name: Events.GuildScheduledEventUserAdd,
@@ -24,7 +24,7 @@ export default new Event({
       await scheduledEvent.fetch().catch((err) => logger.debug({ err }, 'GuildLog | GuildScheduledEventUserAdd: Could not fetch guild scheduled event'));
     }
 
-    const log = (await getGuildLog(guild.id)) ?? { enabled: false, events: [] as GuildLogEvent[] };
+    const log = (await getGuildLog(guild.id)) ?? { enabled: false, events: [] as LoggedEvent[] };
 
     const event = log.events.find((e) => e.name === Events.GuildScheduledEventUserAdd) ?? {
       channelId: undefined,

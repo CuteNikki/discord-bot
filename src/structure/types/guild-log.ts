@@ -3,7 +3,7 @@ import type { ChannelType } from 'discord.js';
 /**
  * Represents a log event definition.
  */
-export type LogEventDefinition = {
+export type EventDefinition = {
   /** Name of the event */
   name: string;
   /** Description of the event */

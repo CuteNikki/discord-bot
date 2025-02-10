@@ -1,8 +1,8 @@
 import { ChannelType, Events } from 'discord.js';
 
-import type { LogEventDefinition } from 'types/guild-log';
+import type { EventDefinition } from 'types/guild-log';
 
-export const APPLICATION_COMMAND_PERMISSIONS_UPDATE: LogEventDefinition = {
+export const APPLICATION_COMMAND_PERMISSIONS_UPDATE: EventDefinition = {
   name: Events.ApplicationCommandPermissionsUpdate,
   description: 'Emitted whenever permissions for an application command in a guild were updated.',
   canExcludeChannels: false,
@@ -14,7 +14,7 @@ export const APPLICATION_COMMAND_PERMISSIONS_UPDATE: LogEventDefinition = {
   canExcludeBotsOnly: true,
   canIncludeBotsOnly: true
 };
-export const AUTO_MODERATION_ACTION_EXECUTION: LogEventDefinition = {
+export const AUTO_MODERATION_ACTION_EXECUTION: EventDefinition = {
   name: Events.AutoModerationActionExecution,
   description: 'Emitted whenever an auto moderation rule is triggered.',
   canExcludeChannels: true,
@@ -24,7 +24,7 @@ export const AUTO_MODERATION_ACTION_EXECUTION: LogEventDefinition = {
   canExcludeUsers: true,
   canIncludeUsers: true
 };
-export const AUTO_MODERATION_RULE_CREATE: LogEventDefinition = {
+export const AUTO_MODERATION_RULE_CREATE: EventDefinition = {
   name: Events.AutoModerationRuleCreate,
   description: 'Emitted whenever an auto moderation rule is created.',
   canExcludeChannels: false,
@@ -34,7 +34,7 @@ export const AUTO_MODERATION_RULE_CREATE: LogEventDefinition = {
   canExcludeUsers: false,
   canIncludeUsers: false
 };
-export const AUTO_MODERATION_RULE_DELETE: LogEventDefinition = {
+export const AUTO_MODERATION_RULE_DELETE: EventDefinition = {
   name: Events.AutoModerationRuleDelete,
   description: 'Emitted whenever an auto moderation rule is deleted.',
   canExcludeChannels: false,
@@ -44,7 +44,7 @@ export const AUTO_MODERATION_RULE_DELETE: LogEventDefinition = {
   canExcludeUsers: false,
   canIncludeUsers: false
 };
-export const AUTO_MODERATION_RULE_UPDATE: LogEventDefinition = {
+export const AUTO_MODERATION_RULE_UPDATE: EventDefinition = {
   name: Events.AutoModerationRuleUpdate,
   description: 'Emitted whenever an auto moderation rule is updated.',
   canExcludeChannels: false,
@@ -54,7 +54,7 @@ export const AUTO_MODERATION_RULE_UPDATE: LogEventDefinition = {
   canExcludeUsers: false,
   canIncludeUsers: false
 };
-export const CHANNEL_CREATE: LogEventDefinition = {
+export const CHANNEL_CREATE: EventDefinition = {
   name: Events.ChannelCreate,
   description: 'Emitted whenever a channel is created.',
   canExcludeChannels: false,
@@ -64,7 +64,7 @@ export const CHANNEL_CREATE: LogEventDefinition = {
   canExcludeUsers: false,
   canIncludeUsers: false
 };
-export const CHANNEL_DELETE: LogEventDefinition = {
+export const CHANNEL_DELETE: EventDefinition = {
   name: Events.ChannelDelete,
   description: 'Emitted whenever a channel is deleted.',
   canExcludeChannels: false,
@@ -74,7 +74,7 @@ export const CHANNEL_DELETE: LogEventDefinition = {
   canExcludeUsers: false,
   canIncludeUsers: false
 };
-export const CHANNEL_UPDATE: LogEventDefinition = {
+export const CHANNEL_UPDATE: EventDefinition = {
   name: Events.ChannelUpdate,
   description: 'Emitted whenever a channel is updated.',
   canExcludeChannels: true,
@@ -84,7 +84,7 @@ export const CHANNEL_UPDATE: LogEventDefinition = {
   canExcludeUsers: false,
   canIncludeUsers: false
 };
-export const GUILD_EMOJI_CREATE: LogEventDefinition = {
+export const GUILD_EMOJI_CREATE: EventDefinition = {
   name: Events.GuildEmojiCreate,
   description: 'Emitted whenever an emoji is created in a guild.',
   canExcludeChannels: false,
@@ -94,7 +94,7 @@ export const GUILD_EMOJI_CREATE: LogEventDefinition = {
   canExcludeUsers: false,
   canIncludeUsers: false
 };
-export const GUILD_EMOJI_DELETE: LogEventDefinition = {
+export const GUILD_EMOJI_DELETE: EventDefinition = {
   name: Events.GuildEmojiDelete,
   description: 'Emitted whenever an emoji is deleted in a guild.',
   canExcludeChannels: false,
@@ -104,7 +104,7 @@ export const GUILD_EMOJI_DELETE: LogEventDefinition = {
   canExcludeUsers: false,
   canIncludeUsers: false
 };
-export const GUILD_EMOJI_UPDATE: LogEventDefinition = {
+export const GUILD_EMOJI_UPDATE: EventDefinition = {
   name: Events.GuildEmojiUpdate,
   description: 'Emitted whenever an emoji is updated in a guild.',
   canExcludeChannels: false,
@@ -114,7 +114,7 @@ export const GUILD_EMOJI_UPDATE: LogEventDefinition = {
   canExcludeUsers: false,
   canIncludeUsers: false
 };
-export const GUILD_BAN_ADD: LogEventDefinition = {
+export const GUILD_BAN_ADD: EventDefinition = {
   name: Events.GuildBanAdd,
   description: 'Emitted whenever a member is banned from a guild.',
   canExcludeChannels: false,
@@ -124,7 +124,7 @@ export const GUILD_BAN_ADD: LogEventDefinition = {
   canExcludeUsers: true,
   canIncludeUsers: false
 };
-export const GUILD_BAN_REMOVE: LogEventDefinition = {
+export const GUILD_BAN_REMOVE: EventDefinition = {
   name: Events.GuildBanRemove,
   description: 'Emitted whenever a member is unbanned from a guild.',
   canExcludeChannels: false,
@@ -134,7 +134,7 @@ export const GUILD_BAN_REMOVE: LogEventDefinition = {
   canExcludeUsers: true,
   canIncludeUsers: false
 };
-export const GUILD_MEMBER_ADD: LogEventDefinition = {
+export const GUILD_MEMBER_ADD: EventDefinition = {
   name: Events.GuildMemberAdd,
   description: 'Emitted whenever a member joins a guild.',
   canExcludeChannels: false,
@@ -144,7 +144,7 @@ export const GUILD_MEMBER_ADD: LogEventDefinition = {
   canExcludeUsers: true,
   canIncludeUsers: false
 };
-export const GUILD_MEMBER_REMOVE: LogEventDefinition = {
+export const GUILD_MEMBER_REMOVE: EventDefinition = {
   name: Events.GuildMemberRemove,
   description: 'Emitted whenever a member leaves a guild.',
   canExcludeChannels: false,
@@ -154,7 +154,7 @@ export const GUILD_MEMBER_REMOVE: LogEventDefinition = {
   canExcludeUsers: false,
   canIncludeUsers: false
 };
-export const GUILD_MEMBER_UPDATE: LogEventDefinition = {
+export const GUILD_MEMBER_UPDATE: EventDefinition = {
   name: Events.GuildMemberUpdate,
   description: 'Emitted whenever a member is updated in a guild.',
   canExcludeChannels: false,
@@ -164,7 +164,7 @@ export const GUILD_MEMBER_UPDATE: LogEventDefinition = {
   canExcludeUsers: false,
   canIncludeUsers: false
 };
-export const GUILD_SCHEDULED_EVENT_CREATE: LogEventDefinition = {
+export const GUILD_SCHEDULED_EVENT_CREATE: EventDefinition = {
   name: Events.GuildScheduledEventCreate,
   description: 'Emitted whenever a scheduled event is created in a guild.',
   canExcludeChannels: false,
@@ -174,7 +174,7 @@ export const GUILD_SCHEDULED_EVENT_CREATE: LogEventDefinition = {
   canExcludeUsers: false,
   canIncludeUsers: false
 };
-export const GUILD_SCHEDULED_EVENT_DELETE: LogEventDefinition = {
+export const GUILD_SCHEDULED_EVENT_DELETE: EventDefinition = {
   name: Events.GuildScheduledEventDelete,
   description: 'Emitted whenever a scheduled event is deleted in a guild.',
   canExcludeChannels: false,
@@ -184,7 +184,7 @@ export const GUILD_SCHEDULED_EVENT_DELETE: LogEventDefinition = {
   canExcludeUsers: false,
   canIncludeUsers: false
 };
-export const GUILD_SCHEDULED_EVENT_UPDATE: LogEventDefinition = {
+export const GUILD_SCHEDULED_EVENT_UPDATE: EventDefinition = {
   name: Events.GuildScheduledEventUpdate,
   description: 'Emitted whenever a scheduled event is updated in a guild.',
   canExcludeChannels: false,
@@ -194,7 +194,7 @@ export const GUILD_SCHEDULED_EVENT_UPDATE: LogEventDefinition = {
   canExcludeUsers: false,
   canIncludeUsers: false
 };
-export const GUILD_SCHEDULED_EVENT_USER_ADD: LogEventDefinition = {
+export const GUILD_SCHEDULED_EVENT_USER_ADD: EventDefinition = {
   name: Events.GuildScheduledEventUserAdd,
   description: 'Emitted whenever a user is added to a scheduled event in a guild.',
   canExcludeChannels: false,
@@ -204,7 +204,7 @@ export const GUILD_SCHEDULED_EVENT_USER_ADD: LogEventDefinition = {
   canExcludeUsers: false,
   canIncludeUsers: false
 };
-export const GUILD_SCHEDULED_EVENT_USER_REMOVE: LogEventDefinition = {
+export const GUILD_SCHEDULED_EVENT_USER_REMOVE: EventDefinition = {
   name: Events.GuildScheduledEventUserRemove,
   description: 'Emitted whenever a user is removed from a scheduled event in a guild.',
   canExcludeChannels: false,
@@ -214,7 +214,7 @@ export const GUILD_SCHEDULED_EVENT_USER_REMOVE: LogEventDefinition = {
   canExcludeUsers: false,
   canIncludeUsers: false
 };
-export const GUILD_UPDATE: LogEventDefinition = {
+export const GUILD_UPDATE: EventDefinition = {
   name: Events.GuildUpdate,
   description: 'Emitted whenever a guild is updated.',
   canExcludeChannels: false,
@@ -224,7 +224,7 @@ export const GUILD_UPDATE: LogEventDefinition = {
   canExcludeUsers: false,
   canIncludeUsers: false
 };
-export const INVITE_CREATE: LogEventDefinition = {
+export const INVITE_CREATE: EventDefinition = {
   name: Events.InviteCreate,
   description: 'Emitted whenever an invite is created in a guild.',
   canExcludeChannels: false,
@@ -234,7 +234,7 @@ export const INVITE_CREATE: LogEventDefinition = {
   canExcludeUsers: false,
   canIncludeUsers: false
 };
-export const INVITE_DELETE: LogEventDefinition = {
+export const INVITE_DELETE: EventDefinition = {
   name: Events.InviteDelete,
   description: 'Emitted whenever an invite is deleted in a guild.',
   canExcludeChannels: false,
@@ -244,7 +244,7 @@ export const INVITE_DELETE: LogEventDefinition = {
   canExcludeUsers: false,
   canIncludeUsers: false
 };
-export const MESSAGE_UPDATE: LogEventDefinition = {
+export const MESSAGE_UPDATE: EventDefinition = {
   name: Events.MessageUpdate,
   description: 'Emitted whenever a message is updated in a guild.',
   canExcludeChannels: true,
@@ -274,7 +274,7 @@ export const MESSAGE_UPDATE: LogEventDefinition = {
   canExcludeUsers: true,
   canIncludeUsers: false
 };
-export const MESSAGE_DELETE: LogEventDefinition = {
+export const MESSAGE_DELETE: EventDefinition = {
   name: Events.MessageDelete,
   description: 'Emitted whenever a message is deleted in a guild.',
   canExcludeChannels: true,
@@ -304,7 +304,7 @@ export const MESSAGE_DELETE: LogEventDefinition = {
   canExcludeUsers: true,
   canIncludeUsers: false
 };
-export const MESSAGE_BULK_DELETE: LogEventDefinition = {
+export const MESSAGE_BULK_DELETE: EventDefinition = {
   name: Events.MessageBulkDelete,
   description: 'Emitted whenever messages are deleted in bulk in a guild.',
   canExcludeChannels: true,
@@ -334,7 +334,7 @@ export const MESSAGE_BULK_DELETE: LogEventDefinition = {
   canExcludeUsers: true,
   canIncludeUsers: false
 };
-export const MESSAGE_REACTION_REMOVE_ALL: LogEventDefinition = {
+export const MESSAGE_REACTION_REMOVE_ALL: EventDefinition = {
   name: Events.MessageReactionRemoveAll,
   description: 'Emitted whenever all reactions are removed from a message in a guild.',
   canExcludeChannels: true,
@@ -344,7 +344,7 @@ export const MESSAGE_REACTION_REMOVE_ALL: LogEventDefinition = {
   canExcludeUsers: true,
   canIncludeUsers: false
 };
-export const GUILD_ROLE_CREATE: LogEventDefinition = {
+export const GUILD_ROLE_CREATE: EventDefinition = {
   name: Events.GuildRoleCreate,
   description: 'Emitted whenever a role is created in a guild.',
   canExcludeChannels: false,
@@ -354,7 +354,7 @@ export const GUILD_ROLE_CREATE: LogEventDefinition = {
   canExcludeUsers: false,
   canIncludeUsers: false
 };
-export const GUILD_ROLE_DELETE: LogEventDefinition = {
+export const GUILD_ROLE_DELETE: EventDefinition = {
   name: Events.GuildRoleDelete,
   description: 'Emitted whenever a role is deleted in a guild.',
   canExcludeChannels: false,
@@ -364,7 +364,7 @@ export const GUILD_ROLE_DELETE: LogEventDefinition = {
   canExcludeUsers: false,
   canIncludeUsers: false
 };
-export const GUILD_ROLE_UPDATE: LogEventDefinition = {
+export const GUILD_ROLE_UPDATE: EventDefinition = {
   name: Events.GuildRoleUpdate,
   description: 'Emitted whenever a role is updated in a guild.',
   canExcludeChannels: false,
@@ -374,7 +374,7 @@ export const GUILD_ROLE_UPDATE: LogEventDefinition = {
   canExcludeUsers: false,
   canIncludeUsers: false
 };
-export const GUILD_STICKER_CREATE: LogEventDefinition = {
+export const GUILD_STICKER_CREATE: EventDefinition = {
   name: Events.GuildStickerCreate,
   description: 'Emitted whenever a sticker is created in a guild.',
   canExcludeChannels: false,
@@ -384,7 +384,7 @@ export const GUILD_STICKER_CREATE: LogEventDefinition = {
   canExcludeUsers: false,
   canIncludeUsers: false
 };
-export const GUILD_STICKER_DELETE: LogEventDefinition = {
+export const GUILD_STICKER_DELETE: EventDefinition = {
   name: Events.GuildStickerDelete,
   description: 'Emitted whenever a sticker is deleted in a guild.',
   canExcludeChannels: false,
@@ -394,7 +394,7 @@ export const GUILD_STICKER_DELETE: LogEventDefinition = {
   canExcludeUsers: false,
   canIncludeUsers: false
 };
-export const GUILD_STICKER_UPDATE: LogEventDefinition = {
+export const GUILD_STICKER_UPDATE: EventDefinition = {
   name: Events.GuildStickerUpdate,
   description: 'Emitted whenever a sticker is updated in a guild.',
   canExcludeChannels: false,
@@ -404,7 +404,7 @@ export const GUILD_STICKER_UPDATE: LogEventDefinition = {
   canExcludeUsers: false,
   canIncludeUsers: false
 };
-export const THREAD_CREATE: LogEventDefinition = {
+export const THREAD_CREATE: EventDefinition = {
   name: Events.ThreadCreate,
   description: 'Emitted whenever a thread is created in a guild.',
   canExcludeChannels: false,
@@ -414,7 +414,7 @@ export const THREAD_CREATE: LogEventDefinition = {
   canExcludeUsers: false,
   canIncludeUsers: false
 };
-export const THREAD_DELETE: LogEventDefinition = {
+export const THREAD_DELETE: EventDefinition = {
   name: Events.ThreadDelete,
   description: 'Emitted whenever a thread is deleted in a guild.',
   canExcludeChannels: false,
@@ -424,7 +424,7 @@ export const THREAD_DELETE: LogEventDefinition = {
   canExcludeUsers: false,
   canIncludeUsers: false
 };
-export const THREAD_UPDATE: LogEventDefinition = {
+export const THREAD_UPDATE: EventDefinition = {
   name: Events.ThreadUpdate,
   description: 'Emitted whenever a thread is updated in a guild.',
   canExcludeChannels: true,
@@ -436,7 +436,7 @@ export const THREAD_UPDATE: LogEventDefinition = {
   canExcludeUsers: false,
   canIncludeUsers: false
 };
-export const VOICE_STATE_UPDATE: LogEventDefinition = {
+export const VOICE_STATE_UPDATE: EventDefinition = {
   name: Events.VoiceStateUpdate,
   description: "Emitted whenever a member's voice state changes in a guild.",
   canExcludeChannels: true,
@@ -449,7 +449,7 @@ export const VOICE_STATE_UPDATE: LogEventDefinition = {
   canIncludeUsers: true
 };
 
-export const LOG_EVENT_DEFINITION: LogEventDefinition[] = [
+export const EVENT_DEFINITIONS: EventDefinition[] = [
   APPLICATION_COMMAND_PERMISSIONS_UPDATE,
   AUTO_MODERATION_ACTION_EXECUTION,
   AUTO_MODERATION_RULE_CREATE,

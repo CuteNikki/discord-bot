@@ -9,7 +9,7 @@ export async function getFarewell<T extends boolean>(
   guildId: string,
   insert: T = false as T
 ): Promise<T extends true ? FarewellDocument : FarewellDocument | null> {
-  let document = await farewellModel.findOne({ guildId }).lean().exec();
+  let document = await farewellModel.findOne({ guildId }).lean().exec() as FarewellDocument | null;
 
   if (!document && insert) {
     document = await updateFarewell(guildId, {});

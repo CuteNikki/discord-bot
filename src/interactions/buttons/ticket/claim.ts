@@ -1,4 +1,4 @@
-import { EmbedBuilder, PermissionFlagsBits, userMention } from 'discord.js';
+import { EmbedBuilder, MessageFlags, PermissionFlagsBits, userMention } from 'discord.js';
 import { t } from 'i18next';
 
 import { Button } from 'classes/button';

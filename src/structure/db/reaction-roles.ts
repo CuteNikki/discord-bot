@@ -19,7 +19,7 @@ export async function getReactionRoles<T extends boolean>(
   insert: T = false as T,
   populate: PopulateOptions[] = DEFAULT_REACTION_ROLE_POPULATE
 ): Promise<T extends true ? ReactionRoleDocument : ReactionRoleDocument | null> {
-  let document = await reactionRoleModel.findOne({ guildId }).populate(populate).lean().exec();
+  let document = await reactionRoleModel.findOne({ guildId }).populate(populate).lean().exec() as ReactionRoleDocument | null;
 
   if (insert && !document) {
     document = await updateReactionRoles(guildId, {}, populate);

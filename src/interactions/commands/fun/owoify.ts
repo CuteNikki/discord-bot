@@ -13,8 +13,8 @@ export default new Command({
     .addStringOption((option) => option.setName('message').setDescription('The message to owoify').setRequired(true))
     .addBooleanOption((option) => option.setName('ephemeral').setDescription('Whether the response should be ephemeral')),
   async execute({ interaction }) {
-    const message = interaction.options.getString('message') as string;
-    const ephemeral = interaction.options.getBoolean('ephemeral') as boolean;
+    const message = interaction.options.getString('message', true);
+    const ephemeral = interaction.options.getBoolean('ephemeral');
 
     await interaction.deferReply({ flags: ephemeral ? [MessageFlags.Ephemeral] : [] });
 

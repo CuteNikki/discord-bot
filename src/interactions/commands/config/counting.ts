@@ -119,7 +119,12 @@ export default new Command({
                 {
                   name: t('counting.current-number', { lng }),
                   value: counting.currentNumberBy
-                    ? t('counting.current-number-by', { lng, number: counting.currentNumber.toString(), by: userMention(counting.currentNumberBy) })
+                    ? t('counting.current-number-by', {
+                        lng,
+                        number: counting.currentNumber.toString(),
+                        by: userMention(counting.currentNumberBy),
+                        at: time(Math.floor(counting.currentNumberAt / 1000), TimestampStyles.ShortDateTime)
+                      })
                     : t('counting.current-number-no-by', { lng, number: counting.currentNumber.toString() })
                 }
               )

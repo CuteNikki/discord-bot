@@ -221,7 +221,9 @@ export default new Command({
             .setTitle(t('log.events.title-enabled', { lng }))
             .setDescription(
               enabledEvents.length
-                ? enabledEvents.map((e) => `${e.name}: ${guild.channels.cache.get(e.channelId) ? channelMention(e.channelId) : e.channelId}`).join('\n')
+                ? enabledEvents
+                    .map((e) => `${e.name}: ${e.channelId && guild.channels.cache.get(e.channelId) ? channelMention(e.channelId) : e.channelId}`)
+                    .join('\n')
                 : t('none', { lng })
             ),
           new EmbedBuilder()

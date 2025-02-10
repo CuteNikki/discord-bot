@@ -9,7 +9,7 @@ export async function getWelcome<T extends boolean>(
   guildId: string,
   insert: T = false as T
 ): Promise<T extends true ? WelcomeDocument : WelcomeDocument | null> {
-  let document = await welcomeModel.findOne({ guildId }).lean().exec();
+  let document = await welcomeModel.findOne({ guildId }).lean().exec() as WelcomeDocument | null;
 
   if (!document && insert) {
     document = await updateWelcome(guildId, {});

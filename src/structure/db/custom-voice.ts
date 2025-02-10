@@ -14,7 +14,7 @@ export async function getCustomVoice<T extends boolean>(
   guildId: string,
   insert: boolean = false as T
 ): Promise<T extends true ? CustomVoiceDocument : CustomVoiceDocument | null> {
-  let document = await customVoiceModel.findOne({ guildId }).lean().exec();
+  let document = await customVoiceModel.findOne({ guildId }).lean().exec() as CustomVoiceDocument | null;
 
   if (insert && !document) {
     document = await updateCustomVoice(guildId, {});

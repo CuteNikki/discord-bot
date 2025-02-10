@@ -3,7 +3,7 @@ import type { UpdateQuery } from 'mongoose';
 import { updateGuild } from 'db/guild';
 import { guildLogModel } from 'models/guild-log';
 
-import type { GuildLogDocument } from 'types/guild-log';
+import type { GuildLogDocument, LoggedEvent } from 'types/guild-log';
 
 export async function getGuildLog<T extends boolean>(
   guildId: string,
@@ -32,6 +32,21 @@ export async function enableGuildLog(guildId: string) {
 
 export async function disableGuildLog(guildId: string) {
   return updateGuildLog(guildId, { $set: { enabled: false } });
+}
+
+export async function setGuildLogEvent(guildId: string, event: LoggedEvent) {
+  await updateGuildLog(guildId, {
+    $pull: {
+      events: {
+        name: event.name
+      }
+    }
+  });
+  await updateGuildLog(guildId, {
+    $push: {
+      events: event
+    }
+  });
 }
 
 export async function enableGuildLogEvent(guildId: string, event: string, channelId: string) {

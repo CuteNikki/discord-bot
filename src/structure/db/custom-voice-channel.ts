@@ -14,7 +14,7 @@ export async function getCustomVoiceChannel<T extends boolean>(
   channelId: string,
   insert: T = false as T
 ): Promise<T extends true ? CustomVoiceChannelDocument : CustomVoiceChannelDocument | null> {
-  let document = await customVoiceChannelModel.findOne({ channelId }).lean().exec();
+  let document = await customVoiceChannelModel.findOne({ channelId }).lean().exec() as CustomVoiceChannelDocument | null;
 
   if (insert && !document) {
     document = await updateCustomVoiceChannel(channelId, {});

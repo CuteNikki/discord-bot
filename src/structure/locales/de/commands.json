@@ -1188,6 +1188,16 @@
         "description": "Konfiguriere die Events",
         "options": [
           {
+            "name": "details",
+            "description": "Zeigt die Details eines Events an",
+            "options": [
+              {
+                "name": "event",
+                "description": "Der Name des Events"
+              }
+            ]
+          },
+          {
             "name": "aktivieren",
             "description": "Aktiviert ein Event",
             "options": [
@@ -1197,13 +1207,7 @@
               },
               {
                 "name": "kanal",
-                "description": "Der Kanal, in dem die Events gesendet werden",
-                "options": [
-                  {
-                    "name": "kanal",
-                    "description": "Der Kanal, in dem die Events gesendet werden"
-                  }
-                ]
+                "description": "Der Kanal, in dem die Events gesendet werden"
               }
             ]
           },
@@ -1214,6 +1218,104 @@
               {
                 "name": "event",
                 "description": "Der Name des Events"
+              }
+            ]
+          },
+          {
+            "name": "setze-kanal",
+            "description": "Setzt den Kanal für ein Event",
+            "options": [
+              {
+                "name": "event",
+                "description": "Der Name des Events"
+              },
+              {
+                "name": "kanal",
+                "description": "Der Kanal, in dem die Events gesendet werden"
+              }
+            ]
+          },
+          {
+            "name": "ignoriere-user",
+            "description": "Ignoriert einen User für ein Event",
+            "options": [
+              {
+                "name": "event",
+                "description": "Der Name des Events"
+              },
+              {
+                "name": "user",
+                "description": "Der User, der ignoriert werden soll"
+              }
+            ]
+          },
+          {
+            "name": "unignoriere-user",
+            "description": "Entfernt einen User von der Ignorier-Liste für ein Event",
+            "options": [
+              {
+                "name": "event",
+                "description": "Der Name des Events"
+              },
+              {
+                "name": "user-id",
+                "description": "Der User, der entfernt werden soll"
+              }
+            ]
+          },
+          {
+            "name": "ignoriere-rolle",
+            "description": "Ignoriert eine Rolle für ein Event",
+            "options": [
+              {
+                "name": "event",
+                "description": "Der Name des Events"
+              },
+              {
+                "name": "rolle",
+                "description": "Die Rolle, die ignoriert werden soll"
+              }
+            ]
+          },
+          {
+            "name": "unignoriere-rolle",
+            "description": "Entfernt eine Rolle von der Ignorier-Liste für ein Event",
+            "options": [
+              {
+                "name": "event",
+                "description": "Der Name des Events"
+              },
+              {
+                "name": "rolle-id",
+                "description": "Die Rolle, die entfernt werden soll"
+              }
+            ]
+          },
+          {
+            "name": "ignoriere-kanal",
+            "description": "Ignoriert einen Kanal für ein Event",
+            "options": [
+              {
+                "name": "event",
+                "description": "Der Name des Events"
+              },
+              {
+                "name": "kanal",
+                "description": "Der Kanal, der ignoriert werden soll"
+              }
+            ]
+          },
+          {
+            "name": "unignoriere-kanal",
+            "description": "Entfernt einen Kanal von der Ignorier-Liste für ein Event",
+            "options": [
+              {
+                "name": "event",
+                "description": "Der Name des Events"
+              },
+              {
+                "name": "kanal-id",
+                "description": "Der Kanal, der entfernt werden soll"
               }
             ]
           }

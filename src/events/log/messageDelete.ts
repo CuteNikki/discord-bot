@@ -8,7 +8,7 @@ import { getGuildLanguage } from 'db/language';
 
 import { logger } from 'utils/logger';
 
-import type { GuildLogEvent } from 'types/guild-log';
+import type { LoggedEvent } from 'types/guild-log';
 
 export default new Event({
   name: Events.MessageDelete,
@@ -24,7 +24,7 @@ export default new Event({
       await message.fetch().catch((err) => logger.debug({ err }, 'GuildLog | MessageDelete: Could not fetch message'));
     }
 
-    const log = (await getGuildLog(guild.id)) ?? { enabled: false, events: [] as GuildLogEvent[] };
+    const log = (await getGuildLog(guild.id)) ?? { enabled: false, events: [] as LoggedEvent[] };
 
     const event = log.events.find((e) => e.name === Events.MessageDelete) ?? {
       channelId: undefined,

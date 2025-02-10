@@ -15,7 +15,7 @@ export async function getCounting<T extends boolean>(
   guildId: string,
   insert: T = false as T
 ): Promise<T extends true ? CountingDocument : CountingDocument | null> {
-  let document = await countingModel.findOne({ guildId }).lean().exec();
+  let document = await countingModel.findOne({ guildId }).lean().exec() as CountingDocument | null;
 
   if (insert && !document) {
     document = await updateCounting(guildId, {});

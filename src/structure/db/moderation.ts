@@ -15,7 +15,8 @@ export async function getModeration<T extends boolean>(
   guildId: string,
   insert: T = false as T
 ): Promise<T extends true ? ModerationDocument : ModerationDocument | null> {
-  let document = await moderationModel.findOne({ guildId }).lean().exec();
+  let document = await moderationModel.findOne({ guildId }).lean().exec() as ModerationDocument | null;
+  
   if (insert && !document) {
     document = await updateModeration(guildId);
   }

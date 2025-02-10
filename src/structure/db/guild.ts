@@ -22,7 +22,7 @@ export async function getGuild<T extends boolean>(
   insert: T = false as T,
   populate: PopulateOptions[] = DEFAULT_GUILD_POPULATE
 ): Promise<T extends true ? GuildDocument : GuildDocument | null> {
-  let document = await guildModel.findOne({ guildId }).populate(populate).lean().exec();
+  let document = await guildModel.findOne({ guildId }).populate(populate).lean().exec() as GuildDocument | null;
 
   if (insert && !document) {
     document = await updateGuild(guildId, {}, populate);

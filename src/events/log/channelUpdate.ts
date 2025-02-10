@@ -8,7 +8,7 @@ import { getGuildLanguage } from 'db/language';
 
 import { logger } from 'utils/logger';
 
-import type { GuildLogEvent } from 'types/guild-log';
+import type { LoggedEvent } from 'types/guild-log';
 
 export default new Event({
   name: Events.ChannelUpdate,
@@ -17,7 +17,7 @@ export default new Event({
     if (oldChannel.isDMBased() || newChannel.isDMBased()) return;
     const guild = newChannel.guild;
 
-    const log = (await getGuildLog(guild.id)) ?? { enabled: false, events: [] as GuildLogEvent[] };
+    const log = (await getGuildLog(guild.id)) ?? { enabled: false, events: [] as LoggedEvent[] };
 
     const event = log.events.find((e) => e.name === Events.ChannelUpdate) ?? {
       channelId: undefined,

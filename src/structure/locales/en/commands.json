@@ -1173,6 +1173,16 @@
         "description": "Configure the logged events",
         "options": [
           {
+            "name": "details",
+            "description": "Shows the details of the logged events",
+            "options": [
+              {
+                "name": "event",
+                "description": "The name of the event"
+              }
+            ]
+          },
+          {
             "name": "enable",
             "description": "Enables an event",
             "options": [
@@ -1182,13 +1192,7 @@
               },
               {
                 "name": "channel",
-                "description": "The channel to send a message to on event",
-                "options": [
-                  {
-                    "name": "channel",
-                    "description": "Channel to send message to"
-                  }
-                ]
+                "description": "The channel to send a message to on event"
               }
             ]
           },
@@ -1199,6 +1203,104 @@
               {
                 "name": "event",
                 "description": "The name of the event"
+              }
+            ]
+          },
+          {
+            "name": "set-channel",
+            "description": "Sets the channel for an event",
+            "options": [
+              {
+                "name": "event",
+                "description": "The name of the event"
+              },
+              {
+                "name": "channel",
+                "description": "The channel to send a message to on event"
+              }
+            ]
+          },
+          {
+            "name": "ignore-user",
+            "description": "Ignores a user from an event",
+            "options": [
+              {
+                "name": "event",
+                "description": "The name of the event"
+              },
+              {
+                "name": "user",
+                "description": "The user to ignore"
+              }
+            ]
+          },
+          {
+            "name": "unignore-user",
+            "description": "Unignores a user from an event",
+            "options": [
+              {
+                "name": "event",
+                "description": "The name of the event"
+              },
+              {
+                "name": "user-id",
+                "description": "The user to unignore"
+              }
+            ]
+          },
+          {
+            "name": "ignore-role",
+            "description": "Ignores a role from an event",
+            "options": [
+              {
+                "name": "event",
+                "description": "The name of the event"
+              },
+              {
+                "name": "role",
+                "description": "The role to ignore"
+              }
+            ]
+          },
+          {
+            "name": "unignore-role",
+            "description": "Unignores a role from an event",
+            "options": [
+              {
+                "name": "event",
+                "description": "The name of the event"
+              },
+              {
+                "name": "role-id",
+                "description": "The role to unignore"
+              }
+            ]
+          },
+          {
+            "name": "ignore-channel",
+            "description": "Ignores a channel from an event",
+            "options": [
+              {
+                "name": "event",
+                "description": "The name of the event"
+              },
+              {
+                "name": "channel",
+                "description": "The channel to ignore"
+              }
+            ]
+          },
+          {
+            "name": "unignore-channel",
+            "description": "Unignores a channel from an event",
+            "options": [
+              {
+                "name": "event",
+                "description": "The name of the event"
+              },
+              {
+                "name": "channel-id",
+                "description": "The channel to unignore"
               }
             ]
           }

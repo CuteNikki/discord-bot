@@ -490,7 +490,7 @@ export const EVENT_DEFINITIONS: EventDefinition[] = [
   VOICE_STATE_UPDATE
 ];
 
-export const LOG_EVENT_VALIDATION_LIST = [
+export const EVENT_VALIDATION: string[] = [
   Events.ApplicationCommandPermissionsUpdate,
   Events.AutoModerationActionExecution,
   Events.AutoModerationRuleCreate,
@@ -531,7 +531,7 @@ export const LOG_EVENT_VALIDATION_LIST = [
   Events.VoiceStateUpdate
 ];
 
-export const LOG_EVENT_RECOMMENDATIONS_ENABLED = [
+export const EVENT_RECOMMENDATIONS_ENABLED: string[] = [
   Events.ApplicationCommandPermissionsUpdate,
   Events.AutoModerationActionExecution,
   Events.AutoModerationRuleCreate,
@@ -550,7 +550,7 @@ export const LOG_EVENT_RECOMMENDATIONS_ENABLED = [
   Events.VoiceStateUpdate
 ];
 
-export const LOG_EVENT_RECOMMENDATIONS_DISABLED = [
+export const EVENT_RECOMMENDATIONS_DISABLED: string[] = [
   Events.ChannelCreate,
   Events.ChannelDelete,
   Events.ChannelUpdate,

@@ -26,7 +26,13 @@ import { AnnouncementType } from 'types/level';
 export async function initDatabase(client: DiscordClient) {
   const startTime = performance.now(); // This is used for logging the time it takes to connect to the database
 
-  await connect(keys.DATABASE_URI)
+  await connect(keys.DATABASE_URI, {
+    maxPoolSize: 10, // Lower to prevent excessive connections
+    minPoolSize: 2, // Maintain some persistent connections
+    socketTimeoutMS: 45000, // Prevent premature socket closure
+    connectTimeoutMS: 30000, // Allow more time for initial connection
+    serverSelectionTimeoutMS: 5000 // Fail faster on unreachable DB
+  })
     .then(() => {
       const endTime = performance.now(); // This is used for logging the time it takes to connect to the database
       logger.info(`[${client.cluster.id}] Connected to DB (${Math.floor(endTime - startTime)}ms)`);

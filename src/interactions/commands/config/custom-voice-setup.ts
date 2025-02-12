@@ -84,7 +84,7 @@ export default new Command({
           });
         }
         break;
-      case 'parent':
+      case 'category':
         {
           const channel = interaction.options.getChannel('category', false, [ChannelType.GuildCategory]);
 

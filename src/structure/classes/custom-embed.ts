@@ -56,6 +56,7 @@ export class CustomEmbedBuilder extends events {
   ) {
     super();
     if (options.message) this.message = options.message;
+    if (!options.message?.embed.color) this.message.embed.color = '#1e1f22';
     this.sendEmbedWithButtons();
   }
 
@@ -94,7 +95,7 @@ export class CustomEmbedBuilder extends events {
     });
 
     collector.on('collect', async (buttonInteraction) => {
-      switch (buttonInteraction.customId.split('_')[1]) {
+      switch (buttonInteraction.customId.split('-')[2]) {
         case 'message':
           {
             await buttonInteraction
@@ -664,7 +665,7 @@ export function isEmptyEmbed(embedData: Embed) {
 }
 
 export function getEmbed(user: User, guild: Guild, embed: Embed): EmbedBuilder {
-  return EmbedBuilder.from({
+  return new EmbedBuilder({
     description: replacePlaceholders(embed.description ?? '', user, guild),
     title: replacePlaceholders(embed.title ?? '', user, guild),
     author: {

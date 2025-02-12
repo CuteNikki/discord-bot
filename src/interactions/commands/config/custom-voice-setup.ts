@@ -105,7 +105,9 @@ export default new Command({
           }
 
           await setCustomVoiceParent(interaction.guild.id, channel.id);
-          await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.customVC).setDescription(t('custom-vc.parent.success', { lng }))] });
+          await interaction.reply({
+            embeds: [new EmbedBuilder().setColor(client.colors.customVC).setDescription(t('custom-vc.parent.success', { lng, channel: channel.toString() }))]
+          });
         }
         break;
       case 'max-members':

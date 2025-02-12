@@ -86,7 +86,7 @@ export default new Command({
         break;
       case 'category':
         {
-          const channel = interaction.options.getChannel('category', false, [ChannelType.GuildCategory]);
+          const channel = interaction.options.getChannel('channel', false, [ChannelType.GuildCategory]);
 
           if (!channel && !config.parentId) {
             await interaction.reply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('custom-vc.parent.not-set', { lng }))] });

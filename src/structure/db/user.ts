@@ -210,7 +210,7 @@ export async function withdraw(userId: string, amount: number): Promise<UserDocu
  * @param {number} amount Amount to add
  * @returns {Promise<UserDocument>} Updated user data
  */
-export async function addMoney(userId: string, amount: number): Promise<UserDocument> {
+export async function addWallet(userId: string, amount: number): Promise<UserDocument> {
   return await updateUser(userId, { $inc: { wallet: amount } });
 }
 
@@ -220,7 +220,7 @@ export async function addMoney(userId: string, amount: number): Promise<UserDocu
  * @param {number} amount Amount to remove
  * @returns {Promise<UserDocument>} Updated user data
  */
-export async function removeMoney(userId: string, amount: number): Promise<UserDocument> {
+export async function removeWallet(userId: string, amount: number): Promise<UserDocument> {
   return await updateUser(userId, { $inc: { wallet: -amount } });
 }
 

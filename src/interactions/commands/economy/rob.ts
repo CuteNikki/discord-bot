@@ -3,7 +3,7 @@ import { t } from 'i18next';
 
 import { Command } from 'classes/command';
 
-import { addMoney, getUser, hasRobbed, removeMoney } from 'db/user';
+import { addWallet, getUser, hasRobbed, removeWallet } from 'db/user';
 
 import { getRandomNumber } from 'utils/common';
 
@@ -73,11 +73,11 @@ export default new Command({
       if (userData?.wallet && userData.wallet < 1) {
         const randomPercentage = getRandomNumber(10, 25);
         randomAmount = (randomPercentage / 100) * targetData.wallet;
-        await removeMoney(interaction.user.id, randomAmount);
+        await removeWallet(interaction.user.id, randomAmount);
       } else if (userData?.bank && userData.bank < 1) {
         const randomPercentage = getRandomNumber(5, 10);
         randomAmount = (randomPercentage / 100) * targetData.wallet;
-        await removeMoney(interaction.user.id, randomAmount);
+        await removeWallet(interaction.user.id, randomAmount);
       }
 
       return interaction.reply({
@@ -92,8 +92,8 @@ export default new Command({
     const randomPercentage = getRandomNumber(10, 50);
     const randomAmount = (randomPercentage / 100) * targetData.wallet;
 
-    await removeMoney(user.id, randomAmount);
-    await addMoney(interaction.user.id, randomAmount);
+    await removeWallet(user.id, randomAmount);
+    await addWallet(interaction.user.id, randomAmount);
 
     return interaction.reply({
       embeds: [

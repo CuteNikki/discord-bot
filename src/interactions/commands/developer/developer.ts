@@ -21,7 +21,7 @@ import {
   updateSupportGuildInvite
 } from 'db/client';
 import { getGuildExport } from 'db/guild';
-import { addBadge, banUser, getBannedUsers, getUser, getUserExport, removeBadge, unbanUser } from 'db/user';
+import { addBadge, addBank, addWallet, banUser, getBannedUsers, getUser, getUserExport, removeBadge, removeBank, removeWallet, unbanUser } from 'db/user';
 
 import { BadgeType } from 'types/user';
 
@@ -80,6 +80,44 @@ export default new Command({
         )
         .addSubcommand((subcommand) => subcommand.setName('remove').setDescription('Removes the bot invite url'))
         .addSubcommand((subcommand) => subcommand.setName('show').setDescription('Shows the bot invite url'))
+    )
+    .addSubcommandGroup((subcommandGroup) =>
+      subcommandGroup
+        .setName('balance-bank')
+        .setDescription('Manage the bank balance of a user')
+        .addSubcommand((subcommand) =>
+          subcommand
+            .setName('add')
+            .setDescription('Adds money to a user')
+            .addUserOption((option) => option.setName('user').setDescription('The user to add money to').setRequired(true))
+            .addIntegerOption((option) => option.setName('amount').setDescription('The amount of money to add').setRequired(true))
+        )
+        .addSubcommand((subcommand) =>
+          subcommand
+            .setName('remove')
+            .setDescription('Removes money from a user')
+            .addUserOption((option) => option.setName('user').setDescription('The user to remove money from').setRequired(true))
+            .addIntegerOption((option) => option.setName('amount').setDescription('The amount of money to remove').setRequired(true))
+        )
+    )
+    .addSubcommandGroup((subcommandGroup) =>
+      subcommandGroup
+        .setName('balance-wallet')
+        .setDescription('Manage the wallet balance of a user')
+        .addSubcommand((subcommand) =>
+          subcommand
+            .setName('add')
+            .setDescription('Adds money to a user')
+            .addUserOption((option) => option.setName('user').setDescription('The user to add money to').setRequired(true))
+            .addIntegerOption((option) => option.setName('amount').setDescription('The amount of money to add').setRequired(true))
+        )
+        .addSubcommand((subcommand) =>
+          subcommand
+            .setName('remove')
+            .setDescription('Removes money from a user')
+            .addUserOption((option) => option.setName('user').setDescription('The user to remove money from').setRequired(true))
+            .addIntegerOption((option) => option.setName('amount').setDescription('The amount of money to remove').setRequired(true))
+        )
     )
     .addSubcommandGroup((subcommandGroup) =>
       subcommandGroup
@@ -303,6 +341,146 @@ export default new Command({
               {
                 await interaction.editReply({
                   embeds: [new EmbedBuilder().setColor(client.colors.developer).setDescription(`Current invite url: ${settings.support.botInvite}`)]
+                });
+              }
+              break;
+          }
+        }
+        break;
+      case 'balance-bank':
+        {
+          if (!keys.DEVELOPER_USER_IDS.includes(user.id) && !badges.includes(BadgeType.Developer)) {
+            await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('You are not a developer of this bot!')] });
+            return;
+          }
+
+          switch (options.getSubcommand()) {
+            case 'add':
+              {
+                const target = options.getUser('user', true);
+                const amount = options.getInteger('amount', true);
+
+                if (target.bot) {
+                  await interaction.editReply({
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('You cannot add money to a bot!')]
+                  });
+                  return;
+                }
+
+                await addBank(target.id, amount);
+
+                await interaction.editReply({
+                  embeds: [
+                    new EmbedBuilder()
+                      .setColor(client.colors.developer)
+                      .setDescription(
+                        `Successfully added ${Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount)} to ${target.toString()} bank balance`
+                      )
+                  ]
+                });
+              }
+              break;
+            case 'remove':
+              {
+                const target = options.getUser('user', true);
+                const amount = options.getInteger('amount', true);
+
+                if (target.bot) {
+                  await interaction.editReply({
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('You cannot remove money from a bot!')]
+                  });
+                  return;
+                }
+
+                const targetData = (await getUser(target.id)) ?? { bank: 0 };
+
+                if (targetData.bank < amount) {
+                  await interaction.editReply({
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('User does not have enough money in bank!')]
+                  });
+                  return;
+                }
+
+                await removeBank(target.id, amount);
+
+                await interaction.editReply({
+                  embeds: [
+                    new EmbedBuilder()
+                      .setColor(client.colors.developer)
+                      .setDescription(
+                        `Successfully removed ${Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount)} from ${target.toString()} bank balance!`
+                      )
+                  ]
+                });
+              }
+              break;
+          }
+        }
+        break;
+      case 'balance-wallet':
+        {
+          if (!keys.DEVELOPER_USER_IDS.includes(user.id) && !badges.includes(BadgeType.Developer)) {
+            await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('You are not a developer of this bot!')] });
+            return;
+          }
+
+          switch (options.getSubcommand()) {
+            case 'add':
+              {
+                const target = options.getUser('user', true);
+                const amount = options.getInteger('amount', true);
+
+                if (target.bot) {
+                  await interaction.editReply({
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('You cannot add money to a bot!')]
+                  });
+                  return;
+                }
+
+                await addWallet(target.id, amount);
+
+                await interaction.editReply({
+                  embeds: [
+                    new EmbedBuilder()
+                      .setColor(client.colors.developer)
+                      .setDescription(
+                        `Successfully added ${Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount)} to ${target.toString()} wallet balance!`
+                      )
+                  ]
+                });
+              }
+              break;
+            case 'remove':
+              {
+                const target = options.getUser('user', true);
+                const amount = options.getInteger('amount', true);
+
+                if (target.bot) {
+                  await interaction.editReply({
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('You cannot remove money from a bot!')]
+                  });
+                  return;
+                }
+
+                const targetData = (await getUser(target.id)) ?? { wallet: 0 };
+
+                if (targetData.wallet < amount) {
+                  await interaction.editReply({
+                    embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription('User does not have enough money in wallet!')]
+                  });
+                  return;
+                }
+
+                await removeWallet(target.id, amount);
+
+                await interaction.editReply({
+                  embeds: [
+                    new EmbedBuilder()
+                      .setColor(client.colors.developer)
+                      .setDescription(
+                        `Successfully removed ${Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount)} from ${target.toString()} wallet balance!`
+                      )
+                  ]
                 });
               }
               break;

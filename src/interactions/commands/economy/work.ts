@@ -3,7 +3,7 @@ import { t } from 'i18next';
 
 import { Command } from 'classes/command';
 
-import { addItems, addMoney, getUser, hasWorked, removeItem } from 'db/user';
+import { addItems, addWallet, getUser, hasWorked, removeItem } from 'db/user';
 
 import { getRandomNumber } from 'utils/common';
 
@@ -82,7 +82,7 @@ export default new Command({
           await addItems(interaction.user.id, items);
 
           const randomMoney = getRandomNumber(100, 500);
-          await addMoney(interaction.user.id, randomMoney);
+          await addWallet(interaction.user.id, randomMoney);
 
           interaction.reply({
             embeds: [
@@ -126,7 +126,7 @@ export default new Command({
           await addItems(interaction.user.id, items);
 
           const randomMoney = getRandomNumber(100, 500);
-          await addMoney(interaction.user.id, randomMoney);
+          await addWallet(interaction.user.id, randomMoney);
 
           interaction.reply({
             embeds: [
@@ -163,7 +163,7 @@ export default new Command({
           await addItems(interaction.user.id, items);
 
           const randomMoney = getRandomNumber(100, 500);
-          await addMoney(interaction.user.id, randomMoney);
+          await addWallet(interaction.user.id, randomMoney);
 
           const lostAxe = getRandomNumber(1, 100) <= BREAK_CHANCE;
           if (lostAxe) {
@@ -206,7 +206,7 @@ export default new Command({
           }
 
           const randomMoney = getRandomNumber(300, 1000);
-          await addMoney(interaction.user.id, randomMoney);
+          await addWallet(interaction.user.id, randomMoney);
 
           interaction.reply({
             embeds: [

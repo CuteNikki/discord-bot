@@ -761,6 +761,74 @@
         ]
       },
       {
+        "name": "balance-bank",
+        "description": "Manage the bank balance of a user",
+        "options": [
+          {
+            "name": "add",
+            "description": "Adds money to a user's bank balance",
+            "options": [
+              {
+                "name": "user",
+                "description": "The user to add money to"
+              },
+              {
+                "name": "amount",
+                "description": "The amount to add"
+              }
+            ]
+          },
+          {
+            "name": "remove",
+            "description": "Removes money from a user's bank balance",
+            "options": [
+              {
+                "name": "user",
+                "description": "The user to remove money from"
+              },
+              {
+                "name": "amount",
+                "description": "The amount to remove"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "balance-wallet",
+        "description": "Manage the wallet balance of a user",
+        "options": [
+          {
+            "name": "add",
+            "description": "Adds money to a user's wallet balance",
+            "options": [
+              {
+                "name": "user",
+                "description": "The user to add money to"
+              },
+              {
+                "name": "amount",
+                "description": "The amount to add"
+              }
+            ]
+          },
+          {
+            "name": "remove",
+            "description": "Removes money from a user's wallet balance",
+            "options": [
+              {
+                "name": "user",
+                "description": "The user to remove money from"
+              },
+              {
+                "name": "amount",
+                "description": "The amount to remove"
+              }
+            ]
+          }
+        ]
+      },
+      {
         "name": "badges",
         "description": "Configure the badges of a user",
         "options": [

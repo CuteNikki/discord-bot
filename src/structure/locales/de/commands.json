@@ -776,6 +776,74 @@
         ]
       },
       {
+        "name": "guthaben-bank",
+        "description": "Verwaltet den Kontostand eines Users",
+        "options": [
+          {
+            "name": "hinzufügen",
+            "description": "Fügt dem Kontostand Geld hinzu",
+            "options": [
+              {
+                "name": "user",
+                "description": "Der User, dem du Geld geben möchtest"
+              },
+              {
+                "name": "betrag",
+                "description": "Der Betrag, den du geben möchtest"
+              }
+            ]
+          },
+          {
+            "name": "entfernen",
+            "description": "Entfernt Geld vom Kontostand",
+            "options": [
+              {
+                "name": "user",
+                "description": "Der User, von dem du Geld entfernen möchtest"
+              },
+              {
+                "name": "betrag",
+                "description": "Der Betrag, den du entfernen möchtest"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "guthaben-geldbeutel",
+        "description": "Verwaltet den Geldbeutel eines Users",
+        "options": [
+          {
+            "name": "hinzufügen",
+            "description": "Fügt Geld zum Geldbeutel hinzu",
+            "options": [
+              {
+                "name": "user",
+                "description": "Der User, dem du Geld geben möchtest"
+              },
+              {
+                "name": "betrag",
+                "description": "Der Betrag, den du geben möchtest"
+              }
+            ]
+          },
+          {
+            "name": "entfernen",
+            "description": "Entfernt Geld vom Geldbeutel",
+            "options": [
+              {
+                "name": "user",
+                "description": "Der User, von dem du Geld entfernen möchtest"
+              },
+              {
+                "name": "amount",
+                "description": "Der Betrag, den du entfernen möchtest"
+              }
+            ]
+          }
+        ]
+      },
+      {
         "name": "abzeichen",
         "description": "Konfiguriere die Abzeichen eines Users",
         "options": [

@@ -790,7 +790,7 @@
               {
                 "name": "abzeichen",
                 "description": "Das Abzeichen was hinzugefügt werden soll",
-                "choices": ["Übersetzer", "Fehler-Finder", "Experten Fehler-Finder", "Unterstützer", "Teammitglied", "Entwickler"]
+                "choices": ["Entwickler", "Teammitglied", "Übersetzer", "Unterstützer", "Experten Fehler-Finder", "Fehler-Finder", "Münzwerfer"]
               }
             ]
           },
@@ -805,7 +805,7 @@
               {
                 "name": "abzeichen",
                 "description": "Das Abzeichen was entfernt werden soll",
-                "choices": ["Übersetzer", "Fehler-Finder", "Experten Fehler-Finder", "Unterstützer", "Teammitglied", "Entwickler"]
+                "choices": ["Entwickler", "Teammitglied", "Übersetzer", "Unterstützer", "Experten Fehler-Finder", "Fehler-Finder", "Münzwerfer"]
               }
             ]
           },

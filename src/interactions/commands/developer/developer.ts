@@ -91,17 +91,15 @@ export default new Command({
             .setDescription('Adds a badge to a user')
             .addUserOption((option) => option.setName('user').setDescription('The user to add a badge to').setRequired(true))
             .addIntegerOption((option) =>
-              option.setName('badge').setDescription('The badge to add').setRequired(true).addChoices(
-                { name: 'translator', value: BadgeType.Translator },
-                { name: 'bughunter', value: BadgeType.Bughunter },
-                {
-                  name: 'expert bughunter',
-                  value: BadgeType.ExpertBughunter
-                },
-                { name: 'supporter', value: BadgeType.Supporter },
-                { name: 'staff member', value: BadgeType.StaffMember },
-                { name: 'developer', value: BadgeType.Developer }
-              )
+              option
+                .setName('badge')
+                .setDescription('The badge to add')
+                .setRequired(true)
+                .setChoices(
+                  Object.entries(BadgeType)
+                    .filter(([, value]) => typeof value === 'number')
+                    .map(([key, value]) => ({ name: key.toLowerCase(), value })) as { name: string; value: number }[]
+                )
             )
         )
         .addSubcommand((subcommand) =>
@@ -110,17 +108,15 @@ export default new Command({
             .setDescription('Removes a badge from a user')
             .addUserOption((option) => option.setName('user').setDescription('The user to remove a badge from').setRequired(true))
             .addIntegerOption((option) =>
-              option.setName('badge').setDescription('The badge to remove').setRequired(true).addChoices(
-                { name: 'translator', value: BadgeType.Translator },
-                { name: 'bughunter', value: BadgeType.Bughunter },
-                {
-                  name: 'expert bughunter',
-                  value: BadgeType.ExpertBughunter
-                },
-                { name: 'supporter', value: BadgeType.Supporter },
-                { name: 'staff member', value: BadgeType.StaffMember },
-                { name: 'developer', value: BadgeType.Developer }
-              )
+              option
+                .setName('badge')
+                .setDescription('The badge to remove')
+                .setRequired(true)
+                .setChoices(
+                  Object.entries(BadgeType)
+                    .filter(([, value]) => typeof value === 'number')
+                    .map(([key, value]) => ({ name: key.toLowerCase(), value })) as { name: string; value: number }[]
+                )
             )
         )
         .addSubcommand((subcommand) =>

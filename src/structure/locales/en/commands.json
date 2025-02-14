@@ -775,7 +775,7 @@
               {
                 "name": "badge",
                 "description": "The badge to add",
-                "choices": ["Translator", "Bughunter", "Expert Bughunter", "Supporter", "Staff Member", "Developer"]
+                "choices": ["Developer", "Staff Member", "Translator", "Supporter", "Expert Bughunter", "Bughunter", "Coinflipper"]
               }
             ]
           },
@@ -790,7 +790,7 @@
               {
                 "name": "badge",
                 "description": "The badge to remove",
-                "choices": ["Translator", "Bughunter", "Expert Bughunter", "Supporter", "Staff Member", "Developer"]
+                "choices": ["Developer", "Staff Member", "Translator", "Supporter", "Expert Bughunter", "Bughunter", "Coinflipper"]
               }
             ]
           },

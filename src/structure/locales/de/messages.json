@@ -977,7 +977,7 @@
     "channelCreate": {
       "title": "Kanal erstellt",
       "channel": "Kanal",
-      "created-by": "Created by",
+      "created-at": "Erstellt am",
       "category": "Kategorie",
       "type": "Typ",
       "permission-overwrites": "Berechtigungsüberschreibungen",
@@ -987,6 +987,7 @@
     "channelDelete": {
       "title": "Kanal gelöscht",
       "channel": "Kanal",
+      "created-at": "Erstellt am",
       "category": "Kategorie",
       "type": "Typ",
       "permission-overwrites": "Berechtigungsüberschreibungen",

@@ -987,7 +987,7 @@
     "channelCreate": {
       "title": "Channel Create",
       "channel": "Channel",
-      "created-by": "Created by",
+      "created-at": "Created at",
       "category": "Category",
       "type": "Type",
       "permission-overwrites": "Permission Overwrites",
@@ -997,7 +997,7 @@
     "channelDelete": {
       "title": "Channel Delete",
       "channel": "Channel",
-      "created-by": "Created by",
+      "created-at": "Created at",
       "category": "Category",
       "type": "Type",
       "permission-overwrites": "Permission Overwrites",

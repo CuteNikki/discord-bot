@@ -70,15 +70,9 @@ export default new Event({
 
       await failedCounting(guildId);
 
-      const failMessage = await message.channel
+      await message.channel
         .send(t('counting.warn-incorrect', { lng, author: author.toString() }))
         .catch((err) => logger.debug({ err }, 'Could not send message'));
-
-      if (!failMessage) {
-        return;
-      }
-
-      delayDelete(failMessage);
 
       return;
     }

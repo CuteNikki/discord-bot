@@ -11,7 +11,7 @@ export default new Event({
   name: Events.GuildMemberRemove,
   once: false,
   async execute(_client, member) {
-    if (member.user.bot) return;
+    if (member.user.bot || member.pending) return;
 
     const farewell = (await getFarewell(member.guild.id)) ?? { enabled: false, message: { content: null, embed: {} }, channelId: undefined };
 

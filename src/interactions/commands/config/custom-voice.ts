@@ -246,13 +246,18 @@ export default new Command({
           }
 
           try {
-            await voiceChannel.edit({ name: member.user.username });
-            await voiceChannel.permissionOverwrites.edit(member.id, {
-              Connect: true,
-              Speak: true,
-              ViewChannel: true,
-              SendMessages: true,
-              UseApplicationCommands: true
+            await voiceChannel.edit({
+              name: member.user.username,
+              permissionOverwrites: [
+                {
+                  id: member.id,
+                  allow: [PermissionFlagsBits.Connect, PermissionFlagsBits.Speak, PermissionFlagsBits.SendMessages, PermissionFlagsBits.UseApplicationCommands]
+                },
+                {
+                  id: interaction.user.id,
+                  deny: [PermissionFlagsBits.UseApplicationCommands]
+                }
+              ]
             });
 
             await setCustomVoiceOwner(voiceChannel.id, member.id);

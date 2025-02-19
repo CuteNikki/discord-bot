@@ -6,6 +6,8 @@ import {
   ButtonStyle,
   ComponentType,
   MessageFlags,
+  ModalBuilder,
+  TextInputBuilder,
   type CommandInteraction,
   type EmbedBuilder
 } from 'discord.js';
@@ -21,7 +23,9 @@ enum CustomIds {
   Previous = 'button-pagination-prev',
   Page = 'button-pagination-page',
   Next = 'button-pagination-next',
-  Last = 'button-pagination-last'
+  Last = 'button-pagination-last',
+  PageModal = 'modal-pagination-page',
+  PageInput = 'input-pagination-page'
 }
 
 export async function pagination({
@@ -53,7 +57,7 @@ export async function pagination({
 
   const buttonFirst = new ButtonBuilder().setCustomId(CustomIds.First).setStyle(ButtonStyle.Secondary).setEmoji('⏪').setDisabled(true);
   const buttonPrev = new ButtonBuilder().setCustomId(CustomIds.Previous).setStyle(ButtonStyle.Secondary).setEmoji('⬅️').setDisabled(true);
-  const buttonPage = new ButtonBuilder().setCustomId(CustomIds.Page).setStyle(ButtonStyle.Secondary).setLabel(`1 / ${embeds.length}`).setDisabled(true);
+  const buttonPage = new ButtonBuilder().setCustomId(CustomIds.Page).setStyle(ButtonStyle.Secondary).setLabel(`1 / ${embeds.length}`);
   const buttonNext = new ButtonBuilder()
     .setCustomId(CustomIds.Next)
     .setStyle(ButtonStyle.Secondary)
@@ -94,6 +98,28 @@ export async function pagination({
       if (index < lastPageIndex) index++;
     } else if (int.customId === CustomIds.Last) {
       if (index < lastPageIndex) index = lastPageIndex;
+    } else if (int.customId === CustomIds.Page) {
+      await int
+        .showModal(
+          new ModalBuilder()
+            .setCustomId(CustomIds.PageModal)
+            .setTitle(t('pagination.page', { lng }))
+            .setComponents(
+              new ActionRowBuilder<TextInputBuilder>().setComponents(
+                new TextInputBuilder().setCustomId(CustomIds.PageInput).setPlaceholder('1').setMinLength(1).setRequired(true)
+              )
+            )
+        )
+        .catch((err) => logger.debug({ err }, 'Could not show modal'));
+      const submitted = await int
+        .awaitModalSubmit({ time: 60_000, filter: (i) => i.customId === CustomIds.PageModal })
+        .catch((err) => logger.debug({ err }, 'Could not await modal submit'));
+      if (!submitted) return;
+      const submittedNumber = submitted.fields.getTextInputValue(CustomIds.PageInput);
+      if (!submittedNumber) return;
+      const number = parseInt(submittedNumber);
+      if (isNaN(number) || number < 1 || number > embeds.length) return;
+      index = number - 1;
     } else if (extraButton && extraButtonFunction) {
       collector.stop('extra');
       return await extraButtonFunction(int).catch((err) => logger.debug({ err }, 'Could not execute extra button function'));

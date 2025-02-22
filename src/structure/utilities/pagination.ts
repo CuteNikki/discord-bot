@@ -8,6 +8,7 @@ import {
   EmbedBuilder,
   MessageFlags,
   ModalBuilder,
+  ModalSubmitInteraction,
   TextInputBuilder,
   TextInputStyle,
   type CommandInteraction
@@ -83,6 +84,28 @@ export async function pagination({
   const firstPageIndex = 0;
   const lastPageIndex = embeds.length - 1;
 
+  async function updatePage(ci: ModalSubmitInteraction | ButtonInteraction, i: number) {
+    if (index === firstPageIndex) {
+      buttonFirst.setDisabled(true);
+      buttonPrev.setDisabled(true);
+    } else {
+      buttonFirst.setDisabled(false);
+      buttonPrev.setDisabled(false);
+    }
+    if (index === lastPageIndex) {
+      buttonNext.setDisabled(true);
+      buttonLast.setDisabled(true);
+    } else {
+      buttonNext.setDisabled(false);
+      buttonLast.setDisabled(false);
+    }
+    buttonPage.setLabel(`${i + 1} / ${embeds.length} `);
+
+    await ci
+      .editReply({ embeds: [embeds[i]], files: attachments ? [attachments[i]] : [], components })
+      .catch((err) => logger.debug({ err }, 'Could not edit message'));
+  }
+
   const msg = await interaction
     .editReply({ content, embeds: [embeds[index]], files: attachments?.length ? [attachments[index]] : [], components })
     .catch((err) => logger.debug({ err }, 'Could not edit message'));
@@ -132,62 +155,49 @@ export async function pagination({
         .awaitModalSubmit({ time: 60_000, filter: (i) => i.customId === CustomIds.PageModal })
         .catch((err) => logger.debug({ err }, 'Could not await modal submit'));
       if (!submitted) return;
+      await submitted.deferUpdate().catch((err) => logger.debug({ err }, 'Could not defer update'));
 
       const submittedNumber = submitted.fields.getTextInputValue(CustomIds.PageInput);
       if (!submittedNumber) return;
 
       const number = parseInt(submittedNumber);
       if (isNaN(number) || number < 1 || number > embeds.length) {
-        return submitted.reply({
-          flags: [MessageFlags.Ephemeral],
+        return submitted.editReply({
           embeds: [new EmbedBuilder().setColor((interaction.client as DiscordClient).colors.error).setDescription(t('pagination.invalid', { lng }))]
         });
       }
 
       index = number - 1;
-
-      return await submitted
-        .editReply({ embeds: [embeds[index]], files: attachments ? [attachments[index]] : [], components })
-        .catch((err) => logger.debug({ err }, 'Could not edit message'));
+      return updatePage(submitted, index);
     }
 
-    if (index === firstPageIndex) {
-      buttonFirst.setDisabled(true);
-      buttonPrev.setDisabled(true);
-    } else {
-      buttonFirst.setDisabled(false);
-      buttonPrev.setDisabled(false);
-    }
-    if (index === lastPageIndex) {
-      buttonNext.setDisabled(true);
-      buttonLast.setDisabled(true);
-    } else {
-      buttonNext.setDisabled(false);
-      buttonLast.setDisabled(false);
-    }
-    buttonPage.setLabel(`${index + 1} / ${embeds.length} `);
-
-    await int
-      .editReply({ embeds: [embeds[index]], files: attachments ? [attachments[index]] : [], components })
-      .catch((err) => logger.debug({ err }, 'Could not edit message'));
+    return updatePage(int, index);
   });
 
   collector.on('end', async (_, reason) => {
     if (reason === 'extra') return;
     if (!disableButtons) return;
-    if (extraButton) extraButton.setDisabled(true);
+
+    if (extraButton) {
+      extraButton.setDisabled(true);
+    }
     buttonFirst.setDisabled(true);
     buttonPrev.setDisabled(true);
     buttonNext.setDisabled(true);
     buttonLast.setDisabled(true);
     buttonPage.setDisabled(true);
 
-    const embed = embeds[index];
-    if (footer)
-      embed.setFooter({
-        text: t('pagination.disabled', { lng, time: ms(time, { long: true }) })
-      });
-
-    interaction.editReply({ embeds: [embed], components }).catch((err) => logger.debug({ err }, 'Could not edit message'));
+    interaction
+      .editReply({
+        embeds: [
+          footer
+            ? embeds[index].setFooter({
+                text: t('pagination.disabled', { lng, time: ms(time, { long: true }) })
+              })
+            : embeds[index]
+        ],
+        components
+      })
+      .catch((err) => logger.debug({ err }, 'Could not edit message'));
   });
 }

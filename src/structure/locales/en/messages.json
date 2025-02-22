@@ -1834,7 +1834,11 @@
     "error": "Something went wrong! Error: {{error}}",
     "module": "You can only use this if the {{module}} module is enabled!"
   },
-  "pagination": "Components were not used for {{time}} and have been disabled!",
+  "pagination": {
+    "disabled": "Components were not used for {{time}} and have been disabled!",
+    "invalid": "You provided an invalid page number!",
+    "custom": "Page number"
+  },
   "enabled": "enabled",
   "disabled": "disabled",
   "none": "none"

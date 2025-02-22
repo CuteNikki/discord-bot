@@ -1825,7 +1825,11 @@
     "error": "Etwas ist schief gelaufen! Fehler: {{error}}",
     "module": "Du kannst das nur machen, wenn das {{module}}-Modul aktiviert ist!"
   },
-  "pagination": "Komponenten wurden für {{time}} nicht benutzt und deaktiviert!",
+  "pagination": {
+    "disabled": "Komponenten wurden für {{time}} nicht benutzt und deaktiviert!",
+    "invalid": "Du hast eine ungültige Seite angegeben!",
+    "custom": "Seitenzahl"
+  },
   "enabled": "aktiviert",
   "disabled": "deaktiviert",
   "none": "/"

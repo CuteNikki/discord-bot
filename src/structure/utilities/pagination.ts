@@ -5,14 +5,17 @@ import {
   ButtonInteraction,
   ButtonStyle,
   ComponentType,
+  EmbedBuilder,
   MessageFlags,
   ModalBuilder,
   TextInputBuilder,
-  type CommandInteraction,
-  type EmbedBuilder
+  TextInputStyle,
+  type CommandInteraction
 } from 'discord.js';
 import { t } from 'i18next';
 import ms from 'ms';
+
+import type { DiscordClient } from 'classes/client';
 
 import { getUserLanguage } from 'db/language';
 
@@ -57,7 +60,11 @@ export async function pagination({
 
   const buttonFirst = new ButtonBuilder().setCustomId(CustomIds.First).setStyle(ButtonStyle.Secondary).setEmoji('⏪').setDisabled(true);
   const buttonPrev = new ButtonBuilder().setCustomId(CustomIds.Previous).setStyle(ButtonStyle.Secondary).setEmoji('⬅️').setDisabled(true);
-  const buttonPage = new ButtonBuilder().setCustomId(CustomIds.Page).setStyle(ButtonStyle.Secondary).setLabel(`1 / ${embeds.length}`);
+  const buttonPage = new ButtonBuilder()
+    .setCustomId(CustomIds.Page)
+    .setStyle(ButtonStyle.Secondary)
+    .setLabel(`1 / ${embeds.length}`)
+    .setDisabled(embeds.length === 1 ? true : false);
   const buttonNext = new ButtonBuilder()
     .setCustomId(CustomIds.Next)
     .setStyle(ButtonStyle.Secondary)
@@ -88,7 +95,9 @@ export async function pagination({
   });
 
   collector.on('collect', async (int) => {
-    await int.deferUpdate().catch((err) => logger.debug({ err }, 'Could not defer update'));
+    if (int.customId !== CustomIds.Page) {
+      await int.deferUpdate().catch((err) => logger.debug({ err }, 'Could not defer update'));
+    }
 
     if (int.customId === CustomIds.First) {
       if (index > firstPageIndex) index = firstPageIndex;
@@ -98,6 +107,9 @@ export async function pagination({
       if (index < lastPageIndex) index++;
     } else if (int.customId === CustomIds.Last) {
       if (index < lastPageIndex) index = lastPageIndex;
+    } else if (extraButton && extraButtonFunction) {
+      collector.stop('extra');
+      return await extraButtonFunction(int).catch((err) => logger.debug({ err }, 'Could not execute extra button function'));
     } else if (int.customId === CustomIds.Page) {
       await int
         .showModal(
@@ -106,23 +118,37 @@ export async function pagination({
             .setTitle(t('pagination.page', { lng }))
             .setComponents(
               new ActionRowBuilder<TextInputBuilder>().setComponents(
-                new TextInputBuilder().setCustomId(CustomIds.PageInput).setPlaceholder('1').setMinLength(1).setRequired(true)
+                new TextInputBuilder()
+                  .setCustomId(CustomIds.PageInput)
+                  .setLabel(t('pagination.custom', { lng }))
+                  .setStyle(TextInputStyle.Short)
+                  .setRequired(true)
               )
             )
         )
         .catch((err) => logger.debug({ err }, 'Could not show modal'));
+
       const submitted = await int
         .awaitModalSubmit({ time: 60_000, filter: (i) => i.customId === CustomIds.PageModal })
         .catch((err) => logger.debug({ err }, 'Could not await modal submit'));
       if (!submitted) return;
+
       const submittedNumber = submitted.fields.getTextInputValue(CustomIds.PageInput);
       if (!submittedNumber) return;
+
       const number = parseInt(submittedNumber);
-      if (isNaN(number) || number < 1 || number > embeds.length) return;
+      if (isNaN(number) || number < 1 || number > embeds.length) {
+        return submitted.reply({
+          flags: [MessageFlags.Ephemeral],
+          embeds: [new EmbedBuilder().setColor((interaction.client as DiscordClient).colors.error).setDescription(t('pagination.invalid', { lng }))]
+        });
+      }
+
       index = number - 1;
-    } else if (extraButton && extraButtonFunction) {
-      collector.stop('extra');
-      return await extraButtonFunction(int).catch((err) => logger.debug({ err }, 'Could not execute extra button function'));
+
+      return await submitted
+        .editReply({ embeds: [embeds[index]], files: attachments ? [attachments[index]] : [], components })
+        .catch((err) => logger.debug({ err }, 'Could not edit message'));
     }
 
     if (index === firstPageIndex) {
@@ -154,11 +180,12 @@ export async function pagination({
     buttonPrev.setDisabled(true);
     buttonNext.setDisabled(true);
     buttonLast.setDisabled(true);
+    buttonPage.setDisabled(true);
 
     const embed = embeds[index];
     if (footer)
       embed.setFooter({
-        text: t('pagination', { lng, time: ms(time, { long: true }) })
+        text: t('pagination.disabled', { lng, time: ms(time, { long: true }) })
       });
 
     interaction.editReply({ embeds: [embed], components }).catch((err) => logger.debug({ err }, 'Could not edit message'));

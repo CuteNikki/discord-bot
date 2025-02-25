@@ -1,4 +1,4 @@
-import { banUser, getBannedUsers, getBansByModerator, getUser, unbanUser } from 'database/user';
+import { banUser, getBans, getBansByModerator, getUser, unbanUser } from 'database/user';
 
 const userId = '303142922780672013';
 
@@ -22,8 +22,8 @@ if (user?.banInfo) {
 const updatedUser = await getUser(userId, { banInfo: true });
 console.log('User after update', updatedUser);
 
-const bansByModerator = await getBansByModerator(userId);
+const bansByModerator = await getBansByModerator(userId, { user: true });
 console.log('Bans by Moderator', bansByModerator);
 
-const bannedUsers = await getBannedUsers();
-console.log('Banned Users', bannedUsers);
+const bannedUsers = await getBans({ user: true });
+console.log('Banned users', bannedUsers);

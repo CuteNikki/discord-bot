@@ -43,10 +43,13 @@ export const unbanUser = (userId: string) =>
     })
     .catch(() => null);
 
-export const getBansByModerator = (moderatorId: string) => prisma.banInfo.findMany({ where: { moderatorId } });
+export const getBansByModerator = (moderatorId: string, include: { user?: boolean } = {}) =>
+  prisma.banInfo.findMany({
+    where: { moderatorId },
+    include,
+  });
 
-export const getBannedUsers = () =>
-  prisma.user.findMany({
-    where: { banInfo: { isNot: null } },
-    include: { banInfo: true },
+export const getBans = (include: { user?: boolean } = {}) =>
+  prisma.banInfo.findMany({
+    include,
   });

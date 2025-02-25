@@ -11,3 +11,11 @@ export const getUser = async (userId: string): Promise<User | null> => {
     where: { userId },
   });
 };
+
+export const updateUser = async (userId: string, data: Partial<Omit<User, 'userId'>>): Promise<User> => {
+  return await prisma.user.upsert({
+    where: { userId },
+    update: data,
+    create: { userId, ...data },
+  });
+};

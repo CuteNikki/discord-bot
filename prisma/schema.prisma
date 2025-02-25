@@ -10,4 +10,5 @@ datasource db {
 
 model User {
   userId String @unique @id
+  isBanned Boolean @default(false)
 } 

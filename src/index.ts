@@ -1,17 +1,29 @@
-import { getUser, updateUser } from 'database/user';
+import { banUser, getBannedUsers, getBansByModerator, getUser, unbanUser } from 'database/user';
 
 const userId = '303142922780672013';
 
-const user = await getUser(userId);
+const user = await getUser(userId, { banInfo: true }, true);
 
 console.log('User before update', user);
 
-if (user?.isBanned) {
-  console.log('User is banned. Unbanning...');
-  const updatedUser = await updateUser(user.userId, { isBanned: false });
-  console.log('Updated User', updatedUser);
+if (user?.banInfo) {
+  const deletedBan = await unbanUser(userId);
+  console.log('Deleted Ban', deletedBan);
 } else {
-  console.log('User is not banned. Banning...');
-  const updatedUser = await updateUser(userId, { isBanned: true });
-  console.log('Updated User', updatedUser);
+  const createdBan = await banUser(userId, {
+    moderatorId: userId,
+    reason: 'Being a bad user',
+    expiresAt: null,
+  });
+  console.log('Created Ban', createdBan);
+  //console.log('Banned at', Math.floor(updatedBan.bannedAt.getTime() / 1000));
 }
+
+const updatedUser = await getUser(userId, { banInfo: true });
+console.log('User after update', updatedUser);
+
+const bansByModerator = await getBansByModerator(userId);
+console.log('Bans by Moderator', bansByModerator);
+
+const bannedUsers = await getBannedUsers();
+console.log('Banned Users', bannedUsers);

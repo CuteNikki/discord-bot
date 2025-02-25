@@ -1,11 +1,23 @@
 {
   "name": "yanera-dev",
-  "module": "index.ts",
+  "module": "src/index.ts",
   "type": "module",
+  "scripts": {
+    "dev": "bun run src/index.ts",
+    "build": "bun build src/index.ts",
+    "start": "node dist/index.js",
+    "prisma-generate": "prisma generate",
+    "prisma-migrate": "prisma migrate dev",
+    "prisma-studio": "prisma studio"
+  },
   "devDependencies": {
     "@types/bun": "latest"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.4.1",
+    "prisma": "^6.4.1"
   }
 }

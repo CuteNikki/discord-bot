@@ -1,4 +1,7 @@
-import { banUser, getBans, getBansByModerator, getUser, unbanUser } from 'database/user';
+import { banUser, getBans, getBansByModerator, unbanUser } from 'database/ban';
+import { getUser } from 'database/user';
+
+import 'database/cron';
 
 const userId = '303142922780672013';
 
@@ -13,7 +16,8 @@ if (user?.banInfo) {
   const createdBan = await banUser(userId, {
     moderatorId: userId,
     reason: 'Being a bad user',
-    expiresAt: null,
+    // 10 seconds from now
+    expiresAt: new Date(Date.now() + 10_000),
   });
   console.log('Created Ban', createdBan);
   //console.log('Banned at', Math.floor(updatedBan.bannedAt.getTime() / 1000));

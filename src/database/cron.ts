@@ -6,4 +6,4 @@ import { deleteExpiredBans } from 'database/ban';
 cron.schedule('0 0 * * *', () => {});
 
 // Run every minute
-cron.schedule('* * * * *', deleteExpiredBans);
+cron.schedule('* * * * *', async () => await deleteExpiredBans());

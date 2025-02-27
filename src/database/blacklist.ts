@@ -6,6 +6,7 @@ import { prisma } from 'database/index';
 import logger from 'utility/logger';
 
 const blacklistWebhookUrl = process.env.WEBHOOK_BLACKLIST;
+const discordToken = process.env.DISCORD_TOKEN;
 
 export const blacklistUser = async (userId: string, blacklist: Omit<Blacklist, 'userId' | 'createdAt'>) => {
   const result = await prisma.blacklist.upsert({
@@ -14,17 +15,32 @@ export const blacklistUser = async (userId: string, blacklist: Omit<Blacklist, '
     create: { userId, ...blacklist, createdAt: new Date() },
   });
 
-  if (blacklistWebhookUrl) {
+  if (result && blacklistWebhookUrl && discordToken) {
+    const userRes = await fetch('https://discord.com/api/v10/users/' + userId, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bot ${discordToken}`,
+      },
+    }).catch(() => null);
+    const user = await userRes?.json().catch(() => null);
+
     await fetch(blacklistWebhookUrl, {
       method: 'POST',
       body: JSON.stringify({
-        username: 'Blacklist',
+        username: 'Blacklisted User',
         embeds: [
           {
             color: 16733751,
             title: 'Blacklist',
+            thumbnail: {
+              url: user?.avatar ? `https://cdn.discordapp.com/avatars/${userId}/${user.avatar}.png` : undefined,
+            },
             fields: [
-              { name: 'User', value: `<@${userId}>`, inline: false },
+              {
+                name: 'User',
+                value: user?.username ? `${user.global_name ? `${user.global_name} | ${user.username}` : user.username} (<@${userId}>)` : `<@${userId}>`,
+                inline: false,
+              },
               { name: 'Moderator', value: `<@${blacklist.moderatorId}>`, inline: false },
               { name: 'Reason', value: blacklist.reason, inline: false },
               {
@@ -50,17 +66,32 @@ export const unblacklistUser = async (userId: string) => {
     })
     .catch(() => null); // Ignore if user is not blacklisted
 
-  if (blacklistWebhookUrl) {
+  if (result && blacklistWebhookUrl && discordToken) {
+    const userRes = await fetch('https://discord.com/api/v10/users/' + userId, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bot ${discordToken}`,
+      },
+    }).catch(() => null);
+    const user = await userRes?.json().catch(() => null);
+
     await fetch(blacklistWebhookUrl, {
       method: 'POST',
       body: JSON.stringify({
-        username: 'Unblacklist',
+        username: 'Unblacklisted User',
         embeds: [
           {
             color: 5111624,
             title: `Unblacklist`,
+            thumbnail: {
+              url: user?.avatar ? `https://cdn.discordapp.com/avatars/${userId}/${user.avatar}.png` : undefined,
+            },
             fields: [
-              { name: 'User', value: `<@${userId}>`, inline: false },
+              {
+                name: 'User',
+                value: user?.username ? `${user.global_name ? `${user.global_name} | ${user.username}` : user.username} (<@${userId}>)` : `<@${userId}>`,
+                inline: false,
+              },
               { name: 'Moderator', value: `<@${result?.moderatorId}>`, inline: false },
               { name: 'Reason', value: result?.reason, inline: false },
               {
@@ -86,15 +117,15 @@ export const unblacklistUsers = async (blacklists: Blacklist[]) => {
     where: { userId: { in: blacklistedIds } },
   });
 
-  if (blacklistWebhookUrl) {
+  if (result && blacklistWebhookUrl) {
     await fetch(blacklistWebhookUrl, {
       method: 'POST',
       body: JSON.stringify({
-        username: 'Unblacklist',
+        username: 'Bulk Unblacklist',
         embeds: [
           {
             color: 5111624,
-            title: `Bulk Unblacklist (${blacklists.length})`,
+            title: `Bulk Unblacklist (${blacklists.length} user${blacklists.length > 1 || blacklistUser.length === 0 ? 's' : ''})`,
             description: blacklistedIds.join().slice(0, 3997) + (blacklists.length > 3997 ? '...' : ''),
           },
         ],
@@ -105,17 +136,6 @@ export const unblacklistUsers = async (blacklists: Blacklist[]) => {
 
   return result;
 };
-
-export const getBlacklistByModeratorId = (moderatorId: string, include: { user?: boolean } = {}) =>
-  prisma.blacklist.findMany({
-    where: { moderatorId },
-    include,
-  });
-
-export const getBlacklist = (include: { user?: boolean } = {}) =>
-  prisma.blacklist.findMany({
-    include,
-  });
 
 export const deleteExpiredBlacklist = async () => {
   const blacklistedUsers = await prisma.blacklist.findMany({
@@ -130,3 +150,14 @@ export const deleteExpiredBlacklist = async () => {
     logger.debug('No expired blacklist entries found');
   }
 };
+
+export const getBlacklistByModeratorId = (moderatorId: string, include: { user?: boolean } = {}) =>
+  prisma.blacklist.findMany({
+    where: { moderatorId },
+    include,
+  });
+
+export const getBlacklist = (include: { user?: boolean } = {}) =>
+  prisma.blacklist.findMany({
+    include,
+  });

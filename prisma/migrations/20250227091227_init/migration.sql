@@ -6,11 +6,11 @@ CREATE TABLE "User" (
 );
 
 -- CreateTable
-CREATE TABLE "BanInfo" (
+CREATE TABLE "Blacklist" (
     "userId" TEXT NOT NULL,
     "moderatorId" TEXT NOT NULL,
     "reason" TEXT NOT NULL,
-    "bannedAt" TIMESTAMP(3) NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL,
     "expiresAt" TIMESTAMP(3)
 );
 
@@ -18,10 +18,10 @@ CREATE TABLE "BanInfo" (
 CREATE UNIQUE INDEX "User_userId_key" ON "User"("userId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "BanInfo_userId_key" ON "BanInfo"("userId");
+CREATE UNIQUE INDEX "Blacklist_userId_key" ON "Blacklist"("userId");
 
 -- CreateIndex
-CREATE INDEX "moderatorId" ON "BanInfo"("moderatorId");
+CREATE INDEX "moderatorId" ON "Blacklist"("moderatorId");
 
 -- AddForeignKey
-ALTER TABLE "BanInfo" ADD CONSTRAINT "BanInfo_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userId") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Blacklist" ADD CONSTRAINT "Blacklist_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userId") ON DELETE CASCADE ON UPDATE CASCADE;

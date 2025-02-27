@@ -9,16 +9,16 @@ datasource db {
 }
 
 model User {
-  userId  String   @id @unique
-  banInfo BanInfo?
+  userId      String     @id @unique
+  blacklisted Blacklist?
 }
 
-model BanInfo {
+model Blacklist {
   user        User      @relation(fields: [userId], references: [userId], onDelete: Cascade)
   userId      String    @unique
   moderatorId String
   reason      String
-  bannedAt    DateTime
+  createdAt   DateTime
   expiresAt   DateTime?
 
   @@index([moderatorId], name: "moderatorId")

@@ -1,34 +1,36 @@
 import logger from 'utility/logger';
 
-import { banUser, getBans, getBansByModerator, unbanUser } from 'database/ban';
+import { blacklistUser, getBlacklist, getBlacklistByModeratorId, unblacklistUser } from 'database/blacklist';
 import { getUser } from 'database/user';
 
 import 'database/cron';
 
 const userId = '303142922780672013';
 
-const user = await getUser(userId, { banInfo: true }, true);
+const user = await getUser(userId, { blacklisted: true }, true);
 
 logger.info({ data: user }, 'User before update');
 
-if (user?.banInfo) {
-  const deletedBan = await unbanUser(userId);
-  logger.info({ deletedBan }, 'Deleted Ban');
+if (user?.blacklisted) {
+  // Here if user is blacklisted
+  const unblacklistResult = await unblacklistUser(userId);
+  logger.info({ data: unblacklistResult }, 'Deleted blacklist entry');
 } else {
-  const createdBan = await banUser(userId, {
+  // Here if user is not blacklisted
+  const blacklistEntry = await blacklistUser(userId, {
     moderatorId: userId,
     reason: 'Being a bad user',
     expiresAt: new Date(Date.now() + 10_000), // 10 seconds from now
   });
-  logger.info({ data: createdBan }, 'Created Ban');
-  logger.info({ data: Math.floor(createdBan.bannedAt.getTime() / 1000) }, 'Banned at');
+  logger.info({ data: blacklistEntry }, 'Created blacklist entry');
+  logger.info({ data: Math.floor(blacklistEntry.createdAt.getTime() / 1000) }, 'Banned at');
 }
 
-const updatedUser = await getUser(userId, { banInfo: true });
+const updatedUser = await getUser(userId, { blacklisted: true });
 logger.info({ data: updatedUser }, 'User after update');
 
-const bansByModerator = await getBansByModerator(userId, { user: true });
-logger.info({ data: bansByModerator }, 'Bans by Moderator');
+const blacklistByModerator = await getBlacklistByModeratorId(userId, { user: true });
+logger.info({ data: blacklistByModerator }, 'Blacklist by Moderator');
 
-const bannedUsers = await getBans({ user: true });
-logger.info({ data: bannedUsers }, 'Banned users');
+const blacklistedUsers = await getBlacklist({ user: true });
+logger.info({ data: blacklistedUsers }, 'Blacklisted users');

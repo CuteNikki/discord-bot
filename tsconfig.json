@@ -25,7 +25,8 @@
     "noPropertyAccessFromIndexSignature": false,
 
     "paths": {
-      "database/*": ["./src/database/*"]
+      "database/*": ["./src/database/*"],
+      "utility/*": ["./src/utility/*"]
     }
   }
 }

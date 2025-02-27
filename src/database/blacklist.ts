@@ -157,7 +157,9 @@ export const getBlacklistByModeratorId = (moderatorId: string, include: { user?:
     include,
   });
 
-export const getBlacklist = (include: { user?: boolean } = {}) =>
+export const getEntireBlacklist = (include: { user?: boolean } = {}) =>
   prisma.blacklist.findMany({
     include,
   });
+
+export const getBlacklist = async (userId: string) => prisma.blacklist.findUnique({ where: { userId } });

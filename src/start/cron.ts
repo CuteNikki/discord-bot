@@ -3,6 +3,7 @@ import { schedule } from 'node-cron';
 import logger from 'utility/logger';
 
 import { deleteExpiredBlacklist } from 'database/blacklist';
+import type { Client } from 'discord.js';
 
 /*
 *
@@ -25,11 +26,14 @@ schedule('0 0 * * 0', () => {
 *
 */
 
-// Run every minute
-schedule('* * * * *', async () => {
-  logger.debug('Running cron job (every minute)');
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export async function startCron(_client: Client) {
+  // Run every minute
+  schedule('* * * * *', async () => {
+    logger.debug('Running cron job (every minute)');
 
-  await deleteExpiredBlacklist(); // Clear expired user bans
-  // coming soon... // Clear expired infractions
-  // coming soon... // Clear expired reminders
-});
+    await deleteExpiredBlacklist(); // Clear expired user bans
+    // coming soon... // Clear expired infractions
+    // coming soon... // Clear expired reminders
+  });
+}

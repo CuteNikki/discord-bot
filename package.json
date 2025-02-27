@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "bun run src/index.ts --debug",
     "start": "bun run src/index.ts",
+    "register": "bun run src/register.ts",
     "lint": "eslint --ext .ts,.tsx src",
     "pretty": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "prisma-generate": "prisma generate",
@@ -26,6 +27,7 @@
   },
   "dependencies": {
     "@prisma/client": "^6.4.1",
+    "discord.js": "^15.0.0-dev.1740615141-b6fda781c",
     "node-cron": "^3.0.3",
     "pino": "^9.6.0",
     "pino-pretty": "^13.0.0",

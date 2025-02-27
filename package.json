@@ -17,6 +17,7 @@
     "@types/bun": "latest",
     "@types/node-cron": "^3.0.11",
     "eslint": "^9.21.0",
+    "eslint-config-prettier": "^10.0.2",
     "globals": "^16.0.0",
     "prettier": "^3.5.2",
     "typescript-eslint": "^8.25.0"

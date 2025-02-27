@@ -17,11 +17,6 @@ export const getUser = <T extends boolean>(userId: string, include: { banInfo?: 
         include,
       })) as Promise<T extends true ? User & { banInfo: BanInfo | null } : (User & { banInfo: BanInfo | null }) | null>;
 
-export const createUser = (userId: string) =>
-  prisma.user.create({
-    data: { userId },
-  });
-
 export const updateUser = (userId: string, data: Partial<Omit<User, 'userId'>>) =>
   prisma.user.upsert({
     where: { userId },

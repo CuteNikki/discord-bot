@@ -3,9 +3,8 @@
   "module": "src/index.ts",
   "type": "module",
   "scripts": {
-    "dev": "bun run src/index.ts",
-    "build": "bun build src/index.ts",
-    "start": "node dist/index.js",
+    "dev": "bun run src/index.ts --debug",
+    "start": "bun run src/index.ts",
     "lint": "eslint --ext .ts,.tsx src",
     "pretty": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "prisma-generate": "prisma generate",

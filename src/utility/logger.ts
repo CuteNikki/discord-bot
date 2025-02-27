@@ -20,5 +20,5 @@ export default pino(
         options: { destination: `${process.cwd()}/logs/pino.log` },
       },
     ],
-  })
+  }),
 );

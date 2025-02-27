@@ -5,7 +5,6 @@
       "name": "yanera-dev",
       "dependencies": {
         "@prisma/client": "^6.4.1",
-        "@types/node-cron": "^3.0.11",
         "node-cron": "^3.0.3",
         "pino": "^9.6.0",
         "pino-pretty": "^13.0.0",
@@ -13,6 +12,7 @@
       },
       "devDependencies": {
         "@types/bun": "latest",
+        "@types/node-cron": "^3.0.11",
       },
       "peerDependencies": {
         "typescript": "^5.0.0",

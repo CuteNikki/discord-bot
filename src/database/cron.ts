@@ -1,4 +1,4 @@
-import cron from 'node-cron';
+import { schedule } from 'node-cron';
 
 import logger from 'utility/logger';
 
@@ -10,13 +10,13 @@ import { deleteExpiredBlacklist } from 'database/blacklist';
 *
 
 // Run every day at midnight
-cron.schedule('0 0 * * *', () => {
+schedule('0 0 * * *', () => {
   logger.debug('Running cron job (every day at midnight)');
   // coming soon... // Clear daily stats
 });
 
 // Run every week on Sunday at midnight
-cron.schedule('0 0 * * 0', () => {
+schedule('0 0 * * 0', () => {
   logger.debug('Running cron job (every week on Sunday at midnight)');
   // coming soon... // Clear weekly stats
 });
@@ -26,7 +26,7 @@ cron.schedule('0 0 * * 0', () => {
 */
 
 // Run every minute
-cron.schedule('* * * * *', async () => {
+schedule('* * * * *', async () => {
   logger.debug('Running cron job (every minute)');
 
   await deleteExpiredBlacklist(); // Clear expired user bans

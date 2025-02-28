@@ -2,7 +2,9 @@ import { type Infraction } from '@prisma/client';
 
 import { prisma } from 'database/index';
 
-export const createInfraction = async (infraction: Omit<Infraction, 'id' | 'createdAt'>): Promise<Infraction> =>
+export const createInfraction = async (
+  infraction: Omit<Infraction, 'id' | 'createdAt' | 'expiresAt' | 'isActive'> & { expiresAt?: Date; isActive?: boolean },
+): Promise<Infraction> =>
   await prisma.infraction.create({
     data: infraction,
   });

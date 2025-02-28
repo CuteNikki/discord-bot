@@ -9,17 +9,51 @@ datasource db {
 }
 
 model User {
-  userId      String     @id @unique
-  blacklisted Blacklist?
+  userId      String       @id @unique
+  blacklisted Blacklist? // Blacklist record if the user is blacklisted
+  Infraction  Infraction[] // Infractions received
+}
+
+model Guild {
+  guildId    String       @id @unique
+  Infraction Infraction[] // Infractions issued in this guild
 }
 
 model Blacklist {
-  user        User      @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  userId      String    @unique
-  moderatorId String
-  reason      String
-  createdAt   DateTime
-  expiresAt   DateTime?
+  user        User      @relation(fields: [userId], references: [userId])
+  userId      String    @unique // UserId who is blacklisted
+  moderatorId String // ModeratorId who blacklisted the user
+  reason      String // The reason for the blacklist
+  createdAt   DateTime  @default(now()) // When the blacklist was created
+  expiresAt   DateTime? // When the blacklist expires
 
-  @@index([moderatorId], name: "moderatorId")
+  @@index([moderatorId], name: "blacklist_moderator")
+}
+
+model Infraction {
+  id          String         @id @default(uuid())
+  user        User           @relation(fields: [userId], references: [userId])
+  guild       Guild          @relation(fields: [guildId], references: [guildId])
+  userId      String // UserId who received the infraction
+  guildId     String // GuildId where the infraction was issued
+  moderatorId String // ModeratorId who issued the infraction
+  reason      String // The reason for the infraction
+  type        InfractionType // The type of infraction
+  createdAt   DateTime       @default(now()) // When the infraction was created
+  expiresAt   DateTime? // When the infraction expires
+  isActive    Boolean?       @default(false) // Set to false if expired and the user was unbanned
+
+  @@index([userId], name: "infraction_user")
+  @@index([guildId], name: "infraction_guild")
+  @@index([userId, guildId], name: "infraction_user_guild")
+  @@index([moderatorId, guildId], name: "infraction_moderator_guild")
+}
+
+enum InfractionType {
+  Ban
+  Tempban
+  Unban
+  Kick
+  Timeout
+  Warn
 }

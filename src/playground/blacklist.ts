@@ -1,11 +1,13 @@
 // random test file to mess around with the database
 
-import logger from 'utility/logger';
+import type { Client } from 'discord.js';
 
 import { blacklistUser, getBlacklistByModeratorId, getEntireBlacklist, unblacklistUser } from 'database/blacklist';
 import { getUser } from 'database/user';
 
-import './start/cron';
+import { startCron } from 'start/cron';
+
+import logger from 'utility/logger';
 
 const userId = '303142922780672013';
 
@@ -36,3 +38,5 @@ logger.info({ data: blacklistByModerator }, 'Blacklist by Moderator');
 
 const blacklistedUsers = await getEntireBlacklist({ user: true });
 logger.info({ data: blacklistedUsers }, 'Blacklisted users');
+
+startCron({} as Client); // Client is not used *yet* anyways

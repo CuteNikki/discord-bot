@@ -1,9 +1,10 @@
+import type { Client } from 'discord.js';
 import { schedule } from 'node-cron';
 
 import logger from 'utility/logger';
 
 import { deleteExpiredBlacklist } from 'database/blacklist';
-import type { Client } from 'discord.js';
+import { handleExpiredInfractions } from 'database/infraction';
 
 /*
 *
@@ -33,6 +34,7 @@ export async function startCron(_client: Client) {
     logger.debug('Running cron job (every minute)');
 
     await deleteExpiredBlacklist(); // Clear expired user bans
+    await handleExpiredInfractions(); // Clear expired infractions
     // coming soon... // Clear expired infractions
     // coming soon... // Clear expired reminders
   });

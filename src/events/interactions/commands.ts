@@ -1,4 +1,4 @@
-import { Events, MessageFlags, type Interaction } from 'discord.js';
+import { Collection, Colors, EmbedBuilder, Events, MessageFlags, time, TimestampStyles, type Interaction } from 'discord.js';
 
 import { Event } from 'classes/event';
 
@@ -35,6 +35,37 @@ export default new Event({
         .catch((e) => logger.debug({ err: e }, 'Error while replying to interaction'));
       return;
     }
+
+    const cooldowns = client.cooldowns;
+    if (!cooldowns.has(command.options.builder.name)) {
+      cooldowns.set(command.options.builder.name, new Collection());
+    }
+
+    const now = Date.now();
+    const timestamps = cooldowns.get(command.options.builder.name)!;
+    const defaultCooldown = 3000;
+    const cooldownAmount = command.options.cooldown ?? defaultCooldown;
+
+    if (timestamps.has(interaction.user.id)) {
+      const expirationTime = timestamps.get(interaction.user.id)! + cooldownAmount;
+
+      if (now <= expirationTime) {
+        const expiredTimestamp = Math.round(expirationTime / 1_000);
+        return interaction.reply({
+          embeds: [
+            new EmbedBuilder()
+              .setColor(Colors.Red)
+              .setDescription(
+                `Please wait, you are on cooldown for \`${command.options.builder.name}\`.\nYou can use it again ${time(expiredTimestamp, TimestampStyles.RelativeTime)}.`,
+              ),
+          ],
+          flags: [MessageFlags.Ephemeral],
+        });
+      }
+    }
+
+    timestamps.set(interaction.user.id, now);
+    setTimeout(() => timestamps.delete(interaction.user.id), cooldownAmount);
 
     try {
       logger.debug({ data: command }, 'Executing command');

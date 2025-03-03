@@ -1,7 +1,7 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, CommandInteraction, ComponentType, EmbedBuilder, Message, MessageFlags } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, Colors, CommandInteraction, ComponentType, EmbedBuilder, Message, MessageFlags } from 'discord.js';
 import logger from 'utility/logger';
 
-type getPageContent = (index: number, totalPages: number) => EmbedBuilder;
+type getPageContent = (index: number, totalPages: number) => (EmbedBuilder | null) | Promise<EmbedBuilder | null>;
 
 type ButtonProps = {
   data: ButtonBuilder;
@@ -12,11 +12,11 @@ type ButtonProps = {
 type Buttons = Array<(index: number, totalPages: number) => ButtonProps>;
 
 type PaginationProps = {
-  initialIndex?: number;
-  totalPages: number;
   getPageContent: getPageContent;
   buttons: Buttons;
   interaction: CommandInteraction;
+  notFoundEmbed?: EmbedBuilder;
+  initialIndex?: number;
   timeout?: number;
 };
 
@@ -27,28 +27,57 @@ export class Pagination {
   private getPageContent: getPageContent;
   private buttons: Buttons;
   private index: number;
-  private totalPages: number;
+  private totalPages: number = 0;
   private interaction: CommandInteraction;
   private timeout: number;
+  private notFoundEmbed: EmbedBuilder;
 
   constructor(props: PaginationProps) {
     this.getPageContent = props.getPageContent;
     this.buttons = props.buttons;
     this.index = props.initialIndex ?? 0;
-    this.totalPages = props.totalPages;
     this.interaction = props.interaction;
     this.timeout = props.timeout ?? 60_000;
+    this.notFoundEmbed = props.notFoundEmbed ?? new EmbedBuilder().setColor(Colors.Red).setDescription('No results found.');
 
     // Start the pagination
     this.sendMessage();
   }
 
   /**
+   * Get the total number of pages
+   * @returns The total number of pages
+   */
+  private async getTotalPages(): Promise<number> {
+    let totalPages = 0;
+    let index = 0;
+
+    while (true) {
+      const embed = await this.getPageContent(index, totalPages);
+      if (!embed) break;
+
+      totalPages++;
+      index++;
+    }
+
+    return totalPages;
+  }
+
+  /**
    * The start of the pagination, sending a message with the first page and buttons
    */
   private async sendMessage(): Promise<void> {
+    this.totalPages = await this.getTotalPages();
+
+    const embed = await this.getPageContent(this.index, this.totalPages);
+
+    if (!embed) {
+      await this.interaction.editReply({ embeds: [this.notFoundEmbed] }).catch((error) => logger.debug({ err: error }, 'Failed to send message'));
+      return;
+    }
+
     const message = await this.interaction
-      .editReply({ embeds: [this.getPageContent(this.index, this.totalPages)], components: this.getComponents() })
+      .editReply({ embeds: [embed], components: this.getComponents() })
       .catch((error) => logger.debug({ err: error }, 'Failed to send message'));
 
     if (!message) return;
@@ -91,17 +120,18 @@ export class Pagination {
     // Update the index
     this.index = newIndex;
 
+    const embed = await this.getPageContent(this.index, this.totalPages);
+    if (!embed) return;
+
     // If the interaction was already replied to (like when a modal was used), don't call update()
     if (buttonInteraction.replied || buttonInteraction.deferred) {
-      await message
-        .edit({ embeds: [this.getPageContent(this.index, this.totalPages)], components: this.getComponents() })
-        .catch((error) => logger.debug({ err: error }, 'Failed to update message'));
+      await message.edit({ embeds: [embed], components: this.getComponents() }).catch((error) => logger.debug({ err: error }, 'Failed to update message'));
       return;
     }
 
     // Otherwise, update the message using the buttonInteraction
     await buttonInteraction
-      .update({ embeds: [this.getPageContent(this.index, this.totalPages)], components: this.getComponents() })
+      .update({ embeds: [embed], components: this.getComponents() })
       .catch((error) => logger.debug({ err: error }, 'Failed to update message'));
   }
 

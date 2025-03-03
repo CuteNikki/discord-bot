@@ -4,6 +4,7 @@ import path from 'path';
 import { performance } from 'perf_hooks';
 
 import type { ExtendedClient } from 'classes/client';
+import type { Command } from 'classes/command';
 
 import logger from 'utility/logger';
 
@@ -15,10 +16,10 @@ export async function loadCommands(client: ExtendedClient) {
   const { cmdFiles } = getCommandFiles();
 
   for (const filePath of cmdFiles) {
-    const command = await import(filePath);
+    const command = (await import(filePath)).default as Command;
 
-    if ('data' in command.default && 'execute' in command.default) {
-      client.commands.set(command.default.data.name, command.default);
+    if ('builder' in command.options && 'execute' in command.options) {
+      client.commands.set(command.options.builder.name, command);
 
       logger.debug(`Loaded command file ${filePath}`);
     } else {

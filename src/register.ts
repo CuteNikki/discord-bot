@@ -3,6 +3,8 @@ import path from 'node:path';
 
 import { performance } from 'perf_hooks';
 
+import type { Command } from 'classes/command';
+
 import { getCommandFiles } from 'start/commands';
 
 import logger from 'utility/logger';
@@ -29,10 +31,10 @@ const { cmdPath, cmdFiles } = getCommandFiles();
 
 for (const file of cmdFiles) {
   const filePath = path.join(cmdPath, file);
-  const command = await import(filePath);
+  const command = (await import(filePath)).default as Command;
 
-  if ('data' in command.default && 'execute' in command.default) {
-    commands.push(command.default.data.toJSON());
+  if ('builder' in command.options && 'execute' in command.options) {
+    commands.push(command.options.builder.toJSON());
     logger.info(`Loaded command file ${file}`);
   } else {
     logger.warn(`Command file ${file} is missing data or execute`);

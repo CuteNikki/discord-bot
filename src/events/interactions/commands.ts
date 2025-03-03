@@ -41,7 +41,7 @@ export default {
 
     try {
       logger.debug({ data: command }, 'Executing command');
-      await command.execute(interaction);
+      await command.options.execute(interaction);
     } catch (error) {
       logger.error(error);
 

@@ -3,7 +3,6 @@ import {
   ApplicationIntegrationType,
   ButtonBuilder,
   ButtonStyle,
-  ChatInputCommandInteraction,
   EmbedBuilder,
   InteractionContextType,
   MessageFlags,
@@ -13,17 +12,18 @@ import {
   TextInputStyle,
 } from 'discord.js';
 
+import { Command } from 'classes/command';
 import { Pagination } from 'classes/pagination';
 
 import logger from 'utility/logger';
 
-export default {
-  data: new SlashCommandBuilder()
-    .setContexts(InteractionContextType.BotDM, InteractionContextType.Guild, InteractionContextType.PrivateChannel)
+export default new Command({
+  builder: new SlashCommandBuilder()
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
+    .setContexts(InteractionContextType.BotDM, InteractionContextType.Guild, InteractionContextType.PrivateChannel)
     .setName('ping')
     .setDescription('Replies with Pong!'),
-  async execute(interaction: ChatInputCommandInteraction) {
+  async execute(interaction) {
     await interaction.deferReply();
 
     new Pagination({
@@ -126,4 +126,4 @@ export default {
       ],
     });
   },
-};
+});

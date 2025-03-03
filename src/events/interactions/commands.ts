@@ -28,7 +28,7 @@ export default new Event({
       await interaction
         .reply({
           content: blacklist.expiresAt
-            ? `You are blacklisted from using this bot until <t:${Math.floor(blacklist.expiresAt.getTime() / 1000)}>!`
+            ? `You are blacklisted from using this bot until <t:${Math.floor(blacklist.expiresAt.getTime() / 1_000)}>!`
             : 'You are blacklisted from using this bot!',
           flags: [MessageFlags.Ephemeral],
         })
@@ -43,7 +43,7 @@ export default new Event({
 
     const now = Date.now();
     const timestamps = cooldowns.get(command.options.builder.name)!;
-    const defaultCooldown = 3000;
+    const defaultCooldown = 3_000;
     const cooldownAmount = command.options.cooldown ?? defaultCooldown;
 
     if (timestamps.has(interaction.user.id)) {

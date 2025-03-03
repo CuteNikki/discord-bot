@@ -45,7 +45,7 @@ export const blacklistUser = async (userId: string, blacklist: Omit<Blacklist, '
               { name: 'Reason', value: blacklist.reason, inline: false },
               {
                 name: 'Expires at',
-                value: `${blacklist.expiresAt ? `<t:${Math.floor(blacklist.expiresAt.getTime() / 1000)}> (<t:${Math.floor(blacklist.expiresAt.getTime() / 1000)}:R>)` : 'never'}`,
+                value: `${blacklist.expiresAt ? `<t:${Math.floor(blacklist.expiresAt.getTime() / 1_000)}> (<t:${Math.floor(blacklist.expiresAt.getTime() / 1_000)}:R>)` : 'never'}`,
                 inline: false,
               },
             ],
@@ -96,7 +96,7 @@ export const unblacklistUser = async (userId: string) => {
               { name: 'Reason', value: result?.reason, inline: false },
               {
                 name: 'Created at',
-                value: `<t:${Math.floor((result?.createdAt.getTime() ?? 0) / 1000)}> (<t:${Math.floor((result?.createdAt.getTime() ?? 0) / 1000)}:R>)`,
+                value: `<t:${Math.floor((result?.createdAt.getTime() ?? 0) / 1_000)}> (<t:${Math.floor((result?.createdAt.getTime() ?? 0) / 1_000)}:R>)`,
                 inline: false,
               },
             ],

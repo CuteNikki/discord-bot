@@ -27,7 +27,7 @@ if (user?.blacklisted) {
     expiresAt: new Date(Date.now() + 10_000), // 10 seconds from now
   });
   logger.info({ data: blacklistEntry }, 'Created blacklist entry');
-  logger.info({ data: Math.floor(blacklistEntry.createdAt.getTime() / 1000) }, 'Banned at');
+  logger.info({ data: Math.floor(blacklistEntry.createdAt.getTime() / 1_000) }, 'Banned at');
 }
 
 const updatedUser = await getUser(userId, { blacklisted: true });

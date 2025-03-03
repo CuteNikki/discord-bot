@@ -1,11 +1,12 @@
-import { Client, Events } from 'discord.js';
+import { Event } from 'classes/event';
+import { Events } from 'discord.js';
 
 import logger from 'utility/logger';
 
-export default {
+export default new Event({
   name: Events.ClientReady,
   once: true,
-  async execute(client: Client<true>) {
-    logger.info(`Logged in as ${client.user.tag}`);
+  execute(_extendedClient, readyClient) {
+    logger.info(`Logged in as ${readyClient.user.tag}`);
   },
-};
+});

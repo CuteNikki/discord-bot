@@ -1,27 +1,24 @@
 import { Events, MessageFlags, type Interaction } from 'discord.js';
 
-import type { ExtendedClient } from 'classes/client';
+import { Event } from 'classes/event';
 
 import { getBlacklist } from 'database/blacklist';
 
 import logger from 'utility/logger';
 
-export default {
+export default new Event({
   name: Events.InteractionCreate,
   once: false,
-  async execute(interaction: Interaction) {
+  async execute(client, interaction: Interaction) {
     logger.debug({ data: interaction }, 'Interaction received');
     if (!interaction.isCommand()) {
       logger.debug('Interaction is not a command');
       return;
     }
 
-    const { commandName } = interaction;
-    const client = interaction.client as ExtendedClient;
-
-    const command = client.commands.get(commandName);
+    const command = client.commands.get(interaction.commandName);
     if (!command) {
-      logger.debug({ data: commandName }, 'Command not found');
+      logger.debug({ data: interaction.commandName }, 'Command not found');
       return;
     }
 
@@ -56,4 +53,4 @@ export default {
       }
     }
   },
-};
+});

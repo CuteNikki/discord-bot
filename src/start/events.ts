@@ -1,25 +1,27 @@
-import type { Client } from 'discord.js';
 import fs from 'fs';
 import path from 'path';
-
 import { performance } from 'perf_hooks';
+
+import type { ExtendedClient } from 'classes/client';
+import type { Event } from 'classes/event';
 
 import logger from 'utility/logger';
 
-export async function loadEvents(client: Client) {
+export async function loadEvents(client: ExtendedClient) {
   logger.debug('Loading event files');
   const startTime = performance.now();
 
   const { eventFiles } = getEventFiles();
 
   for (const filePath of eventFiles) {
-    const event = await import(filePath);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const event = (await import(filePath)).default as Event<any>;
 
-    if ('name' in event.default && 'execute' in event.default) {
-      if (event.default.once) {
-        client.once(event.default.name, (...args: unknown[]) => event.default.execute(...args));
+    if ('name' in event.options && 'execute' in event.options) {
+      if (event.options.once) {
+        client.once(event.options.name, (...args: unknown[]) => event.options.execute(client, ...args));
       } else {
-        client.on(event.default.name, (...args: unknown[]) => event.default.execute(...args));
+        client.on(event.options.name, (...args: unknown[]) => event.options.execute(client, ...args));
       }
 
       logger.debug(`Loaded event file ${filePath}`);

@@ -28,9 +28,8 @@ export default new Command({
 
     new Pagination({
       interaction: interaction,
-      totalPages: 10,
       getPageContent: (pageIndex, totalPages) => {
-        // Fill with content (e.g. fetch level data from a database and set embed data)
+        if (pageIndex >= 10) return null;
         return new EmbedBuilder().setDescription(`Page ${pageIndex + 1} / ${totalPages}`);
       },
       buttons: [

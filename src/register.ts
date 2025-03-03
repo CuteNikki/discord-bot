@@ -1,5 +1,4 @@
 import { REST, Routes } from 'discord.js';
-import path from 'node:path';
 
 import { performance } from 'perf_hooks';
 
@@ -27,17 +26,16 @@ logger.info('Loading command files');
 const startTime = performance.now();
 
 const commands = [];
-const { cmdPath, cmdFiles } = getCommandFiles();
+const { cmdFiles } = getCommandFiles();
 
-for (const file of cmdFiles) {
-  const filePath = path.join(cmdPath, file);
+for (const filePath of cmdFiles) {
   const command = (await import(filePath)).default as Command;
 
   if ('builder' in command.options && 'execute' in command.options) {
     commands.push(command.options.builder.toJSON());
-    logger.info(`Loaded command file ${file}`);
+    logger.info(`Loaded command file ${filePath}`);
   } else {
-    logger.warn(`Command file ${file} is missing data or execute`);
+    logger.warn(`Command file ${filePath} is missing data or execute`);
   }
 }
 

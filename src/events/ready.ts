@@ -1,5 +1,6 @@
-import { Event } from 'classes/event';
 import { Events } from 'discord.js';
+
+import { Event } from 'classes/event';
 
 import logger from 'utility/logger';
 

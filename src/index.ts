@@ -4,10 +4,9 @@ import { ExtendedClient } from 'classes/client';
 
 import { prisma } from 'database/index';
 
-import { loadCommands } from 'start/commands';
-import { startCron } from 'start/cron';
-import { loadEvents } from 'start/events';
-
+import { loadCommands } from 'utility/commands';
+import { startCron } from 'utility/cron';
+import { loadEvents } from 'utility/events';
 import logger from 'utility/logger';
 
 const token = process.env.DISCORD_TOKEN;

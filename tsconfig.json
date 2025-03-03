@@ -27,7 +27,6 @@
     "paths": {
       "database/*": ["./src/database/*"],
       "utility/*": ["./src/utility/*"],
-      "start/*": ["./src/start/*"],
       "types/*": ["./src/types/*"],
       "classes/*": ["./src/classes/*"]
     }

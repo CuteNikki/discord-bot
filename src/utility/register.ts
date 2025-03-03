@@ -4,8 +4,7 @@ import { performance } from 'perf_hooks';
 
 import type { Command } from 'classes/command';
 
-import { getCommandFiles } from 'start/commands';
-
+import { getCommandFiles } from 'utility/commands';
 import logger from 'utility/logger';
 
 const token = process.env.DISCORD_TOKEN;

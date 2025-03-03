@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "bun run src/index.ts --debug",
     "start": "bun run src/index.ts",
-    "register": "bun run src/register.ts",
+    "register": "bun run src/utility/register.ts",
     "lint": "eslint --ext .ts,.tsx src",
     "pretty": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "prisma-generate": "prisma generate",

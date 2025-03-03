@@ -1,7 +1,7 @@
 import { InfractionType, type Infraction } from '@prisma/client';
-import { fetch } from 'bun';
+import { Routes } from 'discord.js';
 
-import { prisma } from 'database/index';
+import { discordRestClient, prisma } from 'database/index';
 
 export const createInfraction = async (
   infraction: Omit<Infraction, 'id' | 'createdAt' | 'expiresAt' | 'isActive'> & { expiresAt?: Date; isActive?: boolean },
@@ -70,12 +70,7 @@ export const handleExpiredInfractions = async (): Promise<void> => {
   for (const infraction of expiredInfractions) {
     // If the infraction is a tempban, unban the user
     if (infraction.type === InfractionType.Tempban) {
-      await fetch(`https://discord.com/api/v10/guilds/${infraction.guildId}/bans/${infraction.userId}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bot ${process.env.DISCORD_TOKEN}`,
-        },
-      }).catch(() => null);
+      await discordRestClient.delete(Routes.guildBan(infraction.guildId, infraction.userId)).catch(() => null);
     }
 
     await updateInfraction(infraction.id, { isActive: false });

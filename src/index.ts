@@ -28,6 +28,6 @@ const client = new ExtendedClient({
 await prisma.$connect();
 await loadCommands(client);
 await loadEvents(client);
-await startCron(client);
+startCron();
 
 client.login(token);

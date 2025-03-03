@@ -1,7 +1,7 @@
 import type { Blacklist } from '@prisma/client';
-import { fetch } from 'bun';
+import type { APIUser } from 'discord.js';
 
-import { prisma } from 'database/index';
+import { discordRestClient, prisma } from 'database/index';
 
 import logger from 'utility/logger';
 
@@ -16,44 +16,38 @@ export const blacklistUser = async (userId: string, blacklist: Omit<Blacklist, '
   });
 
   if (result && blacklistWebhookUrl && discordToken) {
-    const userRes = await fetch('https://discord.com/api/v10/users/' + userId, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bot ${discordToken}`,
-      },
-    }).catch(() => null);
-    const user = await userRes?.json().catch(() => null);
+    const user = (await discordRestClient.get(`/users/${userId}`).catch(() => null)) as APIUser | null;
 
-    await fetch(blacklistWebhookUrl, {
-      method: 'POST',
-      body: JSON.stringify({
-        username: 'Blacklisted User',
-        embeds: [
-          {
-            color: 16733751,
-            title: 'Blacklist',
-            thumbnail: {
-              url: user?.avatar ? `https://cdn.discordapp.com/avatars/${userId}/${user.avatar}.png` : undefined,
+    await discordRestClient
+      .post(`/${blacklistWebhookUrl}`, {
+        body: {
+          username: 'Blacklisted User',
+          embeds: [
+            {
+              color: 16733751,
+              title: 'Blacklist',
+              thumbnail: {
+                url: user?.avatar ? `https://cdn.discordapp.com/avatars/${userId}/${user.avatar}.png` : undefined,
+              },
+              fields: [
+                {
+                  name: 'User',
+                  value: user?.username ? `${user.global_name ? `${user.global_name} | ${user.username}` : user.username} (<@${userId}>)` : `<@${userId}>`,
+                  inline: false,
+                },
+                { name: 'Moderator', value: `<@${blacklist.moderatorId}>`, inline: false },
+                { name: 'Reason', value: blacklist.reason, inline: false },
+                {
+                  name: 'Expires at',
+                  value: `${blacklist.expiresAt ? `<t:${Math.floor(blacklist.expiresAt.getTime() / 1_000)}> (<t:${Math.floor(blacklist.expiresAt.getTime() / 1_000)}:R>)` : 'never'}`,
+                  inline: false,
+                },
+              ],
             },
-            fields: [
-              {
-                name: 'User',
-                value: user?.username ? `${user.global_name ? `${user.global_name} | ${user.username}` : user.username} (<@${userId}>)` : `<@${userId}>`,
-                inline: false,
-              },
-              { name: 'Moderator', value: `<@${blacklist.moderatorId}>`, inline: false },
-              { name: 'Reason', value: blacklist.reason, inline: false },
-              {
-                name: 'Expires at',
-                value: `${blacklist.expiresAt ? `<t:${Math.floor(blacklist.expiresAt.getTime() / 1_000)}> (<t:${Math.floor(blacklist.expiresAt.getTime() / 1_000)}:R>)` : 'never'}`,
-                inline: false,
-              },
-            ],
-          },
-        ],
-      }),
-      headers: { 'Content-Type': 'application/json' },
-    }).catch(() => null);
+          ],
+        },
+      })
+      .catch(() => null);
   }
 
   return result;
@@ -67,44 +61,38 @@ export const unblacklistUser = async (userId: string) => {
     .catch(() => null); // Ignore if user is not blacklisted
 
   if (result && blacklistWebhookUrl && discordToken) {
-    const userRes = await fetch('https://discord.com/api/v10/users/' + userId, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bot ${discordToken}`,
-      },
-    }).catch(() => null);
-    const user = await userRes?.json().catch(() => null);
+    const user = (await discordRestClient.get(`/users/${userId}`).catch(() => null)) as APIUser | null;
 
-    await fetch(blacklistWebhookUrl, {
-      method: 'POST',
-      body: JSON.stringify({
-        username: 'Unblacklisted User',
-        embeds: [
-          {
-            color: 5111624,
-            title: `Unblacklist`,
-            thumbnail: {
-              url: user?.avatar ? `https://cdn.discordapp.com/avatars/${userId}/${user.avatar}.png` : undefined,
+    await discordRestClient
+      .post(`/${blacklistWebhookUrl}`, {
+        body: {
+          username: 'Unblacklisted User',
+          embeds: [
+            {
+              color: 5111624,
+              title: `Unblacklist`,
+              thumbnail: {
+                url: user?.avatar ? `https://cdn.discordapp.com/avatars/${userId}/${user.avatar}.png` : undefined,
+              },
+              fields: [
+                {
+                  name: 'User',
+                  value: user?.username ? `${user.global_name ? `${user.global_name} | ${user.username}` : user.username} (<@${userId}>)` : `<@${userId}>`,
+                  inline: false,
+                },
+                { name: 'Moderator', value: `<@${result?.moderatorId}>`, inline: false },
+                { name: 'Reason', value: result?.reason, inline: false },
+                {
+                  name: 'Created at',
+                  value: `<t:${Math.floor((result?.createdAt.getTime() ?? 0) / 1_000)}> (<t:${Math.floor((result?.createdAt.getTime() ?? 0) / 1_000)}:R>)`,
+                  inline: false,
+                },
+              ],
             },
-            fields: [
-              {
-                name: 'User',
-                value: user?.username ? `${user.global_name ? `${user.global_name} | ${user.username}` : user.username} (<@${userId}>)` : `<@${userId}>`,
-                inline: false,
-              },
-              { name: 'Moderator', value: `<@${result?.moderatorId}>`, inline: false },
-              { name: 'Reason', value: result?.reason, inline: false },
-              {
-                name: 'Created at',
-                value: `<t:${Math.floor((result?.createdAt.getTime() ?? 0) / 1_000)}> (<t:${Math.floor((result?.createdAt.getTime() ?? 0) / 1_000)}:R>)`,
-                inline: false,
-              },
-            ],
-          },
-        ],
-      }),
-      headers: { 'Content-Type': 'application/json' },
-    }).catch(() => null);
+          ],
+        },
+      })
+      .catch(() => null);
   }
 
   return result;
@@ -118,20 +106,20 @@ export const unblacklistUsers = async (blacklists: Blacklist[]) => {
   });
 
   if (result && blacklistWebhookUrl) {
-    await fetch(blacklistWebhookUrl, {
-      method: 'POST',
-      body: JSON.stringify({
-        username: 'Bulk Unblacklist',
-        embeds: [
-          {
-            color: 5111624,
-            title: `Bulk Unblacklist (${blacklists.length} user${blacklists.length > 1 || blacklistUser.length === 0 ? 's' : ''})`,
-            description: blacklistedIds.join().slice(0, 3997) + (blacklists.length > 3997 ? '...' : ''),
-          },
-        ],
-      }),
-      headers: { 'Content-Type': 'application/json' },
-    }).catch(() => null);
+    await discordRestClient
+      .post(`/${blacklistWebhookUrl}`, {
+        body: {
+          username: 'Bulk Unblacklist',
+          embeds: [
+            {
+              color: 5111624,
+              title: `Bulk Unblacklist (${blacklists.length} user${blacklists.length > 1 || blacklists.length === 0 ? 's' : ''})`,
+              description: blacklistedIds.join().slice(0, 3997) + (blacklists.length > 3997 ? '...' : ''),
+            },
+          ],
+        },
+      })
+      .catch(() => null);
   }
 
   return result;

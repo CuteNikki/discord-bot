@@ -1,4 +1,3 @@
-import type { Client } from 'discord.js';
 import { schedule } from 'node-cron';
 
 import logger from 'utility/logger';
@@ -27,15 +26,13 @@ schedule('0 0 * * 0', () => {
 *
 */
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export async function startCron(_client: Client) {
+export function startCron() {
   // Run every minute
   schedule('* * * * *', async () => {
     logger.debug('Running cron job (every minute)');
 
     await deleteExpiredBlacklist(); // Clear expired user bans
     await handleExpiredInfractions(); // Clear expired infractions
-    // coming soon... // Clear expired infractions
     // coming soon... // Clear expired reminders
   });
 }

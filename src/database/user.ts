@@ -1,11 +1,11 @@
-import type { Blacklist, User } from '@prisma/client';
+import type { Prisma, User } from '@prisma/client';
 
 import { prisma } from 'database/index';
 
 export const getUsers = () => prisma.user.findMany();
 
-export const getUser = <T extends boolean>(userId: string, include: { blacklisted?: boolean } = {}, upsert: T = false as T) =>
-  (upsert
+export const getUser = <T extends boolean>(userId: string, include: Prisma.UserInclude = {}, upsert: T = false as T) =>
+  upsert
     ? prisma.user.upsert({
         where: { userId },
         update: {},
@@ -15,7 +15,7 @@ export const getUser = <T extends boolean>(userId: string, include: { blackliste
     : prisma.user.findUnique({
         where: { userId },
         include,
-      })) as Promise<T extends true ? User & { blacklisted: Blacklist | null } : (User & { blacklisted: Blacklist | null }) | null>;
+      });
 
 export const updateUser = (userId: string, data: Partial<Omit<User, 'userId'>>) =>
   prisma.user.upsert({

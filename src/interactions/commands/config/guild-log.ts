@@ -33,11 +33,11 @@ import { ModuleType } from 'types/interactions';
 export default new Command({
   module: ModuleType.Config,
   data: new SlashCommandBuilder()
+  .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
+  .setContexts(InteractionContextType.Guild)
+  .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
     .setName('log')
     .setDescription('Configure guild logs')
-    .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
-    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
-    .setContexts(InteractionContextType.Guild)
     .addSubcommandGroup((group) =>
       group
         .setName('events')

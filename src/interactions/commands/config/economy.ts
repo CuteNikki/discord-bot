@@ -1,4 +1,4 @@
-import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, MessageFlags, SlashCommandBuilder } from 'discord.js';
+import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, MessageFlags, PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
 import { t } from 'i18next';
 
 import { Command } from 'classes/command';
@@ -10,10 +10,11 @@ import { ModuleType } from 'types/interactions';
 export default new Command({
   module: ModuleType.Config,
   data: new SlashCommandBuilder()
-    .setName('economy')
-    .setDescription('Configure the economy system')
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
     .setContexts(InteractionContextType.Guild)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .setName('economy')
+    .setDescription('Configure the economy system')
     .addSubcommand((cmd) => cmd.setName('enable').setDescription('Enable the economy system'))
     .addSubcommand((cmd) => cmd.setName('disable').setDescription('Disable the economy system'))
     .addSubcommand((cmd) => cmd.setName('info').setDescription('Get information about the economy system')),

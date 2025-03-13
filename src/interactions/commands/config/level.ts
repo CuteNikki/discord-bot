@@ -45,11 +45,11 @@ import { AnnouncementType, type LevelReward, type Multiplier } from 'types/level
 export default new Command({
   module: ModuleType.Config,
   data: new SlashCommandBuilder()
-    .setName('level')
-    .setDescription('Configure the level module')
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
     .setContexts(InteractionContextType.Guild)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .setName('level')
+    .setDescription('Configure the level module')
     .addSubcommandGroup((group) =>
       group
         .setName('xp')

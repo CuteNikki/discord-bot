@@ -19,11 +19,11 @@ export default new Command({
   module: ModuleType.Config,
   botPermissions: ['SendMessages'],
   data: new SlashCommandBuilder()
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
+    .setContexts(InteractionContextType.Guild)
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
     .setName('moderation')
     .setDescription('Configure the moderation module')
-    .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
-    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
-    .setContexts(InteractionContextType.Guild)
     .addSubcommand((cmd) => cmd.setName('enable').setDescription('Enables the moderation module'))
     .addSubcommand((cmd) => cmd.setName('disable').setDescription('Disables the moderation module'))
     .addSubcommand((cmd) => cmd.setName('info').setDescription('Shows the current moderation settings'))

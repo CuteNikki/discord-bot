@@ -21,11 +21,11 @@ export default new Command({
   module: ModuleType.Config,
   botPermissions: ['SendMessages'],
   data: new SlashCommandBuilder()
-    .setName('starboard')
-    .setDescription('Showcases messages in a dedicated channel based on receiving a number of star reactions')
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
     .setContexts(InteractionContextType.Guild)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .setName('starboard')
+    .setDescription('Showcases messages in a dedicated channel based on receiving a number of star reactions')
     .addSubcommand((command) => command.setName('config').setDescription('Shows the starboard configuration'))
     .addSubcommand((command) => command.setName('disable').setDescription('Disables the starboard'))
     .addSubcommand((command) => command.setName('enable').setDescription('Enables the starboard'))

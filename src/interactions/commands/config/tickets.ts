@@ -42,11 +42,11 @@ export default new Command({
   module: ModuleType.Config,
   botPermissions: ['SendMessages', 'ManageChannels'],
   data: new SlashCommandBuilder()
-    .setName('tickets')
-    .setDescription('Configure the ticket module')
-    .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels)
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
     .setContexts(InteractionContextType.Guild)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .setName('tickets')
+    .setDescription('Configure the ticket module')
     .addSubcommand((cmd) => cmd.setName('enable').setDescription('Enable the ticket module'))
     .addSubcommand((cmd) => cmd.setName('disable').setDescription('Disable the ticket module'))
     .addSubcommand((cmd) => cmd.setName('setup').setDescription('Start the setup process for a ticket group'))

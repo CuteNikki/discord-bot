@@ -47,6 +47,7 @@ model Infraction {
   @@index([guildId], name: "infraction_guild")
   @@index([userId, guildId], name: "infraction_user_guild")
   @@index([moderatorId, guildId], name: "infraction_moderator_guild")
+  @@index([type], name: "infraction_type")
 }
 
 enum InfractionType {

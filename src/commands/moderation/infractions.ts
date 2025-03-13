@@ -66,7 +66,8 @@ export default new Command({
                 `Reason: ${infraction.reason}`,
                 `Moderator: <@${infraction.moderatorId}>`,
                 `Date: ${time(Math.floor(infraction.createdAt.getTime() / 1_000), TimestampStyles.ShortDateTime)}`,
-                infraction.expiresAt && `Expires: ${time(Math.floor(infraction.expiresAt.getTime() / 1_000), TimestampStyles.ShortDateTime)}`,
+                infraction.expiresAt &&
+                  `Expires: ${time(Math.floor(infraction.expiresAt.getTime() / 1_000), TimestampStyles.ShortDateTime)}`,
               ].join('\n'),
             })),
           );

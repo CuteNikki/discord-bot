@@ -32,7 +32,9 @@ export const blacklistUser = async (userId: string, blacklist: Omit<Blacklist, '
               fields: [
                 {
                   name: 'User',
-                  value: user?.username ? `${user.global_name ? `${user.global_name} | ${user.username}` : user.username} (<@${userId}>)` : `<@${userId}>`,
+                  value: user?.username
+                    ? `${user.global_name ? `${user.global_name} | ${user.username}` : user.username} (<@${userId}>)`
+                    : `<@${userId}>`,
                   inline: false,
                 },
                 { name: 'Moderator', value: `<@${blacklist.moderatorId}>`, inline: false },
@@ -77,7 +79,9 @@ export const unblacklistUser = async (userId: string) => {
               fields: [
                 {
                   name: 'User',
-                  value: user?.username ? `${user.global_name ? `${user.global_name} | ${user.username}` : user.username} (<@${userId}>)` : `<@${userId}>`,
+                  value: user?.username
+                    ? `${user.global_name ? `${user.global_name} | ${user.username}` : user.username} (<@${userId}>)`
+                    : `<@${userId}>`,
                   inline: false,
                 },
                 { name: 'Moderator', value: `<@${result?.moderatorId}>`, inline: false },

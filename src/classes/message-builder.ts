@@ -461,7 +461,9 @@ export class MessageBuilder {
               new TextInputBuilder()
                 .setCustomId(MessageBuilderCustomIds.FieldRemoveIndexInput)
                 .setLabel('Index')
-                .setPlaceholder(`Available indexes: ${this.message.embed.fields.map((field, index) => `${index + 1}. ${field.name}`).join(', ')}`)
+                .setPlaceholder(
+                  `Available indexes: ${this.message.embed.fields.map((field, index) => `${index + 1}. ${field.name}`).join(', ')}`,
+                )
                 .setStyle(TextInputStyle.Short)
                 .setRequired(false),
             ),
@@ -707,7 +709,9 @@ export class MessageBuilder {
     };
     if (!content.content && !content.embeds?.length) content = { content: 'No content or embeds provided.', embeds: [] };
 
-    await message.edit({ ...content, components: this.getComponents() }).catch((error) => logger.debug({ err: error }, 'Failed to update message'));
+    await message
+      .edit({ ...content, components: this.getComponents() })
+      .catch((error) => logger.debug({ err: error }, 'Failed to update message'));
   }
 
   /**
@@ -720,13 +724,21 @@ export class MessageBuilder {
       .setLabel('Message')
       .setEmoji('📝')
       .setStyle(ButtonStyle.Secondary);
-    const titleButton = new ButtonBuilder().setCustomId(MessageBuilderCustomIds.TitleButton).setLabel('Title').setEmoji('📑').setStyle(ButtonStyle.Secondary);
+    const titleButton = new ButtonBuilder()
+      .setCustomId(MessageBuilderCustomIds.TitleButton)
+      .setLabel('Title')
+      .setEmoji('📑')
+      .setStyle(ButtonStyle.Secondary);
     const descriptionButton = new ButtonBuilder()
       .setCustomId(MessageBuilderCustomIds.DescriptionButton)
       .setEmoji('📖')
       .setLabel('Description')
       .setStyle(ButtonStyle.Secondary);
-    const colorButton = new ButtonBuilder().setCustomId(MessageBuilderCustomIds.ColorButton).setLabel('Color').setEmoji('🎨').setStyle(ButtonStyle.Secondary);
+    const colorButton = new ButtonBuilder()
+      .setCustomId(MessageBuilderCustomIds.ColorButton)
+      .setLabel('Color')
+      .setEmoji('🎨')
+      .setStyle(ButtonStyle.Secondary);
     const addFieldButton = new ButtonBuilder()
       .setCustomId(MessageBuilderCustomIds.FieldAddButton)
       .setLabel('Add field')
@@ -742,7 +754,11 @@ export class MessageBuilder {
       .setLabel('Thumbnail')
       .setEmoji('🖼️')
       .setStyle(ButtonStyle.Secondary);
-    const imageButton = new ButtonBuilder().setCustomId(MessageBuilderCustomIds.ImageButton).setLabel('Image').setEmoji('📷').setStyle(ButtonStyle.Secondary);
+    const imageButton = new ButtonBuilder()
+      .setCustomId(MessageBuilderCustomIds.ImageButton)
+      .setLabel('Image')
+      .setEmoji('📷')
+      .setStyle(ButtonStyle.Secondary);
     const footerButton = new ButtonBuilder()
       .setCustomId(MessageBuilderCustomIds.FooterButton)
       .setLabel('Footer')

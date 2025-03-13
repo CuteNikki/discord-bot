@@ -1,4 +1,14 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, Colors, CommandInteraction, ComponentType, EmbedBuilder, Message, MessageFlags } from 'discord.js';
+import {
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonInteraction,
+  Colors,
+  CommandInteraction,
+  ComponentType,
+  EmbedBuilder,
+  Message,
+  MessageFlags,
+} from 'discord.js';
 import logger from 'utility/logger';
 
 type getPageContent = (index: number, totalPages: number) => (EmbedBuilder | null) | Promise<EmbedBuilder | null>;
@@ -72,7 +82,9 @@ export class Pagination {
     const embed = await this.getPageContent(this.index, this.totalPages);
 
     if (!embed) {
-      await this.interaction.editReply({ embeds: [this.notFoundEmbed] }).catch((error) => logger.debug({ err: error }, 'Failed to send message'));
+      await this.interaction
+        .editReply({ embeds: [this.notFoundEmbed] })
+        .catch((error) => logger.debug({ err: error }, 'Failed to send message'));
       return;
     }
 
@@ -125,7 +137,9 @@ export class Pagination {
 
     // If the interaction was already replied to (like when a modal was used), don't call update()
     if (buttonInteraction.replied || buttonInteraction.deferred) {
-      await message.edit({ embeds: [embed], components: this.getComponents() }).catch((error) => logger.debug({ err: error }, 'Failed to update message'));
+      await message
+        .edit({ embeds: [embed], components: this.getComponents() })
+        .catch((error) => logger.debug({ err: error }, 'Failed to update message'));
       return;
     }
 

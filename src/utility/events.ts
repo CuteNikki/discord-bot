@@ -31,7 +31,9 @@ export async function loadEvents(client: ExtendedClient) {
   }
 
   const endTime = performance.now();
-  logger.info(`Loaded ${eventFiles.length} event${eventFiles.length > 1 || eventFiles.length === 0 ? 's' : ''} in ${Math.floor(endTime - startTime)}ms`);
+  logger.info(
+    `Loaded ${eventFiles.length} event${eventFiles.length > 1 || eventFiles.length === 0 ? 's' : ''} in ${Math.floor(endTime - startTime)}ms`,
+  );
 }
 
 function getEventFiles() {

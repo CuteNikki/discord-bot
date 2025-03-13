@@ -28,7 +28,9 @@ export async function loadCommands(client: ExtendedClient) {
   }
 
   const endTime = performance.now();
-  logger.info(`Loaded ${cmdFiles.length} command${cmdFiles.length > 1 || cmdFiles.length === 0 ? 's' : ''} in ${Math.floor(endTime - startTime)}ms`);
+  logger.info(
+    `Loaded ${cmdFiles.length} command${cmdFiles.length > 1 || cmdFiles.length === 0 ? 's' : ''} in ${Math.floor(endTime - startTime)}ms`,
+  );
 }
 
 export function getCommandFiles() {

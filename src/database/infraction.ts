@@ -41,7 +41,12 @@ export const getInfractionsByModeratorIdAndGuildId = async (moderatorId: string,
     where: { moderatorId, guildId },
   });
 
-export const getInfractionsByUserIdAndGuildIdPaginated = async (userId: string, guildId: string, skip: number, take: number): Promise<Infraction[]> =>
+export const getInfractionsByUserIdAndGuildIdPaginated = async (
+  userId: string,
+  guildId: string,
+  skip: number,
+  take: number,
+): Promise<Infraction[]> =>
   await prisma.infraction.findMany({
     where: { userId, guildId },
     skip,

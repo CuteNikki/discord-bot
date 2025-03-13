@@ -9,9 +9,10 @@ datasource db {
 }
 
 model User {
-  userId      String       @id @unique
-  blacklisted Blacklist? // Blacklist record if the user is blacklisted
-  Infraction  Infraction[] // Infractions received
+  userId         String           @id @unique
+  blacklisted    Blacklist? // Blacklist record if the user is blacklisted
+  Infraction     Infraction[] // Infractions received
+  MessageBuilder MessageBuilder[] // MessageBuilder records created by the user
 }
 
 model Guild {
@@ -48,6 +49,20 @@ model Infraction {
   @@index([userId, guildId], name: "infraction_user_guild")
   @@index([moderatorId, guildId], name: "infraction_moderator_guild")
   @@index([type], name: "infraction_type")
+}
+
+model MessageBuilder {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [userId])
+  userId    String // UserId who created the message
+  guildId   String? // GuildId where the message was created
+  channelId String // ChannelId where the message was created
+  messageId String // MessageId of the message
+  content   String // Content of the message
+  embed     String? // Embed of the message
+  createdAt DateTime @default(now()) // When the message was created
+
+  @@index([userId], name: "messagebuilder_user")
 }
 
 enum InfractionType {

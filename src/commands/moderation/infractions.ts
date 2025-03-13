@@ -18,7 +18,7 @@ import {
 import { Command } from 'classes/command';
 import { Pagination } from 'classes/pagination';
 
-import { getInfractionsByUserIdAndGuildIdPaginated } from 'database/infraction';
+import { getInfractionsByUserIdAndGuildId, getInfractionsByUserIdAndGuildIdPaginated } from 'database/infraction';
 
 import logger from 'utility/logger';
 
@@ -43,6 +43,10 @@ export default new Command({
     new Pagination({
       interaction: interaction,
       notFoundEmbed: new EmbedBuilder().setColor(Colors.Red).setDescription(`No infractions found for ${targetUser.toString()}!`),
+      getTotalPages: async () => {
+        const totalInfractions = await getInfractionsByUserIdAndGuildId(targetUser.id, interaction.guild.id);
+        return Math.ceil(totalInfractions.length / ITEMS_PER_PAGE);
+      },
       getPageContent: async (pageIndex) => {
         // Get infractions for the current page
         const pageInfractions = await getInfractionsByUserIdAndGuildIdPaginated(

@@ -12,6 +12,7 @@ import {
 import logger from 'utility/logger';
 
 type getPageContent = (index: number, totalPages: number) => (EmbedBuilder | null) | Promise<EmbedBuilder | null>;
+type getTotalPages = () => number | Promise<number>;
 
 type ButtonProps = {
   data: ButtonBuilder;
@@ -23,6 +24,7 @@ type Buttons = Array<(index: number, totalPages: number) => ButtonProps>;
 
 type PaginationProps = {
   getPageContent: getPageContent;
+  getTotalPages: getTotalPages;
   buttons: Buttons;
   interaction: CommandInteraction;
   notFoundEmbed?: EmbedBuilder;
@@ -35,6 +37,7 @@ type PaginationProps = {
  */
 export class Pagination {
   private getPageContent: getPageContent;
+  private getTotalPages: getTotalPages;
   private buttons: Buttons;
   private index: number;
   private totalPages: number = 0;
@@ -44,6 +47,7 @@ export class Pagination {
 
   constructor(props: PaginationProps) {
     this.getPageContent = props.getPageContent;
+    this.getTotalPages = props.getTotalPages;
     this.buttons = props.buttons;
     this.index = props.initialIndex ?? 0;
     this.interaction = props.interaction;
@@ -52,25 +56,6 @@ export class Pagination {
 
     // Start the pagination
     this.sendMessage();
-  }
-
-  /**
-   * Get the total number of pages
-   * @returns The total number of pages
-   */
-  private async getTotalPages(): Promise<number> {
-    let totalPages = 0;
-    let index = 0;
-
-    while (true) {
-      const embed = await this.getPageContent(index, totalPages);
-      if (!embed) break;
-
-      totalPages++;
-      index++;
-    }
-
-    return totalPages;
   }
 
   /**

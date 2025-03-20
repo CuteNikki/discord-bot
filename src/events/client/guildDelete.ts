@@ -52,6 +52,8 @@ export default new Event({
               value: guild.vanityURLCode ?? '/'
             }
           )
+          .setFooter({ text: `ID: ${guild.id}` })
+          .setTimestamp()
       ]
     });
   }

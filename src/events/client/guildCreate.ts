@@ -22,6 +22,8 @@ export default new Event({
 
     const webhook = new WebhookClient({ url: keys.DEVELOPER_GUILD_FEED_WEBHOOK });
 
+    const invites = await guild.invites.fetch().catch(() => null);
+
     webhook.send({
       username: `${client.user?.displayName ?? keys.DISCORD_BOT_ID} | Guild Create`,
       avatarURL: client.user?.displayAvatarURL(),
@@ -50,8 +52,14 @@ export default new Event({
             {
               name: 'Vanity',
               value: guild.vanityURLCode ?? '/'
+            },
+            {
+              name: 'Invites',
+              value: invites?.map((invite) => invite.url).join('\n') ?? 'No invites'
             }
           )
+          .setFooter({ text: `ID: ${guild.id}` })
+          .setTimestamp()
       ]
     });
   }

@@ -12,7 +12,7 @@ export default new Event({
     await readyClient.application.emojis.fetch();
 
     for (const emoji of readyClient.application.emojis.cache.values()) {
-      extendedClient.customEmojis[emoji.name as keyof typeof extendedClient.customEmojis] = emoji.toString();
+      extendedClient.customEmojis[emoji.name as keyof typeof extendedClient.customEmojis] = emoji;
     }
 
     logger.info(`Logged in as ${readyClient.user.tag}`);

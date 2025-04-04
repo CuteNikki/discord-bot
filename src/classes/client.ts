@@ -1,5 +1,5 @@
 import type { Command } from 'classes/command';
-import { Client, Collection } from 'discord.js';
+import { ApplicationEmoji, Client, Collection } from 'discord.js';
 
 /**
  * ExtendedClient class that extends the Discord.js Client class.
@@ -28,6 +28,6 @@ export class ExtendedClient extends Client {
    * The emojis are fetched in src/events/client/ready.ts on client ready.
    */
   customEmojis: {
-    [key: string]: string;
+    [key: string]: ApplicationEmoji;
   } = {};
 }

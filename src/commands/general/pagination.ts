@@ -13,7 +13,6 @@ import {
 } from 'discord.js';
 
 import { Command } from 'classes/command';
-//import { MessageBuilder } from 'classes/message-builder';
 import { Pagination } from 'classes/pagination';
 
 import logger from 'utility/logger';
@@ -22,14 +21,10 @@ export default new Command({
   builder: new SlashCommandBuilder()
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
     .setContexts(InteractionContextType.BotDM, InteractionContextType.Guild, InteractionContextType.PrivateChannel)
-    .setName('ping')
-    .setDescription('Replies with Pong!'),
+    .setName('pagination')
+    .setDescription('A demonstration of pagination'),
   async execute(interaction) {
     await interaction.deferReply();
-
-    // new MessageBuilder({
-    //   interaction,
-    // });
 
     new Pagination({
       interaction: interaction,
@@ -40,13 +35,13 @@ export default new Command({
       buttons: [
         // First page button
         () => ({
-          data: new ButtonBuilder().setCustomId('pagination_first').setStyle(ButtonStyle.Secondary).setEmoji('⏪'),
+          data: new ButtonBuilder().setCustomId('pagination_first').setStyle(ButtonStyle.Secondary).setEmoji({ name: '⏪' }),
           disableOn: (index) => index === 0,
           onClick: () => 0,
         }),
         // Previous page button
         () => ({
-          data: new ButtonBuilder().setCustomId('pagination_previous').setStyle(ButtonStyle.Secondary).setEmoji('⬅️'),
+          data: new ButtonBuilder().setCustomId('pagination_previous').setStyle(ButtonStyle.Secondary).setEmoji({ name: '⬅️' }),
           disableOn: (index) => index === 0,
           onClick: (index) => (index > 0 ? index - 1 : index),
         }),
@@ -117,13 +112,13 @@ export default new Command({
         }),
         // Next page button
         () => ({
-          data: new ButtonBuilder().setCustomId('pagination_next').setStyle(ButtonStyle.Secondary).setEmoji('➡️'),
+          data: new ButtonBuilder().setCustomId('pagination_next').setStyle(ButtonStyle.Secondary).setEmoji({ name: '➡️' }),
           disableOn: (index, totalPages) => index === totalPages - 1,
           onClick: (index, totalPages) => (index < totalPages - 1 ? index + 1 : index),
         }),
         // Last page button
         () => ({
-          data: new ButtonBuilder().setCustomId('pagination_last').setStyle(ButtonStyle.Secondary).setEmoji('⏩'),
+          data: new ButtonBuilder().setCustomId('pagination_last').setStyle(ButtonStyle.Secondary).setEmoji({ name: '⏩' }),
           disableOn: (index, totalPages) => index === totalPages - 1,
           onClick: (_index, totalPages) => totalPages - 1,
         }),

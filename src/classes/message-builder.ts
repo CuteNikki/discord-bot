@@ -10,7 +10,6 @@ import {
   ModalBuilder,
   TextInputBuilder,
   TextInputStyle,
-  type ColorResolvable,
   type CommandInteraction,
 } from 'discord.js';
 import logger from 'utility/logger';
@@ -64,7 +63,7 @@ type EmbedStructure = {
   title?: string;
   url?: string;
   description?: string;
-  color?: string;
+  color?: number;
   fields?: {
     name: string;
     value: string;
@@ -291,7 +290,7 @@ export class MessageBuilder {
                 .setCustomId(MessageBuilderCustomIds.ColorInput)
                 .setLabel('Color')
                 .setPlaceholder('Enter the color you want to set.')
-                .setValue(this.message.embed?.color ?? '')
+                .setValue(this.message.embed?.color ? '#' + this.message.embed.color.toString(16) : '')
                 .setStyle(TextInputStyle.Short)
                 .setRequired(false),
             ),
@@ -316,10 +315,17 @@ export class MessageBuilder {
       return;
     }
 
+    const hexColor = color.replace('#', '');
+    const decimalColor = parseInt(hexColor, 16);
+    if (isNaN(decimalColor)) {
+      await modalInteraction.reply({ content: 'Invalid color code. Please provide a valid hex code.', flags: [MessageFlags.Ephemeral] });
+      return;
+    }
+
     await modalInteraction.deferUpdate().catch((error) => logger.debug({ err: error }, 'Failed to defer update'));
 
     if (!this.message.embed) this.message.embed = {};
-    this.message.embed.color = color;
+    this.message.embed.color = decimalColor;
     await this.updateMessage(message);
   }
 
@@ -722,52 +728,52 @@ export class MessageBuilder {
     const contentButton = new ButtonBuilder()
       .setCustomId(MessageBuilderCustomIds.ContentButton)
       .setLabel('Message')
-      .setEmoji('📝')
+      .setEmoji({ name: '📝' })
       .setStyle(ButtonStyle.Secondary);
     const titleButton = new ButtonBuilder()
       .setCustomId(MessageBuilderCustomIds.TitleButton)
       .setLabel('Title')
-      .setEmoji('📑')
+      .setEmoji({ name: '📑' })
       .setStyle(ButtonStyle.Secondary);
     const descriptionButton = new ButtonBuilder()
       .setCustomId(MessageBuilderCustomIds.DescriptionButton)
-      .setEmoji('📖')
+      .setEmoji({ name: '📖' })
       .setLabel('Description')
       .setStyle(ButtonStyle.Secondary);
     const colorButton = new ButtonBuilder()
       .setCustomId(MessageBuilderCustomIds.ColorButton)
       .setLabel('Color')
-      .setEmoji('🎨')
+      .setEmoji({ name: '🎨' })
       .setStyle(ButtonStyle.Secondary);
     const addFieldButton = new ButtonBuilder()
       .setCustomId(MessageBuilderCustomIds.FieldAddButton)
       .setLabel('Add field')
-      .setEmoji('➕')
+      .setEmoji({ name: '➕' })
       .setStyle(ButtonStyle.Success);
     const removeFieldButton = new ButtonBuilder()
       .setCustomId(MessageBuilderCustomIds.FieldRemoveButton)
       .setLabel('Remove field')
-      .setEmoji('➖')
+      .setEmoji({ name: '➖' })
       .setStyle(ButtonStyle.Danger);
     const thumbnailButton = new ButtonBuilder()
       .setCustomId(MessageBuilderCustomIds.ThumbnailButton)
       .setLabel('Thumbnail')
-      .setEmoji('🖼️')
+      .setEmoji({ name: '🖼️' })
       .setStyle(ButtonStyle.Secondary);
     const imageButton = new ButtonBuilder()
       .setCustomId(MessageBuilderCustomIds.ImageButton)
       .setLabel('Image')
-      .setEmoji('📷')
+      .setEmoji({ name: '📷' })
       .setStyle(ButtonStyle.Secondary);
     const footerButton = new ButtonBuilder()
       .setCustomId(MessageBuilderCustomIds.FooterButton)
       .setLabel('Footer')
-      .setEmoji('📎')
+      .setEmoji({ name: '📎' })
       .setStyle(ButtonStyle.Secondary);
     const authorButton = new ButtonBuilder()
       .setCustomId(MessageBuilderCustomIds.AuthorButton)
       .setLabel('Author')
-      .setEmoji('🏷️')
+      .setEmoji({ name: '🏷️' })
       .setStyle(ButtonStyle.Secondary);
 
     return [
@@ -788,7 +794,7 @@ export class MessageBuilder {
     if (!embed) return null;
 
     const embedBuilder = new EmbedBuilder();
-    if (embed.color) embedBuilder.setColor(embed.color as ColorResolvable);
+    if (embed.color) embedBuilder.setColor(embed.color);
     if (embed.title) embedBuilder.setTitle(this.replacePlaceholders(embed.title));
     if (embed.url) embedBuilder.setURL(this.replacePlaceholders(embed.url));
     if (embed.description) embedBuilder.setDescription(this.replacePlaceholders(embed.description));

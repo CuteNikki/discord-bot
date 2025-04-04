@@ -79,13 +79,13 @@ export default new Command({
       buttons: [
         // First page button
         () => ({
-          data: new ButtonBuilder().setCustomId('pagination_first').setStyle(ButtonStyle.Secondary).setEmoji('⏪'),
+          data: new ButtonBuilder().setCustomId('pagination_first').setStyle(ButtonStyle.Secondary).setEmoji({ name: '⏪' }),
           disableOn: (index) => index === 0,
           onClick: () => 0,
         }),
         // Previous page button
         () => ({
-          data: new ButtonBuilder().setCustomId('pagination_previous').setStyle(ButtonStyle.Secondary).setEmoji('⬅️'),
+          data: new ButtonBuilder().setCustomId('pagination_previous').setStyle(ButtonStyle.Secondary).setEmoji({ name: '⬅️' }),
           disableOn: (index) => index === 0,
           onClick: (index) => (index > 0 ? index - 1 : index),
         }),
@@ -156,13 +156,13 @@ export default new Command({
         }),
         // Next page button
         () => ({
-          data: new ButtonBuilder().setCustomId('pagination_next').setStyle(ButtonStyle.Secondary).setEmoji('➡️'),
+          data: new ButtonBuilder().setCustomId('pagination_next').setStyle(ButtonStyle.Secondary).setEmoji({ name: '➡️' }),
           disableOn: (index, totalPages) => index === totalPages - 1,
           onClick: (index, totalPages) => (index < totalPages - 1 ? index + 1 : index),
         }),
         // Last page button
         () => ({
-          data: new ButtonBuilder().setCustomId('pagination_last').setStyle(ButtonStyle.Secondary).setEmoji('⏩'),
+          data: new ButtonBuilder().setCustomId('pagination_last').setStyle(ButtonStyle.Secondary).setEmoji({ name: '⏩' }),
           disableOn: (index, totalPages) => index === totalPages - 1,
           onClick: (_index, totalPages) => totalPages - 1,
         }),

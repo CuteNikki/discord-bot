@@ -19,4 +19,15 @@ export class ExtendedClient extends Client {
    * Collection<commandName, Collection<userId, removeTimestamp>>
    */
   cooldowns = new Collection<string, Collection<string, number>>();
+
+  /**
+   * Custom emojis
+   * This is a map of emoji names to their string representation.
+   * For example: { "emojiName": "<:emojiName:emojiId>" }
+   * This is used to store custom emojis that are fetched from the Discord API.
+   * The emojis are fetched in src/events/client/ready.ts on client ready.
+   */
+  customEmojis: {
+    [key: string]: string;
+  } = {};
 }

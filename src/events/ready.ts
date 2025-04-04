@@ -7,7 +7,14 @@ import logger from 'utility/logger';
 export default new Event({
   name: Events.ClientReady,
   once: true,
-  execute(_extendedClient, readyClient) {
+  async execute(extendedClient, readyClient) {
+    // Fetching and setting custom emojis
+    await readyClient.application.emojis.fetch();
+
+    for (const emoji of readyClient.application.emojis.cache.values()) {
+      extendedClient.customEmojis[emoji.name as keyof typeof extendedClient.customEmojis] = emoji.toString();
+    }
+
     logger.info(`Logged in as ${readyClient.user.tag}`);
   },
 });

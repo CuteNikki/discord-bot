@@ -89,8 +89,8 @@ export class Pagination {
   private collectInteractions(message: Message): void {
     const buttonInteractionCollector = message.createMessageComponentCollector({ componentType: ComponentType.Button, idle: this.timeout });
 
-    buttonInteractionCollector.on('collect', (buttonInteraction) => this.handleCollect(buttonInteraction, message));
-    buttonInteractionCollector.on('end', () => this.handleTimeout(message));
+    buttonInteractionCollector.on('collect', (buttonInteraction) => this.handleCollect(buttonInteraction));
+    buttonInteractionCollector.on('end', () => this.handleTimeout());
   }
 
   /**
@@ -98,7 +98,7 @@ export class Pagination {
    * @param buttonInteraction The button interaction object
    * @param message The message to be updated
    */
-  private async handleCollect(buttonInteraction: ButtonInteraction, message: Message): Promise<void> {
+  private async handleCollect(buttonInteraction: ButtonInteraction): Promise<void> {
     const button = this.isValidButton(buttonInteraction);
     if (!button) return;
 
@@ -122,16 +122,16 @@ export class Pagination {
 
     // If the interaction was already replied to (like when a modal was used), don't call update()
     if (buttonInteraction.replied || buttonInteraction.deferred) {
-      await message
-        .edit({ embeds: embeds, components: this.getComponents() })
-        .catch((error) => logger.debug({ err: error }, 'Failed to update message'));
+      await buttonInteraction
+        .editReply({ embeds: embeds, components: this.getComponents() })
+        .catch((error) => logger.debug({ err: error }, 'Failed to update message after already replied/deferred interaction'));
       return;
     }
 
     // Otherwise, update the message using the buttonInteraction
     await buttonInteraction
       .update({ embeds: embeds, components: this.getComponents() })
-      .catch((error) => logger.debug({ err: error }, 'Failed to update message'));
+      .catch((error) => logger.debug({ err: error }, 'Failed to update message after button interaction'));
   }
 
   /**
@@ -147,9 +147,9 @@ export class Pagination {
    * Handle the timeout/end of the collector
    * @param message The message to edit
    */
-  private async handleTimeout(message: Message): Promise<void> {
-    await message
-      .edit({ content: 'The pagination session has ended. Please re-run the command to start over.', components: [] })
+  private async handleTimeout(): Promise<void> {
+    this.interaction
+      .editReply({ content: 'The pagination session has ended. Please re-run the command to start over.', embeds: [], components: [] })
       .catch((error) => logger.debug({ err: error }, 'Failed to remove components'));
   }
 

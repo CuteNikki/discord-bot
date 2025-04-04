@@ -30,7 +30,7 @@ export default new Command({
       interaction: interaction,
       getTotalPages: async () => 10,
       getPageContent: (pageIndex, totalPages) => {
-        return new EmbedBuilder().setDescription(`Page ${pageIndex + 1} / ${totalPages}`);
+        return [new EmbedBuilder().setDescription(`Page ${pageIndex + 1} / ${totalPages}`)];
       },
       buttons: [
         // First page button

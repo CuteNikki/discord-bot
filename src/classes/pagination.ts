@@ -11,7 +11,7 @@ import {
 } from 'discord.js';
 import logger from 'utility/logger';
 
-type getPageContent = (index: number, totalPages: number) => (EmbedBuilder | null) | Promise<EmbedBuilder | null>;
+type getPageContent = (index: number, totalPages: number) => (EmbedBuilder[] | null) | Promise<EmbedBuilder[] | null>;
 type getTotalPages = () => number | Promise<number>;
 
 type ButtonProps = {
@@ -64,9 +64,9 @@ export class Pagination {
   private async sendMessage(): Promise<void> {
     this.totalPages = await this.getTotalPages();
 
-    const embed = await this.getPageContent(this.index, this.totalPages);
+    const embeds = await this.getPageContent(this.index, this.totalPages);
 
-    if (!embed) {
+    if (!embeds) {
       await this.interaction
         .editReply({ embeds: [this.notFoundEmbed] })
         .catch((error) => logger.debug({ err: error }, 'Failed to send message'));
@@ -74,7 +74,7 @@ export class Pagination {
     }
 
     const message = await this.interaction
-      .editReply({ embeds: [embed], components: this.getComponents() })
+      .editReply({ embeds: embeds, components: this.getComponents() })
       .catch((error) => logger.debug({ err: error }, 'Failed to send message'));
 
     if (!message) return;
@@ -117,20 +117,20 @@ export class Pagination {
     // Update the index
     this.index = newIndex;
 
-    const embed = await this.getPageContent(this.index, this.totalPages);
-    if (!embed) return;
+    const embeds = await this.getPageContent(this.index, this.totalPages);
+    if (!embeds) return;
 
     // If the interaction was already replied to (like when a modal was used), don't call update()
     if (buttonInteraction.replied || buttonInteraction.deferred) {
       await message
-        .edit({ embeds: [embed], components: this.getComponents() })
+        .edit({ embeds: embeds, components: this.getComponents() })
         .catch((error) => logger.debug({ err: error }, 'Failed to update message'));
       return;
     }
 
     // Otherwise, update the message using the buttonInteraction
     await buttonInteraction
-      .update({ embeds: [embed], components: this.getComponents() })
+      .update({ embeds: embeds, components: this.getComponents() })
       .catch((error) => logger.debug({ err: error }, 'Failed to update message'));
   }
 

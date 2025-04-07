@@ -9,40 +9,18 @@ import {
   Message,
   MessageFlags,
 } from 'discord.js';
+
+import type { PaginationButtonProps, PaginationButtons, PaginationProps } from 'types/pagination';
+
 import logger from 'utility/logger';
-
-type getPageContent = (index: number, totalPages: number, locate?: string) => (EmbedBuilder[] | null) | Promise<EmbedBuilder[] | null>;
-type getTotalPages = () => number | Promise<number>;
-
-type ButtonProps = {
-  data: ButtonBuilder;
-  disableOn: (index: number, totalPages: number) => boolean;
-  onClick: (
-    index: number,
-    totalPages: number,
-    buttonInteraction: ButtonInteraction,
-  ) => Promise<{ newIndex: number; locate?: string }> | { newIndex: number; locate?: string };
-};
-
-type Buttons = Array<(index: number, totalPages: number) => ButtonProps>;
-
-type PaginationProps = {
-  getPageContent: getPageContent;
-  getTotalPages: getTotalPages;
-  buttons: Buttons;
-  interaction: CommandInteraction;
-  notFoundEmbed?: EmbedBuilder;
-  initialIndex?: number;
-  timeout?: number;
-};
 
 /**
  * A class to handle paginated messages
  */
 export class Pagination {
-  private getPageContent: getPageContent;
-  private getTotalPages: getTotalPages;
-  private buttons: Buttons;
+  private getPageContent;
+  private getTotalPages;
+  private buttons: PaginationButtons;
   private index: number;
   private totalPages: number = 0;
   private interaction: CommandInteraction;
@@ -158,7 +136,10 @@ export class Pagination {
    */
   private async handleTimeout(): Promise<void> {
     this.interaction
-      .editReply({ content: 'The pagination session has ended. Please re-run the command to start over.', embeds: [], components: [] })
+      .editReply({
+        content: 'The pagination session has ended. Please re-run the command to start over.',
+        components: this.getComponents(true),
+      })
       .catch((error) => logger.debug({ err: error }, 'Failed to remove components'));
   }
 
@@ -166,7 +147,7 @@ export class Pagination {
    * Get the properties for the buttons
    * @returns The button properties
    */
-  private getButtonProps(): ButtonProps[] {
+  private getButtonProps(): PaginationButtonProps[] {
     return this.buttons.map((button) => button(this.index, this.totalPages));
   }
 
@@ -175,7 +156,7 @@ export class Pagination {
    * @param interaction The interaction to check
    * @returns The button props if found
    */
-  private isValidButton(interaction: ButtonInteraction): ButtonProps | undefined {
+  private isValidButton(interaction: ButtonInteraction): PaginationButtonProps | undefined {
     return this.getButtonProps().find((button) => 'custom_id' in button.data.data && button.data.data.custom_id === interaction.customId);
   }
 
@@ -183,7 +164,7 @@ export class Pagination {
    * Set the disable state for a button
    * @param buttonProps The button properties
    */
-  private setButtonDisableState(buttonProps: ButtonProps): void {
+  private setButtonDisableState(buttonProps: PaginationButtonProps): void {
     buttonProps.data.setDisabled(buttonProps.disableOn(this.index, this.totalPages));
   }
 
@@ -191,13 +172,14 @@ export class Pagination {
    * Generate the action rows with all updated buttons
    * @returns The generated components
    */
-  private getComponents(): ActionRowBuilder<ButtonBuilder>[] {
+  private getComponents(disabled?: boolean): ActionRowBuilder<ButtonBuilder>[] {
     const buttonPropsList = this.getButtonProps();
     const buttonRows: ActionRowBuilder<ButtonBuilder>[] = [];
     let row: ButtonBuilder[] = [];
 
     buttonPropsList.forEach((buttonProps) => {
       this.setButtonDisableState(buttonProps); // Disable button if needed
+      if (disabled) buttonProps.data.setDisabled(disabled); // Disable all buttons if needed
       row.push(buttonProps.data);
 
       // If the row has 5 buttons, push it into the buttonRows and reset row

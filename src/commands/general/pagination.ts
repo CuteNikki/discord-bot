@@ -42,7 +42,7 @@ export default new Command({
       { userId: '303142922780672013', xp: 8200 },
       { userId: '303142922780672014', xp: 8100 },
       { userId: '303142922780672015', xp: 8000 },
-    ].sort((a, b) => a.xp - b.xp); // Sort the mock data by xp in descending order
+    ].sort((a, b) => b.xp - a.xp); // Sort the mock data by xp in descending order
     // Mock data for pagination
 
     // DB example (xp leaderboard):
@@ -174,7 +174,7 @@ export default new Command({
 
             if (!userEntry) return { newIndex: -1 };
 
-            const countAbove = mockData.filter((entry) => entry.xp < userEntry.xp).length;
+            const countAbove = mockData.filter((entry) => entry.xp > userEntry.xp).length;
             // DB example (xp leaderboard):
             // const countAbove = await prisma.xp.count({ where: { xp: { gt: userEntry.xp } } });
             // For this to work, the xp must be sorted in descending order

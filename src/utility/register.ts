@@ -7,17 +7,17 @@ import type { Command } from 'classes/command';
 import { getCommandFiles } from 'utility/commands';
 import logger from 'utility/logger';
 
-const token = process.env.DISCORD_TOKEN;
-const clientId = process.env.DISCORD_ID;
+const token = process.env.DISCORD_BOT_TOKEN;
+const clientId = process.env.DISCORD_BOT_ID;
 const guildId = process.env.DISCORD_DEV_GUILD_ID;
 
 if (!token) {
-  logger.error('No DISCORD_TOKEN provided');
+  logger.error('No DISCORD_BOT_TOKEN provided');
   process.exit(1);
 }
 
 if (!clientId) {
-  logger.error('No DISCORD_ID provided');
+  logger.error('No DISCORD_BOT_ID provided');
   process.exit(1);
 }
 

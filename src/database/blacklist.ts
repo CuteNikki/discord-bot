@@ -6,7 +6,7 @@ import { discordRestClient, prisma } from 'database/index';
 import logger from 'utility/logger';
 
 const blacklistWebhookUrl = process.env.WEBHOOK_BLACKLIST;
-const discordToken = process.env.DISCORD_TOKEN;
+const discordToken = process.env.DISCORD_BOT_TOKEN;
 
 export const blacklistUser = async (userId: string, blacklist: Omit<Blacklist, 'userId' | 'createdAt'>) => {
   const result = await prisma.blacklist.upsert({

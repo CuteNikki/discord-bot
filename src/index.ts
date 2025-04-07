@@ -9,10 +9,10 @@ import { startCron } from 'utility/cron';
 import { loadEvents } from 'utility/events';
 import logger from 'utility/logger';
 
-const token = process.env.DISCORD_TOKEN;
+const token = process.env.DISCORD_BOT_TOKEN;
 
 if (!token) {
-  logger.error('No DISCORD_TOKEN provided');
+  logger.error('No DISCORD_BOT_TOKEN provided');
   process.exit(1);
 }
 

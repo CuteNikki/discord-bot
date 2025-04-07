@@ -176,7 +176,7 @@ export class CardBuilder {
 
     /**
      * @todo: Remove this code
-     * Playing aroud with text placement
+     * Playing around with text placement
      *
      * context.font = '28px sans-serif';
      * context.fillStyle = '#ffffff';

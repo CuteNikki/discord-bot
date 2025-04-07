@@ -112,6 +112,8 @@ export class Pagination {
 
       return;
     }
+
+    // if the new index is too high or low, return
     if (!this.isValidIndex(newIndex)) return;
 
     // Update the index
@@ -140,7 +142,7 @@ export class Pagination {
    * @returns If the index is valid
    */
   private isValidIndex(newIndex: number): boolean {
-    return newIndex !== this.index && newIndex >= 0 && newIndex < this.totalPages;
+    return newIndex >= 0 && newIndex < this.totalPages;
   }
 
   /**

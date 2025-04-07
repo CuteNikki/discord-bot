@@ -26,11 +26,42 @@ export default new Command({
   async execute(interaction) {
     await interaction.deferReply();
 
+    const mockData = [
+      { userId: '303142922780672001', xp: 9500 },
+      { userId: '303142922780672002', xp: 9400 },
+      { userId: '303142922780672003', xp: 9400 },
+      { userId: '303142922780672004', xp: 9200 },
+      { userId: '303142922780672005', xp: 9100 },
+      { userId: '303142922780672006', xp: 9000 },
+      { userId: '303142922780672007', xp: 8800 },
+      { userId: '303142922780672008', xp: 8700 },
+      { userId: '303142922780672009', xp: 8600 },
+      { userId: '303142922780672010', xp: 8500 },
+      { userId: '303142922780672011', xp: 8400 },
+      { userId: '303142922780672012', xp: 8300 },
+      { userId: '303142922780672013', xp: 8200 },
+      { userId: '303142922780672014', xp: 8100 },
+      { userId: '303142922780672015', xp: 8000 },
+    ].sort((a, b) => a.xp - b.xp); // Sort the mock data by xp in descending order
+    // Mock data for pagination
+
+    // DB example (xp leaderboard):
+    // const mockData = await prisma.xp.findMany({
+    //   where: { guildId: interaction.guildId },
+    //   orderBy: { xp: 'desc' },
+    //   select: { userId: true, xp: true },
+    // });
+
+    const ITEMS_PER_PAGE = 3;
+
     new Pagination({
       interaction: interaction,
-      getTotalPages: async () => 10,
-      getPageContent: (pageIndex, totalPages) => {
-        return [new EmbedBuilder().setDescription(`Page ${pageIndex + 1} / ${totalPages}`)];
+      getTotalPages: () => Math.ceil(mockData.length / ITEMS_PER_PAGE),
+      getPageContent: (pageIndex) => {
+        const start = pageIndex * ITEMS_PER_PAGE;
+        const end = start + ITEMS_PER_PAGE;
+        const items = mockData.slice(start, end);
+        return [new EmbedBuilder().setDescription(items.map((item) => `XP: ${item.xp} | ID: <@${item.userId}>`).join('\n'))];
       },
       buttons: [
         // First page button
@@ -121,6 +152,36 @@ export default new Command({
           data: new ButtonBuilder().setCustomId('pagination_last').setStyle(ButtonStyle.Secondary).setEmoji({ name: '⏩' }),
           disableOn: (index, totalPages) => index === totalPages - 1,
           onClick: (_index, totalPages) => totalPages - 1,
+        }),
+        () => ({
+          data: new ButtonBuilder().setCustomId('pagination_locate').setStyle(ButtonStyle.Secondary).setEmoji({ name: '📍' }),
+          disableOn: () => false,
+          onClick: async () => {
+            // Get the page index of where the user is located
+            const userId = interaction.user.id;
+
+            const userEntry = mockData.find((entry) => entry.userId === userId);
+            // DB example (xp leaderboard):
+            // const userEntry = prisma.xp.findUnique({ where: { userId }, select: { xp: true } });
+
+            if (!userEntry) return -1;
+
+            const countAbove = mockData.filter((entry) => entry.xp < userEntry.xp).length;
+            // DB example (xp leaderboard):
+            // const countAbove = await prisma.xp.count({ where: { xp: { gt: userEntry.xp } } });
+            // For this to work, the xp must be sorted in descending order
+
+            const pageIndex = Math.floor(countAbove / ITEMS_PER_PAGE);
+            return pageIndex;
+          },
+        }),
+        () => ({
+          data: new ButtonBuilder().setCustomId('pagination_refresh').setStyle(ButtonStyle.Secondary).setEmoji({ name: '🔄' }),
+          disableOn: () => false,
+          onClick: async (index) => {
+            // Refresh the pagination to the current index
+            return index;
+          },
         }),
       ],
     });

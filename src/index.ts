@@ -1,4 +1,4 @@
-import { ActivityType, GatewayIntentBits, Partials } from 'discord.js';
+import { ActivityType, GatewayIntentBits, Partials, PresenceUpdateStatus } from 'discord.js';
 
 import { ExtendedClient } from 'classes/client';
 
@@ -13,6 +13,7 @@ const client = new ExtendedClient({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
   partials: [Partials.Message],
   presence: {
+    status: PresenceUpdateStatus.Online,
     activities: [{ name: 'Hello World!', type: ActivityType.Custom }],
   },
 });

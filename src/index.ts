@@ -7,14 +7,7 @@ import { prisma } from 'database/index';
 import { loadCommands } from 'utility/commands';
 import { startCron } from 'utility/cron';
 import { loadEvents } from 'utility/events';
-import logger from 'utility/logger';
-
-const token = process.env.DISCORD_BOT_TOKEN;
-
-if (!token) {
-  logger.error('No DISCORD_BOT_TOKEN provided');
-  process.exit(1);
-}
+import { KEYS } from 'utility/keys';
 
 const client = new ExtendedClient({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
@@ -29,4 +22,4 @@ await loadCommands(client);
 await loadEvents(client);
 startCron();
 
-client.login(token);
+client.login(KEYS.DISCORD_BOT_TOKEN);

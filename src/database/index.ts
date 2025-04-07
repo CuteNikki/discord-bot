@@ -1,14 +1,10 @@
 import { PrismaClient } from '@prisma/client';
 import { REST } from 'discord.js';
 
+import { KEYS } from 'utility/keys';
 import logger from 'utility/logger';
 
-if (!process.env.DISCORD_BOT_TOKEN) {
-  logger.error('No DISCORD_BOT_TOKEN provided');
-  process.exit(1);
-}
-
-export const discordRestClient = new REST({ version: '10' }).setToken(process.env.DISCORD_BOT_TOKEN);
+export const discordRestClient = new REST({ version: '10' }).setToken(KEYS.DISCORD_BOT_TOKEN);
 
 export const prisma = new PrismaClient({
   log: [

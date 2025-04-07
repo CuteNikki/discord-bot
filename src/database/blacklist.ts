@@ -3,10 +3,8 @@ import type { APIUser } from 'discord.js';
 
 import { discordRestClient, prisma } from 'database/index';
 
+import { KEYS } from 'utility/keys';
 import logger from 'utility/logger';
-
-const blacklistWebhookUrl = process.env.WEBHOOK_BLACKLIST;
-const discordToken = process.env.DISCORD_BOT_TOKEN;
 
 export const blacklistUser = async (userId: string, blacklist: Omit<Blacklist, 'userId' | 'createdAt'>) => {
   const result = await prisma.blacklist.upsert({
@@ -15,11 +13,11 @@ export const blacklistUser = async (userId: string, blacklist: Omit<Blacklist, '
     create: { userId, ...blacklist, createdAt: new Date() },
   });
 
-  if (result && blacklistWebhookUrl && discordToken) {
+  if (result && KEYS.WEBHOOK_BLACKLIST) {
     const user = (await discordRestClient.get(`/users/${userId}`).catch(() => null)) as APIUser | null;
 
     await discordRestClient
-      .post(`/${blacklistWebhookUrl}`, {
+      .post(`/${KEYS.WEBHOOK_BLACKLIST}`, {
         body: {
           username: 'Blacklisted User',
           embeds: [
@@ -62,11 +60,11 @@ export const unblacklistUser = async (userId: string) => {
     })
     .catch(() => null); // Ignore if user is not blacklisted
 
-  if (result && blacklistWebhookUrl && discordToken) {
+  if (result && KEYS.WEBHOOK_BLACKLIST) {
     const user = (await discordRestClient.get(`/users/${userId}`).catch(() => null)) as APIUser | null;
 
     await discordRestClient
-      .post(`/${blacklistWebhookUrl}`, {
+      .post(`/${KEYS.WEBHOOK_BLACKLIST}`, {
         body: {
           username: 'Unblacklisted User',
           embeds: [
@@ -109,9 +107,9 @@ export const unblacklistUsers = async (blacklists: Blacklist[]) => {
     where: { userId: { in: blacklistedIds } },
   });
 
-  if (result && blacklistWebhookUrl) {
+  if (result && KEYS.WEBHOOK_BLACKLIST) {
     await discordRestClient
-      .post(`/${blacklistWebhookUrl}`, {
+      .post(`/${KEYS.WEBHOOK_BLACKLIST}`, {
         body: {
           username: 'Bulk Unblacklist',
           embeds: [

@@ -5,21 +5,8 @@ import { performance } from 'perf_hooks';
 import type { Command } from 'classes/command';
 
 import { getCommandFiles } from 'utility/commands';
+import { KEYS } from 'utility/keys';
 import logger from 'utility/logger';
-
-const token = process.env.DISCORD_BOT_TOKEN;
-const clientId = process.env.DISCORD_BOT_ID;
-const guildId = process.env.DISCORD_DEV_GUILD_ID;
-
-if (!token) {
-  logger.error('No DISCORD_BOT_TOKEN provided');
-  process.exit(1);
-}
-
-if (!clientId) {
-  logger.error('No DISCORD_BOT_ID provided');
-  process.exit(1);
-}
 
 logger.info('Loading command files');
 const startTime = performance.now();
@@ -43,7 +30,7 @@ logger.info(
   `Loaded ${cmdFiles.length} command${cmdFiles.length > 1 || cmdFiles.length === 0 ? 's' : ''} in ${Math.floor(endTime - startTime)}ms`,
 );
 
-const rest = new REST().setToken(token);
+const rest = new REST().setToken(KEYS.DISCORD_BOT_TOKEN);
 
 (async () => {
   try {
@@ -51,8 +38,12 @@ const rest = new REST().setToken(token);
 
     const deployStartTime = performance.now();
 
-    const data = (await rest.put(Routes.applicationCommands(clientId), { body: commands })) as unknown as { id: string; name: string }[];
-    if (guildId) await rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands });
+    const data = (await rest.put(Routes.applicationCommands(KEYS.DISCORD_BOT_ID), { body: commands })) as unknown as {
+      id: string;
+      name: string;
+    }[];
+    if (KEYS.DISCORD_DEV_GUILD_ID)
+      await rest.put(Routes.applicationGuildCommands(KEYS.DISCORD_BOT_ID, KEYS.DISCORD_DEV_GUILD_ID), { body: commands });
 
     const deployEndTime = performance.now();
 

@@ -11,13 +11,17 @@ import {
 } from 'discord.js';
 import logger from 'utility/logger';
 
-type getPageContent = (index: number, totalPages: number) => (EmbedBuilder[] | null) | Promise<EmbedBuilder[] | null>;
+type getPageContent = (index: number, totalPages: number, locate?: string) => (EmbedBuilder[] | null) | Promise<EmbedBuilder[] | null>;
 type getTotalPages = () => number | Promise<number>;
 
 type ButtonProps = {
   data: ButtonBuilder;
   disableOn: (index: number, totalPages: number) => boolean;
-  onClick: (index: number, totalPages: number, buttonInteraction: ButtonInteraction) => number | Promise<number>;
+  onClick: (
+    index: number,
+    totalPages: number,
+    buttonInteraction: ButtonInteraction,
+  ) => Promise<{ newIndex: number; locate?: string }> | { newIndex: number; locate?: string };
 };
 
 type Buttons = Array<(index: number, totalPages: number) => ButtonProps>;
@@ -104,8 +108,11 @@ export class Pagination {
 
     // Call the onClick function and get the new index
     let newIndex: number;
+    let locate: string | undefined;
     try {
-      newIndex = await button.onClick(this.index, this.totalPages, buttonInteraction);
+      const response = await button.onClick(this.index, this.totalPages, buttonInteraction);
+      newIndex = response.newIndex;
+      locate = response.locate;
     } catch (error) {
       logger.debug({ err: error }, 'Error in button onClick handler');
       await buttonInteraction.reply({ content: 'Something went wrong.', flags: [MessageFlags.Ephemeral] }).catch(() => {});
@@ -119,7 +126,7 @@ export class Pagination {
     // Update the index
     this.index = newIndex;
 
-    const embeds = await this.getPageContent(this.index, this.totalPages);
+    const embeds = await this.getPageContent(this.index, this.totalPages, locate);
     if (!embeds) return;
 
     // If the interaction was already replied to (like when a modal was used), don't call update()

@@ -57,24 +57,32 @@ export default new Command({
     new Pagination({
       interaction: interaction,
       getTotalPages: () => Math.ceil(mockData.length / ITEMS_PER_PAGE),
-      getPageContent: (pageIndex) => {
+      getPageContent: (pageIndex, _totalPages, locate) => {
         const start = pageIndex * ITEMS_PER_PAGE;
         const end = start + ITEMS_PER_PAGE;
         const items = mockData.slice(start, end);
-        return [new EmbedBuilder().setDescription(items.map((item) => `XP: ${item.xp} | ID: <@${item.userId}>`).join('\n'))];
+        return [
+          new EmbedBuilder().setDescription(
+            items
+              .map((item) =>
+                locate === item.userId ? `**XP: ${item.xp} | ID: <@${item.userId}>** 📍` : `XP: ${item.xp} | ID: <@${item.userId}>`,
+              )
+              .join('\n'),
+          ),
+        ];
       },
       buttons: [
         // First page button
         () => ({
           data: new ButtonBuilder().setCustomId('pagination_first').setStyle(ButtonStyle.Secondary).setEmoji({ name: '⏪' }),
           disableOn: (index) => index === 0,
-          onClick: () => 0,
+          onClick: () => ({ newIndex: 0 }),
         }),
         // Previous page button
         () => ({
           data: new ButtonBuilder().setCustomId('pagination_previous').setStyle(ButtonStyle.Secondary).setEmoji({ name: '⬅️' }),
           disableOn: (index) => index === 0,
-          onClick: (index) => (index > 0 ? index - 1 : index),
+          onClick: (index) => ({ newIndex: index > 0 ? index - 1 : index }),
         }),
         // Custom page button
         (index, totalPages) => ({
@@ -116,7 +124,7 @@ export default new Command({
                 await modalInteraction.deferUpdate(); // Acknowledge the modal submission
 
                 // Return the valid new page index (adjusted for 0-indexing)
-                return newPage - 1;
+                return { newIndex: newPage - 1 };
               } else {
                 // If the page is invalid, show an error message
                 await modalInteraction.reply({
@@ -138,25 +146,25 @@ export default new Command({
             }
 
             // Return the current page index if there's an error or invalid input
-            return clickPageIndex;
+            return { newIndex: clickPageIndex };
           },
         }),
         // Next page button
         () => ({
           data: new ButtonBuilder().setCustomId('pagination_next').setStyle(ButtonStyle.Secondary).setEmoji({ name: '➡️' }),
           disableOn: (index, totalPages) => index === totalPages - 1,
-          onClick: (index, totalPages) => (index < totalPages - 1 ? index + 1 : index),
+          onClick: (index, totalPages) => ({ newIndex: index < totalPages - 1 ? index + 1 : index }),
         }),
         // Last page button
         () => ({
           data: new ButtonBuilder().setCustomId('pagination_last').setStyle(ButtonStyle.Secondary).setEmoji({ name: '⏩' }),
           disableOn: (index, totalPages) => index === totalPages - 1,
-          onClick: (_index, totalPages) => totalPages - 1,
+          onClick: (_index, totalPages) => ({ newIndex: totalPages - 1 }),
         }),
         () => ({
           data: new ButtonBuilder().setCustomId('pagination_locate').setStyle(ButtonStyle.Secondary).setEmoji({ name: '📍' }),
           disableOn: () => false,
-          onClick: async () => {
+          onClick: () => {
             // Get the page index of where the user is located
             const userId = interaction.user.id;
 
@@ -164,7 +172,7 @@ export default new Command({
             // DB example (xp leaderboard):
             // const userEntry = prisma.xp.findUnique({ where: { userId }, select: { xp: true } });
 
-            if (!userEntry) return -1;
+            if (!userEntry) return { newIndex: -1 };
 
             const countAbove = mockData.filter((entry) => entry.xp < userEntry.xp).length;
             // DB example (xp leaderboard):
@@ -172,15 +180,15 @@ export default new Command({
             // For this to work, the xp must be sorted in descending order
 
             const pageIndex = Math.floor(countAbove / ITEMS_PER_PAGE);
-            return pageIndex;
+            return { newIndex: pageIndex, locate: userId };
           },
         }),
         () => ({
           data: new ButtonBuilder().setCustomId('pagination_refresh').setStyle(ButtonStyle.Secondary).setEmoji({ name: '🔄' }),
           disableOn: () => false,
-          onClick: async (index) => {
+          onClick: (index) => {
             // Refresh the pagination to the current index
-            return index;
+            return { newIndex: index };
           },
         }),
       ],

@@ -215,13 +215,13 @@ export default new Command({
           () => ({
             data: new ButtonBuilder().setCustomId('pagination_first').setStyle(ButtonStyle.Secondary).setEmoji({ id: backwardsEmoji.id }),
             disableOn: (index) => index === 0, // Disable if on the first page
-            onClick: () => 0, // Go to the first page
+            onClick: () => ({ newIndex: 0 }), // Go to the first page
           }),
           // Previous page button
           () => ({
             data: new ButtonBuilder().setCustomId('pagination_previous').setStyle(ButtonStyle.Secondary).setEmoji({ id: previousEmoji.id }),
             disableOn: (index) => index === 0, // Disable if on the first page
-            onClick: (index) => (index > 0 ? index - 1 : index), // Go to the previous page
+            onClick: (index) => ({ newIndex: index > 0 ? index - 1 : index }), // Go to the previous page
           }),
           // Custom page button
           (index, totalPages) => ({
@@ -263,7 +263,7 @@ export default new Command({
                   await modalInteraction.deferUpdate(); // Acknowledge the modal submission
 
                   // Return the valid new page index (adjusted for 0-indexing)
-                  return newPage - 1;
+                  return { newIndex: newPage - 1 };
                 } else {
                   // If the page is invalid, show an error message
                   await modalInteraction.reply({
@@ -285,20 +285,20 @@ export default new Command({
               }
 
               // Return the current page index if there's an error or invalid input
-              return clickPageIndex;
+              return { newIndex: clickPageIndex };
             },
           }),
           // Next page button
           () => ({
             data: new ButtonBuilder().setCustomId('pagination_next').setStyle(ButtonStyle.Secondary).setEmoji({ id: nextEmoji.id }),
             disableOn: (index, totalPages) => index === totalPages - 1, // Disable if on the last page
-            onClick: (index, totalPages) => (index < totalPages - 1 ? index + 1 : index), // Go to the next page
+            onClick: (index, totalPages) => ({ newIndex: index < totalPages - 1 ? index + 1 : index }), // Go to the next page
           }),
           // Last page button
           () => ({
             data: new ButtonBuilder().setCustomId('pagination_last').setStyle(ButtonStyle.Secondary).setEmoji({ id: forwardsEmoji.id }),
             disableOn: (index, totalPages) => index === totalPages - 1, // Disable if on the last page
-            onClick: (_index, totalPages) => totalPages - 1, // Go to the last page
+            onClick: (_index, totalPages) => ({ newIndex: totalPages - 1 }), // Go to the last page
           }),
         ],
       });

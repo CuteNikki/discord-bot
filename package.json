@@ -16,6 +16,7 @@
     "@eslint/js": "^9.24.0",
     "@types/bun": "latest",
     "@types/node-cron": "^3.0.11",
+    "@types/react": "18.3.2",
     "eslint": "^9.24.0",
     "eslint-config-prettier": "^10.1.1",
     "globals": "^16.0.0",
@@ -27,6 +28,7 @@
   },
   "dependencies": {
     "@prisma/client": "^6.5.0",
+    "canvacord": "^6.0.2",
     "canvas": "^3.1.0",
     "discord.js": "^15.0.0-dev.1744071174-d93a52c1d",
     "node-cron": "^3.0.3",

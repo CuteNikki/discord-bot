@@ -1,11 +1,14 @@
 {
   "compilerOptions": {
+    "jsx": "react", // Use this for Canvacord's custom JSX pragma
+    "jsxFactory": "JSX.createElement", // Custom JSX factory for Canvacord
+    "jsxFragmentFactory": "JSX.Fragment", // Custom JSX fragment for Canvacord
+
     // Enable latest features
     "lib": ["ESNext", "DOM"],
     "target": "ESNext",
     "module": "ESNext",
     "moduleDetection": "force",
-    "jsx": "react-jsx",
     "allowJs": true,
 
     // Bundler mode

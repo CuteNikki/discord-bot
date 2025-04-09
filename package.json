@@ -28,9 +28,11 @@
   },
   "dependencies": {
     "@prisma/client": "^6.5.0",
+    "@types/he": "^1.2.3",
     "canvacord": "^6.0.2",
     "canvas": "^3.1.0",
     "discord.js": "^15.0.0-dev.1744071174-d93a52c1d",
+    "he": "^1.2.0",
     "node-cron": "^3.0.3",
     "pino": "^9.6.0",
     "pino-pretty": "^13.0.0",

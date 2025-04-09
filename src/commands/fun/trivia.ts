@@ -1,7 +1,16 @@
-import { ApplicationIntegrationType, InteractionContextType, MessageFlags, SlashCommandBuilder } from 'discord.js';
+import { ApplicationIntegrationType, ComponentType, InteractionContextType, MessageFlags, SlashCommandBuilder } from 'discord.js';
+import { decode } from 'he';
 
+import type { ExtendedClient } from 'classes/client';
 import { Command } from 'classes/command';
-import { TriviaBuilder, TriviaCategory, TriviaDifficulty, TriviaType } from 'classes/trivia-builder';
+import { OpenTriviaAPI } from 'classes/trivia-api';
+import { TriviaBuilder } from 'classes/trivia-builder';
+
+import { TriviaCategory, TriviaDifficulty, TriviaType } from 'types/trivia';
+
+import logger from 'utility/logger';
+
+const api = new OpenTriviaAPI();
 
 export default new Command({
   builder: new SlashCommandBuilder()
@@ -28,61 +37,125 @@ export default new Command({
         .setRequired(false),
     )
     .addNumberOption((option) =>
-      option
-        .setName('category')
-        .setDescription('Select the trivia category')
-        .setChoices(
-          { name: 'Any Category', value: TriviaCategory.Any },
-          { name: 'General Knowledge', value: TriviaCategory.GeneralKnowledge },
-          { name: 'Books', value: TriviaCategory.Books },
-          { name: 'Film', value: TriviaCategory.Film },
-          { name: 'Music', value: TriviaCategory.Music },
-          { name: 'Musicals & Theatres', value: TriviaCategory.MusicalsAndTheatres },
-          { name: 'Television', value: TriviaCategory.Television },
-          { name: 'Video Games', value: TriviaCategory.VideoGames },
-          { name: 'Board Games', value: TriviaCategory.BoardGames },
-          { name: 'Nature', value: TriviaCategory.Nature },
-          { name: 'Computers', value: TriviaCategory.Computers },
-          { name: 'Mathematics', value: TriviaCategory.Mathematics },
-          { name: 'Mythology', value: TriviaCategory.Mythology },
-          { name: 'Sports', value: TriviaCategory.Sports },
-          { name: 'Geography', value: TriviaCategory.Geography },
-          { name: 'History', value: TriviaCategory.History },
-          { name: 'Politics', value: TriviaCategory.Politics },
-          { name: 'Art', value: TriviaCategory.Art },
-          { name: 'Celebrities', value: TriviaCategory.Celebrities },
-          { name: 'Animals', value: TriviaCategory.Animals },
-          { name: 'Vehicles', value: TriviaCategory.Vehicles },
-          { name: 'Comics', value: TriviaCategory.Comics },
-          { name: 'Gadgets', value: TriviaCategory.Gadgets },
-          { name: 'Anime & Manga', value: TriviaCategory.AnimeAndManga },
-          { name: 'Cartoons & Animations', value: TriviaCategory.CartoonsAndAnimations },
-        )
-        .setRequired(false),
+      option.setName('category').setDescription('Select the trivia category').setRequired(false).setAutocomplete(true),
     ),
+  async autocomplete(interaction) {
+    const focused = interaction.options.getFocused();
+
+    if (focused.name === 'category') {
+      const categories = await api.getCategories().catch((err) => logger.error({ err }, 'Error fetching trivia categories'));
+
+      if (!categories) {
+        await interaction.respond([]);
+        return;
+      }
+
+      categories.push({ id: TriviaCategory.AnyCategory, name: 'Any Category' });
+
+      const filtered = categories.filter((category) => category.name.toLowerCase().includes(focused.value.toLowerCase()));
+      interaction.respond(filtered.map((category) => ({ name: category.name, value: category.id })).slice(0, 25));
+    }
+  },
   async execute(interaction) {
+    await interaction.deferReply();
+
     const difficulty = interaction.options.getString('difficulty') ?? TriviaDifficulty.Medium;
-    const type = (interaction.options.getString('type') ?? Math.random() < 0.5) ? TriviaType.MultipleChoice : TriviaType.TrueFalse;
-    const category = interaction.options.getNumber('category') ?? TriviaCategory.Any;
+    const type = interaction.options.getString('type') ?? (Math.random() < 0.5 ? TriviaType.MultipleChoice : TriviaType.TrueFalse);
+    const category = interaction.options.getNumber('category') ?? TriviaCategory.AnyCategory;
 
-    // @todo: Implement the trivia API integration
+    const token = await api.getToken();
 
-    const triviaCard = new TriviaBuilder()
-      .setCategory(category)
-      .setDifficulty(difficulty as TriviaDifficulty)
-      .setType(type as TriviaType)
-      .setQuestion('What is the capital of France?')
-      .setAnswers('Paris', ['London', 'Berlin', 'Madrid']);
+    const questions = await api
+      .getQuestions({
+        amount: 1,
+        difficulty: difficulty as TriviaDifficulty,
+        type: type as TriviaType,
+        category,
+        token,
+      })
+      .catch((error) => {
+        interaction.editReply({
+          content: `Error fetching trivia questions: ${error.message}`,
+        });
+        return;
+      });
 
-    interaction.reply({
-      content: 'This command is not implemented yet. The API integeation is missing. Please check back later.', // @todo: Remove this line
-      files: [await triviaCard.build()],
-      flags: [MessageFlags.Ephemeral],
+    if (!questions || questions.length === 0) {
+      if (!interaction.replied) {
+        interaction.editReply({
+          content: 'No trivia questions found.',
+        });
+      }
+      return;
+    }
+
+    const question = questions[0];
+
+    const triviaCard = new TriviaBuilder(interaction.client as ExtendedClient)
+      .setCategory(decode(question.category))
+      .setDifficulty(question.difficulty)
+      .setType(question.type)
+      .setQuestion(decode(question.question))
+      .setAnswers(
+        decode(question.correctAnswer),
+        question.incorrectAnswers.map((answer) => decode(answer)),
+      );
+
+    const message = await interaction
+      .editReply({
+        files: [await triviaCard.build()],
+        components: [triviaCard.getComponents()],
+      })
+      .catch((error) => logger.error({ error }, 'Error sending trivia message'));
+
+    if (!message) {
+      return;
+    }
+
+    const collector = message.createMessageComponentCollector({
+      componentType: ComponentType.Button,
+      time: 60_000,
     });
 
-    /**
-     * @todo: handle the trivia game logic
-     * that includes sending the trivia question with buttons, waiting for the user's response, and checking if the answer is correct.
-     */
+    collector.on('collect', async (buttonInteraction) => {
+      if (buttonInteraction.user.id !== interaction.user.id) {
+        await buttonInteraction.reply({
+          content: 'This is not your trivia game!',
+          flags: [MessageFlags.Ephemeral],
+        });
+        return;
+      }
+
+      await buttonInteraction.deferUpdate();
+
+      const answerIndex = parseInt(buttonInteraction.customId.split('_')[1], 10);
+      const answer = triviaCard.options.get('shuffledAnswers')[answerIndex];
+      const correctAnswer = triviaCard.options.get('correctAnswer');
+      const isCorrect = answer === correctAnswer;
+      const answerLabel = triviaCard.options.get('shuffledAnswers')[answerIndex];
+      const answerMessage = isCorrect
+        ? `Correct! The answer is **${correctAnswer}**.`
+        : `Incorrect! The correct answer is **${correctAnswer}**. You selected **${answerLabel}**.`;
+
+      triviaCard.setRevealResult(true);
+
+      await buttonInteraction.editReply({
+        content: answerMessage,
+        components: [triviaCard.getComponents(true)],
+        files: [await triviaCard.build()],
+      });
+
+      collector.stop();
+    });
+
+    collector.on('end', async (_, reason) => {
+      if (reason === 'time') {
+        await interaction.editReply({
+          content: `Time is up! The correct answer was **${triviaCard.options.get('correctAnswer')}**.`,
+          components: [triviaCard.getComponents(true)],
+          files: [await triviaCard.build()],
+        });
+      }
+    });
   },
 });

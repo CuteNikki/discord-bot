@@ -79,7 +79,7 @@ export class TriviaBuilder extends Builder<TriviaProps> {
     return answers;
   }
 
-  public getComponents(result?: boolean) {
+  public getComponents(result?: boolean, timedOut?: boolean) {
     const row = new ActionRowBuilder<ButtonBuilder>();
 
     const answers = this.options.get('shuffledAnswers');
@@ -94,6 +94,8 @@ export class TriviaBuilder extends Builder<TriviaProps> {
         .setDisabled(result ? true : false);
       row.addComponents(button);
     });
+    if (result && !timedOut)
+      row.addComponents(new ButtonBuilder().setCustomId('trivia-next').setEmoji({ name: '➡️' }).setStyle(ButtonStyle.Primary));
 
     return row;
   }
@@ -140,8 +142,8 @@ export class TriviaBuilder extends Builder<TriviaProps> {
           >
             <span
               style={{
-                backgroundColor: '#e0f7fa',
-                color: '#00796b',
+                backgroundColor: '#e0f8fa',
+                color: '#00584e',
                 padding: '4px 8px',
                 borderRadius: '8px',
                 fontWeight: 'bold',
@@ -152,8 +154,8 @@ export class TriviaBuilder extends Builder<TriviaProps> {
             </span>
             <span
               style={{
-                backgroundColor: '#ffdcc4',
-                color: '#45240e',
+                backgroundColor: '#fff6d9',
+                color: '#494733',
                 padding: '4px 8px',
                 borderRadius: '8px',
                 fontWeight: 'bold',
@@ -165,8 +167,8 @@ export class TriviaBuilder extends Builder<TriviaProps> {
             <span
               style={{
                 backgroundColor:
-                  difficulty === TriviaDifficulty.Easy ? '#d4ffdcff' : difficulty === TriviaDifficulty.Medium ? '#faffcb' : '#ffc8c8',
-                color: difficulty === TriviaDifficulty.Easy ? '#006105' : difficulty === TriviaDifficulty.Medium ? '#b16400' : '#aa0000',
+                  difficulty === TriviaDifficulty.Easy ? '#d4ffdcff' : difficulty === TriviaDifficulty.Medium ? '#faffcb' : '#ffd8d8',
+                color: difficulty === TriviaDifficulty.Easy ? '#006105' : difficulty === TriviaDifficulty.Medium ? '#884d00' : '#aa0000',
                 padding: '4px 8px',
                 borderRadius: '8px',
                 fontWeight: 'bold',
@@ -180,7 +182,7 @@ export class TriviaBuilder extends Builder<TriviaProps> {
             style={{
               fontSize: '20px',
               fontWeight: 'bold',
-              padding: '4px 8px',
+              padding: '8px',
               borderRadius: '8px',
               backgroundColor: '#e3f2fd',
               color: '#0d47a1',
@@ -195,7 +197,7 @@ export class TriviaBuilder extends Builder<TriviaProps> {
               <li
                 key={index}
                 style={{
-                  backgroundColor: result ? (answer === this.options.get('correctAnswer') ? '#d5ffc4' : '#ffcccc') : '#f1f1f1',
+                  backgroundColor: result ? (answer === this.options.get('correctAnswer') ? '#d5ffc4' : '#ffd7d7') : '#f1f1f1',
                   padding: '10px',
                   marginBottom: '8px',
                   borderRadius: '5px',

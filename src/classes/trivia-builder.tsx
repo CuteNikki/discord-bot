@@ -11,59 +11,25 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Builder, Font, FontFactory, JSX } from 'canvacord';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
+
+import type { ExtendedClient } from 'classes/client';
 
 import logger from 'utility/logger';
 
-export enum TriviaCategory {
-  Any = 0,
-  GeneralKnowledge = 9,
-  Books = 10,
-  Film = 11,
-  Music = 12,
-  MusicalsAndTheatres = 13,
-  Television = 14,
-  VideoGames = 15,
-  BoardGames = 16,
-  Nature = 17,
-  Computers = 18,
-  Mathematics = 19,
-  Mythology = 20,
-  Sports = 21,
-  Geography = 22,
-  History = 23,
-  Politics = 24,
-  Art = 25,
-  Celebrities = 26,
-  Animals = 27,
-  Vehicles = 28,
-  Comics = 29,
-  Gadgets = 30,
-  AnimeAndManga = 31,
-  CartoonsAndAnimations = 32,
-}
-export enum TriviaType {
-  MultipleChoice = 'multiple',
-  TrueFalse = 'boolean',
-}
-export enum TriviaDifficulty {
-  Easy = 'easy',
-  Medium = 'medium',
-  Hard = 'hard',
-}
-
-interface TriviaProps {
-  type: TriviaType;
-  difficulty: TriviaDifficulty;
-  category: TriviaCategory;
-  question: string;
-  correctAnswer: string;
-  incorrectAnswers: string[];
-}
+import { TriviaDifficulty, type TriviaProps, TriviaType } from 'types/trivia';
 
 export class TriviaBuilder extends Builder<TriviaProps> {
-  constructor() {
+  constructor(client: ExtendedClient) {
     // @ts-expect-error Expects a width and height - works fine without specified and automatically adjusts
     super();
+
+    this.options.set('answerLabels', [
+      { text: 'A', emoji: client.customEmojis.a_.id },
+      { text: 'B', emoji: client.customEmojis.b_.id },
+      { text: 'C', emoji: client.customEmojis.c_.id },
+      { text: 'D', emoji: client.customEmojis.d_.id },
+    ]);
 
     if (!FontFactory.size) Font.loadDefault();
   }
@@ -73,7 +39,7 @@ export class TriviaBuilder extends Builder<TriviaProps> {
     return this;
   }
 
-  public setCategory(category: number) {
+  public setCategory(category: string) {
     this.options.set('category', category);
     return this;
   }
@@ -88,9 +54,15 @@ export class TriviaBuilder extends Builder<TriviaProps> {
     return this;
   }
 
+  public setRevealResult(revealResult: boolean) {
+    this.options.set('revealResult', revealResult);
+    return this;
+  }
+
   public setAnswers(correct: string, incorrect: string[]) {
     this.options.set('correctAnswer', correct);
     this.options.set('incorrectAnswers', incorrect);
+    this.options.set('shuffledAnswers', this.getShuffledAnswers(correct, incorrect));
     return this;
   }
 
@@ -107,22 +79,38 @@ export class TriviaBuilder extends Builder<TriviaProps> {
     return answers;
   }
 
+  public getComponents(result?: boolean) {
+    const row = new ActionRowBuilder<ButtonBuilder>();
+
+    const answers = this.options.get('shuffledAnswers');
+
+    answers.map((answer, index) => {
+      const button = new ButtonBuilder()
+        .setCustomId(`trivia-answer_${index}`)
+        .setEmoji({ id: this.options.get('answerLabels')[index].emoji })
+        .setStyle(
+          result ? (answer === this.options.get('correctAnswer') ? ButtonStyle.Success : ButtonStyle.Danger) : ButtonStyle.Secondary,
+        )
+        .setDisabled(result ? true : false);
+      row.addComponents(button);
+    });
+
+    return row;
+  }
+
   public async render() {
     const question = this.options.get('question');
-    const category = TriviaCategory[this.options.get('category')];
+    const category = this.options.get('category');
     const difficulty = this.options.get('difficulty');
     const type = this.options.get('type');
-    const correctAnswer = this.options.get('correctAnswer');
-    const incorrectAnswers = this.options.get('incorrectAnswers');
-    const answers = this.getShuffledAnswers(correctAnswer, incorrectAnswers);
-
-    const answerLabels = ['A', 'B', 'C', 'D'];
+    const answers = this.options.get('shuffledAnswers');
+    const result = this.options.get('revealResult');
 
     return (
       <div
         style={{
           display: 'flex',
-          background: 'linear-gradient(135deg, #ff7e5f, #feb47b)', // Gradient background
+          background: 'linear-gradient(135deg,rgb(157, 192, 192),rgb(243, 123, 254))', // Gradient background
           width: '100%',
           height: '100%',
           padding: '20px',
@@ -160,19 +148,19 @@ export class TriviaBuilder extends Builder<TriviaProps> {
                 textTransform: 'capitalize',
               }}
             >
-              Category: {category}
+              {category}
             </span>
             <span
               style={{
-                backgroundColor: '#ffe0b2',
-                color: '#e65100',
+                backgroundColor: '#ffdcc4',
+                color: '#45240e',
                 padding: '4px 8px',
                 borderRadius: '8px',
                 fontWeight: 'bold',
                 textTransform: 'capitalize',
               }}
             >
-              Type: {type === TriviaType.MultipleChoice ? 'Multiple Choice' : 'True/False'}
+              {type === TriviaType.MultipleChoice ? 'Multiple Choice' : 'Single Choice'}
             </span>
             <span
               style={{
@@ -185,7 +173,7 @@ export class TriviaBuilder extends Builder<TriviaProps> {
                 textTransform: 'capitalize',
               }}
             >
-              Difficulty: {difficulty}
+              {difficulty}
             </span>
           </div>
           <span
@@ -200,14 +188,14 @@ export class TriviaBuilder extends Builder<TriviaProps> {
               maxWidth: '440px',
             }}
           >
-            Question: {question}
+            {question}
           </span>
           <ul style={{ listStyleType: 'none', paddingLeft: '0', display: 'flex', flexDirection: 'column', gap: '4px' }}>
             {answers.map((answer, index) => (
               <li
                 key={index}
                 style={{
-                  backgroundColor: '#f1f1f1',
+                  backgroundColor: result ? (answer === this.options.get('correctAnswer') ? '#d5ffc4' : '#ffcccc') : '#f1f1f1',
                   padding: '10px',
                   marginBottom: '8px',
                   borderRadius: '5px',
@@ -218,7 +206,7 @@ export class TriviaBuilder extends Builder<TriviaProps> {
                   maxWidth: '440px',
                 }}
               >
-                <strong>{answerLabels[index]}:</strong>
+                <strong>{this.options.get('answerLabels')[index].text}:</strong>
                 <span>{answer}</span>
               </li>
             ))}

@@ -1,7 +1,7 @@
 import { MessageFlags, SlashCommandBuilder } from 'discord.js';
 
-import { CardBuilder } from 'classes/card-builder';
 import { Command } from 'classes/command';
+import { ProfileBuilder } from 'classes/profile-builder';
 
 export default new Command({
   builder: new SlashCommandBuilder()
@@ -11,13 +11,16 @@ export default new Command({
   async execute(interaction) {
     await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 
-    const user = interaction.options.getUser('user') || interaction.user;
+    let user = interaction.options.getUser('user') || interaction.user;
+    user = await interaction.client.users.fetch(user.id, { force: true }).catch(() => user);
 
-    const profileImage = new CardBuilder()
-      .setUsername(user.displayName)
-      .setAvatarUrl(user.displayAvatarURL({ extension: 'png', size: 256 }))
-      .setTopText('Profile')
-      .setBackgroundUrl('src/assets/profile.jpg');
-    interaction.editReply({ files: [await profileImage.build()] });
+    if (!interaction.channel?.isSendable()) return;
+
+    const profileCard = new ProfileBuilder()
+      .setDisplayName(user.displayName)
+      .setUsername(user.username)
+      .setAvatarURL(user.displayAvatarURL({ extension: 'png', size: 256 }))
+      .setBannerURL(user.bannerURL({ extension: 'png', size: 512 }) ?? undefined);
+    interaction.editReply({ files: [await profileCard.build()] });
   },
 });

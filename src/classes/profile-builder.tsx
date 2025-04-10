@@ -55,31 +55,18 @@ export class ProfileBuilder extends Builder<ProfileProps> {
 
     return (
       <div
+        className='flex items-center justify-center p-5 rounded-lg'
         style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: '20px',
-          borderRadius: '12px',
-          background: bannerURL ? `url(${bannerURL})` : 'linear-gradient(135deg,rgb(157, 192, 192),rgb(243, 123, 254))',
-          // @todo: Fix the background size, currently it's being stretched and no-repeat + cover doesn't work
+          backgroundRepeat: 'no-repeat',
           backgroundSize: '100% 100%',
+          background: bannerURL ? `url(${bannerURL})` : 'linear-gradient(135deg,rgb(157, 192, 192),rgb(243, 123, 254))',
         }}
       >
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '20px',
-            padding: '20px',
-            background: 'rgba(255, 255, 255, 0.8)',
-            borderRadius: '12px',
-          }}
-        >
-          <img src={avatarURL} alt='Avatar' style={{ borderRadius: '50%', width: '100px', height: '100px' }} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-            <span style={{ fontSize: '24px' }}>{displayName}</span>
-            <span style={{ fontSize: '14px' }}>@{username}</span>
+        <div className='flex items-center p-5 bg-white bg-opacity-80 rounded-lg'>
+          <img src={avatarURL} alt='Avatar' className='rounded-full w-24 h-24' />
+          <div className='flex flex-col pl-5'>
+            <span className='text-xl'>{displayName}</span>
+            <span className='text-sm'>@{username}</span>
           </div>
           {/* <div style={{ display: 'flex', flexDirection: 'row', gap: '20px' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>

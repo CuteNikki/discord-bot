@@ -110,102 +110,65 @@ export class TriviaBuilder extends Builder<TriviaProps> {
 
     return (
       <div
+        className='flex p-5 rounded-lg'
         style={{
-          display: 'flex',
           background: 'linear-gradient(135deg,rgb(157, 192, 192),rgb(243, 123, 254))', // Gradient background
-          width: '100%',
-          height: '100%',
-          padding: '20px',
-          borderRadius: '10px',
         }}
       >
         <div
+          className='flex flex-col p-5 rounded-lg'
           style={{
-            display: 'flex',
-            flexDirection: 'column',
             backgroundColor: '#ffffff81',
-            padding: '25px',
-            borderRadius: '8px',
             boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
             color: '#333',
           }}
         >
-          <div
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              flexDirection: 'row',
-              gap: '8px',
-              fontSize: '14px',
-              maxWidth: '440px',
-            }}
-          >
+          <div className='flex flex-wrap max-w-md'>
             <span
+              className='px-2 py-1 rounded-lg capitalize mr-2'
               style={{
                 backgroundColor: '#e0f8fa',
                 color: '#00584e',
-                padding: '4px 8px',
-                borderRadius: '8px',
-                fontWeight: 'bold',
-                textTransform: 'capitalize',
               }}
             >
               {category}
             </span>
             <span
+              className='px-2 py-1 rounded-lg capitalize mr-2'
               style={{
                 backgroundColor: '#fff6d9',
                 color: '#494733',
-                padding: '4px 8px',
-                borderRadius: '8px',
-                fontWeight: 'bold',
-                textTransform: 'capitalize',
               }}
             >
               {type === TriviaType.MultipleChoice ? 'Multiple Choice' : 'Single Choice'}
             </span>
             <span
+              className='px-2 py-1 rounded-lg capitalize'
               style={{
                 backgroundColor:
                   difficulty === TriviaDifficulty.Easy ? '#d4ffdcff' : difficulty === TriviaDifficulty.Medium ? '#faffcb' : '#ffd8d8',
                 color: difficulty === TriviaDifficulty.Easy ? '#006105' : difficulty === TriviaDifficulty.Medium ? '#884d00' : '#aa0000',
-                padding: '4px 8px',
-                borderRadius: '8px',
-                fontWeight: 'bold',
-                textTransform: 'capitalize',
               }}
             >
               {difficulty}
             </span>
           </div>
           <span
+            className='text-lg p-2 rounded-lg my-2 max-w-md'
             style={{
-              fontSize: '20px',
-              fontWeight: 'bold',
-              padding: '8px',
-              borderRadius: '8px',
               backgroundColor: '#e3f2fd',
               color: '#0d47a1',
-              margin: '8px 0px 12px 0px',
-              maxWidth: '440px',
             }}
           >
             {question}
           </span>
-          <ul style={{ listStyleType: 'none', paddingLeft: '0', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+          <ul className='flex flex-col'>
             {answers.map((answer, index) => (
               <li
                 key={index}
+                className='flex max-w-md px-4 py-2 rounded-md mb-2'
                 style={{
                   backgroundColor: result ? (answer === this.options.get('correctAnswer') ? '#d5ffc4' : '#ffd7d7') : '#f1f1f1',
-                  padding: '10px',
-                  marginBottom: '8px',
-                  borderRadius: '5px',
-                  fontSize: '16px',
-                  display: 'flex',
-                  flexDirection: 'row',
-                  gap: '4px',
-                  maxWidth: '440px',
                 }}
               >
                 <strong>{this.options.get('answerLabels')[index].text}:</strong>

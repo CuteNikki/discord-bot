@@ -73,11 +73,11 @@ export default new Event({
     } catch (error) {
       logger.error(error);
 
-      if (interaction.replied) {
+      if (interaction.replied || interaction.deferred) {
         await interaction
           .followUp({ content: 'There was an error while executing this command!', flags: [MessageFlags.Ephemeral] })
           .catch((e) => logger.debug({ err: e }, 'Error while following up to interaction'));
-      } else {
+      } else if (!interaction.replied && !interaction.deferred) {
         await interaction
           .reply({ content: 'There was an error while executing this command!', flags: [MessageFlags.Ephemeral] })
           .catch((e) => logger.debug({ err: e }, 'Error while replying to interaction'));

@@ -57,12 +57,16 @@ model MessageBuilder {
   userId    String // UserId who created the message
   guildId   String? // GuildId where the message was created
   channelId String // ChannelId where the message was created
-  messageId String // MessageId of the message
-  content   String // Content of the message
-  embed     String? // Embed of the message
+  messageId String? // MessageId of the message
+  content   String? // Content of the message
+  embed     Json? // Embeds associated with the message
   createdAt DateTime @default(now()) // When the message was created
+  updatedAt DateTime @updatedAt // When the message was last updated
 
   @@index([userId], name: "messagebuilder_user")
+  @@index([guildId], name: "messagebuilder_guild")
+  @@index([channelId], name: "messagebuilder_channel")
+  @@index([messageId], name: "messagebuilder_message")
 }
 
 enum InfractionType {

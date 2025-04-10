@@ -5,6 +5,7 @@ import {
   ButtonStyle,
   ComponentType,
   EmbedBuilder,
+  InteractionCollector,
   Message,
   MessageFlags,
   ModalBuilder,
@@ -12,6 +13,8 @@ import {
   TextInputStyle,
   type CommandInteraction,
 } from 'discord.js';
+import events from 'events';
+
 import logger from 'utility/logger';
 
 /**
@@ -54,12 +57,14 @@ export enum MessageBuilderCustomIds {
   ImageButton = 'builder_button_image',
   ImageModal = 'builder_modal_image',
   ImageInput = 'builder_input_image',
+  SubmitButton = 'builder_button_submit',
+  DeleteButton = 'builder_button_delete',
 }
 
 /**
  * The structure of an embed
  */
-type EmbedStructure = {
+export type EmbedStructure = {
   title?: string;
   url?: string;
   description?: string;
@@ -85,7 +90,8 @@ type EmbedStructure = {
 /**
  * The structure of a message
  */
-type MessageStructure = {
+export type MessageStructure = {
+  id?: string;
   content?: string;
   embed?: EmbedStructure;
 };
@@ -93,7 +99,7 @@ type MessageStructure = {
 /**
  * The props for the message builder
  */
-type MessageBuilderProps = {
+export type MessageBuilderProps = {
   message?: MessageStructure;
   interaction: CommandInteraction;
 };
@@ -101,15 +107,21 @@ type MessageBuilderProps = {
 /**
  * A class used to build custom embeds.
  */
-export class MessageBuilder {
+export class MessageBuilder extends events {
   private message: MessageStructure;
   private interaction: CommandInteraction;
 
   constructor(props: MessageBuilderProps) {
+    super();
+
     this.interaction = props.interaction;
     this.message = props.message ?? {};
 
     this.sendMessage();
+  }
+
+  eventNames(): (string | symbol)[] {
+    return ['submit', 'delete', 'timeout', ...super.eventNames()];
   }
 
   /**
@@ -118,7 +130,7 @@ export class MessageBuilder {
   private async sendMessage(): Promise<void> {
     let content: { content: string | undefined; embeds?: EmbedBuilder[] } = {
       content: this.replacePlaceholders(this.message.content),
-      embeds: this.getEmbed() ? [this.getEmbed() as EmbedBuilder] : [],
+      embeds: this.message.embed ? [this.getEmbed(this.message.embed) as EmbedBuilder] : [],
     };
     if (!content.content && !content.embeds?.length) content = { content: 'No content or embeds provided.' };
 
@@ -132,11 +144,26 @@ export class MessageBuilder {
   private collectInteractions(message: Message): void {
     const buttonInteractionCollector = message.createMessageComponentCollector({ componentType: ComponentType.Button, idle: 60_000 });
 
-    buttonInteractionCollector.on('collect', (buttonInteraction) => this.handleCollect(buttonInteraction, message));
-    buttonInteractionCollector.on('end', () => this.handleTimeout(message));
+    buttonInteractionCollector.on('collect', (buttonInteraction) => {
+      this.handleCollect(buttonInteraction, message, buttonInteractionCollector);
+    });
+
+    buttonInteractionCollector.on('end', (_, reason) => {
+      if (reason === 'time') {
+        this.emit('timeout', this.message);
+      } else if (reason === 'delete') {
+        this.emit('delete', this.message);
+      } else if (reason === 'submit') {
+        this.emit('submit', this.message);
+      }
+    });
   }
 
-  private async handleCollect(buttonInteraction: ButtonInteraction, message: Message): Promise<void> {
+  private async handleCollect(
+    buttonInteraction: ButtonInteraction,
+    message: Message,
+    buttonInteractionCollector: InteractionCollector<ButtonInteraction>,
+  ): Promise<void> {
     if (buttonInteraction.user.id !== this.interaction.user.id) {
       await buttonInteraction.reply({ content: 'You are not allowed to interact with this message.', flags: [MessageFlags.Ephemeral] });
       return;
@@ -172,6 +199,12 @@ export class MessageBuilder {
         break;
       case MessageBuilderCustomIds.ImageButton:
         this.handleImageCollect(buttonInteraction, message);
+        break;
+      case MessageBuilderCustomIds.SubmitButton:
+        this.handleSubmitCollect(buttonInteraction, buttonInteractionCollector);
+        break;
+      case MessageBuilderCustomIds.DeleteButton:
+        this.handleDeleteCollect(buttonInteractionCollector);
         break;
       default:
         await buttonInteraction.reply({ content: 'Invalid button interaction.', flags: [MessageFlags.Ephemeral] });
@@ -699,19 +732,38 @@ export class MessageBuilder {
   }
 
   /**
-   * Handle the timeout/end of the collector
-   * @param message The message to edit
+   * Handle the submit button interaction
+   * @param buttonInteractionCollector the button interaction collector
    */
-  private async handleTimeout(message: Message) {
-    await message
-      .edit({ content: 'The session has ended. Please re-run the command to start over.', components: [], embeds: [] })
-      .catch((error) => logger.debug({ err: error }, 'Failed to remove components'));
+  private async handleSubmitCollect(
+    buttonInteraction: ButtonInteraction,
+    buttonInteractionCollector: InteractionCollector<ButtonInteraction>,
+  ): Promise<void> {
+    if (!this.message.content && !this.message.embed) {
+      await buttonInteraction
+        .reply({ content: 'There is nothing to submit', flags: [MessageFlags.Ephemeral] })
+        .catch((error) => logger.debug({ err: error }, 'Failed to send follow up'));
+      return;
+    }
+    buttonInteractionCollector.stop('submit');
   }
 
+  /**
+   * Handle the delete button interaction
+   * @param buttonInteractionCollector the button interaction collector
+   */
+  private async handleDeleteCollect(buttonInteractionCollector: InteractionCollector<ButtonInteraction>): Promise<void> {
+    buttonInteractionCollector.stop('delete');
+  }
+
+  /**
+   * Update the message with the new content and embeds
+   * @param message The message to update
+   */
   private async updateMessage(message: Message) {
     let content: { content: string | undefined; embeds?: EmbedBuilder[] } = {
       content: this.replacePlaceholders(this.message.content),
-      embeds: this.getEmbed() ? [this.getEmbed() as EmbedBuilder] : [],
+      embeds: this.message.embed ? [this.getEmbed(this.message.embed) as EmbedBuilder] : [],
     };
     if (!content.content && !content.embeds?.length) content = { content: 'No content or embeds provided.', embeds: [] };
 
@@ -775,12 +827,23 @@ export class MessageBuilder {
       .setLabel('Author')
       .setEmoji({ name: '🏷️' })
       .setStyle(ButtonStyle.Secondary);
+    const submitButton = new ButtonBuilder()
+      .setCustomId(MessageBuilderCustomIds.SubmitButton)
+      .setLabel('Submit')
+      .setEmoji({ name: '✅' })
+      .setStyle(ButtonStyle.Primary);
+    const deleteButton = new ButtonBuilder()
+      .setCustomId(MessageBuilderCustomIds.DeleteButton)
+      .setLabel('Delete')
+      .setEmoji({ name: '🗑️' })
+      .setStyle(ButtonStyle.Danger);
 
     return [
       new ActionRowBuilder<ButtonBuilder>().addComponents(contentButton, titleButton, descriptionButton),
       new ActionRowBuilder<ButtonBuilder>().addComponents(colorButton, thumbnailButton, imageButton),
       new ActionRowBuilder<ButtonBuilder>().addComponents(authorButton, footerButton),
       new ActionRowBuilder<ButtonBuilder>().addComponents(addFieldButton, removeFieldButton),
+      new ActionRowBuilder<ButtonBuilder>().addComponents(submitButton, deleteButton),
     ];
   }
 
@@ -788,11 +851,7 @@ export class MessageBuilder {
    * Converts the embeds in to EmbedBuilders
    * @returns The EmbedBuilders
    */
-  private getEmbed(): EmbedBuilder | null {
-    const embed = this.message.embed;
-
-    if (!embed) return null;
-
+  public getEmbed(embed: EmbedStructure): EmbedBuilder {
     const embedBuilder = new EmbedBuilder();
     if (embed.color) embedBuilder.setColor(embed.color);
     if (embed.title) embedBuilder.setTitle(this.replacePlaceholders(embed.title));
@@ -829,7 +888,7 @@ export class MessageBuilder {
    * @param content The content to replace placeholders in
    * @returns The content with placeholders replaced
    */
-  private replacePlaceholders(content: string = '') {
+  public replacePlaceholders(content: string = '') {
     return content
       .replaceAll('{user.id}', this.interaction.user.id)
       .replaceAll('{user.mention}', this.interaction.user.toString())

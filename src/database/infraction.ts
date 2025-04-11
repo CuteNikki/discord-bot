@@ -5,62 +5,57 @@ import { discordRestClient, prisma } from 'database/index';
 
 export const createInfraction = async (
   infraction: Omit<Infraction, 'id' | 'createdAt' | 'expiresAt' | 'isActive'> & { expiresAt?: Date; isActive?: boolean },
-): Promise<Infraction> =>
-  await prisma.infraction.create({
+) =>
+  prisma.infraction.create({
     data: infraction,
   });
 
-export const updateInfraction = async (id: string, data: Partial<Omit<Infraction, 'id' | 'createdAt'>>): Promise<Infraction> =>
-  await prisma.infraction.update({
+export const updateInfraction = async (id: string, data: Partial<Omit<Infraction, 'id' | 'createdAt'>>) =>
+  prisma.infraction.update({
     where: { id },
     data,
   });
 
-export const getInfractionById = async (id: string): Promise<Infraction | null> =>
-  await prisma.infraction.findUnique({
+export const getInfractionById = async (id: string) =>
+  prisma.infraction.findUnique({
     where: { id },
   });
 
-export const getInfractionsByUserId = async (userId: string): Promise<Infraction[]> =>
-  await prisma.infraction.findMany({
+export const getInfractionsByUserId = async (userId: string) =>
+  prisma.infraction.findMany({
     where: { userId },
   });
 
-export const getInfractionsByGuildId = async (guildId: string): Promise<Infraction[]> =>
-  await prisma.infraction.findMany({
+export const getInfractionsByGuildId = async (guildId: string) =>
+  prisma.infraction.findMany({
     where: { guildId },
   });
 
-export const getInfractionsByUserIdAndGuildId = async (userId: string, guildId: string): Promise<Infraction[]> =>
-  await prisma.infraction.findMany({
+export const getInfractionsByUserIdAndGuildId = async (userId: string, guildId: string) =>
+  prisma.infraction.findMany({
     where: { userId, guildId },
   });
 
-export const getInfractionsByModeratorIdAndGuildId = async (moderatorId: string, guildId: string): Promise<Infraction[]> =>
-  await prisma.infraction.findMany({
+export const getInfractionsByModeratorIdAndGuildId = async (moderatorId: string, guildId: string) =>
+  prisma.infraction.findMany({
     where: { moderatorId, guildId },
   });
 
-export const getInfractionsByUserIdAndGuildIdPaginated = async (
-  userId: string,
-  guildId: string,
-  skip: number,
-  take: number,
-): Promise<Infraction[]> =>
-  await prisma.infraction.findMany({
+export const getInfractionsByUserIdAndGuildIdPaginated = async (userId: string, guildId: string, skip: number, take: number) =>
+  prisma.infraction.findMany({
     where: { userId, guildId },
     skip,
     take,
     orderBy: { createdAt: 'desc' },
   });
 
-export const getExpiredInfractions = async (): Promise<Infraction[]> =>
-  await prisma.infraction.findMany({
+export const getExpiredInfractions = async () =>
+  prisma.infraction.findMany({
     where: { expiresAt: { lt: new Date() }, isActive: true },
   });
 
-export const deleteInfraction = async (id: string): Promise<Infraction | null> =>
-  await prisma.infraction
+export const deleteInfraction = async (id: string) =>
+  prisma.infraction
     .delete({
       where: { id },
     })

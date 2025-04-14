@@ -1,13 +1,13 @@
 // random test file to mess around with the database
 
 import { blacklistUser, getBlacklistByModeratorId, getEntireBlacklist, unblacklistUser } from 'database/blacklist';
-import { getUser } from 'database/user';
+import { getUser, getUserOrCreate } from 'database/user';
 
 import logger from 'utility/logger';
 
 const userId = '303142922780672013';
 
-const user = await getUser(userId, { blacklisted: true }, true);
+const user = await getUserOrCreate(userId, { blacklisted: true });
 
 logger.info({ data: user }, 'User before update');
 

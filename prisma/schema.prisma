@@ -9,10 +9,10 @@ datasource db {
 }
 
 model User {
-  userId         String           @id @unique
-  blacklisted    Blacklist? // Blacklist record if the user is blacklisted
-  Infraction     Infraction[] // Infractions received
-  MessageBuilder MessageBuilder[] // MessageBuilder records created by the user
+  userId          String           @id @unique
+  blacklisted     Blacklist? // Blacklist record if the user is blacklisted
+  infractions     Infraction[] // Infractions received
+  messageBuilders MessageBuilder[] // MessageBuilder records created by the user
 }
 
 model Guild {

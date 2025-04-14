@@ -123,9 +123,9 @@ export class TriviaBuilder extends Builder<TriviaProps> {
             color: '#333',
           }}
         >
-          <div className='flex flex-wrap max-w-md'>
+          <div className='flex flex-wrap max-w-md' style={{ gap: '6px' }}>
             <span
-              className='px-2 py-1 rounded-lg capitalize mr-2'
+              className='px-2 py-1 rounded-lg capitalize'
               style={{
                 backgroundColor: '#e0f8fa',
                 color: '#00584e',
@@ -134,7 +134,7 @@ export class TriviaBuilder extends Builder<TriviaProps> {
               {category}
             </span>
             <span
-              className='px-2 py-1 rounded-lg capitalize mr-2'
+              className='px-2 py-1 rounded-lg capitalize'
               style={{
                 backgroundColor: '#fff6d9',
                 color: '#494733',
@@ -168,6 +168,7 @@ export class TriviaBuilder extends Builder<TriviaProps> {
                 key={index}
                 className='flex max-w-md px-4 py-2 rounded-md mb-2'
                 style={{
+                  gap: '10px',
                   backgroundColor: result ? (answer === this.options.get('correctAnswer') ? '#d5ffc4' : '#ffd7d7') : '#f1f1f1',
                 }}
               >

@@ -17,8 +17,6 @@ import logger from 'utility/logger';
 
 import { TriviaCategory, TriviaDifficulty, TriviaType } from 'types/trivia';
 
-const api = new OpenTriviaAPI();
-
 export default new Command({
   builder: new SlashCommandBuilder()
     .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel)
@@ -51,25 +49,25 @@ export default new Command({
     const focused = interaction.options.getFocused();
 
     if (focused.name === 'category') {
-      const categories = await api.getCategories().catch((err) => {
+      const categories = await OpenTriviaAPI.getCategories().catch((err) => {
         logger.error({ err }, 'Error fetching trivia categories');
       });
 
-      if (!categories) return interaction.respond([]);
+      if (!categories) {
+        return await interaction.respond([]);
+      }
 
       const query = focused.value.toLowerCase();
-
       const filtered = categories.filter((category) => category.name.toLowerCase().includes(query));
-
       const results = [];
 
       if ('any category'.includes(query) || query === '') {
         results.push({ name: 'Any Category', value: TriviaCategory.AnyCategory });
       }
 
-      results.push(...filtered.map((c) => ({ name: c.name, value: c.id })));
+      results.push(...filtered.map((category) => ({ name: category.name, value: category.id })));
 
-      interaction.respond(results.slice(0, 25));
+      await interaction.respond(results.slice(0, 25));
     }
   },
   async execute(interaction) {
@@ -79,18 +77,40 @@ export default new Command({
     const type = interaction.options.getString('type');
     const category = interaction.options.getNumber('category') ?? TriviaCategory.AnyCategory;
 
-    const token = await api.getToken();
+    const token = await OpenTriviaAPI.getToken().catch((err) => logger.error({ err }, 'Error fetching trivia token'));
+
+    if (!token) {
+      await interaction.editReply({
+        content: 'Error fetching trivia token. Please try again later.',
+      });
+      return;
+    }
+
     const question = await fetchQuestion(
       (difficulty ?? getRandomDifficulty()) as TriviaDifficulty,
       (type ?? getRandomType()) as TriviaType,
       category,
       token,
-    );
-    if (!question) return;
+    ).catch((err) => logger.error({ err }, 'Error fetching trivia question'));
+
+    if (!question) {
+      await interaction.editReply({
+        content: 'Error fetching trivia question. Please try again later.',
+      });
+      await OpenTriviaAPI.resetToken(token);
+      return;
+    }
 
     let triviaCard = buildTriviaCard(interaction.client as ExtendedClient, question);
     const message = await sendTriviaMessage(interaction, triviaCard);
-    if (!message) return;
+
+    if (!message) {
+      await interaction.editReply({
+        content: 'Error sending trivia message. Please try again later.',
+      });
+      await OpenTriviaAPI.resetToken(token);
+      return;
+    }
 
     const collector = message.createMessageComponentCollector({
       componentType: ComponentType.Button,
@@ -119,24 +139,19 @@ export default new Command({
           (type ?? getRandomType()) as TriviaType,
           category,
           token,
-        ).catch((error) => {
-          interaction.editReply({
-            content: `Error fetching trivia questions: ${error.message}`,
+        ).catch((err) => logger.error({ err }, 'Error fetching trivia question'));
+
+        if (!question) {
+          await interaction.editReply({
+            content: 'Error fetching trivia question. Please try again later.',
+            components: [],
+            files: [],
           });
+          await OpenTriviaAPI.resetToken(token);
           return;
-        });
+        }
 
-        if (!question) return;
-
-        triviaCard = new TriviaBuilder(interaction.client as ExtendedClient)
-          .setCategory(decode(question.category))
-          .setDifficulty(question.difficulty)
-          .setType(question.type)
-          .setQuestion(decode(question.question))
-          .setAnswers(
-            decode(question.correctAnswer),
-            question.incorrectAnswers.map((answer) => decode(answer)),
-          );
+        triviaCard = buildTriviaCard(interaction.client as ExtendedClient, question);
 
         await buttonInteraction
           .editReply({
@@ -144,9 +159,12 @@ export default new Command({
             files: [await triviaCard.build()],
             components: [triviaCard.getComponents()],
           })
-          .catch((error) => logger.error({ error }, 'Error editing trivia message'));
+          .catch(async (error) => {
+            logger.error({ error }, 'Error editing trivia message');
+            await OpenTriviaAPI.resetToken(token);
+          });
 
-        collector.resetTimer({ time: 30_000 });
+        collector.resetTimer({ time: 30_000 }); // Reset the timer for the next question so the user has 30 seconds to answer
         return;
       }
 
@@ -177,10 +195,14 @@ export default new Command({
         triviaCard.setRevealResult(true);
 
         if (hasAnswered) {
+          // If the user has already answered, just disable the buttons after the time is up
+
           await interaction.editReply({
             components: [triviaCard.getComponents(true, true)],
           });
         } else {
+          // If the user hasn't answered, show the correct answer after the time is up
+
           await interaction.editReply({
             content: `Time is up! The correct answer was **${triviaCard.options.get('correctAnswer')}**.`,
             components: [triviaCard.getComponents(true, true)],
@@ -188,19 +210,35 @@ export default new Command({
           });
         }
       }
+
+      await OpenTriviaAPI.resetToken(token);
     });
   },
 });
 
-async function fetchQuestion(difficulty: TriviaDifficulty, type: TriviaType, category: number, token: string) {
+/**
+ * Fetch a trivia question from the Open Trivia API
+ * @param difficulty
+ * @param type
+ * @param category
+ * @param token
+ * @returns the trivia question
+ */
+async function fetchQuestion(difficulty: TriviaDifficulty, type: TriviaType, category: number, token?: string) {
   try {
-    const questions = await api.getQuestions({ amount: 1, difficulty, type, category, token });
+    const questions = await OpenTriviaAPI.getQuestions({ amount: 1, difficulty, type, category, token });
     return questions?.[0];
   } catch (err) {
     logger.error({ err }, 'Error fetching trivia question');
   }
 }
 
+/**
+ * Build a trivia card using the TriviaBuilder class
+ * @param client
+ * @param question
+ * @returns the trivia card
+ */
 function buildTriviaCard(
   client: ExtendedClient,
   question: {

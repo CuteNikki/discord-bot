@@ -1,9 +1,9 @@
 import { TriviaCategory, TriviaDifficulty, TriviaType } from 'types/trivia';
 
 export class OpenTriviaAPI {
-  private baseURL: string = 'https://opentdb.com';
+  private static baseURL: string = 'https://opentdb.com';
 
-  async getToken(): Promise<string> {
+  public static async getToken(): Promise<string> {
     const response = await fetch(`${this.baseURL}/api_token.php?command=request`);
     if (!response.ok) {
       throw new Error(`Error fetching token: ${response.statusText}`);
@@ -17,7 +17,7 @@ export class OpenTriviaAPI {
     return data.token;
   }
 
-  async resetToken(token: string): Promise<boolean> {
+  public static async resetToken(token: string): Promise<boolean> {
     const response = await fetch(`${this.baseURL}/api_token.php?command=reset&token=${token}`);
     if (!response.ok) {
       throw new Error(`Error resetting token: ${response.statusText}`);
@@ -31,7 +31,7 @@ export class OpenTriviaAPI {
     return data.response_code === 0;
   }
 
-  async getCategories(): Promise<{ id: number; name: string }[]> {
+  public static async getCategories(): Promise<{ id: number; name: string }[]> {
     const response = await fetch(`${this.baseURL}/api_category.php`);
     if (!response.ok) {
       throw new Error(`Error fetching categories: ${response.statusText}`);
@@ -42,7 +42,7 @@ export class OpenTriviaAPI {
     return data.trivia_categories;
   }
 
-  async getQuestions(options: {
+  public static async getQuestions(options: {
     amount: number;
     category: TriviaCategory;
     difficulty: TriviaDifficulty;

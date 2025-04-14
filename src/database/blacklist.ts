@@ -17,7 +17,7 @@ export const blacklistUser = async (userId: string, blacklist: Omit<Blacklist, '
     const user = (await discordRestClient.get(`/users/${userId}`).catch(() => null)) as APIUser | null;
 
     await discordRestClient
-      .post(`/${KEYS.WEBHOOK_BLACKLIST}`, {
+      .post(`/webhooks/${KEYS.WEBHOOK_BLACKLIST}`, {
         body: {
           username: 'Blacklisted User',
           embeds: [
@@ -64,7 +64,7 @@ export const unblacklistUser = async (userId: string) => {
     const user = (await discordRestClient.get(`/users/${userId}`).catch(() => null)) as APIUser | null;
 
     await discordRestClient
-      .post(`/${KEYS.WEBHOOK_BLACKLIST}`, {
+      .post(`/webhooks/${KEYS.WEBHOOK_BLACKLIST}`, {
         body: {
           username: 'Unblacklisted User',
           embeds: [
@@ -109,7 +109,7 @@ export const unblacklistUsers = async (blacklists: Blacklist[]) => {
 
   if (result && KEYS.WEBHOOK_BLACKLIST) {
     await discordRestClient
-      .post(`/${KEYS.WEBHOOK_BLACKLIST}`, {
+      .post(`/webhooks/${KEYS.WEBHOOK_BLACKLIST}`, {
         body: {
           username: 'Bulk Unblacklist',
           embeds: [

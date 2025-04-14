@@ -41,8 +41,8 @@ bun install
 # !! if you don't use postgresql, you will need to change the 'provider' in ROOT/prisma/schema.prisma file!!
 DATABASE_URL="postgresql://user:password@localhost/your-database" # Required (database)
 
-# !! remove the https://discord.com/api/ part !!
-WEBHOOK_BLACKLIST="webhooks/123123123123123123/abc123abc123abc123" # Optional (notifications)
+# !! remove the https://discord.com/api/webhooks/ part from the webhook URL !!
+WEBHOOK_BLACKLIST="123123123123123123/abc123abc123abc123" # Optional (notifications)
 
 DISCORD_BOT_TOKEN="abc123abc123abc123" # Required (bot & cmd registration)
 DISCORD_BOT_ID="123123123123123123" # Required (cmd registration)
@@ -62,7 +62,6 @@ All bot configuration is done through the `.env` file located in the root direct
 ## Community
 
 Join our Discord community for support, updates, and more: [Discord Link](https://discord.gg/ACR6RBQj4y)
-
 
 ## Contributing
 

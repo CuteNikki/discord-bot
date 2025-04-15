@@ -10,27 +10,33 @@ export default new Event({
   name: Events.InteractionCreate,
   once: false,
   async execute(client, interaction: Interaction) {
-    logger.debug({ data: interaction }, 'Interaction received');
-
     if (!interaction.isAutocomplete()) {
-      logger.debug('Interaction is not an autocomplete');
       return;
     }
+
+    /**
+     * Finding the command
+     */
 
     const command = client.commands.get(interaction.commandName);
     if (!command || !command.options.autocomplete) {
-      logger.debug({ data: interaction.commandName }, 'Command not found');
       return;
     }
+
+    /**
+     * Handling blacklisted users
+     */
 
     const blacklist = await getBlacklist(interaction.user.id);
     if (blacklist) {
-      logger.debug({ data: blacklist }, 'User is blacklisted');
       return;
     }
 
+    /**
+     * Executing the command autocomplete
+     */
+
     try {
-      logger.debug({ data: command }, 'Executing autocomplete command');
       await command.options.autocomplete(interaction);
     } catch (error) {
       logger.error(error);

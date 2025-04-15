@@ -10,21 +10,26 @@ export default new Event({
   name: Events.InteractionCreate,
   once: false,
   async execute(client, interaction: Interaction) {
-    logger.debug({ data: interaction }, 'Interaction received');
     if (!interaction.isCommand()) {
-      logger.debug('Interaction is not a command');
       return;
     }
+
+    /**
+     * Finding the command
+     */
 
     const command = client.commands.get(interaction.commandName);
     if (!command) {
-      logger.debug({ data: interaction.commandName }, 'Command not found');
       return;
     }
 
+    /**
+     * Handling blacklisted users
+     */
+
     const blacklist = await getBlacklist(interaction.user.id);
+
     if (blacklist) {
-      logger.debug({ data: blacklist }, 'User is blacklisted');
       await interaction
         .reply({
           content: blacklist.expiresAt
@@ -32,9 +37,13 @@ export default new Event({
             : 'You are blacklisted from using this bot!',
           flags: [MessageFlags.Ephemeral],
         })
-        .catch((e) => logger.debug({ err: e }, 'Error while replying to interaction'));
+        .catch((err) => logger.debug({ err }, 'Error while replying to interaction'));
       return;
     }
+
+    /**
+     * Handling cooldowns
+     */
 
     const cooldowns = client.cooldowns;
     if (!cooldowns.has(command.options.builder.name)) {
@@ -67,8 +76,11 @@ export default new Event({
     timestamps.set(interaction.user.id, now);
     setTimeout(() => timestamps.delete(interaction.user.id), cooldownAmount);
 
+    /**
+     * Executing the command
+     */
+
     try {
-      logger.debug({ data: command }, 'Executing command');
       await command.options.execute(interaction);
     } catch (error) {
       logger.error(error);
@@ -76,11 +88,11 @@ export default new Event({
       if (interaction.replied || interaction.deferred) {
         await interaction
           .followUp({ content: 'There was an error while executing this command!', flags: [MessageFlags.Ephemeral] })
-          .catch((e) => logger.debug({ err: e }, 'Error while following up to interaction'));
+          .catch((err) => logger.debug({ err }, 'Error while following up to interaction'));
       } else if (!interaction.replied && !interaction.deferred) {
         await interaction
           .reply({ content: 'There was an error while executing this command!', flags: [MessageFlags.Ephemeral] })
-          .catch((e) => logger.debug({ err: e }, 'Error while replying to interaction'));
+          .catch((err) => logger.debug({ err }, 'Error while replying to interaction'));
       }
     }
   },

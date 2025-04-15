@@ -1,4 +1,11 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } from 'discord.js';
+import {
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  SlashCommandBuilder,
+  StringSelectMenuBuilder,
+  StringSelectMenuOptionBuilder,
+} from 'discord.js';
 
 import { Command } from 'classes/command';
 
@@ -21,6 +28,23 @@ export default new Command({
             .setStyle(ButtonStyle.Primary)
             .setEmoji({ name: '📝' })
             .setDisabled(false),
+        ),
+        new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
+          new StringSelectMenuBuilder()
+            .setCustomId('select')
+            .setPlaceholder('Test Select Menu')
+            .addOptions(
+              new StringSelectMenuOptionBuilder()
+                .setLabel('Test Option 1')
+                .setValue('test_option_1')
+                .setDescription('This is a test option')
+                .setEmoji({ name: '✅' }),
+              new StringSelectMenuOptionBuilder()
+                .setLabel('Test Option 2')
+                .setValue('test_option_2')
+                .setDescription('This is another test option')
+                .setEmoji({ name: '📝' }),
+            ),
         ),
       ],
     });

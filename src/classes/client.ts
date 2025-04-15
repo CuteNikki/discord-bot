@@ -3,6 +3,7 @@ import { ApplicationEmoji, Client, Collection } from 'discord.js';
 import type { Button } from 'classes/button';
 import type { Command } from 'classes/command';
 import type { Modal } from 'classes/modal';
+import type { SelectMenu } from 'classes/select';
 
 /**
  * ExtendedClient class that extends the Discord.js Client class.
@@ -34,6 +35,12 @@ export class ExtendedClient extends Client {
    * Collection<customId, Modal>
    */
   modals = new Collection<string, Modal>();
+
+  /**
+   * SelectMenu Collection.
+   * Collection<customId, SelectMenu>
+   */
+  selectMenus = new Collection<string, SelectMenu>();
 
   /**
    * Custom emojis

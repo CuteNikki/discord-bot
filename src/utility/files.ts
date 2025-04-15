@@ -43,3 +43,10 @@ export function getModalFiles() {
 
   return { modalPath, modalFiles };
 }
+
+export function getSelectFiles() {
+  const selectPath = path.join(process.cwd(), 'src/selects');
+  const selectFiles = getAllFiles(selectPath).filter((file) => file.endsWith('.ts') || file.endsWith('.js'));
+
+  return { selectPath, selectFiles };
+}

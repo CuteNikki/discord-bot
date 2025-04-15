@@ -19,7 +19,7 @@ export default new Event({
     let button = client.buttons.get(interaction.customId);
 
     if (!button) {
-      button = client.buttons.find((b) => b.options.includeCustomId && b.options.customId.includes(interaction.customId));
+      button = client.buttons.find((b) => b.options.includeCustomId && interaction.customId.includes(b.options.customId));
     }
 
     if (!button) {

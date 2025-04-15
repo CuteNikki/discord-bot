@@ -1,11 +1,9 @@
-import fs from 'fs';
-import path from 'path';
-
 import { performance } from 'perf_hooks';
 
 import type { ExtendedClient } from 'classes/client';
 import type { Command } from 'classes/command';
 
+import { getCommandFiles } from 'utility/files';
 import logger from 'utility/logger';
 
 export async function loadCommands(client: ExtendedClient) {
@@ -31,26 +29,4 @@ export async function loadCommands(client: ExtendedClient) {
   logger.info(
     `Loaded ${cmdFiles.length} command${cmdFiles.length > 1 || cmdFiles.length === 0 ? 's' : ''} in ${Math.floor(endTime - startTime)}ms`,
   );
-}
-
-export function getCommandFiles() {
-  const cmdPath = path.join(process.cwd(), 'src/commands');
-  const cmdFiles = getAllFiles(cmdPath).filter((file) => file.endsWith('.ts') || file.endsWith('.js'));
-
-  return { cmdPath, cmdFiles };
-}
-
-function getAllFiles(dirPath: string, arrayOfFiles: string[] = []) {
-  const files = fs.readdirSync(dirPath);
-
-  files.forEach((file) => {
-    const filePath = path.join(dirPath, file);
-    if (fs.statSync(filePath).isDirectory()) {
-      arrayOfFiles = getAllFiles(filePath, arrayOfFiles);
-    } else {
-      arrayOfFiles.push(filePath);
-    }
-  });
-
-  return arrayOfFiles;
 }

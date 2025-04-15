@@ -1,10 +1,9 @@
-import fs from 'fs';
-import path from 'path';
 import { performance } from 'perf_hooks';
 
 import type { ExtendedClient } from 'classes/client';
 import type { Event } from 'classes/event';
 
+import { getEventFiles } from 'utility/files';
 import logger from 'utility/logger';
 
 export async function loadEvents(client: ExtendedClient) {
@@ -34,26 +33,4 @@ export async function loadEvents(client: ExtendedClient) {
   logger.info(
     `Loaded ${eventFiles.length} event${eventFiles.length > 1 || eventFiles.length === 0 ? 's' : ''} in ${Math.floor(endTime - startTime)}ms`,
   );
-}
-
-function getEventFiles() {
-  const eventPath = path.join(process.cwd(), 'src/events');
-  const eventFiles = getAllFiles(eventPath).filter((file) => file.endsWith('.ts') || file.endsWith('.js'));
-
-  return { eventPath, eventFiles };
-}
-
-function getAllFiles(dirPath: string, arrayOfFiles: string[] = []) {
-  const files = fs.readdirSync(dirPath);
-
-  files.forEach((file) => {
-    const filePath = path.join(dirPath, file);
-    if (fs.statSync(filePath).isDirectory()) {
-      arrayOfFiles = getAllFiles(filePath, arrayOfFiles);
-    } else {
-      arrayOfFiles.push(filePath);
-    }
-  });
-
-  return arrayOfFiles;
 }

@@ -4,7 +4,7 @@ import { performance } from 'perf_hooks';
 
 import type { Command } from 'classes/command';
 
-import { getCommandFiles } from 'utility/commands';
+import { getCommandFiles } from 'utility/files';
 import { KEYS } from 'utility/keys';
 import logger from 'utility/logger';
 

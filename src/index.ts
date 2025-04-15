@@ -4,6 +4,7 @@ import { ExtendedClient } from 'classes/client';
 
 import { prisma } from 'database/index';
 
+import { loadButtons } from 'utility/buttons';
 import { loadCommands } from 'utility/commands';
 import { startCron } from 'utility/cron';
 import { loadEvents } from 'utility/events';
@@ -18,9 +19,7 @@ const client = new ExtendedClient({
   },
 });
 
-await prisma.$connect();
-await loadCommands(client);
-await loadEvents(client);
+await Promise.all([prisma.$connect(), loadCommands(client), loadEvents(client), loadButtons(client)]);
 startCron();
 
 client.login(KEYS.DISCORD_BOT_TOKEN);

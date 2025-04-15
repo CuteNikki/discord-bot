@@ -1,3 +1,4 @@
+import type { Button } from 'classes/button';
 import type { Command } from 'classes/command';
 import { ApplicationEmoji, Client, Collection } from 'discord.js';
 
@@ -19,6 +20,12 @@ export class ExtendedClient extends Client {
    * Collection<commandName, Collection<userId, removeTimestamp>>
    */
   cooldowns = new Collection<string, Collection<string, number>>();
+
+  /**
+   * Buttons collection.
+   * Collection<customId, Button>
+   */
+  buttons = new Collection<string, Button>();
 
   /**
    * Custom emojis

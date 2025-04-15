@@ -8,6 +8,7 @@ export class Modal {
    * Creates an instance of the button with the specified options.
    *
    * @param options - The options for the button.
+   * @param options.userPermissions - The permissions required by the user.
    * @param options.botPermissions - The permissions required by the bot.
    * @param options.isDevelopment - Indicates if the button is in development mode.
    * @param options.cooldown - The cooldown period in milliseconds for this button.

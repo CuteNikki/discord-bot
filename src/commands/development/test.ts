@@ -15,6 +15,12 @@ export default new Command({
             .setStyle(ButtonStyle.Primary)
             .setEmoji({ name: '✅' })
             .setDisabled(false),
+          new ButtonBuilder()
+            .setCustomId('modal')
+            .setLabel('Test Modal')
+            .setStyle(ButtonStyle.Primary)
+            .setEmoji({ name: '📝' })
+            .setDisabled(false),
         ),
       ],
     });

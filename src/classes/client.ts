@@ -1,6 +1,8 @@
+import { ApplicationEmoji, Client, Collection } from 'discord.js';
+
 import type { Button } from 'classes/button';
 import type { Command } from 'classes/command';
-import { ApplicationEmoji, Client, Collection } from 'discord.js';
+import type { Modal } from 'classes/modal';
 
 /**
  * ExtendedClient class that extends the Discord.js Client class.
@@ -26,6 +28,12 @@ export class ExtendedClient extends Client {
    * Collection<customId, Button>
    */
   buttons = new Collection<string, Button>();
+
+  /**
+   * Modals collection.
+   * Collection<customId, Modal>
+   */
+  modals = new Collection<string, Modal>();
 
   /**
    * Custom emojis

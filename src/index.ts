@@ -4,11 +4,13 @@ import { ExtendedClient } from 'classes/client';
 
 import { prisma } from 'database/index';
 
+import { startCron } from 'utility/cron';
+import { KEYS } from 'utility/keys';
+
 import { loadButtons } from 'utility/buttons';
 import { loadCommands } from 'utility/commands';
-import { startCron } from 'utility/cron';
 import { loadEvents } from 'utility/events';
-import { KEYS } from 'utility/keys';
+import { loadModals } from 'utility/modals';
 
 const client = new ExtendedClient({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
@@ -19,7 +21,7 @@ const client = new ExtendedClient({
   },
 });
 
-await Promise.all([prisma.$connect(), loadCommands(client), loadEvents(client), loadButtons(client)]);
+await Promise.all([prisma.$connect(), loadCommands(client), loadEvents(client), loadButtons(client), loadModals(client)]);
 startCron();
 
 client.login(KEYS.DISCORD_BOT_TOKEN);

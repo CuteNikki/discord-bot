@@ -36,3 +36,10 @@ export function getEventFiles() {
 
   return { eventPath, eventFiles };
 }
+
+export function getModalFiles() {
+  const modalPath = path.join(process.cwd(), 'src/modals');
+  const modalFiles = getAllFiles(modalPath).filter((file) => file.endsWith('.ts') || file.endsWith('.js'));
+
+  return { modalPath, modalFiles };
+}

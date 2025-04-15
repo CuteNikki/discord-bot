@@ -138,12 +138,21 @@ export default new Event({
       if (interaction.replied || interaction.deferred) {
         await interaction
           .editReply({
+            content: '',
+            components: [],
+            files: [],
             embeds: [new EmbedBuilder().setColor(Colors.Red).setDescription('An error occurred while executing the button.')],
           })
           .catch((e) => console.error('Error while editing reply to interaction', e));
       } else if (!interaction.replied && !interaction.deferred) {
         await interaction
-          .reply({ content: 'There was an error while executing this button!', flags: [MessageFlags.Ephemeral] })
+          .reply({
+            content: '',
+            components: [],
+            files: [],
+            embeds: [new EmbedBuilder().setColor(Colors.Red).setDescription('An error occurred while executing the button.')],
+            flags: [MessageFlags.Ephemeral],
+          })
           .catch((e) => console.error('Error while replying to interaction', e));
       }
     }

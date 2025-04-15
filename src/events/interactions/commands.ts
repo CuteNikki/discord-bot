@@ -109,7 +109,13 @@ export default new Event({
 
       if (interaction.replied || interaction.deferred) {
         await interaction
-          .followUp({ content: 'There was an error while executing this command!', flags: [MessageFlags.Ephemeral] })
+          .followUp({
+            content: '',
+            components: [],
+            files: [],
+            embeds: [new EmbedBuilder().setColor(Colors.Red).setDescription('An error occurred while executing the command.')],
+            flags: [MessageFlags.Ephemeral],
+          })
           .catch((err) => logger.debug({ err }, 'Error while following up to interaction'));
       } else if (!interaction.replied && !interaction.deferred) {
         await interaction

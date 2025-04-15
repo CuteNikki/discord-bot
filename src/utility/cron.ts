@@ -1,4 +1,5 @@
 import { schedule } from 'node-cron';
+import { performance } from 'perf_hooks';
 
 import logger from 'utility/logger';
 
@@ -30,9 +31,14 @@ export function startCron() {
   // Run every minute
   schedule('* * * * *', async () => {
     logger.debug('Running cron job (every minute)');
+    const start = performance.now();
 
     await deleteExpiredBlacklist(); // Clear expired user bans
     await handleExpiredInfractions(); // Clear expired infractions
     // coming soon... // Clear expired reminders
+
+    const end = performance.now();
+
+    logger.debug(`Cron job completed in ${Math.floor(end - start)}ms`);
   });
 }

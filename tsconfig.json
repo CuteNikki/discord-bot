@@ -31,7 +31,8 @@
       "database/*": ["./src/database/*"],
       "utility/*": ["./src/utility/*"],
       "types/*": ["./src/types/*"],
-      "classes/*": ["./src/classes/*"]
+      "classes/*": ["./src/classes/*"],
+      "loaders/*": ["./src/loaders/*"]
     }
   }
 }

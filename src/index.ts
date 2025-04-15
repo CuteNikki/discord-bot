@@ -7,10 +7,10 @@ import { prisma } from 'database/index';
 import { startCron } from 'utility/cron';
 import { KEYS } from 'utility/keys';
 
-import { loadButtons } from 'utility/buttons';
-import { loadCommands } from 'utility/commands';
-import { loadEvents } from 'utility/events';
-import { loadModals } from 'utility/modals';
+import { loadButtons } from 'loaders/button';
+import { loadCommands } from 'loaders/command';
+import { loadEvents } from 'loaders/event';
+import { loadModals } from 'loaders/modal';
 
 const client = new ExtendedClient({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],

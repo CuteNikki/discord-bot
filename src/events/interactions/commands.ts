@@ -77,6 +77,28 @@ export default new Event({
     setTimeout(() => timestamps.delete(interaction.user.id), cooldownAmount);
 
     /**
+     * Handling bot permissions
+     */
+
+    if (interaction.inCachedGuild() && command.options.botPermissions) {
+      const missingPermissions = interaction.guild.members.me?.permissions.missing(command.options.botPermissions);
+
+      if (missingPermissions?.length) {
+        await interaction
+          .reply({
+            embeds: [
+              new EmbedBuilder()
+                .setColor(Colors.Red)
+                .setDescription(`I am missing the following permissions to execute this button: \`${missingPermissions.join(', ')}\``),
+            ],
+            flags: [MessageFlags.Ephemeral],
+          })
+          .catch((e) => console.error('Error while replying to interaction', e));
+        return;
+      }
+    }
+
+    /**
      * Executing the command
      */
 

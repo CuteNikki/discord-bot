@@ -27,6 +27,6 @@ export const prisma = new PrismaClient({
   ],
 });
 
-prisma.$on('query', (e) => {
-  logger.debug(`Query: ${e.query} | Duration: ${e.duration}ms`);
+prisma.$on('query', (event) => {
+  logger.debug({ ...event }, 'Prisma Query');
 });

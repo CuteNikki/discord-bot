@@ -10,7 +10,22 @@ import {
 import { Command } from 'classes/command';
 
 export default new Command({
-  builder: new SlashCommandBuilder().setName('test').setDescription('Test command'),
+  builder: new SlashCommandBuilder()
+    .setName('test')
+    .setDescription('Test command')
+    .addSubcommandGroup((group) =>
+      group
+        .setName('group')
+        .setDescription('Test group')
+        .addSubcommand((sub) =>
+          sub
+            .setName('sub')
+            .setDescription('Test subcommand')
+            .addStringOption((option) =>
+              option.setName('string-option').setDescription('Test string option').setChoices({ name: 'choice 1', value: 'test_1' }),
+            ),
+        ),
+    ),
   execute(interaction) {
     interaction.reply({
       content: 'Test command executed',

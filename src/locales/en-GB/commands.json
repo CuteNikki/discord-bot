@@ -1,0 +1,25 @@
+{
+  "test": {
+    "name": "test",
+    "description": "Testbefehl",
+    "options": [
+      {
+        "name": "testgruppe",
+        "description": "test Gruppe",
+        "options": [
+          {
+            "name": "testsub",
+            "description": "test Subcommand",
+            "options": [
+              {
+                "name": "teststring",
+                "description": "test String Option",
+                "choices": ["testChoice1"]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

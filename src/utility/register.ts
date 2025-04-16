@@ -1,12 +1,29 @@
 import { REST, Routes } from 'discord.js';
-
 import { performance } from 'perf_hooks';
+
+import { use } from 'i18next';
+import I18NexFsBackend from 'i18next-fs-backend';
 
 import type { Command } from 'classes/command';
 
 import { getCommandFiles } from 'utility/files';
 import { KEYS } from 'utility/keys';
 import logger from 'utility/logger';
+import { translateCommand } from 'utility/translation';
+
+await use(I18NexFsBackend).init({
+  debug: process.argv.includes('--debug-lang'),
+  defaultNS: 'commands',
+  ns: ['messages', 'commands'],
+  preload: KEYS.SUPPORTED_LANGS,
+  fallbackLng: KEYS.FALLBACK_LANG,
+  interpolation: {
+    escapeValue: false,
+  },
+  backend: {
+    loadPath: './src/locales/{{lng}}/{{ns}}.json',
+  },
+});
 
 logger.info('Loading command files');
 const startTime = performance.now();
@@ -38,12 +55,20 @@ const rest = new REST().setToken(KEYS.DISCORD_BOT_TOKEN);
 
     const deployStartTime = performance.now();
 
-    const data = (await rest.put(Routes.applicationCommands(KEYS.DISCORD_BOT_ID), { body: commands })) as unknown as {
+    const commandsWithTranslation = commands.map(translateCommand);
+
+    const data = (await rest.put(Routes.applicationCommands(KEYS.DISCORD_BOT_ID), {
+      body: commandsWithTranslation,
+    })) as unknown as {
       id: string;
       name: string;
     }[];
-    if (KEYS.DISCORD_DEV_GUILD_ID)
-      await rest.put(Routes.applicationGuildCommands(KEYS.DISCORD_BOT_ID, KEYS.DISCORD_DEV_GUILD_ID), { body: commands });
+
+    if (KEYS.DISCORD_DEV_GUILD_ID) {
+      await rest.put(Routes.applicationGuildCommands(KEYS.DISCORD_BOT_ID, KEYS.DISCORD_DEV_GUILD_ID), {
+        body: commandsWithTranslation,
+      });
+    }
 
     const deployEndTime = performance.now();
 

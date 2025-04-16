@@ -1,4 +1,6 @@
 import { ActivityType, GatewayIntentBits, Partials, PresenceUpdateStatus } from 'discord.js';
+import { use } from 'i18next';
+import I18NexFsBackend from 'i18next-fs-backend';
 
 import { ExtendedClient } from 'classes/client';
 
@@ -22,14 +24,28 @@ const client = new ExtendedClient({
   },
 });
 
+await use(I18NexFsBackend).init({
+  debug: process.argv.includes('--debug-lang'),
+  defaultNS: 'messages',
+  ns: ['messages', 'commands'],
+  preload: KEYS.SUPPORTED_LANGS,
+  fallbackLng: KEYS.FALLBACK_LANG,
+  interpolation: {
+    escapeValue: false,
+  },
+  backend: {
+    loadPath: './src/locales/{{lng}}/{{ns}}.json',
+  },
+});
+
 await Promise.all([
   prisma.$connect(),
+  startCron(),
   loadCommands(client),
   loadEvents(client),
   loadButtons(client),
   loadModals(client),
   loadSelectMenus(client),
 ]);
-startCron();
 
 client.login(KEYS.DISCORD_BOT_TOKEN);

@@ -18,25 +18,25 @@
     "@types/node-cron": "^3.0.11",
     "@types/react": "18.3.2",
     "eslint": "^9.24.0",
-    "eslint-config-prettier": "^10.1.1",
+    "eslint-config-prettier": "^10.1.2",
     "globals": "^16.0.0",
     "prettier": "^3.5.3",
-    "typescript-eslint": "^8.29.1"
+    "typescript-eslint": "^8.30.1"
   },
   "peerDependencies": {
-    "typescript": "^5.7.3"
+    "typescript": "^5.8.3"
   },
   "dependencies": {
-    "@prisma/client": "^6.5.0",
+    "@prisma/client": "^6.6.0",
     "@types/he": "^1.2.3",
     "canvacord": "^6.0.2",
     "canvas": "^3.1.0",
-    "discord.js": "^15.0.0-dev.1744071174-d93a52c1d",
+    "discord.js": "^15.0.0-dev.1744589645-5c0b71455",
     "he": "^1.2.0",
     "node-cron": "^3.0.3",
     "pino": "^9.6.0",
     "pino-pretty": "^13.0.0",
-    "prisma": "^6.5.0"
+    "prisma": "^6.6.0"
   },
   "prettier": {
     "singleQuote": true,

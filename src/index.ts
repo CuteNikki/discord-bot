@@ -1,4 +1,4 @@
-import { ActivityType, GatewayIntentBits, Partials, PresenceUpdateStatus } from 'discord.js';
+import { GatewayIntentBits, Partials } from 'discord.js';
 import { use } from 'i18next';
 import I18NexFsBackend from 'i18next-fs-backend';
 
@@ -18,10 +18,6 @@ import { loadSelectMenus } from 'loaders/select';
 const client = new ExtendedClient({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
   partials: [Partials.Message],
-  presence: {
-    status: PresenceUpdateStatus.Online,
-    activities: [{ name: 'Hello World!', type: ActivityType.Custom }],
-  },
 });
 
 await use(I18NexFsBackend).init({

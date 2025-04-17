@@ -1,29 +1,14 @@
 import { REST, Routes } from 'discord.js';
 import { performance } from 'perf_hooks';
 
-import { use } from 'i18next';
-import I18NexFsBackend from 'i18next-fs-backend';
-
 import type { Command } from 'classes/command';
 
 import { getCommandFiles } from 'utility/files';
 import { KEYS } from 'utility/keys';
 import logger from 'utility/logger';
-import { translateCommand } from 'utility/translation';
+import { initializeI18N, translateCommand } from 'utility/translation';
 
-await use(I18NexFsBackend).init({
-  debug: process.argv.includes('--debug-lang'),
-  defaultNS: 'commands',
-  ns: ['messages', 'commands'],
-  preload: KEYS.SUPPORTED_LANGS,
-  fallbackLng: KEYS.FALLBACK_LANG,
-  interpolation: {
-    escapeValue: false,
-  },
-  backend: {
-    loadPath: './src/locales/{{lng}}/{{ns}}.json',
-  },
-});
+await initializeI18N('commands');
 
 logger.info('Loading command files');
 const startTime = performance.now();

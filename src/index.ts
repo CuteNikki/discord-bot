@@ -1,6 +1,4 @@
 import { GatewayIntentBits, Partials } from 'discord.js';
-import { use } from 'i18next';
-import I18NexFsBackend from 'i18next-fs-backend';
 
 import { ExtendedClient } from 'classes/client';
 
@@ -8,6 +6,7 @@ import { prisma } from 'database/index';
 
 import { startCron } from 'utility/cron';
 import { KEYS } from 'utility/keys';
+import { initializeI18N } from 'utility/translation';
 
 import { loadButtons } from 'loaders/button';
 import { loadCommands } from 'loaders/command';
@@ -20,22 +19,10 @@ const client = new ExtendedClient({
   partials: [Partials.Message],
 });
 
-await use(I18NexFsBackend).init({
-  debug: process.argv.includes('--debug-lang'),
-  defaultNS: 'messages',
-  ns: ['messages', 'commands'],
-  preload: KEYS.SUPPORTED_LANGS,
-  fallbackLng: KEYS.FALLBACK_LANG,
-  interpolation: {
-    escapeValue: false,
-  },
-  backend: {
-    loadPath: './src/locales/{{lng}}/{{ns}}.json',
-  },
-});
-
+// Running all of this in parallel
 await Promise.all([
   prisma.$connect(),
+  initializeI18N(),
   startCron(),
   loadCommands(client),
   loadEvents(client),

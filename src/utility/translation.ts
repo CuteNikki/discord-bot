@@ -3,9 +3,26 @@ import type {
   APIApplicationCommandSubcommandOption,
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord.js';
-import { t } from 'i18next';
+import { t, use } from 'i18next';
+import I18NextFsBackend from 'i18next-fs-backend';
 
 import { KEYS } from 'utility/keys';
+
+export async function initializeI18N(defaultNameSpace?: string) {
+  await use(I18NextFsBackend).init({
+    debug: process.argv.includes('--debug-lang'),
+    defaultNS: defaultNameSpace ?? 'messages',
+    ns: ['messages', 'commands'],
+    preload: KEYS.SUPPORTED_LANGS,
+    fallbackLng: KEYS.FALLBACK_LANG,
+    interpolation: {
+      escapeValue: false,
+    },
+    backend: {
+      loadPath: './src/locales/{{lng}}/{{ns}}.json',
+    },
+  });
+}
 
 function translateLocalizationPath(commandName: string, pathParts: (string | number)[]): string {
   return `${commandName}.${pathParts.join('.')}`;

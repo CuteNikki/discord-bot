@@ -1,22 +1,122 @@
 {
   "test": {
     "name": "test",
-    "description": "Testbefehl",
+    "description": "test command",
     "options": [
       {
-        "name": "testgruppe",
-        "description": "test Gruppe",
+        "name": "group",
+        "description": "test group",
         "options": [
           {
-            "name": "testsub",
-            "description": "test Subcommand",
+            "name": "sub",
+            "description": "test subcommand",
             "options": [
               {
-                "name": "teststring",
-                "description": "test String Option",
-                "choices": ["testChoice1"]
+                "name": "option",
+                "description": "test string option",
+                "choices": ["choice"]
               }
             ]
+          }
+        ]
+      }
+    ]
+  },
+  "trivia": {
+    "name": "trivia",
+    "description": "Play a game of trivia",
+    "options": [
+      {
+        "name": "difficulty",
+        "description": "The difficulty of the trivia question",
+        "choices": ["easy", "medium", "hard"]
+      },
+      {
+        "name": "type",
+        "description": "The type of trivia question",
+        "choices": ["multiple choice", "single choice"]
+      },
+      {
+        "name": "category",
+        "description": "The category of trivia question"
+      }
+    ]
+  },
+  "builder": {
+    "name": "message-builder",
+    "description": "Create a custom message",
+    "options": [
+      {
+        "name": "list",
+        "description": "List all custom messages"
+      },
+      {
+        "name": "create",
+        "description": "Create a custom message",
+        "options": [
+          {
+            "name": "channel",
+            "description": "The channel to send the message to"
+          }
+        ]
+      },
+      {
+        "name": "edit",
+        "description": "Edit a custom message",
+        "options": [
+          {
+            "name": "id",
+            "description": "The ID of the custom message"
+          }
+        ]
+      },
+      {
+        "name": "delete",
+        "description": "Delete a custom message",
+        "options": [
+          {
+            "name": "id",
+            "description": "The ID of the custom message"
+          }
+        ]
+      }
+    ]
+  },
+  "pagination": {
+    "name": "pagination",
+    "description": "A demonstration of pagination"
+  },
+  "profile": {
+    "name": "profile",
+    "description": "View a profile",
+    "options": [
+      {
+        "name": "user",
+        "description": "The user to view the profile of"
+      }
+    ]
+  },
+  "infractions": {
+    "name": "infractions",
+    "description": "Manage a member's infractions",
+    "options": [
+      {
+        "name": "history",
+        "description": "View a member's infraction history",
+        "options": [
+          {
+            "name": "user",
+            "description": "The user to view the infraction history of"
+          }
+        ]
+      },
+      {
+        "name": "delete",
+        "description": "Delete an infraction",
+        "options": [
+          {
+            "name": "id",
+            "description": "The ID of the infraction to delete"
           }
         ]
       }

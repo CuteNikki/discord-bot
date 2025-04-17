@@ -4,19 +4,119 @@
     "description": "Testbefehl",
     "options": [
       {
-        "name": "testgruppe",
-        "description": "test Gruppe",
+        "name": "gruppe",
+        "description": "testgruppe",
         "options": [
           {
-            "name": "testsub",
-            "description": "test Subcommand",
+            "name": "unterbefehl",
+            "description": "test Unterbefehl",
             "options": [
               {
-                "name": "teststring",
-                "description": "test String Option",
-                "choices": ["testChoice1"]
+                "name": "option",
+                "description": "test textoption",
+                "choices": ["auswahl"]
               }
             ]
+          }
+        ]
+      }
+    ]
+  },
+  "trivia": {
+    "name": "trivia",
+    "description": "Spielen Sie ein Spiel mit Trivia",
+    "options": [
+      {
+        "name": "schwierigkeit",
+        "description": "Die Schwierigkeit der Trivia -Frage",
+        "choices": ["einfach", "normal", "schwierig"]
+      },
+      {
+        "name": "typ",
+        "description": "Die Art der Trivia -Frage",
+        "choices": ["Mehrfach Auswahl", "Einzelauswahl"]
+      },
+      {
+        "name": "kategorie",
+        "description": "Die Kategorie der Trivia -Frage"
+      }
+    ]
+  },
+  "builder": {
+    "name": "nachrichten-bauer",
+    "description": "Designe eine eigene Nachricht",
+    "options": [
+      {
+        "name": "liste",
+        "description": "Listen Sie alle benutzerdefinierten Nachrichten auf"
+      },
+      {
+        "name": "erstellen",
+        "description": "Erstellen Sie eine benutzerdefinierte Nachricht",
+        "options": [
+          {
+            "name": "kanal",
+            "description": "Der Kanal zum Senden der Nachricht an Senden"
+          }
+        ]
+      },
+      {
+        "name": "bearbeiten",
+        "description": "Bearbeiten Sie eine benutzerdefinierte Nachricht",
+        "options": [
+          {
+            "name": "id",
+            "description": "Die ID der benutzerdefinierten Nachricht"
+          }
+        ]
+      },
+      {
+        "name": "löschen",
+        "description": "Löschen Sie eine benutzerdefinierte Nachricht",
+        "options": [
+          {
+            "name": "id",
+            "description": "Die ID der benutzerdefinierten Nachricht"
+          }
+        ]
+      }
+    ]
+  },
+  "pagination": {
+    "name": "pagination",
+    "description": "Eine Demonstration der Pagination"
+  },
+  "profile": {
+    "name": "profil",
+    "description": "Ein Profil anzeigen",
+    "options": [
+      {
+        "name": "user",
+        "description": "Der User von dem das Profil angezeigt werden soll"
+      }
+    ]
+  },
+  "infractions": {
+    "name": "verstöße",
+    "description": "Verwalte die Verstöße eines Mitglieds",
+    "options": [
+      {
+        "name": "historie",
+        "description": "Sehen Sie sich die Verstoß-Verlauf eines Mitglieds an",
+        "options": [
+          {
+            "name": "user",
+            "description": "Der User von dem die Verstöße angezeigt werden sollen"
+          }
+        ]
+      },
+      {
+        "name": "löschen",
+        "description": "Einen Verstoß löschen",
+        "options": [
+          {
+            "name": "id",
+            "description": "Die ID des Verstoßes zum Löschen"
           }
         ]
       }

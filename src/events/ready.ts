@@ -37,27 +37,31 @@ export default new Event({
         type: ActivityType.Listening,
       },
     ];
+
     // Set the initial presence
     readyClient.user.setPresence({
       status: PresenceUpdateStatus.DoNotDisturb,
       activities: [
         {
-          name: 'Loading...',
+          name: 'booting up...',
           type: ActivityType.Custom,
         },
       ],
     });
 
-    let lastPresence = 0;
-
+    let lastPresenceIndex: number | null = null;
+    // Set a new presence every minute
     setInterval(() => {
-      const presence = presences[Math.floor(Math.random() * presences.length)];
-
-      // Avoid setting the same presence twice in a row
-      if (lastPresence === presences.indexOf(presence)) {
-        return; // @todo: instead of returning, we should set the next presence
+      // Get a random presence from the array
+      let presenceIndex = Math.floor(Math.random() * presences.length);
+      // Ensure the presence is different from the last one
+      while (presenceIndex === lastPresenceIndex) {
+        presenceIndex = Math.floor(Math.random() * presences.length);
       }
-      lastPresence = presences.indexOf(presence);
+      // Store the last presence index
+      lastPresenceIndex = presenceIndex;
+      // Get the presence object
+      const presence = presences[presenceIndex];
 
       // Set the presence
       readyClient.user.setPresence({

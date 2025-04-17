@@ -68,10 +68,10 @@ export default new Command({
      * @param interaction The interaction object
      */
     async function handleDelete(interaction: ChatInputCommandInteraction<'cached'>) {
+      await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
+
       const targetUser = interaction.options.getUser('user', true);
       const infractionId = interaction.options.getString('id', true);
-
-      await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 
       const infraction = await getInfractionById(infractionId);
 
@@ -90,16 +90,13 @@ export default new Command({
       }
 
       // Delete the infraction from the database
-      const deleted = await deleteInfraction(infractionId);
-
-      logger.debug(
-        { moderator: interaction.user.id, targetUserId: targetUser.id, infractionId, guildId: interaction.guild.id },
-        deleted ? 'Infraction deleted' : 'Failed to delete infraction',
+      const isDeleted = await deleteInfraction(infractionId).catch((err) =>
+        logger.error({ err, infractionId }, 'Failed to delete infraction'),
       );
 
       return await interaction.editReply({
         embeds: [
-          deleted
+          isDeleted
             ? new EmbedBuilder()
                 .setColor(Colors.Green)
                 .setDescription(`Successfully deleted infraction \`${infractionId}\` for ${targetUser}.`)
@@ -125,7 +122,15 @@ export default new Command({
         });
       }
 
-      const infractions = await getInfractionsByUserIdAndGuildId(targetUser.id, interaction.guild.id);
+      const infractions = await getInfractionsByUserIdAndGuildId(targetUser.id, interaction.guild.id).catch((err) =>
+        logger.error({ err, targetUser: targetUser.id, guild: interaction.guild.id }, 'Failed to get infractions'),
+      );
+      if (!infractions || infractions.length === 0) {
+        return await interaction.editReply({
+          embeds: [new EmbedBuilder().setColor(Colors.Red).setDescription(`No infractions found for ${targetUser}.`)],
+        });
+      }
+
       const itemsPerPage = 3;
 
       return interaction.editReply(

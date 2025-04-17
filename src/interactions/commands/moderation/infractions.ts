@@ -7,12 +7,13 @@ import {
   MessageFlags,
   PermissionFlagsBits,
   SlashCommandBuilder,
+  userMention,
 } from 'discord.js';
 
 import type { ExtendedClient } from 'classes/client';
 import { Command } from 'classes/command';
 
-import { deleteInfraction, getInfractionById, getInfractionsByUserIdAndGuildId } from 'database/infraction';
+import { deleteInfraction, getInfractionById, getInfractionsByGuildId, getInfractionsByUserIdAndGuildId } from 'database/infraction';
 
 import { buildInfractionOverview } from 'utility/infraction';
 import logger from 'utility/logger';
@@ -34,9 +35,32 @@ export default new Command({
       subcommand
         .setName('delete')
         .setDescription("Delete a user's infraction")
-        .addUserOption((option) => option.setName('user').setDescription('The user to delete an infraction for').setRequired(true))
-        .addStringOption((option) => option.setName('id').setDescription('The ID of the infraction to delete').setRequired(true)),
+        .addStringOption((option) =>
+          option.setName('id').setDescription('The ID of the infraction to delete').setAutocomplete(true).setRequired(true),
+        ),
     ),
+  async autocomplete(interaction) {
+    const focused = interaction.options.getFocused();
+
+    if (focused.name === 'id' && interaction.inCachedGuild()) {
+      const guildId = interaction.guild.id;
+
+      const infractions = await getInfractionsByGuildId(guildId).catch((err) =>
+        logger.error({ err, guildId }, 'Failed to get infractions'),
+      );
+
+      if (!infractions || infractions.length === 0) {
+        return await interaction.respond([]);
+      }
+
+      const choices = infractions.map((infraction) => ({
+        name: infraction.id,
+        value: infraction.id,
+      }));
+
+      return await interaction.respond(choices.slice(0, 25));
+    }
+  },
   async execute(interaction) {
     if (!interaction.inCachedGuild()) {
       return await interaction.reply({
@@ -70,22 +94,16 @@ export default new Command({
     async function handleDelete(interaction: ChatInputCommandInteraction<'cached'>) {
       await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 
-      const targetUser = interaction.options.getUser('user', true);
       const infractionId = interaction.options.getString('id', true);
 
       const infraction = await getInfractionById(infractionId);
 
-      if (!infraction || infraction.userId !== targetUser.id || infraction.guildId !== interaction.guild.id) {
+      if (!infraction || infraction.guildId !== interaction.guild.id) {
         // If the infraction doesn't exist or doesn't belong to the user in the guild, return an error message
-        logger.debug(
-          { infractionId, targetUserId: targetUser.id, guildId: interaction.guild.id },
-          'Infraction not found or does not belong to the user in the guild',
-        );
+        logger.debug({ infractionId, guildId: interaction.guild.id }, 'Infraction not found or does not belong to the guild');
 
         return await interaction.editReply({
-          embeds: [
-            new EmbedBuilder().setColor(Colors.Red).setDescription(`No infraction found with ID \`${infractionId}\` for ${targetUser}.`),
-          ],
+          embeds: [new EmbedBuilder().setColor(Colors.Red).setDescription(`No infraction found with ID \`${infractionId}\`.`)],
         });
       }
 
@@ -99,8 +117,8 @@ export default new Command({
           isDeleted
             ? new EmbedBuilder()
                 .setColor(Colors.Green)
-                .setDescription(`Successfully deleted infraction \`${infractionId}\` for ${targetUser}.`)
-            : new EmbedBuilder().setColor(Colors.Red).setDescription(`Failed to delete infraction \`${infractionId}\` for ${targetUser}.`),
+                .setDescription(`Successfully deleted infraction \`${infractionId}\` of ${userMention(isDeleted.userId)}.`)
+            : new EmbedBuilder().setColor(Colors.Red).setDescription(`Failed to delete infraction \`${infractionId}\`.`),
         ],
       });
     }
